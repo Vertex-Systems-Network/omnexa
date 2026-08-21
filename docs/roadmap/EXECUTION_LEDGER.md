@@ -61,3 +61,25 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `2 / 10 done` with `P00.03` active.
 - Commit / PR: `#5` / `51516acd39af7056b9e6ab9e8c41346a4becd003`.
 - Notes: issue #3 tracks hosted `main` branch protection; issue #4 tracks licensing/IP/trademark strategy. Kernel and business-feature implementation remain locked until P00 exit.
+
+## 2026-08-21 — Repository hygiene correction
+
+- Phase / package: repository maintenance during `P00.03`.
+- Transition: no roadmap transition.
+- Summary: An accidental temporary placeholder file was written directly to `main` while preparing P00.03. It was detected immediately and deleted before any P00.03 artifact/progress claim. The two commits remain visible in history rather than being hidden.
+- Evidence: accidental placeholder commit `0feb42787e20c2d4b7ecae6f2b26672edaff774a`; corrective deletion commit `8e913b973ffb6aa0170f9d376e3e77964ebded3e`; net repository content returned to the pre-placeholder state before feature-branch work continued.
+- Architecture impact: none.
+- State files reconciled: no state transition resulted from the incident.
+- Commit / PR: direct corrective maintenance only; subsequent P00.03 work uses the governed feature-branch/PR flow.
+- Notes: this reinforces issue #3 priority: hosted `main` branch protection is still required to technically prevent accidental direct writes.
+
+## 2026-08-21 — P00.03 Foundation data and contract conventions
+
+- Phase / package: `P00.03`
+- Transition: `active -> done` upon verified merge of the P00.03 PR; `P00.04` becomes active; P00.05/P00.06 are `ready` only.
+- Summary: Frozen canonical identifier, money/precision, time/calendar, locale/regionalization and error semantics. Accepted ADR-0002 and strengthened governance validation to enforce dependency ordering, evidence existence and P00.03 convention markers.
+- Evidence: `IDENTIFIER_STANDARD.md`, `MONEY_STANDARD.md`, `TIME_STANDARD.md`, `LOCALE_STANDARD.md`, `ERROR_STANDARD.md`, `ADR-0002-foundation-data-conventions.md`, updated naming/AI entrypoints, and `scripts/validate_governance.py`.
+- Architecture impact: establishes platform primitive semantics used by future API/event/schema/runtime work; no application/kernel implementation introduced.
+- State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
+- Commit / PR: fill with merged P00.03 PR/CI evidence in an append-only reconciliation entry after merge.
+- Notes: P00 execution lock remains active. P00.04 is the only active work package after merge.
