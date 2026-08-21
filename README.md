@@ -4,7 +4,7 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.03 — ID, money, time, locale and error conventions**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.04 — API contract standard**.
 
 ## Mandatory contributor / AI start here
 
@@ -18,13 +18,18 @@ Any human or AI system changing this repository must read the following in order
 6. [`docs/architecture/NAMING_STANDARD.md`](docs/architecture/NAMING_STANDARD.md)
 7. [`docs/architecture/DOMAIN_OWNERSHIP.md`](docs/architecture/DOMAIN_OWNERSHIP.md)
 8. [`docs/architecture/DEPENDENCY_MATRIX.md`](docs/architecture/DEPENDENCY_MATRIX.md)
-9. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-10. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-11. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-12. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-13. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-14. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-15. Relevant ADRs under [`docs/adr/`](docs/adr/)
+9. [`docs/architecture/IDENTIFIER_STANDARD.md`](docs/architecture/IDENTIFIER_STANDARD.md)
+10. [`docs/architecture/MONEY_STANDARD.md`](docs/architecture/MONEY_STANDARD.md)
+11. [`docs/architecture/TIME_STANDARD.md`](docs/architecture/TIME_STANDARD.md)
+12. [`docs/architecture/LOCALE_STANDARD.md`](docs/architecture/LOCALE_STANDARD.md)
+13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
+14. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+15. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+16. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+17. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+18. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+19. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+20. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
@@ -42,6 +47,16 @@ Any human or AI system changing this repository must read the following in order
 - Omnexa begins as a strict modular monolith and extracts services only when evidence justifies it.
 - Architecture or roadmap changes require formal change control and ADR reconciliation.
 
+## Frozen foundation primitives (P00.03)
+
+- **Identifiers:** UUIDv7 by default; PostgreSQL native `uuid`; canonical tenant scope `tenant_id`.
+- **Money:** exact decimal + explicit currency; JSON decimal strings; PostgreSQL baseline `NUMERIC(38,18)`; no binary floating-point money.
+- **Time:** UTC instants + `timestamptz`; date-only business dates; IANA timezone semantics for civil time/recurrence.
+- **Locale:** BCP 47 language tags; locale/country/currency/timezone are independent; RTL is first-class.
+- **Errors:** stable machine error codes, safe structured problem details, request/trace correlation, no public stack traces/SQL/secrets.
+
+These decisions are recorded by [`ADR-0002`](docs/adr/ADR-0002-foundation-data-conventions.md).
+
 ## Technology baseline
 
 Until superseded by an accepted ADR:
@@ -58,7 +73,7 @@ Until superseded by an accepted ADR:
 
 ## Governance hardening
 
-Repository-level controls now include:
+Repository-level controls include:
 
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - [`SECURITY.md`](SECURITY.md)
@@ -102,7 +117,10 @@ Execution history is recorded in the append-only [`docs/roadmap/EXECUTION_LEDGER
 
 ## Architecture decisions
 
-Architecture decisions live under [`docs/adr/`](docs/adr/). The initial baseline is [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md), and [`docs/adr/TEMPLATE.md`](docs/adr/TEMPLATE.md) defines the required decision shape.
+Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted baselines include:
+
+- [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md)
+- [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
 
 Do not implement an architectural change first and document it afterward.
 
