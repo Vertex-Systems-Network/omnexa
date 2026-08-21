@@ -47,7 +47,7 @@ Verified context:
 - repository visibility: `private`;
 - repository owner: `Vertex-Systems-Network` organization;
 - authenticated user permission: repository `admin`;
-- branch-protection tooling syntax/structure: PASS on `LOCAL-WIN-4`;
+- branch-protection tooling syntax/structure: PASS;
 - live branch metadata after the failed API write: `protected: false`.
 
 GitHub's plan model makes private branch protection/rulesets unavailable on the current plan. This is therefore a hosted product-plan blocker, not an authentication, authorization, script or CI defect.
@@ -58,28 +58,38 @@ Do **not** retry the same API call until one of these conditions changes:
 2. repository visibility is intentionally changed to public through a separate owner/legal/security decision; or
 3. a superseding governance ADR explicitly accepts a compensating control and changes EG-02.
 
-Option 3 is an architecture/governance change and must not be inferred from a generic `continue` instruction.
-
 ### EG-03 — executable verification lane
 State: **SATISFIED**
 Tracker: **Issue #14 — closed/completed**
 
-Current canonical evidence:
-- PR #23 migrated `Omnexa Governance` to require successful validation evidence produced specifically by runner `LOCAL-WIN-4`;
-- runner `LOCAL-WIN-4` executed on Windows X64 / machine `ABDUL-HANAN` from `C:\actions-runner-4\_work`;
-- Git `2.55.0.windows.5` and Python `3.13.7` were available;
-- workflow run `32528329184` executed all four then-current validators successfully on `LOCAL-WIN-4` and the final job named `governance` completed **SUCCESS**;
-- `scripts/validate_governance.py` PASS;
-- `scripts/validate_development_spec.py` PASS;
-- `scripts/validate_operations_spec.py` PASS;
-- `scripts/validate_freeze_review.py` PASS;
-- PR #23 merged to `main` as `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`.
+The canonical workflow is now **runner-name agnostic** inside the approved local pool. The required job is named `governance` and runs on:
 
-Historical evidence remains PR #20 / run `32522919774`, which originally restored the self-hosted CI lane. GitHub-hosted runner quota is no longer required for the canonical governance lane.
+```yaml
+runs-on: [self-hosted, Windows, X64]
+```
 
-`LOCAL-WIN-4` currently has no unique schedulable Actions label. The canonical workflow therefore fails closed: it fans out only across local Windows/X64 self-hosted runners, runs validators only where `RUNNER_NAME == LOCAL-WIN-4`, uploads target pass evidence only from that runner, and exposes a final `governance` job that fails if no LOCAL-WIN-4 evidence exists.
+Any available Windows/X64 self-hosted runner may execute the job. The workflow no longer pins `LOCAL-WIN-4`, no longer uses discovery fanout, and no longer waits for target-runner artifacts. The same fail-closed validators remain mandatory.
 
-While P01 remains blocked, `scripts/validate_p01_preparation.py` is also required on the LOCAL-WIN-4 target and rejects known executable P01.01 paths while `kernel_code_authorized=false`.
+Current routing-policy evidence:
+- workflow run `32535324900`: **SUCCESS**;
+- governance job `96935023669`: **SUCCESS**;
+- actual runner: `LOCAL-WIN-02`;
+- runner OS/arch: Windows / X64;
+- machine: `ABDUL-HANAN`;
+- Git `2.55.0.windows.5`;
+- Python `3.13.7`;
+- PowerShell tooling parse: PASS;
+- `scripts/validate_governance.py`: PASS;
+- `scripts/validate_development_spec.py`: PASS;
+- `scripts/validate_operations_spec.py`: PASS;
+- `scripts/validate_freeze_review.py`: PASS;
+- `scripts/validate_p01_preparation.py`: PASS.
+
+Historical `LOCAL-WIN-4` evidence remains valid provenance: PR #23, run `32528329184`, target job `96915072868`, merge `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`. It is no longer a routing requirement.
+
+GitHub-hosted standard runners may be introduced later if capacity/policy makes them appropriate, provided P00.07 gate semantics remain unchanged. Current canonical routing prefers the already operational self-hosted Windows/X64 pool because it is available and does not depend on hosted-minute entitlement.
+
+While P01 remains blocked, `scripts/validate_p01_preparation.py` is required and rejects known executable P01.01 paths while `kernel_code_authorized=false`.
 
 ### EG-04 — canonical local verification command exists
 State: **PENDING P01 BOOTSTRAP / MUST BE FIRST-CLASS**
@@ -123,7 +133,8 @@ Changing this private repository to public merely to obtain GitHub Free branch p
 
 ```text
 P00 architecture: FROZEN
-Executable CI lane: SATISFIED ON LOCAL-WIN-4
+Executable CI lane: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
+Latest routing proof: LOCAL-WIN-02 / run 32535324900
 EG-02: BLOCKED_BY_PLAN
 P00 exit: BLOCKED ON ISSUE #3 / EG-02 ONLY
 P01.01: PREPARED / PLANNED
