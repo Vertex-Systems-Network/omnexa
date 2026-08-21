@@ -149,3 +149,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
 - Commit / PR: fill with merged P00.06 PR/CI evidence in an append-only reconciliation entry after merge.
 - Notes: P00 execution lock remains active. `P00.07` is the only active work package after merge. Issue #3 remains a hosted GitHub configuration blocker; issue #4 remains a legal/business decision gate.
+
+## 2026-08-22 — Owner-approved temporary P00 hosted-CI exception
+
+- Phase / package: governance exception during `P00.06` and remaining P00 specification work.
+- Transition: hosted GitHub Actions evidence changes from required executable PASS to explicitly `BLOCKED/NOT RUN` for P00 documentation/specification-only packages while the quota condition persists; no runtime gate is waived.
+- Summary: Project owner confirmed GitHub Actions allowance is exhausted/disabled and explicitly instructed the project to skip Actions and continue. ADR-0006 and `CI_EVIDENCE_EXCEPTION_2026-08-22.md` define a narrow temporary evidence path based on PR diff inspection, mandatory artifact presence, state/dependency reconciliation and manual governance review.
+- Evidence: owner authorization; PR #13 failed runs `32516177704`, `32516290875`, `32516417466`, `32516471168`, `32516684511` plus failed-job rerun; issue #14; diagnostic three-job workflow showed jobs failing before runner steps.
+- Architecture impact: operational evidence exception only. Does not alter security, API, event, tenancy, module, runtime or product architecture and does not authorize P01+ test/build/migration bypass.
+- State files reconciled: `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, exception document and ADR-0006.
+- Commit / PR: exception incorporated into PR #13 before merge.
+- Notes: exception expires before any P01 implementation merge, at P00 exit, when Actions returns or on owner revocation. Any later governance validation failure reopens the affected package.
