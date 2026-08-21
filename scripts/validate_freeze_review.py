@@ -37,15 +37,22 @@ if set(manifest.get("frozen_packages") or []) != expected_packages:
 
 entry = manifest.get("p01_entry_gate") or {}
 if entry.get("state") != "BLOCKED":
-    raise SystemExit("ERROR: P01 entry must remain BLOCKED while issue #3/#14 are unresolved")
+    raise SystemExit("ERROR: P01 entry must remain BLOCKED while issue #3 is unresolved")
 if entry.get("kernel_code_authorized") is not False:
     raise SystemExit("ERROR: kernel code must remain unauthorized")
 if entry.get("business_feature_code_authorized") is not False:
     raise SystemExit("ERROR: business feature code must remain unauthorized")
 
-blockers = {item.get("tracker"): item.get("state") for item in entry.get("blockers") or []}
-if blockers.get("issue:#3") != "BLOCKED" or blockers.get("issue:#14") != "BLOCKED":
-    raise SystemExit("ERROR: issue #3 and #14 must be P01 blockers")
+entry_states = {item.get("tracker"): item.get("state") for item in entry.get("blockers") or []}
+if entry_states.get("issue:#3") != "BLOCKED":
+    raise SystemExit("ERROR: issue #3 must remain the P01 entry blocker")
+if entry_states.get("issue:#14") != "SATISFIED":
+    raise SystemExit("ERROR: issue #14 executable CI gate must be SATISFIED")
+
+p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8")
+for marker in ["EG-02", "Issue #3", "EG-03", "SATISFIED", "32522919774", "LOCAL-WIN-01"]:
+    if marker not in p01_gate:
+        raise SystemExit(f"ERROR: P01 entry gate missing reconciliation marker: {marker}")
 
 external = manifest.get("external_distribution_gate") or {}
 if external.get("tracker") != "issue:#4" or external.get("state") != "BLOCKED":
@@ -54,9 +61,10 @@ if external.get("tracker") != "issue:#4" or external.get("state") != "BLOCKED":
 review = (ROOT / "docs/governance/FOUNDATION_FREEZE_REVIEW.md").read_text(encoding="utf-8")
 for marker in ["ACCEPTED FOR FREEZE", "Issue #3", "Issue #14", "Issue #4", "P01 implementation-entry blockers"]:
     if marker not in review:
-        raise SystemExit(f"ERROR: freeze review missing marker: {marker}")
+        raise SystemExit(f"ERROR: freeze review missing historical marker: {marker}")
 
 print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
+print("Executable CI gate: SATISFIED")
 print("P00 exit: VERIFICATION")
-print("P01 entry: BLOCKED")
+print("P01 entry: BLOCKED BY ISSUE #3")
