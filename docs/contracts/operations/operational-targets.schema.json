@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omnexa.dev/contracts/operations/operational-targets.schema.json",
+  "title": "Omnexa Operational Target Declaration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["capability", "owner", "criticality_tier", "recovery_class", "slos", "incident_severity_model"],
+  "properties": {
+    "capability": {"type": "string", "minLength": 1},
+    "owner": {"type": "string", "minLength": 1},
+    "criticality_tier": {"type": "string", "enum": ["TIER_0", "TIER_1", "TIER_2", "TIER_3"]},
+    "recovery_class": {"type": "string", "enum": ["A", "B", "C", "D"]},
+    "slos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "indicator", "objective", "window", "owner"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "indicator": {"type": "string", "minLength": 1},
+          "objective": {"type": "string", "minLength": 1},
+          "window": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1},
+          "zero_tolerance": {"type": "boolean", "default": false}
+        }
+      }
+    },
+    "rpo": {"type": ["string", "null"]},
+    "rto": {"type": ["string", "null"]},
+    "error_budget_policy": {"type": "string"},
+    "dependencies": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "degradation_mode": {"type": "string"},
+    "runbook": {"type": ["string", "null"]},
+    "threat_model": {"type": ["string", "null"]},
+    "incident_severity_model": {"type": "string", "enum": ["SEV0-SEV3"]}
+  }
+}
