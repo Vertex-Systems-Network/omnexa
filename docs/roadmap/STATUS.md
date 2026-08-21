@@ -7,7 +7,7 @@ Last reconciled: **2026-08-22**
 - Program: **Foundation Program**
 - Phase: **P00 — Product Constitution & Architecture Freeze**
 - Phase state: **active**
-- Current work package: **P00.07 — Testing, CI and release standard**
+- Current work package: **P00.08 — Local developer and repository structure specification**
 - Business-feature implementation: **NOT AUTHORIZED YET**
 - Kernel implementation: **NOT AUTHORIZED YET**
 
@@ -21,79 +21,70 @@ Last reconciled: **2026-08-22**
 | P00.04 | API contract standard | done | `API_STANDARD.md`, OpenAPI template + ADR-0003 |
 | P00.05 | Event contract standard | done | `EVENT_STANDARD.md`, event envelope schema + ADR-0004 |
 | P00.06 | Security and data-classification baseline | done | security/data-classification/control matrix, classification schema + ADR-0005; manual P00 evidence under ADR-0006 because hosted Actions is BLOCKED |
-| P00.07 | Testing, CI and release standard | active | Current canonical work package |
-| P00.08 | Local developer and repository structure specification | planned | Requires P00.07 |
+| P00.07 | Testing, CI and release standard | done | testing/CI/release standards, G0-G8 gate matrix, quality evidence schema + ADR-0007; hosted execution BLOCKED under ADR-0006 |
+| P00.08 | Local developer and repository structure specification | active | Current canonical work package |
 | P00.09 | Initial threat model and operational SLO targets | planned | Requires P00.06 + P00.08 |
 | P00.10 | Foundation architecture freeze review | planned | Final P00 exit gate |
 
-P00 package progress: **6 / 10 done**.
+P00 package progress: **7 / 10 done**.
 
-## Frozen foundation contracts
+## Frozen quality baseline — P00.07
 
-### P00.03 — Primitive semantics
+Omnexa quality semantics are **repository-owned and CI-provider independent**. GitHub Actions, another CI service and local development must execute the same canonical verification semantics.
 
-- canonical entity/request/event/workflow/job/audit IDs: **UUIDv7**;
-- PostgreSQL canonical identifiers use native `uuid`; tenant-owned state uses `tenant_id` where applicable;
-- money uses exact decimal semantics with explicit ISO currency and no binary floating-point representation;
-- absolute instants use UTC/`timestamptz`; civil-time recurrence retains IANA timezone semantics;
-- locale uses BCP 47; locale/country/currency/timezone are independent concepts; RTL is first-class;
-- public errors use stable machine codes and safe structured problem details.
+Canonical test layers include static/structural, unit, component, contract, integration, migration, security/negative, module lifecycle, end-to-end, performance/resilience, compatibility and disaster-recovery/rehearsal testing as applicable.
 
-### P00.04 — HTTP API baseline
+Important invariants:
 
-- stable routes: `/api/v{major}/{domain}/{resources}`;
-- OpenAPI **3.2.0** is the canonical stable HTTP contract description baseline;
-- JSON contract fields use lowercase `snake_case`;
-- errors use `application/problem+json` with Omnexa machine codes/request correlation;
-- scalable collections use opaque cursor pagination;
-- protected retriable mutations define `Idempotency-Key` semantics;
-- lost-update-sensitive mutations use explicit optimistic concurrency where applicable;
-- tenant/organization identifiers from clients are never authorization authority.
+- affected tenant-owned paths require same-tenant success plus cross-tenant denial evidence;
+- authorization changes require allow/deny/privilege-escalation evidence;
+- retriable/event/async paths require duplicate/idempotency/replay evidence;
+- persistence changes require fresh-install plus supported-upgrade migration evidence;
+- optional modules require disable/re-enable/degradation isolation evidence;
+- money/time/localization/security boundaries require domain-specific negative/boundary tests;
+- flaky tests are defects and may be quarantined only through named, expiring governance;
+- aggregate coverage percentage never substitutes for critical invariant coverage.
 
-### P00.05 — Event baseline
-
-- event type: `<domain>.<subject>.<past_tense_fact>.v<major>`;
-- canonical envelope is CloudEvents-compatible structured JSON with UUIDv7 event identity;
-- producer owns event meaning/schema and derives trusted tenant context;
-- delivery baseline is **at least once** and consumers are idempotent;
-- business-significant publication/consumption uses outbox + inbox/deduplication or equivalent guarantees;
-- no global ordering assumption; retry is bounded; poison events go to governed dead-letter/quarantine;
-- replay preserves original identity/payload and may not duplicate protected business side effects.
-
-### P00.06 — Security and data classification baseline
-
-Canonical confidentiality classes:
+Quality gate classes are:
 
 ```text
-PUBLIC
-INTERNAL
-CONFIDENTIAL
-RESTRICTED
+G0 Governance
+G1 Static
+G2 Unit / Component
+G3 Contract / Integration
+G4 Data / Migration
+G5 Security / Tenancy
+G6 Lifecycle / Resilience
+G7 Build / Package
+G8 Supply Chain / Release
 ```
 
-Security invariants now include:
+Allowed evidence states are exactly:
 
-- explicit trust boundaries and zero implicit trust;
-- distinct human, service, workload, device, integration, support and AI principals;
-- authentication independent from authorization;
-- authorization = RBAC + relationships + contextual policy + governed capabilities;
-- tenant and organization isolation across OLTP, cache, files, search, analytics, events, backups and AI/vector data;
-- secrets/key material are `RESTRICTED`, excluded from source control/logging/AI and managed by approved secret/KMS mechanisms;
-- production sensitive data does not flow to lower environments by default;
-- audit is a protected security/business record separate from debug logs;
-- privileged operations/support impersonation/export/purge/event replay/high-impact AI actions require explicit capability, policy and audit;
-- external webhooks/integrations are independent trust/disclosure boundaries;
-- extension/module permissions, provenance and supply-chain controls are required;
-- retention, deletion, search, export, analytics and AI behavior is classification-aware;
-- `RESTRICTED` data is prohibited from generic logs/search/analytics and is prohibited as AI input by default.
+```text
+PASS
+FAIL
+BLOCKED
+NOT RUN
+N/A
+```
+
+`BLOCKED`, `NOT RUN` and `N/A` are never silently converted into PASS.
+
+Release architecture uses semantic-versioning semantics, immutable source/artifact identity and a **build once, promote** model where artifact type permits. Stable releases eventually require applicable test, migration, security, packaging, SBOM/provenance/signature and operational-readiness evidence.
 
 Normative evidence:
 
-- `docs/security/SECURITY_STANDARD.md`
-- `docs/security/DATA_CLASSIFICATION.md`
-- `docs/security/SECURITY_CONTROL_MATRIX.md`
-- `docs/contracts/security/data-classification.schema.json`
-- `docs/adr/ADR-0005-security-data-classification-baseline.md`
+- `docs/quality/TESTING_STANDARD.md`
+- `docs/quality/CI_STANDARD.md`
+- `docs/quality/RELEASE_STANDARD.md`
+- `docs/quality/QUALITY_GATE_MATRIX.md`
+- `docs/contracts/quality/quality-gates.schema.json`
+- `docs/adr/ADR-0007-testing-ci-release-baseline.md`
+
+## Previously frozen baselines
+
+P00.03 freezes identifier/money/time/locale/error semantics. P00.04 freezes HTTP/OpenAPI semantics. P00.05 freezes event/reliability/replay semantics. P00.06 freezes security and data-classification semantics. These remain mandatory and P00.07 defines how future implementation proves them.
 
 ## Temporary GitHub Actions exception
 
@@ -105,19 +96,15 @@ The temporary policy is defined by:
 - `docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md`
 - issue #14 for runner/quota blocker evidence.
 
-Hosted Actions evidence is **BLOCKED / NOT RUN**, never recorded as PASS. For P00.06, repository diff/evidence/state/status inspection is the recorded manual acceptance path. P00 packages may continue this way only while they remain documentation/specification work. The exception expires before any P01 implementation merge, at P00 exit, or sooner if Actions returns.
+Hosted Actions evidence is **BLOCKED / NOT RUN**, never recorded as PASS. P00.07 was manually reviewed for scope, mandatory evidence, state/dependency ordering and quality-contract reconciliation. The exception expires before any P01 implementation merge, at P00 exit, or sooner if Actions returns.
 
 ## Governance hardening status
 
-File-level governance is active through CODEOWNERS, contributor/security policies, issue/ADR templates, `scripts/validate_governance.py` and the `Omnexa Governance` workflow definition.
-
-Hosted/business decisions still tracked:
-
-1. **Issue #3 — main branch/ruleset protection:** GitHub still reports `main` as unprotected. The connected GitHub toolset does not expose a branch-protection/ruleset write mutation, so hosted admin configuration remains required and must be verified against `docs/governance/REPOSITORY_HARDENING.md`.
+1. **Issue #3 — main branch/ruleset protection:** `main` remains unprotected; hosted admin configuration is still required.
 2. **Issue #14 — GitHub Actions quota/runner:** hosted execution is temporarily unavailable and handled only through ADR-0006 for P00 specification work.
 3. **Issue #4 — licensing/IP/trademark:** existing GPLv3 is not automatically approved as the final commercial strategy; explicit owner/legal decision is required before external distribution/public launch.
 
-None of these items authorize early kernel/business implementation.
+None of these authorize early kernel/business implementation.
 
 ## Phase states
 
@@ -131,4 +118,4 @@ Do not begin kernel implementation, database models, CRM, ERP, commerce, POS, we
 
 ## How status changes
 
-A package moves to `done` only when acceptance evidence satisfies `docs/governance/DEFINITION_OF_DONE.md` and `docs/roadmap/STATE.json` is reconciled in the same governed change. While ADR-0006 is active, hosted Actions may be `BLOCKED`/`NOT RUN` for P00 documentation/specification changes only; manual evidence must be recorded and the exception may not be used for P01+ executable work.
+A package moves to `done` only when its required evidence is recorded and `STATE.json` is reconciled. While ADR-0006 is active, hosted Actions may be `BLOCKED`/`NOT RUN` for P00 documentation/specification changes only; this exception cannot be used for P01+ executable work.
