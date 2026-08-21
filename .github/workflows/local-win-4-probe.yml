@@ -1,4 +1,4 @@
-name: Omnexa LOCAL-WIN-4 Discovery
+name: Omnexa LOCAL-WIN-4 Validation
 
 on:
   pull_request:
@@ -17,10 +17,14 @@ jobs:
       matrix:
         slot: [1, 2, 3, 4, 5, 6]
     runs-on: [self-hosted, Windows, X64]
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
-      - name: Report actual runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect target runner
+        id: target
         shell: cmd
         run: |
           echo SLOT=${{ matrix.slot }}
@@ -28,6 +32,48 @@ jobs:
           echo RUNNER_OS=%RUNNER_OS%
           echo RUNNER_ARCH=%RUNNER_ARCH%
           echo COMPUTERNAME=%COMPUTERNAME%
-          if /I "%RUNNER_NAME%"=="LOCAL-WIN-4" echo TARGET_LOCAL_WIN_4=YES
-          if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" echo TARGET_LOCAL_WIN_4=NO
-          ping 127.0.0.1 -n 16 > nul
+          if /I "%RUNNER_NAME%"=="LOCAL-WIN-4" (
+            echo is_target=true>>"%GITHUB_OUTPUT%"
+            echo TARGET_LOCAL_WIN_4=YES
+          ) else (
+            echo is_target=false>>"%GITHUB_OUTPUT%"
+            echo TARGET_LOCAL_WIN_4=NO
+          )
+
+      - name: Verify LOCAL-WIN-4 tooling and account
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: |
+          echo USERNAME=%USERNAME%
+          echo USERPROFILE=%USERPROFILE%
+          whoami
+          git --version
+          python --version
+          where gh
+          gh --version
+          gh auth status -h github.com || echo GH_AUTH=NOT_AUTHENTICATED
+
+      - name: Validate canonical governance state on LOCAL-WIN-4
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: python scripts\validate_governance.py
+
+      - name: Validate repository specification on LOCAL-WIN-4
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: python scripts\validate_development_spec.py
+
+      - name: Validate operations specification on LOCAL-WIN-4
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: python scripts\validate_operations_spec.py
+
+      - name: Validate foundation freeze on LOCAL-WIN-4
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: python scripts\validate_freeze_review.py
+
+      - name: Hold non-target runners briefly for discovery fan-out
+        if: steps.target.outputs.is_target != 'true'
+        shell: cmd
+        run: ping 127.0.0.1 -n 16 > nul
