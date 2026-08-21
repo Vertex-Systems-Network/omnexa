@@ -1,0 +1,11 @@
+# Omnexa code ownership
+# Keep architecture/governance changes under explicit maintainer review.
+
+* @wpessential
+
+/AGENTS.md @wpessential
+/docs/governance/ @wpessential
+/docs/architecture/ @wpessential
+/docs/roadmap/ @wpessential
+/docs/adr/ @wpessential
+/.github/ @wpessential
