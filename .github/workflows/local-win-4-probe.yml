@@ -52,6 +52,7 @@ jobs:
           where gh
           gh --version
           gh auth status -h github.com || echo GH_AUTH=NOT_AUTHENTICATED
+          exit /b 0
 
       - name: Validate canonical governance state on LOCAL-WIN-4
         if: steps.target.outputs.is_target == 'true'
