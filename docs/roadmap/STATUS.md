@@ -9,7 +9,7 @@ Last reconciled: **2026-08-22**
 - Phase state: **active — exit verification**
 - Current work package: **P00.10 — Foundation architecture freeze review**
 - Architecture baseline: **FROZEN — Foundation v1**
-- Executable CI entry gate: **SATISFIED**
+- Executable CI entry gate: **SATISFIED ON LOCAL-WIN-4**
 - P01 entry: **BLOCKED BY ISSUE #3 ONLY**
 - Kernel implementation: **NOT AUTHORIZED**
 - Business-feature implementation: **NOT AUTHORIZED**
@@ -47,27 +47,28 @@ Normative freeze/entry records:
 
 ### EG-03 / Issue #14 — SATISFIED
 
-The executable CI blocker is resolved. PR #20 moved the canonical governance workflow to the local Windows self-hosted selector:
+The executable CI blocker remains resolved and the canonical lane is now certified on the specifically requested organization runner `LOCAL-WIN-4`.
 
-```text
-[self-hosted, Windows, X64]
-```
+Verified current evidence:
 
-Verified evidence:
-
-- runner: `LOCAL-WIN-01`;
-- workflow run: `32522919774`;
-- governance job: `96898839560`;
+- PR #23 migrated the canonical workflow to fail closed unless LOCAL-WIN-4 produces validation evidence;
+- runner: `LOCAL-WIN-4` / Windows X64;
+- machine/work root: `ABDUL-HANAN` / `C:\actions-runner-4\_work`;
 - Git `2.55.0.windows.5`;
 - Python `3.13.7`;
+- workflow run `32528329184`;
+- LOCAL-WIN-4 target job `96915072868`: SUCCESS;
 - governance validator PASS;
 - development specification validator PASS;
 - threat/operations validator PASS;
 - foundation-freeze validator PASS;
-- PR #20 merged to `main` as `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`;
-- Issue #14 closed/completed.
+- final required job named `governance`: SUCCESS;
+- PR #23 merged to `main` as `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`;
+- Issue #14 remains closed/completed.
 
-GitHub-hosted runner quota is no longer required for the canonical governance lane. ADR-0006 is retained as historical evidence but is not the active evidence path while the self-hosted lane remains operational.
+Because GitHub Actions does not schedule by runner name and LOCAL-WIN-4 currently has no unique Actions label, the canonical workflow fans out only across local Windows/X64 self-hosted runners, executes protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, uploads target pass evidence only from that runner, and fails the final `governance` job when target evidence is absent.
+
+GitHub-hosted runner quota is not required. ADR-0006 is historical evidence only while this executable lane remains operational.
 
 ### EG-02 / Issue #3 — REMAINING P01 BLOCKER
 
