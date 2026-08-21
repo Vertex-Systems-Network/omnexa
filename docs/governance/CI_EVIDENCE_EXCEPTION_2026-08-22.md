@@ -40,6 +40,7 @@ Observed evidence:
 - State/status reconciliation: **PASS by repository inspection** — branch declares `6 / 10 done` and `P00.07 active` consistently.
 - Runtime build/unit/integration/migration gates: **N/A** — P00 implementation lock prohibits runtime/kernel/business code.
 - GitHub Actions hosted validation: **BLOCKED** — quota exhausted/disabled; issue #14 contains runs showing jobs fail before runner steps start.
+- Full governance validator execution: **NOT RUN** — hosted runner unavailable; this must be rerun when Actions returns.
 
 ## Expiry / revocation
 
