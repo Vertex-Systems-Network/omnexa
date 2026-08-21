@@ -1,0 +1,55 @@
+name: Omnexa Main Protection Admin
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  protect-main:
+    name: protect-main
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify GitHub-hosted administrative runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "RUNNER_NAME=${RUNNER_NAME}"
+          echo "RUNNER_OS=${RUNNER_OS}"
+          echo "RUNNER_ARCH=${RUNNER_ARCH}"
+          echo "RUNNER_ENVIRONMENT=${RUNNER_ENVIRONMENT}"
+          test "${RUNNER_ENVIRONMENT}" = "github-hosted"
+          test "${RUNNER_OS}" = "Linux"
+          test "${RUNNER_ARCH}" = "X64"
+          gh --version
+          pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion'
+
+      - name: Require owner-controlled administration token
+        shell: bash
+        env:
+          OMNEXA_GITHUB_ADMIN_TOKEN: ${{ secrets.OMNEXA_GITHUB_ADMIN_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${OMNEXA_GITHUB_ADMIN_TOKEN:-}" ]; then
+            echo "ERROR: repository secret OMNEXA_GITHUB_ADMIN_TOKEN is required."
+            exit 1
+          fi
+          echo "Administration token presence: PASS"
+
+      - name: Apply main protection
+        shell: pwsh
+        env:
+          OMNEXA_GITHUB_ADMIN_TOKEN: ${{ secrets.OMNEXA_GITHUB_ADMIN_TOKEN }}
+        run: ./scripts/apply_main_protection.ps1
+
+      - name: Verify main protection
+        shell: pwsh
+        env:
+          OMNEXA_GITHUB_ADMIN_TOKEN: ${{ secrets.OMNEXA_GITHUB_ADMIN_TOKEN }}
+        run: ./scripts/verify_main_protection.ps1
