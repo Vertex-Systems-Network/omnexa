@@ -105,3 +105,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
 - Commit / PR: fill with merged P00.04 PR/CI evidence in an append-only reconciliation entry after merge.
 - Notes: P00 execution lock remains active. `P00.05` is the only active work package after merge; P00.06 remains ready.
+
+## 2026-08-21 — P00.04 Merge reconciliation
+
+- Phase / package: `P00.04`
+- Transition: confirms `done`; `P00.05` active; `P00.06` ready.
+- Summary: P00.04 HTTP API contract PR merged to `main` after governance validation passed.
+- Evidence: PR #9 merged successfully; governance workflow run `32508832872` passed; squash merge commit `0378a10ce5e0dd9c1d6e67a9358850f990499584`.
+- Architecture impact: confirms ADR-0003 and the P00.04 stable HTTP API baseline; no additional architecture change.
+- State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `4 / 10 done` with P00.05 active.
+- Commit / PR: `#9` / `0378a10ce5e0dd9c1d6e67a9358850f990499584`.
+- Notes: kernel/business implementation remains locked until P00 exit; issue #3 and issue #4 remain open.
