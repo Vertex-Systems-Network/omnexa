@@ -108,6 +108,8 @@ Required gates have only these outcomes:
 
 ## 6. Least-privilege CI
 
+The canonical CI credential and permission rule is `least-privilege`: grant only the minimum permissions needed for the specific job and trust boundary.
+
 - Default workflow/token permissions are read-only/minimal.
 - Secrets are scoped by environment/job and unavailable to untrusted fork code.
 - Pull requests do not receive production deploy/signing credentials.
