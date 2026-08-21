@@ -4,7 +4,7 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.05 — Event contract standard**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.06 — Security and data-classification baseline**.
 
 ## Mandatory contributor / AI start here
 
@@ -24,13 +24,14 @@ Any human or AI system changing this repository must read the following in order
 12. [`docs/architecture/LOCALE_STANDARD.md`](docs/architecture/LOCALE_STANDARD.md)
 13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
 14. [`docs/architecture/API_STANDARD.md`](docs/architecture/API_STANDARD.md)
-15. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-16. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-17. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-18. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-19. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-20. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-21. Relevant ADRs under [`docs/adr/`](docs/adr/)
+15. [`docs/architecture/EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md)
+16. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+17. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+18. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+19. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+20. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+21. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+22. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
@@ -73,6 +74,20 @@ These decisions are recorded by [`ADR-0002`](docs/adr/ADR-0002-foundation-data-c
 
 The contract is defined by [`API_STANDARD.md`](docs/architecture/API_STANDARD.md), [`openapi-template.yaml`](docs/contracts/http/openapi-template.yaml), and [`ADR-0003`](docs/adr/ADR-0003-http-api-contract-baseline.md).
 
+## Frozen event baseline (P00.05)
+
+- Event types use `<domain>.<subject>.<past_tense_fact>.v<major>` and remain producer-owned contracts.
+- Canonical structured envelope is CloudEvents-compatible with UUIDv7 event identity.
+- Tenant-owned events carry trusted producer-derived `tenantid`; correlation, causation and trace context are explicit.
+- Delivery baseline is **at least once**; consumers must be idempotent.
+- Business-significant publication/consumption uses transactional outbox + inbox/deduplication or equivalent guarantees.
+- Global ordering is not assumed; subject-scoped ordering is explicit and may use `subjectsequence`.
+- Retries are bounded; poison messages use dead-letter/quarantine handling.
+- Replay preserves original event identity and must remain safe against duplicate side effects.
+- Broker routes are infrastructure detail, not business identity; event sourcing is not assumed platform-wide.
+
+The contract is defined by [`EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md), [`event-envelope.schema.json`](docs/contracts/events/event-envelope.schema.json), and [`ADR-0004`](docs/adr/ADR-0004-event-contract-baseline.md).
+
 ## Technology baseline
 
 Until superseded by an accepted ADR:
@@ -100,7 +115,7 @@ Repository-level controls include:
 - hosted repository ruleset target in [`docs/governance/REPOSITORY_HARDENING.md`](docs/governance/REPOSITORY_HARDENING.md)
 - licensing/IP decision gate in [`docs/governance/LICENSING_DECISION.md`](docs/governance/LICENSING_DECISION.md)
 
-Hosted branch protection and licensing/IP/trademark decisions remain explicitly tracked; they do not authorize early implementation.
+GitHub currently reports `main` as unprotected; issue #3 remains open because the connected GitHub toolset has no branch-protection/ruleset write action. Licensing/IP/trademark also remains explicitly tracked in issue #4. Neither issue authorizes early implementation.
 
 ## Roadmap
 
@@ -138,6 +153,7 @@ Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted bas
 - [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md)
 - [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
 - [`ADR-0003 — HTTP API Contract Baseline`](docs/adr/ADR-0003-http-api-contract-baseline.md)
+- [`ADR-0004 — Event Contract Baseline`](docs/adr/ADR-0004-event-contract-baseline.md)
 
 Do not implement an architectural change first and document it afterward.
 
