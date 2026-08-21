@@ -160,3 +160,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, exception document and ADR-0006.
 - Commit / PR: exception incorporated into PR #13 before merge.
 - Notes: exception expires before any P01 implementation merge, at P00 exit, when Actions returns or on owner revocation. Any later governance validation failure reopens the affected package.
+
+## 2026-08-22 — P00.06 Merge reconciliation under temporary CI exception
+
+- Phase / package: `P00.06`
+- Transition: confirms `done`; `P00.07` active.
+- Summary: Security/data-classification baseline merged after owner-authorized manual P00 evidence review because hosted GitHub Actions allowance was exhausted/disabled.
+- Evidence: PR #13 merged successfully; squash merge commit `09399038d7011e9e811901fb602fb9268ef02070`; PR diff inspection confirmed documentation/governance/specification-only scope; mandatory P00.06 artifacts and state/status reconciliation were inspected; hosted Actions remains `BLOCKED/NOT RUN`, not PASS, under ADR-0006 and issue #14.
+- Architecture impact: confirms ADR-0005 security/data-classification baseline and ADR-0006 temporary evidence exception; no runtime/kernel/business code introduced.
+- State files reconciled: `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md` reflect `6 / 10 done` with `P00.07` active.
+- Commit / PR: `#13` / `09399038d7011e9e811901fb602fb9268ef02070`.
+- Notes: temporary CI exception remains valid only for P00 documentation/specification work and expires before P01 implementation. Main branch protection issue #3 and licensing/IP/trademark issue #4 remain open.
