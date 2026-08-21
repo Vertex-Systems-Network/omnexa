@@ -14,12 +14,13 @@ Current program state:
 Foundation Architecture v1: FROZEN
 P00: ACTIVE — exit verification
 P00.10: ACTIVE — review_state=verification
-P01: BLOCKED
+Executable CI gate: SATISFIED
+P01: BLOCKED BY ISSUE #3 ONLY
 kernel_code_authorized: false
 business_feature_code_authorized: false
 ```
 
-Do not infer implementation permission from the word `FROZEN`. Architecture is frozen; implementation is still locked.
+Do not infer implementation permission from the word `FROZEN`. Architecture is frozen; implementation is still locked until the remaining P01 entry gate is cleared.
 
 ## Mandatory read order
 
@@ -39,7 +40,7 @@ Before material work, read:
 12. SLO, Incident and Reliability standards
 13. roadmap `MASTER_PLAN.md`, `STATUS.md`, `STATE.json`
 14. AI Execution Policy, Change Control and Definition of Done
-15. active CI exception if present
+15. historical/active CI exception record if relevant
 16. relevant accepted ADRs, especially ADR-0010.
 
 If canonical documents conflict, stop implementation and resolve through change control.
@@ -51,29 +52,37 @@ P00.01–P00.09 are accepted as **Omnexa Foundation Architecture v1**. Material 
 P00.10 remains active in exit verification. The only authorized work is:
 
 - P00 exit verification;
-- branch-protection/CI entry-gate remediation;
-- narrow governance reconciliation;
+- branch-protection entry-gate remediation;
+- narrow governance/CI reconciliation;
 - explicit correction of a discovered frozen-baseline contradiction.
 
-Do not start P01 kernel code while the P01 entry gate is blocked.
+Do not start P01 kernel code while Issue #3 remains unresolved.
 
-## P01 entry blockers
+## P01 entry gates
 
-### Issue #3 — protected integration path
+### EG-02 / Issue #3 — protected integration path — BLOCKED
 
-Before any executable P01 merge, `main` protection must be applied and verified: PR-based integration, blocked force-push/deletion, controlled bypass, conversation resolution and required checks once an executable CI lane exists.
+Before any executable P01 merge, `main` protection must be applied and verified: PR-based integration, required `governance` check, blocked force-push/deletion, controlled bypass and conversation resolution.
 
-### Issue #14 — executable verification lane
+### EG-03 / Issue #14 — executable verification lane — SATISFIED
 
-Before any executable P01 merge, an approved CI/self-hosted/provider lane must be able to run repository-owned verification semantics in a clean reproducible environment. GitHub Actions itself is not architecturally mandatory; a compliant equivalent is acceptable.
+The canonical governance workflow is operational on the local Windows self-hosted runner using:
+
+```text
+[self-hosted, Windows, X64]
+```
+
+Verified evidence: PR #20; workflow run `32522919774`; governance job `96898839560`; runner `LOCAL-WIN-01`; all four repository validators PASS; merge commit `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`; Issue #14 closed/completed.
+
+The self-hosted lane may be expanded for P01 gates, but it may not weaken P00.07 quality semantics.
 
 ### Issue #4 — external distribution only
 
-Licensing/IP/trademark resolution is a hard gate before public/external distribution or self-hosted customer delivery. It does not block private internal P01 engineering after Issue #3/#14 are cleared.
+Licensing/IP/trademark resolution is a hard gate before public/external distribution or self-hosted customer delivery. It does not block private internal P01 engineering after Issue #3 is cleared.
 
-## Temporary hosted-CI exception
+## Historical hosted-CI exception
 
-ADR-0006 applies only while P00 remains open. Hosted Actions is `BLOCKED`/`NOT RUN`, never `PASS`. The exception cannot authorize executable P01 work and expires at P00 exit.
+ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The local self-hosted executable lane is now operational, so new P00 changes should use executable CI rather than the manual exception while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
 
 ## Architecture invariants
 
@@ -159,24 +168,24 @@ For every material change:
 6. preserve module/repository boundaries;
 7. implement only authorized scope;
 8. add positive + negative evidence and threat-model delta where needed;
-9. execute canonical verification when executable work is authorized;
+9. execute canonical verification on the approved self-hosted/other executable lane;
 10. record evidence accurately and reconcile STATUS/STATE;
 11. document architecture change through ADR/change control before implementation.
 
 ## Forbidden behavior
 
-Do not start P01 while blocked; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; or mix unrelated project code.
+Do not start P01 while Issue #3 is blocked; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; or mix unrelated project code.
 
 ## Exact next transition
 
-Only after Issue #3 and #14 have verified evidence may a narrow governance PR:
+Only after Issue #3 has verified branch-protection evidence may a narrow governance PR:
 
 - mark P00.10 and P00 done;
-- expire ADR-0006;
+- retire ADR-0006 from active use;
 - activate P01;
 - set `kernel_code_authorized = true`;
 - keep `business_feature_code_authorized = false`;
-- record entry evidence;
+- record branch-protection and existing executable-CI evidence;
 - define the first P01 kernel work package.
 
 Do not combine this transition with unrelated kernel feature implementation.
