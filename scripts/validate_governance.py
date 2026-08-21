@@ -39,7 +39,9 @@ REQUIRED_FILES = [
     "docs/architecture/LOCALE_STANDARD.md",
     "docs/architecture/ERROR_STANDARD.md",
     "docs/architecture/API_STANDARD.md",
+    "docs/architecture/EVENT_STANDARD.md",
     "docs/contracts/http/openapi-template.yaml",
+    "docs/contracts/events/event-envelope.schema.json",
     "docs/roadmap/MASTER_PLAN.md",
     "docs/roadmap/STATUS.md",
     "docs/roadmap/STATE.json",
@@ -47,6 +49,7 @@ REQUIRED_FILES = [
     "docs/adr/ADR-0001-platform-architecture-baseline.md",
     "docs/adr/ADR-0002-foundation-data-conventions.md",
     "docs/adr/ADR-0003-http-api-contract-baseline.md",
+    "docs/adr/ADR-0004-event-contract-baseline.md",
     "docs/adr/TEMPLATE.md",
 ]
 
@@ -62,6 +65,12 @@ P00_04_EVIDENCE = {
     "docs/architecture/API_STANDARD.md",
     "docs/contracts/http/openapi-template.yaml",
     "docs/adr/ADR-0003-http-api-contract-baseline.md",
+}
+
+P00_05_EVIDENCE = {
+    "docs/architecture/EVENT_STANDARD.md",
+    "docs/contracts/events/event-envelope.schema.json",
+    "docs/adr/ADR-0004-event-contract-baseline.md",
 }
 
 P00_03_MARKERS = {
@@ -87,6 +96,25 @@ P00_04_MARKERS = {
         "Problem:",
         "IdempotencyKey:",
         "PageCursor:",
+    ],
+}
+
+P00_05_MARKERS = {
+    "docs/architecture/EVENT_STANDARD.md": [
+        "CloudEvents-compatible",
+        "at least once",
+        "transactional outbox",
+        "inbox/deduplication",
+        "subjectsequence",
+        "dead-letter",
+        "Replay",
+    ],
+    "docs/contracts/events/event-envelope.schema.json": [
+        '"specversion"',
+        '"tenantid"',
+        '"correlationid"',
+        '"causationid"',
+        '"subjectsequence"',
     ],
 }
 
@@ -177,15 +205,15 @@ def validate_state(state: dict) -> None:
             if missing_evidence:
                 fail(f"done work package {pkg_id} references missing evidence: {', '.join(missing_evidence)}")
 
-    p00_03 = packages_by_id.get("P00.03")
-    if p00_03 and p00_03.get("state") == "done":
-        if not P00_03_EVIDENCE.issubset(set(p00_03.get("evidence") or [])):
-            fail("P00.03 done state is missing mandatory foundation-convention evidence")
-
-    p00_04 = packages_by_id.get("P00.04")
-    if p00_04 and p00_04.get("state") == "done":
-        if not P00_04_EVIDENCE.issubset(set(p00_04.get("evidence") or [])):
-            fail("P00.04 done state is missing mandatory API-contract evidence")
+    for package_id, required in [
+        ("P00.03", P00_03_EVIDENCE),
+        ("P00.04", P00_04_EVIDENCE),
+        ("P00.05", P00_05_EVIDENCE),
+    ]:
+        pkg = packages_by_id.get(package_id)
+        if pkg and pkg.get("state") == "done":
+            if not required.issubset(set(pkg.get("evidence") or [])):
+                fail(f"{package_id} done state is missing mandatory evidence")
 
     done_count = sum(pkg.get("state") == "done" for pkg in work_packages)
     if phase.get("done_work_packages") != done_count:
@@ -236,6 +264,7 @@ def main() -> int:
     require_files()
     validate_markers(P00_03_MARKERS, "P00.03")
     validate_markers(P00_04_MARKERS, "P00.04")
+    validate_markers(P00_05_MARKERS, "P00.05")
     state = load_state()
     validate_state(state)
     validate_status(state)

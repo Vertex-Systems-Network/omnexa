@@ -7,7 +7,7 @@ Last reconciled: **2026-08-21**
 - Program: **Foundation Program**
 - Phase: **P00 — Product Constitution & Architecture Freeze**
 - Phase state: **active**
-- Current work package: **P00.05 — Event contract standard**
+- Current work package: **P00.06 — Security and data-classification baseline**
 - Business-feature implementation: **NOT AUTHORIZED YET**
 - Kernel implementation: **NOT AUTHORIZED YET**
 
@@ -19,14 +19,14 @@ Last reconciled: **2026-08-21**
 | P00.02 | Product/domain glossary and naming standard | done | `GLOSSARY.md`, `NAMING_STANDARD.md`, `DOMAIN_OWNERSHIP.md`, `DEPENDENCY_MATRIX.md`, contribution/security/hardening controls and governance CI baseline |
 | P00.03 | ID, money, time, locale and error conventions | done | `IDENTIFIER_STANDARD.md`, `MONEY_STANDARD.md`, `TIME_STANDARD.md`, `LOCALE_STANDARD.md`, `ERROR_STANDARD.md`, ADR-0002 plus governance validation |
 | P00.04 | API contract standard | done | `API_STANDARD.md`, OpenAPI 3.2 foundation template, ADR-0003 and governance validation |
-| P00.05 | Event contract standard | active | Current canonical work package: event envelope/versioning/ownership/reliability/replay rules |
-| P00.06 | Security and data-classification baseline | ready | Dependency gate satisfied; remains non-active while P00.05 executes |
+| P00.05 | Event contract standard | done | `EVENT_STANDARD.md`, event-envelope JSON Schema, ADR-0004 and governance validation |
+| P00.06 | Security and data-classification baseline | active | Current canonical work package |
 | P00.07 | Testing/CI/release standard | planned | Requires P00.04/P00.05/P00.06 |
 | P00.08 | Local developer and repository structure specification | planned | Requires P00.03/P00.07 |
 | P00.09 | Initial threat model and operational SLO targets | planned | Must precede foundation freeze |
 | P00.10 | Foundation architecture freeze review | planned | Final P00 exit gate |
 
-P00 package progress: **4 / 10 done**.
+P00 package progress: **5 / 10 done**.
 
 ## P00.03 frozen primitives
 
@@ -46,26 +46,27 @@ P00 package progress: **4 / 10 done**.
 - Protected retriable mutations define `Idempotency-Key` semantics; lost-update-sensitive resources may use `ETag` + `If-Match`.
 - Cursor pagination (`page_size`, `page_cursor`) is the scalable default; filters/sorts are allowlisted.
 - Tenant selection is untrusted input and never authorization authority.
-- Compatibility/deprecation rules and an OpenAPI machine template are now frozen.
 
-These conventions are platform contracts. P00.05/P00.06/P00.07 may add event/security/CI details but must not contradict them without change control/ADR.
+## P00.05 frozen event baseline
+
+- Published events are immutable past-tense facts with explicit major version: `<domain>.<subject>.<fact>.v<major>`.
+- Canonical envelope is CloudEvents-compatible structured JSON with UUIDv7 event identity.
+- Tenant-owned events carry producer-derived `tenantid`; correlation, causation and trace context remain explicit.
+- Producers own event meaning/schema/publication conditions; consumers may not redefine producer contracts.
+- Delivery baseline is **at least once**; consumers must be idempotent.
+- Business-significant publication/consumption uses transactional outbox + inbox/deduplication or equivalent guarantees.
+- No global ordering guarantee; subject-scoped ordering is explicit and may use `subjectsequence`.
+- Retries are bounded, poison messages use dead-letter/quarantine handling, and replay preserves immutable event identity.
+- Broker routing is transport detail, not business identity; event sourcing is not assumed platform-wide.
 
 ## Governance hardening status
 
-File-level governance is specified/implemented through:
+File-level governance is implemented through CODEOWNERS, contribution/security policies, architecture-change/bug templates, ADR templates, repository hardening specification, dependency-free governance state validation and GitHub Actions governance CI.
 
-- `.github/CODEOWNERS`;
-- contribution and security policies;
-- architecture-change and bug templates;
-- ADR template;
-- repository hardening specification;
-- dependency-free governance state validator;
-- GitHub Actions governance workflow.
+Hosted/business decisions still tracked:
 
-Two hosted/business decisions remain explicitly tracked:
-
-1. **Issue #3 — main branch/ruleset protection:** GitHub-hosted branch protection must be enabled and verified against `docs/governance/REPOSITORY_HARDENING.md`.
-2. **Issue #4 — licensing/IP/trademark:** existing GPLv3 must not be treated as an automatically approved final commercial strategy; owner/legal decision is required before external distribution/public launch.
+1. **Issue #3 — main branch/ruleset protection:** GitHub currently reports `main` as unprotected. The connected GitHub toolset exposes no branch-protection/ruleset write action, so hosted admin configuration is still required and must be verified against `docs/governance/REPOSITORY_HARDENING.md`.
+2. **Issue #4 — licensing/IP/trademark:** existing GPLv3 is not automatically approved as the final commercial strategy; owner/legal decision is required before external distribution/public launch.
 
 Neither issue authorizes early kernel/business implementation.
 

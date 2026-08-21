@@ -116,3 +116,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `4 / 10 done` with P00.05 active.
 - Commit / PR: `#9` / `0378a10ce5e0dd9c1d6e67a9358850f990499584`.
 - Notes: kernel/business implementation remains locked until P00 exit; issue #3 and issue #4 remain open.
+
+## 2026-08-21 — P00.05 Event contract baseline
+
+- Phase / package: `P00.05`
+- Transition: `active -> done` upon verified merge of the P00.05 PR; `P00.06` becomes active.
+- Summary: Frozen event naming/versioning, CloudEvents-compatible envelope, producer ownership, tenant/correlation/causation context, schema evolution, at-least-once delivery assumptions, transactional outbox/inbox idempotency, subject-scoped ordering, bounded retry, dead-letter/quarantine and replay semantics.
+- Evidence: `docs/architecture/EVENT_STANDARD.md`, `docs/contracts/events/event-envelope.schema.json`, `docs/adr/ADR-0004-event-contract-baseline.md`, updated `AGENTS.md`, `README.md`, state/status and stronger governance validation.
+- Architecture impact: establishes platform-wide event contract and reliability semantics; no application/kernel/business implementation introduced.
+- State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
+- Commit / PR: fill with merged P00.05 PR/CI evidence in an append-only reconciliation entry after merge.
+- Notes: P00 execution lock remains active. `P00.06` is the only active work package after merge.

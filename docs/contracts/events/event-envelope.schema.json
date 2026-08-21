@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:omnexa:event-schema:envelope:v1",
+  "title": "Omnexa Event Envelope v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "specversion",
+    "id",
+    "source",
+    "type",
+    "time",
+    "datacontenttype",
+    "dataschema",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Immutable event identity; UUIDv7 by Omnexa convention."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^urn:omnexa:module:[a-z0-9.\\-]+$"
+    },
+    "type": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9_]*){2,}\\.v[1-9][0-9]*$"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datacontenttype": {
+      "const": "application/json"
+    },
+    "dataschema": {
+      "type": "string",
+      "pattern": "^urn:omnexa:event-schema:[a-z0-9._-]+:v[1-9][0-9]*$"
+    },
+    "tenantid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "organizationid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "correlationid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "causationid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "traceparent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actorid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actortype": {
+      "type": "string",
+      "enum": ["user", "service_account", "system", "agent"]
+    },
+    "subjectsequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["actortype"]
+      },
+      "then": {
+        "required": ["actorid"]
+      }
+    }
+  ]
+}
