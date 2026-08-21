@@ -5,6 +5,14 @@ Owner phase: **P00.10 -> P01 transition**
 
 P01 kernel implementation is not authorized merely because the P00 architecture documents exist. This gate is the operational handoff between architecture freeze and executable kernel work.
 
+Prepared handoff artifacts:
+
+- `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
+- `docs/roadmap/work-packages/P01.01.md`
+- `scripts/validate_p01_preparation.py`
+
+These artifacts reduce transition ambiguity but do not satisfy EG-02 or authorize executable code.
+
 ## Required before P01 executable merge
 
 ### EG-01 — Foundation architecture freeze accepted
@@ -60,7 +68,7 @@ Current canonical evidence:
 - PR #23 migrated `Omnexa Governance` to require successful validation evidence produced specifically by runner `LOCAL-WIN-4`;
 - runner `LOCAL-WIN-4` executed on Windows X64 / machine `ABDUL-HANAN` from `C:\actions-runner-4\_work`;
 - Git `2.55.0.windows.5` and Python `3.13.7` were available;
-- workflow run `32528329184` executed all four validators successfully on `LOCAL-WIN-4` and the final job named `governance` completed **SUCCESS**;
+- workflow run `32528329184` executed all four then-current validators successfully on `LOCAL-WIN-4` and the final job named `governance` completed **SUCCESS**;
 - `scripts/validate_governance.py` PASS;
 - `scripts/validate_development_spec.py` PASS;
 - `scripts/validate_operations_spec.py` PASS;
@@ -71,31 +79,43 @@ Historical evidence remains PR #20 / run `32522919774`, which originally restore
 
 `LOCAL-WIN-4` currently has no unique schedulable Actions label. The canonical workflow therefore fails closed: it fans out only across local Windows/X64 self-hosted runners, runs validators only where `RUNNER_NAME == LOCAL-WIN-4`, uploads target pass evidence only from that runner, and exposes a final `governance` job that fails if no LOCAL-WIN-4 evidence exists.
 
+While P01 remains blocked, `scripts/validate_p01_preparation.py` is also required on the LOCAL-WIN-4 target and rejects known executable P01.01 paths while `kernel_code_authorized=false`.
+
 ### EG-04 — canonical local verification command exists
 State: **PENDING P01 BOOTSTRAP / MUST BE FIRST-CLASS**
 
 P01 may create the executable `omnexa verify`/equivalent command family defined by P00.07/P00.08, but the first executable PR must not merge unless its applicable verification runs through the satisfied executable-CI lane.
 
+The first package controlling this bootstrap is `docs/roadmap/work-packages/P01.01.md`.
+
 ### EG-05 — implementation locks transition atomically
 State: **BLOCKED BY EG-02 ONLY**
 
-The transition PR must:
+The transition PR must follow `docs/governance/P00_P01_TRANSITION_CHECKLIST.md` and:
 
 - verify Issue #3 / hosted `main` protection, or reference a superseding accepted governance ADR that deliberately replaces EG-02;
 - mark P00.10 done;
 - mark P00 phase done;
 - retire the temporary P00 CI exception from active use;
-- activate P01;
+- activate P01 and P01.01;
 - set `kernel_code_authorized = true`;
 - keep `business_feature_code_authorized = false`;
-- define the first P01 work package;
+- keep P01.02–P01.12 planned;
 - record branch-protection/compensating-control and CI evidence.
 
-Do not combine the transition with unrelated kernel feature code.
+Do not combine the transition with kernel implementation. The first kernel-code PR is separate and follows the merged transition.
+
+## Prepared P01.01 scope
+
+P01.01 is prepared as **Go workspace/build skeleton** and remains `planned`.
+
+It may not be implemented yet. Its specification deliberately excludes configuration, DB, cache, storage, telemetry, health, jobs, feature flags, audit, identity/tenancy, module runtime and business-domain behavior. Those remain later packages/phases.
 
 ## External distribution gate
 
-Issue #4 licensing/IP/trademark is **not** an internal P01 engineering blocker, but remains a hard gate before external/public distribution, self-hosted customer delivery or public launch.
+Issue #4 licensing/IP/trademark is **not** an internal P01 engineering blocker, but remains a hard gate before external/public distribution, self-hosted customer delivery, public launch or external contributor intake.
+
+The owner/legal decision worksheet is `docs/governance/LICENSING_DECISION_BRIEF.md`. It does not change `LICENSE` or establish trademark clearance.
 
 Changing this private repository to public merely to obtain GitHub Free branch protection is not an implicit workaround; it requires an explicit owner/legal/security decision and must consider Issue #4 first.
 
@@ -106,6 +126,7 @@ P00 architecture: FROZEN
 Executable CI lane: SATISFIED ON LOCAL-WIN-4
 EG-02: BLOCKED_BY_PLAN
 P00 exit: BLOCKED ON ISSUE #3 / EG-02 ONLY
+P01.01: PREPARED / PLANNED
 P01 implementation: NOT AUTHORIZED
 Kernel code: LOCKED
 Business feature code: LOCKED
