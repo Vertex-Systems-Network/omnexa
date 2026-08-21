@@ -13,8 +13,8 @@ All items must be true before the transition PR is opened as ready-to-merge:
 - [ ] P00.01–P00.09 remain `done` and frozen.
 - [ ] P00.10 review artifacts are present and internally consistent.
 - [ ] `docs/governance/FOUNDATION_FREEZE.json` reports `architecture_status=FROZEN`.
-- [ ] Executable governance CI is operational and produces evidence specifically from `LOCAL-WIN-4`.
-- [ ] Final `governance` aggregator check passes.
+- [ ] Executable governance CI is operational on the approved Windows/X64 self-hosted pool.
+- [ ] The required `governance` job passes on whichever eligible runner GitHub schedules.
 - [ ] Issue #14 remains resolved/completed.
 - [ ] EG-02 / Issue #3 is no longer blocked.
 - [ ] If GitHub hosted protection is used, live API reports `main.protected=true` and required `governance` check is enforced.
@@ -54,8 +54,7 @@ The transition PR must produce:
 - [ ] `scripts/validate_operations_spec.py` PASS.
 - [ ] `scripts/validate_freeze_review.py` PASS or its governed post-P00 successor.
 - [ ] `scripts/validate_p01_preparation.py` PASS.
-- [ ] LOCAL-WIN-4 target evidence PASS.
-- [ ] final `governance` check PASS.
+- [ ] required `governance` job PASS on an approved Windows/X64 self-hosted runner.
 
 No `BLOCKED`, `NOT RUN` or manual-only exception may be relabeled PASS.
 
@@ -89,7 +88,7 @@ Do not complete the transition if any of these occur:
 
 - hosted protection is assumed rather than observed;
 - compensating-control ADR is proposed but not explicitly owner-approved;
-- LOCAL-WIN-4 evidence is absent;
+- no eligible Windows/X64 governance runner produces PASS evidence;
 - final `governance` check fails/blocks;
 - state would authorize business code;
 - more than one P01 package becomes active;
@@ -102,7 +101,8 @@ Do not complete the transition if any of these occur:
 P00 architecture: FROZEN
 P00.10: EXIT VERIFICATION
 EG-02 / Issue #3: BLOCKED_BY_PLAN
-Executable CI: SATISFIED ON LOCAL-WIN-4
+Executable CI: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
+Latest routing proof: LOCAL-WIN-02 / run 32535324900
 P01: BLOCKED
 P01.01 specification: PREPARED / PLANNED
 Kernel code: LOCKED
