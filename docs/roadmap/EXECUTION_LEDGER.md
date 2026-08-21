@@ -171,3 +171,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md` reflect `6 / 10 done` with `P00.07` active.
 - Commit / PR: `#13` / `09399038d7011e9e811901fb602fb9268ef02070`.
 - Notes: temporary CI exception remains valid only for P00 documentation/specification work and expires before P01 implementation. Main branch protection issue #3 and licensing/IP/trademark issue #4 remain open.
+
+## 2026-08-22 — P01 preparation and runner-agnostic governance CI merge reconciliation
+
+- Phase / package: `P00.10` exit verification / P01 implementation-readiness preparation.
+- Transition: no roadmap phase transition; P00.10 remains `active / verification`, P01 remains `blocked`, P01.01 remains `planned`.
+- Summary: Prepared the controlling P01.01 Go workspace/build-skeleton specification, deterministic P00→P01 transition checklist, owner/legal licensing-IP-trademark decision brief, and a fail-closed P01-preparation validator. Replaced the LOCAL-WIN-4-specific discovery/fanout workflow with one required `governance` job that may execute on any eligible Windows/X64 self-hosted runner.
+- Evidence: PR #27 final head `685d969a065c980e76fd56ee0a02f54e95675ecc`; workflow run `32535938468` / job `96936760894` completed SUCCESS on `LOCAL-WIN-01` (Windows/X64, machine `ABDUL-HANAN`); branch-protection PowerShell parse PASS; governance/development/operations/foundation-freeze/P01-preparation validators all PASS; PR #27 squash-merged as `27a2476329b4df426637d4e9a7f08228c1729bdd`.
+- Architecture impact: no executable kernel/business implementation; frozen P00 architecture is unchanged. CI routing becomes runner-name agnostic without weakening validation semantics. Issue #4 is converted from an unstructured decision placeholder into an explicit owner/legal decision worksheet without changing `LICENSE` or asserting trademark clearance.
+- State files reconciled: PR #27 reconciled `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `AGENTS.md`, `README.md`, `docs/governance/P01_ENTRY_GATE.md`, and `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`.
+- Commit / PR: `#27` / `27a2476329b4df426637d4e9a7f08228c1729bdd`.
+- Notes: Issue #3 / EG-02 remains `BLOCKED_BY_PLAN`; `main` is still unprotected. `kernel_code_authorized=false` and `business_feature_code_authorized=false`. Do not start executable P01 until EG-02 is verified satisfied or deliberately superseded by an owner-approved governance ADR.
