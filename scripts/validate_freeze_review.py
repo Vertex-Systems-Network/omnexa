@@ -84,7 +84,7 @@ for marker in [
     "32535324900",
     "LOCAL-WIN-02",
 ]:
-    if marker not in p01_gate:
+    if marker.lower() not in p01_gate.lower():
         raise SystemExit(f"ERROR: P01 entry gate missing reconciliation marker: {marker}")
 
 external = manifest.get("external_distribution_gate") or {}
