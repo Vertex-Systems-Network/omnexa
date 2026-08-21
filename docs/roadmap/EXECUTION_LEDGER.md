@@ -50,3 +50,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
 - Commit / PR: fill with merged P00.02 PR reference in an append-only reconciliation entry after merge.
 - Notes: GitHub-hosted main-branch protection remains tracked in issue #3 because the available connector cannot mutate branch/ruleset settings. Licensing/IP/trademark strategy remains tracked in issue #4 and is not changed automatically.
+
+## 2026-08-21 — P00.02 Merge reconciliation
+
+- Phase / package: `P00.02`
+- Transition: confirms `done`; `P00.03` active.
+- Summary: P00.02 governance/specification PR merged to `main` after the first Omnexa governance workflow completed successfully.
+- Evidence: PR #5 merged successfully; governance workflow run `32505512601` passed; squash merge commit `51516acd39af7056b9e6ab9e8c41346a4becd003`.
+- Architecture impact: no additional architecture change beyond the P00.02 terminology/ownership/dependency constraints recorded by PR #5.
+- State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `2 / 10 done` with `P00.03` active.
+- Commit / PR: `#5` / `51516acd39af7056b9e6ab9e8c41346a4becd003`.
+- Notes: issue #3 tracks hosted `main` branch protection; issue #4 tracks licensing/IP/trademark strategy. Kernel and business-feature implementation remain locked until P00 exit.
