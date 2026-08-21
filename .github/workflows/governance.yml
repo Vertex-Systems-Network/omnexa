@@ -61,3 +61,7 @@ jobs:
       - name: Validate P01 implementation-readiness preparation
         shell: cmd
         run: python scripts\validate_p01_preparation.py
+
+      - name: Validate complete P01 package specification set
+        shell: cmd
+        run: python scripts\validate_p01_package_specs.py
