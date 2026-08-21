@@ -27,7 +27,8 @@
       "issue": 14,
       "exception": "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
       "adr": "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
-      "note": "Project owner confirmed GitHub Actions allowance is exhausted/disabled and explicitly authorized skipping hosted Actions for P00 documentation/specification work only. Hosted CI evidence is BLOCKED/NOT RUN, not PASS. Exception expires before P01 implementation or sooner if Actions returns."
+      "evidence_state": "BLOCKED",
+      "note": "Project owner confirmed GitHub Actions allowance is exhausted/disabled and explicitly authorized skipping hosted Actions for P00 documentation/specification work only. Hosted CI is not PASS. Exception expires before P01 implementation or sooner if Actions returns."
     },
     "licensing_ip_trademark": {
       "state": "decision_required_before_external_distribution",
