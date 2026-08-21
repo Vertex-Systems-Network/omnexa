@@ -37,11 +37,13 @@
       "issue": 14,
       "evidence_state": "PASS",
       "runner_selector": ["self-hosted", "Windows", "X64"],
-      "runner_name": "LOCAL-WIN-01",
-      "workflow_run": 32522919774,
-      "job": 96898839560,
-      "merge_commit": "c2ab2cd679c295a8dec84b1879acb9a9e02ad67d",
-      "note": "Executable governance CI is restored on the local Windows self-hosted runner. Issue #14 is closed/completed. ADR-0006 remains historical evidence and is no longer needed for new P00 changes while this lane remains operational."
+      "required_runner_name": "LOCAL-WIN-4",
+      "routing_mode": "fanout_detect_and_fail_closed",
+      "workflow_run": 32528329184,
+      "target_job": 96915072868,
+      "final_check": "governance",
+      "merge_commit": "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
+      "note": "Canonical governance CI requires pass evidence produced specifically on LOCAL-WIN-4. The workflow fans out only across local Windows/X64 self-hosted runners, runs validators only when RUNNER_NAME=LOCAL-WIN-4, uploads target evidence, and fails the final governance job if that evidence is absent. Issue #14 is closed/completed."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -99,5 +101,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 / workflow run 32522919774. P00.10 may move to done only after Issue #3 main protection is applied and verified. The transition must retire ADR-0006 from active use, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record branch-protection evidence. Issue #4 remains an external distribution/public-launch blocker."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and current canonical LOCAL-WIN-4 validation evidence. P00.10 may move to done only after Issue #3 main protection is applied and verified. The transition must retire ADR-0006 from active use, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record branch-protection evidence. Issue #4 remains an external distribution/public-launch blocker."
 }
