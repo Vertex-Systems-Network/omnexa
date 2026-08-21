@@ -7,7 +7,7 @@ Last reconciled: **2026-08-21**
 - Program: **Foundation Program**
 - Phase: **P00 — Product Constitution & Architecture Freeze**
 - Phase state: **active**
-- Current work package: **P00.03 — ID, money, time, locale and error conventions**
+- Current work package: **P00.04 — API contract standard**
 - Business-feature implementation: **NOT AUTHORIZED YET**
 - Kernel implementation: **NOT AUTHORIZED YET**
 
@@ -17,20 +17,30 @@ Last reconciled: **2026-08-21**
 |---|---|---|---|
 | P00.01 | Repository governance baseline | done | `AGENTS.md`, Product Constitution, Architecture, Module Standard, Change Control, DoD, Master Plan, State and baseline ADR |
 | P00.02 | Product/domain glossary and naming standard | done | `GLOSSARY.md`, `NAMING_STANDARD.md`, `DOMAIN_OWNERSHIP.md`, `DEPENDENCY_MATRIX.md`, contribution/security/hardening controls and governance CI baseline |
-| P00.03 | ID, money, time, locale and error conventions | active | Current canonical work package |
-| P00.04 | API contract standard | planned | Depends on P00.02/P00.03 |
-| P00.05 | Event contract standard | planned | Depends on P00.02/P00.03 |
-| P00.06 | Security and data-classification baseline | planned | Depends on P00.02/P00.03 |
-| P00.07 | Testing/CI/release standard | planned | Full executable quality/release gates; initial governance-only workflow already exists |
-| P00.08 | Local developer and repository structure specification | planned | Implementation skeleton specification only until earlier conventions settle |
+| P00.03 | ID, money, time, locale and error conventions | done | `IDENTIFIER_STANDARD.md`, `MONEY_STANDARD.md`, `TIME_STANDARD.md`, `LOCALE_STANDARD.md`, `ERROR_STANDARD.md` plus governance validation |
+| P00.04 | API contract standard | active | Next canonical work package; transport/versioning/resource/action/error/idempotency/pagination/compatibility rules |
+| P00.05 | Event contract standard | ready | Dependency gate satisfied; remains non-active while P00.04 executes |
+| P00.06 | Security and data-classification baseline | ready | Dependency gate satisfied; remains non-active while P00.04 executes |
+| P00.07 | Testing/CI/release standard | planned | Requires P00.04/P00.05/P00.06 |
+| P00.08 | Local developer and repository structure specification | planned | Requires P00.03/P00.07 |
 | P00.09 | Initial threat model and operational SLO targets | planned | Must precede foundation freeze |
 | P00.10 | Foundation architecture freeze review | planned | Final P00 exit gate |
 
-P00 package progress: **2 / 10 done**.
+P00 package progress: **3 / 10 done**.
+
+## P00.03 frozen conventions
+
+- Canonical new entity/request/event/workflow/job/audit identifiers: **UUIDv7**; PostgreSQL native `uuid`; canonical tenant scope field: `tenant_id`.
+- Money: exact decimal + explicit currency; JSON decimal strings; PostgreSQL baseline `NUMERIC(38,18)`; no binary floating point; explicit rounding/conversion policies.
+- Time: UTC instants + `timestamptz`; IANA timezones; business dates remain dates; recurring civil-time schedules retain timezone semantics.
+- Locale: BCP 47 language tags; country codes separate; locale never implies currency/timezone; RTL is a first-class UI requirement.
+- Errors: stable machine codes + safe structured problem representation + request/trace correlation; no public stack traces/SQL/secrets.
+
+These conventions are platform contracts. Later P00 packages may refine transport/runtime details but must not contradict them without change control/ADR.
 
 ## Governance hardening status
 
-File-level governance is now specified/implemented through:
+File-level governance is specified/implemented through:
 
 - `.github/CODEOWNERS`;
 - contribution and security policies;
@@ -40,7 +50,7 @@ File-level governance is now specified/implemented through:
 - dependency-free governance state validator;
 - GitHub Actions governance workflow.
 
-Two hosted/business decisions remain explicitly tracked and must not be forgotten:
+Two hosted/business decisions remain explicitly tracked:
 
 1. **Issue #3 — main branch/ruleset protection:** GitHub-hosted branch protection must be enabled and verified against `docs/governance/REPOSITORY_HARDENING.md`.
 2. **Issue #4 — licensing/IP/trademark:** existing GPLv3 must not be treated as an automatically approved final commercial strategy; owner/legal decision is required before external distribution/public launch.
