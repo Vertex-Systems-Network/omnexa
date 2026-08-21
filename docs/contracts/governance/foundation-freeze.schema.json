@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omnexa.dev/contracts/governance/foundation-freeze.schema.json",
+  "title": "Omnexa Foundation Freeze Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "architecture_status", "p00_exit_status", "frozen_packages", "p01_entry_gate", "external_distribution_gate"],
+  "properties": {
+    "version": {"type": "string", "const": "foundation-v1"},
+    "architecture_status": {"type": "string", "enum": ["FROZEN", "REOPENED"]},
+    "p00_exit_status": {"type": "string", "enum": ["VERIFICATION", "DONE"]},
+    "frozen_packages": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^P00\\.0[1-9]$"},
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true
+    },
+    "p01_entry_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "kernel_code_authorized", "business_feature_code_authorized", "blockers"],
+      "properties": {
+        "state": {"type": "string", "enum": ["BLOCKED", "READY"]},
+        "kernel_code_authorized": {"type": "boolean"},
+        "business_feature_code_authorized": {"type": "boolean"},
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "tracker", "state"],
+            "properties": {
+              "id": {"type": "string"},
+              "tracker": {"type": "string"},
+              "state": {"type": "string", "enum": ["BLOCKED", "SATISFIED"]},
+              "description": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "external_distribution_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "tracker"],
+      "properties": {
+        "state": {"type": "string", "enum": ["BLOCKED", "READY"]},
+        "tracker": {"type": "string"},
+        "description": {"type": "string"}
+      }
+    }
+  }
+}
