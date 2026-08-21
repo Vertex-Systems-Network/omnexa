@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-21",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.03",
+  "current_work_package": "P00.04",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -42,7 +42,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 2,
+    "done_work_packages": 3,
     "work_packages": [
       {
         "id": "P00.01",
@@ -84,25 +84,33 @@
       {
         "id": "P00.03",
         "name": "ID, money, time, locale and error conventions",
-        "state": "active",
-        "depends_on": ["P00.02"]
+        "state": "done",
+        "depends_on": ["P00.02"],
+        "evidence": [
+          "docs/architecture/IDENTIFIER_STANDARD.md",
+          "docs/architecture/MONEY_STANDARD.md",
+          "docs/architecture/TIME_STANDARD.md",
+          "docs/architecture/LOCALE_STANDARD.md",
+          "docs/architecture/ERROR_STANDARD.md",
+          "scripts/validate_governance.py"
+        ]
       },
       {
         "id": "P00.04",
         "name": "API contract standard",
-        "state": "planned",
+        "state": "active",
         "depends_on": ["P00.02", "P00.03"]
       },
       {
         "id": "P00.05",
         "name": "Event contract standard",
-        "state": "planned",
+        "state": "ready",
         "depends_on": ["P00.02", "P00.03"]
       },
       {
         "id": "P00.06",
         "name": "Security and data-classification baseline",
-        "state": "planned",
+        "state": "ready",
         "depends_on": ["P00.02", "P00.03"]
       },
       {
@@ -171,5 +179,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.03 may move to done only when canonical ID, money, time, locale and error conventions are documented with validation/compatibility rules and STATUS.md + STATE.json are reconciled; then P00.04 and P00.05 become eligible according to dependency gates."
+  "next_transition_rule": "P00.04 may move to done only when the canonical API contract standard defines transport/versioning/resource/action/error/idempotency/pagination/compatibility rules and machine validation evidence exists. P00.05 and P00.06 remain ready; foundation execution keeps exactly one active package."
 }
