@@ -31,18 +31,20 @@ Required evidence:
 State: **SATISFIED**
 Tracker: **Issue #14 — closed/completed**
 
-Verified evidence:
-- PR #20 moved `Omnexa Governance` to `runs-on: [self-hosted, Windows, X64]`;
-- attached runner executed as `LOCAL-WIN-01` on Windows X64;
-- Git and Python were available on the clean runner workspace;
-- workflow run `32522919774`, governance job `96898839560`, completed **SUCCESS**;
+Current canonical evidence:
+- PR #23 migrated `Omnexa Governance` to require successful validation evidence produced specifically by runner `LOCAL-WIN-4`;
+- runner `LOCAL-WIN-4` executed on Windows X64 / machine `ABDUL-HANAN` from `C:\actions-runner-4\_work`;
+- Git `2.55.0.windows.5` and Python `3.13.7` were available;
+- workflow run `32528329184` executed all four validators successfully on `LOCAL-WIN-4` and the final job named `governance` completed **SUCCESS**;
 - `scripts/validate_governance.py` PASS;
 - `scripts/validate_development_spec.py` PASS;
 - `scripts/validate_operations_spec.py` PASS;
 - `scripts/validate_freeze_review.py` PASS;
-- PR #20 merged to `main` as `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`.
+- PR #23 merged to `main` as `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`.
 
-GitHub-hosted runner quota is no longer required for the canonical governance lane. Future executable gates may expand on the same self-hosted lane or another approved lane, provided P00.07 semantics remain unchanged.
+Historical evidence remains PR #20 / run `32522919774`, which originally restored the self-hosted CI lane. GitHub-hosted runner quota is no longer required for the canonical governance lane.
+
+`LOCAL-WIN-4` currently has no unique schedulable Actions label. The canonical workflow therefore fails closed: it fans out only across local Windows/X64 self-hosted runners, runs validators only where `RUNNER_NAME == LOCAL-WIN-4`, uploads target pass evidence only from that runner, and exposes a final `governance` job that fails if no LOCAL-WIN-4 evidence exists.
 
 ### EG-04 — canonical local verification command exists
 State: **PENDING P01 BOOTSTRAP / MUST BE FIRST-CLASS**
@@ -74,7 +76,7 @@ Issue #4 licensing/IP/trademark is **not** an internal P01 engineering blocker, 
 
 ```text
 P00 architecture: FROZEN
-Executable CI lane: SATISFIED
+Executable CI lane: SATISFIED ON LOCAL-WIN-4
 P00 exit: BLOCKED ON EG-02 / ISSUE #3 ONLY
 P01 implementation: NOT AUTHORIZED
 Kernel code: LOCKED

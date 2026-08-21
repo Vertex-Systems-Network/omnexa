@@ -18,7 +18,7 @@
         "id": "EG-03",
         "tracker": "issue:#14",
         "state": "SATISFIED",
-        "description": "local Windows self-hosted executable CI lane verified by workflow run 32522919774 on LOCAL-WIN-01"
+        "description": "canonical local Windows executable CI is certified on LOCAL-WIN-4; PR #23 validation run 32528329184 produced LOCAL-WIN-4 pass evidence and final governance success"
       }
     ]
   },
