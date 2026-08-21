@@ -7,7 +7,7 @@ Last reconciled: **2026-08-21**
 - Program: **Foundation Program**
 - Phase: **P00 — Product Constitution & Architecture Freeze**
 - Phase state: **active**
-- Current work package: **P00.04 — API contract standard**
+- Current work package: **P00.05 — Event contract standard**
 - Business-feature implementation: **NOT AUTHORIZED YET**
 - Kernel implementation: **NOT AUTHORIZED YET**
 
@@ -17,18 +17,18 @@ Last reconciled: **2026-08-21**
 |---|---|---|---|
 | P00.01 | Repository governance baseline | done | `AGENTS.md`, Product Constitution, Architecture, Module Standard, Change Control, DoD, Master Plan, State and baseline ADR |
 | P00.02 | Product/domain glossary and naming standard | done | `GLOSSARY.md`, `NAMING_STANDARD.md`, `DOMAIN_OWNERSHIP.md`, `DEPENDENCY_MATRIX.md`, contribution/security/hardening controls and governance CI baseline |
-| P00.03 | ID, money, time, locale and error conventions | done | `IDENTIFIER_STANDARD.md`, `MONEY_STANDARD.md`, `TIME_STANDARD.md`, `LOCALE_STANDARD.md`, `ERROR_STANDARD.md` plus governance validation |
-| P00.04 | API contract standard | active | Next canonical work package; transport/versioning/resource/action/error/idempotency/pagination/compatibility rules |
-| P00.05 | Event contract standard | ready | Dependency gate satisfied; remains non-active while P00.04 executes |
-| P00.06 | Security and data-classification baseline | ready | Dependency gate satisfied; remains non-active while P00.04 executes |
+| P00.03 | ID, money, time, locale and error conventions | done | `IDENTIFIER_STANDARD.md`, `MONEY_STANDARD.md`, `TIME_STANDARD.md`, `LOCALE_STANDARD.md`, `ERROR_STANDARD.md`, ADR-0002 plus governance validation |
+| P00.04 | API contract standard | done | `API_STANDARD.md`, OpenAPI 3.2 foundation template, ADR-0003 and governance validation |
+| P00.05 | Event contract standard | active | Current canonical work package: event envelope/versioning/ownership/reliability/replay rules |
+| P00.06 | Security and data-classification baseline | ready | Dependency gate satisfied; remains non-active while P00.05 executes |
 | P00.07 | Testing/CI/release standard | planned | Requires P00.04/P00.05/P00.06 |
 | P00.08 | Local developer and repository structure specification | planned | Requires P00.03/P00.07 |
 | P00.09 | Initial threat model and operational SLO targets | planned | Must precede foundation freeze |
 | P00.10 | Foundation architecture freeze review | planned | Final P00 exit gate |
 
-P00 package progress: **3 / 10 done**.
+P00 package progress: **4 / 10 done**.
 
-## P00.03 frozen conventions
+## P00.03 frozen primitives
 
 - Canonical new entity/request/event/workflow/job/audit identifiers: **UUIDv7**; PostgreSQL native `uuid`; canonical tenant scope field: `tenant_id`.
 - Money: exact decimal + explicit currency; JSON decimal strings; PostgreSQL baseline `NUMERIC(38,18)`; no binary floating point; explicit rounding/conversion policies.
@@ -36,7 +36,19 @@ P00 package progress: **3 / 10 done**.
 - Locale: BCP 47 language tags; country codes separate; locale never implies currency/timezone; RTL is a first-class UI requirement.
 - Errors: stable machine codes + safe structured problem representation + request/trace correlation; no public stack traces/SQL/secrets.
 
-These conventions are platform contracts. Later P00 packages may refine transport/runtime details but must not contradict them without change control/ADR.
+## P00.04 frozen HTTP API baseline
+
+- Stable route major versioning: `/api/v{major}/{domain}/{resources}`.
+- OpenAPI **3.2.0** is the canonical HTTP contract description baseline.
+- JSON contract fields use lowercase `snake_case`; success bodies use `data` with controlled metadata/page envelopes.
+- Business lifecycle commands use explicit action operations rather than arbitrary `status` mutations.
+- Errors use `application/problem+json` with canonical Omnexa machine codes/request IDs.
+- Protected retriable mutations define `Idempotency-Key` semantics; lost-update-sensitive resources may use `ETag` + `If-Match`.
+- Cursor pagination (`page_size`, `page_cursor`) is the scalable default; filters/sorts are allowlisted.
+- Tenant selection is untrusted input and never authorization authority.
+- Compatibility/deprecation rules and an OpenAPI machine template are now frozen.
+
+These conventions are platform contracts. P00.05/P00.06/P00.07 may add event/security/CI details but must not contradict them without change control/ADR.
 
 ## Governance hardening status
 
