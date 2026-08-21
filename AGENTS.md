@@ -14,7 +14,8 @@ Current program state:
 Foundation Architecture v1: FROZEN
 P00: ACTIVE — exit verification
 P00.10: ACTIVE — review_state=verification
-Executable CI gate: SATISFIED ON LOCAL-WIN-4
+Executable CI gate: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
+Latest routing proof: LOCAL-WIN-02 / run 32535324900
 P01: BLOCKED BY EG-02 / ISSUE #3 (BLOCKED_BY_PLAN)
 P01.01: PREPARED / PLANNED / NOT ACTIVE
 kernel_code_authorized: false
@@ -76,13 +77,19 @@ Do not retry the same protection API operation until plan/visibility changes. Do
 
 ### EG-03 / Issue #14 — executable verification lane — SATISFIED
 
-The canonical governance workflow is certified on the requested organization runner `LOCAL-WIN-4`.
+The canonical governance workflow is runner-name agnostic inside the approved local pool:
 
-Current evidence: PR #23; workflow run `32528329184`; target job `96915072868`; runner `LOCAL-WIN-4`; Windows X64; machine `ABDUL-HANAN`; work root `C:\actions-runner-4\_work`; repository validators PASS; final job named `governance` SUCCESS; merge commit `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`; Issue #14 closed/completed.
+```yaml
+runs-on: [self-hosted, Windows, X64]
+```
 
-GitHub schedules by runner labels/groups rather than runner name. Because LOCAL-WIN-4 currently has no unique Actions label, the workflow fails closed: it fans out only across local Windows/X64 self-hosted runners, executes protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, uploads pass evidence only from that runner, and allows the final `governance` job to pass only when that evidence exists.
+The single required job is named `governance`. GitHub may schedule it on any available Windows/X64 self-hosted runner; the job itself executes the full validator set and fails closed on any validation error. No specific runner name, discovery matrix or target-evidence artifact is required.
 
-The self-hosted lane may be expanded for P01 gates, but it may not weaken P00.07 quality semantics.
+Current routing proof: run `32535324900`, job `96935023669`, runner `LOCAL-WIN-02`, Windows/X64, machine `ABDUL-HANAN`; PowerShell parse plus governance, development, operations, freeze-review and P01-preparation validators all PASS.
+
+Historical LOCAL-WIN-4 evidence from PR #23/run `32528329184` remains provenance only and is not a routing requirement.
+
+GitHub-hosted standard runners may be introduced later when capacity/policy permits, provided P00.07 gate semantics are not weakened.
 
 ## P01.01 readiness rule
 
@@ -107,7 +114,7 @@ Licensing/IP/trademark resolution is a hard gate before public/external distribu
 
 ## Historical hosted-CI exception
 
-ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The local self-hosted executable lane is now operational, so new P00 changes use executable CI while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
+ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The self-hosted executable lane is operational, so new P00 changes use executable CI while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
 
 ## Architecture invariants
 
@@ -142,7 +149,7 @@ ADR-0006 records the temporary P00 manual-evidence exception used while hosted A
 
 ## Quality and release rules
 
-Gate classes: `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package, `G8` Supply Chain/Release.
+Gate classes: `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package, `G8` Supply Chain/Release`.
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never treat blocked/unrun/N/A as PASS.
 
@@ -171,7 +178,7 @@ Every future material trust boundary/provider/privileged capability requires a t
 
 Operational criticality: `TIER_0`, `TIER_1`, `TIER_2`, `TIER_3` with initial mature-production availability objectives 99.99%, 99.95%, 99.9%, 99.5%.
 
-Recovery targets: A <=5m RPO/<=30m RTO; B <=15m/<=2h; C <=24h/<=8h; D rebuild-based. These are targets until recovery rehearsal proves them.
+Recovery targets: A <=5m RPO/<=30m RTO; B <=15m/<=2h RTO; C <=24h/<=8h; D rebuild-based. These are targets until recovery rehearsal proves them.
 
 Zero-tolerance conditions include cross-tenant disclosure, unauthorized privileged mutation, duplicate protected financial side effects, material financial/ledger integrity violation and lost acknowledged durable work. Error budgets never excuse these conditions.
 
@@ -193,7 +200,7 @@ For every material change:
 6. preserve module/repository boundaries;
 7. implement only authorized scope;
 8. add positive + negative evidence and threat-model delta where needed;
-9. execute canonical verification on the approved LOCAL-WIN-4 self-hosted lane;
+9. execute canonical verification through the required `governance` job on an approved available runner;
 10. execute `validate_p01_preparation.py` while P01 remains blocked;
 11. record evidence accurately and reconcile STATUS/STATE;
 12. document architecture change through ADR/change control before implementation.
