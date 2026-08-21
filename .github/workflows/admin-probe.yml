@@ -1,0 +1,29 @@
+name: Omnexa Local GitHub Admin Probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/admin-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: admin-probe
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect GitHub CLI and local authentication
+        shell: cmd
+        run: |
+          echo Runner: %RUNNER_NAME% / %RUNNER_OS% / %RUNNER_ARCH%
+          where gh
+          gh --version
+          gh auth status -h github.com
+          gh api user --jq ".login"
+          gh api repos/Vertex-Systems-Network/omnexa/collaborators/wpessential/permission --jq ".permission"
