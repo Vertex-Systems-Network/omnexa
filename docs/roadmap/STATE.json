@@ -9,13 +9,27 @@
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
-    "allowed_work": ["P00 architecture", "P00 governance", "P00 specifications", "narrow repository-maintenance fixes"]
+    "allowed_work": ["P00 architecture", "P00 governance", "P00 specifications", "narrow repository-maintenance fixes", "P00 exit verification"]
   },
   "governance_tracking": {
+    "foundation_freeze": {
+      "architecture_status": "FROZEN",
+      "p00_exit_status": "VERIFICATION",
+      "manifest": "docs/governance/FOUNDATION_FREEZE.json",
+      "review": "docs/governance/FOUNDATION_FREEZE_REVIEW.md",
+      "adr": "docs/adr/ADR-0010-foundation-architecture-freeze.md"
+    },
+    "p01_entry_gate": {
+      "state": "BLOCKED",
+      "document": "docs/governance/P01_ENTRY_GATE.md",
+      "blockers": [3, 14],
+      "kernel_code_authorized": false,
+      "business_feature_code_authorized": false
+    },
     "main_branch_protection": {
-      "state": "open",
+      "state": "p01_entry_blocker",
       "issue": 3,
-      "note": "GitHub still reports main protected=false. Hosted admin configuration remains required."
+      "note": "main branch/ruleset protection must be applied and verified before any P01 executable merge."
     },
     "github_actions_ci": {
       "state": "temporary_p00_exception",
@@ -23,12 +37,12 @@
       "exception": "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
       "adr": "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
       "evidence_state": "BLOCKED",
-      "note": "Owner authorized P00 documentation/specification manual evidence while Actions allowance is exhausted/disabled. Exception expires before P01 implementation."
+      "note": "P00 documentation/specification manual evidence is owner-authorized while Actions is unavailable. A working executable CI lane is a P01 entry blocker. ADR-0006 expires at P00 exit."
     },
     "licensing_ip_trademark": {
-      "state": "decision_required_before_external_distribution",
+      "state": "external_distribution_blocker",
       "issue": 4,
-      "note": "Existing GPLv3 is not treated as an implicitly approved final commercial licensing strategy."
+      "note": "Final licensing/IP/trademark strategy is required before external distribution/public launch, but does not block private internal P01 engineering once P01 entry controls are satisfied."
     }
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
@@ -48,12 +62,12 @@
       {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
       {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
       {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"done","depends_on":["P00.06","P00.08"],"evidence":["docs/security/THREAT_MODEL.md","docs/operations/SLO_STANDARD.md","docs/operations/INCIDENT_STANDARD.md","docs/operations/RELIABILITY_STANDARD.md","docs/contracts/operations/operational-targets.schema.json","docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md","scripts/validate_operations_spec.py"]},
-      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"]}
+      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py"]}
     ]
   },
   "phases": [
-    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active"},
-    {"id":"P01","name":"Omnexa Kernel","state":"planned"},
+    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active","review_state":"verification"},
+    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3","issue:#14"]},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -81,5 +95,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 may move to done only after a foundation freeze review confirms all P00.01-P00.09 evidence, resolves or explicitly classifies remaining blockers, records P01 entry prerequisites, verifies the architecture has no contradictory source-of-truth documents, and creates an accepted freeze ADR/review record. The temporary P00 hosted-CI exception expires at P00 exit and cannot authorize P01 implementation."
+  "next_transition_rule": "P00.10 remains active in exit verification. It may move to done only after Issue #3 main protection and Issue #14 executable CI lane are verified satisfied. The transition must expire ADR-0006, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record evidence. Issue #4 remains an external distribution/public-launch blocker."
 }
