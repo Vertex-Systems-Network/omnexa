@@ -4,7 +4,7 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.04 — API contract standard**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.05 — Event contract standard**.
 
 ## Mandatory contributor / AI start here
 
@@ -23,13 +23,14 @@ Any human or AI system changing this repository must read the following in order
 11. [`docs/architecture/TIME_STANDARD.md`](docs/architecture/TIME_STANDARD.md)
 12. [`docs/architecture/LOCALE_STANDARD.md`](docs/architecture/LOCALE_STANDARD.md)
 13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
-14. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-15. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-16. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-17. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-18. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-19. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-20. Relevant ADRs under [`docs/adr/`](docs/adr/)
+14. [`docs/architecture/API_STANDARD.md`](docs/architecture/API_STANDARD.md)
+15. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+16. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+17. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+18. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+19. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+20. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+21. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
@@ -56,6 +57,21 @@ Any human or AI system changing this repository must read the following in order
 - **Errors:** stable machine error codes, safe structured problem details, request/trace correlation, no public stack traces/SQL/secrets.
 
 These decisions are recorded by [`ADR-0002`](docs/adr/ADR-0002-foundation-data-conventions.md).
+
+## Frozen HTTP API baseline (P00.04)
+
+- Stable routes use `/api/v{major}/{domain}/{resources}`.
+- Canonical stable HTTP contracts use OpenAPI 3.2.0.
+- JSON fields use lowercase `snake_case`.
+- Errors use `application/problem+json` plus stable Omnexa codes and request correlation.
+- Scalable lists use opaque cursor pagination.
+- Protected retriable mutations define `Idempotency-Key` semantics.
+- Lost-update-sensitive mutations use explicit optimistic concurrency such as `ETag` / `If-Match` where applicable.
+- Filters, sorts and includes are allowlisted, bounded and authorization-aware.
+- Business actions are explicit capability/action operations rather than arbitrary status patches.
+- Client-supplied tenant or organization identifiers never become authorization authority.
+
+The contract is defined by [`API_STANDARD.md`](docs/architecture/API_STANDARD.md), [`openapi-template.yaml`](docs/contracts/http/openapi-template.yaml), and [`ADR-0003`](docs/adr/ADR-0003-http-api-contract-baseline.md).
 
 ## Technology baseline
 
@@ -121,6 +137,7 @@ Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted bas
 
 - [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md)
 - [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
+- [`ADR-0003 — HTTP API Contract Baseline`](docs/adr/ADR-0003-http-api-contract-baseline.md)
 
 Do not implement an architectural change first and document it afterward.
 
