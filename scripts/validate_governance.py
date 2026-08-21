@@ -14,6 +14,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/roadmap/STATE.json"
 STATUS_PATH = ROOT / "docs/roadmap/STATUS.md"
+CLASSIFICATION_SCHEMA_PATH = ROOT / "docs/contracts/security/data-classification.schema.json"
 
 REQUIRED_FILES = [
     "AGENTS.md",
@@ -136,31 +137,27 @@ MARKER_REQUIREMENTS = {
             "INTERNAL",
             "CONFIDENTIAL",
             "RESTRICTED",
-            "`RESTRICTED` data is prohibited as model input by default",
-            "Production `CONFIDENTIAL`/`RESTRICTED` data must not be copied to development/test by default",
+            "AI and model handling",
+            "Lower environments",
+            "Retention",
+            "Deletion and erasure",
         ],
         "docs/security/SECURITY_STANDARD.md": [
             "Zero implicit trust",
-            "RBAC",
-            "relationship-based authorization",
-            "Tenant isolation is a mandatory invariant",
-            "secrets are never committed to source control",
-            "Support/admin access to a tenant is never an invisible superuser shortcut",
-            "prompt/tool injection",
+            "Authorization model",
+            "Tenant isolation",
+            "Secrets management",
+            "Audit logging",
+            "Impersonation and support access",
+            "Module and marketplace security",
+            "AI",
         ],
         "docs/security/SECURITY_CONTROL_MATRIX.md": [
             "Deny-by-default areas",
             "cross-tenant access",
             "AI tool execution",
             "Support impersonation",
-        ],
-        "docs/contracts/security/data-classification.schema.json": [
-            '"PUBLIC"',
-            '"INTERNAL"',
-            '"CONFIDENTIAL"',
-            '"RESTRICTED"',
-            '"ai_eligibility"',
-            '"retention_policy"',
+            "Security exceptions",
         ],
     },
 }
@@ -176,6 +173,7 @@ ALLOWED_STATES = {
 }
 
 DEPENDENCY_SATISFIED_STATES = {"ready", "active", "verification", "done"}
+EXPECTED_CLASSIFICATIONS = {"PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"}
 
 
 def fail(message: str) -> None:
@@ -189,14 +187,14 @@ def require_files() -> None:
         fail("missing required governance files: " + ", ".join(missing))
 
 
-def load_state() -> dict:
+def load_json(path: pathlib.Path, label: str) -> dict:
     try:
-        state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+        value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        fail(f"STATE.json is unreadable/invalid: {exc}")
-    if not isinstance(state, dict):
-        fail("STATE.json root must be an object")
-    return state
+        fail(f"{label} is unreadable/invalid JSON: {exc}")
+    if not isinstance(value, dict):
+        fail(f"{label} root must be an object")
+    return value
 
 
 def validate_markers() -> None:
@@ -205,7 +203,25 @@ def validate_markers() -> None:
             text = (ROOT / path).read_text(encoding="utf-8")
             for marker in markers:
                 if marker not in text:
-                    fail(f"{package_id}: {path} is missing canonical marker: {marker}")
+                    fail(f"{package_id}: {path} is missing canonical concept marker: {marker}")
+
+
+def validate_classification_schema() -> None:
+    schema = load_json(CLASSIFICATION_SCHEMA_PATH, "data-classification schema")
+    properties = schema.get("properties") or {}
+    classification = properties.get("classification") or {}
+    if set(classification.get("enum") or []) != EXPECTED_CLASSIFICATIONS:
+        fail("data-classification schema must define exactly PUBLIC/INTERNAL/CONFIDENTIAL/RESTRICTED")
+
+    required = set(schema.get("required") or [])
+    for field in {"owner", "resource", "classification", "tenant_scope", "logging", "export", "retention_policy", "ai_eligibility"}:
+        if field not in required:
+            fail(f"data-classification schema is missing required field: {field}")
+
+    handling_tags = ((properties.get("handling_tags") or {}).get("items") or {}).get("enum") or []
+    for tag in {"PII", "AUTH_SECRET", "CRYPTO_KEY", "PAYMENT_SENSITIVE", "MODEL_INPUT", "MODEL_OUTPUT"}:
+        if tag not in handling_tags:
+            fail(f"data-classification schema is missing canonical handling tag: {tag}")
 
 
 def validate_state(state: dict) -> None:
@@ -300,7 +316,8 @@ def validate_status(state: dict) -> None:
 def main() -> int:
     require_files()
     validate_markers()
-    state = load_state()
+    validate_classification_schema()
+    state = load_json(STATE_PATH, "STATE.json")
     validate_state(state)
     validate_status(state)
     print("Omnexa governance validation: PASS")
