@@ -83,3 +83,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
 - Commit / PR: fill with merged P00.03 PR/CI evidence in an append-only reconciliation entry after merge.
 - Notes: P00 execution lock remains active. P00.04 is the only active work package after merge.
+
+## 2026-08-21 — P00.03 Merge reconciliation
+
+- Phase / package: `P00.03`
+- Transition: confirms `done`; `P00.04` active; `P00.05` and `P00.06` ready.
+- Summary: P00.03 foundation convention PR merged to `main` after governance validation passed.
+- Evidence: PR #7 merged successfully; governance workflow run `32506846155` passed; squash merge commit `f579b3e5acf3034fc3e3a46e411bbdbeb3b7a59b`.
+- Architecture impact: confirms ADR-0002 and the P00.03 identifier/money/time/locale/error baselines; no additional architecture change.
+- State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `3 / 10 done` with P00.04 active.
+- Commit / PR: `#7` / `f579b3e5acf3034fc3e3a46e411bbdbeb3b7a59b`.
+- Notes: kernel/business implementation remains locked until P00 exit; issue #3 and issue #4 remain open governance/business decisions.
