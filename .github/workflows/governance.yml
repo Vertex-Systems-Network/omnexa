@@ -24,32 +24,28 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify local Windows runner
-        shell: powershell
+        shell: cmd
         run: |
-          Write-Host "Runner name: $env:RUNNER_NAME"
-          Write-Host "Runner OS:   $env:RUNNER_OS"
-          Write-Host "Runner arch: $env:RUNNER_ARCH"
-          Write-Host "Machine:     $env:COMPUTERNAME"
-
-          if ($env:RUNNER_OS -ne "Windows") {
-            throw "Expected a Windows self-hosted runner, got '$env:RUNNER_OS'."
-          }
-
+          echo Runner name: %RUNNER_NAME%
+          echo Runner OS:   %RUNNER_OS%
+          echo Runner arch: %RUNNER_ARCH%
+          echo Machine:     %COMPUTERNAME%
+          if /I not "%RUNNER_OS%"=="Windows" exit /b 1
           git --version
           python --version
 
       - name: Validate canonical governance state
-        shell: powershell
-        run: python scripts/validate_governance.py
+        shell: cmd
+        run: python scripts\validate_governance.py
 
       - name: Validate repository and local-development specification
-        shell: powershell
-        run: python scripts/validate_development_spec.py
+        shell: cmd
+        run: python scripts\validate_development_spec.py
 
       - name: Validate threat and operations specification
-        shell: powershell
-        run: python scripts/validate_operations_spec.py
+        shell: cmd
+        run: python scripts\validate_operations_spec.py
 
       - name: Validate foundation freeze review
-        shell: powershell
-        run: python scripts/validate_freeze_review.py
+        shell: cmd
+        run: python scripts\validate_freeze_review.py
