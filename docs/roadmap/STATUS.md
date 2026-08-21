@@ -1,6 +1,6 @@
 # Omnexa Program Status
 
-Last reconciled: **2026-08-21**
+Last reconciled: **2026-08-22**
 
 ## Current position
 
@@ -20,7 +20,7 @@ Last reconciled: **2026-08-21**
 | P00.03 | ID, money, time, locale and error conventions | done | primitive standards + ADR-0002 |
 | P00.04 | API contract standard | done | `API_STANDARD.md`, OpenAPI template + ADR-0003 |
 | P00.05 | Event contract standard | done | `EVENT_STANDARD.md`, event envelope schema + ADR-0004 |
-| P00.06 | Security and data-classification baseline | done | security/data-classification/control matrix, classification schema + ADR-0005 |
+| P00.06 | Security and data-classification baseline | done | security/data-classification/control matrix, classification schema + ADR-0005; hosted CI evidence temporarily BLOCKED under ADR-0006 |
 | P00.07 | Testing, CI and release standard | active | Current canonical work package |
 | P00.08 | Local developer and repository structure specification | planned | Requires P00.07 |
 | P00.09 | Initial threat model and operational SLO targets | planned | Requires P00.06 + P00.08 |
@@ -95,16 +95,29 @@ Normative evidence:
 - `docs/contracts/security/data-classification.schema.json`
 - `docs/adr/ADR-0005-security-data-classification-baseline.md`
 
+## Temporary GitHub Actions exception
+
+GitHub Actions allowance is currently exhausted/disabled. The project owner explicitly authorized continuing P00 documentation/specification work without hosted Actions until the quota condition is resolved.
+
+The temporary policy is defined by:
+
+- `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`
+- `docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md`
+- issue #14 for the runner/quota blocker evidence.
+
+Hosted Actions evidence is therefore **BLOCKED / NOT RUN**, never recorded as PASS. P00 packages may use manual repository/state/evidence verification only while they remain documentation/specification work. This exception expires before any P01 implementation merge, at P00 exit, or sooner if Actions returns.
+
 ## Governance hardening status
 
-File-level governance is active through CODEOWNERS, contributor/security policies, issue/ADR templates, `scripts/validate_governance.py` and the `Omnexa Governance` GitHub Actions workflow.
+File-level governance is active through CODEOWNERS, contributor/security policies, issue/ADR templates, `scripts/validate_governance.py` and the `Omnexa Governance` workflow definition.
 
 Hosted/business decisions still tracked:
 
 1. **Issue #3 — main branch/ruleset protection:** GitHub still reports `main` as unprotected. The connected GitHub toolset does not expose a branch-protection/ruleset write mutation, so hosted admin configuration remains required and must be verified against `docs/governance/REPOSITORY_HARDENING.md`.
-2. **Issue #4 — licensing/IP/trademark:** existing GPLv3 is not automatically approved as the final commercial strategy; explicit owner/legal decision is required before external distribution/public launch.
+2. **Issue #14 — GitHub Actions quota/runner:** hosted execution is temporarily unavailable and handled only through ADR-0006 for P00 specification work.
+3. **Issue #4 — licensing/IP/trademark:** existing GPLv3 is not automatically approved as the final commercial strategy; explicit owner/legal decision is required before external distribution/public launch.
 
-Neither issue authorizes early kernel/business implementation.
+None of these items authorize early kernel/business implementation.
 
 ## Phase states
 
@@ -118,4 +131,4 @@ Do not begin kernel implementation, database models, CRM, ERP, commerce, POS, we
 
 ## How status changes
 
-A package moves to `done` only when acceptance evidence satisfies `docs/governance/DEFINITION_OF_DONE.md`, governance CI is successful and `docs/roadmap/STATE.json` is reconciled in the same governed change.
+A package moves to `done` only when acceptance evidence satisfies `docs/governance/DEFINITION_OF_DONE.md` and `docs/roadmap/STATE.json` is reconciled in the same governed change. While ADR-0006 is active, hosted Actions may be `BLOCKED`/`NOT RUN` for P00 documentation/specification changes only; manual evidence must be recorded and the exception may not be used for P01+ executable work.
