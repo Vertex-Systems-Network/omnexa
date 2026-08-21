@@ -10,58 +10,69 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v3-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v4-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   governance:
     name: governance
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Report runner and tooling
-        shell: cmd
+      - name: Verify GitHub-hosted runner and tooling
+        shell: bash
         run: |
-          echo RUNNER_NAME=%RUNNER_NAME%
-          echo RUNNER_OS=%RUNNER_OS%
-          echo RUNNER_ARCH=%RUNNER_ARCH%
-          echo COMPUTERNAME=%COMPUTERNAME%
+          set -euo pipefail
+          echo "RUNNER_NAME=${RUNNER_NAME}"
+          echo "RUNNER_OS=${RUNNER_OS}"
+          echo "RUNNER_ARCH=${RUNNER_ARCH}"
+          echo "RUNNER_ENVIRONMENT=${RUNNER_ENVIRONMENT}"
           git --version
           python --version
-          powershell -NoLogo -NoProfile -Command "$PSVersionTable.PSVersion"
-          if /I not "%RUNNER_OS%"=="Windows" exit /b 1
-          if /I not "%RUNNER_ARCH%"=="X64" exit /b 1
+          pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion'
+          test "${RUNNER_ENVIRONMENT}" = "github-hosted"
+          test "${RUNNER_OS}" = "Linux"
+          test "${RUNNER_ARCH}" = "X64"
 
       - name: Parse branch-protection PowerShell tooling
-        shell: cmd
-        run: >-
-          powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command
-          "$ErrorActionPreference='Stop'; foreach ($path in @('scripts/apply_main_protection.ps1','scripts/verify_main_protection.ps1')) { $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path), [ref]$tokens, [ref]$errors) | Out-Null; if ($errors.Count -gt 0) { foreach ($parseError in $errors) { Write-Host $parseError.Message }; exit 1 }; Write-Host ('PowerShell parse validation PASS: ' + $path) }"
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          foreach ($path in @('scripts/apply_main_protection.ps1','scripts/verify_main_protection.ps1')) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) {
+              foreach ($parseError in $errors) { Write-Host $parseError.Message }
+              exit 1
+            }
+            Write-Host ('PowerShell parse validation PASS: ' + $path)
+          }
 
       - name: Validate canonical governance state
-        shell: cmd
-        run: python scripts\validate_governance.py
+        shell: bash
+        run: python scripts/validate_governance.py
 
       - name: Validate repository and local-development specification
-        shell: cmd
-        run: python scripts\validate_development_spec.py
+        shell: bash
+        run: python scripts/validate_development_spec.py
 
       - name: Validate threat and operations specification
-        shell: cmd
-        run: python scripts\validate_operations_spec.py
+        shell: bash
+        run: python scripts/validate_operations_spec.py
 
       - name: Validate foundation freeze review
-        shell: cmd
-        run: python scripts\validate_freeze_review.py
+        shell: bash
+        run: python scripts/validate_freeze_review.py
 
       - name: Validate P01 implementation-readiness preparation
-        shell: cmd
-        run: python scripts\validate_p01_preparation.py
+        shell: bash
+        run: python scripts/validate_p01_preparation.py
 
       - name: Validate complete P01 package specification set
-        shell: cmd
-        run: python scripts\validate_p01_package_specs.py
+        shell: bash
+        run: python scripts/validate_p01_package_specs.py
