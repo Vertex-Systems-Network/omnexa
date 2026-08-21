@@ -1,0 +1,25 @@
+name: Omnexa LOCAL-WIN-4 Probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/local-win-4-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  local-win-4-probe:
+    name: local-win-4-probe
+    runs-on: [self-hosted, LOCAL-WIN-4]
+    timeout-minutes: 10
+
+    steps:
+      - name: Verify exact runner
+        shell: cmd
+        run: |
+          echo Runner name: %RUNNER_NAME%
+          echo Runner OS: %RUNNER_OS%
+          echo Runner arch: %RUNNER_ARCH%
+          echo Machine: %COMPUTERNAME%
+          if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" exit /b 1
