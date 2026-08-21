@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-21",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.02",
+  "current_work_package": "P00.03",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -15,6 +15,18 @@
       "P00 specifications",
       "narrow repository-maintenance fixes"
     ]
+  },
+  "governance_tracking": {
+    "main_branch_protection": {
+      "state": "open",
+      "issue": 3,
+      "note": "Hosted GitHub branch/ruleset settings must be applied and verified against docs/governance/REPOSITORY_HARDENING.md."
+    },
+    "licensing_ip_trademark": {
+      "state": "decision_required_before_external_distribution",
+      "issue": 4,
+      "note": "Existing GPLv3 file is not treated as an implicitly approved final commercial licensing strategy."
+    }
   },
   "state_vocabulary": [
     "planned",
@@ -30,7 +42,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 1,
+    "done_work_packages": 2,
     "work_packages": [
       {
         "id": "P00.01",
@@ -53,13 +65,26 @@
       {
         "id": "P00.02",
         "name": "Product/domain glossary and naming standard",
-        "state": "active",
-        "depends_on": ["P00.01"]
+        "state": "done",
+        "depends_on": ["P00.01"],
+        "evidence": [
+          "docs/architecture/GLOSSARY.md",
+          "docs/architecture/NAMING_STANDARD.md",
+          "docs/architecture/DOMAIN_OWNERSHIP.md",
+          "docs/architecture/DEPENDENCY_MATRIX.md",
+          "CONTRIBUTING.md",
+          "SECURITY.md",
+          ".github/CODEOWNERS",
+          "docs/governance/REPOSITORY_HARDENING.md",
+          "docs/governance/LICENSING_DECISION.md",
+          "scripts/validate_governance.py",
+          ".github/workflows/governance.yml"
+        ]
       },
       {
         "id": "P00.03",
         "name": "ID, money, time, locale and error conventions",
-        "state": "planned",
+        "state": "active",
         "depends_on": ["P00.02"]
       },
       {
@@ -146,5 +171,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.02 may move to done only with glossary/naming artifacts and reconciled STATUS.md + STATE.json; then P00.03 becomes active unless change control approves otherwise."
+  "next_transition_rule": "P00.03 may move to done only when canonical ID, money, time, locale and error conventions are documented with validation/compatibility rules and STATUS.md + STATE.json are reconciled; then P00.04 and P00.05 become eligible according to dependency gates."
 }
