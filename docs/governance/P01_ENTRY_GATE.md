@@ -1,6 +1,6 @@
 # Omnexa P01 Implementation Entry Gate
 
-Status: **BLOCKED — GitHub plan-limited hosted protection**  
+Status: **BLOCKED — main protection not yet applied**  
 Owner phase: **P00.10 -> P01 transition**
 
 P01 kernel implementation is not authorized merely because the P00 architecture documents exist. This gate is the operational handoff between architecture freeze and executable kernel work.
@@ -9,7 +9,9 @@ Prepared handoff artifacts:
 
 - `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
 - `docs/roadmap/work-packages/P01.01.md`
+- `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
 - `scripts/validate_p01_preparation.py`
+- `scripts/validate_p01_package_specs.py`
 
 These artifacts reduce transition ambiguity but do not satisfy EG-02 or authorize executable code.
 
@@ -23,7 +25,7 @@ Evidence:
 - ADR-0010.
 
 ### EG-02 — `main` integration protection
-State: **BLOCKED_BY_PLAN**
+State: **ACTIONABLE_UNPROTECTED**
 Tracker: **Issue #3**
 
 Required policy remains:
@@ -35,66 +37,57 @@ Required policy remains:
 - required `governance` check attached to the protection/ruleset;
 - protection verified through GitHub, not assumed from documentation.
 
-#### Decisive 2026-08-22 evidence
+#### Current 2026-08-22 evidence
 
-The owner executed the merged administration tooling against the private organization repository and GitHub returned:
-
-```text
-gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)
-```
+Repository visibility is now intentionally **public**.
 
 Verified context:
-- repository visibility: `private`;
+- repository visibility: `public`;
 - repository owner: `Vertex-Systems-Network` organization;
 - authenticated user permission: repository `admin`;
 - branch-protection tooling syntax/structure: PASS;
-- live branch metadata after the failed API write: `protected: false`.
+- live branch metadata: `protected: false`.
 
-GitHub's plan model makes private branch protection/rulesets unavailable on the current plan. This is therefore a hosted product-plan blocker, not an authentication, authorization, script or CI defect.
+The earlier private-repository attempt returned HTTP 403 with an upgrade/public-repository message. That historical plan-entitlement blocker is no longer the active cause because repository visibility has changed to public. EG-02 is now technically actionable, but it remains **unsatisfied** until live GitHub configuration reports the required protection and negative tests are recorded.
 
-Do **not** retry the same API call until one of these conditions changes:
-
-1. the organization/repository is upgraded to a GitHub plan that supports private branch protection/rulesets;
-2. repository visibility is intentionally changed to public through a separate owner/legal/security decision; or
-3. a superseding governance ADR explicitly accepts a compensating control and changes EG-02.
+Do not authorize P01 merely because the plan blocker disappeared. `protected: false` is still a hard stop.
 
 ### EG-03 — executable verification lane
 State: **SATISFIED**
 Tracker: **Issue #14 — closed/completed**
 
-The canonical workflow is now **runner-name agnostic** inside the approved local pool. The required job is named `governance` and runs on:
+The canonical governance workflow is now **GitHub-hosted only**:
 
 ```yaml
-runs-on: [self-hosted, Windows, X64]
+runs-on: ubuntu-24.04
 ```
 
-Any available Windows/X64 self-hosted runner may execute the job. The workflow no longer pins `LOCAL-WIN-4`, no longer uses discovery fanout, and no longer waits for target-runner artifacts. The same fail-closed validators remain mandatory.
+The required job remains named `governance`. It fails closed unless the runtime reports `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited from the canonical governance workflow.
 
-Current routing-policy evidence:
-- workflow run `32535324900`: **SUCCESS**;
-- governance job `96935023669`: **SUCCESS**;
-- actual runner: `LOCAL-WIN-02`;
-- runner OS/arch: Windows / X64;
-- machine: `ABDUL-HANAN`;
-- Git `2.55.0.windows.5`;
-- Python `3.13.7`;
-- PowerShell tooling parse: PASS;
+Current hosted evidence:
+- workflow run `32537207455`: **SUCCESS**;
+- governance job `96940269306`: **SUCCESS**;
+- runner: `GitHub Actions 1000006777`;
+- runner environment: `github-hosted`;
+- operating system: Ubuntu 24.04.4 LTS / X64;
+- runner image: `ubuntu-24.04`, image version `20260816.277.1`;
+- Git `2.55.0`;
+- Python `3.12.3`;
+- PowerShell `7.6.5`;
+- branch-protection PowerShell tooling parse: PASS;
 - `scripts/validate_governance.py`: PASS;
 - `scripts/validate_development_spec.py`: PASS;
 - `scripts/validate_operations_spec.py`: PASS;
-- `scripts/validate_freeze_review.py`: PASS;
-- `scripts/validate_p01_preparation.py`: PASS.
+- `scripts/validate_freeze_review.py`: PASS on the initial migration head;
+- `scripts/validate_p01_preparation.py`: PASS;
+- `scripts/validate_p01_package_specs.py`: PASS.
 
-Historical `LOCAL-WIN-4` evidence remains valid provenance: PR #23, run `32528329184`, target job `96915072868`, merge `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`. It is no longer a routing requirement.
-
-GitHub-hosted standard runners may be introduced later if capacity/policy makes them appropriate, provided P00.07 gate semantics remain unchanged. Current canonical routing prefers the already operational self-hosted Windows/X64 pool because it is available and does not depend on hosted-minute entitlement.
-
-While P01 remains blocked, `scripts/validate_p01_preparation.py` is required and rejects known executable P01.01 paths while `kernel_code_authorized=false`.
+Earlier LOCAL-WIN runner evidence remains historical provenance only. It is not an active routing option and must not be reintroduced into the canonical workflow.
 
 ### EG-04 — canonical local verification command exists
 State: **PENDING P01 BOOTSTRAP / MUST BE FIRST-CLASS**
 
-P01 may create the executable `omnexa verify`/equivalent command family defined by P00.07/P00.08, but the first executable PR must not merge unless its applicable verification runs through the satisfied executable-CI lane.
+P01 may create the executable `omnexa verify`/equivalent command family defined by P00.07/P00.08, but the first executable PR must not merge unless its applicable verification runs through the satisfied GitHub-hosted executable-CI lane.
 
 The first package controlling this bootstrap is `docs/roadmap/work-packages/P01.01.md`.
 
@@ -103,7 +96,7 @@ State: **BLOCKED BY EG-02 ONLY**
 
 The transition PR must follow `docs/governance/P00_P01_TRANSITION_CHECKLIST.md` and:
 
-- verify Issue #3 / hosted `main` protection, or reference a superseding accepted governance ADR that deliberately replaces EG-02;
+- verify Issue #3 / live hosted `main` protection, or reference a superseding accepted governance ADR that deliberately replaces EG-02;
 - mark P00.10 done;
 - mark P00 phase done;
 - retire the temporary P00 CI exception from active use;
@@ -111,33 +104,34 @@ The transition PR must follow `docs/governance/P00_P01_TRANSITION_CHECKLIST.md` 
 - set `kernel_code_authorized = true`;
 - keep `business_feature_code_authorized = false`;
 - keep P01.02–P01.12 planned;
-- record branch-protection/compensating-control and CI evidence.
+- record branch-protection/compensating-control and GitHub-hosted CI evidence.
 
 Do not combine the transition with kernel implementation. The first kernel-code PR is separate and follows the merged transition.
 
-## Prepared P01.01 scope
+## Prepared P01 package sequence
 
-P01.01 is prepared as **Go workspace/build skeleton** and remains `planned`.
+P01.01–P01.12 are specification-complete under the machine-readable sequence at `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`.
 
-It may not be implemented yet. Its specification deliberately excludes configuration, DB, cache, storage, telemetry, health, jobs, feature flags, audit, identity/tenancy, module runtime and business-domain behavior. Those remain later packages/phases.
+P01.01 remains the next package and is **Go workspace/build skeleton**. All packages remain `planned`; strict sequential one-active-package activation applies. No executable P01 implementation is authorized yet.
 
-## External distribution gate
+## External distribution / public visibility
 
-Issue #4 licensing/IP/trademark is **not** an internal P01 engineering blocker, but remains a hard gate before external/public distribution, self-hosted customer delivery, public launch or external contributor intake.
+Issue #4 licensing/IP/trademark remains open. The repository is now public while the current repository `LICENSE` remains GPLv3 and trademark clearance is unresolved. That visibility change must be reconciled explicitly with the owner/legal decision path; it does not by itself satisfy or replace the P01 technical entry gates.
 
-The owner/legal decision worksheet is `docs/governance/LICENSING_DECISION_BRIEF.md`. It does not change `LICENSE` or establish trademark clearance.
-
-Changing this private repository to public merely to obtain GitHub Free branch protection is not an implicit workaround; it requires an explicit owner/legal/security decision and must consider Issue #4 first.
+The owner/legal decision worksheet is `docs/governance/LICENSING_DECISION_BRIEF.md`.
 
 ## Current decision
 
 ```text
 P00 architecture: FROZEN
-Executable CI lane: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
-Latest routing proof: LOCAL-WIN-02 / run 32535324900
-EG-02: BLOCKED_BY_PLAN
+Executable CI lane: SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04
+Hosted proof: run 32537207455 / job 96940269306
+Local/self-hosted governance runner: PROHIBITED
+Repository visibility: PUBLIC
+EG-02: ACTIONABLE_UNPROTECTED
+Live main protection: false
 P00 exit: BLOCKED ON ISSUE #3 / EG-02 ONLY
-P01.01: PREPARED / PLANNED
+P01.01-P01.12 specs: PREPARED / PLANNED
 P01 implementation: NOT AUTHORIZED
 Kernel code: LOCKED
 Business feature code: LOCKED
