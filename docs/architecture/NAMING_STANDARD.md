@@ -63,11 +63,11 @@ Rules:
 
 - PostgreSQL schemas belong to owning modules/domains.
 - Tables/columns: lowercase `snake_case`.
-- Primary keys: `id` unless a stronger domain-specific composite key is deliberately specified.
+- Primary keys: `id` and follow `IDENTIFIER_STANDARD.md` unless an accepted ADR defines a stronger domain-specific composite identity.
 - Foreign references within an owning schema: `<entity>_id`.
 - Cross-domain database foreign keys are forbidden by default; use owned references/contracts according to architecture rules.
-- Tenant-owned rows must use the canonical tenant scope field defined in P00.03; do not invent alternatives before P00.03 freezes the convention.
-- Timestamp, money and identifier representation are deferred to P00.03 and must not be guessed early.
+- Tenant-owned rows use canonical `tenant_id`; organization/legal-entity/business-unit/branch/team/user scope fields follow `IDENTIFIER_STANDARD.md`.
+- Identifier, money, time and locale representation follow the P00.03 foundation standards; modules must not invent alternative primitives.
 
 ## 6. Capability naming
 
