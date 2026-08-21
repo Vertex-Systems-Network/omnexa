@@ -68,8 +68,23 @@
     "work_package_spec": "docs/roadmap/work-packages/P01.01.md",
     "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
     "validator": "scripts/validate_p01_preparation.py",
+    "package_sequence_manifest": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
+    "package_sequence_validator": "scripts/validate_p01_package_specs.py",
+    "prepared_spec_count": 12,
+    "total_package_count": 12,
+    "prepared_specs_state": "planned",
+    "activation_policy": "strict_sequential_one_active_package",
     "blocking_gate": "EG-02 / issue:#3",
-    "note": "P01.01 is specification-complete enough to activate immediately after the governed P00->P01 transition. No Go workspace, go.mod/go.work, kernel main entrypoint, or other executable kernel implementation is authorized before that transition."
+    "latest_spec_evidence": {
+      "pr": 30,
+      "head": "a042b1946b0fe8dcb0ebd96983b864ad2fb4c1b5",
+      "workflow_run": 32536671900,
+      "job": 96938793965,
+      "runner": "LOCAL-WIN-01",
+      "result": "PASS",
+      "merge_commit": "352f66a35d4144d6b7dffb856b2ecae1792ac4aa"
+    },
+    "note": "All P01.01-P01.12 work packages are specification-prepared and machine-validated, but all remain planned. P01.01 is the only next package and may activate only after the governed P00->P01 transition. No Go workspace, go.mod/go.work, kernel main entrypoint, or other executable kernel implementation is authorized before that transition."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -88,12 +103,12 @@
       {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
       {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
       {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"done","depends_on":["P00.06","P00.08"],"evidence":["docs/security/THREAT_MODEL.md","docs/operations/SLO_STANDARD.md","docs/operations/INCIDENT_STANDARD.md","docs/operations/RELIABILITY_STANDARD.md","docs/contracts/operations/operational-targets.schema.json","docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md","scripts/validate_operations_spec.py"]},
-      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/P00_P01_TRANSITION_CHECKLIST.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py","scripts/validate_p01_preparation.py"]}
+      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/P00_P01_TRANSITION_CHECKLIST.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py","scripts/validate_p01_preparation.py","docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json","scripts/validate_p01_package_specs.py"]}
     ]
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active","review_state":"verification"},
-    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"],"prepared_next_work_package":"P01.01","prepared_spec":"docs/roadmap/work-packages/P01.01.md"},
+    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"],"prepared_next_work_package":"P01.01","prepared_spec":"docs/roadmap/work-packages/P01.01.md","prepared_spec_count":12,"package_sequence_manifest":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -121,5 +136,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and the runner-name-agnostic Windows/X64 self-hosted governance lane; run 32535324900 proved all validators PASS on LOCAL-WIN-02. EG-02/Issue #3 remains BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. P01.01 is fully pre-specified but remains planned and executable kernel code remains prohibited. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker with owner decision brief prepared at docs/governance/LICENSING_DECISION_BRIEF.md."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and the runner-name-agnostic Windows/X64 self-hosted governance lane. EG-02/Issue #3 remains BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. All P01.01-P01.12 packages are now pre-specified and machine-validated, but every P01 package remains planned and P01.01 remains the only next package. Executable kernel code remains prohibited. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker with owner decision brief prepared at docs/governance/LICENSING_DECISION_BRIEF.md."
 }
