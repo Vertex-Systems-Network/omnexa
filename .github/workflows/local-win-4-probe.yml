@@ -1,4 +1,4 @@
-name: Omnexa LOCAL-WIN-4 Probe
+name: Omnexa LOCAL-WIN-4 Discovery
 
 on:
   pull_request:
@@ -9,17 +9,25 @@ permissions:
   contents: read
 
 jobs:
-  local-win-4-probe:
-    name: local-win-4-probe
-    runs-on: [self-hosted, LOCAL-WIN-4]
-    timeout-minutes: 10
+  discover:
+    name: discover-${{ matrix.slot }}
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        slot: [1, 2, 3, 4, 5, 6]
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 5
 
     steps:
-      - name: Verify exact runner
+      - name: Report actual runner
         shell: cmd
         run: |
-          echo Runner name: %RUNNER_NAME%
-          echo Runner OS: %RUNNER_OS%
-          echo Runner arch: %RUNNER_ARCH%
-          echo Machine: %COMPUTERNAME%
-          if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" exit /b 1
+          echo SLOT=${{ matrix.slot }}
+          echo RUNNER_NAME=%RUNNER_NAME%
+          echo RUNNER_OS=%RUNNER_OS%
+          echo RUNNER_ARCH=%RUNNER_ARCH%
+          echo COMPUTERNAME=%COMPUTERNAME%
+          if /I "%RUNNER_NAME%"=="LOCAL-WIN-4" echo TARGET_LOCAL_WIN_4=YES
+          if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" echo TARGET_LOCAL_WIN_4=NO
+          ping 127.0.0.1 -n 16 > nul
