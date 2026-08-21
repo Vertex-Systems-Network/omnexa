@@ -138,3 +138,25 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `5 / 10 done` with P00.06 active.
 - Commit / PR: `#11` / `0c2cc0eb70d72b73d73e0d247c8078d73777d525`.
 - Notes: kernel/business implementation remains locked until P00 exit; issue #3 remains open because hosted branch protection cannot be mutated through the connected tool surface; issue #4 remains open for licensing/IP/trademark.
+
+## 2026-08-21 — P00.06 Security and data-classification baseline
+
+- Phase / package: `P00.06`
+- Transition: `active -> done` upon verified merge of the P00.06 PR; `P00.07` becomes active.
+- Summary: Frozen platform trust boundaries, principal types, authentication/session and authorization invariants, tenant/sub-scope isolation, four-level data classification plus handling tags, secrets/cryptography rules, audit/privileged operation controls, integration/webhook/SSRF boundaries, files/search/analytics/retention/deletion rules, module/supply-chain expectations and governed AI retrieval/tool authority.
+- Evidence: `docs/security/SECURITY_STANDARD.md`, `docs/security/DATA_CLASSIFICATION.md`, `docs/security/SECURITY_CONTROL_MATRIX.md`, `docs/contracts/security/data-classification.schema.json`, `docs/adr/ADR-0005-security-data-classification-baseline.md`, updated `AGENTS.md`, `README.md`, state/status and stronger governance validation.
+- Architecture impact: establishes platform-wide security and data-handling invariants; no kernel/business/runtime implementation introduced.
+- State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
+- Commit / PR: fill with merged P00.06 PR/CI evidence in an append-only reconciliation entry after merge.
+- Notes: P00 execution lock remains active. `P00.07` is the only active work package after merge. Issue #3 remains a hosted GitHub configuration blocker; issue #4 remains a legal/business decision gate.
+
+## 2026-08-22 — Owner-approved temporary P00 hosted-CI exception
+
+- Phase / package: governance exception during `P00.06` and remaining P00 specification work.
+- Transition: hosted GitHub Actions evidence changes from required executable PASS to explicitly `BLOCKED/NOT RUN` for P00 documentation/specification-only packages while the quota condition persists; no runtime gate is waived.
+- Summary: Project owner confirmed GitHub Actions allowance is exhausted/disabled and explicitly instructed the project to skip Actions and continue. ADR-0006 and `CI_EVIDENCE_EXCEPTION_2026-08-22.md` define a narrow temporary evidence path based on PR diff inspection, mandatory artifact presence, state/dependency reconciliation and manual governance review.
+- Evidence: owner authorization; PR #13 failed runs `32516177704`, `32516290875`, `32516417466`, `32516471168`, `32516684511` plus failed-job rerun; issue #14; diagnostic three-job workflow showed jobs failing before runner steps.
+- Architecture impact: operational evidence exception only. Does not alter security, API, event, tenancy, module, runtime or product architecture and does not authorize P01+ test/build/migration bypass.
+- State files reconciled: `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, exception document and ADR-0006.
+- Commit / PR: exception incorporated into PR #13 before merge.
+- Notes: exception expires before any P01 implementation merge, at P00 exit, when Actions returns or on owner revocation. Any later governance validation failure reopens the affected package.

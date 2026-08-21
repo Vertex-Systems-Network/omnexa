@@ -4,7 +4,9 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.06 — Security and data-classification baseline**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.07 — Testing, CI and release standard**.
+
+> **Temporary CI note:** GitHub Actions allowance is currently exhausted/disabled. ADR-0006 authorizes a temporary P00 documentation/specification-only manual evidence path. Hosted CI must be recorded `BLOCKED`/`NOT RUN`, never as `PASS`, and this exception expires before any P01 implementation merge.
 
 ## Mandatory contributor / AI start here
 
@@ -25,13 +27,17 @@ Any human or AI system changing this repository must read the following in order
 13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
 14. [`docs/architecture/API_STANDARD.md`](docs/architecture/API_STANDARD.md)
 15. [`docs/architecture/EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md)
-16. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-17. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-18. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-19. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-20. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-21. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-22. Relevant ADRs under [`docs/adr/`](docs/adr/)
+16. [`docs/security/SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md)
+17. [`docs/security/DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md)
+18. [`docs/security/SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md)
+19. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+20. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+21. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+22. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+23. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+24. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+25. If active, [`docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md)
+26. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
@@ -88,6 +94,20 @@ The contract is defined by [`API_STANDARD.md`](docs/architecture/API_STANDARD.md
 
 The contract is defined by [`EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md), [`event-envelope.schema.json`](docs/contracts/events/event-envelope.schema.json), and [`ADR-0004`](docs/adr/ADR-0004-event-contract-baseline.md).
 
+## Frozen security baseline (P00.06)
+
+- Data classes: `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED` plus handling tags.
+- Tenant-owned business records default to at least `CONFIDENTIAL` unless explicitly published through an authorized public projection.
+- Authorization combines RBAC, relationships, contextual policy and governed capability checks.
+- Tenant/organization isolation applies across primary data, cache, files, search, analytics, events, backups and AI/vector data.
+- Secrets/key/auth-equivalent material is `RESTRICTED`, excluded from logs/source control/AI and handled by governed secret/KMS capabilities.
+- Audit is separate from debug logging; privileged support/export/purge/replay/high-impact AI actions require explicit policy/audit.
+- External integrations, webhooks, devices, modules and AI are independent trust boundaries.
+- Production sensitive data does not flow to lower environments by default.
+- `RESTRICTED` data is prohibited from generic logs/search/analytics and from AI model input by default.
+
+The baseline is defined by [`SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md), [`DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md), [`SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md), the classification JSON Schema and [`ADR-0005`](docs/adr/ADR-0005-security-data-classification-baseline.md).
+
 ## Technology baseline
 
 Until superseded by an accepted ADR:
@@ -110,12 +130,13 @@ Repository-level controls include:
 - [`SECURITY.md`](SECURITY.md)
 - [`.github/CODEOWNERS`](.github/CODEOWNERS)
 - architecture/bug issue templates
-- governance CI via [`.github/workflows/governance.yml`](.github/workflows/governance.yml)
+- governance CI workflow definition at [`.github/workflows/governance.yml`](.github/workflows/governance.yml)
 - dependency-free state validator at [`scripts/validate_governance.py`](scripts/validate_governance.py)
 - hosted repository ruleset target in [`docs/governance/REPOSITORY_HARDENING.md`](docs/governance/REPOSITORY_HARDENING.md)
 - licensing/IP decision gate in [`docs/governance/LICENSING_DECISION.md`](docs/governance/LICENSING_DECISION.md)
+- temporary P00 hosted-CI exception, when active, in [`CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md) and ADR-0006.
 
-GitHub currently reports `main` as unprotected; issue #3 remains open because the connected GitHub toolset has no branch-protection/ruleset write action. Licensing/IP/trademark also remains explicitly tracked in issue #4. Neither issue authorizes early implementation.
+GitHub currently reports `main` as unprotected; issue #3 remains open because the connected GitHub toolset has no branch-protection/ruleset write action. GitHub Actions quota/runner availability is tracked by issue #14. Licensing/IP/trademark remains explicitly tracked in issue #4. None of these authorize early implementation.
 
 ## Roadmap
 
@@ -154,6 +175,8 @@ Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted bas
 - [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
 - [`ADR-0003 — HTTP API Contract Baseline`](docs/adr/ADR-0003-http-api-contract-baseline.md)
 - [`ADR-0004 — Event Contract Baseline`](docs/adr/ADR-0004-event-contract-baseline.md)
+- [`ADR-0005 — Security & Data Classification Baseline`](docs/adr/ADR-0005-security-data-classification-baseline.md)
+- [`ADR-0006 — Temporary P00 CI Evidence Exception`](docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md)
 
 Do not implement an architectural change first and document it afterward.
 
