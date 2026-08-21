@@ -64,6 +64,14 @@ if main_protection.get("repository_visibility") != "private":
 if "HTTP 403" not in str(main_protection.get("attempt_result") or ""):
     raise SystemExit("ERROR: plan-blocked branch protection must retain HTTP 403 evidence")
 
+ci = tracking.get("github_actions_ci") or {}
+if ci.get("state") != "operational_self_hosted":
+    raise SystemExit("ERROR: executable CI gate must remain operational_self_hosted")
+if ci.get("routing_mode") != "any_available_windows_x64_self_hosted":
+    raise SystemExit("ERROR: governance CI must route to any available Windows/X64 self-hosted runner")
+if ci.get("final_check") != "governance":
+    raise SystemExit("ERROR: final required CI check must be governance")
+
 p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8")
 for marker in [
     "EG-02",
@@ -72,9 +80,9 @@ for marker in [
     "HTTP 403",
     "Issue #14",
     "SATISFIED",
-    "LOCAL-WIN-4",
-    "32528329184",
-    "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
+    "any available Windows/X64 self-hosted runner",
+    "32535324900",
+    "LOCAL-WIN-02",
 ]:
     if marker not in p01_gate:
         raise SystemExit(f"ERROR: P01 entry gate missing reconciliation marker: {marker}")
@@ -136,7 +144,7 @@ for marker in [
 
 print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
-print("Executable CI gate: SATISFIED ON LOCAL-WIN-4")
+print("Executable CI gate: SATISFIED ON ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER")
 print("Branch-protection admin tooling: PRESENT")
 print("Branch-protection hosted entitlement: BLOCKED_BY_PLAN (HTTP 403)")
 print("P00 exit: VERIFICATION")
