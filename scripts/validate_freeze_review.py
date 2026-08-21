@@ -50,7 +50,15 @@ if entry_states.get("issue:#14") != "SATISFIED":
     raise SystemExit("ERROR: issue #14 executable CI gate must be SATISFIED")
 
 p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8")
-for marker in ["EG-02", "Issue #3", "EG-03", "SATISFIED", "32522919774", "LOCAL-WIN-01"]:
+for marker in [
+    "EG-02",
+    "Issue #3",
+    "EG-03",
+    "SATISFIED",
+    "LOCAL-WIN-4",
+    "32528329184",
+    "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
+]:
     if marker not in p01_gate:
         raise SystemExit(f"ERROR: P01 entry gate missing reconciliation marker: {marker}")
 
@@ -65,6 +73,6 @@ for marker in ["ACCEPTED FOR FREEZE", "Issue #3", "Issue #14", "Issue #4", "P01 
 
 print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
-print("Executable CI gate: SATISFIED")
+print("Executable CI gate: SATISFIED ON LOCAL-WIN-4")
 print("P00 exit: VERIFICATION")
 print("P01 entry: BLOCKED BY ISSUE #3")
