@@ -4,166 +4,121 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.08 — Local developer and repository structure specification**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.09 — Initial threat model and operational SLO targets**.
 
-> **Temporary CI note:** GitHub Actions allowance is currently exhausted/disabled. ADR-0006 authorizes a temporary P00 documentation/specification-only manual evidence path. Hosted CI is `BLOCKED`/`NOT RUN`, never `PASS`, and this exception expires before any P01 implementation merge.
+> **Temporary CI note:** GitHub Actions allowance is exhausted/disabled. ADR-0006 permits temporary P00 documentation/specification manual evidence only. Hosted CI remains `BLOCKED`/`NOT RUN`, never `PASS`, and the exception expires before P01 implementation.
 
 ## Mandatory contributor / AI start here
 
-Any human or AI system changing this repository must read the following in order:
+Read in this order before material changes:
 
-1. [`AGENTS.md`](AGENTS.md)
-2. [`docs/governance/PRODUCT_CONSTITUTION.md`](docs/governance/PRODUCT_CONSTITUTION.md)
-3. [`docs/architecture/SYSTEM_ARCHITECTURE.md`](docs/architecture/SYSTEM_ARCHITECTURE.md)
-4. [`docs/architecture/MODULE_STANDARD.md`](docs/architecture/MODULE_STANDARD.md)
-5. [`docs/architecture/GLOSSARY.md`](docs/architecture/GLOSSARY.md)
-6. [`docs/architecture/NAMING_STANDARD.md`](docs/architecture/NAMING_STANDARD.md)
-7. [`docs/architecture/DOMAIN_OWNERSHIP.md`](docs/architecture/DOMAIN_OWNERSHIP.md)
-8. [`docs/architecture/DEPENDENCY_MATRIX.md`](docs/architecture/DEPENDENCY_MATRIX.md)
-9. [`docs/architecture/IDENTIFIER_STANDARD.md`](docs/architecture/IDENTIFIER_STANDARD.md)
-10. [`docs/architecture/MONEY_STANDARD.md`](docs/architecture/MONEY_STANDARD.md)
-11. [`docs/architecture/TIME_STANDARD.md`](docs/architecture/TIME_STANDARD.md)
-12. [`docs/architecture/LOCALE_STANDARD.md`](docs/architecture/LOCALE_STANDARD.md)
-13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
-14. [`docs/architecture/API_STANDARD.md`](docs/architecture/API_STANDARD.md)
-15. [`docs/architecture/EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md)
-16. [`docs/security/SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md)
-17. [`docs/security/DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md)
-18. [`docs/security/SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md)
-19. [`docs/quality/TESTING_STANDARD.md`](docs/quality/TESTING_STANDARD.md)
-20. [`docs/quality/CI_STANDARD.md`](docs/quality/CI_STANDARD.md)
-21. [`docs/quality/RELEASE_STANDARD.md`](docs/quality/RELEASE_STANDARD.md)
-22. [`docs/quality/QUALITY_GATE_MATRIX.md`](docs/quality/QUALITY_GATE_MATRIX.md)
-23. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-24. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-25. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-26. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-27. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-28. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-29. If active, [`docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md)
-30. Relevant ADRs under [`docs/adr/`](docs/adr/)
+1. `AGENTS.md`
+2. Product Constitution and system/module architecture
+3. glossary, naming, domain ownership and dependency matrix
+4. identifier, money, time, locale and error standards
+5. API and Event standards
+6. Security Standard, Data Classification and Security Control Matrix
+7. Testing, CI, Release and Quality Gate standards
+8. Repository Structure, Local Development, Toolchain, Configuration and Developer Command standards
+9. `docs/roadmap/MASTER_PLAN.md`, `STATUS.md`, `STATE.json`
+10. AI Execution Policy, Change Control and Definition of Done
+11. active temporary CI exception if present
+12. relevant ADRs
 
-`STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
+`STATE.json` is the machine-readable execution source of truth.
 
-## Core architecture laws
+## Core laws
 
 - Kernel before business modules.
-- Every authoritative write model has one owner.
-- Modules own their write models and schemas.
-- Cross-module direct database writes are forbidden.
-- Cross-domain integration uses versioned capabilities, events, workflows or approved read projections.
-- Tenant scope, authorization, audit and observability are platform requirements, not optional module features.
-- Optional modules must fail/degrade independently.
-- Public contracts are versioned.
-- AI acts only through governed, authorized, auditable capabilities.
-- Omnexa begins as a strict modular monolith and extracts services only when evidence justifies it.
-- Architecture or roadmap changes require formal change control and ADR reconciliation.
+- One authoritative owner per write model/capability.
+- Cross-module direct DB writes are forbidden.
+- Cross-domain communication uses governed APIs/capabilities/events/workflows/read projections.
+- Tenant scope, authorization, audit, observability and contract versioning are mandatory.
+- Optional modules fail/degrade independently.
+- AI acts only through governed authorized capabilities.
+- Strict modular monolith first; extract services only when evidence justifies it.
+- Architecture/roadmap changes require change control and ADR reconciliation.
 
-## Frozen foundation contracts
+## Frozen P00 foundation
 
 ### P00.03 — Primitives
 
-UUIDv7 identifiers, exact-decimal money, UTC/`timestamptz` + IANA civil-time semantics, BCP 47 locale/RTL rules and stable structured error contracts are frozen by ADR-0002.
+UUIDv7 IDs, exact-decimal money, UTC/`timestamptz` plus IANA civil-time semantics, BCP 47 locale/RTL and stable safe error contracts.
 
 ### P00.04 — HTTP APIs
 
-Stable APIs use `/api/v{major}/{domain}/{resources}`, OpenAPI 3.2.0, `snake_case`, Problem Details errors, cursor pagination, explicit idempotency/concurrency semantics and authorization-derived tenant context. See ADR-0003.
+`/api/v{major}/{domain}/{resources}`, OpenAPI 3.2.0, `snake_case`, Problem Details, cursor pagination, explicit idempotency/concurrency and authorization-derived tenant context.
 
 ### P00.05 — Events
 
-Events are producer-owned immutable past-tense facts using `<domain>.<subject>.<past_tense_fact>.v<major>`, CloudEvents-compatible envelopes, UUIDv7 identities, at-least-once assumptions, idempotent consumers, outbox/inbox reliability, bounded retry/DLQ and replay-safe semantics. See ADR-0004.
+Producer-owned versioned facts, CloudEvents-compatible envelope, UUIDv7 event identity, at-least-once delivery, idempotent consumers, outbox/inbox reliability, bounded retry/DLQ and replay safety.
 
-### P00.06 — Security and classification
+### P00.06 — Security
 
-Data classes are `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`. Authorization combines RBAC, relationships, contextual policy and governed capabilities. Tenant isolation, secrets/KMS, audit, privileged operations, integrations/webhooks/SSRF, modules/supply chain and AI execution are governed platform invariants. See ADR-0005.
+`PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`; RBAC + relationships + contextual policy + capabilities; tenant isolation; secrets/KMS; audit; privileged operations; integration/module/AI trust boundaries.
 
-### P00.07 — Testing, CI and release
+### P00.07 — Quality and release
 
-Quality semantics are **repository-owned and CI-provider independent**. Local development and any approved CI provider must execute the same canonical gates.
+Repository-owned CI-provider-independent verification. Gate classes G0–G8 cover governance through supply-chain/release. Evidence vocabulary is `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Releases prefer immutable build-once/promote artifacts and explicit migration/compatibility/rollback evidence.
 
-Gate classes:
+### P00.08 — Repository and local development
+
+Canonical governed monorepo categories:
 
 ```text
-G0 Governance
-G1 Static
-G2 Unit / Component
-G3 Contract / Integration
-G4 Data / Migration
-G5 Security / Tenancy
-G6 Lifecycle / Resilience
-G7 Build / Package
-G8 Supply Chain / Release
+apps/
+kernel/
+modules/
+platform/
+shared/
+infrastructure/
+scripts/
+docs/
+generated/
 ```
 
-Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`; blocked/unrun work is never silently green. Testing is risk-based and requires negative evidence for affected tenant, authorization, replay/idempotency, lifecycle and security boundaries. Releases use semantic-versioning semantics, immutable source/artifact identity and a build-once/promote model where possible.
+Folders express ownership, not automatic microservices. Module private code/schema/migrations stay with the owner; cross-module private imports/tables are forbidden.
 
-Normative documents:
+Default local infrastructure is containerized PostgreSQL, Redis-compatible cache, NATS/JetStream and S3-compatible object storage. Kubernetes is **not** required for the default local developer loop.
 
-- [`TESTING_STANDARD.md`](docs/quality/TESTING_STANDARD.md)
-- [`CI_STANDARD.md`](docs/quality/CI_STANDARD.md)
-- [`RELEASE_STANDARD.md`](docs/quality/RELEASE_STANDARD.md)
-- [`QUALITY_GATE_MATRIX.md`](docs/quality/QUALITY_GATE_MATRIX.md)
-- [`quality-gates.schema.json`](docs/contracts/quality/quality-gates.schema.json)
-- [`ADR-0007`](docs/adr/ADR-0007-testing-ci-release-baseline.md)
+Toolchains/dependencies are repository-pinned. Configuration is explicit and separate from secrets. Development fixtures are synthetic/deterministic; production sensitive data is prohibited by default locally.
+
+Future local command semantics include:
+
+```text
+omnexa dev bootstrap|up|down|status|reset
+omnexa db status|migrate|fresh|seed
+omnexa verify governance|format|lint|static|unit|contracts|integration|migrations|security|module-lifecycle|build|release|all
+omnexa module create|validate|test|package
+```
+
+Linux is the canonical backend execution environment; macOS is supported where tooling permits; Windows backend development prefers WSL2. Native Windows is a separate certification target where POS/edge requirements need it.
+
+Normative P00.08 documents are under `docs/development/`, with `docs/contracts/development/workspace.schema.json` and ADR-0008.
 
 ## Technology baseline
 
-Until superseded by an accepted ADR:
+- Go — kernel/backend/domain services
+- TypeScript + React — admin/web/builder/SDK
+- Rust — justified edge/native/security-sensitive work
+- Python — justified AI/data workloads
+- PostgreSQL — primary OLTP
+- Redis-compatible — cache/ephemeral coordination
+- S3-compatible — files/media
+- NATS/JetStream-class — events/messaging
+- OpenTelemetry — observability
 
-- **Go** — platform kernel/backend and primary domain services
-- **TypeScript + React** — admin, web, builder and primary extension SDK surfaces
-- **Rust** — edge/native/security-sensitive components where justified
-- **Python** — AI/data workloads where ecosystem value justifies it
-- **PostgreSQL** — primary transactional store
-- **Redis-compatible layer** — cache/ephemeral coordination
-- **S3-compatible object storage** — files/media
-- **NATS/JetStream-class fabric** — event/messaging baseline
-- **OpenTelemetry** — observability semantics
+## Governance status
 
-## Governance hardening
-
-Repository-level controls include `CONTRIBUTING.md`, `SECURITY.md`, CODEOWNERS, issue/ADR templates, the governance validator/workflow definition, repository hardening specification and licensing/IP decision gate.
-
-Current hosted blockers:
-
-- Issue #3: `main` branch/ruleset protection is still not applied through the available connector.
-- Issue #14: GitHub Actions execution is temporarily unavailable due exhausted/disabled allowance; ADR-0006 applies only to P00 documentation/specification work.
-- Issue #4: final licensing/IP/trademark strategy remains a decision gate before external distribution/public launch.
+- Issue #3: hosted `main` branch protection still needs admin configuration.
+- Issue #14: GitHub Actions quota/runner unavailable; ADR-0006 is P00-only.
+- Issue #4: final licensing/IP/trademark strategy remains unresolved before external distribution/public launch.
 
 None of these authorize early implementation.
 
 ## Roadmap
 
-The canonical [`MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md) covers P00 through P27:
-
-```text
-P00 Architecture/Governance
- -> P01 Kernel
- -> P02 Identity/Tenancy
- -> P03 Module Runtime
- -> P04 Event/Data Fabric
- -> P05 Workflow OS
- -> P06 Business Foundation
- -> P07-P15 Core Business Domains
- -> P16-P18 Integration/Low-code/Data
- -> P19-P20 Intelligence/Agents
- -> P21-P22 Developer Ecosystem/Marketplace
- -> P23-P25 Global/Enterprise/Scale
- -> P26 Industry Packs
- -> P27 Autonomous Business OS
-```
-
-See [`STATUS.md`](docs/roadmap/STATUS.md) and [`STATE.json`](docs/roadmap/STATE.json) for current execution state.
-
-## Work-package discipline
-
-Material work must satisfy [`DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md) and use the governed work-package/change-control process. Execution history is append-only in [`EXECUTION_LEDGER.md`](docs/roadmap/EXECUTION_LEDGER.md).
-
-## Accepted architecture decisions
-
-ADR-0001 through ADR-0007 define the current foundation, with ADR-0006 being a temporary P00 operational exception rather than a permanent architecture weakening.
-
-Do not implement an architectural change first and document it afterward.
+`docs/roadmap/MASTER_PLAN.md` governs P00 through P27. Current status is **8/10 P00 packages done; P00.09 active**. P01+ remain planned.
 
 ## Product principle
 
