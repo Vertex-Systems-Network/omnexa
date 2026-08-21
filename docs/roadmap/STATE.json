@@ -5,22 +5,17 @@
   "last_reconciled": "2026-08-22",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.08",
+  "current_work_package": "P00.09",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
-    "allowed_work": [
-      "P00 architecture",
-      "P00 governance",
-      "P00 specifications",
-      "narrow repository-maintenance fixes"
-    ]
+    "allowed_work": ["P00 architecture", "P00 governance", "P00 specifications", "narrow repository-maintenance fixes"]
   },
   "governance_tracking": {
     "main_branch_protection": {
       "state": "open",
       "issue": 3,
-      "note": "GitHub still reports main protected=false. The connected GitHub toolset has no branch-protection/ruleset write action; hosted admin configuration remains required and must be verified against docs/governance/REPOSITORY_HARDENING.md."
+      "note": "GitHub still reports main protected=false. Hosted admin configuration remains required."
     },
     "github_actions_ci": {
       "state": "temporary_p00_exception",
@@ -28,196 +23,63 @@
       "exception": "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
       "adr": "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
       "evidence_state": "BLOCKED",
-      "note": "Project owner confirmed GitHub Actions allowance is exhausted/disabled and explicitly authorized skipping hosted Actions for P00 documentation/specification work only. Hosted CI is not PASS. Exception expires before P01 implementation or sooner if Actions returns."
+      "note": "Owner authorized P00 documentation/specification manual evidence while Actions allowance is exhausted/disabled. Exception expires before P01 implementation."
     },
     "licensing_ip_trademark": {
       "state": "decision_required_before_external_distribution",
       "issue": 4,
-      "note": "Existing GPLv3 file is not treated as an implicitly approved final commercial licensing strategy."
+      "note": "Existing GPLv3 is not treated as an implicitly approved final commercial licensing strategy."
     }
   },
-  "state_vocabulary": [
-    "planned",
-    "ready",
-    "active",
-    "blocked",
-    "verification",
-    "done",
-    "superseded"
-  ],
+  "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
     "id": "P00",
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 7,
+    "done_work_packages": 8,
     "work_packages": [
-      {
-        "id": "P00.01",
-        "name": "Repository governance baseline",
-        "state": "done",
-        "evidence": [
-          "AGENTS.md",
-          "docs/governance/PRODUCT_CONSTITUTION.md",
-          "docs/governance/AI_EXECUTION_POLICY.md",
-          "docs/architecture/SYSTEM_ARCHITECTURE.md",
-          "docs/architecture/MODULE_STANDARD.md",
-          "docs/governance/CHANGE_CONTROL.md",
-          "docs/governance/DEFINITION_OF_DONE.md",
-          "docs/roadmap/MASTER_PLAN.md",
-          "docs/roadmap/STATUS.md",
-          "docs/roadmap/STATE.json",
-          "docs/adr/ADR-0001-platform-architecture-baseline.md"
-        ]
-      },
-      {
-        "id": "P00.02",
-        "name": "Product/domain glossary and naming standard",
-        "state": "done",
-        "depends_on": ["P00.01"],
-        "evidence": [
-          "docs/architecture/GLOSSARY.md",
-          "docs/architecture/NAMING_STANDARD.md",
-          "docs/architecture/DOMAIN_OWNERSHIP.md",
-          "docs/architecture/DEPENDENCY_MATRIX.md",
-          "CONTRIBUTING.md",
-          "SECURITY.md",
-          ".github/CODEOWNERS",
-          "docs/governance/REPOSITORY_HARDENING.md",
-          "docs/governance/LICENSING_DECISION.md",
-          "scripts/validate_governance.py",
-          ".github/workflows/governance.yml"
-        ]
-      },
-      {
-        "id": "P00.03",
-        "name": "ID, money, time, locale and error conventions",
-        "state": "done",
-        "depends_on": ["P00.02"],
-        "evidence": [
-          "docs/architecture/IDENTIFIER_STANDARD.md",
-          "docs/architecture/MONEY_STANDARD.md",
-          "docs/architecture/TIME_STANDARD.md",
-          "docs/architecture/LOCALE_STANDARD.md",
-          "docs/architecture/ERROR_STANDARD.md",
-          "docs/adr/ADR-0002-foundation-data-conventions.md",
-          "scripts/validate_governance.py"
-        ]
-      },
-      {
-        "id": "P00.04",
-        "name": "API contract standard",
-        "state": "done",
-        "depends_on": ["P00.02", "P00.03"],
-        "evidence": [
-          "docs/architecture/API_STANDARD.md",
-          "docs/contracts/http/openapi-template.yaml",
-          "docs/adr/ADR-0003-http-api-contract-baseline.md",
-          "scripts/validate_governance.py"
-        ]
-      },
-      {
-        "id": "P00.05",
-        "name": "Event contract standard",
-        "state": "done",
-        "depends_on": ["P00.02", "P00.03"],
-        "evidence": [
-          "docs/architecture/EVENT_STANDARD.md",
-          "docs/contracts/events/event-envelope.schema.json",
-          "docs/adr/ADR-0004-event-contract-baseline.md",
-          "scripts/validate_governance.py"
-        ]
-      },
-      {
-        "id": "P00.06",
-        "name": "Security and data-classification baseline",
-        "state": "done",
-        "depends_on": ["P00.02", "P00.03"],
-        "evidence": [
-          "docs/security/SECURITY_STANDARD.md",
-          "docs/security/DATA_CLASSIFICATION.md",
-          "docs/security/SECURITY_CONTROL_MATRIX.md",
-          "docs/contracts/security/data-classification.schema.json",
-          "docs/adr/ADR-0005-security-data-classification-baseline.md",
-          "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
-          "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
-          "scripts/validate_governance.py"
-        ]
-      },
-      {
-        "id": "P00.07",
-        "name": "Testing, CI and release standard",
-        "state": "done",
-        "depends_on": ["P00.04", "P00.05", "P00.06"],
-        "evidence": [
-          "docs/quality/TESTING_STANDARD.md",
-          "docs/quality/CI_STANDARD.md",
-          "docs/quality/RELEASE_STANDARD.md",
-          "docs/quality/QUALITY_GATE_MATRIX.md",
-          "docs/contracts/quality/quality-gates.schema.json",
-          "docs/adr/ADR-0007-testing-ci-release-baseline.md",
-          "scripts/validate_governance.py"
-        ]
-      },
-      {
-        "id": "P00.08",
-        "name": "Local developer and repository structure specification",
-        "state": "active",
-        "depends_on": ["P00.03", "P00.07"]
-      },
-      {
-        "id": "P00.09",
-        "name": "Initial threat model and operational SLO targets",
-        "state": "planned",
-        "depends_on": ["P00.06", "P00.08"]
-      },
-      {
-        "id": "P00.10",
-        "name": "Foundation architecture freeze review",
-        "state": "planned",
-        "depends_on": [
-          "P00.01",
-          "P00.02",
-          "P00.03",
-          "P00.04",
-          "P00.05",
-          "P00.06",
-          "P00.07",
-          "P00.08",
-          "P00.09"
-        ]
-      }
+      {"id":"P00.01","name":"Repository governance baseline","state":"done","evidence":["AGENTS.md","docs/governance/PRODUCT_CONSTITUTION.md","docs/governance/AI_EXECUTION_POLICY.md","docs/architecture/SYSTEM_ARCHITECTURE.md","docs/architecture/MODULE_STANDARD.md","docs/governance/CHANGE_CONTROL.md","docs/governance/DEFINITION_OF_DONE.md","docs/roadmap/MASTER_PLAN.md","docs/roadmap/STATUS.md","docs/roadmap/STATE.json","docs/adr/ADR-0001-platform-architecture-baseline.md"]},
+      {"id":"P00.02","name":"Product/domain glossary and naming standard","state":"done","depends_on":["P00.01"],"evidence":["docs/architecture/GLOSSARY.md","docs/architecture/NAMING_STANDARD.md","docs/architecture/DOMAIN_OWNERSHIP.md","docs/architecture/DEPENDENCY_MATRIX.md","CONTRIBUTING.md","SECURITY.md",".github/CODEOWNERS","docs/governance/REPOSITORY_HARDENING.md","docs/governance/LICENSING_DECISION.md","scripts/validate_governance.py",".github/workflows/governance.yml"]},
+      {"id":"P00.03","name":"ID, money, time, locale and error conventions","state":"done","depends_on":["P00.02"],"evidence":["docs/architecture/IDENTIFIER_STANDARD.md","docs/architecture/MONEY_STANDARD.md","docs/architecture/TIME_STANDARD.md","docs/architecture/LOCALE_STANDARD.md","docs/architecture/ERROR_STANDARD.md","docs/adr/ADR-0002-foundation-data-conventions.md","scripts/validate_governance.py"]},
+      {"id":"P00.04","name":"API contract standard","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/architecture/API_STANDARD.md","docs/contracts/http/openapi-template.yaml","docs/adr/ADR-0003-http-api-contract-baseline.md","scripts/validate_governance.py"]},
+      {"id":"P00.05","name":"Event contract standard","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/architecture/EVENT_STANDARD.md","docs/contracts/events/event-envelope.schema.json","docs/adr/ADR-0004-event-contract-baseline.md","scripts/validate_governance.py"]},
+      {"id":"P00.06","name":"Security and data-classification baseline","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/security/SECURITY_STANDARD.md","docs/security/DATA_CLASSIFICATION.md","docs/security/SECURITY_CONTROL_MATRIX.md","docs/contracts/security/data-classification.schema.json","docs/adr/ADR-0005-security-data-classification-baseline.md","docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md","docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md","scripts/validate_governance.py"]},
+      {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
+      {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
+      {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"active","depends_on":["P00.06","P00.08"]},
+      {"id":"P00.10","name":"Foundation architecture freeze review","state":"planned","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"]}
     ]
   },
   "phases": [
-    {"id": "P00", "name": "Product Constitution & Architecture Freeze", "state": "active"},
-    {"id": "P01", "name": "Omnexa Kernel", "state": "planned"},
-    {"id": "P02", "name": "Identity, Tenancy & Organization", "state": "planned"},
-    {"id": "P03", "name": "Module Runtime", "state": "planned"},
-    {"id": "P04", "name": "Data, Jobs & Event Fabric", "state": "planned"},
-    {"id": "P05", "name": "Omnexa Flow / Workflow OS", "state": "planned"},
-    {"id": "P06", "name": "Universal Business Foundation", "state": "planned"},
-    {"id": "P07", "name": "CRM, Sales & Customer 360", "state": "planned"},
-    {"id": "P08", "name": "Finance & ERP Core", "state": "planned"},
-    {"id": "P09", "name": "Commerce OS", "state": "planned"},
-    {"id": "P10", "name": "Payment Fabric", "state": "planned"},
-    {"id": "P11", "name": "POS & Edge", "state": "planned"},
-    {"id": "P12", "name": "Experience Builder & CMS", "state": "planned"},
-    {"id": "P13", "name": "Portal Platform", "state": "planned"},
-    {"id": "P14", "name": "HR, Projects & Service Operations", "state": "planned"},
-    {"id": "P15", "name": "Supply Chain, Warehouse & Manufacturing", "state": "planned"},
-    {"id": "P16", "name": "Omnexa Connect / Integration Fabric", "state": "planned"},
-    {"id": "P17", "name": "Low-code App Builder", "state": "planned"},
-    {"id": "P18", "name": "Data, Reporting & BI", "state": "planned"},
-    {"id": "P19", "name": "Omnexa Intelligence Platform", "state": "planned"},
-    {"id": "P20", "name": "Governed AI Agents", "state": "planned"},
-    {"id": "P21", "name": "Developer Platform", "state": "planned"},
-    {"id": "P22", "name": "Omnexa Exchange / Marketplace", "state": "planned"},
-    {"id": "P23", "name": "Globalization & Country Packs", "state": "planned"},
-    {"id": "P24", "name": "Enterprise Governance, Security & Compliance", "state": "planned"},
-    {"id": "P25", "name": "Scale Fabric", "state": "planned"},
-    {"id": "P26", "name": "Industry Packs", "state": "planned"},
-    {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
+    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active"},
+    {"id":"P01","name":"Omnexa Kernel","state":"planned"},
+    {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
+    {"id":"P03","name":"Module Runtime","state":"planned"},
+    {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
+    {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
+    {"id":"P06","name":"Universal Business Foundation","state":"planned"},
+    {"id":"P07","name":"CRM, Sales & Customer 360","state":"planned"},
+    {"id":"P08","name":"Finance & ERP Core","state":"planned"},
+    {"id":"P09","name":"Commerce OS","state":"planned"},
+    {"id":"P10","name":"Payment Fabric","state":"planned"},
+    {"id":"P11","name":"POS & Edge","state":"planned"},
+    {"id":"P12","name":"Experience Builder & CMS","state":"planned"},
+    {"id":"P13","name":"Portal Platform","state":"planned"},
+    {"id":"P14","name":"HR, Projects & Service Operations","state":"planned"},
+    {"id":"P15","name":"Supply Chain, Warehouse & Manufacturing","state":"planned"},
+    {"id":"P16","name":"Omnexa Connect / Integration Fabric","state":"planned"},
+    {"id":"P17","name":"Low-code App Builder","state":"planned"},
+    {"id":"P18","name":"Data, Reporting & BI","state":"planned"},
+    {"id":"P19","name":"Omnexa Intelligence Platform","state":"planned"},
+    {"id":"P20","name":"Governed AI Agents","state":"planned"},
+    {"id":"P21","name":"Developer Platform","state":"planned"},
+    {"id":"P22","name":"Omnexa Exchange / Marketplace","state":"planned"},
+    {"id":"P23","name":"Globalization & Country Packs","state":"planned"},
+    {"id":"P24","name":"Enterprise Governance, Security & Compliance","state":"planned"},
+    {"id":"P25","name":"Scale Fabric","state":"planned"},
+    {"id":"P26","name":"Industry Packs","state":"planned"},
+    {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.08 may move to done only when the repository/local-development specification defines canonical monorepo layout, package/module boundaries, generated-artifact locations, toolchain pinning, local dependencies, configuration/secrets, developer bootstrap, canonical verification commands, database/migration workflow and cross-platform expectations with machine-validation evidence. During ADR-0006, hosted execution may remain BLOCKED/NOT RUN for P00 specification work. Then P00.09 becomes active."
+  "next_transition_rule": "P00.09 may move to done only when the threat model covers tenant escape, authz/authn abuse, injection/SSRF/webhooks, supply chain/module compromise, CI/release credentials, edge/POS loss, event replay, payment duplication, AI prompt/tool abuse, insider/support access, backup/search leakage, noisy-neighbor/resource exhaustion and disaster scenarios; operational SLO/RPO/RTO/error-budget/severity/observability targets must be documented with manual/machine evidence. Then P00.10 becomes active."
 }
