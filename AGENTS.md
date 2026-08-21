@@ -36,7 +36,8 @@ Before changing code, schema, infrastructure, APIs, events, tests or documentati
 22. `docs/governance/AI_EXECUTION_POLICY.md`
 23. `docs/governance/CHANGE_CONTROL.md`
 24. `docs/governance/DEFINITION_OF_DONE.md`
-25. relevant ADRs under `docs/adr/`
+25. if present and active, `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`
+26. relevant ADRs under `docs/adr/`
 
 If canonical documents conflict, stop implementation and resolve the conflict through change control.
 
@@ -53,6 +54,10 @@ During P00:
 - only architecture, governance, specifications and narrow maintenance are permitted.
 
 An AI system must never claim progress beyond repository evidence.
+
+### Temporary hosted-CI exception
+
+When `STATE.json` declares `github_actions_ci.state = temporary_p00_exception`, ADR-0006 and `CI_EVIDENCE_EXCEPTION_2026-08-22.md` govern evidence handling. Hosted GitHub Actions must be recorded as `BLOCKED`/`NOT RUN`, never fabricated as `PASS`. Manual evidence may advance **P00 documentation/specification-only** work when the exception criteria are satisfied. This exception cannot authorize P01+ runtime/kernel/business merges or waive executable build, migration, test, security-scan or release gates. If Actions returns, rerun governance validation and reopen any affected package that fails.
 
 ## 4. Core architecture invariants
 
@@ -210,8 +215,8 @@ For every material change:
 5. state ownership/dependency direction and security/tenant implications;
 6. implement the smallest complete authorized change;
 7. add/update positive and negative tests appropriate to risk;
-8. run required quality gates;
-9. record build/test/migration/contract/security/CI evidence;
+8. run required quality gates, except only where an active documented P00 CI exception explicitly marks hosted execution `BLOCKED`/`NOT RUN`;
+9. record build/test/migration/contract/security/CI evidence accurately;
 10. update STATUS/STATE only when evidence supports the transition;
 11. add/update ADR and dependent docs before implementing an architectural change.
 
@@ -231,6 +236,8 @@ Do not:
 - weaken a shared security control inside a module;
 - introduce hidden super-admin/support bypasses;
 - claim `done` without acceptance evidence;
+- claim blocked/unrun CI as PASS;
+- use a P00 operational exception as precedent for executable P01+ work;
 - mix unrelated project code into this repository.
 
 ## 12. Change-control triggers
@@ -281,6 +288,8 @@ A change is incomplete when any relevant required gate fails, including:
 - secret disclosure controls;
 - ownership/dependency rules;
 - documentation/state consistency.
+
+A documented temporary P00 CI exception may classify hosted runner execution as `BLOCKED`/`NOT RUN`; it does not convert an actual failing product/governance check into a pass.
 
 P00.07 defines the canonical testing/CI/release gate taxonomy that future phases must execute.
 
