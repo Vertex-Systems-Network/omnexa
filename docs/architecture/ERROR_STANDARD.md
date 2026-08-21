@@ -9,7 +9,7 @@ This standard defines stable, diagnosable and safe error semantics across APIs, 
 
 Errors are contracts, not arbitrary strings.
 
-Every material error must separate:
+Every material failure has a **stable machine error code**. Every material error must separate:
 
 - stable machine meaning;
 - safe human-facing explanation;
