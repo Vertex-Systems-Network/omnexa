@@ -82,6 +82,11 @@ jobs:
         shell: cmd
         run: python scripts\validate_freeze_review.py
 
+      - name: Validate P01 implementation-readiness preparation
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: python scripts\validate_p01_preparation.py
+
       - name: Write LOCAL-WIN-4 pass evidence
         if: steps.target.outputs.is_target == 'true'
         shell: cmd
