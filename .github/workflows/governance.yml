@@ -51,8 +51,16 @@ jobs:
         run: |
           git --version
           python --version
+          powershell -NoLogo -NoProfile -Command "$PSVersionTable.PSVersion"
           if /I not "%RUNNER_OS%"=="Windows" exit /b 1
           if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" exit /b 1
+
+      - name: Parse branch-protection PowerShell tooling
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: >-
+          powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command
+          "$ErrorActionPreference='Stop'; foreach ($path in @('scripts/apply_main_protection.ps1','scripts/verify_main_protection.ps1')) { $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $path), [ref]$tokens, [ref]$errors) | Out-Null; if ($errors.Count -gt 0) { foreach ($parseError in $errors) { Write-Host $parseError.Message }; exit 1 }; Write-Host ('PowerShell parse validation PASS: ' + $path) }"
 
       - name: Validate canonical governance state
         if: steps.target.outputs.is_target == 'true'

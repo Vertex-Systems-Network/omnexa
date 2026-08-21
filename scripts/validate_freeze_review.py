@@ -15,6 +15,9 @@ REQUIRED_FILES = [
     "docs/governance/FOUNDATION_FREEZE.json",
     "docs/contracts/governance/foundation-freeze.schema.json",
     "docs/adr/ADR-0010-foundation-architecture-freeze.md",
+    "docs/governance/BRANCH_PROTECTION_ADMIN_RUNBOOK.md",
+    "scripts/apply_main_protection.ps1",
+    "scripts/verify_main_protection.ps1",
 ]
 
 for path in REQUIRED_FILES:
@@ -71,8 +74,45 @@ for marker in ["ACCEPTED FOR FREEZE", "Issue #3", "Issue #14", "Issue #4", "P01 
     if marker not in review:
         raise SystemExit(f"ERROR: freeze review missing historical marker: {marker}")
 
+hardening = (ROOT / "docs/governance/REPOSITORY_HARDENING.md").read_text(encoding="utf-8")
+for marker in [
+    "BRANCH_PROTECTION_ADMIN_RUNBOOK.md",
+    "apply_main_protection.ps1",
+    "verify_main_protection.ps1",
+    "Issue #3 remains open",
+]:
+    if marker not in hardening:
+        raise SystemExit(f"ERROR: repository hardening missing admin-tooling marker: {marker}")
+
+apply_script = (ROOT / "scripts/apply_main_protection.ps1").read_text(encoding="utf-8")
+for marker in [
+    "required_status_checks",
+    "governance",
+    "enforce_admins",
+    "required_pull_request_reviews",
+    "required_conversation_resolution",
+    "allow_force_pushes",
+    "allow_deletions",
+    "OMNEXA_GITHUB_ADMIN_TOKEN",
+]:
+    if marker not in apply_script:
+        raise SystemExit(f"ERROR: apply_main_protection.ps1 missing policy marker: {marker}")
+
+verify_script = (ROOT / "scripts/verify_main_protection.ps1").read_text(encoding="utf-8")
+for marker in [
+    "protected=true",
+    "required status check",
+    "conversation resolution",
+    "force pushes are blocked",
+    "branch deletion is blocked",
+    "administrators",
+]:
+    if marker not in verify_script:
+        raise SystemExit(f"ERROR: verify_main_protection.ps1 missing verification marker: {marker}")
+
 print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
 print("Executable CI gate: SATISFIED ON LOCAL-WIN-4")
+print("Branch-protection admin tooling: PRESENT")
 print("P00 exit: VERIFICATION")
 print("P01 entry: BLOCKED BY ISSUE #3")

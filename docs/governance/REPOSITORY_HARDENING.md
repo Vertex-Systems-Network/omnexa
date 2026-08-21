@@ -76,3 +76,17 @@ After hosted settings are configured:
 4. open a test PR and verify governance CI is required;
 5. modify a CODEOWNERS path and verify required owner review behavior when enabled;
 6. record evidence in the tracking issue and execution ledger if this changes a formal gate.
+
+## 8. Deterministic administration tooling
+
+P00.10 provides repository-managed administration helpers so the hosted setting can be applied and verified without reconstructing the policy manually:
+
+- `docs/governance/BRANCH_PROTECTION_ADMIN_RUNBOOK.md`;
+- `scripts/apply_main_protection.ps1`;
+- `scripts/verify_main_protection.ps1`.
+
+The apply script uses GitHub's branch-protection Administration API through the GitHub CLI and requires either an owner-controlled authenticated `gh` session or a short-lived process-only `OMNEXA_GITHUB_ADMIN_TOKEN` with repository Administration read/write permission.
+
+The current single-maintainer policy uses required approval count `0` while still requiring PR-based integration, because GitHub does not allow an author to approve their own PR. Once an independent reviewer exists, the baseline must be tightened to one or more approvals and Code Owner review according to the contributor model.
+
+The verifier is fail-closed and checks the hosted configuration, but it does not replace the controlled negative tests listed above. Issue #3 remains open until live GitHub evidence and the required rejection tests are complete.
