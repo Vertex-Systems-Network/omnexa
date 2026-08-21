@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "product": "Omnexa",
+  "product_category": "Composable Enterprise Business Operating System",
+  "last_reconciled": "2026-08-21",
+  "program": "foundation",
+  "current_phase": "P00",
+  "current_work_package": "P00.02",
+  "implementation_lock": {
+    "business_feature_code_authorized": false,
+    "kernel_code_authorized": false,
+    "allowed_work": [
+      "P00 architecture",
+      "P00 governance",
+      "P00 specifications",
+      "narrow repository-maintenance fixes"
+    ]
+  },
+  "state_vocabulary": [
+    "planned",
+    "ready",
+    "active",
+    "blocked",
+    "verification",
+    "done",
+    "superseded"
+  ],
+  "phase": {
+    "id": "P00",
+    "name": "Product Constitution & Architecture Freeze",
+    "state": "active",
+    "mandatory_work_packages": 10,
+    "done_work_packages": 1,
+    "work_packages": [
+      {
+        "id": "P00.01",
+        "name": "Repository governance baseline",
+        "state": "done",
+        "evidence": [
+          "AGENTS.md",
+          "docs/governance/PRODUCT_CONSTITUTION.md",
+          "docs/governance/AI_EXECUTION_POLICY.md",
+          "docs/architecture/SYSTEM_ARCHITECTURE.md",
+          "docs/architecture/MODULE_STANDARD.md",
+          "docs/governance/CHANGE_CONTROL.md",
+          "docs/governance/DEFINITION_OF_DONE.md",
+          "docs/roadmap/MASTER_PLAN.md",
+          "docs/roadmap/STATUS.md",
+          "docs/roadmap/STATE.json",
+          "docs/adr/ADR-0001-platform-architecture-baseline.md"
+        ]
+      },
+      {
+        "id": "P00.02",
+        "name": "Product/domain glossary and naming standard",
+        "state": "active",
+        "depends_on": ["P00.01"]
+      },
+      {
+        "id": "P00.03",
+        "name": "ID, money, time, locale and error conventions",
+        "state": "planned",
+        "depends_on": ["P00.02"]
+      },
+      {
+        "id": "P00.04",
+        "name": "API contract standard",
+        "state": "planned",
+        "depends_on": ["P00.02", "P00.03"]
+      },
+      {
+        "id": "P00.05",
+        "name": "Event contract standard",
+        "state": "planned",
+        "depends_on": ["P00.02", "P00.03"]
+      },
+      {
+        "id": "P00.06",
+        "name": "Security and data-classification baseline",
+        "state": "planned",
+        "depends_on": ["P00.02", "P00.03"]
+      },
+      {
+        "id": "P00.07",
+        "name": "Testing, CI and release standard",
+        "state": "planned",
+        "depends_on": ["P00.04", "P00.05", "P00.06"]
+      },
+      {
+        "id": "P00.08",
+        "name": "Local developer and repository structure specification",
+        "state": "planned",
+        "depends_on": ["P00.03", "P00.07"]
+      },
+      {
+        "id": "P00.09",
+        "name": "Initial threat model and operational SLO targets",
+        "state": "planned",
+        "depends_on": ["P00.06", "P00.08"]
+      },
+      {
+        "id": "P00.10",
+        "name": "Foundation architecture freeze review",
+        "state": "planned",
+        "depends_on": [
+          "P00.01",
+          "P00.02",
+          "P00.03",
+          "P00.04",
+          "P00.05",
+          "P00.06",
+          "P00.07",
+          "P00.08",
+          "P00.09"
+        ]
+      }
+    ]
+  },
+  "phases": [
+    {"id": "P00", "name": "Product Constitution & Architecture Freeze", "state": "active"},
+    {"id": "P01", "name": "Omnexa Kernel", "state": "planned"},
+    {"id": "P02", "name": "Identity, Tenancy & Organization", "state": "planned"},
+    {"id": "P03", "name": "Module Runtime", "state": "planned"},
+    {"id": "P04", "name": "Data, Jobs & Event Fabric", "state": "planned"},
+    {"id": "P05", "name": "Omnexa Flow / Workflow OS", "state": "planned"},
+    {"id": "P06", "name": "Universal Business Foundation", "state": "planned"},
+    {"id": "P07", "name": "CRM, Sales & Customer 360", "state": "planned"},
+    {"id": "P08", "name": "Finance & ERP Core", "state": "planned"},
+    {"id": "P09", "name": "Commerce OS", "state": "planned"},
+    {"id": "P10", "name": "Payment Fabric", "state": "planned"},
+    {"id": "P11", "name": "POS & Edge", "state": "planned"},
+    {"id": "P12", "name": "Experience Builder & CMS", "state": "planned"},
+    {"id": "P13", "name": "Portal Platform", "state": "planned"},
+    {"id": "P14", "name": "HR, Projects & Service Operations", "state": "planned"},
+    {"id": "P15", "name": "Supply Chain, Warehouse & Manufacturing", "state": "planned"},
+    {"id": "P16", "name": "Omnexa Connect / Integration Fabric", "state": "planned"},
+    {"id": "P17", "name": "Low-code App Builder", "state": "planned"},
+    {"id": "P18", "name": "Data, Reporting & BI", "state": "planned"},
+    {"id": "P19", "name": "Omnexa Intelligence Platform", "state": "planned"},
+    {"id": "P20", "name": "Governed AI Agents", "state": "planned"},
+    {"id": "P21", "name": "Developer Platform", "state": "planned"},
+    {"id": "P22", "name": "Omnexa Exchange / Marketplace", "state": "planned"},
+    {"id": "P23", "name": "Globalization & Country Packs", "state": "planned"},
+    {"id": "P24", "name": "Enterprise Governance, Security & Compliance", "state": "planned"},
+    {"id": "P25", "name": "Scale Fabric", "state": "planned"},
+    {"id": "P26", "name": "Industry Packs", "state": "planned"},
+    {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
+  ],
+  "next_transition_rule": "P00.02 may move to done only with glossary/naming artifacts and reconciled STATUS.md + STATE.json; then P00.03 becomes active unless change control approves otherwise."
+}
