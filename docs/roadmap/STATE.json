@@ -22,7 +22,8 @@
     "p01_entry_gate": {
       "state": "BLOCKED",
       "document": "docs/governance/P01_ENTRY_GATE.md",
-      "blockers": [3, 14],
+      "blockers": [3],
+      "satisfied": [14],
       "kernel_code_authorized": false,
       "business_feature_code_authorized": false
     },
@@ -32,12 +33,15 @@
       "note": "main branch/ruleset protection must be applied and verified before any P01 executable merge."
     },
     "github_actions_ci": {
-      "state": "temporary_p00_exception",
+      "state": "operational_self_hosted",
       "issue": 14,
-      "exception": "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
-      "adr": "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
-      "evidence_state": "BLOCKED",
-      "note": "P00 documentation/specification manual evidence is owner-authorized while Actions is unavailable. A working executable CI lane is a P01 entry blocker. ADR-0006 expires at P00 exit."
+      "evidence_state": "PASS",
+      "runner_selector": ["self-hosted", "Windows", "X64"],
+      "runner_name": "LOCAL-WIN-01",
+      "workflow_run": 32522919774,
+      "job": 96898839560,
+      "merge_commit": "c2ab2cd679c295a8dec84b1879acb9a9e02ad67d",
+      "note": "Executable governance CI is restored on the local Windows self-hosted runner. Issue #14 is closed/completed. ADR-0006 remains historical evidence and is no longer needed for new P00 changes while this lane remains operational."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -67,7 +71,7 @@
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active","review_state":"verification"},
-    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3","issue:#14"]},
+    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"]},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -95,5 +99,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. It may move to done only after Issue #3 main protection and Issue #14 executable CI lane are verified satisfied. The transition must expire ADR-0006, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record evidence. Issue #4 remains an external distribution/public-launch blocker."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 / workflow run 32522919774. P00.10 may move to done only after Issue #3 main protection is applied and verified. The transition must retire ADR-0006 from active use, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record branch-protection evidence. Issue #4 remains an external distribution/public-launch blocker."
 }

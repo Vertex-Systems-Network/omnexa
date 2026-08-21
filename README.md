@@ -6,9 +6,7 @@ Omnexa is being designed as a governed modular platform above the scope of a con
 
 > **Architecture state:** **Omnexa Foundation Architecture v1 is FROZEN.** P00 remains active only in **exit verification**. Current package: **P00.10 — Foundation architecture freeze review**.
 
-> **Implementation lock:** P01 kernel implementation is **BLOCKED** until Issue #3 (`main` protection) and Issue #14 (working executable CI lane) are verified. Kernel and business-feature code remain unauthorized.
-
-> **Temporary CI:** ADR-0006 permits P00 documentation/specification-only manual evidence while GitHub Actions is unavailable. Hosted CI is `BLOCKED`/`NOT RUN`, never `PASS`; the exception expires at P00 exit and cannot authorize P01 executable work.
+> **Implementation lock:** the executable CI gate is now **SATISFIED** on the local Windows self-hosted runner. P01 kernel implementation remains **BLOCKED only by Issue #3 (`main` protection)**. Kernel and business-feature code remain unauthorized until that gate is cleared.
 
 ## Mandatory contributor / AI start here
 
@@ -35,44 +33,58 @@ Freeze/entry-gate sources:
 
 ## Frozen foundation v1
 
-P00.01–P00.09 freeze:
-
-- governance, AI execution, change control and roadmap discipline;
-- glossary, naming, domain ownership and dependency direction;
-- UUIDv7, exact-money, time/locale/error primitives;
-- stable HTTP/OpenAPI and event contracts;
-- security, data classification, tenant isolation, authorization and audit;
-- G0–G8 testing/CI/release semantics and exact evidence vocabulary;
-- governed monorepo/local-development/toolchain/config model;
-- threat model T01–T24, TIER_0–TIER_3 operational criticality, recovery classes A–D, SLO/RPO/RTO/error budgets, SEV0–SEV3 and reliability readiness.
+P00.01–P00.09 freeze governance/AI/change control, terminology/ownership/dependencies, UUIDv7/exact-money/time/locale/error primitives, HTTP/OpenAPI and event contracts, security/data classification/tenant isolation, G0–G8 quality/release semantics, monorepo/local-development rules, and the threat/SLO/recovery/incident baseline.
 
 Technology baseline remains Go + TypeScript/React with selective Rust/Python; PostgreSQL, Redis-compatible cache, S3-compatible storage, NATS/JetStream-class messaging and OpenTelemetry.
 
+## Executable CI — verified
+
+The canonical governance workflow now uses:
+
+```text
+runs-on: [self-hosted, Windows, X64]
+```
+
+Verified PR #20 evidence:
+
+- runner `LOCAL-WIN-01` / Windows X64;
+- Git `2.55.0.windows.5`;
+- Python `3.13.7`;
+- workflow run `32522919774` SUCCESS;
+- governance validator PASS;
+- development-spec validator PASS;
+- operations validator PASS;
+- foundation-freeze validator PASS;
+- PR #20 merged as `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`;
+- Issue #14 closed/completed.
+
+The old hosted-runner quota problem no longer blocks the governance lane. ADR-0006 remains historical evidence, not the active path while self-hosted CI is operational.
+
 ## P01 entry gate
 
-P01 is **not authorized** yet.
+P01 is **not authorized yet**.
 
-### Issue #3 — P01 entry blocker
+### Issue #3 — remaining P01 entry blocker
 
-Before executable P01 merges: protect `main` with PR-based integration, blocked force-push/deletion, controlled bypass, conversation resolution and required verification checks when the CI lane exists.
+Before executable P01 merges, protect `main` with PR-based integration, required `governance` check, blocked force-push/deletion, controlled bypass and conversation resolution.
 
-### Issue #14 — P01 entry blocker
+### Issue #14 — satisfied
 
-Before executable P01 merges: provide an approved CI/self-hosted/provider lane that actually runs the repository-owned verification commands in a clean reproducible environment. GitHub Actions is not architecturally mandatory; a compliant equivalent is acceptable.
+Executable CI has been restored and verified through the local Windows self-hosted runner.
 
 ### Issue #4 — external distribution blocker
 
-Licensing/IP/trademark resolution is required before public/external distribution or self-hosted customer delivery, but does not block private internal P01 engineering after the P01 entry gate is cleared.
+Licensing/IP/trademark resolution is required before public/external distribution or self-hosted customer delivery, but does not block private internal P01 engineering after Issue #3 is cleared.
 
 ## Exact next transition
 
-A narrow governance transition may close P00 only after Issue #3 and #14 are verified. It must expire ADR-0006, mark P00.10/P00 done, activate P01, set `kernel_code_authorized = true`, keep business features locked, record evidence and define the first P01 kernel work package.
+A narrow governance transition may close P00 after Issue #3 is verified. It must retire ADR-0006 from active use, mark P00.10/P00 done, activate P01, set `kernel_code_authorized = true`, keep business features locked, record branch-protection evidence and define the first P01 kernel work package.
 
 Do **not** combine that transition with unrelated kernel feature code.
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; P00.10 exit verification; P01 blocked**.
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; executable CI satisfied; P00.10 exit verification; P01 blocked only by Issue #3**.
 
 ## Product principle
 

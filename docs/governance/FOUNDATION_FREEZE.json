@@ -17,8 +17,8 @@
       {
         "id": "EG-03",
         "tracker": "issue:#14",
-        "state": "BLOCKED",
-        "description": "no executable CI lane is currently available to run required P01 verification"
+        "state": "SATISFIED",
+        "description": "local Windows self-hosted executable CI lane verified by workflow run 32522919774 on LOCAL-WIN-01"
       }
     ]
   },
