@@ -2,7 +2,7 @@
 """Fail-fast consistency checks for Omnexa architecture/governance state.
 
 Dependency-free by design so it can run before the application toolchain exists.
-P00.07 defines the broader CI/test/release architecture.
+The canonical quality semantics are defined by P00.07 and are CI-provider independent.
 """
 
 from __future__ import annotations
@@ -15,6 +15,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 STATE_PATH = ROOT / "docs/roadmap/STATE.json"
 STATUS_PATH = ROOT / "docs/roadmap/STATUS.md"
 CLASSIFICATION_SCHEMA_PATH = ROOT / "docs/contracts/security/data-classification.schema.json"
+QUALITY_SCHEMA_PATH = ROOT / "docs/contracts/quality/quality-gates.schema.json"
 
 REQUIRED_FILES = [
     "AGENTS.md",
@@ -29,6 +30,7 @@ REQUIRED_FILES = [
     "docs/governance/DEFINITION_OF_DONE.md",
     "docs/governance/REPOSITORY_HARDENING.md",
     "docs/governance/LICENSING_DECISION.md",
+    "docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md",
     "docs/architecture/SYSTEM_ARCHITECTURE.md",
     "docs/architecture/MODULE_STANDARD.md",
     "docs/architecture/GLOSSARY.md",
@@ -45,9 +47,14 @@ REQUIRED_FILES = [
     "docs/security/SECURITY_STANDARD.md",
     "docs/security/DATA_CLASSIFICATION.md",
     "docs/security/SECURITY_CONTROL_MATRIX.md",
+    "docs/quality/TESTING_STANDARD.md",
+    "docs/quality/CI_STANDARD.md",
+    "docs/quality/RELEASE_STANDARD.md",
+    "docs/quality/QUALITY_GATE_MATRIX.md",
     "docs/contracts/http/openapi-template.yaml",
     "docs/contracts/events/event-envelope.schema.json",
     "docs/contracts/security/data-classification.schema.json",
+    "docs/contracts/quality/quality-gates.schema.json",
     "docs/roadmap/MASTER_PLAN.md",
     "docs/roadmap/STATUS.md",
     "docs/roadmap/STATE.json",
@@ -57,6 +64,8 @@ REQUIRED_FILES = [
     "docs/adr/ADR-0003-http-api-contract-baseline.md",
     "docs/adr/ADR-0004-event-contract-baseline.md",
     "docs/adr/ADR-0005-security-data-classification-baseline.md",
+    "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md",
+    "docs/adr/ADR-0007-testing-ci-release-baseline.md",
     "docs/adr/TEMPLATE.md",
 ]
 
@@ -85,6 +94,14 @@ EVIDENCE_REQUIREMENTS = {
         "docs/security/SECURITY_CONTROL_MATRIX.md",
         "docs/contracts/security/data-classification.schema.json",
         "docs/adr/ADR-0005-security-data-classification-baseline.md",
+    },
+    "P00.07": {
+        "docs/quality/TESTING_STANDARD.md",
+        "docs/quality/CI_STANDARD.md",
+        "docs/quality/RELEASE_STANDARD.md",
+        "docs/quality/QUALITY_GATE_MATRIX.md",
+        "docs/contracts/quality/quality-gates.schema.json",
+        "docs/adr/ADR-0007-testing-ci-release-baseline.md",
     },
 }
 
@@ -160,6 +177,36 @@ MARKER_REQUIREMENTS = {
             "Security exceptions",
         ],
     },
+    "P00.07": {
+        "docs/quality/TESTING_STANDARD.md": [
+            "Security/negative tests",
+            "Migration tests",
+            "Module lifecycle tests",
+            "Flaky test policy",
+            "BLOCKED",
+        ],
+        "docs/quality/CI_STANDARD.md": [
+            "Provider-independent rule",
+            "verify:all",
+            "Fail-closed semantics",
+            "least-privilege",
+            "CI outage / quota behavior",
+        ],
+        "docs/quality/RELEASE_STANDARD.md": [
+            "MAJOR.MINOR.PATCH",
+            "Build once, promote",
+            "SBOM",
+            "Rollback and forward fix",
+            "No production release during P00",
+        ],
+        "docs/quality/QUALITY_GATE_MATRIX.md": [
+            "G0 — Governance",
+            "G5 — Security/tenancy",
+            "G8 — Supply chain/release",
+            "PASS",
+            "BLOCKED",
+        ],
+    },
 }
 
 ALLOWED_STATES = {
@@ -174,6 +221,8 @@ ALLOWED_STATES = {
 
 DEPENDENCY_SATISFIED_STATES = {"ready", "active", "verification", "done"}
 EXPECTED_CLASSIFICATIONS = {"PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"}
+EXPECTED_GATE_CLASSES = {f"G{i}" for i in range(9)}
+EXPECTED_EVIDENCE_STATES = {"PASS", "FAIL", "BLOCKED", "NOT RUN", "N/A"}
 
 
 def fail(message: str) -> None:
@@ -222,6 +271,20 @@ def validate_classification_schema() -> None:
     for tag in {"PII", "AUTH_SECRET", "CRYPTO_KEY", "PAYMENT_SENSITIVE", "MODEL_INPUT", "MODEL_OUTPUT"}:
         if tag not in handling_tags:
             fail(f"data-classification schema is missing canonical handling tag: {tag}")
+
+
+def validate_quality_schema() -> None:
+    schema = load_json(QUALITY_SCHEMA_PATH, "quality-gates schema")
+    gates = ((schema.get("properties") or {}).get("gates") or {})
+    item = gates.get("items") or {}
+    props = item.get("properties") or {}
+    if set((props.get("class") or {}).get("enum") or []) != EXPECTED_GATE_CLASSES:
+        fail("quality-gates schema must define exactly G0-G8")
+    if set((props.get("state") or {}).get("enum") or []) != EXPECTED_EVIDENCE_STATES:
+        fail("quality-gates schema must define exact evidence vocabulary")
+    required = set(item.get("required") or [])
+    if not {"id", "class", "state"}.issubset(required):
+        fail("quality-gates schema gate item must require id/class/state")
 
 
 def validate_state(state: dict) -> None:
@@ -317,6 +380,7 @@ def main() -> int:
     require_files()
     validate_markers()
     validate_classification_schema()
+    validate_quality_schema()
     state = load_json(STATE_PATH, "STATE.json")
     validate_state(state)
     validate_status(state)

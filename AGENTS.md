@@ -10,7 +10,7 @@ The repository must evolve as one coherent platform with independently installab
 
 ## 2. Mandatory read order
 
-Before changing code, schema, infrastructure, APIs, events, tests or documentation, read:
+Before any material change, read:
 
 1. `AGENTS.md`
 2. `docs/governance/PRODUCT_CONSTITUTION.md`
@@ -30,22 +30,24 @@ Before changing code, schema, infrastructure, APIs, events, tests or documentati
 16. `docs/security/SECURITY_STANDARD.md`
 17. `docs/security/DATA_CLASSIFICATION.md`
 18. `docs/security/SECURITY_CONTROL_MATRIX.md`
-19. `docs/roadmap/MASTER_PLAN.md`
-20. `docs/roadmap/STATUS.md`
-21. `docs/roadmap/STATE.json`
-22. `docs/governance/AI_EXECUTION_POLICY.md`
-23. `docs/governance/CHANGE_CONTROL.md`
-24. `docs/governance/DEFINITION_OF_DONE.md`
-25. if present and active, `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`
-26. relevant ADRs under `docs/adr/`
+19. `docs/quality/TESTING_STANDARD.md`
+20. `docs/quality/CI_STANDARD.md`
+21. `docs/quality/RELEASE_STANDARD.md`
+22. `docs/quality/QUALITY_GATE_MATRIX.md`
+23. `docs/roadmap/MASTER_PLAN.md`
+24. `docs/roadmap/STATUS.md`
+25. `docs/roadmap/STATE.json`
+26. `docs/governance/AI_EXECUTION_POLICY.md`
+27. `docs/governance/CHANGE_CONTROL.md`
+28. `docs/governance/DEFINITION_OF_DONE.md`
+29. if active, `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`
+30. relevant accepted ADRs.
 
 If canonical documents conflict, stop implementation and resolve the conflict through change control.
 
 ## 3. Canonical execution state
 
-`docs/roadmap/STATE.json` is the machine-readable execution source of truth.
-
-Only the work package marked `active` is authorized, except a narrowly scoped dependency-blocking defect or repository-maintenance correction.
+`docs/roadmap/STATE.json` is the machine-readable execution source of truth. Only the work package marked `active` is authorized except a narrowly scoped dependency-blocking defect or repository-maintenance correction.
 
 During P00:
 
@@ -53,256 +55,198 @@ During P00:
 - business-feature implementation is forbidden;
 - only architecture, governance, specifications and narrow maintenance are permitted.
 
-An AI system must never claim progress beyond repository evidence.
+Never claim progress beyond repository evidence.
 
 ### Temporary hosted-CI exception
 
-When `STATE.json` declares `github_actions_ci.state = temporary_p00_exception`, ADR-0006 and `CI_EVIDENCE_EXCEPTION_2026-08-22.md` govern evidence handling. Hosted GitHub Actions must be recorded as `BLOCKED`/`NOT RUN`, never fabricated as `PASS`. Manual evidence may advance **P00 documentation/specification-only** work when the exception criteria are satisfied. This exception cannot authorize P01+ runtime/kernel/business merges or waive executable build, migration, test, security-scan or release gates. If Actions returns, rerun governance validation and reopen any affected package that fails.
+When `STATE.json` declares `github_actions_ci.state = temporary_p00_exception`, ADR-0006 governs evidence handling. Hosted Actions is `BLOCKED`/`NOT RUN`, never fabricated as `PASS`. Manual evidence may advance **P00 documentation/specification-only** work when the exception criteria are satisfied. The exception cannot authorize P01+ executable merges or waive build, migration, test, security-scan or release gates.
 
 ## 4. Core architecture invariants
 
-Unless superseded through an accepted ADR and plan reconciliation:
+Unless superseded by accepted ADR + plan reconciliation:
 
 1. Kernel before business modules.
 2. Every authoritative write model/capability has one owner.
-3. A module owns its write model/schema; other modules do not write its private tables.
-4. Cross-domain communication uses governed APIs/capabilities, events, workflows or approved read projections.
+3. Modules own their private write models/schemas; cross-module direct DB writes are forbidden.
+4. Cross-domain integration uses governed capabilities/APIs, events, workflows or approved read projections.
 5. Dependency direction follows `DEPENDENCY_MATRIX.md`.
 6. Tenant and organization boundaries are explicit.
 7. Every protected action is authorization-aware.
 8. Business/security-significant mutations are auditable.
 9. Public/external contracts are versioned.
 10. Optional-module failure/removal must not corrupt unrelated domains.
-11. Retriable integrations/jobs/events are idempotent where required.
-12. AI acts through governed capabilities and never unrestricted database authority.
-13. Omnexa begins as a strict modular monolith; service extraction requires evidence.
-14. Infrastructure complexity must be justified by requirements/evidence.
+11. Retriable jobs/events/integrations are idempotent where required.
+12. AI acts only through governed capabilities and never unrestricted database authority.
+13. Start as a strict modular monolith; extract services only when evidence justifies it.
+14. Infrastructure complexity must be earned by requirements/evidence.
 
 ## 5. Foundation primitive invariants — P00.03
 
-- canonical new entity/request/event/workflow/job/audit identifiers use UUIDv7;
-- PostgreSQL uses native `uuid` for canonical identifiers;
+- canonical IDs use UUIDv7; PostgreSQL uses native `uuid`;
 - tenant-owned persisted state uses `tenant_id` where applicable;
-- monetary values use exact decimal semantics with explicit currency; binary floating point is forbidden for money;
-- JSON monetary/rate decimals are strings; high-precision PostgreSQL baseline is `NUMERIC(38,18)`;
-- absolute instants use UTC/`timestamptz`; business dates remain dates; civil-time recurrence carries an IANA timezone;
-- locales use BCP 47; locale/country/currency/timezone are separate concepts; RTL is first-class;
-- public errors use stable machine codes plus safe structured problem details and never expose secrets, stack traces or SQL internals.
+- money uses exact decimal + explicit currency; binary floating point is forbidden for money;
+- JSON monetary/rate decimals are strings; high-precision baseline is `NUMERIC(38,18)`;
+- absolute instants use UTC/`timestamptz`; civil time carries an IANA timezone;
+- locales use BCP 47; locale/country/currency/timezone are separate; RTL is first-class;
+- public errors use stable machine codes + safe structured problem details and expose no secrets/SQL/stack traces.
 
-## 6. Stable HTTP API invariants — P00.04
+## 6. HTTP API invariants — P00.04
 
-Stable public/partner/cross-domain HTTP contracts follow `API_STANDARD.md` and ADR-0003.
-
-- route major versions use `/api/v{major}/{domain}/{resources}`;
-- OpenAPI 3.2.0 is the canonical stable HTTP contract description baseline;
+- stable routes: `/api/v{major}/{domain}/{resources}`;
+- OpenAPI 3.2.0 is canonical;
 - JSON fields use lowercase `snake_case`;
-- errors use `application/problem+json` plus stable Omnexa machine codes/request IDs;
-- scalable lists default to opaque cursor pagination;
-- filters/sorts/includes are allowlisted, bounded and authorization-aware;
-- protected retriable mutations define `Idempotency-Key` behavior;
-- lost-update-sensitive mutations use explicit optimistic concurrency such as `ETag` / `If-Match` where applicable;
-- business lifecycle actions are explicit capability/action operations, not arbitrary status patches;
-- client-provided tenant/organization IDs are context only and never authorization authority;
-- generated routes/SDKs/docs derive from the governed contract rather than replacing it.
+- errors use `application/problem+json` + stable Omnexa codes/request IDs;
+- scalable lists use opaque cursor pagination;
+- retriable mutations define `Idempotency-Key` behavior;
+- lost-update-sensitive writes use explicit optimistic concurrency where applicable;
+- business lifecycle actions are explicit capability/action operations;
+- client tenant/org identifiers never become authorization authority;
+- generated SDK/routes/docs derive from governed contracts.
 
 ## 7. Event invariants — P00.05
 
-Published events follow `EVENT_STANDARD.md` and ADR-0004.
-
 - event type: `<domain>.<subject>.<past_tense_fact>.v<major>`;
-- the authoritative producer owns the event meaning/schema/publication condition;
-- canonical envelope is CloudEvents-compatible structured JSON with UUIDv7 identity;
-- tenant-owned events carry trusted producer-derived `tenantid`;
-- correlation, causation and tracing remain separate explicit context;
-- delivery baseline is **at least once**;
-- consumers are idempotent under duplicate delivery;
-- business-significant publication uses transactional outbox or equivalent consistency guarantees;
-- business-significant consumers use inbox/deduplication or equivalent durable idempotency controls;
-- no global ordering guarantee exists; subject ordering is explicit where required;
-- retries are bounded; poison/permanent failures use governed dead-letter/quarantine handling;
-- replay preserves original identity/payload and may not duplicate protected business side effects;
-- broker routing is infrastructure detail, not canonical business identity;
-- event sourcing is not assumed platform-wide.
+- authoritative producer owns meaning/schema/publication condition;
+- envelope is CloudEvents-compatible with UUIDv7 identity;
+- tenant-owned events carry trusted producer-derived tenant context;
+- delivery baseline is at least once; consumers are idempotent;
+- business-significant publication/consumption uses outbox/inbox or equivalent durable guarantees;
+- no global ordering guarantee;
+- retries are bounded; poison failures use governed dead-letter/quarantine handling;
+- replay preserves original identity/payload and cannot duplicate protected business side effects.
 
 ## 8. Security invariants — P00.06
 
-Security follows `docs/security/SECURITY_STANDARD.md`, `DATA_CLASSIFICATION.md`, `SECURITY_CONTROL_MATRIX.md` and ADR-0005.
+Data classes: `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`.
 
-### Data classes
+- tenant-owned business records default to at least `CONFIDENTIAL` unless explicitly published;
+- encryption does not lower classification;
+- secrets/auth equivalents/private keys are `RESTRICTED`;
+- `RESTRICTED` data is excluded from ordinary logs/search/analytics/generic exports and AI model input by default;
+- production sensitive data does not flow to dev/test by default;
+- authentication does not substitute for authorization;
+- authorization combines RBAC + relationships + contextual policy + bounded capabilities;
+- tenant isolation spans OLTP/cache/files/search/analytics/events/backups/AI/vector data;
+- cross-tenant operations require explicit privileged capability and audit;
+- modules do not invent custom cryptography;
+- privileged support/export/purge/replay/financial/high-impact AI actions require explicit policy/audit and stronger controls according to risk;
+- webhooks/integrations/devices/modules/AI are independent trust boundaries;
+- prompt/tool injection cannot create authority.
+
+## 9. Quality invariants — P00.07
+
+Quality semantics are repository-owned and **CI-provider independent**. Local development and CI must execute the same underlying verification rules.
+
+### Gate classes
 
 ```text
-PUBLIC
-INTERNAL
-CONFIDENTIAL
-RESTRICTED
+G0 Governance
+G1 Static
+G2 Unit / Component
+G3 Contract / Integration
+G4 Data / Migration
+G5 Security / Tenancy
+G6 Lifecycle / Resilience
+G7 Build / Package
+G8 Supply Chain / Release
 ```
+
+Allowed evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`.
 
 Rules:
 
-- tenant-owned business records default to at least `CONFIDENTIAL` unless the owning domain explicitly publishes a `PUBLIC` projection;
-- encryption does not lower classification;
-- exact copies/derived representations inherit sensitivity unless approved irreversible transformation demonstrably lowers risk;
-- secrets, authentication equivalents, private keys and high-risk credential material are `RESTRICTED`;
-- `RESTRICTED` values do not enter ordinary logs, traces, analytics, search indexes, support screenshots or generic exports;
-- `RESTRICTED` data is prohibited as AI/model input by default;
-- production `CONFIDENTIAL`/`RESTRICTED` data does not flow to dev/test by default;
-- classification applies to queues, DLQs, files, analytics, embeddings/vector stores and AI prompts/outputs as data stores.
+- `BLOCKED`, `NOT RUN` and `N/A` are never silently equivalent to PASS;
+- every change maps risk to the applicable G0-G8 gates;
+- tenant-owned paths require positive same-scope plus negative cross-scope tests where affected;
+- authorization changes require allow + deny evidence;
+- retriable/event/async behavior requires duplicate/idempotency/replay evidence;
+- persistence changes require fresh-install + supported-upgrade migration evidence;
+- optional modules require install/enable/disable/re-enable/upgrade/degradation evidence;
+- flaky tests are defects and quarantine requires owner, issue and expiry;
+- aggregate coverage never substitutes for high-risk invariant coverage;
+- production releases prefer build-once/promote immutable artifacts;
+- release identity must trace to source SHA, artifact digest and applicable gate evidence;
+- P00 temporary CI exceptions cannot authorize P01+ executable merges/releases.
 
-### Trust and identity
+Future tooling must expose stable local verification commands equivalent to the canonical `verify:*` command family defined in `CI_STANDARD.md`.
 
-- same process/network/module/VPC is not implicit trust;
-- human users, service accounts, workloads, devices, integrations, support operators and AI agents are distinct principal types;
-- authentication proves identity but never substitutes for authorization;
-- authorization combines RBAC + relationships + contextual policy + bounded capabilities;
-- roles such as `owner`, `admin` or `superuser` are not hidden unrestricted bypasses.
-
-### Tenant isolation
-
-- tenant scope is derived from trusted identity/policy/execution context;
-- client payload/header tenant IDs are never authority;
-- OLTP, cache, files, search, analytics, broker/events, backups and AI/vector data preserve tenant isolation;
-- cross-tenant operations require explicit privileged capability and audit;
-- affected implementation paths require negative cross-tenant tests.
-
-### Secrets and cryptography
-
-- secrets are never committed or emitted to logs/traces/errors/CI output/AI context;
-- production secrets use approved secret-management/KMS mechanisms;
-- modules do not invent custom cryptography;
-- protected traffic uses authenticated encryption in transit;
-- production stores/backups use approved encryption at rest;
-- passwords are never reversibly stored and use an approved adaptive password-hashing mechanism when password auth exists.
-
-### High-risk operations
-
-Role/permission changes, tenant transfer, auth/MFA policy changes, secret/key actions, bulk export, destructive purge, payment/refund/payout actions, financial close/reversal, support impersonation, side-effecting event replay, module trust changes and high-impact AI actions require explicit capability/policy/audit and may require stronger authentication, reason capture, approval or dual control according to risk.
-
-### Integrations, modules and AI
-
-- webhooks/integrations are independent trust and disclosure boundaries;
-- inbound webhooks require authenticity verification and replay/deduplication controls where supported;
-- configurable outbound destinations must address SSRF/egress risks;
-- modules/extensions declare permissions and external access requirements;
-- future marketplace packages require verifiable identity/integrity/provenance controls;
-- AI retrieval is tenant/object authorized before context assembly;
-- prompt/tool injection cannot create authority;
-- AI actions use the same protected business capabilities as humans/workflows/integrations.
-
-## 9. Technology baseline
-
-Until changed by ADR:
+## 10. Technology baseline
 
 - Go — kernel/backend and primary domain services;
-- TypeScript + React — admin/web/builder/primary extension SDK surfaces;
-- Rust — edge/native/security-sensitive components only where justified;
-- Python — AI/data workloads only where ecosystem value justifies it;
+- TypeScript + React — admin/web/builder/SDK surfaces;
+- Rust — edge/native/security-sensitive components where justified;
+- Python — AI/data workloads where ecosystem value justifies it;
 - PostgreSQL — primary OLTP;
 - Redis-compatible — cache/ephemeral coordination;
-- S3-compatible object storage — files/media;
-- NATS/JetStream-class fabric — event/messaging baseline;
+- S3-compatible — files/media;
+- NATS/JetStream-class — event/messaging baseline;
 - OpenTelemetry — observability semantics.
 
 Technology choice never authorizes premature phase work.
 
-## 10. Required work protocol
+## 11. Required work protocol
 
 For every material change:
 
 1. identify phase/work package and acceptance criteria;
-2. inspect repository state before editing;
+2. inspect current repository state;
 3. identify canonical terminology and authoritative owner;
-4. apply primitive, API, event and security/classification standards at affected boundaries;
-5. state ownership/dependency direction and security/tenant implications;
-6. implement the smallest complete authorized change;
-7. add/update positive and negative tests appropriate to risk;
-8. run required quality gates, except only where an active documented P00 CI exception explicitly marks hosted execution `BLOCKED`/`NOT RUN`;
-9. record build/test/migration/contract/security/CI evidence accurately;
-10. update STATUS/STATE only when evidence supports the transition;
-11. add/update ADR and dependent docs before implementing an architectural change.
+4. apply primitive/API/event/security/quality standards at affected boundaries;
+5. map affected risk to G0-G8 quality gates;
+6. state ownership/dependency/security/tenant implications;
+7. implement the smallest complete authorized change;
+8. add positive + required negative tests;
+9. execute required canonical verification commands, except only where an active P00 exception records hosted execution `BLOCKED/NOT RUN`;
+10. record evidence accurately;
+11. reconcile STATUS/STATE only when evidence supports transition;
+12. add/update ADR + dependent docs before architectural change implementation.
 
-## 11. Forbidden AI/contributor behavior
+## 12. Forbidden behavior
 
 Do not:
 
 - start future phases early;
-- add an unplanned domain silently;
-- create duplicate authoritative ownership;
-- invent alternative primitive/API/event/security semantics;
-- write directly across module-private schemas;
-- bypass tenancy, authorization, audit, classification or contract versioning;
-- grant AI a private write path or broader authority;
-- log/store secrets for debugging convenience;
-- copy sensitive production data to lower environments without explicit security approval;
-- weaken a shared security control inside a module;
+- silently add domains or duplicate ownership;
+- invent conflicting primitive/API/event/security/quality semantics;
+- cross-write module-private schemas;
+- bypass tenancy, authorization, audit, classification or versioning;
+- grant AI broader/private write authority;
+- log/store secrets for convenience;
+- use production sensitive data in lower environments without approved exception;
 - introduce hidden super-admin/support bypasses;
-- claim `done` without acceptance evidence;
-- claim blocked/unrun CI as PASS;
-- use a P00 operational exception as precedent for executable P01+ work;
-- mix unrelated project code into this repository.
+- claim `done` without evidence;
+- call blocked/unrun CI PASS;
+- use ADR-0006 as precedent for executable P01+ work;
+- weaken required G0-G8 gates to make a PR green;
+- mix unrelated project code into the repository.
 
-## 12. Change-control triggers
+## 13. Change-control triggers
 
-An ADR plus plan/document reconciliation is required before materially changing:
-
-- product/platform boundary;
-- domain ownership or canonical terminology semantics;
-- identifier/money/time/locale/error primitives;
-- stable API semantics;
-- event envelope/naming/versioning/delivery/replay semantics;
-- trust/security boundary, tenant isolation, authentication/session or authorization model;
-- confidentiality classification model, secrets/key handling, audit integrity or AI execution authority;
-- language/runtime baseline;
-- module lifecycle/dependency model;
-- deployment topology baseline;
-- phase ordering or mandatory gates.
+ADR + plan reconciliation is required for material changes to product boundary, domain ownership, primitives, stable API/event semantics, security/tenant/authorization model, classification/secrets/audit/AI authority, quality gate taxonomy/evidence semantics, release artifact identity/promotion, language/runtime baseline, module lifecycle/dependencies, deployment topology or phase ordering/gates.
 
 Never implement the architecture change first and document it later.
 
-## 13. Pull request requirements
+## 14. Pull request requirements
 
-Every material PR states:
-
-- phase/work package;
-- scope/non-scope;
-- architecture impact;
-- authoritative owner(s) and dependency mechanism;
-- primitive/API/event impacts;
-- security/tenancy/data-classification impact;
-- migration/data impact;
-- tests and CI evidence;
-- compatibility/rollback considerations;
-- status/state reconciliation.
+Every material PR states phase/work package, scope/non-scope, architecture impact, owner/dependency mechanism, primitive/API/event impacts, security/tenancy/classification impact, quality gate mapping, data/migration impact, exact evidence state, compatibility/rollback considerations and status/state reconciliation.
 
 Unrelated work belongs in separate PRs.
 
-## 14. Safe completion
+## 15. Safe completion
 
-A change is incomplete when any relevant required gate fails, including:
+A change is incomplete if an applicable required gate fails. Infrastructure-blocked execution remains `BLOCKED`; it is not a pass. P00.07 is the canonical quality baseline for future implementation.
 
-- build/tests/static/contract checks;
-- fresh-install or migration repeatability;
-- tenant/object authorization negative tests;
-- public contract/version compatibility;
-- duplicate-delivery/replay safety;
-- security/classification requirements;
-- secret disclosure controls;
-- ownership/dependency rules;
-- documentation/state consistency.
-
-A documented temporary P00 CI exception may classify hosted runner execution as `BLOCKED`/`NOT RUN`; it does not convert an actual failing product/governance check into a pass.
-
-P00.07 defines the canonical testing/CI/release gate taxonomy that future phases must execute.
-
-## 15. Repository and legal guardrails
+## 16. Repository and legal guardrails
 
 - use governed feature branches/PRs rather than intentional direct `main` changes;
 - follow `CONTRIBUTING.md` and `SECURITY.md`;
-- hosted protection target is defined in `docs/governance/REPOSITORY_HARDENING.md` and tracked by issue #3;
-- do not replace the existing license or treat it as the approved final commercial strategy without explicit owner/legal decision tracked by issue #4;
-- AI systems do not make trademark/legal ownership decisions autonomously.
+- branch protection target is tracked by issue #3;
+- GitHub Actions quota/runner blocker is tracked by issue #14;
+- final licensing/IP/trademark strategy is tracked by issue #4;
+- AI systems do not make legal/trademark ownership decisions autonomously.
 
-## 16. Scope drift
+## 17. Scope drift
 
-Useful work outside the active package is recorded for later or proposed through plan change. It is not silently absorbed into the current package.
+Useful work outside the active package is recorded for later or proposed through plan change; it is not silently absorbed.
 
-The objective is not maximum feature count. It is a platform that can grow to very high feature count **without architectural decay**.
+The objective is a platform that can grow to very high feature count **without architectural decay**.
