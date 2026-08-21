@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import pathlib
-import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -16,6 +15,7 @@ REQUIRED_FILES = [
     "docs/governance/LICENSING_DECISION_BRIEF.md",
     "docs/governance/P01_ENTRY_GATE.md",
     "docs/roadmap/STATE.json",
+    ".github/workflows/governance.yml",
 ]
 
 for relative in REQUIRED_FILES:
@@ -39,6 +39,14 @@ if branch.get("state") != "blocked_by_plan":
     raise SystemExit("ERROR: Issue #3 must remain classified blocked_by_plan until governed remediation")
 if branch.get("issue") != 3 or "HTTP 403" not in str(branch.get("attempt_result", "")):
     raise SystemExit("ERROR: plan-limited branch-protection evidence is incomplete")
+
+ci = tracking.get("github_actions_ci") or {}
+if ci.get("state") != "operational_self_hosted":
+    raise SystemExit("ERROR: governance CI must remain operational_self_hosted")
+if ci.get("routing_mode") != "any_available_windows_x64_self_hosted":
+    raise SystemExit("ERROR: governance CI must allow any available Windows/X64 self-hosted runner")
+if ci.get("final_check") != "governance":
+    raise SystemExit("ERROR: canonical required check must remain governance")
 
 phases = {item.get("id"): item for item in state.get("phases") or []}
 p01 = phases.get("P01") or {}
@@ -69,7 +77,7 @@ for marker in [
     "G1",
     "G2",
     "G7",
-    "LOCAL-WIN-4",
+    "canonical governance",
     "no business",
 ]:
     if marker.lower() not in package.lower():
@@ -78,16 +86,31 @@ for marker in [
 transition = (ROOT / "docs/governance/P00_P01_TRANSITION_CHECKLIST.md").read_text(encoding="utf-8")
 for marker in [
     "EG-02",
-    "LOCAL-WIN-4",
     "P00.10.state",
     "kernel_code_authorized",
     "business_feature_code_authorized",
     "P01.01",
     "governance",
     "superseded",
+    "Windows/X64",
 ]:
     if marker.lower() not in transition.lower():
         raise SystemExit(f"ERROR: transition checklist missing marker: {marker}")
+
+workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
+for marker in [
+    "name: governance",
+    "runs-on: [self-hosted, Windows, X64]",
+    "python scripts\\validate_governance.py",
+    "python scripts\\validate_development_spec.py",
+    "python scripts\\validate_operations_spec.py",
+    "python scripts\\validate_freeze_review.py",
+    "python scripts\\validate_p01_preparation.py",
+]:
+    if marker not in workflow:
+        raise SystemExit(f"ERROR: governance workflow missing runner-agnostic marker: {marker}")
+if "LOCAL-WIN-4" in workflow or "matrix:" in workflow:
+    raise SystemExit("ERROR: governance workflow must not pin a runner name or use discovery fanout")
 
 licensing = (ROOT / "docs/governance/LICENSING_DECISION_BRIEF.md").read_text(encoding="utf-8")
 for marker in [
@@ -116,6 +139,7 @@ for relative in PREMATURE_EXECUTABLE_PATHS:
         )
 
 print("Omnexa P01 preparation validation: PASS")
+print("Governance runner policy: ANY AVAILABLE WINDOWS/X64 SELF-HOSTED")
 print("P01.01 specification: PREPARED / PLANNED")
 print("Transition checklist: PREPARED")
 print("Licensing owner-decision brief: PREPARED")
