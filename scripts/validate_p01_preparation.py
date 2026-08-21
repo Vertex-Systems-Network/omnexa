@@ -35,16 +35,10 @@ if lock.get("business_feature_code_authorized") is not False:
 
 tracking = state.get("governance_tracking") or {}
 branch = tracking.get("main_branch_protection") or {}
-if branch.get("state") != "blocked_by_plan":
-    raise SystemExit("ERROR: Issue #3 must remain classified blocked_by_plan until governed remediation")
-if branch.get("issue") != 3 or "HTTP 403" not in str(branch.get("attempt_result", "")):
-    raise SystemExit("ERROR: plan-limited branch-protection evidence is incomplete")
+if branch.get("issue") != 3:
+    raise SystemExit("ERROR: main branch protection must remain tracked by Issue #3 until verified")
 
 ci = tracking.get("github_actions_ci") or {}
-if ci.get("state") != "operational_self_hosted":
-    raise SystemExit("ERROR: governance CI must remain operational_self_hosted")
-if ci.get("routing_mode") != "any_available_windows_x64_self_hosted":
-    raise SystemExit("ERROR: governance CI must allow any available Windows/X64 self-hosted runner")
 if ci.get("final_check") != "governance":
     raise SystemExit("ERROR: canonical required check must remain governance")
 
@@ -92,7 +86,6 @@ for marker in [
     "P01.01",
     "governance",
     "superseded",
-    "Windows/X64",
 ]:
     if marker.lower() not in transition.lower():
         raise SystemExit(f"ERROR: transition checklist missing marker: {marker}")
@@ -100,17 +93,21 @@ for marker in [
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 for marker in [
     "name: governance",
-    "runs-on: [self-hosted, Windows, X64]",
-    "python scripts\\validate_governance.py",
-    "python scripts\\validate_development_spec.py",
-    "python scripts\\validate_operations_spec.py",
-    "python scripts\\validate_freeze_review.py",
-    "python scripts\\validate_p01_preparation.py",
+    "runs-on: ubuntu-24.04",
+    "RUNNER_ENVIRONMENT",
+    "github-hosted",
+    "python scripts/validate_governance.py",
+    "python scripts/validate_development_spec.py",
+    "python scripts/validate_operations_spec.py",
+    "python scripts/validate_freeze_review.py",
+    "python scripts/validate_p01_preparation.py",
+    "python scripts/validate_p01_package_specs.py",
 ]:
     if marker not in workflow:
-        raise SystemExit(f"ERROR: governance workflow missing runner-agnostic marker: {marker}")
-if "LOCAL-WIN-4" in workflow or "matrix:" in workflow:
-    raise SystemExit("ERROR: governance workflow must not pin a runner name or use discovery fanout")
+        raise SystemExit(f"ERROR: governance workflow missing GitHub-hosted marker: {marker}")
+for forbidden in ["self-hosted", "LOCAL-WIN-", "runs-on: [self-hosted"]:
+    if forbidden in workflow:
+        raise SystemExit(f"ERROR: governance workflow must not use local/self-hosted runners: {forbidden}")
 
 licensing = (ROOT / "docs/governance/LICENSING_DECISION_BRIEF.md").read_text(encoding="utf-8")
 for marker in [
@@ -139,7 +136,7 @@ for relative in PREMATURE_EXECUTABLE_PATHS:
         )
 
 print("Omnexa P01 preparation validation: PASS")
-print("Governance runner policy: ANY AVAILABLE WINDOWS/X64 SELF-HOSTED")
+print("Governance runner policy: GITHUB-HOSTED ONLY / ubuntu-24.04")
 print("P01.01 specification: PREPARED / PLANNED")
 print("Transition checklist: PREPARED")
 print("Licensing owner-decision brief: PREPARED")
