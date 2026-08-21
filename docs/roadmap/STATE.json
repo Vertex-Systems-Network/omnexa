@@ -29,34 +29,43 @@
       "business_feature_code_authorized": false
     },
     "main_branch_protection": {
-      "state": "blocked_by_plan",
+      "state": "actionable_unprotected",
       "issue": 3,
-      "repository_visibility": "private",
-      "attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
-      "note": "Authenticated admin execution proved that the current GitHub plan does not provide branch protection/rulesets for this private organization repository. Do not retry until the plan/visibility changes or EG-02 is deliberately superseded through an accepted governance ADR."
+      "repository_visibility": "public",
+      "live_protected": false,
+      "historical_private_attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "note": "The repository is now public, so the former private-repository plan entitlement blocker is no longer the active cause of EG-02. Live GitHub branch metadata still reports main protected=false. Apply and verify the required protection/ruleset before P01 authorization."
     },
     "github_actions_ci": {
-      "state": "operational_self_hosted",
+      "state": "operational_github_hosted",
       "issue": 14,
       "evidence_state": "PASS",
-      "runner_selector": ["self-hosted", "Windows", "X64"],
-      "routing_mode": "any_available_windows_x64_self_hosted",
-      "workflow_run": 32535324900,
-      "job": 96935023669,
-      "evidence_runner": "LOCAL-WIN-02",
-      "evidence_machine": "ABDUL-HANAN",
+      "runner_label": "ubuntu-24.04",
+      "routing_mode": "github_hosted_only",
+      "self_hosted_allowed": false,
+      "workflow_run": 32537207455,
+      "job": 96940269306,
+      "evidence_runner": "GitHub Actions 1000006777",
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
       "final_check": "governance",
-      "historical_local_win_4_run": 32528329184,
-      "historical_local_win_4_job": 96915072868,
-      "historical_local_win_4_merge": "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
-      "note": "Canonical governance CI is runner-name agnostic within the approved Windows/X64 self-hosted pool. The single required job named governance executes all validators on whichever eligible local runner GitHub schedules. Run 32535324900 proved the policy on LOCAL-WIN-02 with every validator PASS. LOCAL-WIN-4 evidence remains historical, not a routing requirement. Issue #14 remains closed/completed."
+      "historical_self_hosted_provenance": {
+        "run": 32535324900,
+        "job": 96935023669,
+        "runner": "LOCAL-WIN-02"
+      },
+      "note": "Canonical governance CI is GitHub-hosted only. PR #31 run 32537207455 proved all validators PASS on the GitHub-hosted ubuntu-24.04 image with RUNNER_ENVIRONMENT=github-hosted. Local/self-hosted runners are prohibited for the canonical governance workflow."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
       "issue": 4,
       "decision_gate": "docs/governance/LICENSING_DECISION.md",
       "owner_decision_brief": "docs/governance/LICENSING_DECISION_BRIEF.md",
-      "note": "Final licensing/IP/trademark strategy is required before external distribution/public launch. An owner decision brief is prepared, but LICENSE replacement and trademark clearance remain unauthorized/unresolved. This does not block private internal P01 engineering once P01 entry controls are satisfied."
+      "repository_visibility": "public",
+      "note": "The repository is now public while the current LICENSE remains GPLv3 and trademark clearance remains unresolved. Issue #4 therefore requires explicit owner/legal reconciliation for product launch, commercial licensing, contribution policy and trademark claims. It does not by itself authorize or prohibit private/internal P01 implementation once the P01 entry controls are satisfied."
     }
   },
   "p01_preparation": {
@@ -66,10 +75,14 @@
     "work_package_name": "Go workspace/build skeleton",
     "work_package_state": "planned",
     "work_package_spec": "docs/roadmap/work-packages/P01.01.md",
+    "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
+    "prepared_spec_count": 12,
+    "mandatory_spec_count": 12,
     "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
     "validator": "scripts/validate_p01_preparation.py",
+    "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": "EG-02 / issue:#3",
-    "note": "P01.01 is specification-complete enough to activate immediately after the governed P00->P01 transition. No Go workspace, go.mod/go.work, kernel main entrypoint, or other executable kernel implementation is authorized before that transition."
+    "note": "P01.01-P01.12 specifications are prepared under strict sequential one-active-package policy. P01.01 remains the next package, but no Go workspace, go.mod/go.work, kernel main entrypoint, or other executable kernel implementation is authorized before the governed P00->P01 transition."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -88,12 +101,12 @@
       {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
       {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
       {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"done","depends_on":["P00.06","P00.08"],"evidence":["docs/security/THREAT_MODEL.md","docs/operations/SLO_STANDARD.md","docs/operations/INCIDENT_STANDARD.md","docs/operations/RELIABILITY_STANDARD.md","docs/contracts/operations/operational-targets.schema.json","docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md","scripts/validate_operations_spec.py"]},
-      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/P00_P01_TRANSITION_CHECKLIST.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py","scripts/validate_p01_preparation.py"]}
+      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/P00_P01_TRANSITION_CHECKLIST.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py","scripts/validate_p01_preparation.py","scripts/validate_p01_package_specs.py"]}
     ]
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active","review_state":"verification"},
-    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"],"prepared_next_work_package":"P01.01","prepared_spec":"docs/roadmap/work-packages/P01.01.md"},
+    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"],"prepared_next_work_package":"P01.01","prepared_spec":"docs/roadmap/work-packages/P01.01.md","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -121,5 +134,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and the runner-name-agnostic Windows/X64 self-hosted governance lane; run 32535324900 proved all validators PASS on LOCAL-WIN-02. EG-02/Issue #3 remains BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. P01.01 is fully pre-specified but remains planned and executable kernel code remains prohibited. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker with owner decision brief prepared at docs/governance/LICENSING_DECISION_BRIEF.md."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and is now GitHub-hosted only on ubuntu-24.04; PR #31 run 32537207455/job 96940269306 proved all validators PASS with RUNNER_ENVIRONMENT=github-hosted. EG-02/Issue #3 is no longer plan-blocked because the repository is public, but live main remains protected=false and therefore EG-02 is still unsatisfied. P01.01-P01.12 are fully pre-specified under strict sequential activation, but executable kernel code remains prohibited. P00.10 may move to done only after main protection/ruleset is applied and verified, or after a deliberate superseding governance ADR replaces EG-02 with explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record applicable control evidence. Issue #4 remains open and now requires explicit reconciliation with the repository's public visibility."
 }
