@@ -38,11 +38,15 @@ REQUIRED_FILES = [
     "docs/architecture/TIME_STANDARD.md",
     "docs/architecture/LOCALE_STANDARD.md",
     "docs/architecture/ERROR_STANDARD.md",
+    "docs/architecture/API_STANDARD.md",
+    "docs/contracts/http/openapi-template.yaml",
     "docs/roadmap/MASTER_PLAN.md",
     "docs/roadmap/STATUS.md",
     "docs/roadmap/STATE.json",
     "docs/roadmap/EXECUTION_LEDGER.md",
     "docs/adr/ADR-0001-platform-architecture-baseline.md",
+    "docs/adr/ADR-0002-foundation-data-conventions.md",
+    "docs/adr/ADR-0003-http-api-contract-baseline.md",
     "docs/adr/TEMPLATE.md",
 ]
 
@@ -54,12 +58,36 @@ P00_03_EVIDENCE = {
     "docs/architecture/ERROR_STANDARD.md",
 }
 
+P00_04_EVIDENCE = {
+    "docs/architecture/API_STANDARD.md",
+    "docs/contracts/http/openapi-template.yaml",
+    "docs/adr/ADR-0003-http-api-contract-baseline.md",
+}
+
 P00_03_MARKERS = {
     "docs/architecture/IDENTIFIER_STANDARD.md": ["UUIDv7", "tenant_id", "PostgreSQL's native `uuid` type"],
     "docs/architecture/MONEY_STANDARD.md": ["NUMERIC(38,18)", "ISO 4217", "round half to even"],
     "docs/architecture/TIME_STANDARD.md": ["timestamptz", "IANA timezone", "business date"],
     "docs/architecture/LOCALE_STANDARD.md": ["BCP 47", "ISO 3166-1 alpha-2", "RTL"],
     "docs/architecture/ERROR_STANDARD.md": ["stable machine error code", "request_id", "retryable"],
+}
+
+P00_04_MARKERS = {
+    "docs/architecture/API_STANDARD.md": [
+        "OpenAPI Specification 3.2.0",
+        "/api/v{major}/{domain}/{resources}",
+        "Idempotency-Key",
+        "ETag",
+        "page_cursor",
+        "application/problem+json",
+    ],
+    "docs/contracts/http/openapi-template.yaml": [
+        "openapi: 3.2.0",
+        "Money:",
+        "Problem:",
+        "IdempotencyKey:",
+        "PageCursor:",
+    ],
 }
 
 ALLOWED_STATES = {
@@ -96,12 +124,12 @@ def load_state() -> dict:
     return state
 
 
-def validate_p00_03_standards() -> None:
-    for path, markers in P00_03_MARKERS.items():
+def validate_markers(group: dict[str, list[str]], label: str) -> None:
+    for path, markers in group.items():
         text = (ROOT / path).read_text(encoding="utf-8")
         for marker in markers:
             if marker not in text:
-                fail(f"{path} is missing canonical marker: {marker}")
+                fail(f"{label}: {path} is missing canonical marker: {marker}")
 
 
 def validate_state(state: dict) -> None:
@@ -152,7 +180,12 @@ def validate_state(state: dict) -> None:
     p00_03 = packages_by_id.get("P00.03")
     if p00_03 and p00_03.get("state") == "done":
         if not P00_03_EVIDENCE.issubset(set(p00_03.get("evidence") or [])):
-            fail("P00.03 done state is missing one or more mandatory foundation-convention evidence files")
+            fail("P00.03 done state is missing mandatory foundation-convention evidence")
+
+    p00_04 = packages_by_id.get("P00.04")
+    if p00_04 and p00_04.get("state") == "done":
+        if not P00_04_EVIDENCE.issubset(set(p00_04.get("evidence") or [])):
+            fail("P00.04 done state is missing mandatory API-contract evidence")
 
     done_count = sum(pkg.get("state") == "done" for pkg in work_packages)
     if phase.get("done_work_packages") != done_count:
@@ -201,7 +234,8 @@ def validate_status(state: dict) -> None:
 
 def main() -> int:
     require_files()
-    validate_p00_03_standards()
+    validate_markers(P00_03_MARKERS, "P00.03")
+    validate_markers(P00_04_MARKERS, "P00.04")
     state = load_state()
     validate_state(state)
     validate_status(state)
