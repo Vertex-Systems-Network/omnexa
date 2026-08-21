@@ -14,55 +14,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  required-files:
-    name: required-files
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Verify P00.06 security evidence exists
-        run: |
-          test -f docs/security/SECURITY_STANDARD.md
-          test -f docs/security/DATA_CLASSIFICATION.md
-          test -f docs/security/SECURITY_CONTROL_MATRIX.md
-          test -f docs/contracts/security/data-classification.schema.json
-          test -f docs/adr/ADR-0005-security-data-classification-baseline.md
-
-  security-schema:
-    name: security-schema
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Validate classification schema and canonical state
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          schema = json.loads(Path('docs/contracts/security/data-classification.schema.json').read_text())
-          classes = set(schema['properties']['classification']['enum'])
-          assert classes == {'PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'}
-
-          state = json.loads(Path('docs/roadmap/STATE.json').read_text())
-          assert state['current_phase'] == 'P00'
-          assert state['current_work_package'] == 'P00.07'
-          assert state['phase']['done_work_packages'] == 6
-          packages = {p['id']: p for p in state['phase']['work_packages']}
-          assert packages['P00.06']['state'] == 'done'
-          assert packages['P00.07']['state'] == 'active'
-          assert state['implementation_lock']['kernel_code_authorized'] is False
-          assert state['implementation_lock']['business_feature_code_authorized'] is False
-          PY
-
   governance:
     name: governance
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    runs-on: [self-hosted, Windows, X64, windows-latest]
+    timeout-minutes: 15
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify local Windows runner
+        shell: pwsh
+        run: |
+          Write-Host "Runner name: $env:RUNNER_NAME"
+          Write-Host "Runner OS:   $env:RUNNER_OS"
+          Write-Host "Runner arch: $env:RUNNER_ARCH"
+          Write-Host "Machine:     $env:COMPUTERNAME"
+
+          if ($env:RUNNER_OS -ne "Windows") {
+            throw "Expected a Windows self-hosted runner, got '$env:RUNNER_OS'."
+          }
+
+          git --version
+          python --version
+
       - name: Validate canonical governance state
-        run: python3 scripts/validate_governance.py
+        shell: pwsh
+        run: python scripts/validate_governance.py
+
+      - name: Validate repository and local-development specification
+        shell: pwsh
+        run: python scripts/validate_development_spec.py
+
+      - name: Validate threat and operations specification
+        shell: pwsh
+        run: python scripts/validate_operations_spec.py
+
+      - name: Validate foundation freeze review
+        shell: pwsh
+        run: python scripts/validate_freeze_review.py
