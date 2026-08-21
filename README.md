@@ -6,7 +6,7 @@ Omnexa is being designed as a governed modular platform above the scope of a con
 
 > **Architecture state:** **Omnexa Foundation Architecture v1 is FROZEN.** P00 remains active only in **exit verification**. Current package: **P00.10 — Foundation architecture freeze review**.
 
-> **Implementation lock:** the executable CI gate is now **SATISFIED** on the local Windows self-hosted runner. P01 kernel implementation remains **BLOCKED only by Issue #3 (`main` protection)**. Kernel and business-feature code remain unauthorized until that gate is cleared.
+> **Implementation lock:** the executable CI gate is **SATISFIED on LOCAL-WIN-4**. P01 kernel implementation remains **BLOCKED only by Issue #3 (`main` protection)**. Kernel and business-feature code remain unauthorized until that gate is cleared.
 
 ## Mandatory contributor / AI start here
 
@@ -37,26 +37,28 @@ P00.01–P00.09 freeze governance/AI/change control, terminology/ownership/depen
 
 Technology baseline remains Go + TypeScript/React with selective Rust/Python; PostgreSQL, Redis-compatible cache, S3-compatible storage, NATS/JetStream-class messaging and OpenTelemetry.
 
-## Executable CI — verified
+## Executable CI — verified on LOCAL-WIN-4
 
-The canonical governance workflow now uses:
+The canonical governance workflow uses only local Windows/X64 self-hosted runners for discovery and fails closed unless runner `LOCAL-WIN-4` produces the required validation evidence.
 
-```text
-runs-on: [self-hosted, Windows, X64]
-```
+Verified PR #23 evidence:
 
-Verified PR #20 evidence:
-
-- runner `LOCAL-WIN-01` / Windows X64;
+- runner `LOCAL-WIN-4` / Windows X64;
+- machine `ABDUL-HANAN`;
+- work root `C:\actions-runner-4\_work`;
 - Git `2.55.0.windows.5`;
 - Python `3.13.7`;
-- workflow run `32522919774` SUCCESS;
+- workflow run `32528329184`;
+- LOCAL-WIN-4 target job `96915072868` SUCCESS;
 - governance validator PASS;
 - development-spec validator PASS;
 - operations validator PASS;
 - foundation-freeze validator PASS;
-- PR #20 merged as `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`;
-- Issue #14 closed/completed.
+- final job named `governance` SUCCESS;
+- PR #23 merged as `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`;
+- Issue #14 remains closed/completed.
+
+GitHub Actions schedules self-hosted runners by labels/groups, not runner name. Since LOCAL-WIN-4 currently has no unique custom label, the workflow discovers the runner from the local Windows pool, runs protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, and requires its uploaded pass evidence before the final `governance` check can pass.
 
 The old hosted-runner quota problem no longer blocks the governance lane. ADR-0006 remains historical evidence, not the active path while self-hosted CI is operational.
 
@@ -70,7 +72,7 @@ Before executable P01 merges, protect `main` with PR-based integration, required
 
 ### Issue #14 — satisfied
 
-Executable CI has been restored and verified through the local Windows self-hosted runner.
+Executable CI has been restored and is now specifically certified on `LOCAL-WIN-4`.
 
 ### Issue #4 — external distribution blocker
 
@@ -84,7 +86,7 @@ Do **not** combine that transition with unrelated kernel feature code.
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; executable CI satisfied; P00.10 exit verification; P01 blocked only by Issue #3**.
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; LOCAL-WIN-4 executable CI satisfied; P00.10 exit verification; P01 blocked only by Issue #3**.
 
 ## Product principle
 
