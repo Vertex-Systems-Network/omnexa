@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:omnexa:development:workspace:v1",
+  "title": "Omnexa Workspace Declaration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace", "toolchains", "local_services", "commands"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "root_categories"],
+      "properties": {
+        "model": {"const": "governed_monorepo"},
+        "root_categories": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["apps", "kernel", "modules", "platform", "shared", "infrastructure", "scripts", "docs", "generated"]
+          }
+        }
+      }
+    },
+    "toolchains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "version_source"],
+        "properties": {
+          "name": {"type": "string", "enum": ["go", "node", "rust", "python"]},
+          "version_source": {"type": "string", "minLength": 1},
+          "required": {"type": "boolean", "default": false}
+        }
+      }
+    },
+    "local_services": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["postgresql", "redis_compatible", "nats_jetstream", "s3_compatible", "mail_sink"]
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^omnexa (dev|db|verify|module) [a-z0-9-]+(?: <[a-z_]+>)?$"
+      }
+    },
+    "windows_backend_mode": {
+      "type": "string",
+      "enum": ["wsl2_preferred", "native_supported", "not_supported"],
+      "default": "wsl2_preferred"
+    },
+    "kubernetes_required_for_default_local_loop": {
+      "const": false
+    },
+    "production_data_allowed_in_default_local_environment": {
+      "const": false
+    }
+  }
+}
