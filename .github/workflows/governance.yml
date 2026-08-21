@@ -16,7 +16,7 @@ concurrency:
 jobs:
   governance:
     name: governance
-    runs-on: [self-hosted, Windows, X64, windows-latest]
+    runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 15
 
     steps:
