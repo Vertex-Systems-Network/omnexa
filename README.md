@@ -4,9 +4,9 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.07 — Testing, CI and release standard**.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.08 — Local developer and repository structure specification**.
 
-> **Temporary CI note:** GitHub Actions allowance is currently exhausted/disabled. ADR-0006 authorizes a temporary P00 documentation/specification-only manual evidence path. Hosted CI must be recorded `BLOCKED`/`NOT RUN`, never as `PASS`, and this exception expires before any P01 implementation merge.
+> **Temporary CI note:** GitHub Actions allowance is currently exhausted/disabled. ADR-0006 authorizes a temporary P00 documentation/specification-only manual evidence path. Hosted CI is `BLOCKED`/`NOT RUN`, never `PASS`, and this exception expires before any P01 implementation merge.
 
 ## Mandatory contributor / AI start here
 
@@ -30,14 +30,18 @@ Any human or AI system changing this repository must read the following in order
 16. [`docs/security/SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md)
 17. [`docs/security/DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md)
 18. [`docs/security/SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md)
-19. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-20. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-21. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-22. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-23. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-24. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-25. If active, [`docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md)
-26. Relevant ADRs under [`docs/adr/`](docs/adr/)
+19. [`docs/quality/TESTING_STANDARD.md`](docs/quality/TESTING_STANDARD.md)
+20. [`docs/quality/CI_STANDARD.md`](docs/quality/CI_STANDARD.md)
+21. [`docs/quality/RELEASE_STANDARD.md`](docs/quality/RELEASE_STANDARD.md)
+22. [`docs/quality/QUALITY_GATE_MATRIX.md`](docs/quality/QUALITY_GATE_MATRIX.md)
+23. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+24. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+25. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+26. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+27. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+28. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+29. If active, [`docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md)
+30. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
@@ -55,58 +59,52 @@ Any human or AI system changing this repository must read the following in order
 - Omnexa begins as a strict modular monolith and extracts services only when evidence justifies it.
 - Architecture or roadmap changes require formal change control and ADR reconciliation.
 
-## Frozen foundation primitives (P00.03)
+## Frozen foundation contracts
 
-- **Identifiers:** UUIDv7 by default; PostgreSQL native `uuid`; canonical tenant scope `tenant_id`.
-- **Money:** exact decimal + explicit currency; JSON decimal strings; PostgreSQL baseline `NUMERIC(38,18)`; no binary floating-point money.
-- **Time:** UTC instants + `timestamptz`; date-only business dates; IANA timezone semantics for civil time/recurrence.
-- **Locale:** BCP 47 language tags; locale/country/currency/timezone are independent; RTL is first-class.
-- **Errors:** stable machine error codes, safe structured problem details, request/trace correlation, no public stack traces/SQL/secrets.
+### P00.03 — Primitives
 
-These decisions are recorded by [`ADR-0002`](docs/adr/ADR-0002-foundation-data-conventions.md).
+UUIDv7 identifiers, exact-decimal money, UTC/`timestamptz` + IANA civil-time semantics, BCP 47 locale/RTL rules and stable structured error contracts are frozen by ADR-0002.
 
-## Frozen HTTP API baseline (P00.04)
+### P00.04 — HTTP APIs
 
-- Stable routes use `/api/v{major}/{domain}/{resources}`.
-- Canonical stable HTTP contracts use OpenAPI 3.2.0.
-- JSON fields use lowercase `snake_case`.
-- Errors use `application/problem+json` plus stable Omnexa codes and request correlation.
-- Scalable lists use opaque cursor pagination.
-- Protected retriable mutations define `Idempotency-Key` semantics.
-- Lost-update-sensitive mutations use explicit optimistic concurrency such as `ETag` / `If-Match` where applicable.
-- Filters, sorts and includes are allowlisted, bounded and authorization-aware.
-- Business actions are explicit capability/action operations rather than arbitrary status patches.
-- Client-supplied tenant or organization identifiers never become authorization authority.
+Stable APIs use `/api/v{major}/{domain}/{resources}`, OpenAPI 3.2.0, `snake_case`, Problem Details errors, cursor pagination, explicit idempotency/concurrency semantics and authorization-derived tenant context. See ADR-0003.
 
-The contract is defined by [`API_STANDARD.md`](docs/architecture/API_STANDARD.md), [`openapi-template.yaml`](docs/contracts/http/openapi-template.yaml), and [`ADR-0003`](docs/adr/ADR-0003-http-api-contract-baseline.md).
+### P00.05 — Events
 
-## Frozen event baseline (P00.05)
+Events are producer-owned immutable past-tense facts using `<domain>.<subject>.<past_tense_fact>.v<major>`, CloudEvents-compatible envelopes, UUIDv7 identities, at-least-once assumptions, idempotent consumers, outbox/inbox reliability, bounded retry/DLQ and replay-safe semantics. See ADR-0004.
 
-- Event types use `<domain>.<subject>.<past_tense_fact>.v<major>` and remain producer-owned contracts.
-- Canonical structured envelope is CloudEvents-compatible with UUIDv7 event identity.
-- Tenant-owned events carry trusted producer-derived `tenantid`; correlation, causation and trace context are explicit.
-- Delivery baseline is **at least once**; consumers must be idempotent.
-- Business-significant publication/consumption uses transactional outbox + inbox/deduplication or equivalent guarantees.
-- Global ordering is not assumed; subject-scoped ordering is explicit and may use `subjectsequence`.
-- Retries are bounded; poison messages use dead-letter/quarantine handling.
-- Replay preserves original event identity and must remain safe against duplicate side effects.
-- Broker routes are infrastructure detail, not business identity; event sourcing is not assumed platform-wide.
+### P00.06 — Security and classification
 
-The contract is defined by [`EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md), [`event-envelope.schema.json`](docs/contracts/events/event-envelope.schema.json), and [`ADR-0004`](docs/adr/ADR-0004-event-contract-baseline.md).
+Data classes are `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`. Authorization combines RBAC, relationships, contextual policy and governed capabilities. Tenant isolation, secrets/KMS, audit, privileged operations, integrations/webhooks/SSRF, modules/supply chain and AI execution are governed platform invariants. See ADR-0005.
 
-## Frozen security baseline (P00.06)
+### P00.07 — Testing, CI and release
 
-- Data classes: `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED` plus handling tags.
-- Tenant-owned business records default to at least `CONFIDENTIAL` unless explicitly published through an authorized public projection.
-- Authorization combines RBAC, relationships, contextual policy and governed capability checks.
-- Tenant/organization isolation applies across primary data, cache, files, search, analytics, events, backups and AI/vector data.
-- Secrets/key/auth-equivalent material is `RESTRICTED`, excluded from logs/source control/AI and handled by governed secret/KMS capabilities.
-- Audit is separate from debug logging; privileged support/export/purge/replay/high-impact AI actions require explicit policy/audit.
-- External integrations, webhooks, devices, modules and AI are independent trust boundaries.
-- Production sensitive data does not flow to lower environments by default.
-- `RESTRICTED` data is prohibited from generic logs/search/analytics and from AI model input by default.
+Quality semantics are **repository-owned and CI-provider independent**. Local development and any approved CI provider must execute the same canonical gates.
 
-The baseline is defined by [`SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md), [`DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md), [`SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md), the classification JSON Schema and [`ADR-0005`](docs/adr/ADR-0005-security-data-classification-baseline.md).
+Gate classes:
+
+```text
+G0 Governance
+G1 Static
+G2 Unit / Component
+G3 Contract / Integration
+G4 Data / Migration
+G5 Security / Tenancy
+G6 Lifecycle / Resilience
+G7 Build / Package
+G8 Supply Chain / Release
+```
+
+Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`; blocked/unrun work is never silently green. Testing is risk-based and requires negative evidence for affected tenant, authorization, replay/idempotency, lifecycle and security boundaries. Releases use semantic-versioning semantics, immutable source/artifact identity and a build-once/promote model where possible.
+
+Normative documents:
+
+- [`TESTING_STANDARD.md`](docs/quality/TESTING_STANDARD.md)
+- [`CI_STANDARD.md`](docs/quality/CI_STANDARD.md)
+- [`RELEASE_STANDARD.md`](docs/quality/RELEASE_STANDARD.md)
+- [`QUALITY_GATE_MATRIX.md`](docs/quality/QUALITY_GATE_MATRIX.md)
+- [`quality-gates.schema.json`](docs/contracts/quality/quality-gates.schema.json)
+- [`ADR-0007`](docs/adr/ADR-0007-testing-ci-release-baseline.md)
 
 ## Technology baseline
 
@@ -124,23 +122,19 @@ Until superseded by an accepted ADR:
 
 ## Governance hardening
 
-Repository-level controls include:
+Repository-level controls include `CONTRIBUTING.md`, `SECURITY.md`, CODEOWNERS, issue/ADR templates, the governance validator/workflow definition, repository hardening specification and licensing/IP decision gate.
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [`SECURITY.md`](SECURITY.md)
-- [`.github/CODEOWNERS`](.github/CODEOWNERS)
-- architecture/bug issue templates
-- governance CI workflow definition at [`.github/workflows/governance.yml`](.github/workflows/governance.yml)
-- dependency-free state validator at [`scripts/validate_governance.py`](scripts/validate_governance.py)
-- hosted repository ruleset target in [`docs/governance/REPOSITORY_HARDENING.md`](docs/governance/REPOSITORY_HARDENING.md)
-- licensing/IP decision gate in [`docs/governance/LICENSING_DECISION.md`](docs/governance/LICENSING_DECISION.md)
-- temporary P00 hosted-CI exception, when active, in [`CI_EVIDENCE_EXCEPTION_2026-08-22.md`](docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md) and ADR-0006.
+Current hosted blockers:
 
-GitHub currently reports `main` as unprotected; issue #3 remains open because the connected GitHub toolset has no branch-protection/ruleset write action. GitHub Actions quota/runner availability is tracked by issue #14. Licensing/IP/trademark remains explicitly tracked in issue #4. None of these authorize early implementation.
+- Issue #3: `main` branch/ruleset protection is still not applied through the available connector.
+- Issue #14: GitHub Actions execution is temporarily unavailable due exhausted/disabled allowance; ADR-0006 applies only to P00 documentation/specification work.
+- Issue #4: final licensing/IP/trademark strategy remains a decision gate before external distribution/public launch.
+
+None of these authorize early implementation.
 
 ## Roadmap
 
-The canonical plan is [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md), covering **P00 through P27**:
+The canonical [`MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md) covers P00 through P27:
 
 ```text
 P00 Architecture/Governance
@@ -159,29 +153,18 @@ P00 Architecture/Governance
  -> P27 Autonomous Business OS
 ```
 
-See [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md) for the current human-readable status and [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json) for canonical machine state.
+See [`STATUS.md`](docs/roadmap/STATUS.md) and [`STATE.json`](docs/roadmap/STATE.json) for current execution state.
 
 ## Work-package discipline
 
-Material work must use [`docs/governance/WORK_PACKAGE_TEMPLATE.md`](docs/governance/WORK_PACKAGE_TEMPLATE.md) and satisfy [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md).
+Material work must satisfy [`DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md) and use the governed work-package/change-control process. Execution history is append-only in [`EXECUTION_LEDGER.md`](docs/roadmap/EXECUTION_LEDGER.md).
 
-Execution history is recorded in the append-only [`docs/roadmap/EXECUTION_LEDGER.md`](docs/roadmap/EXECUTION_LEDGER.md).
+## Accepted architecture decisions
 
-## Architecture decisions
-
-Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted baselines include:
-
-- [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md)
-- [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
-- [`ADR-0003 — HTTP API Contract Baseline`](docs/adr/ADR-0003-http-api-contract-baseline.md)
-- [`ADR-0004 — Event Contract Baseline`](docs/adr/ADR-0004-event-contract-baseline.md)
-- [`ADR-0005 — Security & Data Classification Baseline`](docs/adr/ADR-0005-security-data-classification-baseline.md)
-- [`ADR-0006 — Temporary P00 CI Evidence Exception`](docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md)
+ADR-0001 through ADR-0007 define the current foundation, with ADR-0006 being a temporary P00 operational exception rather than a permanent architecture weakening.
 
 Do not implement an architectural change first and document it afterward.
 
 ## Product principle
-
-Omnexa is not trying to win by collecting the largest number of disconnected features. The intended long-term advantage is:
 
 **Universal Kernel + Extreme Modularity + Universal Workflow + Unified Business Graph + Governed AI Execution.**
