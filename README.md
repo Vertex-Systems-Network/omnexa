@@ -2,15 +2,24 @@
 
 **Composable Enterprise Business Operating System**
 
-Omnexa is being designed as a governed modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform foundation.
+Omnexa is being designed as a governed modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are governed domain families on one platform foundation.
 
-> **Current execution lock:** repository phase is **P00 — Product Constitution & Architecture Freeze**. Current package: **P00.10 — Foundation architecture freeze review**. Kernel and business-feature implementation remain unauthorized until the freeze review and P01 entry prerequisites are satisfied.
+> **Architecture state:** **Omnexa Foundation Architecture v1 is FROZEN.** P00 remains active only in **exit verification**. Current package: **P00.10 — Foundation architecture freeze review**.
 
-> **Temporary CI note:** GitHub Actions allowance is exhausted/disabled. ADR-0006 permits temporary P00 documentation/specification-only manual evidence. Hosted CI remains `BLOCKED`/`NOT RUN`, never `PASS`, and the exception expires at P00 exit/before P01 implementation.
+> **Implementation lock:** P01 kernel implementation is **BLOCKED** until Issue #3 (`main` protection) and Issue #14 (working executable CI lane) are verified. Kernel and business-feature code remain unauthorized.
+
+> **Temporary CI:** ADR-0006 permits P00 documentation/specification-only manual evidence while GitHub Actions is unavailable. Hosted CI is `BLOCKED`/`NOT RUN`, never `PASS`; the exception expires at P00 exit and cannot authorize P01 executable work.
 
 ## Mandatory contributor / AI start here
 
 Read `AGENTS.md`, then the governance, architecture, security, quality, development, operations and roadmap documents referenced there. `docs/roadmap/STATE.json` is the machine-readable execution source of truth.
+
+Freeze/entry-gate sources:
+
+- `docs/governance/FOUNDATION_FREEZE_REVIEW.md`
+- `docs/governance/FOUNDATION_FREEZE.json`
+- `docs/governance/P01_ENTRY_GATE.md`
+- `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
 
@@ -24,59 +33,46 @@ Read `AGENTS.md`, then the governance, architecture, security, quality, developm
 - Strict modular monolith first; extract services only when evidence justifies it.
 - Architecture/roadmap changes require change control and ADR reconciliation.
 
-## Frozen P00 foundation
+## Frozen foundation v1
 
-### P00.03 — Primitives
-UUIDv7 IDs, exact-decimal money, UTC/`timestamptz` plus IANA civil-time semantics, BCP 47 locale/RTL and stable safe error contracts.
+P00.01–P00.09 freeze:
 
-### P00.04 — HTTP APIs
-`/api/v{major}/{domain}/{resources}`, OpenAPI 3.2.0, `snake_case`, Problem Details, cursor pagination, explicit idempotency/concurrency and authorization-derived tenant context.
+- governance, AI execution, change control and roadmap discipline;
+- glossary, naming, domain ownership and dependency direction;
+- UUIDv7, exact-money, time/locale/error primitives;
+- stable HTTP/OpenAPI and event contracts;
+- security, data classification, tenant isolation, authorization and audit;
+- G0–G8 testing/CI/release semantics and exact evidence vocabulary;
+- governed monorepo/local-development/toolchain/config model;
+- threat model T01–T24, TIER_0–TIER_3 operational criticality, recovery classes A–D, SLO/RPO/RTO/error budgets, SEV0–SEV3 and reliability readiness.
 
-### P00.05 — Events
-Producer-owned versioned facts, CloudEvents-compatible envelopes, UUIDv7 event identity, at-least-once delivery, idempotent consumers, outbox/inbox reliability, bounded retry/DLQ and replay safety.
+Technology baseline remains Go + TypeScript/React with selective Rust/Python; PostgreSQL, Redis-compatible cache, S3-compatible storage, NATS/JetStream-class messaging and OpenTelemetry.
 
-### P00.06 — Security
-`PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`; RBAC + relationships + contextual policy + capabilities; tenant isolation; secrets/KMS; audit; privileged operations; integration/module/AI trust boundaries.
+## P01 entry gate
 
-### P00.07 — Quality and release
-Repository-owned CI-provider-independent verification. G0–G8 cover governance through supply-chain/release. Evidence vocabulary: `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Releases prefer immutable build-once/promote artifacts with explicit migration/compatibility/rollback evidence.
+P01 is **not authorized** yet.
 
-### P00.08 — Repository and local development
-Governed monorepo roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infrastructure/`, `scripts/`, `docs/`, `generated/`. Local baseline uses containerized PostgreSQL, Redis-compatible cache, NATS/JetStream and S3-compatible object storage. Kubernetes is not required for ordinary local development. Toolchains/dependencies are repository-pinned; secrets are separate; production sensitive data is prohibited by default locally.
+### Issue #3 — P01 entry blocker
 
-### P00.09 — Threat model and operational reliability
-Foundation threat model covers tenant escape, authn/authz abuse, privilege escalation, injection/SSRF/webhooks, replay/idempotency, financial integrity, module/supply-chain compromise, CI/release credentials, POS/edge compromise, backup/search/vector leakage, AI prompt/tool abuse, insider misuse, noisy-neighbor/DDoS/provider outage, migration corruption, region failure, audit tampering, secrets exposure and misconfiguration.
+Before executable P01 merges: protect `main` with PR-based integration, blocked force-push/deletion, controlled bypass, conversation resolution and required verification checks when the CI lane exists.
 
-Operational tiers: `TIER_0` integrity-critical, `TIER_1` core transactions, `TIER_2` supporting interactive, `TIER_3` optional/background. Initial mature-production availability objectives are 99.99%, 99.95%, 99.9% and 99.5% respectively.
+### Issue #14 — P01 entry blocker
 
-Recovery targets:
+Before executable P01 merges: provide an approved CI/self-hosted/provider lane that actually runs the repository-owned verification commands in a clean reproducible environment. GitHub Actions is not architecturally mandatory; a compliant equivalent is acceptable.
 
-```text
-A: RPO <= 5m,  RTO <= 30m
-B: RPO <= 15m, RTO <= 2h
-C: RPO <= 24h, RTO <= 8h
-D: rebuild-based derived state
-```
+### Issue #4 — external distribution blocker
 
-These are architecture targets until recovery rehearsal proves them. Zero-tolerance conditions include cross-tenant disclosure, unauthorized privileged mutation, duplicate protected financial side effects, material financial/ledger integrity violation and lost acknowledged durable work. Incident model is SEV0–SEV3.
+Licensing/IP/trademark resolution is required before public/external distribution or self-hosted customer delivery, but does not block private internal P01 engineering after the P01 entry gate is cleared.
 
-Normative P00.09 documents: `docs/security/THREAT_MODEL.md`, `docs/operations/`, `docs/contracts/operations/operational-targets.schema.json`, ADR-0009 and `scripts/validate_operations_spec.py`.
+## Exact next transition
 
-## Technology baseline
+A narrow governance transition may close P00 only after Issue #3 and #14 are verified. It must expire ADR-0006, mark P00.10/P00 done, activate P01, set `kernel_code_authorized = true`, keep business features locked, record evidence and define the first P01 kernel work package.
 
-Go — core/backend; TypeScript + React — web/admin/builder/SDK; Rust — justified edge/native/security; Python — justified AI/data; PostgreSQL — OLTP; Redis-compatible — cache; S3-compatible — storage; NATS/JetStream-class — messaging; OpenTelemetry — observability.
-
-## Governance status
-
-- Issue #3: hosted `main` branch protection still requires admin configuration.
-- Issue #14: GitHub Actions quota/runner unavailable; ADR-0006 is P00-only.
-- Issue #4: final licensing/IP/trademark strategy remains unresolved before external distribution/public launch.
-
-P00.10 must classify remaining blockers and P01 entry prerequisites explicitly; none authorizes early implementation.
+Do **not** combine that transition with unrelated kernel feature code.
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current status: **9/10 P00 packages done; P00.10 active**. P01+ remain planned.
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; P00.10 exit verification; P01 blocked**.
 
 ## Product principle
 
