@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:omnexa:security:data-classification:v1",
+  "title": "Omnexa Data Classification Declaration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "owner",
+    "resource",
+    "classification",
+    "tenant_scope",
+    "logging",
+    "export",
+    "retention_policy",
+    "ai_eligibility"
+  ],
+  "properties": {
+    "owner": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$"
+    },
+    "resource": {
+      "type": "string",
+      "minLength": 1
+    },
+    "field": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]
+    },
+    "handling_tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "PII",
+          "AUTH_SECRET",
+          "CRYPTO_KEY",
+          "PAYMENT_SENSITIVE",
+          "FINANCIAL_RECORD",
+          "EMPLOYEE_DATA",
+          "LEGAL_RECORD",
+          "HEALTH_SENSITIVE",
+          "CHILD_DATA",
+          "BIOMETRIC",
+          "LOCATION_PRECISE",
+          "SECURITY_TELEMETRY",
+          "CUSTOMER_CONTENT",
+          "MODEL_INPUT",
+          "MODEL_OUTPUT"
+        ]
+      }
+    },
+    "tenant_scope": {
+      "type": "string",
+      "enum": ["platform", "tenant", "organization", "mixed"]
+    },
+    "logging": {
+      "type": "string",
+      "enum": ["allowed", "metadata_only", "redacted", "prohibited"]
+    },
+    "export": {
+      "type": "string",
+      "enum": ["ordinary", "privileged", "specialized_only", "prohibited"]
+    },
+    "search_indexing": {
+      "type": "string",
+      "enum": ["allowed", "allowlist_only", "prohibited"]
+    },
+    "analytics": {
+      "type": "string",
+      "enum": ["allowed", "minimized", "pseudonymized", "prohibited"]
+    },
+    "retention_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ai_eligibility": {
+      "type": "string",
+      "enum": ["allowed", "policy_required", "prohibited_by_default", "prohibited"]
+    },
+    "masking": {
+      "type": "string",
+      "enum": ["none", "display_mask", "redact_by_default", "never_render"]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"classification": {"const": "RESTRICTED"}}
+      },
+      "then": {
+        "properties": {
+          "logging": {"enum": ["metadata_only", "prohibited"]},
+          "export": {"enum": ["specialized_only", "prohibited"]},
+          "search_indexing": {"enum": ["prohibited"]},
+          "ai_eligibility": {"enum": ["prohibited_by_default", "prohibited"]}
+        }
+      }
+    }
+  ]
+}
