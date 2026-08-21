@@ -127,3 +127,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
 - Commit / PR: fill with merged P00.05 PR/CI evidence in an append-only reconciliation entry after merge.
 - Notes: P00 execution lock remains active. `P00.06` is the only active work package after merge.
+
+## 2026-08-21 — P00.05 Merge reconciliation
+
+- Phase / package: `P00.05`
+- Transition: confirms `done`; `P00.06` active.
+- Summary: P00.05 event contract PR merged to `main` after governance validation passed.
+- Evidence: PR #11 merged successfully; governance workflow run `32509707314` passed; squash merge commit `0c2cc0eb70d72b73d73e0d247c8078d73777d525`.
+- Architecture impact: confirms ADR-0004 and the P00.05 event reliability/replay baseline; no additional architecture change.
+- State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `5 / 10 done` with P00.06 active.
+- Commit / PR: `#11` / `0c2cc0eb70d72b73d73e0d247c8078d73777d525`.
+- Notes: kernel/business implementation remains locked until P00 exit; issue #3 remains open because hosted branch protection cannot be mutated through the connected tool surface; issue #4 remains open for licensing/IP/trademark.
