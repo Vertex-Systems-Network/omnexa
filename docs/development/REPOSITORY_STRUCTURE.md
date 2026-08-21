@@ -85,7 +85,7 @@ Exact language-specific folders may vary through implementation ADRs, but owners
 ## Import/dependency rules
 
 - Another module may not import `modules/<other>/internal/**`.
-- Another module may not read/write another module's private tables/migrations.
+- Cross-module direct DB writes are forbidden; another module may not read/write another module's private tables/migrations.
 - Cross-domain code uses governed public contracts/capabilities/events/workflows/read projections.
 - `shared/` may contain universal primitives only when ownership is truly platform-wide.
 - Apps may compose modules but may not bypass their public capabilities for protected business mutations.
