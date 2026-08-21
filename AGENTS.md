@@ -16,12 +16,17 @@ Before proposing or modifying code, schema, infrastructure, APIs, tests or docum
 2. `docs/governance/PRODUCT_CONSTITUTION.md`
 3. `docs/architecture/SYSTEM_ARCHITECTURE.md`
 4. `docs/architecture/MODULE_STANDARD.md`
-5. `docs/roadmap/MASTER_PLAN.md`
-6. `docs/roadmap/STATUS.md`
-7. `docs/roadmap/STATE.json`
-8. `docs/governance/CHANGE_CONTROL.md`
-9. `docs/governance/DEFINITION_OF_DONE.md`
-10. Relevant ADRs under `docs/adr/`
+5. `docs/architecture/GLOSSARY.md`
+6. `docs/architecture/NAMING_STANDARD.md`
+7. `docs/architecture/DOMAIN_OWNERSHIP.md`
+8. `docs/architecture/DEPENDENCY_MATRIX.md`
+9. `docs/roadmap/MASTER_PLAN.md`
+10. `docs/roadmap/STATUS.md`
+11. `docs/roadmap/STATE.json`
+12. `docs/governance/AI_EXECUTION_POLICY.md`
+13. `docs/governance/CHANGE_CONTROL.md`
+14. `docs/governance/DEFINITION_OF_DONE.md`
+15. Relevant ADRs under `docs/adr/`
 
 If these documents conflict, stop and resolve the conflict through the change-control process before implementation.
 
@@ -35,6 +40,8 @@ An AI agent MUST NOT:
 
 - start a future phase early;
 - silently add a new product domain;
+- invent synonyms that conflict with the canonical glossary/naming standard;
+- create a second authoritative owner for an existing concept;
 - replace an approved technology or architectural pattern without an ADR;
 - couple modules through direct cross-module database writes;
 - create a second implementation of an existing platform capability;
@@ -48,17 +55,19 @@ An AI agent MUST NOT:
 These rules are non-negotiable unless superseded by an approved ADR and corresponding plan revision.
 
 1. **Kernel before business modules.** Shared platform capabilities belong in the kernel, not copied into domains.
-2. **Domain ownership.** A module owns its write model and schema. Other modules may use contracts, events or approved read models only.
-3. **No hidden coupling.** No module may depend on another module's internal tables, classes, private endpoints or undocumented behavior.
-4. **Tenant-aware by default.** Tenant and organization boundaries must be explicit at data, authorization and service layers.
-5. **Authorization-aware by default.** Every protected action goes through policy/capability checks.
-6. **Auditable by default.** Security-sensitive and business-significant mutations emit attributable audit records.
-7. **Versioned contracts.** Public APIs, events, module manifests and externally consumed schemas are versioned.
-8. **Failure isolation.** Disabling or removing an optional module must not corrupt unrelated modules.
-9. **Idempotent integration.** Events, webhooks, retries and background jobs must be safe to replay where required.
-10. **AI uses governed capabilities.** AI agents never receive unrestricted database write access.
-11. **Modular-monolith first.** Services are extracted only when measurable scale, isolation or team ownership justifies it.
-12. **No speculative infrastructure.** Complexity must be earned by requirements and evidence.
+2. **One authoritative owner.** Every authoritative write model/capability has one owning domain recorded by the ownership model.
+3. **Domain ownership.** A module owns its write model and schema. Other modules may use contracts, events or approved read models only.
+4. **No hidden coupling.** No module may depend on another module's internal tables, classes, private endpoints or undocumented behavior.
+5. **Dependency direction is governed.** `DEPENDENCY_MATRIX.md` defines allowed cross-domain mechanisms; an `X` path requires redesign or an approved ADR, not a shortcut.
+6. **Tenant-aware by default.** Tenant and organization boundaries must be explicit at data, authorization and service layers.
+7. **Authorization-aware by default.** Every protected action goes through policy/capability checks.
+8. **Auditable by default.** Security-sensitive and business-significant mutations emit attributable audit records.
+9. **Versioned contracts.** Public APIs, events, module manifests and externally consumed schemas are versioned.
+10. **Failure isolation.** Disabling or removing an optional module must not corrupt unrelated modules.
+11. **Idempotent integration.** Events, webhooks, retries and background jobs must be safe to replay where required.
+12. **AI uses governed capabilities.** AI agents never receive unrestricted database write access.
+13. **Modular-monolith first.** Services are extracted only when measurable scale, isolation or team ownership justifies it.
+14. **No speculative infrastructure.** Complexity must be earned by requirements and evidence.
 
 ## 5. Technology baseline
 
@@ -82,13 +91,14 @@ For every implementation task:
 
 1. Identify the exact phase, work package and acceptance criteria.
 2. Inspect current repository state before editing.
-3. State affected modules/contracts/data ownership.
-4. Implement the smallest complete change satisfying the active acceptance criteria.
-5. Add or update tests at the appropriate layer.
-6. Run required quality gates from `DEFINITION_OF_DONE.md`.
-7. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
-8. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
-9. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
+3. Identify canonical terminology and the authoritative owning domain before creating a new entity/capability.
+4. State affected modules/contracts/data ownership and allowed dependency direction.
+5. Implement the smallest complete change satisfying the active acceptance criteria.
+6. Add or update tests at the appropriate layer.
+7. Run required quality gates from `DEFINITION_OF_DONE.md`.
+8. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
+9. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
+10. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
 
 ## 7. Phase and task state model
 
@@ -111,6 +121,8 @@ Only one foundation phase should normally be `active` at a time until the kernel
 An ADR and master-plan reconciliation are mandatory for changes to any of the following:
 
 - platform category or product boundary;
+- canonical domain ownership for an established concept;
+- canonical terminology when semantics/ownership change materially;
 - language/runtime baseline;
 - tenancy hierarchy;
 - authorization model;
@@ -131,6 +143,8 @@ Every PR must identify:
 - phase/work package;
 - scope and non-scope;
 - architecture impact;
+- authoritative domain owner(s);
+- dependency direction/mechanism;
 - data/migration impact;
 - security/tenancy impact;
 - contracts/events changed;
@@ -150,11 +164,21 @@ A change is incomplete if any of these are true:
 - permission checks are missing;
 - module uninstall/disable compatibility is broken where relevant;
 - public contracts changed without versioning;
+- domain ownership is ambiguous or duplicated;
+- an implementation uses a forbidden dependency path;
 - status claims exceed evidence;
 - documentation and machine-readable state disagree;
 - runtime depends on hidden manual steps.
 
-## 11. Scope-drift rule
+## 11. Repository and legal guardrails
+
+- Follow `CONTRIBUTING.md` and `SECURITY.md`.
+- Do not intentionally push implementation directly to `main`; use governed PRs.
+- Hosted branch/ruleset targets are defined in `docs/governance/REPOSITORY_HARDENING.md`.
+- The existing `LICENSE` file must not be replaced or treated as the final business licensing strategy without explicit owner authorization and the licensing/IP decision process.
+- AI systems must never make trademark/legal ownership decisions autonomously.
+
+## 12. Scope-drift rule
 
 If a requested feature is valuable but outside the active work package, record it as planned backlog or propose a plan amendment. Do not absorb it silently into the current implementation.
 

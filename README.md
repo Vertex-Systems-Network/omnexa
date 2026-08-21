@@ -4,7 +4,7 @@
 
 Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete.
+> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.03 — ID, money, time, locale and error conventions**.
 
 ## Mandatory contributor / AI start here
 
@@ -14,19 +14,24 @@ Any human or AI system changing this repository must read the following in order
 2. [`docs/governance/PRODUCT_CONSTITUTION.md`](docs/governance/PRODUCT_CONSTITUTION.md)
 3. [`docs/architecture/SYSTEM_ARCHITECTURE.md`](docs/architecture/SYSTEM_ARCHITECTURE.md)
 4. [`docs/architecture/MODULE_STANDARD.md`](docs/architecture/MODULE_STANDARD.md)
-5. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-6. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-7. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-8. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-9. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-10. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-11. Relevant ADRs under [`docs/adr/`](docs/adr/)
+5. [`docs/architecture/GLOSSARY.md`](docs/architecture/GLOSSARY.md)
+6. [`docs/architecture/NAMING_STANDARD.md`](docs/architecture/NAMING_STANDARD.md)
+7. [`docs/architecture/DOMAIN_OWNERSHIP.md`](docs/architecture/DOMAIN_OWNERSHIP.md)
+8. [`docs/architecture/DEPENDENCY_MATRIX.md`](docs/architecture/DEPENDENCY_MATRIX.md)
+9. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+10. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+11. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+12. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
+13. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
+14. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
+15. Relevant ADRs under [`docs/adr/`](docs/adr/)
 
 `STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
 
 ## Core architecture laws
 
 - Kernel before business modules.
+- Every authoritative write model has one owner.
 - Modules own their write models and schemas.
 - Cross-module direct database writes are forbidden.
 - Cross-domain integration uses versioned capabilities, events, workflows or approved read projections.
@@ -50,6 +55,21 @@ Until superseded by an accepted ADR:
 - **S3-compatible object storage** — files/media
 - **NATS/JetStream-class fabric** — event/messaging baseline
 - **OpenTelemetry** — observability semantics
+
+## Governance hardening
+
+Repository-level controls now include:
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`.github/CODEOWNERS`](.github/CODEOWNERS)
+- architecture/bug issue templates
+- governance CI via [`.github/workflows/governance.yml`](.github/workflows/governance.yml)
+- dependency-free state validator at [`scripts/validate_governance.py`](scripts/validate_governance.py)
+- hosted repository ruleset target in [`docs/governance/REPOSITORY_HARDENING.md`](docs/governance/REPOSITORY_HARDENING.md)
+- licensing/IP decision gate in [`docs/governance/LICENSING_DECISION.md`](docs/governance/LICENSING_DECISION.md)
+
+Hosted branch protection and licensing/IP/trademark decisions remain explicitly tracked; they do not authorize early implementation.
 
 ## Roadmap
 
@@ -82,7 +102,7 @@ Execution history is recorded in the append-only [`docs/roadmap/EXECUTION_LEDGER
 
 ## Architecture decisions
 
-Architecture decisions live under [`docs/adr/`](docs/adr/). The initial baseline is [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md).
+Architecture decisions live under [`docs/adr/`](docs/adr/). The initial baseline is [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md), and [`docs/adr/TEMPLATE.md`](docs/adr/TEMPLATE.md) defines the required decision shape.
 
 Do not implement an architectural change first and document it afterward.
 
