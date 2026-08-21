@@ -9,7 +9,8 @@ Last reconciled: **2026-08-22**
 - Phase state: **active — exit verification**
 - Current work package: **P00.10 — Foundation architecture freeze review**
 - Architecture baseline: **FROZEN — Foundation v1**
-- Executable CI entry gate: **SATISFIED ON LOCAL-WIN-4**
+- Executable CI entry gate: **SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER**
+- Latest routing proof: **LOCAL-WIN-02 / run 32535324900 / job 96935023669 / PASS**
 - P01 entry: **BLOCKED BY ISSUE #3 / GITHUB PLAN LIMITATION**
 - P01.01 preparation: **SPECIFIED / PLANNED / BLOCKED**
 - Kernel implementation: **NOT AUTHORIZED**
@@ -50,28 +51,32 @@ Normative freeze/entry records:
 
 ### EG-03 / Issue #14 — SATISFIED
 
-The executable CI blocker remains resolved and the canonical lane is certified on the specifically requested organization runner `LOCAL-WIN-4`.
+The executable CI blocker remains resolved. The canonical workflow now exposes one required job named `governance` on:
 
-Verified current evidence:
+```yaml
+runs-on: [self-hosted, Windows, X64]
+```
 
-- PR #23 migrated the canonical workflow to fail closed unless LOCAL-WIN-4 produces validation evidence;
-- runner: `LOCAL-WIN-4` / Windows X64;
-- machine/work root: `ABDUL-HANAN` / `C:\actions-runner-4\_work`;
+GitHub may schedule that job on any available Windows/X64 self-hosted runner. Runner-name pinning, discovery fanout and target evidence aggregation have been removed; the validators themselves remain fail-closed.
+
+Verified current routing evidence:
+
+- workflow run `32535324900`: SUCCESS;
+- job `96935023669`: SUCCESS;
+- actual runner `LOCAL-WIN-02` / Windows X64;
+- machine `ABDUL-HANAN`;
 - Git `2.55.0.windows.5`;
 - Python `3.13.7`;
-- workflow run `32528329184`;
-- LOCAL-WIN-4 target job `96915072868`: SUCCESS;
+- branch-protection PowerShell parse PASS;
 - governance validator PASS;
 - development specification validator PASS;
 - threat/operations validator PASS;
 - foundation-freeze validator PASS;
-- final required job named `governance`: SUCCESS;
-- PR #23 merged to `main` as `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`;
-- Issue #14 remains closed/completed.
+- P01-preparation validator PASS.
 
-Because GitHub Actions does not schedule by runner name and LOCAL-WIN-4 currently has no unique Actions label, the canonical workflow fans out only across local Windows/X64 self-hosted runners, executes protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, uploads target pass evidence only from that runner, and fails the final `governance` job when target evidence is absent.
+The earlier LOCAL-WIN-4 evidence from PR #23/run `32528329184` remains historical provenance only. It is no longer a scheduling requirement.
 
-GitHub-hosted runner quota is not required. ADR-0006 is historical evidence only while this executable lane remains operational.
+GitHub-hosted standard runners may be introduced later if capacity/policy permits without weakening P00.07 quality semantics. The current self-hosted pool is already operational and avoids dependence on hosted-minute entitlement.
 
 ### EG-02 / Issue #3 — BLOCKED BY CURRENT GITHUB PLAN
 
@@ -85,7 +90,7 @@ Verified context:
 
 - repository is organization-owned and `private`;
 - authenticated user has repository `admin` permission;
-- branch-protection scripts parse successfully on `LOCAL-WIN-4`;
+- branch-protection scripts parse successfully;
 - the API attempt reached GitHub and was rejected by product-plan entitlement;
 - `main` remains `protected: false`.
 
@@ -101,7 +106,7 @@ Until EG-02 is satisfied or deliberately superseded, P00.10 remains in exit veri
 
 ## P01.01 implementation-readiness preparation
 
-P01 itself remains blocked, but its first executable package is now pre-specified so no architecture decisions need to be invented after the gate clears.
+P01 itself remains blocked, but its first executable package is pre-specified so no architecture decisions need to be invented after the gate clears.
 
 Prepared artifacts:
 
@@ -111,29 +116,18 @@ Prepared artifacts:
 
 P01.01 remains `planned`. Its scope is deliberately limited to the Go workspace/build/process skeleton, initial build/version metadata and applicable G0/G1/G2/G7 evidence. Configuration, DB, cache, storage, telemetry, health, jobs, flags, audit, identity/tenancy, module runtime and business domains remain later packages/phases.
 
-The preparation validator also rejects known P01.01 executable paths such as `go.mod`, `go.work` and `kernel/cmd/omnexa/main.go` while `kernel_code_authorized=false`.
+The preparation validator rejects known P01.01 executable paths such as `go.mod`, `go.work` and `kernel/cmd/omnexa/main.go` while `kernel_code_authorized=false` and verifies the runner-name-agnostic governance workflow shape.
 
 ## Issue #4 — external-distribution blocker
 
 Licensing/IP/trademark strategy does **not** block private internal P01 engineering after the P01 entry gate is cleared, but remains a hard gate before public/external distribution, self-hosted customer delivery or public launch.
 
-The owner/legal decision is now structured in:
+The owner/legal decision is structured in:
 
 - `docs/governance/LICENSING_DECISION.md` — canonical gate;
 - `docs/governance/LICENSING_DECISION_BRIEF.md` — explicit owner choices for distribution model, core licensing direction, contributor IP, marketplace/extension boundary, dependency policy and trademark/name clearance.
 
 No repository `LICENSE` change is authorized by preparation alone.
-
-## Frozen foundation summary
-
-- governance/change control/AI execution;
-- canonical vocabulary/domain ownership/dependency rules;
-- UUIDv7, exact money, time/locale/error primitives;
-- stable HTTP/OpenAPI and event contracts;
-- security/data classification/tenant isolation/authorization/audit;
-- G0–G8 quality, testing, CI and release semantics;
-- governed monorepo/local development/toolchain/config model;
-- threat model, operational criticality, SLO/RPO/RTO/error budgets, SEV0–SEV3 and reliability readiness.
 
 ## Exact next transition
 
