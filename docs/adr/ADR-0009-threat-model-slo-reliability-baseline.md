@@ -32,7 +32,7 @@ Adopt:
 - tenant escape, unauthorized privilege, duplicate protected financial side effects and lost acknowledged durable business work are zero-tolerance conditions;
 - security/integrity is not traded for availability;
 - Tier 0/Tier 1/Tier 2/Tier 3 classify operational criticality;
-- recovery classes A-D define initial RPO/RTO objectives;
+- Recovery classes A-D define initial RPO/RTO objectives;
 - RPO/RTO are targets until restore/recovery rehearsal proves them;
 - error-budget consumption may restrict risky releases but cannot excuse security/integrity breaches;
 - every material production capability eventually has an owner, SLI/SLO, recovery treatment, observability, runbook and threat-model delta;
