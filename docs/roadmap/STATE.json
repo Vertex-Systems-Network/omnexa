@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-22",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.07",
+  "current_work_package": "P00.08",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -50,7 +50,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 6,
+    "done_work_packages": 7,
     "work_packages": [
       {
         "id": "P00.01",
@@ -147,13 +147,22 @@
       {
         "id": "P00.07",
         "name": "Testing, CI and release standard",
-        "state": "active",
-        "depends_on": ["P00.04", "P00.05", "P00.06"]
+        "state": "done",
+        "depends_on": ["P00.04", "P00.05", "P00.06"],
+        "evidence": [
+          "docs/quality/TESTING_STANDARD.md",
+          "docs/quality/CI_STANDARD.md",
+          "docs/quality/RELEASE_STANDARD.md",
+          "docs/quality/QUALITY_GATE_MATRIX.md",
+          "docs/contracts/quality/quality-gates.schema.json",
+          "docs/adr/ADR-0007-testing-ci-release-baseline.md",
+          "scripts/validate_governance.py"
+        ]
       },
       {
         "id": "P00.08",
         "name": "Local developer and repository structure specification",
-        "state": "planned",
+        "state": "active",
         "depends_on": ["P00.03", "P00.07"]
       },
       {
@@ -210,5 +219,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.07 may move to done only when the canonical testing, CI and release standard defines test layers, mandatory negative/security/tenant tests, contract/schema validation, migration/fresh-install gates, build/lint/static-analysis gates, supply-chain/security scans, release/versioning/provenance requirements, branch/PR evidence and failure policy with machine-validation evidence. During the temporary P00 hosted-CI exception, machine-validation execution may be recorded BLOCKED/NOT RUN but the standards and validator artifacts must still be present and manually reconciled. Then P00.08 becomes active."
+  "next_transition_rule": "P00.08 may move to done only when the repository/local-development specification defines canonical monorepo layout, package/module boundaries, generated-artifact locations, toolchain pinning, local dependencies, configuration/secrets, developer bootstrap, canonical verification commands, database/migration workflow and cross-platform expectations with machine-validation evidence. During ADR-0006, hosted execution may remain BLOCKED/NOT RUN for P00 specification work. Then P00.09 becomes active."
 }
