@@ -94,3 +94,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` reflect P00 progress `3 / 10 done` with P00.04 active.
 - Commit / PR: `#7` / `f579b3e5acf3034fc3e3a46e411bbdbeb3b7a59b`.
 - Notes: kernel/business implementation remains locked until P00 exit; issue #3 and issue #4 remain open governance/business decisions.
+
+## 2026-08-21 — P00.04 HTTP API contract baseline
+
+- Phase / package: `P00.04`
+- Transition: `active -> done` upon verified merge of the P00.04 PR; `P00.05` becomes active.
+- Summary: Frozen stable HTTP API routing, major versioning, JSON/envelope shape, OpenAPI 3.2 contract source-of-truth, Problem Details error transport, cursor pagination, idempotency, optimistic concurrency, bounded filtering/sorting/includes, explicit business actions, authorization-derived tenancy context, compatibility/deprecation and generated-artifact rules.
+- Evidence: `docs/architecture/API_STANDARD.md`, `docs/contracts/http/openapi-template.yaml`, `docs/adr/ADR-0003-http-api-contract-baseline.md`, updated `AGENTS.md`, `README.md`, naming standard, state/status, and stronger governance validation.
+- Architecture impact: establishes platform-wide stable HTTP contract semantics; no application/kernel/business implementation introduced.
+- State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
+- Commit / PR: fill with merged P00.04 PR/CI evidence in an append-only reconciliation entry after merge.
+- Notes: P00 execution lock remains active. `P00.05` is the only active work package after merge; P00.06 remains ready.
