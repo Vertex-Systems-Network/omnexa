@@ -136,7 +136,7 @@ MARKER_REQUIREMENTS = {
             "INTERNAL",
             "CONFIDENTIAL",
             "RESTRICTED",
-            "RESTRICTED` data is prohibited as model input by default",
+            "`RESTRICTED` data is prohibited as model input by default",
             "Production `CONFIDENTIAL`/`RESTRICTED` data must not be copied to development/test by default",
         ],
         "docs/security/SECURITY_STANDARD.md": [
