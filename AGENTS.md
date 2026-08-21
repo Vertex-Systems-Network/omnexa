@@ -14,15 +14,18 @@ Current program state:
 Foundation Architecture v1: FROZEN
 P00: ACTIVE — exit verification
 P00.10: ACTIVE — review_state=verification
-Executable CI gate: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
-Latest routing proof: LOCAL-WIN-02 / run 32535324900
-P01: BLOCKED BY EG-02 / ISSUE #3 (BLOCKED_BY_PLAN)
-P01.01: PREPARED / PLANNED / NOT ACTIVE
+Repository visibility: PUBLIC
+Executable CI gate: SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04
+Hosted proof: run 32537207455 / job 96940269306
+Local/self-hosted governance runners: PROHIBITED
+P01: BLOCKED BY EG-02 / ISSUE #3
+EG-02: ACTIONABLE_UNPROTECTED — live main protected=false
+P01.01-P01.12: PREPARED / PLANNED / NOT ACTIVE
 kernel_code_authorized: false
 business_feature_code_authorized: false
 ```
 
-Do not infer implementation permission from `FROZEN` or `P01.01 prepared`. Architecture/readiness can be prepared while executable kernel implementation remains locked.
+Do not infer implementation permission from `FROZEN`, public visibility, hosted CI availability or prepared P01 specifications. Architecture/readiness can be prepared while executable kernel implementation remains locked.
 
 ## Mandatory read order
 
@@ -42,7 +45,7 @@ Before material work, read:
 12. repository/local-development/toolchain/configuration/developer-command standards
 13. SLO, Incident and Reliability standards
 14. roadmap `MASTER_PLAN.md`, `STATUS.md`, `STATE.json`
-15. `docs/roadmap/work-packages/P01.01.md` when preparing the P01 handoff
+15. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` and the active/prepared P01 package specification when working on the P01 handoff
 16. `docs/governance/LICENSING_DECISION.md` and `LICENSING_DECISION_BRIEF.md` for distribution/IP work
 17. AI Execution Policy, Change Control and Definition of Done
 18. historical/active CI exception record if relevant
@@ -67,54 +70,64 @@ Do not create `go.mod`, `go.work`, `kernel/cmd/omnexa/main.go` or equivalent P01
 
 ## P01 entry gates
 
-### EG-02 / Issue #3 — protected integration path — BLOCKED_BY_PLAN
+### EG-02 / Issue #3 — protected integration path — ACTIONABLE_UNPROTECTED
 
 Hosted `main` protection remains required unless deliberately superseded through an owner-approved governance ADR.
 
-Owner/admin execution of the merged protection tooling reached GitHub but returned HTTP 403 stating that the current plan must be upgraded or the repository made public. The repository is private and the linked account has admin permission, so the current blocker is hosted plan entitlement rather than script correctness or repository permission.
+The repository is now public, so the earlier private-repository plan entitlement blocker is no longer active. However live GitHub branch metadata still reports `protected=false`. P01 remains blocked until the required policy is applied and verified.
 
-Do not retry the same protection API operation until plan/visibility changes. Do not make the repository public merely to clear this gate without the separate licensing/IP/security decision path.
+Required live evidence includes PR-only integration, strict required `governance` check, conversation resolution, blocked force push/deletion, administrator enforcement and contributor-model-appropriate review policy.
+
+Never treat public visibility or the disappearance of the old HTTP 403 as proof that EG-02 is satisfied.
 
 ### EG-03 / Issue #14 — executable verification lane — SATISFIED
 
-The canonical governance workflow is runner-name agnostic inside the approved local pool:
+Canonical governance CI is **GitHub-hosted only**:
 
 ```yaml
-runs-on: [self-hosted, Windows, X64]
+runs-on: ubuntu-24.04
 ```
 
-The single required job is named `governance`. GitHub may schedule it on any available Windows/X64 self-hosted runner; the job itself executes the full validator set and fails closed on any validation error. No specific runner name, discovery matrix or target-evidence artifact is required.
+The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=Linux` and `RUNNER_ARCH=X64`.
 
-Current routing proof: run `32535324900`, job `96935023669`, runner `LOCAL-WIN-02`, Windows/X64, machine `ABDUL-HANAN`; PowerShell parse plus governance, development, operations, freeze-review and P01-preparation validators all PASS.
+Current evidence: PR #31 migration run `32537207455`, job `96940269306`, runner `GitHub Actions 1000006777`, Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04`; governance, development, operations, freeze-review, P01-preparation and P01-package-spec validators all PASS.
 
-Historical LOCAL-WIN-4 evidence from PR #23/run `32528329184` remains provenance only and is not a routing requirement.
+The canonical workflow must not contain `self-hosted`, `LOCAL-WIN-*`, runner-name discovery, local evidence aggregation or any local-runner fallback.
 
-GitHub-hosted standard runners may be introduced later when capacity/policy permits, provided P00.07 gate semantics are not weakened.
+### Hosted branch-protection administration
 
-## P01.01 readiness rule
+Repository administration automation for EG-02 must also use GitHub-hosted compute. `.github/workflows/main-protection-admin.yml` is manual (`workflow_dispatch`) only and must run on `ubuntu-24.04` with an owner-controlled short-lived `OMNEXA_GITHUB_ADMIN_TOKEN` secret.
 
-`docs/roadmap/work-packages/P01.01.md` is the prepared controlling specification for the first kernel package: **Go workspace/build skeleton**.
+The ordinary Actions `GITHUB_TOKEN` is not repository Administration authority and must not be used as a privilege substitute.
+
+## P01 readiness rule
+
+`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution for P01.01–P01.12. All twelve specifications are prepared, but all remain `planned` while EG-02 is blocked.
+
+P01.01 remains the only next package: **Go workspace/build skeleton**.
 
 While blocked:
 
-- P01.01 state remains `planned`;
 - implementation is prohibited;
 - `scripts/validate_p01_preparation.py` must pass;
+- `scripts/validate_p01_package_specs.py` must pass;
 - only specification/acceptance/test-boundary refinement is allowed;
 - P01.02+ may not be made active;
-- P02/P03/business behavior may not be pulled into P01.01.
+- P02/P03/business behavior may not be pulled into P01.
 
 When EG-02 is cleared or deliberately superseded, follow `P00_P01_TRANSITION_CHECKLIST.md` in a governance-only PR before any kernel code is added.
 
-## Issue #4 — external distribution only
+## Issue #4 — public visibility / external distribution
 
-Licensing/IP/trademark resolution is a hard gate before public/external distribution, self-hosted customer delivery, public launch or an external contribution program. It does not block private internal P01 engineering after the P01 entry gate clears.
+The repository is now public while the current `LICENSE` remains GPLv3 and trademark clearance remains unresolved. Issue #4 therefore requires explicit owner/legal reconciliation for product launch, commercial licensing, contribution policy and trademark claims.
 
-`LICENSING_DECISION_BRIEF.md` is an owner/legal decision worksheet only. It does not replace legal review, change `LICENSE`, grant redistribution rights or establish trademark clearance.
+`LICENSING_DECISION_BRIEF.md` is an owner/legal decision worksheet only. It does not replace legal review, change `LICENSE`, grant new redistribution rights or establish trademark clearance.
 
-## Historical hosted-CI exception
+Issue #4 does not automatically authorize or prohibit P01 engineering once the technical P01 entry gate is satisfied.
 
-ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The self-hosted executable lane is operational, so new P00 changes use executable CI while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
+## Historical CI exception
+
+ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. GitHub-hosted executable CI is now operational, so ADR-0006 is historical evidence only and cannot authorize any current bypass.
 
 ## Architecture invariants
 
@@ -164,12 +177,12 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - generated output is derivative, not source of truth;
 - default local infra = containerized PostgreSQL + Redis-compatible + NATS/JetStream + S3-compatible storage;
 - Kubernetes is not required for ordinary local development;
-- local and CI use the same semantic verification rules;
+- local development and CI must use the same semantic verification rules, but canonical repository CI runs on GitHub-hosted infrastructure only;
 - toolchains/dependencies are repository-pinned;
 - secrets are separate from committed config;
 - production sensitive data is prohibited by default locally;
 - use synthetic deterministic multi-tenant fixtures;
-- Linux is canonical backend environment; Windows backend development prefers WSL2; native Windows is a separate certification target where required;
+- Linux is canonical backend environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
 ## Threat/reliability rules
@@ -200,14 +213,14 @@ For every material change:
 6. preserve module/repository boundaries;
 7. implement only authorized scope;
 8. add positive + negative evidence and threat-model delta where needed;
-9. execute canonical verification through the required `governance` job on an approved available runner;
-10. execute `validate_p01_preparation.py` while P01 remains blocked;
+9. execute canonical verification through the required GitHub-hosted `governance` job;
+10. execute P01 preparation/package validators while P01 remains blocked;
 11. record evidence accurately and reconcile STATUS/STATE;
 12. document architecture change through ADR/change control before implementation.
 
 ## Forbidden behavior
 
-Do not start P01 while EG-02 is blocked; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
+Do not start P01 while EG-02 is blocked; use local/self-hosted runners for canonical governance CI; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
 ## Exact next transition
 
@@ -218,7 +231,7 @@ Only after EG-02 is either verified satisfied or explicitly superseded by an own
 - activate P01 and P01.01;
 - set `kernel_code_authorized = true`;
 - keep `business_feature_code_authorized = false`;
-- record applicable integration-protection/compensating-control evidence plus existing executable-CI evidence;
+- record applicable integration-protection/compensating-control evidence plus GitHub-hosted CI evidence;
 - preserve P01.02–P01.12 as planned.
 
 Do not combine this transition with kernel implementation. The first kernel-code PR follows only after the transition is merged and verified on `main`.

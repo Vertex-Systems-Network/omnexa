@@ -13,11 +13,13 @@ All items must be true before the transition PR is opened as ready-to-merge:
 - [ ] P00.01–P00.09 remain `done` and frozen.
 - [ ] P00.10 review artifacts are present and internally consistent.
 - [ ] `docs/governance/FOUNDATION_FREEZE.json` reports `architecture_status=FROZEN`.
-- [ ] Executable governance CI is operational on the approved Windows/X64 self-hosted pool.
-- [ ] The required `governance` job passes on whichever eligible runner GitHub schedules.
+- [ ] Executable governance CI is operational on GitHub-hosted `ubuntu-24.04` only.
+- [ ] The required `governance` job proves `RUNNER_ENVIRONMENT=github-hosted` and passes all applicable validators.
+- [ ] No canonical governance workflow contains `self-hosted` or `LOCAL-WIN-*` runner routing.
 - [ ] Issue #14 remains resolved/completed.
 - [ ] EG-02 / Issue #3 is no longer blocked.
-- [ ] If GitHub hosted protection is used, live API reports `main.protected=true` and required `governance` check is enforced.
+- [ ] Live GitHub API reports `main.protected=true` and required strict `governance` check is enforced.
+- [ ] Force pushes/deletion are blocked and conversation resolution/admin enforcement are verified.
 - [ ] If EG-02 is superseded instead, an owner-approved ADR explicitly defines compensating controls, residual risk, expiry/review conditions and rollback path.
 - [ ] No architecture contradiction has been introduced since ADR-0010.
 - [ ] Repository is still free of unrelated project code.
@@ -54,7 +56,9 @@ The transition PR must produce:
 - [ ] `scripts/validate_operations_spec.py` PASS.
 - [ ] `scripts/validate_freeze_review.py` PASS or its governed post-P00 successor.
 - [ ] `scripts/validate_p01_preparation.py` PASS.
-- [ ] required `governance` job PASS on an approved Windows/X64 self-hosted runner.
+- [ ] `scripts/validate_p01_package_specs.py` PASS.
+- [ ] required `governance` job PASS on GitHub-hosted `ubuntu-24.04`.
+- [ ] hosted runtime evidence includes `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64.
 
 No `BLOCKED`, `NOT RUN` or manual-only exception may be relabeled PASS.
 
@@ -67,8 +71,9 @@ When P01 activates:
 - no P02 identity/tenant implementation may be pulled forward;
 - no P03 module runtime may be prebuilt;
 - no persistence/infrastructure from P01.04+ may be added to P01.01;
-- every executable PR must use the canonical quality lane;
-- `docs/roadmap/work-packages/P01.01.md` is the controlling package specification.
+- every executable PR must use the canonical GitHub-hosted quality lane;
+- `docs/roadmap/work-packages/P01.01.md` is the controlling package specification;
+- strict sequential P01.01→P01.12 activation remains in force.
 
 ## E. Post-merge verification
 
@@ -79,7 +84,7 @@ After the transition merge:
 - [ ] verify `kernel_code_authorized=true`;
 - [ ] verify `business_feature_code_authorized=false`;
 - [ ] verify no second P01 package is active;
-- [ ] verify latest governance run on canonical state passes;
+- [ ] verify latest governance run on canonical state passes on GitHub-hosted infrastructure;
 - [ ] append immutable merge SHA/run evidence through a reconciliation PR if the transition PR cannot know its own merge SHA.
 
 ## F. Abort conditions
@@ -88,7 +93,8 @@ Do not complete the transition if any of these occur:
 
 - hosted protection is assumed rather than observed;
 - compensating-control ADR is proposed but not explicitly owner-approved;
-- no eligible Windows/X64 governance runner produces PASS evidence;
+- live `main` still reports `protected=false`;
+- a local/self-hosted runner is used for canonical governance verification;
 - final `governance` check fails/blocks;
 - state would authorize business code;
 - more than one P01 package becomes active;
@@ -100,11 +106,14 @@ Do not complete the transition if any of these occur:
 ```text
 P00 architecture: FROZEN
 P00.10: EXIT VERIFICATION
-EG-02 / Issue #3: BLOCKED_BY_PLAN
-Executable CI: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
-Latest routing proof: LOCAL-WIN-02 / run 32535324900
+Repository visibility: PUBLIC
+EG-02 / Issue #3: ACTIONABLE_UNPROTECTED
+Live main protection: false
+Executable CI: SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04
+Hosted proof: run 32537207455 / job 96940269306
+Local/self-hosted governance runner: PROHIBITED
 P01: BLOCKED
-P01.01 specification: PREPARED / PLANNED
+P01.01-P01.12 specifications: PREPARED / PLANNED
 Kernel code: LOCKED
 Business feature code: LOCKED
 ```

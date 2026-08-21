@@ -55,20 +55,30 @@ if entry_states.get("issue:#14") != "SATISFIED":
 
 tracking = state.get("governance_tracking") or {}
 main_protection = tracking.get("main_branch_protection") or {}
-if main_protection.get("state") != "blocked_by_plan":
-    raise SystemExit("ERROR: main branch protection must be classified blocked_by_plan until hosted entitlement changes")
+if main_protection.get("state") != "actionable_unprotected":
+    raise SystemExit("ERROR: public repository main protection must remain actionable_unprotected until live protection is verified")
 if main_protection.get("issue") != 3:
     raise SystemExit("ERROR: main branch protection must remain tracked by issue #3")
-if main_protection.get("repository_visibility") != "private":
-    raise SystemExit("ERROR: plan-blocked evidence expects the repository to remain private")
-if "HTTP 403" not in str(main_protection.get("attempt_result") or ""):
-    raise SystemExit("ERROR: plan-blocked branch protection must retain HTTP 403 evidence")
+if main_protection.get("repository_visibility") != "public":
+    raise SystemExit("ERROR: current repository visibility must be public")
+if main_protection.get("live_protected") is not False:
+    raise SystemExit("ERROR: state must not claim branch protection before live verification")
+if "HTTP 403" not in str(main_protection.get("historical_private_attempt_result") or ""):
+    raise SystemExit("ERROR: historical private-repository HTTP 403 evidence must be retained")
 
 ci = tracking.get("github_actions_ci") or {}
-if ci.get("state") != "operational_self_hosted":
-    raise SystemExit("ERROR: executable CI gate must remain operational_self_hosted")
-if ci.get("routing_mode") != "any_available_windows_x64_self_hosted":
-    raise SystemExit("ERROR: governance CI must route to any available Windows/X64 self-hosted runner")
+if ci.get("state") != "operational_github_hosted":
+    raise SystemExit("ERROR: executable CI gate must be operational_github_hosted")
+if ci.get("routing_mode") != "github_hosted_only":
+    raise SystemExit("ERROR: governance CI must be GitHub-hosted only")
+if ci.get("runner_label") != "ubuntu-24.04":
+    raise SystemExit("ERROR: canonical governance runner label must be ubuntu-24.04")
+if ci.get("self_hosted_allowed") is not False:
+    raise SystemExit("ERROR: self-hosted/local runners must be prohibited for canonical governance CI")
+if ci.get("workflow_run") != 32537207455 or ci.get("job") != 96940269306:
+    raise SystemExit("ERROR: GitHub-hosted migration proof run/job mismatch")
+if ci.get("evidence_environment") != "github-hosted":
+    raise SystemExit("ERROR: CI evidence must prove RUNNER_ENVIRONMENT=github-hosted")
 if ci.get("final_check") != "governance":
     raise SystemExit("ERROR: final required CI check must be governance")
 
@@ -76,13 +86,15 @@ p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-
 for marker in [
     "EG-02",
     "Issue #3",
-    "BLOCKED_BY_PLAN",
-    "HTTP 403",
+    "ACTIONABLE_UNPROTECTED",
+    "repository visibility: `public`",
+    "protected: false",
     "Issue #14",
     "SATISFIED",
-    "any available Windows/X64 self-hosted runner",
-    "32535324900",
-    "LOCAL-WIN-02",
+    "ubuntu-24.04",
+    "github-hosted",
+    "32537207455",
+    "96940269306",
 ]:
     if marker.lower() not in p01_gate.lower():
         raise SystemExit(f"ERROR: P01 entry gate missing reconciliation marker: {marker}")
@@ -108,13 +120,13 @@ for marker in [
 
 runbook = (ROOT / "docs/governance/BRANCH_PROTECTION_ADMIN_RUNBOOK.md").read_text(encoding="utf-8")
 for marker in [
-    "HTTP 403",
-    "product-plan entitlement failure",
-    "Issue #4",
-    "Do not keep retrying",
+    "repository is now public",
+    "GitHub-hosted",
+    "OMNEXA_GITHUB_ADMIN_TOKEN",
+    "protected: true",
 ]:
-    if marker not in runbook:
-        raise SystemExit(f"ERROR: branch protection runbook missing plan-limitation marker: {marker}")
+    if marker.lower() not in runbook.lower():
+        raise SystemExit(f"ERROR: branch protection runbook missing current public/hosted marker: {marker}")
 
 apply_script = (ROOT / "scripts/apply_main_protection.ps1").read_text(encoding="utf-8")
 for marker in [
@@ -142,10 +154,17 @@ for marker in [
     if marker not in verify_script:
         raise SystemExit(f"ERROR: verify_main_protection.ps1 missing verification marker: {marker}")
 
+workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
+if "runs-on: ubuntu-24.04" not in workflow or "RUNNER_ENVIRONMENT" not in workflow or "github-hosted" not in workflow:
+    raise SystemExit("ERROR: canonical governance workflow must prove GitHub-hosted ubuntu-24.04 execution")
+if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
+    raise SystemExit("ERROR: canonical governance workflow must not use local/self-hosted runners")
+
 print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
-print("Executable CI gate: SATISFIED ON ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER")
-print("Branch-protection admin tooling: PRESENT")
-print("Branch-protection hosted entitlement: BLOCKED_BY_PLAN (HTTP 403)")
+print("Executable CI gate: SATISFIED ON GITHUB-HOSTED ubuntu-24.04")
+print("Local/self-hosted governance runners: PROHIBITED")
+print("Branch-protection plan blocker: CLEARED BY PUBLIC VISIBILITY")
+print("Branch-protection live state: ACTIONABLE_UNPROTECTED")
 print("P00 exit: VERIFICATION")
-print("P01 entry: BLOCKED BY ISSUE #3")
+print("P01 entry: BLOCKED BY ISSUE #3 UNTIL LIVE PROTECTION IS VERIFIED")

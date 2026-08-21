@@ -6,7 +6,7 @@ Omnexa is being designed as a governed modular platform above the scope of a con
 
 > **Architecture state:** **Omnexa Foundation Architecture v1 is FROZEN.** P00 remains active only in **exit verification**. Current package: **P00.10 — Foundation architecture freeze review**.
 
-> **Implementation lock:** the executable CI gate is **SATISFIED on any available Windows/X64 self-hosted runner**. P01 kernel implementation remains **BLOCKED by Issue #3 / GitHub plan-limited `main` protection**. P01.01 is prepared/specification-only; kernel and business-feature code remain unauthorized.
+> **Implementation lock:** executable CI is **SATISFIED on GitHub-hosted `ubuntu-24.04` only**. The repository is public, so the previous private-plan branch-protection blocker is gone, but live `main` still reports `protected:false`; therefore P01 remains blocked and kernel/business-feature code remain unauthorized.
 
 ## Mandatory contributor / AI start here
 
@@ -18,6 +18,7 @@ Freeze/entry-gate sources:
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
+- `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
 - `docs/roadmap/work-packages/P01.01.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
@@ -39,64 +40,56 @@ P00.01–P00.09 freeze governance/AI/change control, terminology/ownership/depen
 
 Technology baseline remains Go + TypeScript/React with selective Rust/Python; PostgreSQL, Redis-compatible cache, S3-compatible storage, NATS/JetStream-class messaging and OpenTelemetry.
 
-## Executable CI — runner-name agnostic
+## Executable CI — GitHub-hosted only
 
-The canonical governance workflow exposes one required job named `governance` on:
+The canonical required job remains `governance` and runs only on:
 
 ```yaml
-runs-on: [self-hosted, Windows, X64]
+runs-on: ubuntu-24.04
 ```
 
-GitHub schedules that job on whichever eligible Windows/X64 self-hosted runner is available. There is no runner-name pinning, discovery fanout or target-runner artifact aggregation. The full validator set runs directly in the required job and fails closed on any error.
+The workflow fails unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. It contains no `self-hosted` selector, no `LOCAL-WIN-*` routing and no local-runner fallback.
 
-Current routing proof:
+Current proof:
 
-- workflow run `32535324900`: SUCCESS;
-- job `96935023669`: SUCCESS;
-- actual runner `LOCAL-WIN-02` / Windows X64;
-- machine `ABDUL-HANAN`;
-- Git `2.55.0.windows.5`;
-- Python `3.13.7`;
-- PowerShell branch-protection tooling parse PASS;
-- governance validator PASS;
-- development-spec validator PASS;
-- operations validator PASS;
-- foundation-freeze validator PASS;
-- P01-preparation validator PASS.
+- workflow run `32537207455`: SUCCESS;
+- job `96940269306`: SUCCESS;
+- runner `GitHub Actions 1000006777`;
+- `RUNNER_ENVIRONMENT=github-hosted`;
+- Ubuntu 24.04.4 LTS / X64;
+- image `ubuntu-24.04` version `20260816.277.1`;
+- Git `2.55.0`;
+- Python `3.12.3`;
+- PowerShell `7.6.5`;
+- governance/development/operations/freeze/P01-preparation/P01-package-spec validators PASS.
 
-The earlier LOCAL-WIN-4 evidence from PR #23/run `32528329184` remains historical provenance, not a scheduling requirement.
-
-While P01 is blocked, CI runs `scripts/validate_p01_preparation.py`, which keeps P01.01 prepared but fails if known executable kernel paths appear before the authorization transition.
+Local/self-hosted runner evidence remains historical provenance only and is not an active CI option.
 
 ## P01 entry gate
 
 P01 is **not authorized yet**.
 
-### Issue #3 — remaining P01 entry blocker: `BLOCKED_BY_PLAN`
+### Issue #3 — remaining blocker: `ACTIONABLE_UNPROTECTED`
 
-The branch-protection tooling is merged and validated, but GitHub returned HTTP 403 for private branch protection on the current organization plan. `main` remains unprotected.
+The repository is now public, so the former private-repository plan limitation is no longer the active blocker. However GitHub's live branch API still reports `main.protected=false`.
 
-The gate clears only when hosted protection becomes available and is verified, or an explicitly owner-approved superseding governance ADR replaces EG-02 with compensating controls. Making the repository public is not an automatic workaround.
+The gate clears only after the required PR-only protection/ruleset is applied and verified with strict `governance`, conversation resolution, force-push/deletion blocking and administrator enforcement, or after an explicitly owner-approved superseding governance ADR.
 
 ### Issue #14 — satisfied
 
-Executable CI is restored and runner-name agnostic inside the approved Windows/X64 self-hosted pool.
+Executable CI is restored and canonical governance now runs only on GitHub-hosted infrastructure.
 
-## P01.01 — prepared, not active
+## P01 package preparation
 
-The first kernel work package is fully specified at `docs/roadmap/work-packages/P01.01.md`:
+All P01.01–P01.12 specifications are prepared under strict sequential one-active-package policy. P01.01 remains the only next package:
 
 **Go workspace / build skeleton**
 
-Prepared scope includes repository-owned Go toolchain/workspace structure, deterministic build/test entrypoints, minimal process/build metadata and G0/G1/G2/G7 evidence. It explicitly excludes configuration, PostgreSQL, cache, object storage, telemetry, health, jobs, feature flags, audit, identity/tenancy, module runtime and business domains.
-
 No `go.mod`, `go.work` or kernel entrypoint is authorized until the P00→P01 transition is merged.
 
-## Issue #4 — external distribution blocker
+## Public visibility / Issue #4
 
-Licensing/IP/trademark resolution is required before public/external distribution, self-hosted customer delivery, public launch or external contributor intake, but does not block private internal P01 engineering after the P01 entry gate is cleared.
-
-Prepared owner/legal worksheet: `docs/governance/LICENSING_DECISION_BRIEF.md`. It does not change the current `LICENSE` or establish trademark clearance.
+The repository is now public while the current repository `LICENSE` remains GPLv3 and trademark clearance remains unresolved. Issue #4 requires explicit owner/legal reconciliation for product launch, commercial licensing, contribution policy and trademark claims. The prepared worksheet remains `docs/governance/LICENSING_DECISION_BRIEF.md`.
 
 ## Exact next transition
 
@@ -106,7 +99,7 @@ The first kernel implementation PR comes **after** that state transition; it is 
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; runner-name-agnostic executable CI satisfied; P00.10 exit verification; P01.01 prepared/planned; P01 blocked by plan-limited Issue #3**.
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; GitHub-hosted-only executable CI satisfied; repository public; P00.10 exit verification; P01.01–P01.12 prepared/planned; P01 blocked only by unverified `main` protection**.
 
 ## Product principle
 
