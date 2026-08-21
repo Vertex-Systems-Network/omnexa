@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-22",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.09",
+  "current_work_package": "P00.10",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -37,7 +37,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 8,
+    "done_work_packages": 9,
     "work_packages": [
       {"id":"P00.01","name":"Repository governance baseline","state":"done","evidence":["AGENTS.md","docs/governance/PRODUCT_CONSTITUTION.md","docs/governance/AI_EXECUTION_POLICY.md","docs/architecture/SYSTEM_ARCHITECTURE.md","docs/architecture/MODULE_STANDARD.md","docs/governance/CHANGE_CONTROL.md","docs/governance/DEFINITION_OF_DONE.md","docs/roadmap/MASTER_PLAN.md","docs/roadmap/STATUS.md","docs/roadmap/STATE.json","docs/adr/ADR-0001-platform-architecture-baseline.md"]},
       {"id":"P00.02","name":"Product/domain glossary and naming standard","state":"done","depends_on":["P00.01"],"evidence":["docs/architecture/GLOSSARY.md","docs/architecture/NAMING_STANDARD.md","docs/architecture/DOMAIN_OWNERSHIP.md","docs/architecture/DEPENDENCY_MATRIX.md","CONTRIBUTING.md","SECURITY.md",".github/CODEOWNERS","docs/governance/REPOSITORY_HARDENING.md","docs/governance/LICENSING_DECISION.md","scripts/validate_governance.py",".github/workflows/governance.yml"]},
@@ -47,8 +47,8 @@
       {"id":"P00.06","name":"Security and data-classification baseline","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/security/SECURITY_STANDARD.md","docs/security/DATA_CLASSIFICATION.md","docs/security/SECURITY_CONTROL_MATRIX.md","docs/contracts/security/data-classification.schema.json","docs/adr/ADR-0005-security-data-classification-baseline.md","docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md","docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md","scripts/validate_governance.py"]},
       {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
       {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
-      {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"active","depends_on":["P00.06","P00.08"]},
-      {"id":"P00.10","name":"Foundation architecture freeze review","state":"planned","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"]}
+      {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"done","depends_on":["P00.06","P00.08"],"evidence":["docs/security/THREAT_MODEL.md","docs/operations/SLO_STANDARD.md","docs/operations/INCIDENT_STANDARD.md","docs/operations/RELIABILITY_STANDARD.md","docs/contracts/operations/operational-targets.schema.json","docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md","scripts/validate_operations_spec.py"]},
+      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"]}
     ]
   },
   "phases": [
@@ -81,5 +81,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.09 may move to done only when the threat model covers tenant escape, authz/authn abuse, injection/SSRF/webhooks, supply chain/module compromise, CI/release credentials, edge/POS loss, event replay, payment duplication, AI prompt/tool abuse, insider/support access, backup/search leakage, noisy-neighbor/resource exhaustion and disaster scenarios; operational SLO/RPO/RTO/error-budget/severity/observability targets must be documented with manual/machine evidence. Then P00.10 becomes active."
+  "next_transition_rule": "P00.10 may move to done only after a foundation freeze review confirms all P00.01-P00.09 evidence, resolves or explicitly classifies remaining blockers, records P01 entry prerequisites, verifies the architecture has no contradictory source-of-truth documents, and creates an accepted freeze ADR/review record. The temporary P00 hosted-CI exception expires at P00 exit and cannot authorize P01 implementation."
 }
