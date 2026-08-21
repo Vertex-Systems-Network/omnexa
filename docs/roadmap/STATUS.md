@@ -20,7 +20,7 @@ Last reconciled: **2026-08-22**
 | P00.03 | ID, money, time, locale and error conventions | done | primitive standards + ADR-0002 |
 | P00.04 | API contract standard | done | `API_STANDARD.md`, OpenAPI template + ADR-0003 |
 | P00.05 | Event contract standard | done | `EVENT_STANDARD.md`, event envelope schema + ADR-0004 |
-| P00.06 | Security and data-classification baseline | done | security/data-classification/control matrix, classification schema + ADR-0005; hosted CI evidence temporarily BLOCKED under ADR-0006 |
+| P00.06 | Security and data-classification baseline | done | security/data-classification/control matrix, classification schema + ADR-0005; manual P00 evidence under ADR-0006 because hosted Actions is BLOCKED |
 | P00.07 | Testing, CI and release standard | active | Current canonical work package |
 | P00.08 | Local developer and repository structure specification | planned | Requires P00.07 |
 | P00.09 | Initial threat model and operational SLO targets | planned | Requires P00.06 + P00.08 |
@@ -103,9 +103,9 @@ The temporary policy is defined by:
 
 - `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`
 - `docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md`
-- issue #14 for the runner/quota blocker evidence.
+- issue #14 for runner/quota blocker evidence.
 
-Hosted Actions evidence is therefore **BLOCKED / NOT RUN**, never recorded as PASS. P00 packages may use manual repository/state/evidence verification only while they remain documentation/specification work. This exception expires before any P01 implementation merge, at P00 exit, or sooner if Actions returns.
+Hosted Actions evidence is **BLOCKED / NOT RUN**, never recorded as PASS. For P00.06, repository diff/evidence/state/status inspection is the recorded manual acceptance path. P00 packages may continue this way only while they remain documentation/specification work. The exception expires before any P01 implementation merge, at P00 exit, or sooner if Actions returns.
 
 ## Governance hardening status
 
