@@ -28,9 +28,11 @@
       "business_feature_code_authorized": false
     },
     "main_branch_protection": {
-      "state": "p01_entry_blocker",
+      "state": "blocked_by_plan",
       "issue": 3,
-      "note": "main branch/ruleset protection must be applied and verified before any P01 executable merge."
+      "repository_visibility": "private",
+      "attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
+      "note": "Authenticated admin execution proved that the current GitHub plan does not provide branch protection/rulesets for this private organization repository. Do not retry until the plan/visibility changes or EG-02 is deliberately superseded through an accepted governance ADR."
     },
     "github_actions_ci": {
       "state": "operational_self_hosted",
@@ -101,5 +103,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and current canonical LOCAL-WIN-4 validation evidence. P00.10 may move to done only after Issue #3 main protection is applied and verified. The transition must retire ADR-0006 from active use, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record branch-protection evidence. Issue #4 remains an external distribution/public-launch blocker."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and current canonical LOCAL-WIN-4 validation evidence. EG-02/Issue #3 is BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must retire ADR-0006 from active use, mark P00 done, activate P01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker."
 }
