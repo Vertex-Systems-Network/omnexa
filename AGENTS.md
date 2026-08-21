@@ -20,13 +20,18 @@ Before proposing or modifying code, schema, infrastructure, APIs, tests or docum
 6. `docs/architecture/NAMING_STANDARD.md`
 7. `docs/architecture/DOMAIN_OWNERSHIP.md`
 8. `docs/architecture/DEPENDENCY_MATRIX.md`
-9. `docs/roadmap/MASTER_PLAN.md`
-10. `docs/roadmap/STATUS.md`
-11. `docs/roadmap/STATE.json`
-12. `docs/governance/AI_EXECUTION_POLICY.md`
-13. `docs/governance/CHANGE_CONTROL.md`
-14. `docs/governance/DEFINITION_OF_DONE.md`
-15. Relevant ADRs under `docs/adr/`
+9. `docs/architecture/IDENTIFIER_STANDARD.md`
+10. `docs/architecture/MONEY_STANDARD.md`
+11. `docs/architecture/TIME_STANDARD.md`
+12. `docs/architecture/LOCALE_STANDARD.md`
+13. `docs/architecture/ERROR_STANDARD.md`
+14. `docs/roadmap/MASTER_PLAN.md`
+15. `docs/roadmap/STATUS.md`
+16. `docs/roadmap/STATE.json`
+17. `docs/governance/AI_EXECUTION_POLICY.md`
+18. `docs/governance/CHANGE_CONTROL.md`
+19. `docs/governance/DEFINITION_OF_DONE.md`
+20. Relevant ADRs under `docs/adr/`
 
 If these documents conflict, stop and resolve the conflict through the change-control process before implementation.
 
@@ -42,6 +47,7 @@ An AI agent MUST NOT:
 - silently add a new product domain;
 - invent synonyms that conflict with the canonical glossary/naming standard;
 - create a second authoritative owner for an existing concept;
+- invent alternative identifier, money, time, locale or error primitives that conflict with P00.03 standards;
 - replace an approved technology or architectural pattern without an ADR;
 - couple modules through direct cross-module database writes;
 - create a second implementation of an existing platform capability;
@@ -69,7 +75,21 @@ These rules are non-negotiable unless superseded by an approved ADR and correspo
 13. **Modular-monolith first.** Services are extracted only when measurable scale, isolation or team ownership justifies it.
 14. **No speculative infrastructure.** Complexity must be earned by requirements and evidence.
 
-## 5. Technology baseline
+## 5. Foundation primitive invariants
+
+Until superseded by an accepted ADR:
+
+- new canonical entity/request/event/workflow/job/audit IDs use UUIDv7; PostgreSQL uses native `uuid`;
+- tenant-owned persisted records use canonical `tenant_id` where tenant ownership applies;
+- monetary values use exact decimal semantics with explicit currency; binary floating point is forbidden for money;
+- JSON monetary/rate decimals are strings; PostgreSQL general high-precision money baseline is `NUMERIC(38,18)`;
+- absolute instants use UTC/`timestamptz`; business dates remain date-only values; civil-time meaning carries an IANA timezone;
+- locales use BCP 47; locale, timezone, country and currency are separate concepts; RTL is first-class;
+- public errors use stable machine codes plus safe structured problem details and never expose stack traces/SQL/secrets.
+
+P00.04/P00.05 may define transport/event envelopes but must not contradict these semantics without change control and an ADR.
+
+## 6. Technology baseline
 
 Until changed by ADR:
 
@@ -85,22 +105,23 @@ Until changed by ADR:
 
 Technology choice does not authorize premature implementation. The active phase and its acceptance gates still control work.
 
-## 6. Required work protocol
+## 7. Required work protocol
 
 For every implementation task:
 
 1. Identify the exact phase, work package and acceptance criteria.
 2. Inspect current repository state before editing.
 3. Identify canonical terminology and the authoritative owning domain before creating a new entity/capability.
-4. State affected modules/contracts/data ownership and allowed dependency direction.
-5. Implement the smallest complete change satisfying the active acceptance criteria.
-6. Add or update tests at the appropriate layer.
-7. Run required quality gates from `DEFINITION_OF_DONE.md`.
-8. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
-9. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
-10. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
+4. Apply foundation identifier/money/time/locale/error standards at every affected contract/data boundary.
+5. State affected modules/contracts/data ownership and allowed dependency direction.
+6. Implement the smallest complete change satisfying the active acceptance criteria.
+7. Add or update tests at the appropriate layer.
+8. Run required quality gates from `DEFINITION_OF_DONE.md`.
+9. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
+10. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
+11. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
 
-## 7. Phase and task state model
+## 8. Phase and task state model
 
 Allowed states:
 
@@ -114,15 +135,16 @@ Allowed states:
 
 Transitions must be evidence-backed. `done` means all acceptance gates passed, not merely that code exists.
 
-Only one foundation phase should normally be `active` at a time until the kernel/module contracts are stable. Parallel domain execution is allowed only when the master plan explicitly opens parallel workstreams.
+Only one foundation work package is active at a time while P00 is running. Packages whose dependencies are satisfied may be `ready`, but they do not authorize parallel execution until state explicitly marks them active.
 
-## 8. Change-control trigger
+## 9. Change-control trigger
 
 An ADR and master-plan reconciliation are mandatory for changes to any of the following:
 
 - platform category or product boundary;
 - canonical domain ownership for an established concept;
 - canonical terminology when semantics/ownership change materially;
+- identifier/money/time/locale/error primitive semantics;
 - language/runtime baseline;
 - tenancy hierarchy;
 - authorization model;
@@ -136,7 +158,7 @@ An ADR and master-plan reconciliation are mandatory for changes to any of the fo
 
 Do not implement the architectural change first and document it later.
 
-## 9. Pull request discipline
+## 10. Pull request discipline
 
 Every PR must identify:
 
@@ -145,6 +167,7 @@ Every PR must identify:
 - architecture impact;
 - authoritative domain owner(s);
 - dependency direction/mechanism;
+- foundation primitive impacts (ID/money/time/locale/errors);
 - data/migration impact;
 - security/tenancy impact;
 - contracts/events changed;
@@ -154,7 +177,7 @@ Every PR must identify:
 
 Unrelated changes belong in separate PRs.
 
-## 10. Definition of safe completion
+## 11. Definition of safe completion
 
 A change is incomplete if any of these are true:
 
@@ -166,11 +189,12 @@ A change is incomplete if any of these are true:
 - public contracts changed without versioning;
 - domain ownership is ambiguous or duplicated;
 - an implementation uses a forbidden dependency path;
+- foundation primitives are represented inconsistently;
 - status claims exceed evidence;
 - documentation and machine-readable state disagree;
 - runtime depends on hidden manual steps.
 
-## 11. Repository and legal guardrails
+## 12. Repository and legal guardrails
 
 - Follow `CONTRIBUTING.md` and `SECURITY.md`.
 - Do not intentionally push implementation directly to `main`; use governed PRs.
@@ -178,7 +202,7 @@ A change is incomplete if any of these are true:
 - The existing `LICENSE` file must not be replaced or treated as the final business licensing strategy without explicit owner authorization and the licensing/IP decision process.
 - AI systems must never make trademark/legal ownership decisions autonomously.
 
-## 12. Scope-drift rule
+## 13. Scope-drift rule
 
 If a requested feature is valuable but outside the active work package, record it as planned backlog or propose a plan amendment. Do not absorb it silently into the current implementation.
 
