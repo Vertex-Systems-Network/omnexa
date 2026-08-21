@@ -10,7 +10,7 @@ Last reconciled: **2026-08-22**
 - Current work package: **P00.10 — Foundation architecture freeze review**
 - Architecture baseline: **FROZEN — Foundation v1**
 - Executable CI entry gate: **SATISFIED ON LOCAL-WIN-4**
-- P01 entry: **BLOCKED BY ISSUE #3 ONLY**
+- P01 entry: **BLOCKED BY ISSUE #3 / GITHUB PLAN LIMITATION**
 - Kernel implementation: **NOT AUTHORIZED**
 - Business-feature implementation: **NOT AUTHORIZED**
 - P00 progress: **9 / 10 done; P00.10 verification active**
@@ -47,7 +47,7 @@ Normative freeze/entry records:
 
 ### EG-03 / Issue #14 — SATISFIED
 
-The executable CI blocker remains resolved and the canonical lane is now certified on the specifically requested organization runner `LOCAL-WIN-4`.
+The executable CI blocker remains resolved and the canonical lane is certified on the specifically requested organization runner `LOCAL-WIN-4`.
 
 Verified current evidence:
 
@@ -70,22 +70,37 @@ Because GitHub Actions does not schedule by runner name and LOCAL-WIN-4 currentl
 
 GitHub-hosted runner quota is not required. ADR-0006 is historical evidence only while this executable lane remains operational.
 
-### EG-02 / Issue #3 — REMAINING P01 BLOCKER
+### EG-02 / Issue #3 — BLOCKED BY CURRENT GITHUB PLAN
 
-`main` branch/ruleset protection must still be applied and verified before executable P01 merges. Required properties include:
+The owner executed the merged branch-protection administration tooling from an authenticated admin workstation. GitHub returned:
 
-- PR-based integration;
-- required `governance` check;
-- force-push blocked;
-- branch deletion blocked;
-- conversation-resolution policy;
-- controlled break-glass bypass only.
+```text
+gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)
+```
 
-Until Issue #3 is verified, P00.10 remains in exit verification and kernel code stays locked.
+Verified context:
+
+- repository is organization-owned and `private`;
+- authenticated user has repository `admin` permission;
+- branch-protection scripts parse successfully on `LOCAL-WIN-4`;
+- the API attempt reached GitHub and was rejected by product-plan entitlement;
+- `main` remains `protected: false`.
+
+GitHub's current feature model provides protected branches/rulesets for public repositories on GitHub Free, while private repositories require GitHub Pro/Team/Enterprise-class support. The remaining blocker is therefore the hosted GitHub plan, not CI, permissions or script correctness.
+
+Do not retry the same API operation until one of these changes:
+
+1. upgrade to a plan that supports private branch protection/rulesets;
+2. intentionally change repository visibility to public through a separate owner/legal/security decision; or
+3. approve a superseding governance ADR that deliberately replaces EG-02 with a compensating control.
+
+Changing this repository to public merely to clear EG-02 is not an automatic workaround because Issue #4 remains an external distribution/IP/licensing gate.
+
+Until EG-02 is satisfied or deliberately superseded, P00.10 remains in exit verification and kernel code stays locked.
 
 ### Issue #4 — external-distribution blocker
 
-Licensing/IP/trademark strategy does **not** block private internal P01 engineering after Issue #3 is cleared, but remains a hard gate before public/external distribution, self-hosted customer delivery or public launch.
+Licensing/IP/trademark strategy does **not** block private internal P01 engineering after the P01 entry gate is cleared, but remains a hard gate before public/external distribution, self-hosted customer delivery or public launch.
 
 ## Frozen foundation summary
 
@@ -100,7 +115,7 @@ Licensing/IP/trademark strategy does **not** block private internal P01 engineer
 
 ## Exact next transition
 
-P00.10 may become `done` only when Issue #3 has verified branch-protection evidence. The narrow transition must:
+P00.10 may become `done` only when Issue #3 has verified branch-protection evidence **or** an explicitly accepted superseding governance ADR replaces EG-02 with a compensating control. The narrow transition must:
 
 1. mark P00.10 done;
 2. mark P00 done;
@@ -108,7 +123,7 @@ P00.10 may become `done` only when Issue #3 has verified branch-protection evide
 4. activate P01;
 5. set `kernel_code_authorized = true`;
 6. keep `business_feature_code_authorized = false`;
-7. record branch-protection evidence;
+7. record the applicable protection/compensating-control evidence;
 8. define the first P01 kernel work package.
 
 Until then, **do not begin canonical kernel/product implementation**.

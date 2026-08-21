@@ -26,6 +26,7 @@ for path in REQUIRED_FILES:
         raise SystemExit(1)
 
 manifest = json.loads((ROOT / "docs/governance/FOUNDATION_FREEZE.json").read_text(encoding="utf-8"))
+state = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"))
 
 if manifest.get("version") != "foundation-v1":
     raise SystemExit("ERROR: freeze version must be foundation-v1")
@@ -52,11 +53,24 @@ if entry_states.get("issue:#3") != "BLOCKED":
 if entry_states.get("issue:#14") != "SATISFIED":
     raise SystemExit("ERROR: issue #14 executable CI gate must be SATISFIED")
 
+tracking = state.get("governance_tracking") or {}
+main_protection = tracking.get("main_branch_protection") or {}
+if main_protection.get("state") != "blocked_by_plan":
+    raise SystemExit("ERROR: main branch protection must be classified blocked_by_plan until hosted entitlement changes")
+if main_protection.get("issue") != 3:
+    raise SystemExit("ERROR: main branch protection must remain tracked by issue #3")
+if main_protection.get("repository_visibility") != "private":
+    raise SystemExit("ERROR: plan-blocked evidence expects the repository to remain private")
+if "HTTP 403" not in str(main_protection.get("attempt_result") or ""):
+    raise SystemExit("ERROR: plan-blocked branch protection must retain HTTP 403 evidence")
+
 p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8")
 for marker in [
     "EG-02",
     "Issue #3",
-    "EG-03",
+    "BLOCKED_BY_PLAN",
+    "HTTP 403",
+    "Issue #14",
     "SATISFIED",
     "LOCAL-WIN-4",
     "32528329184",
@@ -83,6 +97,16 @@ for marker in [
 ]:
     if marker not in hardening:
         raise SystemExit(f"ERROR: repository hardening missing admin-tooling marker: {marker}")
+
+runbook = (ROOT / "docs/governance/BRANCH_PROTECTION_ADMIN_RUNBOOK.md").read_text(encoding="utf-8")
+for marker in [
+    "HTTP 403",
+    "product-plan entitlement failure",
+    "Issue #4",
+    "Do not keep retrying",
+]:
+    if marker not in runbook:
+        raise SystemExit(f"ERROR: branch protection runbook missing plan-limitation marker: {marker}")
 
 apply_script = (ROOT / "scripts/apply_main_protection.ps1").read_text(encoding="utf-8")
 for marker in [
@@ -114,5 +138,6 @@ print("Omnexa P00.10 foundation freeze review validation: PASS")
 print("Architecture: FROZEN")
 print("Executable CI gate: SATISFIED ON LOCAL-WIN-4")
 print("Branch-protection admin tooling: PRESENT")
+print("Branch-protection hosted entitlement: BLOCKED_BY_PLAN (HTTP 403)")
 print("P00 exit: VERIFICATION")
 print("P01 entry: BLOCKED BY ISSUE #3")
