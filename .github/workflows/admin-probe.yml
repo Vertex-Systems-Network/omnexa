@@ -18,12 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Detect GitHub CLI and local authentication
+      - name: Identify runner account and GitHub CLI state
         shell: cmd
         run: |
           echo Runner: %RUNNER_NAME% / %RUNNER_OS% / %RUNNER_ARCH%
+          echo Computer: %COMPUTERNAME%
+          echo User: %USERNAME%
+          echo UserProfile: %USERPROFILE%
+          whoami
           where gh
           gh --version
-          gh auth status -h github.com
-          gh api user --jq ".login"
-          gh api repos/Vertex-Systems-Network/omnexa/collaborators/wpessential/permission --jq ".permission"
+          gh auth status -h github.com || echo GH_AUTH=NOT_AUTHENTICATED
