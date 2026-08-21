@@ -14,8 +14,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  governance:
-    name: governance
+  local-win-4-validation:
+    name: local-win-4-${{ matrix.slot }}
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        slot: [1, 2, 3, 4, 5, 6]
     runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 15
 
@@ -23,29 +28,94 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify local Windows runner
+      - name: Detect LOCAL-WIN-4
+        id: target
         shell: cmd
         run: |
-          echo Runner name: %RUNNER_NAME%
-          echo Runner OS:   %RUNNER_OS%
-          echo Runner arch: %RUNNER_ARCH%
-          echo Machine:     %COMPUTERNAME%
-          if /I not "%RUNNER_OS%"=="Windows" exit /b 1
+          echo SLOT=${{ matrix.slot }}
+          echo RUNNER_NAME=%RUNNER_NAME%
+          echo RUNNER_OS=%RUNNER_OS%
+          echo RUNNER_ARCH=%RUNNER_ARCH%
+          echo COMPUTERNAME=%COMPUTERNAME%
+          if /I "%RUNNER_NAME%"=="LOCAL-WIN-4" (
+            echo is_target=true>>"%GITHUB_OUTPUT%"
+            echo TARGET_LOCAL_WIN_4=YES
+          ) else (
+            echo is_target=false>>"%GITHUB_OUTPUT%"
+            echo TARGET_LOCAL_WIN_4=NO
+          )
+
+      - name: Verify LOCAL-WIN-4 tooling
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: |
           git --version
           python --version
+          if /I not "%RUNNER_OS%"=="Windows" exit /b 1
+          if /I not "%RUNNER_NAME%"=="LOCAL-WIN-4" exit /b 1
 
       - name: Validate canonical governance state
+        if: steps.target.outputs.is_target == 'true'
         shell: cmd
         run: python scripts\validate_governance.py
 
       - name: Validate repository and local-development specification
+        if: steps.target.outputs.is_target == 'true'
         shell: cmd
         run: python scripts\validate_development_spec.py
 
       - name: Validate threat and operations specification
+        if: steps.target.outputs.is_target == 'true'
         shell: cmd
         run: python scripts\validate_operations_spec.py
 
       - name: Validate foundation freeze review
+        if: steps.target.outputs.is_target == 'true'
         shell: cmd
         run: python scripts\validate_freeze_review.py
+
+      - name: Write LOCAL-WIN-4 pass evidence
+        if: steps.target.outputs.is_target == 'true'
+        shell: cmd
+        run: |
+          echo runner=LOCAL-WIN-4>local-win-4-pass-${{ matrix.slot }}.txt
+          echo run_id=%GITHUB_RUN_ID%>>local-win-4-pass-${{ matrix.slot }}.txt
+          echo commit=%GITHUB_SHA%>>local-win-4-pass-${{ matrix.slot }}.txt
+
+      - name: Upload LOCAL-WIN-4 pass evidence
+        if: steps.target.outputs.is_target == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-win-4-pass-${{ matrix.slot }}
+          path: local-win-4-pass-${{ matrix.slot }}.txt
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Hold non-target runner briefly
+        if: steps.target.outputs.is_target != 'true'
+        shell: cmd
+        run: ping 127.0.0.1 -n 16 > nul
+
+  governance:
+    name: governance
+    needs: local-win-4-validation
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 10
+
+    steps:
+      - name: Download LOCAL-WIN-4 evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: local-win-4-pass-*
+          path: local-win-4-evidence
+          merge-multiple: true
+
+      - name: Require successful LOCAL-WIN-4 validation
+        shell: cmd
+        run: |
+          if not exist local-win-4-evidence\local-win-4-pass-*.txt (
+            echo ERROR: no successful LOCAL-WIN-4 validation evidence found.
+            exit /b 1
+          )
+          echo LOCAL-WIN-4 validation evidence:
+          type local-win-4-evidence\local-win-4-pass-*.txt
