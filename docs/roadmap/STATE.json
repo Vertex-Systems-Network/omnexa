@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-21",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.06",
+  "current_work_package": "P00.07",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -42,7 +42,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 5,
+    "done_work_packages": 6,
     "work_packages": [
       {
         "id": "P00.01",
@@ -123,13 +123,21 @@
       {
         "id": "P00.06",
         "name": "Security and data-classification baseline",
-        "state": "active",
-        "depends_on": ["P00.02", "P00.03"]
+        "state": "done",
+        "depends_on": ["P00.02", "P00.03"],
+        "evidence": [
+          "docs/security/SECURITY_STANDARD.md",
+          "docs/security/DATA_CLASSIFICATION.md",
+          "docs/security/SECURITY_CONTROL_MATRIX.md",
+          "docs/contracts/security/data-classification.schema.json",
+          "docs/adr/ADR-0005-security-data-classification-baseline.md",
+          "scripts/validate_governance.py"
+        ]
       },
       {
         "id": "P00.07",
         "name": "Testing, CI and release standard",
-        "state": "planned",
+        "state": "active",
         "depends_on": ["P00.04", "P00.05", "P00.06"]
       },
       {
@@ -192,5 +200,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.06 may move to done only when security boundaries, data classification, secrets, encryption, authentication/session, authorization, audit, tenant isolation, sensitive-field handling, retention/deletion, integration trust boundaries and AI/tool security requirements are documented with machine-validation evidence. Then P00.07 becomes active because P00.04/P00.05/P00.06 will all be done."
+  "next_transition_rule": "P00.07 may move to done only when the canonical testing, CI and release standard defines test layers, mandatory negative/security/tenant tests, contract/schema validation, migration/fresh-install gates, build/lint/static-analysis gates, supply-chain/security scans, release/versioning/provenance requirements, branch/PR evidence and failure policy with machine-validation evidence. Then P00.08 becomes active."
 }
