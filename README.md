@@ -6,7 +6,7 @@ Omnexa is being designed as a governed modular platform above the scope of a con
 
 > **Architecture state:** **Omnexa Foundation Architecture v1 is FROZEN.** P00 remains active only in **exit verification**. Current package: **P00.10 — Foundation architecture freeze review**.
 
-> **Implementation lock:** the executable CI gate is **SATISFIED on LOCAL-WIN-4**. P01 kernel implementation remains **BLOCKED only by Issue #3 (`main` protection)**. Kernel and business-feature code remain unauthorized until that gate is cleared.
+> **Implementation lock:** the executable CI gate is **SATISFIED on LOCAL-WIN-4**. P01 kernel implementation remains **BLOCKED by Issue #3 / GitHub plan-limited `main` protection**. P01.01 is prepared/specification-only; kernel and business-feature code remain unauthorized.
 
 ## Mandatory contributor / AI start here
 
@@ -17,6 +17,8 @@ Freeze/entry-gate sources:
 - `docs/governance/FOUNDATION_FREEZE_REVIEW.md`
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
+- `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
+- `docs/roadmap/work-packages/P01.01.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -60,33 +62,47 @@ Verified PR #23 evidence:
 
 GitHub Actions schedules self-hosted runners by labels/groups, not runner name. Since LOCAL-WIN-4 currently has no unique custom label, the workflow discovers the runner from the local Windows pool, runs protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, and requires its uploaded pass evidence before the final `governance` check can pass.
 
-The old hosted-runner quota problem no longer blocks the governance lane. ADR-0006 remains historical evidence, not the active path while self-hosted CI is operational.
+While P01 is blocked, CI also runs `scripts/validate_p01_preparation.py`, which keeps P01.01 prepared but fails if known executable kernel paths appear before the authorization transition.
 
 ## P01 entry gate
 
 P01 is **not authorized yet**.
 
-### Issue #3 — remaining P01 entry blocker
+### Issue #3 — remaining P01 entry blocker: `BLOCKED_BY_PLAN`
 
-Before executable P01 merges, protect `main` with PR-based integration, required `governance` check, blocked force-push/deletion, controlled bypass and conversation resolution.
+The branch-protection tooling is merged and validated, but GitHub returned HTTP 403 for private branch protection on the current organization plan. `main` remains unprotected.
+
+The gate clears only when hosted protection becomes available and is verified, or an explicitly owner-approved superseding governance ADR replaces EG-02 with compensating controls. Making the repository public is not an automatic workaround.
 
 ### Issue #14 — satisfied
 
-Executable CI has been restored and is now specifically certified on `LOCAL-WIN-4`.
+Executable CI has been restored and is specifically certified on `LOCAL-WIN-4`.
 
-### Issue #4 — external distribution blocker
+## P01.01 — prepared, not active
 
-Licensing/IP/trademark resolution is required before public/external distribution or self-hosted customer delivery, but does not block private internal P01 engineering after Issue #3 is cleared.
+The first kernel work package is fully specified at `docs/roadmap/work-packages/P01.01.md`:
+
+**Go workspace / build skeleton**
+
+Prepared scope includes repository-owned Go toolchain/workspace structure, deterministic build/test entrypoints, minimal process/build metadata and G0/G1/G2/G7 evidence. It explicitly excludes configuration, PostgreSQL, cache, object storage, telemetry, health, jobs, feature flags, audit, identity/tenancy, module runtime and business domains.
+
+No `go.mod`, `go.work` or kernel entrypoint is authorized until the P00→P01 transition is merged.
+
+## Issue #4 — external distribution blocker
+
+Licensing/IP/trademark resolution is required before public/external distribution, self-hosted customer delivery, public launch or external contributor intake, but does not block private internal P01 engineering after the P01 entry gate is cleared.
+
+Prepared owner/legal worksheet: `docs/governance/LICENSING_DECISION_BRIEF.md`. It does not change the current `LICENSE` or establish trademark clearance.
 
 ## Exact next transition
 
-A narrow governance transition may close P00 after Issue #3 is verified. It must retire ADR-0006 from active use, mark P00.10/P00 done, activate P01, set `kernel_code_authorized = true`, keep business features locked, record branch-protection evidence and define the first P01 kernel work package.
+A narrow governance-only transition may close P00 only after EG-02 is satisfied or deliberately superseded. It must follow `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`, retire ADR-0006 from active use, mark P00.10/P00 done, activate P01/P01.01, set `kernel_code_authorized = true`, keep business features locked, and preserve P01.02–P01.12 as planned.
 
-Do **not** combine that transition with unrelated kernel feature code.
+The first kernel implementation PR comes **after** that state transition; it is not combined with it.
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; LOCAL-WIN-4 executable CI satisfied; P00.10 exit verification; P01 blocked only by Issue #3**.
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state is **Foundation v1 frozen; LOCAL-WIN-4 executable CI satisfied; P00.10 exit verification; P01.01 prepared/planned; P01 blocked by plan-limited Issue #3**.
 
 ## Product principle
 
