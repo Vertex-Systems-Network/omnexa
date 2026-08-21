@@ -2,98 +2,114 @@
 
 **Composable Enterprise Business Operating System**
 
-Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform kernel.
+Omnexa is being designed as a governed, modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are planned as domain families running on one shared platform foundation.
 
-> **Current execution lock:** the repository is in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation must not begin until the P00 exit gate is complete. Current package: **P00.06 — Security and data-classification baseline**.
+> **Execution lock:** Omnexa is still in **P00 — Product Constitution & Architecture Freeze**. Kernel and business-feature implementation are not authorized until the P00 exit gate is complete. Current package: **P00.07 — Testing, CI and release standard**.
 
 ## Mandatory contributor / AI start here
 
-Any human or AI system changing this repository must read the following in order:
+Read in this order before making material changes:
 
 1. [`AGENTS.md`](AGENTS.md)
 2. [`docs/governance/PRODUCT_CONSTITUTION.md`](docs/governance/PRODUCT_CONSTITUTION.md)
-3. [`docs/architecture/SYSTEM_ARCHITECTURE.md`](docs/architecture/SYSTEM_ARCHITECTURE.md)
-4. [`docs/architecture/MODULE_STANDARD.md`](docs/architecture/MODULE_STANDARD.md)
-5. [`docs/architecture/GLOSSARY.md`](docs/architecture/GLOSSARY.md)
-6. [`docs/architecture/NAMING_STANDARD.md`](docs/architecture/NAMING_STANDARD.md)
-7. [`docs/architecture/DOMAIN_OWNERSHIP.md`](docs/architecture/DOMAIN_OWNERSHIP.md)
-8. [`docs/architecture/DEPENDENCY_MATRIX.md`](docs/architecture/DEPENDENCY_MATRIX.md)
-9. [`docs/architecture/IDENTIFIER_STANDARD.md`](docs/architecture/IDENTIFIER_STANDARD.md)
-10. [`docs/architecture/MONEY_STANDARD.md`](docs/architecture/MONEY_STANDARD.md)
-11. [`docs/architecture/TIME_STANDARD.md`](docs/architecture/TIME_STANDARD.md)
-12. [`docs/architecture/LOCALE_STANDARD.md`](docs/architecture/LOCALE_STANDARD.md)
-13. [`docs/architecture/ERROR_STANDARD.md`](docs/architecture/ERROR_STANDARD.md)
-14. [`docs/architecture/API_STANDARD.md`](docs/architecture/API_STANDARD.md)
-15. [`docs/architecture/EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md)
-16. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
-17. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
-18. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
-19. [`docs/governance/AI_EXECUTION_POLICY.md`](docs/governance/AI_EXECUTION_POLICY.md)
-20. [`docs/governance/CHANGE_CONTROL.md`](docs/governance/CHANGE_CONTROL.md)
-21. [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md)
-22. Relevant ADRs under [`docs/adr/`](docs/adr/)
+3. architecture standards under [`docs/architecture/`](docs/architecture/)
+4. security standards under [`docs/security/`](docs/security/)
+5. [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md)
+6. [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md)
+7. [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json)
+8. governance policies under [`docs/governance/`](docs/governance/)
+9. relevant ADRs under [`docs/adr/`](docs/adr/)
 
-`STATE.json` is the machine-readable canonical execution state. Work outside the active package is not implicitly authorized.
+`STATE.json` is the canonical machine-readable execution state. Work outside the active package is not implicitly authorized.
 
 ## Core architecture laws
 
 - Kernel before business modules.
-- Every authoritative write model has one owner.
-- Modules own their write models and schemas.
-- Cross-module direct database writes are forbidden.
-- Cross-domain integration uses versioned capabilities, events, workflows or approved read projections.
-- Tenant scope, authorization, audit and observability are platform requirements, not optional module features.
+- Every authoritative write model/capability has one owner.
+- Modules own private write state; cross-module direct database writes are forbidden.
+- Cross-domain integration uses versioned capabilities/APIs, events, workflows or approved read projections.
+- Tenant scope, authorization, audit, classification and observability are platform properties.
 - Optional modules must fail/degrade independently.
-- Public contracts are versioned.
+- Public/external contracts are versioned.
 - AI acts only through governed, authorized, auditable capabilities.
-- Omnexa begins as a strict modular monolith and extracts services only when evidence justifies it.
-- Architecture or roadmap changes require formal change control and ADR reconciliation.
+- Omnexa starts as a strict modular monolith and extracts services only when evidence justifies it.
+- Architecture changes require formal change control and ADR reconciliation.
 
-## Frozen foundation primitives (P00.03)
+## Frozen P00 baselines
 
-- **Identifiers:** UUIDv7 by default; PostgreSQL native `uuid`; canonical tenant scope `tenant_id`.
-- **Money:** exact decimal + explicit currency; JSON decimal strings; PostgreSQL baseline `NUMERIC(38,18)`; no binary floating-point money.
-- **Time:** UTC instants + `timestamptz`; date-only business dates; IANA timezone semantics for civil time/recurrence.
-- **Locale:** BCP 47 language tags; locale/country/currency/timezone are independent; RTL is first-class.
-- **Errors:** stable machine error codes, safe structured problem details, request/trace correlation, no public stack traces/SQL/secrets.
+### P00.03 — Foundation primitives
 
-These decisions are recorded by [`ADR-0002`](docs/adr/ADR-0002-foundation-data-conventions.md).
+- UUIDv7 canonical IDs; PostgreSQL native `uuid`; canonical tenant scope `tenant_id`.
+- exact-decimal money with explicit currency; no binary floating-point money.
+- UTC/`timestamptz` instants; date-only business dates; IANA timezone semantics for civil recurrence.
+- BCP 47 locale model; locale/country/currency/timezone are independent; RTL is first-class.
+- stable machine error codes with disclosure-safe structured problem details.
 
-## Frozen HTTP API baseline (P00.04)
+See ADR-0002 and the primitive standards in `docs/architecture/`.
 
-- Stable routes use `/api/v{major}/{domain}/{resources}`.
-- Canonical stable HTTP contracts use OpenAPI 3.2.0.
-- JSON fields use lowercase `snake_case`.
-- Errors use `application/problem+json` plus stable Omnexa codes and request correlation.
-- Scalable lists use opaque cursor pagination.
-- Protected retriable mutations define `Idempotency-Key` semantics.
-- Lost-update-sensitive mutations use explicit optimistic concurrency such as `ETag` / `If-Match` where applicable.
-- Filters, sorts and includes are allowlisted, bounded and authorization-aware.
-- Business actions are explicit capability/action operations rather than arbitrary status patches.
-- Client-supplied tenant or organization identifiers never become authorization authority.
+### P00.04 — Stable HTTP API
 
-The contract is defined by [`API_STANDARD.md`](docs/architecture/API_STANDARD.md), [`openapi-template.yaml`](docs/contracts/http/openapi-template.yaml), and [`ADR-0003`](docs/adr/ADR-0003-http-api-contract-baseline.md).
+- stable route major versioning: `/api/v{major}/{domain}/{resources}`;
+- OpenAPI 3.2.0 canonical contract baseline;
+- lowercase `snake_case` JSON fields;
+- `application/problem+json` errors;
+- cursor pagination, bounded filters/sorts/includes;
+- `Idempotency-Key` for protected retriable mutations;
+- explicit optimistic concurrency where lost updates matter;
+- client-provided tenant/organization IDs never become authorization authority.
 
-## Frozen event baseline (P00.05)
+See [`API_STANDARD.md`](docs/architecture/API_STANDARD.md) and ADR-0003.
 
-- Event types use `<domain>.<subject>.<past_tense_fact>.v<major>` and remain producer-owned contracts.
-- Canonical structured envelope is CloudEvents-compatible with UUIDv7 event identity.
-- Tenant-owned events carry trusted producer-derived `tenantid`; correlation, causation and trace context are explicit.
-- Delivery baseline is **at least once**; consumers must be idempotent.
-- Business-significant publication/consumption uses transactional outbox + inbox/deduplication or equivalent guarantees.
-- Global ordering is not assumed; subject-scoped ordering is explicit and may use `subjectsequence`.
-- Retries are bounded; poison messages use dead-letter/quarantine handling.
-- Replay preserves original event identity and must remain safe against duplicate side effects.
-- Broker routes are infrastructure detail, not business identity; event sourcing is not assumed platform-wide.
+### P00.05 — Events
 
-The contract is defined by [`EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md), [`event-envelope.schema.json`](docs/contracts/events/event-envelope.schema.json), and [`ADR-0004`](docs/adr/ADR-0004-event-contract-baseline.md).
+- producer-owned `<domain>.<subject>.<past_tense_fact>.v<major>` events;
+- CloudEvents-compatible structured envelope with UUIDv7 identity;
+- producer-derived tenant context and explicit correlation/causation/tracing;
+- at-least-once delivery assumption with idempotent consumers;
+- transactional outbox + inbox/deduplication or equivalent guarantees for business-significant flows;
+- explicit subject ordering only, bounded retry, dead-letter/quarantine, replay-safe side effects.
+
+See [`EVENT_STANDARD.md`](docs/architecture/EVENT_STANDARD.md) and ADR-0004.
+
+### P00.06 — Security & data classification
+
+Canonical confidentiality classes:
+
+```text
+PUBLIC
+INTERNAL
+CONFIDENTIAL
+RESTRICTED
+```
+
+Security baseline includes:
+
+- zero implicit trust across client, service, module, tenant, device, integration, support, CI/release and AI boundaries;
+- distinct human/service/workload/device/integration/support/AI principals;
+- authentication separate from authorization;
+- authorization = RBAC + relationship + contextual policy + capability boundaries;
+- tenant isolation across OLTP, cache, files, search, analytics, events, backups and AI/vector data;
+- classification-aware logging, search, analytics, export, retention, deletion and AI behavior;
+- secrets/key material managed as `RESTRICTED` and excluded from ordinary logs/source/AI;
+- governed privileged actions, support impersonation, event replay and high-impact AI execution;
+- external integration/webhook authenticity and SSRF/egress controls;
+- extension/module permission declaration and future package provenance/integrity controls;
+- sensitive production data excluded from lower environments by default.
+
+Normative documents:
+
+- [`SECURITY_STANDARD.md`](docs/security/SECURITY_STANDARD.md)
+- [`DATA_CLASSIFICATION.md`](docs/security/DATA_CLASSIFICATION.md)
+- [`SECURITY_CONTROL_MATRIX.md`](docs/security/SECURITY_CONTROL_MATRIX.md)
+- [`data-classification.schema.json`](docs/contracts/security/data-classification.schema.json)
+- [`ADR-0005`](docs/adr/ADR-0005-security-data-classification-baseline.md)
 
 ## Technology baseline
 
 Until superseded by an accepted ADR:
 
-- **Go** — platform kernel/backend and primary domain services
-- **TypeScript + React** — admin, web, builder and primary extension SDK surfaces
+- **Go** — kernel/backend and primary domain services
+- **TypeScript + React** — web/admin/builder/primary extension SDK surfaces
 - **Rust** — edge/native/security-sensitive components where justified
 - **Python** — AI/data workloads where ecosystem value justifies it
 - **PostgreSQL** — primary transactional store
@@ -104,32 +120,28 @@ Until superseded by an accepted ADR:
 
 ## Governance hardening
 
-Repository-level controls include:
+Repository controls include CODEOWNERS, contribution/security policies, issue/ADR templates, governance CI and the dependency-free state validator.
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- [`SECURITY.md`](SECURITY.md)
-- [`.github/CODEOWNERS`](.github/CODEOWNERS)
-- architecture/bug issue templates
-- governance CI via [`.github/workflows/governance.yml`](.github/workflows/governance.yml)
-- dependency-free state validator at [`scripts/validate_governance.py`](scripts/validate_governance.py)
-- hosted repository ruleset target in [`docs/governance/REPOSITORY_HARDENING.md`](docs/governance/REPOSITORY_HARDENING.md)
-- licensing/IP decision gate in [`docs/governance/LICENSING_DECISION.md`](docs/governance/LICENSING_DECISION.md)
+Two explicit non-code decisions remain tracked:
 
-GitHub currently reports `main` as unprotected; issue #3 remains open because the connected GitHub toolset has no branch-protection/ruleset write action. Licensing/IP/trademark also remains explicitly tracked in issue #4. Neither issue authorizes early implementation.
+- **Issue #3:** hosted `main` branch/ruleset protection. GitHub still reports `main` as unprotected and the connected GitHub toolset does not expose a protection/ruleset write mutation.
+- **Issue #4:** final licensing/IP/trademark strategy. Existing GPLv3 is not treated as implicit approval for the eventual commercial distribution model.
+
+Neither item authorizes early kernel/business implementation.
 
 ## Roadmap
 
-The canonical plan is [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md), covering **P00 through P27**:
+Canonical roadmap: [`docs/roadmap/MASTER_PLAN.md`](docs/roadmap/MASTER_PLAN.md), P00 through P27.
 
 ```text
 P00 Architecture/Governance
  -> P01 Kernel
  -> P02 Identity/Tenancy
  -> P03 Module Runtime
- -> P04 Event/Data Fabric
+ -> P04 Data/Event Fabric
  -> P05 Workflow OS
  -> P06 Business Foundation
- -> P07-P15 Core Business Domains
+ -> P07-P15 Business Domains
  -> P16-P18 Integration/Low-code/Data
  -> P19-P20 Intelligence/Agents
  -> P21-P22 Developer Ecosystem/Marketplace
@@ -138,27 +150,16 @@ P00 Architecture/Governance
  -> P27 Autonomous Business OS
 ```
 
-See [`docs/roadmap/STATUS.md`](docs/roadmap/STATUS.md) for the current human-readable status and [`docs/roadmap/STATE.json`](docs/roadmap/STATE.json) for canonical machine state.
+Current human status: [`STATUS.md`](docs/roadmap/STATUS.md). Canonical machine state: [`STATE.json`](docs/roadmap/STATE.json).
 
 ## Work-package discipline
 
-Material work must use [`docs/governance/WORK_PACKAGE_TEMPLATE.md`](docs/governance/WORK_PACKAGE_TEMPLATE.md) and satisfy [`docs/governance/DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md).
+Material work must satisfy [`DEFINITION_OF_DONE.md`](docs/governance/DEFINITION_OF_DONE.md). Execution history is append-only in [`EXECUTION_LEDGER.md`](docs/roadmap/EXECUTION_LEDGER.md).
 
-Execution history is recorded in the append-only [`docs/roadmap/EXECUTION_LEDGER.md`](docs/roadmap/EXECUTION_LEDGER.md).
-
-## Architecture decisions
-
-Architecture decisions live under [`docs/adr/`](docs/adr/). Current accepted baselines include:
-
-- [`ADR-0001 — Platform Architecture Baseline`](docs/adr/ADR-0001-platform-architecture-baseline.md)
-- [`ADR-0002 — Foundation Data & Contract Conventions`](docs/adr/ADR-0002-foundation-data-conventions.md)
-- [`ADR-0003 — HTTP API Contract Baseline`](docs/adr/ADR-0003-http-api-contract-baseline.md)
-- [`ADR-0004 — Event Contract Baseline`](docs/adr/ADR-0004-event-contract-baseline.md)
-
-Do not implement an architectural change first and document it afterward.
+Current accepted architecture baselines are ADR-0001 through ADR-0005. Do not implement an architectural change first and document it afterward.
 
 ## Product principle
 
-Omnexa is not trying to win by collecting the largest number of disconnected features. The intended long-term advantage is:
+Omnexa's intended long-term advantage is:
 
 **Universal Kernel + Extreme Modularity + Universal Workflow + Unified Business Graph + Governed AI Execution.**
