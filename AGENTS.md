@@ -14,13 +14,15 @@ Current program state:
 Foundation Architecture v1: FROZEN
 P00: ACTIVE — exit verification
 P00.10: ACTIVE — review_state=verification
-Executable CI gate: SATISFIED ON LOCAL-WIN-4
-P01: BLOCKED BY ISSUE #3 ONLY
+Executable CI gate: SATISFIED — ANY AVAILABLE WINDOWS/X64 SELF-HOSTED RUNNER
+Latest routing proof: LOCAL-WIN-02 / run 32535324900
+P01: BLOCKED BY EG-02 / ISSUE #3 (BLOCKED_BY_PLAN)
+P01.01: PREPARED / PLANNED / NOT ACTIVE
 kernel_code_authorized: false
 business_feature_code_authorized: false
 ```
 
-Do not infer implementation permission from the word `FROZEN`. Architecture is frozen; implementation is still locked until the remaining P01 entry gate is cleared.
+Do not infer implementation permission from `FROZEN` or `P01.01 prepared`. Architecture/readiness can be prepared while executable kernel implementation remains locked.
 
 ## Mandatory read order
 
@@ -30,18 +32,21 @@ Before material work, read:
 2. `docs/governance/FOUNDATION_FREEZE_REVIEW.md`
 3. `docs/governance/FOUNDATION_FREEZE.json`
 4. `docs/governance/P01_ENTRY_GATE.md`
-5. Product Constitution + system/module architecture
-6. glossary, naming, domain ownership and dependency matrix
-7. identifier/money/time/locale/error standards
-8. API and Event standards
-9. Security Standard, Data Classification, Security Control Matrix and Threat Model
-10. Testing, CI, Release and Quality Gate standards
-11. repository/local-development/toolchain/configuration/developer-command standards
-12. SLO, Incident and Reliability standards
-13. roadmap `MASTER_PLAN.md`, `STATUS.md`, `STATE.json`
-14. AI Execution Policy, Change Control and Definition of Done
-15. historical/active CI exception record if relevant
-16. relevant accepted ADRs, especially ADR-0010.
+5. `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
+6. Product Constitution + system/module architecture
+7. glossary, naming, domain ownership and dependency matrix
+8. identifier/money/time/locale/error standards
+9. API and Event standards
+10. Security Standard, Data Classification, Security Control Matrix and Threat Model
+11. Testing, CI, Release and Quality Gate standards
+12. repository/local-development/toolchain/configuration/developer-command standards
+13. SLO, Incident and Reliability standards
+14. roadmap `MASTER_PLAN.md`, `STATUS.md`, `STATE.json`
+15. `docs/roadmap/work-packages/P01.01.md` when preparing the P01 handoff
+16. `docs/governance/LICENSING_DECISION.md` and `LICENSING_DECISION_BRIEF.md` for distribution/IP work
+17. AI Execution Policy, Change Control and Definition of Done
+18. historical/active CI exception record if relevant
+19. relevant accepted ADRs, especially ADR-0010.
 
 If canonical documents conflict, stop implementation and resolve through change control.
 
@@ -49,38 +54,67 @@ If canonical documents conflict, stop implementation and resolve through change 
 
 P00.01–P00.09 are accepted as **Omnexa Foundation Architecture v1**. Material reinterpretation requires a superseding accepted ADR and reconciliation.
 
-P00.10 remains active in exit verification. The only authorized work is:
+P00.10 remains active in exit verification. Authorized work is limited to:
 
 - P00 exit verification;
 - branch-protection entry-gate remediation;
 - narrow governance/CI reconciliation;
+- P01 implementation-readiness **specification only**, with executable kernel code prohibited;
+- licensing/IP/trademark decision preparation without changing `LICENSE` or claiming clearance;
 - explicit correction of a discovered frozen-baseline contradiction.
 
-Do not start P01 kernel code while Issue #3 remains unresolved.
+Do not create `go.mod`, `go.work`, `kernel/cmd/omnexa/main.go` or equivalent P01 executable implementation while `kernel_code_authorized=false`.
 
 ## P01 entry gates
 
-### EG-02 / Issue #3 — protected integration path — BLOCKED
+### EG-02 / Issue #3 — protected integration path — BLOCKED_BY_PLAN
 
-Before any executable P01 merge, `main` protection must be applied and verified: PR-based integration, required `governance` check, blocked force-push/deletion, controlled bypass and conversation resolution.
+Hosted `main` protection remains required unless deliberately superseded through an owner-approved governance ADR.
+
+Owner/admin execution of the merged protection tooling reached GitHub but returned HTTP 403 stating that the current plan must be upgraded or the repository made public. The repository is private and the linked account has admin permission, so the current blocker is hosted plan entitlement rather than script correctness or repository permission.
+
+Do not retry the same protection API operation until plan/visibility changes. Do not make the repository public merely to clear this gate without the separate licensing/IP/security decision path.
 
 ### EG-03 / Issue #14 — executable verification lane — SATISFIED
 
-The canonical governance workflow is certified on the requested organization runner `LOCAL-WIN-4`.
+The canonical governance workflow is runner-name agnostic inside the approved local pool:
 
-Current evidence: PR #23; workflow run `32528329184`; target job `96915072868`; runner `LOCAL-WIN-4`; Windows X64; machine `ABDUL-HANAN`; work root `C:\actions-runner-4\_work`; all four repository validators PASS; final job named `governance` SUCCESS; merge commit `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`; Issue #14 closed/completed.
+```yaml
+runs-on: [self-hosted, Windows, X64]
+```
 
-GitHub schedules by runner labels/groups rather than runner name. Because LOCAL-WIN-4 currently has no unique Actions label, the workflow fails closed: it fans out only across local Windows/X64 self-hosted runners, executes protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, uploads pass evidence only from that runner, and allows the final `governance` job to pass only when that evidence exists.
+The single required job is named `governance`. GitHub may schedule it on any available Windows/X64 self-hosted runner; the job itself executes the full validator set and fails closed on any validation error. No specific runner name, discovery matrix or target-evidence artifact is required.
 
-The self-hosted lane may be expanded for P01 gates, but it may not weaken P00.07 quality semantics.
+Current routing proof: run `32535324900`, job `96935023669`, runner `LOCAL-WIN-02`, Windows/X64, machine `ABDUL-HANAN`; PowerShell parse plus governance, development, operations, freeze-review and P01-preparation validators all PASS.
 
-### Issue #4 — external distribution only
+Historical LOCAL-WIN-4 evidence from PR #23/run `32528329184` remains provenance only and is not a routing requirement.
 
-Licensing/IP/trademark resolution is a hard gate before public/external distribution or self-hosted customer delivery. It does not block private internal P01 engineering after Issue #3 is cleared.
+GitHub-hosted standard runners may be introduced later when capacity/policy permits, provided P00.07 gate semantics are not weakened.
+
+## P01.01 readiness rule
+
+`docs/roadmap/work-packages/P01.01.md` is the prepared controlling specification for the first kernel package: **Go workspace/build skeleton**.
+
+While blocked:
+
+- P01.01 state remains `planned`;
+- implementation is prohibited;
+- `scripts/validate_p01_preparation.py` must pass;
+- only specification/acceptance/test-boundary refinement is allowed;
+- P01.02+ may not be made active;
+- P02/P03/business behavior may not be pulled into P01.01.
+
+When EG-02 is cleared or deliberately superseded, follow `P00_P01_TRANSITION_CHECKLIST.md` in a governance-only PR before any kernel code is added.
+
+## Issue #4 — external distribution only
+
+Licensing/IP/trademark resolution is a hard gate before public/external distribution, self-hosted customer delivery, public launch or an external contribution program. It does not block private internal P01 engineering after the P01 entry gate clears.
+
+`LICENSING_DECISION_BRIEF.md` is an owner/legal decision worksheet only. It does not replace legal review, change `LICENSE`, grant redistribution rights or establish trademark clearance.
 
 ## Historical hosted-CI exception
 
-ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The local self-hosted executable lane is now operational, so new P00 changes should use executable CI rather than the manual exception while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
+ADR-0006 records the temporary P00 manual-evidence exception used while hosted Actions capacity was unavailable. The self-hosted executable lane is operational, so new P00 changes use executable CI while the lane remains available. ADR-0006 remains historical evidence and cannot authorize executable P01 bypass.
 
 ## Architecture invariants
 
@@ -159,34 +193,35 @@ Go backend/core; TypeScript+React web/admin/builder/SDK; Rust justified edge/nat
 For every material change:
 
 1. verify the active phase/package and implementation locks;
-2. inspect `FOUNDATION_FREEZE.json`, `P01_ENTRY_GATE.md` and `STATE.json`;
+2. inspect `FOUNDATION_FREEZE.json`, `P01_ENTRY_GATE.md`, `P00_P01_TRANSITION_CHECKLIST.md` and `STATE.json`;
 3. identify canonical terminology and authoritative owner;
 4. apply frozen primitive/API/event/security/quality/development/operations rules;
 5. map risk to G0-G8 and operational criticality/recovery class where relevant;
 6. preserve module/repository boundaries;
 7. implement only authorized scope;
 8. add positive + negative evidence and threat-model delta where needed;
-9. execute canonical verification on the approved LOCAL-WIN-4 self-hosted lane;
-10. record evidence accurately and reconcile STATUS/STATE;
-11. document architecture change through ADR/change control before implementation.
+9. execute canonical verification through the required `governance` job on an approved available runner;
+10. execute `validate_p01_preparation.py` while P01 remains blocked;
+11. record evidence accurately and reconcile STATUS/STATE;
+12. document architecture change through ADR/change control before implementation.
 
 ## Forbidden behavior
 
-Do not start P01 while Issue #3 is blocked; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; or mix unrelated project code.
+Do not start P01 while EG-02 is blocked; silently add domains; duplicate ownership; invent conflicting contracts/security/quality/toolchain/SLO semantics; cross-write/import module-private internals; bypass tenancy/authz/audit/classification; grant AI private write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; call blocked CI PASS; claim untested RPO/RTO as achieved; spend availability error budget on security/integrity violations; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
 ## Exact next transition
 
-Only after Issue #3 has verified branch-protection evidence may a narrow governance PR:
+Only after EG-02 is either verified satisfied or explicitly superseded by an owner-approved governance ADR may a narrow governance PR:
 
 - mark P00.10 and P00 done;
 - retire ADR-0006 from active use;
-- activate P01;
+- activate P01 and P01.01;
 - set `kernel_code_authorized = true`;
 - keep `business_feature_code_authorized = false`;
-- record branch-protection and existing executable-CI evidence;
-- define the first P01 kernel work package.
+- record applicable integration-protection/compensating-control evidence plus existing executable-CI evidence;
+- preserve P01.02–P01.12 as planned.
 
-Do not combine this transition with unrelated kernel feature implementation.
+Do not combine this transition with kernel implementation. The first kernel-code PR follows only after the transition is merged and verified on `main`.
 
 ## Scope drift
 

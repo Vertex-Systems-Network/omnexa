@@ -4,6 +4,8 @@ Status: **Decision required before external distribution / public launch**
 
 This document prevents the repository's existing license from becoming an accidental long-term product/business-model decision.
 
+Structured owner decision worksheet: `docs/governance/LICENSING_DECISION_BRIEF.md`.
+
 ## 1. Current state
 
 The repository currently contains the GNU General Public License version 3 (GPLv3). That is a strong copyleft license and may materially affect distribution obligations for covered derivative works.
@@ -22,6 +24,8 @@ Before Omnexa is distributed externally, offered as downloadable/self-hosted sof
 - open-core/community + commercial editions.
 
 This is a business/legal decision, not an AI architecture optimization.
+
+`LICENSING_DECISION_BRIEF.md` converts this list into explicit owner choices for distribution model, core licensing direction, contributor IP, marketplace/extension boundaries, dependency policy and trademark/name clearance. Completing that brief still requires owner/legal approval; it does not itself authorize a license change.
 
 ## 3. Decision inputs
 
@@ -58,6 +62,6 @@ Changing the repository license requires explicit owner authorization and an ADR
 
 ## 7. Blocking scope
 
-This decision does **not** block internal architecture/specification work. It becomes a hard gate before external distribution/public launch and should be resolved before licensing assumptions become embedded in contributor, marketplace or packaging architecture.
+This decision does **not** block internal architecture/specification work or private internal P01 engineering after the P01 entry gate is satisfied. It becomes a hard gate before external distribution/public launch and should be resolved before licensing assumptions become embedded in contributor, marketplace or packaging architecture.
 
 > This repository document is product governance, not legal advice. Formal commercial licensing should be reviewed by qualified counsel for the intended jurisdictions and distribution model.
