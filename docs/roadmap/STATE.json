@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-21",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.05",
+  "current_work_package": "P00.06",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -20,7 +20,7 @@
     "main_branch_protection": {
       "state": "open",
       "issue": 3,
-      "note": "Hosted GitHub branch/ruleset settings must be applied and verified against docs/governance/REPOSITORY_HARDENING.md."
+      "note": "GitHub still reports main protected=false. The connected GitHub toolset has no branch-protection/ruleset write action; hosted admin configuration remains required and must be verified against docs/governance/REPOSITORY_HARDENING.md."
     },
     "licensing_ip_trademark": {
       "state": "decision_required_before_external_distribution",
@@ -42,7 +42,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 4,
+    "done_work_packages": 5,
     "work_packages": [
       {
         "id": "P00.01",
@@ -111,13 +111,19 @@
       {
         "id": "P00.05",
         "name": "Event contract standard",
-        "state": "active",
-        "depends_on": ["P00.02", "P00.03"]
+        "state": "done",
+        "depends_on": ["P00.02", "P00.03"],
+        "evidence": [
+          "docs/architecture/EVENT_STANDARD.md",
+          "docs/contracts/events/event-envelope.schema.json",
+          "docs/adr/ADR-0004-event-contract-baseline.md",
+          "scripts/validate_governance.py"
+        ]
       },
       {
         "id": "P00.06",
         "name": "Security and data-classification baseline",
-        "state": "ready",
+        "state": "active",
         "depends_on": ["P00.02", "P00.03"]
       },
       {
@@ -186,5 +192,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.05 may move to done only when the canonical event contract standard defines event envelope, naming/versioning, producer ownership, correlation/causation, tenant context, schema evolution, idempotent consumption, outbox/inbox, ordering, retry/dead-letter and replay compatibility rules with machine-validation evidence. Then P00.06 becomes active unless change control approves otherwise."
+  "next_transition_rule": "P00.06 may move to done only when security boundaries, data classification, secrets, encryption, authentication/session, authorization, audit, tenant isolation, sensitive-field handling, retention/deletion, integration trust boundaries and AI/tool security requirements are documented with machine-validation evidence. Then P00.07 becomes active because P00.04/P00.05/P00.06 will all be done."
 }
