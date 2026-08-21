@@ -18,9 +18,9 @@ jobs:
     name: local-win-4-${{ matrix.slot }}
     strategy:
       fail-fast: false
-      max-parallel: 12
+      max-parallel: 6
       matrix:
-        slot: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        slot: [1, 2, 3, 4, 5, 6]
     runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 15
 
@@ -107,7 +107,7 @@ jobs:
       - name: Hold non-target runner briefly
         if: steps.target.outputs.is_target != 'true'
         shell: cmd
-        run: ping 127.0.0.1 -n 31 > nul
+        run: ping 127.0.0.1 -n 16 > nul
 
   governance:
     name: governance
