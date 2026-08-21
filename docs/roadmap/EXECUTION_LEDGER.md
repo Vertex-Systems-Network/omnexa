@@ -39,3 +39,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` already reflect P00.01 `done` and P00.02 `active`.
 - Commit / PR: `#1` / `934e80ee588b1fd0edb2b8c8430b6288cdf5da1a`.
 - Notes: P00 remains the only active phase. Kernel and business-feature implementation remain locked until P00 exit.
+
+## 2026-08-21 — P00.02 Terminology, ownership and repository hardening
+
+- Phase / package: `P00.02`
+- Transition: `active -> done` upon verified merge of the P00.02 PR; `P00.03` becomes active.
+- Summary: Established canonical product/domain vocabulary, naming rules, authoritative domain ownership, dependency matrix, contribution/security controls, CODEOWNERS, repository hardening specification, licensing/IP decision gate, ADR/issue templates, and an initial machine governance validator/workflow.
+- Evidence: artifacts listed under P00.02 in `docs/roadmap/STATE.json`; governance CI must pass on the PR before merge.
+- Architecture impact: clarifies and constrains existing architecture; does not introduce business/application implementation.
+- State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`, `README.md`, `AGENTS.md`.
+- Commit / PR: fill with merged P00.02 PR reference in an append-only reconciliation entry after merge.
+- Notes: GitHub-hosted main-branch protection remains tracked in issue #3 because the available connector cannot mutate branch/ruleset settings. Licensing/IP/trademark strategy remains tracked in issue #4 and is not changed automatically.
