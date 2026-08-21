@@ -28,3 +28,14 @@ Notes:
 - State files reconciled: `docs/roadmap/STATUS.md`, `docs/roadmap/STATE.json`.
 - Commit / PR: fill with merged governance PR reference after merge if tooling/process performs a follow-up ledger reconciliation.
 - Notes: P00 remains active. P00.02 is the next permitted canonical package. Kernel and business-feature implementation remain locked.
+
+## 2026-08-21 — P00.01 Merge reconciliation
+
+- Phase / package: `P00.01`
+- Transition: confirms `done`
+- Summary: Governance baseline PR merged to `main`; this entry preserves the actual immutable merge evidence without rewriting the original ledger entry.
+- Evidence: PR #1 merged successfully; squash merge commit `934e80ee588b1fd0edb2b8c8430b6288cdf5da1a`.
+- Architecture impact: none beyond ADR-0001 and governance baseline already recorded by PR #1.
+- State files reconciled: `docs/roadmap/STATUS.md` and `docs/roadmap/STATE.json` already reflect P00.01 `done` and P00.02 `active`.
+- Commit / PR: `#1` / `934e80ee588b1fd0edb2b8c8430b6288cdf5da1a`.
+- Notes: P00 remains the only active phase. Kernel and business-feature implementation remain locked until P00 exit.
