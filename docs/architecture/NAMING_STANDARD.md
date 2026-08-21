@@ -127,15 +127,24 @@ Rules:
 - commands must not masquerade as events (`create_order` is not an event);
 - consumers must not depend on undocumented producer internals.
 
-## 9. API path naming
+## 9. HTTP API naming
 
-Until P00.04 freezes the full API standard:
+The canonical HTTP rules are defined in `API_STANDARD.md`.
 
-- use plural resource nouns where resource APIs are appropriate;
-- do not expose database table names merely because they exist;
-- domain ownership must be visible in routing/versioning strategy;
-- actions that are not CRUD must be explicit business operations;
-- no unversioned public contract may be treated as stable.
+Stable route pattern:
+
+```text
+/api/v{major}/{domain}/{resources}
+```
+
+Rules:
+
+- route resource segments are lowercase plural kebab-case nouns;
+- JSON property names are lowercase `snake_case`;
+- stable OpenAPI `operationId` values use `<domain>_<resource>_<action>`;
+- domain ownership must remain visible while deployment/framework/database names remain hidden;
+- business lifecycle commands use explicit action operations rather than arbitrary `status` field mutations;
+- no unversioned public/cross-boundary contract may be treated as stable.
 
 ## 10. Configuration naming
 

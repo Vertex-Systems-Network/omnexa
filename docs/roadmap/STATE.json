@@ -5,7 +5,7 @@
   "last_reconciled": "2026-08-21",
   "program": "foundation",
   "current_phase": "P00",
-  "current_work_package": "P00.04",
+  "current_work_package": "P00.05",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
@@ -42,7 +42,7 @@
     "name": "Product Constitution & Architecture Freeze",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 3,
+    "done_work_packages": 4,
     "work_packages": [
       {
         "id": "P00.01",
@@ -92,19 +92,26 @@
           "docs/architecture/TIME_STANDARD.md",
           "docs/architecture/LOCALE_STANDARD.md",
           "docs/architecture/ERROR_STANDARD.md",
+          "docs/adr/ADR-0002-foundation-data-conventions.md",
           "scripts/validate_governance.py"
         ]
       },
       {
         "id": "P00.04",
         "name": "API contract standard",
-        "state": "active",
-        "depends_on": ["P00.02", "P00.03"]
+        "state": "done",
+        "depends_on": ["P00.02", "P00.03"],
+        "evidence": [
+          "docs/architecture/API_STANDARD.md",
+          "docs/contracts/http/openapi-template.yaml",
+          "docs/adr/ADR-0003-http-api-contract-baseline.md",
+          "scripts/validate_governance.py"
+        ]
       },
       {
         "id": "P00.05",
         "name": "Event contract standard",
-        "state": "ready",
+        "state": "active",
         "depends_on": ["P00.02", "P00.03"]
       },
       {
@@ -179,5 +186,5 @@
     {"id": "P26", "name": "Industry Packs", "state": "planned"},
     {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
   ],
-  "next_transition_rule": "P00.04 may move to done only when the canonical API contract standard defines transport/versioning/resource/action/error/idempotency/pagination/compatibility rules and machine validation evidence exists. P00.05 and P00.06 remain ready; foundation execution keeps exactly one active package."
+  "next_transition_rule": "P00.05 may move to done only when the canonical event contract standard defines event envelope, naming/versioning, producer ownership, correlation/causation, tenant context, schema evolution, idempotent consumption, outbox/inbox, ordering, retry/dead-letter and replay compatibility rules with machine-validation evidence. Then P00.06 becomes active unless change control approves otherwise."
 }

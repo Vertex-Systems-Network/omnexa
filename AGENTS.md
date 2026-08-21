@@ -25,13 +25,14 @@ Before proposing or modifying code, schema, infrastructure, APIs, tests or docum
 11. `docs/architecture/TIME_STANDARD.md`
 12. `docs/architecture/LOCALE_STANDARD.md`
 13. `docs/architecture/ERROR_STANDARD.md`
-14. `docs/roadmap/MASTER_PLAN.md`
-15. `docs/roadmap/STATUS.md`
-16. `docs/roadmap/STATE.json`
-17. `docs/governance/AI_EXECUTION_POLICY.md`
-18. `docs/governance/CHANGE_CONTROL.md`
-19. `docs/governance/DEFINITION_OF_DONE.md`
-20. Relevant ADRs under `docs/adr/`
+14. `docs/architecture/API_STANDARD.md`
+15. `docs/roadmap/MASTER_PLAN.md`
+16. `docs/roadmap/STATUS.md`
+17. `docs/roadmap/STATE.json`
+18. `docs/governance/AI_EXECUTION_POLICY.md`
+19. `docs/governance/CHANGE_CONTROL.md`
+20. `docs/governance/DEFINITION_OF_DONE.md`
+21. Relevant ADRs under `docs/adr/`
 
 If these documents conflict, stop and resolve the conflict through the change-control process before implementation.
 
@@ -48,6 +49,7 @@ An AI agent MUST NOT:
 - invent synonyms that conflict with the canonical glossary/naming standard;
 - create a second authoritative owner for an existing concept;
 - invent alternative identifier, money, time, locale or error primitives that conflict with P00.03 standards;
+- invent HTTP/API routes, envelopes, versioning, pagination, error, idempotency or concurrency semantics that conflict with `API_STANDARD.md`;
 - replace an approved technology or architectural pattern without an ADR;
 - couple modules through direct cross-module database writes;
 - create a second implementation of an existing platform capability;
@@ -87,9 +89,28 @@ Until superseded by an accepted ADR:
 - locales use BCP 47; locale, timezone, country and currency are separate concepts; RTL is first-class;
 - public errors use stable machine codes plus safe structured problem details and never expose stack traces/SQL/secrets.
 
-P00.04/P00.05 may define transport/event envelopes but must not contradict these semantics without change control and an ADR.
+## 6. HTTP API invariants
 
-## 6. Technology baseline
+Stable HTTP/public/partner/cross-domain APIs follow `docs/architecture/API_STANDARD.md` and ADR-0003.
+
+Until superseded by an accepted ADR:
+
+- stable route major versions use `/api/v{major}/{domain}/{resources}`;
+- canonical HTTP contracts are described with OpenAPI 3.2.0;
+- JSON properties use lowercase `snake_case`;
+- success responses use governed `data`/`meta` and collection `page` envelopes;
+- HTTP errors use `application/problem+json` plus stable Omnexa machine codes/request IDs;
+- protected retriable mutations explicitly define `Idempotency-Key` behavior;
+- lost-update-sensitive mutations use explicit optimistic concurrency semantics such as `ETag`/`If-Match` where applicable;
+- scalable lists default to opaque cursor pagination with `page_size`/`page_cursor`;
+- filters/sorts/includes are allowlisted, bounded and authorization-aware;
+- business actions such as issue/cancel/refund are explicit capability/action operations rather than arbitrary status patches;
+- client-provided tenant/organization identifiers never become authorization authority;
+- generated SDK/routes/docs are derivative of the canonical contract, not replacements for it.
+
+P00.05/P00.06 may define event and security details but must not contradict these HTTP semantics without change control and an ADR.
+
+## 7. Technology baseline
 
 Until changed by ADR:
 
@@ -105,7 +126,7 @@ Until changed by ADR:
 
 Technology choice does not authorize premature implementation. The active phase and its acceptance gates still control work.
 
-## 7. Required work protocol
+## 8. Required work protocol
 
 For every implementation task:
 
@@ -113,15 +134,16 @@ For every implementation task:
 2. Inspect current repository state before editing.
 3. Identify canonical terminology and the authoritative owning domain before creating a new entity/capability.
 4. Apply foundation identifier/money/time/locale/error standards at every affected contract/data boundary.
-5. State affected modules/contracts/data ownership and allowed dependency direction.
-6. Implement the smallest complete change satisfying the active acceptance criteria.
-7. Add or update tests at the appropriate layer.
-8. Run required quality gates from `DEFINITION_OF_DONE.md`.
-9. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
-10. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
-11. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
+5. Apply `API_STANDARD.md` to every stable HTTP contract and reconcile its OpenAPI description.
+6. State affected modules/contracts/data ownership and allowed dependency direction.
+7. Implement the smallest complete change satisfying the active acceptance criteria.
+8. Add or update tests at the appropriate layer.
+9. Run required quality gates from `DEFINITION_OF_DONE.md`.
+10. Record evidence: tests, builds, migration checks, contract checks and relevant CI run IDs.
+11. Update `STATUS.md` and `STATE.json` only when evidence proves the transition.
+12. If architecture changed, add/update an ADR and reconcile all dependent documents in the same change.
 
-## 8. Phase and task state model
+## 9. Phase and task state model
 
 Allowed states:
 
@@ -137,7 +159,7 @@ Transitions must be evidence-backed. `done` means all acceptance gates passed, n
 
 Only one foundation work package is active at a time while P00 is running. Packages whose dependencies are satisfied may be `ready`, but they do not authorize parallel execution until state explicitly marks them active.
 
-## 9. Change-control trigger
+## 10. Change-control trigger
 
 An ADR and master-plan reconciliation are mandatory for changes to any of the following:
 
@@ -145,6 +167,7 @@ An ADR and master-plan reconciliation are mandatory for changes to any of the fo
 - canonical domain ownership for an established concept;
 - canonical terminology when semantics/ownership change materially;
 - identifier/money/time/locale/error primitive semantics;
+- stable API routing/versioning/envelope/error/idempotency/concurrency/compatibility semantics;
 - language/runtime baseline;
 - tenancy hierarchy;
 - authorization model;
@@ -158,7 +181,7 @@ An ADR and master-plan reconciliation are mandatory for changes to any of the fo
 
 Do not implement the architectural change first and document it later.
 
-## 10. Pull request discipline
+## 11. Pull request discipline
 
 Every PR must identify:
 
@@ -168,6 +191,7 @@ Every PR must identify:
 - authoritative domain owner(s);
 - dependency direction/mechanism;
 - foundation primitive impacts (ID/money/time/locale/errors);
+- stable API/OpenAPI impacts;
 - data/migration impact;
 - security/tenancy impact;
 - contracts/events changed;
@@ -177,7 +201,7 @@ Every PR must identify:
 
 Unrelated changes belong in separate PRs.
 
-## 11. Definition of safe completion
+## 12. Definition of safe completion
 
 A change is incomplete if any of these are true:
 
@@ -187,6 +211,7 @@ A change is incomplete if any of these are true:
 - permission checks are missing;
 - module uninstall/disable compatibility is broken where relevant;
 - public contracts changed without versioning;
+- stable HTTP implementation diverges from its governed OpenAPI contract;
 - domain ownership is ambiguous or duplicated;
 - an implementation uses a forbidden dependency path;
 - foundation primitives are represented inconsistently;
@@ -194,7 +219,7 @@ A change is incomplete if any of these are true:
 - documentation and machine-readable state disagree;
 - runtime depends on hidden manual steps.
 
-## 12. Repository and legal guardrails
+## 13. Repository and legal guardrails
 
 - Follow `CONTRIBUTING.md` and `SECURITY.md`.
 - Do not intentionally push implementation directly to `main`; use governed PRs.
@@ -202,7 +227,7 @@ A change is incomplete if any of these are true:
 - The existing `LICENSE` file must not be replaced or treated as the final business licensing strategy without explicit owner authorization and the licensing/IP decision process.
 - AI systems must never make trademark/legal ownership decisions autonomously.
 
-## 13. Scope-drift rule
+## 14. Scope-drift rule
 
 If a requested feature is valuable but outside the active work package, record it as planned backlog or propose a plan amendment. Do not absorb it silently into the current implementation.
 

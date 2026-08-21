@@ -1,0 +1,164 @@
+openapi: 3.2.0
+info:
+  title: Omnexa HTTP API Contract Template
+  version: 0.1.0
+  description: >-
+    Foundation contract template. It defines reusable P00.03/P00.04 primitives only;
+    it is not an implemented product API and contains no business paths.
+
+components:
+  schemas:
+    UuidV7:
+      type: string
+      format: uuid
+      description: Canonical Omnexa UUIDv7 identifier. Consumers treat it as opaque.
+      example: 018f47a6-7b7e-7c14-a847-0af56b2a44fe
+
+    Money:
+      type: object
+      additionalProperties: false
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: string
+          pattern: '^-?(0|[1-9][0-9]*)(\.[0-9]+)?$'
+          description: Exact decimal string; never binary floating point.
+          example: '1250.375000'
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          description: ISO 4217 alpha-3 fiat currency code where applicable.
+          example: AED
+
+    Violation:
+      type: object
+      additionalProperties: false
+      required:
+        - path
+        - code
+      properties:
+        path:
+          type: string
+          description: API contract field path, not an internal/database path.
+        code:
+          type: string
+          pattern: '^[a-z0-9]+(?:[._-][a-z0-9]+)*$'
+        message:
+          type: string
+          description: Optional localized safe presentation text.
+        meta:
+          type: object
+          additionalProperties: true
+
+    Problem:
+      type: object
+      description: RFC 9457-compatible Omnexa problem details with stable extensions.
+      required:
+        - type
+        - status
+        - code
+        - request_id
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          example: urn:omnexa:error:validation.failed:v1
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          type: string
+          pattern: '^[a-z0-9]+(?:[._-][a-z0-9]+)*$'
+          example: validation.failed
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri-reference
+        request_id:
+          $ref: '#/components/schemas/UuidV7'
+        trace_id:
+          type: string
+        retryable:
+          type: boolean
+        retry_after_ms:
+          type: integer
+          minimum: 0
+        violations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violation'
+      additionalProperties: true
+
+    PageInfo:
+      type: object
+      additionalProperties: false
+      required:
+        - next_cursor
+        - has_more
+      properties:
+        next_cursor:
+          oneOf:
+            - type: string
+            - type: 'null'
+          description: Opaque cursor for the next page.
+        has_more:
+          type: boolean
+
+  parameters:
+    PageSize:
+      name: page_size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+      description: Operation-specific default/max applies.
+
+    PageCursor:
+      name: page_cursor
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Opaque integrity-protected cursor where required.
+
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 255
+      description: Opaque idempotency key for protected retriable mutations.
+
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+      description: HTTP entity tag precondition for optimistic concurrency.
+
+  headers:
+    RequestId:
+      description: Server-resolved Omnexa request identifier.
+      schema:
+        $ref: '#/components/schemas/UuidV7'
+
+    ETag:
+      description: HTTP entity tag used for caching and/or optimistic concurrency.
+      schema:
+        type: string
+
+    Location:
+      description: Canonical URI of a created or accepted operation resource when applicable.
+      schema:
+        type: string
+        format: uri-reference
