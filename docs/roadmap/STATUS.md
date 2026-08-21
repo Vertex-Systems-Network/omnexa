@@ -6,13 +6,15 @@ Last reconciled: **2026-08-22**
 
 - Program: **Foundation Program**
 - Phase: **P00 — Product Constitution & Architecture Freeze**
-- Phase state: **active**
+- Phase state: **active — exit verification**
 - Current work package: **P00.10 — Foundation architecture freeze review**
-- Business-feature implementation: **NOT AUTHORIZED YET**
-- Kernel implementation: **NOT AUTHORIZED YET**
-- P00 progress: **9 / 10 done**
+- Architecture baseline: **FROZEN — Foundation v1**
+- P01 entry: **BLOCKED**
+- Kernel implementation: **NOT AUTHORIZED**
+- Business-feature implementation: **NOT AUTHORIZED**
+- P00 progress: **9 / 10 done; P00.10 verification active**
 
-## P00 work packages
+## P00 packages
 
 | ID | Work package | State |
 |---|---|---|
@@ -25,66 +27,64 @@ Last reconciled: **2026-08-22**
 | P00.07 | Testing/CI/release standard | done |
 | P00.08 | Local developer/repository structure | done |
 | P00.09 | Threat model and operational SLO targets | done |
-| P00.10 | Foundation architecture freeze review | **active** |
+| P00.10 | Foundation architecture freeze review | **active / verification** |
 
-## P00.09 frozen threat/reliability baseline
+## Freeze result
 
-The foundation threat model covers cross-tenant escape, authorization/authentication abuse, privilege escalation, injection, SSRF, webhook spoofing/replay, event/job replay, financial duplication/integrity loss, module/supply-chain compromise, CI/release credential theft, POS/edge compromise, backup/export/search/vector leakage, AI prompt/tool abuse, insider/support misuse, noisy-neighbor/resource exhaustion, DDoS/provider outage, migration corruption, region failure, audit tampering, secrets exposure and misconfiguration.
+P00.01–P00.09 are accepted and frozen as **Omnexa Foundation Architecture v1**. The normative review and machine manifest are:
 
-Operational criticality tiers:
+- `docs/governance/FOUNDATION_FREEZE_REVIEW.md`
+- `docs/governance/FOUNDATION_FREEZE.json`
+- `docs/contracts/governance/foundation-freeze.schema.json`
+- `docs/adr/ADR-0010-foundation-architecture-freeze.md`
+- `scripts/validate_freeze_review.py`
 
-```text
-TIER_0  integrity-critical control paths
-TIER_1  core transactions
-TIER_2  interactive supporting capabilities
-TIER_3  optional/background capabilities
-```
+Material changes to frozen foundation semantics require change control and a superseding accepted ADR.
 
-Initial mature-production availability objectives are 99.99%, 99.95%, 99.9% and 99.5% respectively, subject to capability-specific refinement. Security and integrity are not traded for uptime.
+## P01 implementation-entry gate
 
-Recovery classes:
+`docs/governance/P01_ENTRY_GATE.md` is authoritative.
 
-```text
-A  critical identity/security/financial state: target RPO <= 5m, RTO <= 30m
-B  core transactional state:              target RPO <= 15m, RTO <= 2h
-C  supporting/derived state:              target RPO <= 24h, RTO <= 8h
-D  reproducible caches/indexes:            rebuild-based objective
-```
+### Issue #3 — BLOCKS P01
 
-These are architecture targets until restore/recovery rehearsal proves them.
+`main` branch/ruleset protection must be applied and verified before executable P01 merges. Required properties include PR-based integration, blocked force-push/deletion, controlled bypass, conversation resolution and required verification checks once an executable CI lane exists.
 
-Zero-tolerance SLIs include cross-tenant disclosure, unauthorized privileged mutations, duplicate protected financial side effects caused by replay/retry, lost acknowledged durable business work and material financial/ledger integrity violations.
+### Issue #14 — BLOCKS P01
 
-Incident model is **SEV0–SEV3**, with security/privacy/integrity allowed to outrank pure availability impact. Reliability rules cover observability, golden signals plus domain-integrity signals, bounded timeouts/retries, circuit breakers, backpressure, graceful degradation, capacity/noisy-neighbor protection, dependency resilience, backup/restore rehearsal and production-readiness ownership.
+A working executable verification lane is required before P01. It may be GitHub Actions, another approved provider or a self-hosted lane, but it must execute the repository-owned P00.07 verification semantics in a clean reproducible environment.
 
-Normative P00.09 evidence:
+The P00 temporary Actions exception is **not valid for P01 executable work**.
 
-- `docs/security/THREAT_MODEL.md`
-- `docs/operations/SLO_STANDARD.md`
-- `docs/operations/INCIDENT_STANDARD.md`
-- `docs/operations/RELIABILITY_STANDARD.md`
-- `docs/contracts/operations/operational-targets.schema.json`
-- `docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md`
-- `scripts/validate_operations_spec.py`
+### Issue #4 — external-distribution blocker
 
-## Existing frozen baselines
+Licensing/IP/trademark strategy does **not** block private internal P01 engineering after the P01 entry gate is cleared, but it remains a hard gate before public/external distribution, self-hosted customer delivery or public launch.
 
-P00.03–P00.08 remain binding: foundation primitives, HTTP/event contracts, security/data classification, provider-independent quality/release gates, and governed monorepo/local-development structure.
+## Frozen foundation summary
+
+- governance/change control/AI execution;
+- canonical vocabulary/domain ownership/dependency rules;
+- UUIDv7, exact money, time/locale/error primitives;
+- stable HTTP/OpenAPI and event contracts;
+- security/data classification/tenant isolation/authorization/audit;
+- G0–G8 quality, testing, CI and release semantics;
+- governed monorepo/local development/toolchain/config model;
+- threat model, operational criticality, SLO/RPO/RTO/error budgets, SEV0–SEV3 and reliability readiness.
 
 ## Temporary GitHub Actions exception
 
-GitHub Actions allowance is exhausted/disabled. ADR-0006 permits only P00 documentation/specification manual evidence while hosted execution is unavailable. Hosted CI is **BLOCKED / NOT RUN**, never PASS.
+ADR-0006 remains active **only because P00 has not exited yet**. Hosted CI is `BLOCKED / NOT RUN`, never PASS. It expires when P00 exits or sooner if executable CI becomes available.
 
-**The exception expires at P00 exit and cannot authorize P01 implementation.**
+## Exact next transition
 
-## Outstanding governance/business blockers
+P00.10 may become `done` only when Issue #3 and Issue #14 have verified exit evidence. The narrow transition must:
 
-1. Issue #3 — `main` branch/ruleset protection still requires hosted admin configuration.
-2. Issue #14 — hosted Actions quota/runner remains unavailable.
-3. Issue #4 — licensing/IP/trademark strategy remains unresolved before external distribution/public launch.
+1. mark P00.10 done;
+2. mark P00 done;
+3. expire ADR-0006;
+4. activate P01;
+5. set `kernel_code_authorized = true`;
+6. keep `business_feature_code_authorized = false`;
+7. record branch-protection and executable-CI evidence;
+8. define the first P01 kernel work package.
 
-P00.10 must explicitly classify these as P01 entry blockers, external-launch blockers, or acceptable post-P00 debt; it may not silently ignore them.
-
-## Execution lock
-
-P00.10 is the only authorized work package. Do not begin kernel, database model, CRM, ERP, commerce, POS, website builder, payments or AI product implementation until the final freeze review is complete **and P01 entry prerequisites are satisfied**.
+Until then, **do not begin canonical kernel/product implementation**.
