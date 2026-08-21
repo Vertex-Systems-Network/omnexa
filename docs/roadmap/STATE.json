@@ -40,13 +40,16 @@
       "issue": 14,
       "evidence_state": "PASS",
       "runner_selector": ["self-hosted", "Windows", "X64"],
-      "required_runner_name": "LOCAL-WIN-4",
-      "routing_mode": "fanout_detect_and_fail_closed",
-      "workflow_run": 32528329184,
-      "target_job": 96915072868,
+      "routing_mode": "any_available_windows_x64_self_hosted",
+      "workflow_run": 32535324900,
+      "job": 96935023669,
+      "evidence_runner": "LOCAL-WIN-02",
+      "evidence_machine": "ABDUL-HANAN",
       "final_check": "governance",
-      "merge_commit": "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
-      "note": "Canonical governance CI requires pass evidence produced specifically on LOCAL-WIN-4. The workflow fans out only across local Windows/X64 self-hosted runners, runs validators only when RUNNER_NAME=LOCAL-WIN-4, uploads target evidence, and fails the final governance job if that evidence is absent. Issue #14 is closed/completed."
+      "historical_local_win_4_run": 32528329184,
+      "historical_local_win_4_job": 96915072868,
+      "historical_local_win_4_merge": "1a14362e2ed52a20d66cec6f28b93a2ee457f9a9",
+      "note": "Canonical governance CI is runner-name agnostic within the approved Windows/X64 self-hosted pool. The single required job named governance executes all validators on whichever eligible local runner GitHub schedules. Run 32535324900 proved the policy on LOCAL-WIN-02 with every validator PASS. LOCAL-WIN-4 evidence remains historical, not a routing requirement. Issue #14 remains closed/completed."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -118,5 +121,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and current canonical LOCAL-WIN-4 validation evidence. EG-02/Issue #3 is BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. P01.01 is fully pre-specified but remains planned and executable kernel code remains prohibited. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker with owner decision brief prepared at docs/governance/LICENSING_DECISION_BRIEF.md."
+  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and the runner-name-agnostic Windows/X64 self-hosted governance lane; run 32535324900 proved all validators PASS on LOCAL-WIN-02. EG-02/Issue #3 remains BLOCKED_BY_PLAN because GitHub returned HTTP 403 for branch protection on this private organization repository. P01.01 is fully pre-specified but remains planned and executable kernel code remains prohibited. P00.10 may move to done only after hosted protection becomes available and is verified, or after a deliberate superseding governance ADR replaces EG-02 with an explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record the applicable control evidence. Issue #4 remains an external distribution/public-launch blocker with owner decision brief prepared at docs/governance/LICENSING_DECISION_BRIEF.md."
 }
