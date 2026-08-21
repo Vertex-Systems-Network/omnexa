@@ -14,7 +14,7 @@ Current program state:
 Foundation Architecture v1: FROZEN
 P00: ACTIVE — exit verification
 P00.10: ACTIVE — review_state=verification
-Executable CI gate: SATISFIED
+Executable CI gate: SATISFIED ON LOCAL-WIN-4
 P01: BLOCKED BY ISSUE #3 ONLY
 kernel_code_authorized: false
 business_feature_code_authorized: false
@@ -66,13 +66,11 @@ Before any executable P01 merge, `main` protection must be applied and verified:
 
 ### EG-03 / Issue #14 — executable verification lane — SATISFIED
 
-The canonical governance workflow is operational on the local Windows self-hosted runner using:
+The canonical governance workflow is certified on the requested organization runner `LOCAL-WIN-4`.
 
-```text
-[self-hosted, Windows, X64]
-```
+Current evidence: PR #23; workflow run `32528329184`; target job `96915072868`; runner `LOCAL-WIN-4`; Windows X64; machine `ABDUL-HANAN`; work root `C:\actions-runner-4\_work`; all four repository validators PASS; final job named `governance` SUCCESS; merge commit `1a14362e2ed52a20d66cec6f28b93a2ee457f9a9`; Issue #14 closed/completed.
 
-Verified evidence: PR #20; workflow run `32522919774`; governance job `96898839560`; runner `LOCAL-WIN-01`; all four repository validators PASS; merge commit `c2ab2cd679c295a8dec84b1879acb9a9e02ad67d`; Issue #14 closed/completed.
+GitHub schedules by runner labels/groups rather than runner name. Because LOCAL-WIN-4 currently has no unique Actions label, the workflow fails closed: it fans out only across local Windows/X64 self-hosted runners, executes protected validators only when `RUNNER_NAME == LOCAL-WIN-4`, uploads pass evidence only from that runner, and allows the final `governance` job to pass only when that evidence exists.
 
 The self-hosted lane may be expanded for P01 gates, but it may not weaken P00.07 quality semantics.
 
@@ -117,7 +115,7 @@ ADR-0006 records the temporary P00 manual-evidence exception used while hosted A
 
 ## Quality and release rules
 
-Gate classes: `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package, `G8` Supply Chain/Release.
+Gate classes: `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package, `G8` Supply Chain/Release`.
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never treat blocked/unrun/N/A as PASS.
 
@@ -168,7 +166,7 @@ For every material change:
 6. preserve module/repository boundaries;
 7. implement only authorized scope;
 8. add positive + negative evidence and threat-model delta where needed;
-9. execute canonical verification on the approved self-hosted/other executable lane;
+9. execute canonical verification on the approved LOCAL-WIN-4 self-hosted lane;
 10. record evidence accurately and reconcile STATUS/STATE;
 11. document architecture change through ADR/change control before implementation.
 
