@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.03 are DONE; P01.04 — PostgreSQL connection & migration foundation is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.04 are DONE; P01.05 — Cache abstraction is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -15,10 +15,12 @@ Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execut
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.04.md`
+- `docs/roadmap/work-packages/P01.05.md`
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`
+- `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`
+- `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -58,6 +60,7 @@ Completed package evidence:
 - P01.01: PR #40, run `32562869345`, job `97007065640`, merge `7257977264d788663083fa215462b1828f1e5afb`.
 - P01.02: PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
 - P01.03: PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
+- P01.04: PR #46, run `32567842071`, job `97019012280`, merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
 
 Repository-managed Dependabot configuration is present for weekly GitHub Actions dependency updates.
 
@@ -75,13 +78,23 @@ Typed configuration/environment system with deterministic precedence, strict unk
 
 Transport-neutral structured failure primitives with stable codes/categories, safe public projection, private causes, Go wrapping semantics, explicit retryability, bounded validation details and correlation metadata hooks. Evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
 
-### P01.04 — active
+### P01.04 — done
 
-P01.04 implements only the PostgreSQL connection and migration foundation: governed pool construction from P01.02 configuration, safe P01.03 provider failure mapping, transaction helper boundary, migration runner/version ledger, deterministic fresh/upgrade execution and synthetic PostgreSQL integration tests.
+PostgreSQL connection/migration foundation with pgx `v5.10.0`, PostgreSQL `18.6`, bounded pool/config behavior, safe provider failures, transaction helper, advisory-locked owner-scoped migration ledger, deterministic fresh/upgrade/failure tests and GitHub-hosted G0/G1/G2/G3/G4/G5/G7 evidence. Evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
 
-It must **not** pull forward tenant/organization tables, module-runtime schema, event outbox/inbox, business schemas/data, cache/storage, telemetry, health endpoints, production HA/backups or business-domain repositories.
+### P01.05 — active
 
-P01.05–P01.12 remain planned and strict sequential activation applies.
+P01.05 implements only the Redis-compatible cache abstraction: deterministic namespaced/versioned keys, explicit TTL semantics, typed serialization, get/set/delete and justified atomic primitives, P01.02 configuration, P01.03 safe failure mapping, bounded timeout/cancellation, synthetic provider integration and flush/restart evidence proving cache is non-authoritative.
+
+It must **not** pull forward business cache keys/models, sessions/authentication, tenancy, module runtime, event/job fabric, object storage, telemetry, health or later P01 capability semantics.
+
+P01.06–P01.12 remain planned and strict sequential activation applies.
+
+## Future browser UI quality/accessibility
+
+`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` is the AI/human execution plan for future authorized browser UI work. Production UI targets **WCAG 2.2 AA**, semantic standards-based HTML/CSS, W3C validation, WAVE evaluation and manual keyboard/focus/screen-reader/zoom-reflow checks.
+
+WAVE is treated as an evaluation tool rather than a certification. Required WAVE automation that lacks an approved key/license is `BLOCKED`, not PASS. This plan does not authorize P12/P13/P17 or any business/UI implementation during P01.
 
 ## Public visibility / Issue #4
 
@@ -89,7 +102,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01-P01.03 done; P01.04 active; P01 progress 3 / 12 done; kernel implementation authorized only for P01.04; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01-P01.04 done; P01.05 active; P01 progress 4 / 12 done; kernel implementation authorized only for P01.05; business features locked.**
 
 ## Product principle
 
