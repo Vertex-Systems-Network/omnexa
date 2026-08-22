@@ -105,11 +105,11 @@ func TestS3CompatibleStorageFoundationIntegration(t *testing.T) {
 			t.Fatalf("download = %q, want %q", decoded, payload)
 		}
 
-		if err := store.Delete(context.Background(), key); err != nil {
-			t.Fatalf("Delete() error = %v", err)
+		if deleteErr := store.Delete(context.Background(), key); deleteErr != nil {
+			t.Fatalf("Delete() error = %v", deleteErr)
 		}
-		if err := store.Delete(context.Background(), key); err != nil {
-			t.Fatalf("Delete(missing) error = %v, want idempotent success", err)
+		if deleteErr := store.Delete(context.Background(), key); deleteErr != nil {
+			t.Fatalf("Delete(missing) error = %v, want idempotent success", deleteErr)
 		}
 		_, err = store.Head(context.Background(), key)
 		if err == nil {
