@@ -16,6 +16,7 @@ The following artifacts are authoritative:
 - `docs/architecture/SYSTEM_ARCHITECTURE.md` — technical boundaries
 - `docs/architecture/MODULE_STANDARD.md` — module contract
 - `docs/roadmap/MASTER_PLAN.md` — phase sequence and gates
+- `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` — mandatory preplanned module/submodule decomposition and ordered execution template
 - `docs/roadmap/STATUS.md` — human-readable progress
 - `docs/roadmap/STATE.json` — machine-readable canonical state
 - `docs/governance/CHANGE_CONTROL.md` — architecture-change process
@@ -31,11 +32,14 @@ For each request, an AI system must determine:
 1. which roadmap phase/work package owns the request;
 2. whether that work package is currently permitted by `STATE.json`;
 3. what existing module owns the relevant data/capability;
-4. what contracts or events may be affected;
-5. what tenant, authorization, audit and migration implications exist;
-6. what acceptance tests are required.
+4. which preplanned submodule/work-package/task in `MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` owns the requested behavior when applicable;
+5. what contracts or events may be affected;
+6. what tenant, authorization, audit and migration implications exist;
+7. what acceptance tests are required.
 
-If a requested feature is outside the active scope, the AI should propose or record it as planned work rather than silently implementing it.
+If a requested feature is outside the active scope, the AI should record it in the owning future module/submodule plan rather than silently implementing it.
+
+When a module/submodule decomposition already exists, the AI must continue from the next incomplete planned task. It must not restart a generic planning cycle merely because a new implementation session or agent begins. Replanning is appropriate only for a genuine architecture conflict, missing owner, changed requirement or approved change-control event.
 
 ## 4. Prohibited autonomous decisions
 
@@ -67,7 +71,21 @@ Within an active work package, AI may autonomously choose implementation details
 - performance improvements that preserve semantics;
 - documentation corrections that do not alter architecture.
 
-## 6. Evidence requirement
+## 6. Runner-deferred implementation workflow
+
+Canonical hosted verification may be deferred until the implementation branch is substantially complete. For an already-authorized work package, AI should normally:
+
+1. complete the planned source/tests/docs/verifier work first;
+2. perform all available deterministic static/unit/self-review preparation;
+3. open the executable PR only when it is ready for end-stage integration verification;
+4. use the required GitHub-hosted governance lane as the authoritative final integration gate;
+5. fix failures rather than weakening checks;
+6. merge only after required checks are green;
+7. reconcile completion evidence/state only after merge evidence exists.
+
+Deferring the runner does **not** permit an unverified `PASS`, `done` or protected merge claim.
+
+## 7. Evidence requirement
 
 AI-generated work is not complete until evidence exists for all applicable gates:
 
@@ -84,7 +102,7 @@ AI-generated work is not complete until evidence exists for all applicable gates
 
 The evidence must be summarized in the PR and reflected in status files only after it exists.
 
-## 7. No invented success
+## 8. No invented success
 
 An AI system must distinguish:
 
@@ -95,13 +113,13 @@ An AI system must distinguish:
 
 It must never report `passed`, `green`, `done` or equivalent without observable evidence.
 
-## 8. Repository hygiene
+## 9. Repository hygiene
 
 AI must not copy files from unrelated repositories or projects unless the task explicitly requires a reviewed import. Every created file must have an Omnexa purpose.
 
 Temporary experiments, generated artifacts, local secrets and debug output must not enter version control.
 
-## 9. Scope control
+## 10. Scope control
 
 Each work item must have explicit:
 
@@ -109,6 +127,12 @@ Each work item must have explicit:
 - **Out of scope**
 - **Dependencies**
 - **Acceptance criteria**
+
+Every future module and submodule must also use the preplanned hierarchy:
+
+```text
+Phase -> Module -> Submodule -> Work package -> Task -> Evidence
+```
 
 If implementation discovers a necessary dependency, classify it as:
 
@@ -118,7 +142,7 @@ If implementation discovers a necessary dependency, classify it as:
 
 Do not expand scope invisibly.
 
-## 10. Architecture conflict protocol
+## 11. Architecture conflict protocol
 
 If current code conflicts with governance documents:
 
@@ -129,7 +153,7 @@ If current code conflicts with governance documents:
 5. update affected architecture/roadmap/state documents atomically with the approved change;
 6. only then implement the new baseline.
 
-## 11. Data ownership rule
+## 12. Data ownership rule
 
 An AI system must ask "who owns this write?" before adding persistence.
 
@@ -143,7 +167,7 @@ Examples:
 
 Cross-domain reads should use capability APIs, events, projections or explicitly approved read models.
 
-## 12. AI feature implementation rule
+## 13. AI feature implementation rule
 
 AI features inside Omnexa itself must use governed capability interfaces.
 
@@ -162,13 +186,13 @@ AI request
 
 Direct unrestricted database mutation by an AI agent is prohibited.
 
-## 13. Status update rule
+## 14. Status update rule
 
 `STATUS.md` is explanatory. `STATE.json` is canonical machine state.
 
 Any transition to `verification` or `done` must include evidence references. If the two files disagree, the safest lower-completion state wins until reconciled.
 
-## 14. Stop conditions
+## 15. Stop conditions
 
 An AI system must stop implementation and surface the issue when:
 
