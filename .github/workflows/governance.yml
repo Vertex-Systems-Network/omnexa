@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v6-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v9-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -97,3 +97,7 @@ jobs:
       - name: Verify P01.02 configuration and environment system
         shell: bash
         run: bash scripts/verify_p01_02.sh
+
+      - name: Verify P01.03 structured error and result conventions
+        shell: bash
+        run: bash scripts/verify_p01_03.sh

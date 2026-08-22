@@ -75,31 +75,44 @@ Each command maps to P00.07 quality gate classes and returns a non-zero exit sta
 
 ## P01 executable mappings
 
-P01.01 established the first repository-owned verification wrapper:
+Completed P01 packages retain their verification wrappers as mandatory regressions:
 
 ```text
 bash scripts/verify_p01_01.sh
-```
-
-It remains a required regression gate for the completed Go workspace/build skeleton and covers pinned Go version, format/static checks, unit tests, dependency boundary, build/source metadata and process smoke behavior.
-
-The active P01.02 configuration/environment package adds:
-
-```text
 bash scripts/verify_p01_02.sh
 ```
 
-P01.02 maps the currently applicable quality semantics as follows:
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior.
 
-- `verify format` -> `gofmt` cleanliness across the kernel Go source;
-- `verify static` -> exact pinned Go version, canonical workspace/module metadata, `go vet`, and Omnexa dependency-boundary validation;
-- `verify unit` -> kernel unit tests plus race-enabled configuration tests;
-- `verify security` -> invalid/unknown configuration rejection, secret redaction, raw-value non-disclosure and isolated-loader tests;
-- `verify build` -> trimmed kernel build, default/config-file/environment precedence startup smoke and fail-closed invalid startup.
+The active P01.03 structured failure package adds:
 
-The GitHub-hosted `governance` job invokes both the completed P01.01 regression wrapper and the active P01.02 wrapper. P01.02 does **not** implement the final `omnexa verify ...` CLI; that broader developer CLI belongs to P01.12. Database migration, event replay, module lifecycle and other checks without an implemented owning capability remain governed `N/A`, not fabricated PASS.
+```text
+bash scripts/verify_p01_03.sh
+```
 
-## Configuration startup contract during P01.02
+P01.03 maps the currently applicable quality semantics as follows:
+
+- `verify format` -> `gofmt` cleanliness across kernel Go source;
+- `verify static` -> pinned Go, `go vet` and failure-package dependency boundary;
+- `verify unit` -> structured failure unit tests and race-enabled package tests;
+- `verify security` -> private-cause/public-redaction, bounded validation detail, invalid contract metadata and correlation-data negative tests;
+- `verify build` -> complete kernel package build with no transport/database/logging/telemetry coupling in the failure primitive.
+
+The GitHub-hosted `governance` job invokes P01.01, P01.02 and P01.03 wrappers in sequence. The final `omnexa verify ...` CLI remains owned by P01.12.
+
+## Go result convention during P01.03
+
+P01.03 does **not** introduce a custom generic `Result[T]` container. The canonical Go call convention remains:
+
+```go
+value, err := operation()
+```
+
+The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
+
+Transport adapters, database/provider mappings and telemetry emission remain owned by later packages. Callers may wrap lower-level causes into the structured failure primitive while public projections remain cause-free.
+
+## Configuration startup contract — completed P01.02
 
 The kernel process accepts only explicit governed configuration sources. Current application-level controls are:
 
@@ -108,15 +121,13 @@ OMNEXA_CONFIG_FILE=<explicit JSON file path>   # optional; no implicit file disc
 OMNEXA_ENVIRONMENT=local|ci|preview|test|staging|production
 ```
 
-The configuration file contains lowercase `snake_case` keys. Current application schema exposes only `environment`; the generic loader supports typed/required/sensitive definitions for later governed package-owned keys without pre-creating later infrastructure or business settings.
-
-Precedence is deterministic:
+Configuration precedence remains:
 
 ```text
 default -> explicit JSON config file -> environment variable -> explicit in-process test override
 ```
 
-Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors must identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a global runtime feature-flag/config registry.
+Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a global runtime feature-flag/config registry.
 
 ## Module developer commands
 
