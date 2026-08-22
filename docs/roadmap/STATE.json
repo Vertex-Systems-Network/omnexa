@@ -5,12 +5,12 @@
   "last_reconciled": "2026-08-22",
   "program": "kernel",
   "current_phase": "P01",
-  "current_work_package": "P01.01",
+  "current_work_package": "P01.02",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P01.01 Go workspace/build skeleton implementation",
+      "P01.02 configuration and environment system implementation",
       "P01 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -58,14 +58,16 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32542183023,
-      "job": 96954177596,
+      "workflow_run": 32562869345,
+      "job": 97007065640,
       "evidence_environment": "github-hosted",
-      "evidence_os": "Linux",
+      "evidence_runner": "GitHub Actions 1000007484",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
       "final_check": "governance",
-      "note": "PR #38 transition run 32542183023 / job 96954177596 passed all canonical validators on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
+      "note": "P01.01 PR #40 run 32562869345 / job 97007065640 passed all canonical governance validators and executable Go P01.01 gates on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -79,10 +81,10 @@
   "p01_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P01.01",
-    "work_package_name": "Go workspace/build skeleton",
+    "next_work_package": "P01.02",
+    "work_package_name": "Configuration & environment system",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P01.01.md",
+    "work_package_spec": "docs/roadmap/work-packages/P01.02.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
     "mandatory_spec_count": 12,
@@ -90,7 +92,7 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01 is the sole active kernel work package. P01.02-P01.12 remain planned and may not activate until the previous package is done."
+    "note": "P01.01 is done with hosted executable evidence. P01.02 is the sole active kernel work package. P01.03-P01.12 remain planned and may not activate until the previous package is done."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -98,10 +100,26 @@
     "name": "Omnexa Kernel",
     "state": "active",
     "mandatory_work_packages": 12,
-    "done_work_packages": 0,
+    "done_work_packages": 1,
     "work_packages": [
-      {"id":"P01.01","name":"Go workspace/build skeleton","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P01.01.md"},
-      {"id":"P01.02","name":"Configuration & environment system","state":"planned","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md"},
+      {
+        "id": "P01.01",
+        "name": "Go workspace/build skeleton",
+        "state": "done",
+        "depends_on": [],
+        "spec": "docs/roadmap/work-packages/P01.01.md",
+        "evidence": [
+          ".go-version",
+          "go.mod",
+          "go.work",
+          "kernel/cmd/omnexa/main.go",
+          "kernel/internal/buildinfo/buildinfo.go",
+          "kernel/internal/buildinfo/buildinfo_test.go",
+          "scripts/verify_p01_01.sh",
+          "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"
+        ]
+      },
+      {"id":"P01.02","name":"Configuration & environment system","state":"active","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md"},
       {"id":"P01.03","name":"Structured error & result conventions","state":"planned","depends_on":["P01.02"],"spec":"docs/roadmap/work-packages/P01.03.md"},
       {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"planned","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md"},
       {"id":"P01.05","name":"Cache abstraction","state":"planned","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
@@ -116,7 +134,7 @@
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
-    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.01","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.02","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -144,5 +162,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01.01 is active and is the only authorized executable kernel scope. Implement the Go workspace/build skeleton, obtain G0/G1/G2/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.01 through verification to done, then activate only P01.02. Business-feature code and P02+ implementation remain unauthorized."
+  "next_transition_rule": "P01.02 is active and is the only authorized executable kernel scope. Implement the typed configuration/environment system, obtain required G0/G1/G2/G5/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.02 through verification to done, then activate only P01.03. Business-feature code and P02+ implementation remain unauthorized."
 }
