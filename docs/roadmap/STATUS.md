@@ -7,17 +7,11 @@ Last reconciled: **2026-08-22**
 - Program: **Kernel Program**
 - Phase: **P01 — Omnexa Kernel**
 - Phase state: **active**
-- Current work package: **P01.08 — Health, readiness & diagnostics**
-- P01 progress: **7 / 12 done**
-- P01.01: **DONE**
-- P01.02: **DONE**
-- P01.03: **DONE**
-- P01.04: **DONE**
-- P01.05: **DONE**
-- P01.06: **DONE**
-- P01.07: **DONE**
-- P01.08: **ACTIVE**
-- P01.09–P01.12: **PLANNED / NOT ACTIVE**
+- Current work package: **P01.09 — Job & scheduler primitives**
+- P01 progress: **8 / 12 done**
+- P01.01–P01.08: **DONE**
+- P01.09: **ACTIVE**
+- P01.10–P01.12: **PLANNED / NOT ACTIVE**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
 - Repository visibility: **PUBLIC**
@@ -29,35 +23,32 @@ Last reconciled: **2026-08-22**
 
 ## Completed P01 packages
 
-- **P01.01 — Go workspace/build skeleton:** canonical evidence `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
-- **P01.02 — Configuration & environment system:** canonical evidence `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
-- **P01.03 — Structured error & result conventions:** canonical evidence `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
-- **P01.04 — PostgreSQL connection & migration foundation:** canonical evidence `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`; implementation PR #46 / run `32567842071` / job `97019012280` / merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
-- **P01.05 — Cache abstraction:** canonical evidence `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`; implementation PR #48 / run `32571147128` / job `97026673348` / merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`.
-- **P01.06 — Object & file storage abstraction:** canonical evidence `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`; implementation PR #50 / final strict-up-to-date run `32588244996` / job `97067784835` / merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
-- **P01.07 — Structured logging & OpenTelemetry baseline:** canonical evidence `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`; implementation PR #54 / final strict-up-to-date run `32595413156` / job `97085413083` / merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
+Canonical completion evidence is retained for P01.01 through P01.08 under `docs/roadmap/evidence/`.
 
-P01.07 established the governed `log/slog` and OpenTelemetry Go `v1.45.0` baseline. The canonical lane passed repository Go quality, P01.01-P01.06 regressions and P01.07 G1/G2/G3/G5/G6/G7 evidence. Telemetry remains diagnostic infrastructure below domain/capability boundaries, does not own business truth and does not imply authorization or tenancy.
+Latest completed package: **P01.08 — Health, readiness & diagnostics**. Implementation PR #56 passed final strict-up-to-date GitHub-hosted run `32601741049` / job `97100949202` and merged as `a2a93454bb283464bfa144bb5a38539041e40069`. Canonical evidence: `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`.
 
-## Active P01 package — P01.08
+P01.08 established portable process liveness/readiness semantics, criticality-aware dependency checks, bounded timeout/cancellation behavior, safe diagnostic projection, startup/stopping lifecycle states, build identity and P01.07 observability integration. Health output remains operational evidence rather than authorization, tenancy or business-state authority.
 
-P01.08 is the sole active package. It owns only the health/readiness/diagnostic foundation defined in `docs/roadmap/work-packages/P01.08.md`:
+## Active P01 package — P01.09
 
-- distinct liveness and readiness semantics;
-- dependency-check registry with criticality classification;
-- bounded timeout/cancellation behavior;
-- startup/readiness transition model;
-- safe diagnostic summary with stable machine states;
-- build/version identity integration;
-- integration with the completed P01.07 observability boundary;
-- healthy/degraded/unready deterministic test harness;
-- P01.01-P01.07 regression preservation and repository Go quality.
+P01.09 is the sole active package and owns only the bounded kernel-local job/scheduler primitives in `docs/roadmap/work-packages/P01.09.md`:
 
-P01.08 must not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler/feature-registry/audit-transport behavior, identity/tenancy/module/event/workflow/business code, or AI/model/agent/planner functionality.
+- deterministic job identity/type registration;
+- kernel-local enqueue/execute result model;
+- bounded worker concurrency and graceful shutdown;
+- cancellation/deadline propagation;
+- bounded retry/backoff metadata;
+- idempotency-key hook and duplicate-safe handler contract;
+- simple recurring/one-shot kernel maintenance schedules;
+- correlation/observability propagation;
+- deterministic in-memory/test harness;
+- P01.01-P01.08 regression preservation and repository Go quality.
 
-Health output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads. Liveness and readiness are distinct operational signals; optional degradation must not automatically kill the process, while required security-critical dependencies fail closed where their capability is needed.
+P01.09 must not implement NATS/JetStream durable streams, transactional outbox/inbox, P05 workflow timers, business jobs, tenant-context runtime, feature registry, audit transport, developer CLI, later P01/P02+ behavior, or AI/model/agent/planner functionality.
 
-P01.09 may activate only after P01.08 reaches `done` with required canonical evidence.
+Job/scheduler identity never implies authority. Future tenant/actor context must be explicit and revalidated. Retry behavior must be bounded, duplicate-safe where protected effects are possible, and shutdown must stop accepting work with bounded drain/cancel semantics.
+
+P01.10 may activate only after P01.09 reaches `done` with required canonical evidence.
 
 ## Repository Go quality
 
@@ -65,13 +56,11 @@ P01.09 may activate only after P01.08 reaches `done` with required canonical evi
 
 ## Protected integration / CI
 
-`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates and required conversation resolution. Canonical governance CI remains GitHub-hosted only on `ubuntu-24.04`; local/self-hosted runners are prohibited.
-
-Completed P01 package verifiers remain regression gates in the same required job. Strict protection requires every implementation and closure branch to be current with protected `main` before merge.
+`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates and required conversation resolution. Canonical governance CI remains GitHub-hosted only on `ubuntu-24.04`; local/self-hosted runners are prohibited. Completed P01 package verifiers remain regression gates in the same required job.
 
 ## Future web UI quality/accessibility plan
 
-`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` remains mandatory planning input whenever a future package actually authorizes browser UI. It does not authorize P12/P13/P17 or other business/UI implementation during P01.
+`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` remains mandatory planning input whenever a future package actually authorizes browser UI. It does not authorize business/UI implementation during P01.
 
 ## Issue #4 — external distribution gate
 
@@ -79,4 +68,4 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-Implement **P01.08 only** after this governed closure/state transition merges. Establish the package-specific fail-closed verification required by its specification, obtain GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence with P01.01-P01.07 regressions and repository Go quality, reconcile P01.08 to `done`, then activate only P01.09. Keep `business_feature_code_authorized=false` and P02+ implementation locked.
+After this governed P01.08 closure/state-transition PR merges, implement **P01.09 only**. Add its fail-closed verifier, preserve repository Go quality and P01.01-P01.08 regressions, obtain GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, then use a separate closure transition before activating P01.10. Keep `business_feature_code_authorized=false` and P02+ implementation locked.
