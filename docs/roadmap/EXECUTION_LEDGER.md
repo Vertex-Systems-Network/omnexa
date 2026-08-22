@@ -215,3 +215,25 @@ Notes:
 - State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.01/P01.02 specs, P01 package sequence and P01 validators.
 - Commit / PR: implementation `#40` / `7257977264d788663083fa215462b1828f1e5afb`; completion-reconciliation PR/merge SHA to be appended after merge.
 - Notes: P01.02 is now the sole active kernel scope. `business_feature_code_authorized=false`; P01.03+ and P02+ remain unauthorized.
+
+## 2026-08-22 — P01.02 configuration/environment completion reconciliation
+
+- Phase / package: `P01.02`.
+- Transition: `active -> verification -> done`; `P01.03 planned -> active` through PR #43.
+- Summary: Completed the typed configuration/environment system with deterministic defaults/file/environment/override precedence, governed environment identity, strict unknown `OMNEXA_*` rejection, required/typed setting semantics, secret-safe diagnostics/provenance, isolated loader state and fail-closed startup validation.
+- Evidence: implementation PR #42 final head `b028582df299534898d6c9d2bafe7c5f1dc45a9d`; initial hosted run `32563817196` failed and remained failure evidence; corrected run `32563880800` / job `97009520624` completed SUCCESS on GitHub-hosted Ubuntu 24.04.4 LTS / X64 with Go 1.26.7; P01.01 regression plus P01.02 format/static, unit/race, precedence/startup, secret-safe negative, dependency-boundary and build/package checks PASS; PR #42 squash-merged as `c857bb9e7df1e347226653eeaded024d6ecd0271`; detailed evidence `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
+- Architecture impact: implements approved P01.02 configuration primitives only; no P01.03+ capability, database/cache/storage/telemetry/tenancy/module/business behavior introduced.
+- State files reconciled: PR #43 updated `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.02/P01.03 specs, package sequence and P01 validators.
+- Commit / PR: implementation `#42` / `c857bb9e7df1e347226653eeaded024d6ecd0271`; completion reconciliation `#43` / `88fde19addf54e60e641fbb88f64e2460d1f524f`.
+- Notes: PR #43 run `32564486977` failed because a required historical branch-protection marker had been dropped during document condensation; the marker was restored without weakening validation. Corrected run `32564554726` / job `97011173649` passed all governance and P01.01/P01.02 regressions before PR #43 merged. P01.03 then became the sole active kernel package.
+
+## 2026-08-22 — P01.03 structured error/result completion
+
+- Phase / package: `P01.03`.
+- Transition: `active -> verification -> done`; this reconciliation activates only `P01.04`.
+- Summary: Completed transport-neutral structured failure primitives: stable machine codes/categories, safe public projection separated from private causes, standard Go `errors.Is`/`errors.As` wrapping semantics, explicit retryability, deterministic bounded validation violations and correlation metadata hooks. Canonical Go `(value, error)` result semantics were retained; no custom `Result[T]` abstraction was introduced.
+- Evidence: implementation PR #44 final head `c9636bf9465c0c17d59e783e3ee73c3ba05fe22c`; run `32564943239` failed on `gofmt` cleanliness; diagnostic runs `32565072534` and `32565769688` remained failure/diagnostic evidence; exact formatter changes were applied and diagnostic workflow logic removed; final run `32565935613` / job `97014452248` completed SUCCESS on `GitHub Actions 1000008114`, Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04` `20260816.277.1`, Go 1.26.7. P01.01/P01.02 regressions and P01.03 format/static, unit/race, wrapping, public/private redaction, validation bounds/order, dependency-boundary and build/package gates all PASS. PR #44 squash-merged as `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
+- Architecture impact: implements approved P01.03 failure semantics only; no HTTP adapter, PostgreSQL/provider mapping, telemetry, tenancy, module runtime or business-domain error catalog introduced.
+- State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.03/P01.04 specs, package sequence and canonical completion evidence.
+- Commit / PR: implementation `#44` / `bdeda5fad09a2369b2a6852e5c62550db50047ea`; completion-reconciliation PR/merge SHA to be appended after merge.
+- Notes: canonical evidence is `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`. P01.04 is the sole next authorized kernel scope; `business_feature_code_authorized=false` and P02+ remain locked.
