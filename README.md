@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.06 are DONE; P01.07 — Structured logging & OpenTelemetry baseline is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.07 are DONE; P01.08 — Health, readiness & diagnostics is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -17,13 +17,14 @@ Key references:
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.07.md`
+- `docs/roadmap/work-packages/P01.08.md`
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`
+- `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
@@ -78,12 +79,15 @@ Redis-compatible cache foundation with Valkey `9.1.1` / valkey-go `v1.0.75`, plu
 ### P01.06 — done
 Governed S3-compatible object/file storage foundation with deterministic namespaced/versioned keys, bounded streaming, untrusted metadata validation, SHA-256 integrity handling, provider-safe failures, timeout/cancellation/unavailability classification, concurrent synthetic integration and provider restart evidence. Final implementation evidence: PR #50, run `32588244996`, job `97067784835`, merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`. Canonical evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`.
 
-### P01.07 — active
-P01.07 owns only the structured logging and OpenTelemetry-compatible observability baseline: stable structured fields, levels/defaults, correlation/trace context propagation, resource/service identity, trace/metric provider lifecycle, vendor-neutral exporter configuration, bounded shutdown/flush, redaction/filtering hooks and deterministic test capture.
+### P01.07 — done
+Governed structured logging and OpenTelemetry baseline using standard-library `log/slog`, safe classification/sensitive-key redaction, bounded correlation + W3C trace-context propagation, isolated trace/metric SDK lifecycle, vendor-neutral exporter injection, bounded flush/shutdown, disabled mode and deterministic capture tests. OpenTelemetry Go is pinned to `v1.45.0`. Final implementation evidence: PR #54, run `32595413156`, job `97085413083`, merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`. Canonical evidence: `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`.
 
-P01.07 must not pull forward product analytics, dashboards/alerts/SLO automation, domain-specific telemetry, audit semantics, health/readiness, scheduler/feature-registry/audit transport, identity/tenancy/module/event/workflow/business code or AI/model/agent/planner functionality.
+### P01.08 — active
+P01.08 owns only the portable health/readiness/diagnostic foundation: semantically distinct liveness/readiness, dependency-check criticality, bounded timeout/cancellation, startup/readiness transitions, safe machine-readable diagnostics, build/version integration, P01.07 observability integration and healthy/degraded/unready test coverage.
 
-P01.08-P01.12 remain planned and strict sequential activation applies.
+P01.08 must not pull forward public business status pages, P03 tenant/module health aggregation, SLO automation, Kubernetes-specific architecture, sensitive support diagnostics, scheduler/feature-registry/audit/CLI behavior, identity/tenancy/module/event/workflow/business code or AI/model/agent/planner functionality.
+
+P01.09-P01.12 remain planned and strict sequential activation applies.
 
 ## Future browser UI quality/accessibility
 
@@ -95,7 +99,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current canonical state after the P01.06 closure transition: **P00 done; P01 active; P01.01-P01.06 done; P01.07 active; P01 progress 6 / 12 done; kernel implementation authorized only for P01.07; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current canonical state after the P01.07 closure transition: **P00 done; P01 active; P01.01-P01.07 done; P01.08 active; P01 progress 7 / 12 done; kernel implementation authorized only for P01.08; business features locked.**
 
 ## Product principle
 

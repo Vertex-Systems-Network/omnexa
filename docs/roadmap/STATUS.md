@@ -7,16 +7,17 @@ Last reconciled: **2026-08-22**
 - Program: **Kernel Program**
 - Phase: **P01 — Omnexa Kernel**
 - Phase state: **active**
-- Current work package: **P01.07 — Structured logging & OpenTelemetry baseline**
-- P01 progress: **6 / 12 done**
+- Current work package: **P01.08 — Health, readiness & diagnostics**
+- P01 progress: **7 / 12 done**
 - P01.01: **DONE**
 - P01.02: **DONE**
 - P01.03: **DONE**
 - P01.04: **DONE**
 - P01.05: **DONE**
 - P01.06: **DONE**
-- P01.07: **ACTIVE**
-- P01.08–P01.12: **PLANNED / NOT ACTIVE**
+- P01.07: **DONE**
+- P01.08: **ACTIVE**
+- P01.09–P01.12: **PLANNED / NOT ACTIVE**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
 - Repository visibility: **PUBLIC**
@@ -34,29 +35,29 @@ Last reconciled: **2026-08-22**
 - **P01.04 — PostgreSQL connection & migration foundation:** canonical evidence `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`; implementation PR #46 / run `32567842071` / job `97019012280` / merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
 - **P01.05 — Cache abstraction:** canonical evidence `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`; implementation PR #48 / run `32571147128` / job `97026673348` / merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`.
 - **P01.06 — Object & file storage abstraction:** canonical evidence `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`; implementation PR #50 / final strict-up-to-date run `32588244996` / job `97067784835` / merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
+- **P01.07 — Structured logging & OpenTelemetry baseline:** canonical evidence `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`; implementation PR #54 / final strict-up-to-date run `32595413156` / job `97085413083` / merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
 
-P01.06 verified the governed S3-compatible storage foundation using `adobe/s3mock:5.1.0`, AWS SDK for Go v2 `v1.43.7`, S3 client `v1.107.3`, credentials `v1.19.37` and Smithy `v1.27.8`. The canonical lane passed repository Go quality, P01.01-P01.05 regressions and P01.06 G1/G2/G3/G5/G6/G7 evidence. Storage keys remain infrastructure identity only and do not imply tenant authorization or business ownership.
+P01.07 established the governed `log/slog` and OpenTelemetry Go `v1.45.0` baseline. The canonical lane passed repository Go quality, P01.01-P01.06 regressions and P01.07 G1/G2/G3/G5/G6/G7 evidence. Telemetry remains diagnostic infrastructure below domain/capability boundaries, does not own business truth and does not imply authorization or tenancy.
 
-## Active P01 package — P01.07
+## Active P01 package — P01.08
 
-P01.07 is the sole active package. It owns only the structured logging and OpenTelemetry-compatible observability baseline defined in `docs/roadmap/work-packages/P01.07.md`:
+P01.08 is the sole active package. It owns only the health/readiness/diagnostic foundation defined in `docs/roadmap/work-packages/P01.08.md`:
 
-- structured logs with stable field conventions;
-- log levels and environment-appropriate defaults;
-- correlation/trace context propagation helpers;
-- OpenTelemetry resource/service identity baseline;
-- trace and metric provider lifecycle;
-- exporter/configuration abstraction without vendor lock-in;
-- bounded shutdown/flush and exporter-failure behavior;
-- redaction/filtering hooks aligned with data classification;
-- deterministic test-capture utilities;
-- P01.01-P01.06 regression preservation and repository Go quality.
+- distinct liveness and readiness semantics;
+- dependency-check registry with criticality classification;
+- bounded timeout/cancellation behavior;
+- startup/readiness transition model;
+- safe diagnostic summary with stable machine states;
+- build/version identity integration;
+- integration with the completed P01.07 observability boundary;
+- healthy/degraded/unready deterministic test harness;
+- P01.01-P01.07 regression preservation and repository Go quality.
 
-P01.07 must not implement product analytics/business metrics, dashboards/alerts/SLO automation, domain-specific telemetry, audit semantics, health/readiness, scheduler/feature-registry/audit-transport behavior, tenancy/module/event/workflow/business code, or AI/model/agent/planner functionality.
+P01.08 must not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler/feature-registry/audit-transport behavior, identity/tenancy/module/event/workflow/business code, or AI/model/agent/planner functionality.
 
-Secrets, auth tokens, private keys, raw `RESTRICTED` payloads and ordinary sensitive business content are prohibited from telemetry by default. Observability outage must not become a correctness or security bypass. Correlation/trace identifiers are identifiers, not authorization credentials.
+Health output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads. Liveness and readiness are distinct operational signals; optional degradation must not automatically kill the process, while required security-critical dependencies fail closed where their capability is needed.
 
-P01.08 may activate only after P01.07 reaches `done` with required canonical evidence.
+P01.09 may activate only after P01.08 reaches `done` with required canonical evidence.
 
 ## Repository Go quality
 
@@ -66,7 +67,7 @@ P01.08 may activate only after P01.07 reaches `done` with required canonical evi
 
 `main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates and required conversation resolution. Canonical governance CI remains GitHub-hosted only on `ubuntu-24.04`; local/self-hosted runners are prohibited.
 
-Completed P01 package verifiers remain regression gates in the same required job. P01.06 integration demonstrated that strict protection also requires the PR branch to be current with protected `main`; the branch was synchronized and a fresh full green lane was obtained rather than weakening protection.
+Completed P01 package verifiers remain regression gates in the same required job. Strict protection requires every implementation and closure branch to be current with protected `main` before merge.
 
 ## Future web UI quality/accessibility plan
 
@@ -78,4 +79,4 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-Implement **P01.07 only** after this governed closure/state transition merges. Establish the package-specific fail-closed verification required by its specification, obtain GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence with P01.01-P01.06 regressions and repository Go quality, reconcile P01.07 to `done`, then activate only P01.08. Keep `business_feature_code_authorized=false` and P02+ implementation locked.
+Implement **P01.08 only** after this governed closure/state transition merges. Establish the package-specific fail-closed verification required by its specification, obtain GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence with P01.01-P01.07 regressions and repository Go quality, reconcile P01.08 to `done`, then activate only P01.09. Keep `business_feature_code_authorized=false` and P02+ implementation locked.

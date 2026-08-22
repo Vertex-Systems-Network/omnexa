@@ -58,7 +58,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Why:** each kernel primitive becomes a verified dependency for the next package; multiple active foundation packages make evidence and authority ambiguous.
 
-**Current implication:** after the governed P01.06 closure transition, P01.01-P01.06 are done and P01.07 is the sole active package. P01.08 remains blocked until P01.07 is done and canonical state transitions again. While closure PR #53 is unmerged, protected `main` remains authoritative and still records P01.06 as active.
+**Current implication:** P01.07 implementation is merged and completion-eligible. Closure PR #55 proposes P01.01-P01.07 `done` and P01.08 as the sole active package. Until PR #55 merges, protected `main` remains authoritative and still records P01.07 as active. P01.08 runtime must not start before that transition; P01.09 remains blocked until P01.08 later completes and transitions canonically.
 
 ## D-007 — Repository continuity is a subordinate snapshot, not a new source of truth
 
@@ -79,3 +79,15 @@ This file preserves concise rationale that a future AI must not forget. It refer
 **Direction:** model gateway, context/retrieval, planner, risk/policy, approval, capability broker, verification/replanning, governed agents and autonomous business orchestration belong to future authorized phases.
 
 **Current rule:** compatibility may be preserved; implementation is forbidden until canonical roadmap state authorizes it.
+
+## D-009 — Observability is diagnostic infrastructure, not authority
+
+**Authoritative source:** `docs/roadmap/work-packages/P01.07.md`, `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`, `AGENTS.md`.
+
+**Why:** logs/traces/metrics must help explain runtime behavior without becoming a second correctness path, business-state owner, authorization signal or audit substitute.
+
+**Implemented P01.07 direction:** standard structured logging plus isolated OpenTelemetry trace/metric SDK providers, vendor-neutral exporter injection, bounded lifecycle and fail-closed redaction. Correlation/trace identifiers remain diagnostic identifiers only.
+
+**Rejected:** proprietary telemetry coupling in the kernel contract, global-provider mutation as hidden process state, raw secret/classified/error leakage, audit semantics in ordinary logs, or treating telemetry availability as application correctness.
+
+**Future dependency:** P01.08 consumes the completed observability boundary for health/diagnostic integration; later audit/business/AI systems must preserve their own ownership and authority boundaries.

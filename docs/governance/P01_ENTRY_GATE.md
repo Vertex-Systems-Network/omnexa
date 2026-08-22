@@ -28,7 +28,7 @@ Verified repository behavior includes:
 
 Current single-maintainer policy uses zero required approvals and does not require Code Owner review until an independent reviewer exists.
 
-P01.06 integration also reconfirmed the strict up-to-date requirement: PR #50 could not merge while its branch lagged protected `main`, despite previously green workflow runs. The branch was synchronized with current `main`, fresh run `32588244996` passed, and the PR then merged normally. Protection was not bypassed or weakened.
+P01.06 integration reconfirmed the strict up-to-date requirement: PR #50 could not merge while its branch lagged protected `main`, despite previously green workflow runs. The branch was synchronized with current `main`, fresh run `32588244996` passed, and the PR then merged normally. Protection was not bypassed or weakened.
 
 ### EG-03 — executable verification lane
 State: **SATISFIED**  
@@ -48,21 +48,22 @@ Canonical completed-package evidence:
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
-- `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`.
+- `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`.
 
-Latest completed-package implementation evidence is P01.06 PR #50, final strict-up-to-date run `32588244996`, job `97067784835`, merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
+Latest completed-package implementation evidence is P01.07 PR #54, final strict-up-to-date run `32595413156`, job `97085413083`, merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
-Current bounded state after the governed P01.06 closure transition:
+Current bounded state after the governed P01.07 closure transition:
 
 - P00/P00.10: `done`;
 - P01: `active`;
-- P01.01-P01.06: `done`;
-- P01.07: `active`;
-- P01.08-P01.12: `planned`;
-- `kernel_code_authorized=true` only for P01.07;
+- P01.01-P01.07: `done`;
+- P01.08: `active`;
+- P01.09-P01.12: `planned`;
+- `kernel_code_authorized=true` only for P01.08;
 - `business_feature_code_authorized=false`.
 
 ## Active P01 package sequence
@@ -75,18 +76,19 @@ Current bounded state after the governed P01.06 closure transition:
 - P01.04 — **PostgreSQL connection & migration foundation**: done.
 - P01.05 — **Cache abstraction**: done.
 - P01.06 — **Object & file storage abstraction**: done; PR #50 / run `32588244996` / job `97067784835` / merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
-- P01.07 — **Structured logging & OpenTelemetry baseline**: sole active package.
-- P01.08-P01.12: planned.
+- P01.07 — **Structured logging & OpenTelemetry baseline**: done; PR #54 / run `32595413156` / job `97085413083` / merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
+- P01.08 — **Health, readiness & diagnostics**: sole active package.
+- P01.09-P01.12: planned.
 
-Advancing again requires P01.07 to reach `done` with its required GitHub-hosted evidence, P01.01-P01.06 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
+Advancing again requires P01.08 to reach `done` with its required GitHub-hosted evidence, P01.01-P01.07 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
 
-## Active P01.07 bounds
+## Active P01.08 bounds
 
-P01.07 may implement only the structured logging/OpenTelemetry-compatible observability baseline defined in `docs/roadmap/work-packages/P01.07.md`: stable structured fields, levels/defaults, correlation/trace context helpers, OpenTelemetry resource/provider lifecycle, vendor-neutral exporter configuration, bounded shutdown/flush, redaction/filtering hooks and deterministic test capture.
+P01.08 may implement only the health/readiness/diagnostic foundation defined in `docs/roadmap/work-packages/P01.08.md`: distinct liveness/readiness semantics, dependency check registry with criticality, bounded timeout/cancellation, startup/readiness transitions, safe diagnostic machine states, build/version identity integration, P01.07 observability integration and deterministic healthy/degraded/unready tests.
 
-It may not implement product analytics/business metrics, dashboards/alerts/SLO automation, domain-specific telemetry, audit semantics, health/readiness, scheduler/feature-registry/audit transport, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
+It may not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration automation, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler/feature-registry/audit/CLI behavior, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
 
-Secrets, tokens, private keys and raw `RESTRICTED` content are prohibited from telemetry by default. Correlation IDs are not authorization credentials. Observability outage must not become a correctness/security bypass.
+Health output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads. Liveness and readiness are distinct operational signals. Diagnostic state does not grant authorization or become business truth.
 
 ## Future browser UI planning requirement
 
@@ -105,9 +107,9 @@ Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01-P01.06: DONE
-P01.07: ACTIVE — Structured logging & OpenTelemetry baseline
-P01.08-P01.12: PLANNED
+P01.01-P01.07: DONE
+P01.08: ACTIVE — Health, readiness & diagnostics
+P01.09-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
