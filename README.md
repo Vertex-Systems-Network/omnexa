@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.04 are DONE; P01.05 — Cache abstraction is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.05 are DONE; P01.06 — Object & file storage abstraction is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -15,11 +15,13 @@ Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execut
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.05.md`
+- `docs/roadmap/work-packages/P01.06.md`
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`
+- `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`
+- `docs/quality/GO_CODE_QUALITY.md`
 - `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
@@ -55,12 +57,15 @@ runs-on: ubuntu-24.04
 
 The `governance` job fails unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
 
+Permanent repository-wide Go quality verification runs before package regressions through `bash scripts/verify_go_quality.sh`, using pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
+
 Completed package evidence:
 
 - P01.01: PR #40, run `32562869345`, job `97007065640`, merge `7257977264d788663083fa215462b1828f1e5afb`.
 - P01.02: PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
 - P01.03: PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
 - P01.04: PR #46, run `32567842071`, job `97019012280`, merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
+- P01.05: PR #48, run `32571147128`, job `97026673348`, merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`.
 
 Repository-managed Dependabot configuration is present for weekly GitHub Actions dependency updates.
 
@@ -82,13 +87,25 @@ Transport-neutral structured failure primitives with stable codes/categories, sa
 
 PostgreSQL connection/migration foundation with pgx `v5.10.0`, PostgreSQL `18.6`, bounded pool/config behavior, safe provider failures, transaction helper, advisory-locked owner-scoped migration ledger, deterministic fresh/upgrade/failure tests and GitHub-hosted G0/G1/G2/G3/G4/G5/G7 evidence. Evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
 
-### P01.05 — active
+### P01.05 — done
 
-P01.05 implements only the Redis-compatible cache abstraction: deterministic namespaced/versioned keys, explicit TTL semantics, typed serialization, get/set/delete and justified atomic primitives, P01.02 configuration, P01.03 safe failure mapping, bounded timeout/cancellation, synthetic provider integration and flush/restart evidence proving cache is non-authoritative.
+Redis-compatible cache foundation with Valkey `9.1.1` and valkey-go `v1.0.75`: deterministic namespaced/versioned keys, bounded TTL/value semantics, typed JSON serialization, explicit miss/error behavior, get/set/delete, safe provider failures, bounded cancellation/timeouts, FLUSHDB non-authority and provider restart/reconnect evidence. Evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
 
-It must **not** pull forward business cache keys/models, sessions/authentication, tenancy, module runtime, event/job fabric, object storage, telemetry, health or later P01 capability semantics.
+P01.05 also established the permanent Go code-quality gate. The canonical completion run reported golangci-lint `0 issues` and no reachable govulncheck vulnerabilities. A reachable `GO-2026-5970` finding discovered during development was fixed by moving the canonical dependency graph to `golang.org/x/text v0.39.0` rather than suppressing it.
 
-P01.06–P01.12 remain planned and strict sequential activation applies.
+### P01.06 — active
+
+P01.06 implements only the governed S3-compatible object/file storage foundation: provider adapter, bucket/container configuration, explicitly namespaced/versioned object keys, streamed bounded upload/download, untrusted metadata handling, integrity/checksum hooks, put/get/head/delete/missing-object behavior, safe provider timeout/cancellation/error mapping and synthetic provider verification.
+
+It must **not** pull forward media library/CMS/file UI, public URL/CDN/image processing, tenant/business document models, sessions/authentication, tenancy, module runtime, event/job fabric, retention/legal hold, telemetry/logging, health, scheduler, feature registry, audit transport or later capability semantics.
+
+Object keys never imply authorization. Path traversal must not escape the provider namespace. Storage credentials are RESTRICTED; signed URLs, secrets and sensitive content must not appear in diagnostics. Large-object flows must be streamed and bounded.
+
+P01.07–P01.12 remain planned and strict sequential activation applies.
+
+## Go code quality
+
+`docs/quality/GO_CODE_QUALITY.md` defines the permanent repository-wide Go quality policy. The required governance job validates formatting, curated static analysis and reachable dependency vulnerabilities with pinned tool versions before completed-package regression verifiers.
 
 ## Future browser UI quality/accessibility
 
@@ -102,7 +119,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01-P01.04 done; P01.05 active; P01 progress 4 / 12 done; kernel implementation authorized only for P01.05; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01-P01.05 done; P01.06 active; P01 progress 5 / 12 done; kernel implementation authorized only for P01.06; business features locked.**
 
 ## Product principle
 

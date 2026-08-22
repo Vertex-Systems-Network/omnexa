@@ -78,30 +78,40 @@ Each command maps to P00.07 quality gate classes and returns a non-zero exit sta
 Completed P01 packages retain their verification wrappers as mandatory regressions:
 
 ```text
+bash scripts/verify_go_quality.sh
 bash scripts/verify_p01_01.sh
 bash scripts/verify_p01_02.sh
 bash scripts/verify_p01_03.sh
 P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_04.sh
+P01_05_TEST_CACHE_ADDRESS=127.0.0.1:6379 P01_05_TEST_VALKEY_IMAGE=valkey/valkey:9.1.1 bash scripts/verify_p01_05.sh
 ```
 
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate, bounded provider behavior, transaction semantics, fresh/upgrade/failure migrations, immutable ledger/drift checks and advisory-lock coordination against PostgreSQL 18.6.
+`verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-Canonical GitHub-hosted governance currently executes P01.01 through P01.04 in sequence on `ubuntu-24.04`. P01.04 additionally provisions the governed PostgreSQL 18.6 synthetic test service. The final `omnexa verify ...` CLI remains owned by P01.12.
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior.
 
-### Active P01.05
+Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.05 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6 and P01.05 provisions Valkey 9.1.1 as governed synthetic services. The final `omnexa verify ...` CLI remains owned by P01.12.
 
-P01.05 — Cache abstraction is the sole active executable kernel package. Its implementation PR must add a fail-closed `scripts/verify_p01_05.sh` and a governed Redis-compatible synthetic test service before P01.05 can complete.
+## Completed P01.05
 
-The active P01.05 verifier must map the package requirements to:
+P01.05 is complete with canonical evidence in `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Cache/provider mappings retain lower-level causes privately while public failures remain provider/credential safe.
 
-- `verify format` / `verify static` -> pinned toolchain, formatting/lint/static checks and cache-package dependency/scope boundaries;
-- `verify unit` -> deterministic key namespace/version, TTL, serialization and miss/error behavior;
-- `verify integration` -> Redis-compatible get/set/delete and any justified atomic primitive against a real synthetic provider;
-- `verify security` -> provider-secret redaction and no business/session/tenant/later-capability pull-forward;
-- lifecycle/resilience evidence -> provider flush/restart/eviction/outage proving cache is non-authoritative;
-- `verify build` -> complete kernel package build with pinned cache dependency metadata.
+## Active P01.06
 
-Until that active verifier/service exists and passes on the canonical GitHub-hosted lane, P01.05 cannot be marked done.
+P01.06 — Object & file storage abstraction is the sole active executable kernel package. Its implementation PR must add a fail-closed `scripts/verify_p01_06.sh` and a governed S3-compatible synthetic test provider/service before P01.06 can complete.
+
+The active P01.06 verifier must map package requirements to:
+
+- `verify format` / `verify static` -> pinned toolchain, repository Go quality, formatting/static checks and storage-package dependency/scope boundaries;
+- `verify unit` -> deterministic object-key namespace/version behavior, metadata/key validation, integrity/checksum helpers and missing-object semantics;
+- `verify integration` -> S3-compatible put/get/head/delete, missing-object behavior and provider contract tests against a real synthetic provider;
+- streaming evidence -> large synthetic objects must prove bounded-memory streaming rather than whole-object buffering;
+- `verify security` -> provider-secret/signed-URL/content redaction, path-traversal containment and no CMS/media/business/tenant/later-capability pull-forward;
+- lifecycle/resilience evidence -> bounded provider unavailable/timeout/cancellation behavior and recoverability appropriate to the selected provider;
+- `verify build` -> complete kernel package build with pinned storage dependency metadata;
+- completed P01.01-P01.05 regression preservation.
+
+Until that active verifier/service exists and passes on the canonical GitHub-hosted lane, P01.06 cannot be marked done.
 
 ## Go result convention — completed P01.03
 
@@ -113,9 +123,9 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-P01.04 database/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.05 cache/provider mappings must follow the same safe public/private cause boundary. Transport adapters and telemetry emission remain owned by their later packages.
+P01.04 database/provider mappings and P01.05 cache/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.06 storage/provider mappings must follow the same boundary. Transport adapters and telemetry emission remain owned by their later packages.
 
-## Configuration startup contract — completed P01.02 / P01.04 database extension
+## Configuration startup contract
 
 The kernel process accepts only explicit governed configuration sources. Application-level controls remain:
 
@@ -124,7 +134,7 @@ OMNEXA_CONFIG_FILE=<explicit JSON file path>   # optional; no implicit file disc
 OMNEXA_ENVIRONMENT=local|ci|preview|test|staging|production
 ```
 
-P01.04 composes these database settings only at the database boundary; it does not make the existing kernel startup path database-dependent:
+P01.04 database settings remain a completed boundary extension:
 
 ```text
 OMNEXA_DATABASE_URL=<RESTRICTED PostgreSQL DSN>
@@ -135,9 +145,20 @@ OMNEXA_DATABASE_MAX_CONNECTION_LIFETIME=30m
 OMNEXA_DATABASE_MAX_CONNECTION_IDLE_TIME=5m
 ```
 
-`OMNEXA_DATABASE_URL` is RESTRICTED and must never be printed in logs, failures or artifacts. The remaining values are bounded by the P01.04 adapter before a pool is constructed.
+P01.05 cache settings remain a completed boundary extension:
 
-P01.05 may add only cache-specific configuration keys justified by its active specification. Cache credentials/endpoints are sensitive and must follow the same no-leak rule.
+```text
+OMNEXA_CACHE_ADDRESS=<sensitive Redis-compatible endpoint>
+OMNEXA_CACHE_USERNAME=<sensitive provider username, optional>
+OMNEXA_CACHE_PASSWORD=<RESTRICTED provider password, optional>
+OMNEXA_CACHE_CONNECT_TIMEOUT=3s
+OMNEXA_CACHE_OPERATION_TIMEOUT=2s
+OMNEXA_CACHE_KEY_PREFIX=omnexa
+OMNEXA_CACHE_MAX_VALUE_BYTES=1048576
+OMNEXA_CACHE_MAX_TTL=24h
+```
+
+P01.06 may add only storage-specific configuration justified by its active specification. Storage credentials/endpoints/bucket secrets are sensitive or RESTRICTED as applicable and must never be printed in logs, public failures or artifacts.
 
 Configuration precedence remains:
 
@@ -173,16 +194,7 @@ omnexa module package <id>
 
 ## Contract commands
 
-Future tooling should support explicit validation/generation for:
-
-- OpenAPI contracts;
-- event schemas;
-- data-classification declarations;
-- module manifests;
-- quality evidence records;
-- SDK/generated artifacts.
-
-Generation and validation must be reproducible from pinned tool versions.
+Future tooling should support explicit validation/generation for OpenAPI contracts, event schemas, data-classification declarations, module manifests, quality evidence records and SDK/generated artifacts. Generation and validation must be reproducible from pinned tool versions.
 
 ## Exit-code contract
 
