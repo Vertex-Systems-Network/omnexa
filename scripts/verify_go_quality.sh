@@ -19,9 +19,16 @@ GOBIN="${TOOL_ROOT}" GOTOOLCHAIN=local go install "golang.org/x/vuln/cmd/govulnc
 
 "${TOOL_ROOT}/golangci-lint" version
 "${TOOL_ROOT}/govulncheck" -version
-"${TOOL_ROOT}/golangci-lint" config verify
 
 status=0
+
+if config_output=$("${TOOL_ROOT}/golangci-lint" config verify 2>&1); then
+  echo "golangci-lint configuration: PASS"
+else
+  echo "ERROR: golangci-lint configuration validation failed" >&2
+  printf '%s\n' "${config_output}" >&2
+  status=1
+fi
 
 : > "${FORMAT_DIFF}"
 gofmt -d kernel > "${FORMAT_DIFF}"
