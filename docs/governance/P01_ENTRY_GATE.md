@@ -22,13 +22,13 @@ Verified 2026-08-22:
 - live GitHub branch metadata reports `main protected: true`;
 - required check is `governance`;
 - PR #34 intentionally failed `governance` in run `32540836431`; GitHub rejected merge with `Required status check "governance" is failing`;
-- controlled direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected with `Changes must be made through a pull request` and `Required status check "governance" is expected`;
-- force-update probe was rejected with `Cannot force-push to this branch`;
-- PR #37 changed the CODEOWNERS path, passed hosted run `32541439589`, and an unresolved review thread blocked merge until explicit resolution; after resolution the same PR merged as `866646f5a2db444fc668dd62b8d1ff824b6359bc`;
-- green PR #35 passed hosted governance and merged normally as `843c615170058ab900ba69516dbed80a47f26973`;
-- force pushes and deletion of `main` remain blocked by the configured ruleset. Destructive deletion of the default branch was intentionally not attempted because it would create unnecessary recovery risk.
+- controlled direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
+- force-update probe was rejected;
+- PR #37 run `32541439589` proved conversation resolution enforcement: an unresolved review thread blocked merge until explicit resolution;
+- green PR #35 merged normally;
+- force pushes and deletion of `main` remain blocked by the configured ruleset.
 
-Current single-maintainer review policy intentionally requires `0` approvals and does not require Code Owner review. CODEOWNERS still documents ownership. When an independent reviewer exists, require at least one independent approval and Code Owner review.
+Current single-maintainer review policy intentionally requires `0` approvals and does not require Code Owner review. Tighten this when an independent reviewer exists.
 
 ### EG-03 — executable verification lane
 State: **SATISFIED**  
@@ -43,34 +43,40 @@ runs-on: ubuntu-24.04
 The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
 
 ### EG-04 — canonical executable verification command
-State: **SATISFIED BY P01.01**
+State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
-P01.01 established the repository-owned Go toolchain/workspace and `scripts/verify_p01_01.sh`, which is invoked by the same GitHub-hosted governance job used for canonical verification. P01.01 completion evidence is recorded at `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
+P01.01 established the pinned Go workspace/build verifier. P01.02 added its configuration/security verifier. Completed-package regression verifiers remain mandatory in the same GitHub-hosted governance job.
+
+Canonical evidence:
+
+- `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
 Current bounded state:
 
-- P00.10: `done`;
-- P00: `done`;
+- P00/P00.10: `done`;
 - P01: `active`;
 - P01.01: `done`;
-- P01.02: `active`;
+- P01.02: `done`;
+- P01.03: `active`;
 - `kernel_code_authorized=true`;
 - `business_feature_code_authorized=false`;
-- P01.03–P01.12 remain `planned`;
-- ADR-0006 is historical-only and cannot authorize a current bypass.
+- P01.04–P01.12 remain `planned`;
+- ADR-0006 remains historical-only.
 
 ## Active P01 package sequence
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
 
-- P01.01 — **Go workspace / build skeleton**: `done` with PR #40 / run `32562869345` / job `97007065640` evidence.
-- P01.02 — **Configuration & environment system**: sole `active` package.
-- P01.03–P01.12: `planned`.
+- P01.01 — **Go workspace / build skeleton**: `done`.
+- P01.02 — **Configuration & environment system**: `done`; PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
+- P01.03 — **Structured error & result conventions**: sole `active` package.
+- P01.04–P01.12: `planned`.
 
-Advancing to a later package requires the active package to reach `done` with its required hosted evidence and a governed state reconciliation.
+Advancing again requires P01.03 to reach `done` with required hosted evidence and a governed state reconciliation.
 
 ## External distribution / Issue #4
 
@@ -87,8 +93,9 @@ Live main protection: protected:true
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
 P01.01: DONE
-P01.02: ACTIVE — Configuration & environment system
-P01.03-P01.12: PLANNED
+P01.02: DONE
+P01.03: ACTIVE — Structured error & result conventions
+P01.04-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```

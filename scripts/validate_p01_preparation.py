@@ -22,6 +22,7 @@ for relative in REQUIRED_FILES:
 state = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"))
 if state.get("current_phase") != "P01":
     raise SystemExit("ERROR: current phase must be P01")
+
 current = state.get("current_work_package")
 expected_ids = [f"P01.{i:02d}" for i in range(1, 13)]
 if current not in expected_ids:
@@ -77,24 +78,20 @@ if prep.get("blocking_gate") is not None:
     raise SystemExit("ERROR: active P01 must have no blocking entry gate")
 
 package = active_spec.read_text(encoding="utf-8")
-for marker in [current, "State: `active`", "kernel_code_authorized=true", "business_feature_code_authorized=false", "Acceptance criteria", "Completion evidence", "GitHub-hosted"]:
+for marker in [
+    current,
+    "State: `active`",
+    "kernel_code_authorized=true",
+    "business_feature_code_authorized=false",
+    "Acceptance criteria",
+    "Completion evidence",
+    "GitHub-hosted",
+]:
     if marker.lower() not in package.lower():
         raise SystemExit(f"ERROR: active {current} spec missing marker: {marker}")
 
-if current_index > 0:
-    evidence = ROOT / "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"
-    if not evidence.is_file():
-        raise SystemExit("ERROR: advancing beyond P01.01 requires canonical P01.01 completion evidence")
-
-required_verifiers = ["scripts/verify_p01_01.sh"]
-if current == "P01.02":
-    required_verifiers.append("scripts/verify_p01_02.sh")
-for relative in required_verifiers:
-    if not (ROOT / relative).is_file():
-        raise SystemExit(f"ERROR: active P01 verification file missing: {relative}")
-
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
-for marker in [
+base_workflow_markers = [
     "name: governance",
     "runs-on: ubuntu-24.04",
     "RUNNER_ENVIRONMENT",
@@ -103,14 +100,26 @@ for marker in [
     "python scripts/validate_freeze_review.py",
     "python scripts/validate_p01_preparation.py",
     "python scripts/validate_p01_package_specs.py",
-    "bash scripts/verify_p01_01.sh",
-]:
+]
+for marker in base_workflow_markers:
     if marker not in workflow:
         raise SystemExit(f"ERROR: governance workflow missing marker: {marker}")
-if current == "P01.02" and "bash scripts/verify_p01_02.sh" not in workflow:
-    raise SystemExit("ERROR: active P01.02 must be enforced by the canonical governance workflow")
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
+
+# Every completed sequential package must retain immutable completion evidence and
+# its regression verifier in both the repository and canonical workflow.
+for index in range(current_index):
+    package_number = index + 1
+    evidence = ROOT / f"docs/roadmap/evidence/P01.{package_number:02d}_COMPLETION_2026-08-22.md"
+    verifier = ROOT / f"scripts/verify_p01_{package_number:02d}.sh"
+    if not evidence.is_file():
+        raise SystemExit(f"ERROR: completed P01.{package_number:02d} missing canonical completion evidence")
+    if not verifier.is_file():
+        raise SystemExit(f"ERROR: completed P01.{package_number:02d} missing regression verifier")
+    workflow_marker = f"bash scripts/verify_p01_{package_number:02d}.sh"
+    if workflow_marker not in workflow:
+        raise SystemExit(f"ERROR: completed P01.{package_number:02d} verifier missing from governance workflow")
 
 print("Omnexa P01 activation/readiness validation: PASS")
 print("P00: DONE")
