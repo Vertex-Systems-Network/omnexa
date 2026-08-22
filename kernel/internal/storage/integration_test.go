@@ -142,7 +142,7 @@ func TestS3CompatibleStorageFoundationIntegration(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Open(large) error = %v", err)
 		}
-		defer object.Body.Close()
+		defer func() { _ = object.Body.Close() }()
 		hasher := sha256.New()
 		buffer := make([]byte, 32*1024)
 		written, err := io.CopyBuffer(hasher, object.Body, buffer)
