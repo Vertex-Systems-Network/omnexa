@@ -16,7 +16,17 @@ Evidence: `FOUNDATION_FREEZE_REVIEW.md`, `FOUNDATION_FREEZE.json`, ADR-0010.
 State: **SATISFIED**  
 Tracker: **Issue #3 — closed/completed**
 
-Verified repository behavior includes protected `main`, PR-only integration, strict required `governance`, blocked direct/force updates, failed-check merge rejection, required conversation resolution and strict up-to-date branch enforcement. Current single-maintainer policy uses zero required approvals until an independent reviewer exists.
+Verified repository behavior includes:
+
+- `protected: true` for `main`;
+- PR-only integration with strict required `governance`;
+- intentionally failing governance probe run `32540836431` blocked merge;
+- direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
+- force updates remain rejected;
+- conversation-resolution probe run `32541439589` blocked merge until the review thread was resolved;
+- green integration is permitted only when all required controls are satisfied.
+
+Current single-maintainer policy uses zero required approvals and does not require Code Owner review until an independent reviewer exists. Strict up-to-date branch enforcement remains mandatory; stale green runs do not authorize merge.
 
 ### EG-03 — executable verification lane
 State: **SATISFIED**  
