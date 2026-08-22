@@ -75,7 +75,7 @@ Each command maps to P00.07 quality gate classes and returns a non-zero exit sta
 
 ## P01 executable mappings
 
-Completed P01 packages retain their verification wrappers as mandatory regressions:
+Completed P01 packages retain their verification wrappers as mandatory regressions, while the sole active package adds its verifier before final hosted verification:
 
 ```text
 bash scripts/verify_go_quality.sh
@@ -84,13 +84,28 @@ bash scripts/verify_p01_02.sh
 bash scripts/verify_p01_03.sh
 P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_04.sh
 P01_05_TEST_CACHE_ADDRESS=127.0.0.1:6379 P01_05_TEST_VALKEY_IMAGE=valkey/valkey:9.1.1 bash scripts/verify_p01_05.sh
+P01_06_TEST_S3_ENDPOINT=http://127.0.0.1:9090 P01_06_TEST_S3_BUCKET=omnexa-p01-06 P01_06_TEST_S3_IMAGE=adobe/s3mock:5.1.0 bash scripts/verify_p01_06.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior.
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior. P01.06 covers the S3-compatible object/file storage foundation, including deterministic keys, bounded metadata/size rules, streamed put/open, head/delete/missing semantics, integrity verification, provider outage/cancellation and restart/reconnect behavior.
 
-Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.05 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6 and P01.05 provisions Valkey 9.1.1 as governed synthetic services. The final `omnexa verify ...` CLI remains owned by P01.12.
+Canonical GitHub-hosted governance is configured to execute repository Go quality and P01.01 through P01.06 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions Adobe S3Mock 5.1.0 as governed synthetic services. The final `omnexa verify ...` CLI remains owned by P01.12.
+
+## Runner-deferred implementation workflow
+
+For an already-authorized package, implementation work may be completed before consuming the hosted runner. The normal sequence is:
+
+1. source/tests/docs/verifier implementation;
+2. deterministic static/unit/self-review preparation;
+3. final executable PR;
+4. GitHub-hosted canonical governance verification;
+5. fix any discovered defects without weakening checks;
+6. merge only on green evidence;
+7. immutable completion/state/ledger reconciliation.
+
+This workflow reduces repeated runner usage; it does not permit unverified `PASS`, `done` or protected merge claims.
 
 ## Completed P01.05
 
@@ -98,20 +113,18 @@ P01.05 is complete with canonical evidence in `docs/roadmap/evidence/P01.05_COMP
 
 ## Active P01.06
 
-P01.06 — Object & file storage abstraction is the sole active executable kernel package. Its implementation PR must add a fail-closed `scripts/verify_p01_06.sh` and a governed S3-compatible synthetic test provider/service before P01.06 can complete.
+P01.06 — Object & file storage abstraction is the sole active executable kernel package. The implementation branch now provides fail-closed `scripts/verify_p01_06.sh`, the pinned AWS SDK/S3 client baseline and a governed Adobe S3Mock 5.1.0 synthetic provider configuration. **Canonical hosted P01.06 evidence remains pending until the final implementation PR run; P01.06 is not done before that run passes.**
 
-The active P01.06 verifier must map package requirements to:
+The active P01.06 verifier maps package requirements to:
 
-- `verify format` / `verify static` -> pinned toolchain, repository Go quality, formatting/static checks and storage-package dependency/scope boundaries;
-- `verify unit` -> deterministic object-key namespace/version behavior, metadata/key validation, integrity/checksum helpers and missing-object semantics;
-- `verify integration` -> S3-compatible put/get/head/delete, missing-object behavior and provider contract tests against a real synthetic provider;
-- streaming evidence -> large synthetic objects must prove bounded-memory streaming rather than whole-object buffering;
-- `verify security` -> provider-secret/signed-URL/content redaction, path-traversal containment and no CMS/media/business/tenant/later-capability pull-forward;
-- lifecycle/resilience evidence -> bounded provider unavailable/timeout/cancellation behavior and recoverability appropriate to the selected provider;
+- `verify format` / `verify static` -> pinned toolchain/client versions, repository Go quality, formatting/static checks and storage-package dependency/scope boundaries;
+- `verify unit` -> deterministic object-key namespace/version behavior, metadata/key validation, streaming length/integrity helpers and secret-safe failure behavior;
+- `verify integration` -> S3-compatible put/open/head/delete, missing-object behavior and provider contract tests against Adobe S3Mock 5.1.0;
+- streaming evidence -> 8 MiB deterministic synthetic object with bounded read buffers rather than whole-object buffering;
+- `verify security` -> provider-secret redaction, path-traversal containment, untrusted metadata validation and no module/cache/database/telemetry coupling;
+- lifecycle/resilience evidence -> unavailable provider, timeout/cancellation, deliberate content-integrity mismatch and provider restart/reconnect;
 - `verify build` -> complete kernel package build with pinned storage dependency metadata;
-- completed P01.01-P01.05 regression preservation.
-
-Until that active verifier/service exists and passes on the canonical GitHub-hosted lane, P01.06 cannot be marked done.
+- completed P01.01-P01.05 regression preservation through the same governance job.
 
 ## Go result convention — completed P01.03
 
@@ -123,7 +136,7 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-P01.04 database/provider mappings and P01.05 cache/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.06 storage/provider mappings must follow the same boundary. Transport adapters and telemetry emission remain owned by their later packages.
+P01.04 database/provider mappings and P01.05 cache/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.06 storage/provider mappings follow the same boundary. Transport adapters and telemetry emission remain owned by their later packages.
 
 ## Configuration startup contract
 
@@ -158,7 +171,22 @@ OMNEXA_CACHE_MAX_VALUE_BYTES=1048576
 OMNEXA_CACHE_MAX_TTL=24h
 ```
 
-P01.06 may add only storage-specific configuration justified by its active specification. Storage credentials/endpoints/bucket secrets are sensitive or RESTRICTED as applicable and must never be printed in logs, public failures or artifacts.
+P01.06 composes only these storage-specific settings at the storage boundary:
+
+```text
+OMNEXA_STORAGE_ENDPOINT=<sensitive S3-compatible endpoint>
+OMNEXA_STORAGE_ACCESS_KEY=<RESTRICTED provider access key>
+OMNEXA_STORAGE_SECRET_KEY=<RESTRICTED provider secret key>
+OMNEXA_STORAGE_REGION=us-east-1
+OMNEXA_STORAGE_BUCKET=<provider bucket/container name>
+OMNEXA_STORAGE_USE_PATH_STYLE=true
+OMNEXA_STORAGE_CONNECT_TIMEOUT=3s
+OMNEXA_STORAGE_OPERATION_TIMEOUT=5s
+OMNEXA_STORAGE_KEY_PREFIX=omnexa
+OMNEXA_STORAGE_MAX_OBJECT_BYTES=1073741824
+```
+
+P01.06 validates the endpoint scheme/shape, bucket/region, timeout bounds, namespace prefix and object-size cap before provider construction. Endpoint/access/secret values are marked sensitive and must never be printed in public failures or artifacts. The default object-size bound is 1 GiB and the simple single-object adapter rejects configuration above the 5 GiB S3 PutObject boundary; later multipart behavior requires its own governed scope.
 
 Configuration precedence remains:
 
@@ -190,7 +218,7 @@ omnexa module test <id>
 omnexa module package <id>
 ```
 
-`module create` uses the governed module manifest/ownership/naming standard; it may not generate direct cross-module dependencies.
+`module create` uses the governed module manifest/ownership/naming standard and `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md`; it may not generate direct cross-module dependencies or restart an already-defined module plan from scratch.
 
 ## Contract commands
 
