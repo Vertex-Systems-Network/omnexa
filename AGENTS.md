@@ -21,13 +21,14 @@ P01.03: DONE — Structured error & result conventions
 P01.04: DONE — PostgreSQL connection & migration foundation
 P01.05: DONE — Cache abstraction
 P01.06: DONE — Object & file storage abstraction
-P01.07: ACTIVE — Structured logging & OpenTelemetry baseline
-P01.08-P01.12: PLANNED
+P01.07: DONE — Structured logging & OpenTelemetry baseline
+P01.08: ACTIVE — Health, readiness & diagnostics
+P01.09-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.08+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.09+, P02+, module runtime or business features.
 
 ## Persistent AI continuity
 
@@ -41,7 +42,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.07.md` currently);
+5. the active package specification (`P01.08.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -83,7 +84,7 @@ The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=L
 
 The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it from required governance, weaken configured checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
 
-Strict protection requires an implementation/closure PR to be current with protected `main` before merge. P01.06 integration explicitly reconfirmed this behavior: stale green runs were not treated as merge permission; the branch was synchronized and a fresh full green lane was obtained.
+Strict protection requires an implementation/closure PR to be current with protected `main` before merge. Stale green runs are not merge permission; synchronize the branch and obtain a fresh full green lane.
 
 ## P01 execution rule
 
@@ -96,28 +97,28 @@ Completed:
 - P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
 - P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
 - P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
-- P01.06 — evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`.
+- P01.06 — evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`;
+- P01.07 — evidence: `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.07 — Structured logging & OpenTelemetry baseline**.
+Current active package: **P01.08 — Health, readiness & diagnostics**.
 
 Allowed executable scope is limited to:
 
-- structured logger with stable field conventions;
-- log levels and environment-appropriate defaults;
-- correlation/trace context propagation helpers;
-- OpenTelemetry resource/service identity baseline;
-- trace and metric provider lifecycle;
-- vendor-neutral exporter/configuration boundary;
-- bounded exporter failure and safe shutdown/flush behavior;
-- redaction/filtering hooks aligned with data classification;
-- deterministic test-capture utilities;
-- completed P01.01-P01.06 regression verification;
+- semantically distinct liveness/readiness primitives;
+- dependency check registry with criticality classification;
+- bounded timeout/cancellation behavior;
+- startup/readiness transition model;
+- safe diagnostic summary with stable machine states;
+- build/version identity integration;
+- integration with the completed P01.07 observability boundary;
+- deterministic healthy/degraded/unready test harness;
+- completed P01.01-P01.07 regression verification;
 - permanent repository Go quality verification;
 - GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.07 must not implement product analytics/business metrics, dashboards/alerts/SLO automation, domain-specific spans/metrics, audit semantics, health/readiness, scheduler primitives, feature registry, audit transport, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
+P01.08 must not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration automation, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler primitives, feature registry, audit transport, developer CLI behavior, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
 
-P01.08 becomes active only after P01.07 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.09 becomes active only after P01.08 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -129,7 +130,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.07, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.06 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.08, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.07 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -144,16 +145,20 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.07 observability rules
+## P01.08 health/readiness rules
 
-- Telemetry is diagnostic infrastructure, not a correctness dependency or source of business truth.
-- Secrets, auth tokens, private keys, raw `RESTRICTED` payloads and ordinary sensitive business content are prohibited from logs/telemetry by default.
-- Correlation/trace IDs are identifiers, not authorization credentials.
-- Exporter failure and shutdown/flush behavior must be bounded; an observability outage must not corrupt state or bypass security.
-- Structured logging, traces and metrics must preserve vendor-neutral boundaries; do not hard-code a proprietary backend into the kernel contract.
-- Audit events/semantics belong to P01.11 and must not be conflated with ordinary logs.
-- Product analytics/business metrics, dashboards/alerts and SLO automation remain out of scope.
-- P01.07 must not pull forward health/readiness or later P01 behavior.
+- Liveness and readiness are distinct operational semantics; do not collapse them into one generic health boolean.
+- Dependency checks must be timeout-bounded and classify required versus optional/conditionally relevant dependencies explicitly.
+- Optional dependency degradation must not automatically kill the process; required security-critical capability failure must fail closed where applicable.
+- Diagnostic output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads.
+- Diagnostic states are operational signals, not authorization, tenancy or business-state authority.
+- Use the completed P01.07 observability boundary; do not create a parallel logging/tracing system.
+- Do not implement public status pages, module/tenant health aggregation, SLO automation or Kubernetes-specific architecture by anticipation.
+- P01.08 must not pull forward scheduler/feature-registry/audit/CLI or later-phase behavior.
+
+## Completed P01.07 observability rules retained
+
+Telemetry remains diagnostic infrastructure and not a correctness dependency or business source of truth. Secrets, auth tokens, private keys, raw `RESTRICTED` payloads and ordinary sensitive business content remain prohibited from logs/telemetry by default. Correlation/trace IDs are identifiers, not authorization credentials. Exporter failure and shutdown/flush remain bounded. Structured logging, traces and metrics preserve vendor-neutral boundaries. Audit semantics remain owned by P01.11. P01.07 regression verification stays mandatory.
 
 ## Completed P01.06 storage rules retained
 
@@ -198,4 +203,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.07 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.07.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.06 regressions, move P01.07 `active -> verification -> done`, reconcile canonical state, then activate only P01.08.
+Implement P01.08 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.08.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.07 regressions, move P01.08 `active -> verification -> done`, reconcile canonical state, then activate only P01.09.
