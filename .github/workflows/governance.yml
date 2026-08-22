@@ -115,6 +115,20 @@ jobs:
         shell: bash
         run: python scripts/validate_p01_package_specs.py
 
+      - name: TEMP diagnostic canonical Go module metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          go work sync
+          go mod tidy
+          echo '--- canonical go.mod ---'
+          cat go.mod
+          echo '--- canonical go.sum ---'
+          cat go.sum
+          echo '--- metadata diff ---'
+          git diff -- go.mod go.work go.sum
+          exit 1
+
       - name: Verify repository Go code quality
         shell: bash
         run: bash scripts/verify_go_quality.sh
