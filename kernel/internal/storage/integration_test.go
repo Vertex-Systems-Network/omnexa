@@ -262,7 +262,6 @@ func patternSHA256(t *testing.T, size int64) string {
 
 type patternReader struct {
 	remaining  int64
-	offset     int64
 	maxRequest int
 }
 
@@ -273,14 +272,12 @@ func (reader *patternReader) Read(buffer []byte) (int, error) {
 	if len(buffer) > reader.maxRequest {
 		reader.maxRequest = len(buffer)
 	}
-	limit := int64(len(buffer))
-	if reader.remaining < limit {
-		limit = reader.remaining
+	readBuffer := buffer
+	if reader.remaining < int64(len(buffer)) {
+		readBuffer = buffer[:reader.remaining]
 	}
-	for index := int64(0); index < limit; index++ {
-		buffer[index] = byte((reader.offset + index) % 251)
-	}
-	reader.offset += limit
-	reader.remaining -= limit
-	return int(limit), nil
+	clear(readBuffer)
+	readCount := len(readBuffer)
+	reader.remaining -= int64(readCount)
+	return readCount, nil
 }
