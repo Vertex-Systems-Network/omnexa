@@ -133,6 +133,15 @@ func (executor *Executor) Execute(ctx context.Context, request Request) (Result,
 	if ctx == nil {
 		ctx = context.Background()
 	}
+	if _, err := validateRequest(request); err != nil {
+		return Result{}, err
+	}
+	if _, err := executor.registry.lookup(request.Type); err != nil {
+		return Result{}, err
+	}
+	if ctx.Err() != nil {
+		return Result{}, contextFailure(ctx.Err())
+	}
 
 	executor.mu.RLock()
 	if !executor.accepting {
