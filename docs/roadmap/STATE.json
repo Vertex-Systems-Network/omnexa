@@ -5,12 +5,12 @@
   "last_reconciled": "2026-08-22",
   "program": "kernel",
   "current_phase": "P01",
-  "current_work_package": "P01.08",
+  "current_work_package": "P01.09",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P01.08 health readiness and diagnostics implementation",
+      "P01.09 job and scheduler primitives implementation",
       "P01 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -58,14 +58,14 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32595413156,
-      "job": 97085413083,
+      "workflow_run": 32601741049,
+      "job": 97100949202,
       "evidence_environment": "github-hosted",
       "evidence_os": "Ubuntu 24.04.4 LTS",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "final_check": "governance",
-      "note": "P01.07 PR #54 final strict-up-to-date run 32595413156 / job 97085413083 passed repository Go quality, P01.01-P01.06 regressions and P01.07 G1/G2/G3/G5/G6/G7 gates using OpenTelemetry Go v1.45.0. Local/self-hosted runners remain prohibited."
+      "note": "P01.08 PR #56 final strict-up-to-date run 32601741049 / job 97100949202 passed repository Go quality, P01.01-P01.07 regressions and P01.08 G1/G2/G3/G5/G6/G7 gates on GitHub-hosted Ubuntu 24.04.4 LTS / X64 with Go 1.26.7. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -79,10 +79,10 @@
   "p01_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P01.08",
-    "work_package_name": "Health, readiness & diagnostics",
+    "next_work_package": "P01.09",
+    "work_package_name": "Job & scheduler primitives",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P01.08.md",
+    "work_package_spec": "docs/roadmap/work-packages/P01.09.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
     "mandatory_spec_count": 12,
@@ -90,7 +90,7 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01-P01.07 are done with GitHub-hosted executable evidence. P01.08 is the sole active kernel work package. P01.09-P01.12 remain planned and may not activate until the previous package is done."
+    "note": "P01.01-P01.08 are done with GitHub-hosted executable evidence. P01.09 is the sole active kernel work package. P01.10-P01.12 remain planned and may not activate until the previous package is done."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -98,147 +98,17 @@
     "name": "Omnexa Kernel",
     "state": "active",
     "mandatory_work_packages": 12,
-    "done_work_packages": 7,
+    "done_work_packages": 8,
     "work_packages": [
-      {
-        "id": "P01.01",
-        "name": "Go workspace/build skeleton",
-        "state": "done",
-        "depends_on": [],
-        "spec": "docs/roadmap/work-packages/P01.01.md",
-        "evidence": [
-          ".go-version",
-          "go.mod",
-          "go.work",
-          "kernel/cmd/omnexa/main.go",
-          "kernel/internal/buildinfo/buildinfo.go",
-          "kernel/internal/buildinfo/buildinfo_test.go",
-          "scripts/verify_p01_01.sh",
-          "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.02",
-        "name": "Configuration & environment system",
-        "state": "done",
-        "depends_on": ["P01.01"],
-        "spec": "docs/roadmap/work-packages/P01.02.md",
-        "evidence": [
-          "kernel/internal/config/config.go",
-          "kernel/internal/config/config_test.go",
-          "kernel/cmd/omnexa/main_test.go",
-          "scripts/verify_p01_02.sh",
-          "docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.03",
-        "name": "Structured error & result conventions",
-        "state": "done",
-        "depends_on": ["P01.02"],
-        "spec": "docs/roadmap/work-packages/P01.03.md",
-        "evidence": [
-          "kernel/internal/failure/failure.go",
-          "kernel/internal/failure/failure_test.go",
-          "scripts/verify_p01_03.sh",
-          "docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.04",
-        "name": "PostgreSQL connection & migration foundation",
-        "state": "done",
-        "depends_on": ["P01.03"],
-        "spec": "docs/roadmap/work-packages/P01.04.md",
-        "evidence": [
-          "go.mod",
-          "go.sum",
-          "kernel/internal/database/errors.go",
-          "kernel/internal/database/pool.go",
-          "kernel/internal/database/pool_test.go",
-          "kernel/internal/database/transaction.go",
-          "kernel/internal/database/migration.go",
-          "kernel/internal/database/migration_test.go",
-          "kernel/internal/database/integration_test.go",
-          "kernel/migrations/README.md",
-          "scripts/verify_p01_04.sh",
-          "docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.05",
-        "name": "Cache abstraction",
-        "state": "done",
-        "depends_on": ["P01.04"],
-        "spec": "docs/roadmap/work-packages/P01.05.md",
-        "evidence": [
-          ".golangci.yml",
-          "docs/quality/GO_CODE_QUALITY.md",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/cache/cache_test.go",
-          "kernel/internal/cache/codec.go",
-          "kernel/internal/cache/errors.go",
-          "kernel/internal/cache/integration_test.go",
-          "kernel/internal/cache/key.go",
-          "kernel/internal/cache/store.go",
-          "scripts/verify_go_quality.sh",
-          "scripts/verify_p01_05.sh",
-          "docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.06",
-        "name": "Object & file storage abstraction",
-        "state": "done",
-        "depends_on": ["P01.05"],
-        "spec": "docs/roadmap/work-packages/P01.06.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          ".golangci.yml",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/storage/classification_test.go",
-          "kernel/internal/storage/concurrency_integration_test.go",
-          "kernel/internal/storage/context_reader.go",
-          "kernel/internal/storage/errors.go",
-          "kernel/internal/storage/integration_test.go",
-          "kernel/internal/storage/key.go",
-          "kernel/internal/storage/metadata_control_test.go",
-          "kernel/internal/storage/model.go",
-          "kernel/internal/storage/restart_test.go",
-          "kernel/internal/storage/storage_test.go",
-          "kernel/internal/storage/store.go",
-          "kernel/internal/storage/stream.go",
-          "kernel/internal/storage/stream_terminal_test.go",
-          "kernel/internal/storage/timeout_test.go",
-          "scripts/verify_p01_06.sh",
-          "docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {
-        "id": "P01.07",
-        "name": "Structured logging & OpenTelemetry baseline",
-        "state": "done",
-        "depends_on": ["P01.06"],
-        "spec": "docs/roadmap/work-packages/P01.07.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/observability/config.go",
-          "kernel/internal/observability/context.go",
-          "kernel/internal/observability/errors.go",
-          "kernel/internal/observability/logger.go",
-          "kernel/internal/observability/observability_test.go",
-          "kernel/internal/observability/provider.go",
-          "scripts/validate_p01_preparation.py",
-          "scripts/verify_p01_07.sh",
-          "docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"
-        ]
-      },
-      {"id":"P01.08","name":"Health, readiness & diagnostics","state":"active","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
-      {"id":"P01.09","name":"Job & scheduler primitives","state":"planned","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
+      {"id":"P01.01","name":"Go workspace/build skeleton","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P01.01.md","evidence":[".go-version","go.mod","go.work","kernel/cmd/omnexa/main.go","kernel/internal/buildinfo/buildinfo.go","kernel/internal/buildinfo/buildinfo_test.go","scripts/verify_p01_01.sh","docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.02","name":"Configuration & environment system","state":"done","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md","evidence":["kernel/internal/config/config.go","kernel/internal/config/config_test.go","kernel/cmd/omnexa/main_test.go","scripts/verify_p01_02.sh","docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.03","name":"Structured error & result conventions","state":"done","depends_on":["P01.02"],"spec":"docs/roadmap/work-packages/P01.03.md","evidence":["kernel/internal/failure/failure.go","kernel/internal/failure/failure_test.go","scripts/verify_p01_03.sh","docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"done","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md","evidence":["go.mod","go.sum","kernel/internal/database/errors.go","kernel/internal/database/pool.go","kernel/internal/database/pool_test.go","kernel/internal/database/transaction.go","kernel/internal/database/migration.go","kernel/internal/database/migration_test.go","kernel/internal/database/integration_test.go","kernel/migrations/README.md","scripts/verify_p01_04.sh","docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.05","name":"Cache abstraction","state":"done","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md","evidence":[".golangci.yml","docs/quality/GO_CODE_QUALITY.md","go.mod","go.sum","kernel/internal/cache/cache_test.go","kernel/internal/cache/codec.go","kernel/internal/cache/errors.go","kernel/internal/cache/integration_test.go","kernel/internal/cache/key.go","kernel/internal/cache/store.go","scripts/verify_go_quality.sh","scripts/verify_p01_05.sh","docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.06","name":"Object & file storage abstraction","state":"done","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md","evidence":[".github/workflows/governance.yml",".golangci.yml","go.mod","go.sum","kernel/internal/storage/classification_test.go","kernel/internal/storage/concurrency_integration_test.go","kernel/internal/storage/context_reader.go","kernel/internal/storage/errors.go","kernel/internal/storage/integration_test.go","kernel/internal/storage/key.go","kernel/internal/storage/metadata_control_test.go","kernel/internal/storage/model.go","kernel/internal/storage/restart_test.go","kernel/internal/storage/storage_test.go","kernel/internal/storage/store.go","kernel/internal/storage/stream.go","kernel/internal/storage/stream_terminal_test.go","kernel/internal/storage/timeout_test.go","scripts/verify_p01_06.sh","docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"done","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md","evidence":[".github/workflows/governance.yml","go.mod","go.sum","kernel/internal/observability/config.go","kernel/internal/observability/context.go","kernel/internal/observability/errors.go","kernel/internal/observability/logger.go","kernel/internal/observability/observability_test.go","kernel/internal/observability/provider.go","scripts/validate_p01_preparation.py","scripts/verify_p01_07.sh","docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.08","name":"Health, readiness & diagnostics","state":"done","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md","evidence":[".github/workflows/governance.yml","kernel/internal/operations/errors.go","kernel/internal/operations/health.go","kernel/internal/operations/health_test.go","scripts/validate_p01_preparation.py","scripts/verify_p01_08.sh","docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"]},
+      {"id":"P01.09","name":"Job & scheduler primitives","state":"active","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
       {"id":"P01.10","name":"Feature flag & configuration registry","state":"planned","depends_on":["P01.09"],"spec":"docs/roadmap/work-packages/P01.10.md"},
       {"id":"P01.11","name":"Audit transport foundation","state":"planned","depends_on":["P01.10"],"spec":"docs/roadmap/work-packages/P01.11.md"},
       {"id":"P01.12","name":"Developer CLI baseline","state":"planned","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
@@ -246,7 +116,7 @@
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
-    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.08","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.09","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -274,5 +144,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01.08 is active and is the only authorized executable kernel scope. Implement bounded liveness/readiness/diagnostic primitives, obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.08 through verification to done, then activate only P01.09. Business-feature code and P02+ implementation remain unauthorized."
+  "next_transition_rule": "P01.09 is active and is the only authorized executable kernel scope. Implement bounded kernel-local job and scheduler primitives with deterministic registration, retry/idempotency hooks, cancellation, bounded concurrency and graceful shutdown, obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.09 through verification to done, then activate only P01.10. Durable P04 messaging/event fabric, P05 workflow timers, business jobs, tenant runtime, business-feature code and P02+ implementation remain unauthorized."
 }
