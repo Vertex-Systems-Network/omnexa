@@ -8,7 +8,25 @@ Every business capability in Omnexa must fit a repeatable module contract so the
 
 A module is not merely a folder. It is a versioned product boundary with declared ownership, dependencies, permissions, events, migrations, UI contributions and lifecycle behavior.
 
-## 2. Required module metadata
+## 2. Module and submodule decomposition
+
+Large modules are decomposed into governed submodules/capability families using `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md`.
+
+Required hierarchy:
+
+```text
+Phase -> Module -> Submodule -> Work package -> Task -> Evidence
+```
+
+A submodule is normally an internal capability boundary of its owning module, not a separate product/domain owner. It may own its own focused write model, contracts, tests and lifecycle behavior only where those responsibilities remain consistent with the module's authoritative ownership.
+
+Before implementation begins, each submodule plan must identify ownership, dependencies, data/schema, provided/consumed capabilities, permissions, tenant/security implications, UI/event/workflow contributions, migrations, lifecycle, ordered subtasks, acceptance criteria and evidence requirements.
+
+When a preplanned decomposition exists, implementation agents continue from the next incomplete task instead of restarting architecture planning. Replanning is reserved for a genuine architecture conflict, changed requirement, missing owner or approved change-control event.
+
+Builder-style modules must separate runtime schema/contracts from visual authoring UI. The visual builder is an editor for versioned server-validated definitions; it is not an undocumented source of runtime semantics.
+
+## 3. Required module metadata
 
 Every installable module must expose a machine-readable manifest containing at least:
 
@@ -41,7 +59,7 @@ health_checks: []
 
 The exact manifest syntax may evolve, but these semantics must remain represented.
 
-## 3. Module ownership
+## 4. Module ownership
 
 Each module owns:
 
@@ -58,21 +76,21 @@ Each module owns:
 
 A module does not own kernel concerns such as tenant identity, global files, global audit transport, core policy runtime or event transport.
 
-## 4. Dependency classes
+## 5. Dependency classes
 
-### 4.1 Required dependency
+### 5.1 Required dependency
 The module cannot function at all without the dependency. Keep these rare.
 
-### 4.2 Optional dependency
+### 5.2 Optional dependency
 The module exposes additional capability when another module is present, but degrades safely when it is absent.
 
-### 4.3 Platform dependency
+### 5.3 Platform dependency
 Kernel contracts required by every module. These do not create domain coupling.
 
-### 4.4 Forbidden dependency
+### 5.4 Forbidden dependency
 Any dependency on another module's private package, internal table, undocumented endpoint, migration detail or implementation-specific field.
 
-## 5. Capability contract
+## 6. Capability contract
 
 A provided capability must document:
 
@@ -93,7 +111,7 @@ Example capability identifier:
 inventory.reserve-stock.v1
 ```
 
-## 6. Event contract
+## 7. Event contract
 
 A published event must declare:
 
@@ -109,7 +127,7 @@ A published event must declare:
 
 Consumers must treat events as facts, not remote procedure calls.
 
-## 7. Permission contract
+## 8. Permission contract
 
 Permissions should use stable names:
 
@@ -124,7 +142,7 @@ payments.refund.execute
 
 Permissions must be checked server-side at the owning capability boundary.
 
-## 8. UI contribution contract
+## 9. UI contribution contract
 
 Modules may contribute navigation, pages, widgets, builder blocks or settings through declared slots rather than patching unrelated UI directly.
 
@@ -136,7 +154,9 @@ Each UI contribution must define:
 - feature flag/entitlement condition;
 - fallback behavior when dependencies are absent.
 
-## 9. Data ownership
+Builder submodules such as page builder, template builder, form builder, dashboard builder or custom-object builder must also provide keyboard-equivalent authoring operations and satisfy the repository browser accessibility/standards plan when UI implementation is authorized.
+
+## 10. Data ownership
 
 A module may write only:
 
@@ -148,7 +168,7 @@ Cross-module foreign keys should be considered carefully. Prefer stable platform
 
 Historical records requiring external context should store the immutable snapshot necessary for audit/business continuity when appropriate.
 
-## 10. Module lifecycle hooks
+## 11. Module lifecycle hooks
 
 Modules may implement:
 
@@ -168,7 +188,7 @@ Modules may implement:
 
 Lifecycle handlers must be retry-aware and idempotent where execution can be repeated.
 
-## 11. Disable versus purge
+## 12. Disable versus purge
 
 Disable is non-destructive. It makes active features unavailable while preserving data required for future re-enable, reporting, audit or references.
 
@@ -176,7 +196,7 @@ Purge is destructive and must be explicit, authorized, audited and dependency-ch
 
 A module must never interpret normal uninstall/disable as permission to silently erase business evidence referenced elsewhere.
 
-## 12. Migration rules
+## 13. Migration rules
 
 Module migrations must:
 
@@ -190,7 +210,7 @@ Module migrations must:
 - be tested against representative data;
 - preserve tenant boundaries.
 
-## 13. Failure behavior
+## 14. Failure behavior
 
 A module must classify dependencies as:
 
@@ -200,9 +220,9 @@ A module must classify dependencies as:
 
 A module failure should not crash unrelated domains where isolation is feasible.
 
-## 14. Testing contract
+## 15. Testing contract
 
-Every module is expected to provide, as applicable:
+Every module/submodule is expected to provide, as applicable:
 
 - domain unit tests;
 - application/use-case tests;
@@ -214,9 +234,10 @@ Every module is expected to provide, as applicable:
 - migration/fresh-install tests;
 - lifecycle enable/disable tests;
 - optional-dependency degradation tests;
-- idempotency/retry tests for async behavior.
+- idempotency/retry tests for async behavior;
+- browser accessibility/standards evidence for authorized UI surfaces.
 
-## 15. Versioning
+## 16. Versioning
 
 Module versioning uses semantic intent:
 
@@ -226,7 +247,7 @@ Module versioning uses semantic intent:
 
 Public API/event/capability contract versions are independent where needed. A module major bump does not justify silently breaking all contracts.
 
-## 16. Security declaration
+## 17. Security declaration
 
 Modules must declare:
 
@@ -241,7 +262,7 @@ Modules must declare:
 
 Marketplace/third-party modules will eventually require signed packages and explicit installation consent for these scopes.
 
-## 17. Module acceptance gate
+## 18. Module acceptance gate
 
 A new module is not accepted merely because it loads.
 
@@ -256,4 +277,5 @@ Minimum acceptance:
 7. events validate against schema;
 8. no forbidden cross-module imports/writes;
 9. health check reports accurately;
-10. documentation and roadmap ownership are reconciled.
+10. module and submodule decomposition is reconciled with the execution blueprint;
+11. documentation and roadmap ownership are reconciled.
