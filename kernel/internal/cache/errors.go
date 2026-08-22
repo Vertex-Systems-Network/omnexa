@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	codeConfigurationInvalid failure.Code = "cache.configuration.invalid"
+	codeConfigurationInvalid  failure.Code = "cache.configuration.invalid"
 	codeConnectionUnavailable failure.Code = "cache.connection.unavailable"
 	codeOperationFailed       failure.Code = "cache.operation.failed"
 	codeKeyInvalid            failure.Code = "cache.key.invalid"
