@@ -30,6 +30,21 @@ if [[ "$P01_06_TEST_S3_IMAGE" != "adobe/s3mock:5.1.0" ]]; then
   exit 1
 fi
 
+provider_ready=false
+for _ in $(seq 1 60); do
+  if curl --silent --output /dev/null --connect-timeout 1 --max-time 2 "${P01_06_TEST_S3_ENDPOINT}/" 2>/dev/null; then
+    provider_ready=true
+    break
+  fi
+  sleep 1
+done
+if [[ "$provider_ready" != "true" ]]; then
+  echo "ERROR: governed S3-compatible provider did not become reachable before P01.06 tests" >&2
+  exit 1
+fi
+
+echo "P01.06 S3-compatible provider reachable: ${P01_06_TEST_S3_ENDPOINT}"
+
 mapfile -t go_files < <(find kernel -type f -name '*.go' -print | sort)
 if [[ ${#go_files[@]} -eq 0 ]]; then
   echo "ERROR: no Go source files found under kernel/" >&2
@@ -109,7 +124,7 @@ fi
 s3_container="${s3_containers[0]}"
 docker restart "$s3_container" >/dev/null
 ready=false
-for _ in $(seq 1 45); do
+for _ in $(seq 1 60); do
   if curl --silent --output /dev/null --connect-timeout 1 --max-time 2 "${P01_06_TEST_S3_ENDPOINT}/" 2>/dev/null; then
     ready=true
     break
