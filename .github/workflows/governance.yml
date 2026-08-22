@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v13-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v14-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -112,6 +112,10 @@ jobs:
       - name: Validate foundation freeze review
         shell: bash
         run: python scripts/validate_freeze_review.py
+
+      - name: Validate future module and submodule planning catalog
+        shell: bash
+        run: python scripts/validate_module_planning.py
 
       - name: Validate P01 implementation-readiness preparation
         shell: bash
