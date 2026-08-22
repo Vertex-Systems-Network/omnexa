@@ -81,26 +81,27 @@ Completed P01 packages retain their verification wrappers as mandatory regressio
 bash scripts/verify_p01_01.sh
 bash scripts/verify_p01_02.sh
 bash scripts/verify_p01_03.sh
-```
-
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions.
-
-The active P01.04 PostgreSQL connection and migration foundation adds:
-
-```text
 P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_04.sh
 ```
 
-P01.04 maps the currently applicable quality semantics as follows:
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate, bounded provider behavior, transaction semantics, fresh/upgrade/failure migrations, immutable ledger/drift checks and advisory-lock coordination against PostgreSQL 18.6.
 
-- `verify format` / `verify static` -> pinned Go, `gofmt`, `go vet`, canonical Go module metadata and database-package dependency boundary;
-- `verify unit` -> database configuration, redaction, migration invariant and bounded-negative tests, including race-enabled package coverage;
-- `verify integration` -> PostgreSQL connection/ping, pool exhaustion and explicit transaction commit/rollback behavior;
-- `verify migrations` -> fresh, idempotent, synthetic upgrade, failed-migration rollback, immutable version-ledger/drift and advisory-lock coordination evidence;
-- `verify security` -> RESTRICTED database URL redaction, synthetic-data-only execution, no ORM and no P02/P03/business/later-capability schema pull-forward;
-- `verify build` -> complete kernel package build against pinned pgx v5.10.0.
+Canonical GitHub-hosted governance currently executes P01.01 through P01.04 in sequence on `ubuntu-24.04`. P01.04 additionally provisions the governed PostgreSQL 18.6 synthetic test service. The final `omnexa verify ...` CLI remains owned by P01.12.
 
-Canonical GitHub-hosted governance executes P01.01 through P01.04 in sequence on `ubuntu-24.04`. P01.04 additionally provisions the governed PostgreSQL 18.6 synthetic test service. The final `omnexa verify ...` CLI remains owned by P01.12.
+### Active P01.05
+
+P01.05 — Cache abstraction is the sole active executable kernel package. Its implementation PR must add a fail-closed `scripts/verify_p01_05.sh` and a governed Redis-compatible synthetic test service before P01.05 can complete.
+
+The active P01.05 verifier must map the package requirements to:
+
+- `verify format` / `verify static` -> pinned toolchain, formatting/lint/static checks and cache-package dependency/scope boundaries;
+- `verify unit` -> deterministic key namespace/version, TTL, serialization and miss/error behavior;
+- `verify integration` -> Redis-compatible get/set/delete and any justified atomic primitive against a real synthetic provider;
+- `verify security` -> provider-secret redaction and no business/session/tenant/later-capability pull-forward;
+- lifecycle/resilience evidence -> provider flush/restart/eviction/outage proving cache is non-authoritative;
+- `verify build` -> complete kernel package build with pinned cache dependency metadata.
+
+Until that active verifier/service exists and passes on the canonical GitHub-hosted lane, P01.05 cannot be marked done.
 
 ## Go result convention — completed P01.03
 
@@ -112,9 +113,9 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-P01.04 database/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. Transport adapters and telemetry emission remain owned by their later packages.
+P01.04 database/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.05 cache/provider mappings must follow the same safe public/private cause boundary. Transport adapters and telemetry emission remain owned by their later packages.
 
-## Configuration startup contract — completed P01.02 / extended by active P01.04
+## Configuration startup contract — completed P01.02 / P01.04 database extension
 
 The kernel process accepts only explicit governed configuration sources. Application-level controls remain:
 
@@ -136,6 +137,8 @@ OMNEXA_DATABASE_MAX_CONNECTION_IDLE_TIME=5m
 
 `OMNEXA_DATABASE_URL` is RESTRICTED and must never be printed in logs, failures or artifacts. The remaining values are bounded by the P01.04 adapter before a pool is constructed.
 
+P01.05 may add only cache-specific configuration keys justified by its active specification. Cache credentials/endpoints are sensitive and must follow the same no-leak rule.
+
 Configuration precedence remains:
 
 ```text
@@ -143,6 +146,17 @@ default -> explicit JSON config file -> environment variable -> explicit in-proc
 ```
 
 Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a global runtime feature-flag/config registry.
+
+## Future web UI quality commands
+
+When a future authorized browser-UI package implements `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`, developer/CI tooling should expose reproducible operations equivalent to:
+
+```text
+omnexa verify web-standards
+omnexa verify accessibility
+```
+
+Their semantics must cover rendered-output W3C validation, WAVE evaluation where the owning package requires it, and manual-evidence hooks for keyboard/focus/screen-reader/zoom-reflow checks. A required WAVE API/license dependency that is unavailable is `BLOCKED`, not PASS. These commands are planning semantics only during P01 and do not authorize UI implementation.
 
 ## Module developer commands
 

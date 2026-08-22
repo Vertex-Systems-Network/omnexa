@@ -7,11 +7,12 @@ Last reconciled: **2026-08-22**
 - Program: **Kernel Program**
 - Phase: **P01 — Omnexa Kernel**
 - Phase state: **active**
-- Current work package: **P01.04 — PostgreSQL connection & migration foundation**
-- P01 progress: **3 / 12 done**
+- Current work package: **P01.05 — Cache abstraction**
+- P01 progress: **4 / 12 done**
 - P01.01: **DONE**
 - P01.02: **DONE**
 - P01.03: **DONE**
+- P01.04: **DONE**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
 - Repository visibility: **PUBLIC**
@@ -20,7 +21,7 @@ Last reconciled: **2026-08-22**
 - Local/self-hosted governance runners: **PROHIBITED**
 - Kernel implementation: **AUTHORIZED ONLY FOR ACTIVE P01 PACKAGE**
 - Business-feature implementation: **NOT AUTHORIZED**
-- P01.05–P01.12: **PLANNED / NOT ACTIVE**
+- P01.06–P01.12: **PLANNED / NOT ACTIVE**
 
 ## Completed P01 packages
 
@@ -55,23 +56,54 @@ PR #44 merged as `bdeda5fad09a2369b2a6852e5c62550db50047ea` after GitHub-hosted 
 
 Earlier formatting/diagnostic failures remain recorded in the canonical completion evidence and are not counted as PASS.
 
-## Active P01 package — P01.04
+### P01.04 — PostgreSQL connection & migration foundation
 
-P01.04 is the sole active package. It owns only the PostgreSQL connection and migration foundation:
+Canonical evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
 
-- pool/connection construction from P01.02 configuration;
-- safe provider failure mapping through P01.03;
-- bounded connection behavior;
-- transaction helper boundary without domain writes;
-- migration runner and version ledger;
-- deterministic fresh and upgrade migrations;
-- migration coordination/ownership rules;
-- synthetic-data PostgreSQL integration tests;
-- P01.01-P01.03 regression preservation.
+PR #46 was verified by GitHub-hosted run `32567842071` / job `97019012280` and squash-merged to protected `main` as `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
 
-Explicitly prohibited in P01.04: tenant/organization tables, module-runtime schema, event outbox/inbox, business schemas/data, cross-module SQL, cache/storage, telemetry, health endpoints, production HA/backups or later domain repositories.
+Verified baseline:
 
-P01.05 may activate only after P01.04 reaches `done` with required G0/G1/G2/G3/G4/G5/G7 GitHub-hosted evidence.
+- Go `1.26.7`;
+- pgx `v5.10.0`;
+- PostgreSQL `18.6 (Debian 18.6-1.pgdg13+2)`;
+- P01.01-P01.03 regressions PASS;
+- P01.04 G1/G2/G3/G4/G5/G7 PASS;
+- G0 governance/state validators PASS.
+
+Synthetic PostgreSQL evidence covered server ping/version, bounded pool exhaustion, unavailable connection, transaction commit/rollback, fresh migration, idempotent rerun, deterministic upgrade, failed-migration rollback without ledger advance, rewritten-migration drift detection and advisory-lock contention.
+
+Diagnostic run `32567607242` / job `97018421698` remains preserved as FAIL history after exposing a formatting defect and canonical module metadata. It is not counted as PASS.
+
+P01.04 did not introduce an ORM, tenant/organization schema, module-runtime schema, event outbox/inbox, business schema/data, cache/storage, telemetry, health or later capability implementation.
+
+## Active P01 package — P01.05
+
+P01.05 is the sole active package. It owns only the Redis-compatible cache abstraction foundation:
+
+- cache interface/provider adapter;
+- deterministic namespaced/versioned keys;
+- explicit TTL/expiry semantics;
+- typed serialization boundary;
+- get/set/delete and only justified bounded atomic primitives;
+- P01.02 configuration integration and P01.03 safe failure mapping;
+- cache-miss versus provider-failure distinction;
+- bounded timeout/cancellation behavior;
+- synthetic Redis-compatible integration evidence;
+- provider flush/restart semantics proving cache is never authoritative;
+- P01.01-P01.04 regression preservation.
+
+Explicitly prohibited in P01.05: business-domain keys/models, sessions/authentication, tenant/organization behavior, module runtime, event/job fabric, object storage, telemetry, health, later P01 capability implementation or use of cache as system of record.
+
+P01.06 may activate only after P01.05 reaches `done` with required G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence.
+
+## Future web UI quality/accessibility plan
+
+`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` now records the future browser-UI implementation requirement for humans and AI systems.
+
+When an authorized UI package begins, browser surfaces target **WCAG 2.2 AA**, standards-based semantic HTML/CSS, W3C validation and WAVE evaluation plus manual keyboard/focus/screen-reader/zoom-reflow evidence. WAVE is an evaluation input, not an accessibility certification, and a missing required WAVE API/license is `BLOCKED`, not PASS.
+
+This planning requirement does **not** authorize P12/P13/P17 or any other business/UI implementation during P01.
 
 ## Protected integration / CI
 
@@ -89,4 +121,4 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-Implement **P01.04 only**, obtain hosted PostgreSQL connection/migration/security/build evidence, reconcile P01.04 to `done`, then activate only P01.05. Keep `business_feature_code_authorized=false` and P02+ implementation locked.
+Implement **P01.05 only**, obtain GitHub-hosted cache contract/integration/outage/resilience/security/build evidence, reconcile P01.05 to `done`, then activate only P01.06. Keep `business_feature_code_authorized=false` and P02+ implementation locked.

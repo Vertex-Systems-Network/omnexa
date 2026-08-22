@@ -237,3 +237,25 @@ Notes:
 - State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.03/P01.04 specs, package sequence and canonical completion evidence.
 - Commit / PR: implementation `#44` / `bdeda5fad09a2369b2a6852e5c62550db50047ea`; completion-reconciliation PR/merge SHA to be appended after merge.
 - Notes: canonical evidence is `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`. P01.04 is the sole next authorized kernel scope; `business_feature_code_authorized=false` and P02+ remain locked.
+
+## 2026-08-22 — P01.04 PostgreSQL foundation completion / P01.05 activation
+
+- Phase / package: `P01.04 -> P01.05`.
+- Transition: P01.04 `active -> verification -> done`; P01.05 `planned -> active`.
+- Summary: Closed the bounded PostgreSQL connection/migration foundation after canonical hosted evidence proved pgx pool/config construction, P01.03-safe provider failures, transaction commit/rollback, owner-scoped advisory-locked migrations, immutable SHA-256 ledger/drift checks, deterministic fresh/idempotent/upgrade execution and failed-migration rollback. Activated only the Redis-compatible cache abstraction as the next executable kernel package.
+- Evidence: implementation PR #46 final head `df28e5ff99c6db42c3984d146f13262f2e5f90fb`; canonical run `32567842071` / job `97019012280` SUCCESS on `GitHub Actions 1000008492`, Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04` `20260816.277.1`; Go `1.26.7`; pgx `v5.10.0`; PostgreSQL `18.6 (Debian 18.6-1.pgdg13+2)`; G0/G1/G2/G3/G4/G5/G7 and P01.01-P01.03 regressions PASS; PR #46 squash-merged as `6068202415dd124d3e74a196b6e0bbca5d75c4cd`; detailed evidence `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
+- Architecture impact: implements the already-authorized P01.04 data substrate only. No ORM, tenant/organization schema, module runtime, event outbox/inbox, business schema/data, cache/storage/telemetry/health implementation or frozen Foundation v1 change was introduced.
+- State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.04/P01.05 specs, P01 package sequence, developer-command contract and canonical completion evidence.
+- Commit / PR: implementation `#46` / `6068202415dd124d3e74a196b6e0bbca5d75c4cd`; completion-reconciliation PR/merge SHA to be appended after merge.
+- Notes: diagnostic run `32567607242` / job `97018421698` remains FAIL history after exposing `gofmt` and module-metadata work; it is not counted as PASS. P01.05 is now the sole active kernel scope. `business_feature_code_authorized=false`; P01.06+ and P02+ remain unauthorized.
+
+## 2026-08-22 — Future web UI W3C/WAVE quality planning requirement
+
+- Phase / package: cross-cutting roadmap/quality planning during P01.05 activation; no UI implementation transition.
+- Transition: no executable UI/business phase transition.
+- Summary: Added `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` so future human and AI contributors have an explicit browser-UI delivery contract: WCAG 2.2 AA target, standards-based semantic HTML/CSS, rendered-output W3C validation, WAVE evaluation, manual keyboard/focus/screen-reader/zoom-reflow checks, honest BLOCKED semantics for unavailable required WAVE licensing/API and no automated-tool-only compliance claim.
+- Evidence: owner instruction on 2026-08-22; W3C WCAG 2.2 and validation tooling references; WebAIM WAVE evaluation/API/extension guidance captured in the planning document and referenced by AI/developer entrypoints.
+- Architecture impact: planning/quality clarification only. It does not alter frozen Foundation v1, add a new G0-G8 gate class or authorize P12/P13/P17/browser UI implementation during P01.
+- State files reconciled: `AGENTS.md`, `README.md`, `STATUS.md`, `P01_ENTRY_GATE.md`, `docs/development/DEVELOPER_COMMANDS.md`, plus the new UI quality plan.
+- Commit / PR: completion-reconciliation PR/merge SHA to be appended after merge.
+- Notes: WAVE is an evaluation input, not a certification. Future generated UI is held to the same standards as hand-authored UI; required unavailable WAVE automation is `BLOCKED`, not PASS.

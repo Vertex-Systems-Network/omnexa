@@ -18,13 +18,14 @@ P01: ACTIVE
 P01.01: DONE — Go workspace/build skeleton
 P01.02: DONE — Configuration & environment system
 P01.03: DONE — Structured error & result conventions
-P01.04: ACTIVE — PostgreSQL connection & migration foundation
-P01.05-P01.12: PLANNED
+P01.04: DONE — PostgreSQL connection & migration foundation
+P01.05: ACTIVE — Cache abstraction
+P01.06-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.05+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.06+, P02+, module runtime or business features.
 
 ## Mandatory read order
 
@@ -34,15 +35,16 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.04.md` currently);
+5. the active package specification (`P01.05.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
 9. testing/CI/release/quality standards;
 10. repository/local-development/toolchain/configuration/developer-command standards;
-11. SLO/incident/reliability standards;
-12. AI Execution Policy, Change Control and Definition of Done;
-13. relevant ADRs, especially ADR-0010.
+11. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
+12. SLO/incident/reliability standards;
+13. AI Execution Policy, Change Control and Definition of Done;
+14. relevant ADRs, especially ADR-0010.
 
 If canonical documents conflict, resolve through change control before implementation.
 
@@ -81,25 +83,29 @@ Completed:
 
 - P01.01 — evidence: `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
 - P01.02 — evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
-- P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
+- P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
+- P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.04 — PostgreSQL connection & migration foundation**.
+Current active package: **P01.05 — Cache abstraction**.
 
 Allowed executable scope is limited to:
 
-- PostgreSQL pool/connection construction from P01.02 configuration;
-- bounded connection behavior and safe provider failures mapped through P01.03;
-- transaction helper boundary without domain writes;
-- migration runner/version ledger foundation;
-- deterministic fresh-install and synthetic upgrade migrations;
-- migration coordination and owner-scoped repository conventions;
-- synthetic PostgreSQL integration/migration tests;
-- completed P01.01-P01.03 regression verification;
-- GitHub-hosted G0/G1/G2/G3/G4/G5/G7 evidence.
+- Redis-compatible cache interface/provider adapter;
+- deterministic namespaced/versioned key conventions;
+- explicit TTL/expiry semantics;
+- typed serialization boundary;
+- get/set/delete and narrowly justified bounded atomic primitives;
+- P01.02 configuration integration;
+- P01.03 structured provider failure mapping;
+- cache miss versus provider failure distinction;
+- bounded timeout/cancellation behavior;
+- synthetic Redis-compatible integration, flush/restart and non-authority evidence;
+- completed P01.01-P01.04 regression verification;
+- GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.04 must not implement tenant/organization tables, module-runtime schema, event outbox/inbox, business schemas/data, cross-module SQL, cache/storage, logging/OpenTelemetry, health endpoints, jobs, production HA/backups or business-domain repository behavior.
+P01.05 must not implement business cache keys/models, sessions/authentication, tenant/organization behavior, module runtime, event/job fabric, object/file storage, logging/OpenTelemetry, health endpoints, feature registry, audit transport or use cache as a source of truth.
 
-P01.05 becomes active only after P01.04 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.06 becomes active only after P01.05 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -111,7 +117,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.04, required executable evidence is G0/G1/G2/G3/G4/G5/G7 plus completed P01.01-P01.03 regression verification. PostgreSQL integration/migration checks are now applicable. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.05, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus completed P01.01-P01.04 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -126,14 +132,33 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.04 data rules
+## P01.05 cache rules
 
-- Database credentials are `RESTRICTED`; never print DSNs, passwords or secret query parameters in logs/errors/artifacts.
-- Tests use synthetic data only and must not require production snapshots.
-- Migrations are explicit, versioned, reviewable and reproducible from zero.
-- A failed migration must fail closed and must not claim a successful schema version.
-- P01.04 may establish only kernel migration metadata/foundation objects required to prove the migration substrate; it may not create P02/P03/business schemas by anticipation.
-- Cross-owner direct SQL/write coupling remains forbidden.
+- Cache is never the authoritative system of record.
+- Flush, restart, eviction or cache loss must not corrupt protected state.
+- Cache provider credentials are sensitive and must not appear in logs, failures or artifacts.
+- Tests use synthetic data only.
+- Cache miss and provider failure must remain distinguishable.
+- Keys are explicitly namespaced/versioned; future tenant scope may not be inferred or invented during P01.05.
+- P01.05 does not implement sessions/authentication or later domain caching by anticipation.
+
+## Future browser UI quality rule
+
+`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` is a mandatory planning input whenever a future package authorizes browser UI.
+
+Future production browser UI must target WCAG 2.2 AA and standards-based semantic HTML/CSS, with W3C validation, WAVE evaluation and manual keyboard/focus/screen-reader/zoom-reflow checks appropriate to the affected surface.
+
+AI systems must not:
+
+- use ARIA as a mechanical substitute for correct native semantics;
+- disable validators/accessibility checks merely to obtain green CI;
+- claim “WAVE passed”, “WCAG compliant” or “W3C compliant” solely from an automated scan;
+- silently ignore WAVE Errors, Contrast Errors or Alerts;
+- expose WAVE API/license secrets in repository content or artifacts.
+
+A required WAVE automation dependency without an approved key/license is `BLOCKED`, not PASS. WAVE is an evaluation input and does not replace human accessibility judgment.
+
+This future UI rule is planning only during P01; it does not authorize P12/P13/P17 or any other business/UI implementation.
 
 ## Required work protocol
 
@@ -160,4 +185,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.04 in a separate executable PR. Obtain G0/G1/G2/G3/G4/G5/G7 GitHub-hosted evidence, move P01.04 `active -> verification -> done`, reconcile canonical state, then activate only P01.05.
+Implement P01.05 in a separate executable PR. Obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence, move P01.05 `active -> verification -> done`, reconcile canonical state, then activate only P01.06.

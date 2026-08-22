@@ -11,8 +11,8 @@
     {"id":"P01.01","name":"Go workspace/build skeleton","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P01.01.md"},
     {"id":"P01.02","name":"Configuration & environment system","state":"done","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md"},
     {"id":"P01.03","name":"Structured error & result conventions","state":"done","depends_on":["P01.02"],"spec":"docs/roadmap/work-packages/P01.03.md"},
-    {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"active","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md"},
-    {"id":"P01.05","name":"Cache abstraction","state":"planned","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
+    {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"done","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md"},
+    {"id":"P01.05","name":"Cache abstraction","state":"active","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
     {"id":"P01.06","name":"Object & file storage abstraction","state":"planned","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md"},
     {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"planned","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
     {"id":"P01.08","name":"Health, readiness & diagnostics","state":"planned","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
@@ -22,5 +22,5 @@
     {"id":"P01.12","name":"Developer CLI baseline","state":"planned","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
   ],
   "phase_exit": "Fresh install from zero must start, migrate, health-check, emit telemetry and run tests reproducibly without hidden manual steps.",
-  "note": "P01 is active. P01.01-P01.03 are done with GitHub-hosted executable evidence. P01.04 is the sole active executable kernel package; P01.05-P01.12 remain planned. Business-feature code remains unauthorized."
+  "note": "P01 is active. P01.01-P01.04 are done with GitHub-hosted executable evidence. P01.05 is the sole active executable kernel package; P01.06-P01.12 remain planned. Business-feature code remains unauthorized."
 }
