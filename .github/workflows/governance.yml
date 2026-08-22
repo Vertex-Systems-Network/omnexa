@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v12-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v13-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -42,6 +42,12 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      s3mock:
+        image: adobe/s3mock:5.1.0
+        env:
+          COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: omnexa-p01-06
+        ports:
+          - 9090:9090
 
     steps:
       - name: Checkout
@@ -143,3 +149,11 @@ jobs:
           P01_05_TEST_CACHE_ADDRESS: 127.0.0.1:6379
           P01_05_TEST_VALKEY_IMAGE: valkey/valkey:9.1.1
         run: bash scripts/verify_p01_05.sh
+
+      - name: Verify P01.06 object and file storage abstraction
+        shell: bash
+        env:
+          P01_06_TEST_S3_ENDPOINT: http://127.0.0.1:9090
+          P01_06_TEST_S3_BUCKET: omnexa-p01-06
+          P01_06_TEST_S3_IMAGE: adobe/s3mock:5.1.0
+        run: bash scripts/verify_p01_06.sh
