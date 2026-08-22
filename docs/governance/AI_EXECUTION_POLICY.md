@@ -17,13 +17,16 @@ The following artifacts are authoritative:
 - `docs/architecture/MODULE_STANDARD.md` — module contract
 - `docs/roadmap/MASTER_PLAN.md` — phase sequence and gates
 - `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` — mandatory preplanned module/submodule decomposition and ordered execution template
+- `docs/roadmap/modules/SUBMODULE_CATALOG.json` — machine-readable P02-P27 submodule/family identity
+- `docs/roadmap/modules/` — owning architecture, flow and option dossiers
+- `docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md` — mandatory continuation/no-replanning/handoff protocol
 - `docs/roadmap/STATUS.md` — human-readable progress
-- `docs/roadmap/STATE.json` — machine-readable canonical state
+- `docs/roadmap/STATE.json` — machine-readable canonical execution state and sole implementation authorization
 - `docs/governance/CHANGE_CONTROL.md` — architecture-change process
 - `docs/governance/DEFINITION_OF_DONE.md` — completion evidence
 - `docs/adr/*` — approved architectural decisions
 
-AI systems must read these before implementation.
+AI systems must read the applicable artifacts before implementation. A preplanned future submodule is not executable unless `STATE.json` authorizes its owning phase/work package.
 
 ## 3. Required behavior before coding
 
@@ -31,15 +34,18 @@ For each request, an AI system must determine:
 
 1. which roadmap phase/work package owns the request;
 2. whether that work package is currently permitted by `STATE.json`;
-3. what existing module owns the relevant data/capability;
-4. which preplanned submodule/work-package/task in `MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` owns the requested behavior when applicable;
-5. what contracts or events may be affected;
-6. what tenant, authorization, audit and migration implications exist;
-7. what acceptance tests are required.
+3. which canonical module/submodule ID owns the behavior when P02-P27 planning applies;
+4. what existing module owns the relevant data/capability;
+5. which preplanned S01-S10 work-package/task owns the requested behavior;
+6. what contracts/events/workflows/UI slots may be affected;
+7. what tenant, authorization, audit and migration implications exist;
+8. what settings/options/feature flags are affected, including scope and change permission;
+9. what acceptance tests/evidence are required;
+10. what the next incomplete authorized task is.
 
-If a requested feature is outside the active scope, the AI should record it in the owning future module/submodule plan rather than silently implementing it.
+If a requested feature is outside the active scope, the AI should record/refine it in the owning future module/submodule plan rather than silently implementing it.
 
-When a module/submodule decomposition already exists, the AI must continue from the next incomplete planned task. It must not restart a generic planning cycle merely because a new implementation session or agent begins. Replanning is appropriate only for a genuine architecture conflict, missing owner, changed requirement or approved change-control event.
+When a module/submodule decomposition already exists, the AI must continue from the next incomplete planned task. It must not restart a generic planning cycle merely because a new implementation session or agent begins. Replanning is appropriate only for a genuine architecture conflict, missing owner/dependency, changed requirement, security/regulatory constraint or approved change-control/ADR event.
 
 ## 4. Prohibited autonomous decisions
 
@@ -57,7 +63,9 @@ Without an approved ADR and plan reconciliation, AI must not:
 - introduce a breaking event/API version silently;
 - remove auditability, retry safety or rollback behavior;
 - change roadmap phase order;
-- mark a phase done because code compiles only.
+- mark a phase done because code compiles only;
+- invent a second ownership model because an existing submodule plan is inconvenient;
+- treat a preplanned future module/submodule as implementation authorization.
 
 ## 5. Allowed autonomy
 
@@ -98,6 +106,7 @@ AI-generated work is not complete until evidence exists for all applicable gates
 - module lifecycle tests;
 - build/package checks;
 - security scans where configured;
+- W3C/WAVE/manual accessibility evidence when authorized browser UI is affected;
 - CI result.
 
 The evidence must be summarized in the PR and reflected in status files only after it exists.
@@ -128,11 +137,15 @@ Each work item must have explicit:
 - **Dependencies**
 - **Acceptance criteria**
 
-Every future module and submodule must also use the preplanned hierarchy:
+Every future module/submodule task must also resolve:
 
-```text
-Phase -> Module -> Submodule -> Work package -> Task -> Evidence
-```
+- canonical phase/module/submodule ID;
+- authoritative owner/write boundary;
+- owning dossier architecture and primary flow;
+- options/settings/policies affected;
+- permissions/tenant/org scope;
+- contract/event/workflow/UI contribution impact;
+- required S01-S10 task/evidence position.
 
 If implementation discovers a necessary dependency, classify it as:
 
@@ -150,7 +163,7 @@ If current code conflicts with governance documents:
 2. document the conflict;
 3. determine whether code or governance is intended to change;
 4. if architecture changes, create an ADR;
-5. update affected architecture/roadmap/state documents atomically with the approved change;
+5. update affected architecture/roadmap/catalog/dossier/state documents atomically with the approved change;
 6. only then implement the new baseline.
 
 ## 12. Data ownership rule
@@ -186,13 +199,30 @@ AI request
 
 Direct unrestricted database mutation by an AI agent is prohibited.
 
-## 14. Status update rule
+## 14. Module/submodule continuation rule
+
+For P02-P27 follow `docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md`:
+
+```text
+request
+ -> phase
+ -> module/submodule ID from SUBMODULE_CATALOG
+ -> STATE.json authorization
+ -> owning dossier architecture/flows/options
+ -> S01-S10 task sequence
+ -> next incomplete authorized task
+ -> implementation/evidence
+```
+
+The end-of-session branch/document state must make the active submodule/task, completed work, next task, blockers and evidence status recoverable without relying on chat memory.
+
+## 15. Status update rule
 
 `STATUS.md` is explanatory. `STATE.json` is canonical machine state.
 
 Any transition to `verification` or `done` must include evidence references. If the two files disagree, the safest lower-completion state wins until reconciled.
 
-## 15. Stop conditions
+## 16. Stop conditions
 
 An AI system must stop implementation and surface the issue when:
 
@@ -201,6 +231,7 @@ An AI system must stop implementation and surface the issue when:
 - a destructive migration has no approved migration/rollback strategy;
 - tenant isolation cannot be demonstrated;
 - a required dependency would violate module boundaries;
+- the submodule owner/write boundary cannot be resolved;
 - completion cannot be verified.
 
 Stopping means refusing to invent progress; it does not mean abandoning analysis or a safe planning fix.
