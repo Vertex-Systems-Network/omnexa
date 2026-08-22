@@ -26,6 +26,41 @@ linters:
       enable-all: true
       disable:
         - fieldalignment
+  exclusions:
+    warn-unused: true
+    rules:
+      # P01.02 deliberately accepts an explicitly supplied local config-file
+      # path. The path is never auto-discovered and path details are redacted
+      # from returned errors, so G304 is not an arbitrary server-side include.
+      - path: kernel/internal/config/config\.go
+        text: "G304:"
+        linters:
+          - gosec
+      # These literals are synthetic credentials whose purpose is to prove
+      # secret/DSN redaction. They are not deployment credentials.
+      - path: kernel/internal/(config/config_test|database/(integration_test|pool_test))\.go
+        text: "G101:"
+        linters:
+          - gosec
+      # The advisory-lock cast intentionally preserves a 64-bit digest bit
+      # pattern, while pool connection values are validated to <=1000 before
+      # conversion. Both conversions are bounded P01.04 invariants.
+      - path: kernel/internal/database/(migration|pool)\.go
+        text: "G115:"
+        linters:
+          - gosec
+      # P01.04 integration tests use short scoped `err` bindings repeatedly;
+      # shadowing is local to test closures and does not alter runtime state.
+      - path: kernel/internal/database/integration_test\.go
+        text: "shadow: declaration of"
+        linters:
+          - govet
+      # Intentional misspellings are negative fixtures proving strict unknown
+      # configuration-key rejection; correcting them would invalidate the test.
+      - path: kernel/(cmd/omnexa/main_test|internal/config/config_test)\.go
+        text: "(ENVIRONMNET|environmnet)"
+        linters:
+          - misspell
 
 issues:
   max-issues-per-linter: 0
