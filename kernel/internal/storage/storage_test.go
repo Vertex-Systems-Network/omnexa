@@ -235,6 +235,7 @@ func TestIntegrityReaderDetectsDeclaredLengthMismatch(t *testing.T) {
 
 	reader = newIntegrityReader(bytes.NewReader(append(payload, 'x')), int64(len(payload)), SHA256Hex(payload))
 	buffer := make([]byte, 16)
+	err = nil
 	for err == nil {
 		_, err = reader.Read(buffer)
 	}
@@ -252,7 +253,7 @@ func TestVerifiedReadCloserDetectsCorruption(t *testing.T) {
 		t.Fatalf("ReadAll(valid) error = %v", err)
 	}
 	if !bytes.Equal(decoded, payload) {
-		t.Fatalf("decoded = %q, want %q", decoded, payload)
+		t.Fatalf("decoded = %#v, want %#v", decoded, payload)
 	}
 
 	corrupt := newVerifiedReadCloser(io.NopCloser(bytes.NewReader(payload)), int64(len(payload)), SHA256Hex([]byte("other")))
