@@ -13,9 +13,9 @@ import (
 const (
 	// MaxViolations bounds public validation detail so malformed input cannot
 	// create unbounded error payloads.
-	MaxViolations = 100
-	maxPathRunes   = 256
-	maxMessageRunes = 512
+	MaxViolations       = 100
+	maxPathRunes        = 256
+	maxMessageRunes     = 512
 	maxCorrelationRunes = 128
 )
 
@@ -79,15 +79,15 @@ type Violation struct {
 // Public is the transport-neutral safe projection of an Error. It intentionally
 // contains no wrapped cause, stack, SQL, provider payload, or diagnostic text.
 type Public struct {
-	Code                 Code
-	Category             Category
-	Title                string
-	Detail               string
-	Retryable            bool
-	RequestID            string
-	TraceID              string
-	Violations           []Violation
-	ViolationsTruncated  bool
+	Code                Code
+	Category            Category
+	Title               string
+	Detail              string
+	Retryable           bool
+	RequestID           string
+	TraceID             string
+	Violations          []Violation
+	ViolationsTruncated bool
 }
 
 // Error is the canonical structured kernel failure. Fields are private so a
