@@ -239,7 +239,7 @@ func TestIntegrityReaderDetectsDeclaredLengthMismatch(t *testing.T) {
 	for err == nil {
 		_, err = reader.Read(buffer)
 	}
-	if err == io.EOF {
+	if errors.Is(err, io.EOF) {
 		t.Fatal("long upload returned EOF instead of length failure")
 	}
 	assertStorageFailureCode(t, err, codeLengthInvalid)
