@@ -81,13 +81,8 @@ func validateUpload(upload Upload, maxObjectBytes int64) (map[string]string, err
 	if err != nil {
 		return nil, err
 	}
-	if upload.ContentType != "" {
-		if len(upload.ContentType) > 255 {
-			return nil, invalidMetadata("content type exceeds the supported length")
-		}
-		if _, _, err := mime.ParseMediaType(upload.ContentType); err != nil {
-			return nil, invalidMetadata("content type is invalid")
-		}
+	if err := validateContentType(upload.ContentType); err != nil {
+		return nil, err
 	}
 	if err := validateFileName(upload.FileName); err != nil {
 		return nil, err
@@ -117,6 +112,22 @@ func validateUpload(upload Upload, maxObjectBytes int64) (map[string]string, err
 	return metadata, nil
 }
 
+func validateStoredMetadata(metadata map[string]string) error {
+	if len(metadata) > maxMetadataEntries+2 {
+		return invalidMetadata("stored object contains too many metadata entries")
+	}
+	for key, value := range metadata {
+		normalized := strings.ToLower(strings.TrimSpace(key))
+		if len(normalized) > maxMetadataKeyBytes || !metadataKeyPattern.MatchString(normalized) {
+			return invalidMetadata("stored object metadata key is invalid")
+		}
+		if !validMetadataValue(value) {
+			return invalidMetadata("stored object metadata value is invalid")
+		}
+	}
+	return nil
+}
+
 func normalizeChecksum(value string) (string, error) {
 	value = strings.ToLower(strings.TrimSpace(value))
 	if len(value) != sha256.Size*2 {
@@ -127,6 +138,19 @@ func normalizeChecksum(value string) (string, error) {
 		return "", invalidMetadata("SHA-256 checksum is invalid")
 	}
 	return value, nil
+}
+
+func validateContentType(value string) error {
+	if value == "" {
+		return nil
+	}
+	if len(value) > 255 {
+		return invalidMetadata("content type exceeds the supported length")
+	}
+	if _, _, err := mime.ParseMediaType(value); err != nil {
+		return invalidMetadata("content type is invalid")
+	}
+	return nil
 }
 
 func validateFileName(value string) error {
