@@ -8,16 +8,16 @@ import (
 )
 
 const (
-	codeConfigurationInvalid failure.Code = "database.configuration.invalid"
+	codeConfigurationInvalid  failure.Code = "database.configuration.invalid"
 	codeConnectionUnavailable failure.Code = "database.connection.unavailable"
-	codeTransactionBegin       failure.Code = "database.transaction.begin_failed"
-	codeTransactionCommit      failure.Code = "database.transaction.commit_failed"
-	codeTransactionRollback    failure.Code = "database.transaction.rollback_failed"
-	codeMigrationInvalid       failure.Code = "database.migration.invalid"
-	codeMigrationLock          failure.Code = "database.migration.lock_failed"
-	codeMigrationLedger        failure.Code = "database.migration.ledger_failed"
-	codeMigrationDrift         failure.Code = "database.migration.drift_detected"
-	codeMigrationApply         failure.Code = "database.migration.apply_failed"
+	codeTransactionBegin      failure.Code = "database.transaction.begin_failed"
+	codeTransactionCommit     failure.Code = "database.transaction.commit_failed"
+	codeTransactionRollback   failure.Code = "database.transaction.rollback_failed"
+	codeMigrationInvalid      failure.Code = "database.migration.invalid"
+	codeMigrationLock         failure.Code = "database.migration.lock_failed"
+	codeMigrationLedger       failure.Code = "database.migration.ledger_failed"
+	codeMigrationDrift        failure.Code = "database.migration.drift_detected"
+	codeMigrationApply        failure.Code = "database.migration.apply_failed"
 )
 
 func safeFailure(code failure.Code, category failure.Category, title string, options ...failure.Option) error {
