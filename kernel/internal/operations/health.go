@@ -252,7 +252,6 @@ func evaluateDependencies(parent context.Context, dependencies []Dependency) []D
 	}
 	results := make(chan DependencyResult, len(dependencies))
 	for _, dependency := range dependencies {
-		dependency := dependency
 		go func() {
 			results <- evaluateDependency(parent, dependency)
 		}()
