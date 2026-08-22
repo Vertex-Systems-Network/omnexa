@@ -16,10 +16,14 @@ func main() {
 
 func run(stdout io.Writer, stderr io.Writer, environ []string) int {
 	if _, err := config.LoadApplication(config.OSOptions(environ)); err != nil {
-		fmt.Fprintf(stderr, "omnexa configuration error: %v\n", err)
+		if _, writeErr := fmt.Fprintf(stderr, "omnexa configuration error: %v\n", err); writeErr != nil {
+			return 1
+		}
 		return 2
 	}
 
-	fmt.Fprintf(stdout, "omnexa-kernel %s\n", buildinfo.Current())
+	if _, err := fmt.Fprintf(stdout, "omnexa-kernel %s\n", buildinfo.Current()); err != nil {
+		return 1
+	}
 	return 0
 }
