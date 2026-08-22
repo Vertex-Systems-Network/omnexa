@@ -43,11 +43,13 @@ Snapshot reconciled during P01.08 closure on `2026-08-23`.
 
 Authoritative live facts verified before this snapshot:
 
-- protected `main` after P01.08 implementation merge: `a2a93454bb283464bfa144bb5a38539041e40069`;
 - P01.08 implementation PR `#56`: merged;
 - P01.08 final strict-up-to-date implementation head: `988ef3673d49f54bbd105d3e0067ba134c66b236`;
 - P01.08 final implementation run/job: `32601741049` / `97100949202` — PASS;
 - P01.08 implementation merge: `a2a93454bb283464bfa144bb5a38539041e40069`;
+- protected `main` subsequently advanced only through maintenance PR `#57` (`.github/dependabot.yml`) to `7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8`;
+- closure branch absorbed that main-only maintenance delta through explicit two-parent sync commit `0fce489f98a65639afa227fab9702e2423ad11b3`;
+- after synchronization the closure branch compared `ahead` with `behind_by=0` against protected main and the Dependabot file was no longer part of PR #58's diff;
 - protected main still records P01.08 `active` until the separate closure PR merges;
 - closure/state-transition PR: `#58`;
 - closure branch: `chore/p01-08-close-p01-09-activate`;
