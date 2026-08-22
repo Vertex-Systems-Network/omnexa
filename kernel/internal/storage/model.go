@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
@@ -135,22 +136,23 @@ func validateFileName(value string) error {
 	if len(value) > maxFileNameBytes || !utf8.ValidString(value) {
 		return invalidMetadata("file name is invalid")
 	}
-	if strings.ContainsAny(value, "/\\\r\n\x00") || value == "." || value == ".." {
+	if strings.ContainsAny(value, "/\\") || value == "." || value == ".." || containsControl(value) {
 		return invalidMetadata("file name contains path or control characters")
 	}
 	return nil
 }
 
 func validMetadataValue(value string) bool {
-	if len(value) > maxMetadataValueBytes || !utf8.ValidString(value) {
-		return false
-	}
+	return len(value) <= maxMetadataValueBytes && utf8.ValidString(value) && !containsControl(value)
+}
+
+func containsControl(value string) bool {
 	for _, r := range value {
-		if r == '\r' || r == '\n' || r == 0 {
-			return false
+		if unicode.IsControl(r) {
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func invalidMetadata(detail string) error {
