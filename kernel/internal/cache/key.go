@@ -1,7 +1,6 @@
 package cache
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -60,8 +59,4 @@ func invalidKey(detail string) error {
 		"cache key is invalid",
 		failure.WithDetail(detail),
 	)
-}
-
-func keyDiagnostic(key Key) string {
-	return fmt.Sprintf("namespace=%s version=%d", key.Namespace, key.Version)
 }
