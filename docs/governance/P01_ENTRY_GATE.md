@@ -24,7 +24,7 @@ Verified 2026-08-22:
 - PR #34 intentionally failed `governance` in run `32540836431`; GitHub rejected merge with `Required status check "governance" is failing`;
 - controlled direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
 - force-update probe was rejected;
-- unresolved conversation on PR #37 blocked merge until resolution;
+- PR #37 run `32541439589` proved conversation resolution enforcement: an unresolved review thread blocked merge until explicit resolution;
 - green PR #35 merged normally;
 - force pushes and deletion of `main` remain blocked by the configured ruleset.
 
