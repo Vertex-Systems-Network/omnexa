@@ -86,10 +86,29 @@ if current_index > 0:
     if not evidence.is_file():
         raise SystemExit("ERROR: advancing beyond P01.01 requires canonical P01.01 completion evidence")
 
+required_verifiers = ["scripts/verify_p01_01.sh"]
+if current == "P01.02":
+    required_verifiers.append("scripts/verify_p01_02.sh")
+for relative in required_verifiers:
+    if not (ROOT / relative).is_file():
+        raise SystemExit(f"ERROR: active P01 verification file missing: {relative}")
+
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
-for marker in ["name: governance", "runs-on: ubuntu-24.04", "RUNNER_ENVIRONMENT", "github-hosted", "python scripts/validate_governance.py", "python scripts/validate_freeze_review.py", "python scripts/validate_p01_preparation.py", "python scripts/validate_p01_package_specs.py", "bash scripts/verify_p01_01.sh"]:
+for marker in [
+    "name: governance",
+    "runs-on: ubuntu-24.04",
+    "RUNNER_ENVIRONMENT",
+    "github-hosted",
+    "python scripts/validate_governance.py",
+    "python scripts/validate_freeze_review.py",
+    "python scripts/validate_p01_preparation.py",
+    "python scripts/validate_p01_package_specs.py",
+    "bash scripts/verify_p01_01.sh",
+]:
     if marker not in workflow:
         raise SystemExit(f"ERROR: governance workflow missing marker: {marker}")
+if current == "P01.02" and "bash scripts/verify_p01_02.sh" not in workflow:
+    raise SystemExit("ERROR: active P01.02 must be enforced by the canonical governance workflow")
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
