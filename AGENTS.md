@@ -38,15 +38,16 @@ Before material work read:
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
 5. the active package specification (`P01.06.md` currently);
 6. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` whenever planning, implementing or extending any module/submodule/capability family;
-7. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
-8. identifier/money/time/locale/error/API/event standards;
-9. security/data-classification/threat model;
-10. testing/CI/release/quality standards, including `docs/quality/GO_CODE_QUALITY.md`;
-11. repository/local-development/toolchain/configuration/developer-command standards;
-12. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
-13. SLO/incident/reliability standards;
-14. AI Execution Policy, Change Control and Definition of Done;
-15. relevant ADRs, especially ADR-0010.
+7. for P02-P27 work, `docs/roadmap/modules/SUBMODULE_CATALOG.json`, `docs/roadmap/modules/README.md`, the owning dossier in `docs/roadmap/modules/`, and `docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md`;
+8. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
+9. identifier/money/time/locale/error/API/event standards;
+10. security/data-classification/threat model;
+11. testing/CI/release/quality standards, including `docs/quality/GO_CODE_QUALITY.md`;
+12. repository/local-development/toolchain/configuration/developer-command standards;
+13. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
+14. SLO/incident/reliability standards;
+15. AI Execution Policy, Change Control and Definition of Done;
+16. relevant ADRs, especially ADR-0010.
 
 If canonical documents conflict, resolve through change control before implementation.
 
@@ -78,6 +79,8 @@ runs-on: ubuntu-24.04
 The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=Linux` and `RUNNER_ARCH=X64`. Do not reintroduce `self-hosted`, `LOCAL-WIN-*`, local evidence fanout or local-runner fallback.
 
 The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it from required governance, weaken configured checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
+
+Future module/submodule planning integrity is also a canonical governance concern. `python scripts/validate_module_planning.py` must continue to validate the P02-P27 catalog/dossier set. Planning validation does not authorize those phases.
 
 ### Runner-deferred execution
 
@@ -131,7 +134,12 @@ P01.07 becomes active only after P01.06 reaches `done` with required evidence. M
 
 ## Module/submodule planning rule
 
-`docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` is the mandatory decomposition plan for future large modules and nested capabilities such as page builder, template builder, theme system, block registry, form builder, dashboard builder and similar submodules.
+The following form one mandatory future-module planning system:
+
+- `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` — S01-S10 ordered execution template;
+- `docs/roadmap/modules/SUBMODULE_CATALOG.json` — canonical P02-P27 phase/submodule IDs;
+- `docs/roadmap/modules/*.md` — detailed architecture, primary flows, options and delivery ordering;
+- `docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md` — AI continuation/no-replanning/handoff rules.
 
 AI systems must use the hierarchy:
 
@@ -139,9 +147,13 @@ AI systems must use the hierarchy:
 Phase -> Module -> Submodule -> Work package -> Task -> Evidence
 ```
 
-When the blueprint or owning phase plan already defines the decomposition, do **not** restart a generic planning cycle in a later chat/session. Load the canonical plan, select the next incomplete authorized task, verify dependencies/locks, execute it and record evidence. Replanning is reserved for a genuine architecture conflict, missing owner, changed requirement or approved change-control event.
+For P02-P27, resolve the request to a catalog submodule ID and owning dossier before executable coding. The dossier must answer ownership/write boundary, architecture, dependencies, primary happy/failure/retry/degradation flows, options/settings/policies, permissions, tenant/org scope, contracts/events/workflows/UI contributions and evidence requirements.
+
+When the catalog/dossier/blueprint already defines the decomposition, do **not** restart a generic planning cycle in a later chat/session. Load the canonical plan, select the next incomplete authorized task, verify dependencies/locks, execute it and record evidence. Replanning is reserved for a genuine architecture conflict, missing owner/dependency, changed requirement, security/regulatory constraint or approved change-control/ADR event.
 
 Pre-planning future module/submodule scope does not authorize its implementation. `STATE.json` remains the implementation lock.
+
+Every configurable option introduced by a future submodule must declare stable key/name, type/bounds, default, scope, read/change permission, sensitivity, audit behavior, effective timing and compatibility/rollback semantics. Security/accounting/tenancy/ownership invariants cannot be downgraded into ordinary user settings.
 
 ## Business-feature lock
 
@@ -208,7 +220,7 @@ This future UI rule is planning only during P01; it does not authorize P12/P13/P
 For every material change:
 
 1. verify active phase/package and locks in `STATE.json`;
-2. inspect the active package spec, frozen standards and preplanned submodule task when applicable;
+2. resolve catalog/dossier/submodule task when applicable and inspect the active package spec/frozen standards;
 3. preserve ownership/dependency boundaries;
 4. implement only authorized scope;
 5. add positive/negative evidence appropriate to risk;
