@@ -9,13 +9,13 @@ import (
 )
 
 const (
-	maxJobTypeRunes          = 64
-	maxIdempotencyRunes      = 256
-	maxRetryAttempts         = 8
-	minRetryBackoff          = time.Millisecond
-	maxRetryBackoff          = 30 * time.Second
-	minRecurringInterval     = time.Second
-	maxRecurringInterval     = 30 * 24 * time.Hour
+	maxJobTypeRunes      = 64
+	maxIdempotencyRunes  = 256
+	maxRetryAttempts     = 8
+	minRetryBackoff      = time.Millisecond
+	maxRetryBackoff      = 30 * time.Second
+	minRecurringInterval = time.Second
+	maxRecurringInterval = 30 * 24 * time.Hour
 )
 
 var jobTypePattern = regexp.MustCompile(`^[a-z][a-z0-9._-]{0,63}$`)
@@ -98,10 +98,10 @@ type Request struct {
 
 // Invocation is the bounded handler view of an execution attempt.
 type Invocation struct {
-	ExecutionID   string
-	Type          Type
-	Attempt       int
-	Payload       any
+	ExecutionID    string
+	Type           Type
+	Attempt        int
+	Payload        any
 	IdempotencyKey string
 }
 
@@ -140,7 +140,7 @@ type Result struct {
 type ScheduleKind string
 
 const (
-	ScheduleOneShot  ScheduleKind = "one_shot"
+	ScheduleOneShot   ScheduleKind = "one_shot"
 	ScheduleRecurring ScheduleKind = "recurring"
 )
 
