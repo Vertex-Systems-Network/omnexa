@@ -3,38 +3,51 @@
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
   "last_reconciled": "2026-08-22",
-  "program": "foundation",
-  "current_phase": "P00",
-  "current_work_package": "P00.10",
+  "program": "kernel",
+  "current_phase": "P01",
+  "current_work_package": "P01.01",
   "implementation_lock": {
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": false,
-    "allowed_work": ["P00 architecture", "P00 governance", "P00 specifications", "narrow repository-maintenance fixes", "P00 exit verification", "P01 implementation-readiness specifications without executable kernel code"]
+    "kernel_code_authorized": true,
+    "allowed_work": [
+      "P01.01 Go workspace/build skeleton implementation",
+      "P01 governance and verification",
+      "narrow repository-maintenance fixes"
+    ]
   },
   "governance_tracking": {
     "foundation_freeze": {
       "architecture_status": "FROZEN",
-      "p00_exit_status": "VERIFICATION",
+      "p00_exit_status": "DONE",
       "manifest": "docs/governance/FOUNDATION_FREEZE.json",
       "review": "docs/governance/FOUNDATION_FREEZE_REVIEW.md",
       "adr": "docs/adr/ADR-0010-foundation-architecture-freeze.md"
     },
     "p01_entry_gate": {
-      "state": "BLOCKED",
+      "state": "SATISFIED",
       "document": "docs/governance/P01_ENTRY_GATE.md",
       "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
-      "blockers": [3],
-      "satisfied": [14],
-      "kernel_code_authorized": false,
+      "blockers": [],
+      "satisfied": [3, 14],
+      "kernel_code_authorized": true,
       "business_feature_code_authorized": false
     },
     "main_branch_protection": {
-      "state": "actionable_unprotected",
+      "state": "verified_protected",
       "issue": 3,
+      "issue_state": "closed",
       "repository_visibility": "public",
-      "live_protected": false,
+      "live_protected": true,
+      "required_check": "governance",
+      "direct_push_probe_commit": "44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2",
+      "failed_check_probe_pr": 34,
+      "failed_check_probe_run": 32540836431,
+      "conversation_probe_pr": 37,
+      "conversation_probe_run": 32541439589,
+      "green_integration_pr": 35,
+      "green_integration_merge": "843c615170058ab900ba69516dbed80a47f26973",
       "historical_private_attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
-      "note": "The repository is now public, so the former private-repository plan entitlement blocker is no longer the active cause of EG-02. Live GitHub branch metadata still reports main protected=false. Apply and verify the required protection/ruleset before P01 authorization."
+      "note": "Issue #3 is closed. main reports protected=true; direct push and force-push probes were rejected; failed governance blocked PR #34; unresolved conversation blocked PR #37 until resolution; green PR #35 merged normally. Branch deletion remains blocked by the configured ruleset; destructive deletion of the default branch was intentionally not attempted. Current single-maintainer review policy requires zero approvals and does not require Code Owner review until an independent reviewer exists."
     },
     "github_actions_ci": {
       "state": "operational_github_hosted",
@@ -43,21 +56,13 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32537207455,
-      "job": 96940269306,
-      "evidence_runner": "GitHub Actions 1000006777",
+      "workflow_run": 32541439589,
       "evidence_environment": "github-hosted",
-      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_os": "Linux",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
-      "runner_image_version": "20260816.277.1",
       "final_check": "governance",
-      "historical_self_hosted_provenance": {
-        "run": 32535324900,
-        "job": 96935023669,
-        "runner": "LOCAL-WIN-02"
-      },
-      "note": "Canonical governance CI is GitHub-hosted only. PR #31 run 32537207455 proved all validators PASS on the GitHub-hosted ubuntu-24.04 image with RUNNER_ENVIRONMENT=github-hosted. Local/self-hosted runners are prohibited for the canonical governance workflow."
+      "note": "Canonical governance CI is GitHub-hosted only. PR #37 run 32541439589 passed after the hosted-only migration; local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -65,15 +70,15 @@
       "decision_gate": "docs/governance/LICENSING_DECISION.md",
       "owner_decision_brief": "docs/governance/LICENSING_DECISION_BRIEF.md",
       "repository_visibility": "public",
-      "note": "The repository is now public while the current LICENSE remains GPLv3 and trademark clearance remains unresolved. Issue #4 therefore requires explicit owner/legal reconciliation for product launch, commercial licensing, contribution policy and trademark claims. It does not by itself authorize or prohibit private/internal P01 implementation once the P01 entry controls are satisfied."
+      "note": "The repository is public and the current LICENSE remains GPLv3. Issue #4 remains an external distribution/public-launch licensing, IP and trademark decision gate; it does not block authorized P01 kernel engineering."
     }
   },
   "p01_preparation": {
-    "state": "prepared_blocked",
-    "phase_state": "blocked",
+    "state": "activated",
+    "phase_state": "active",
     "next_work_package": "P01.01",
     "work_package_name": "Go workspace/build skeleton",
-    "work_package_state": "planned",
+    "work_package_state": "active",
     "work_package_spec": "docs/roadmap/work-packages/P01.01.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
@@ -81,32 +86,34 @@
     "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
-    "blocking_gate": "EG-02 / issue:#3",
-    "note": "P01.01-P01.12 specifications are prepared under strict sequential one-active-package policy. P01.01 remains the next package, but no Go workspace, go.mod/go.work, kernel main entrypoint, or other executable kernel implementation is authorized before the governed P00->P01 transition."
+    "blocking_gate": null,
+    "note": "P01.01 is the sole active kernel work package. P01.02-P01.12 remain planned and may not activate until the previous package is done."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
-    "id": "P00",
-    "name": "Product Constitution & Architecture Freeze",
+    "id": "P01",
+    "name": "Omnexa Kernel",
     "state": "active",
-    "mandatory_work_packages": 10,
-    "done_work_packages": 9,
+    "mandatory_work_packages": 12,
+    "done_work_packages": 0,
     "work_packages": [
-      {"id":"P00.01","name":"Repository governance baseline","state":"done","evidence":["AGENTS.md","docs/governance/PRODUCT_CONSTITUTION.md","docs/governance/AI_EXECUTION_POLICY.md","docs/architecture/SYSTEM_ARCHITECTURE.md","docs/architecture/MODULE_STANDARD.md","docs/governance/CHANGE_CONTROL.md","docs/governance/DEFINITION_OF_DONE.md","docs/roadmap/MASTER_PLAN.md","docs/roadmap/STATUS.md","docs/roadmap/STATE.json","docs/adr/ADR-0001-platform-architecture-baseline.md"]},
-      {"id":"P00.02","name":"Product/domain glossary and naming standard","state":"done","depends_on":["P00.01"],"evidence":["docs/architecture/GLOSSARY.md","docs/architecture/NAMING_STANDARD.md","docs/architecture/DOMAIN_OWNERSHIP.md","docs/architecture/DEPENDENCY_MATRIX.md","CONTRIBUTING.md","SECURITY.md",".github/CODEOWNERS","docs/governance/REPOSITORY_HARDENING.md","docs/governance/LICENSING_DECISION.md","scripts/validate_governance.py",".github/workflows/governance.yml"]},
-      {"id":"P00.03","name":"ID, money, time, locale and error conventions","state":"done","depends_on":["P00.02"],"evidence":["docs/architecture/IDENTIFIER_STANDARD.md","docs/architecture/MONEY_STANDARD.md","docs/architecture/TIME_STANDARD.md","docs/architecture/LOCALE_STANDARD.md","docs/architecture/ERROR_STANDARD.md","docs/adr/ADR-0002-foundation-data-conventions.md","scripts/validate_governance.py"]},
-      {"id":"P00.04","name":"API contract standard","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/architecture/API_STANDARD.md","docs/contracts/http/openapi-template.yaml","docs/adr/ADR-0003-http-api-contract-baseline.md","scripts/validate_governance.py"]},
-      {"id":"P00.05","name":"Event contract standard","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/architecture/EVENT_STANDARD.md","docs/contracts/events/event-envelope.schema.json","docs/adr/ADR-0004-event-contract-baseline.md","scripts/validate_governance.py"]},
-      {"id":"P00.06","name":"Security and data-classification baseline","state":"done","depends_on":["P00.02","P00.03"],"evidence":["docs/security/SECURITY_STANDARD.md","docs/security/DATA_CLASSIFICATION.md","docs/security/SECURITY_CONTROL_MATRIX.md","docs/contracts/security/data-classification.schema.json","docs/adr/ADR-0005-security-data-classification-baseline.md","docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md","docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md","scripts/validate_governance.py"]},
-      {"id":"P00.07","name":"Testing, CI and release standard","state":"done","depends_on":["P00.04","P00.05","P00.06"],"evidence":["docs/quality/TESTING_STANDARD.md","docs/quality/CI_STANDARD.md","docs/quality/RELEASE_STANDARD.md","docs/quality/QUALITY_GATE_MATRIX.md","docs/contracts/quality/quality-gates.schema.json","docs/adr/ADR-0007-testing-ci-release-baseline.md","scripts/validate_governance.py"]},
-      {"id":"P00.08","name":"Local developer and repository structure specification","state":"done","depends_on":["P00.03","P00.07"],"evidence":["docs/development/REPOSITORY_STRUCTURE.md","docs/development/LOCAL_DEVELOPMENT.md","docs/development/TOOLCHAIN_STANDARD.md","docs/development/CONFIGURATION_STANDARD.md","docs/development/DEVELOPER_COMMANDS.md","docs/contracts/development/workspace.schema.json","docs/adr/ADR-0008-repository-local-development-baseline.md","scripts/validate_development_spec.py"]},
-      {"id":"P00.09","name":"Initial threat model and operational SLO targets","state":"done","depends_on":["P00.06","P00.08"],"evidence":["docs/security/THREAT_MODEL.md","docs/operations/SLO_STANDARD.md","docs/operations/INCIDENT_STANDARD.md","docs/operations/RELIABILITY_STANDARD.md","docs/contracts/operations/operational-targets.schema.json","docs/adr/ADR-0009-threat-model-slo-reliability-baseline.md","scripts/validate_operations_spec.py"]},
-      {"id":"P00.10","name":"Foundation architecture freeze review","state":"active","review_state":"verification","depends_on":["P00.01","P00.02","P00.03","P00.04","P00.05","P00.06","P00.07","P00.08","P00.09"],"evidence":["docs/governance/FOUNDATION_FREEZE_REVIEW.md","docs/governance/P01_ENTRY_GATE.md","docs/governance/P00_P01_TRANSITION_CHECKLIST.md","docs/governance/FOUNDATION_FREEZE.json","docs/contracts/governance/foundation-freeze.schema.json","docs/adr/ADR-0010-foundation-architecture-freeze.md","scripts/validate_freeze_review.py","scripts/validate_p01_preparation.py","scripts/validate_p01_package_specs.py"]}
+      {"id":"P01.01","name":"Go workspace/build skeleton","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P01.01.md"},
+      {"id":"P01.02","name":"Configuration & environment system","state":"planned","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md"},
+      {"id":"P01.03","name":"Structured error & result conventions","state":"planned","depends_on":["P01.02"],"spec":"docs/roadmap/work-packages/P01.03.md"},
+      {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"planned","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md"},
+      {"id":"P01.05","name":"Cache abstraction","state":"planned","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
+      {"id":"P01.06","name":"Object & file storage abstraction","state":"planned","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md"},
+      {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"planned","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
+      {"id":"P01.08","name":"Health, readiness & diagnostics","state":"planned","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
+      {"id":"P01.09","name":"Job & scheduler primitives","state":"planned","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
+      {"id":"P01.10","name":"Feature flag & configuration registry","state":"planned","depends_on":["P01.09"],"spec":"docs/roadmap/work-packages/P01.10.md"},
+      {"id":"P01.11","name":"Audit transport foundation","state":"planned","depends_on":["P01.10"],"spec":"docs/roadmap/work-packages/P01.11.md"},
+      {"id":"P01.12","name":"Developer CLI baseline","state":"planned","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
     ]
   },
   "phases": [
-    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"active","review_state":"verification"},
-    {"id":"P01","name":"Omnexa Kernel","state":"blocked","blocked_by":["issue:#3"],"prepared_next_work_package":"P01.01","prepared_spec":"docs/roadmap/work-packages/P01.01.md","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.01","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -134,5 +141,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P00.10 remains active in exit verification. Executable CI is satisfied by Issue #14 and is now GitHub-hosted only on ubuntu-24.04; PR #31 run 32537207455/job 96940269306 proved all validators PASS with RUNNER_ENVIRONMENT=github-hosted. EG-02/Issue #3 is no longer plan-blocked because the repository is public, but live main remains protected=false and therefore EG-02 is still unsatisfied. P01.01-P01.12 are fully pre-specified under strict sequential activation, but executable kernel code remains prohibited. P00.10 may move to done only after main protection/ruleset is applied and verified, or after a deliberate superseding governance ADR replaces EG-02 with explicitly accepted compensating control. The transition must follow docs/governance/P00_P01_TRANSITION_CHECKLIST.md, retire ADR-0006 from active use, mark P00 done, activate P01/P01.01, set kernel_code_authorized=true, keep business_feature_code_authorized=false, and record applicable control evidence. Issue #4 remains open and now requires explicit reconciliation with the repository's public visibility."
+  "next_transition_rule": "P01.01 is active and is the only authorized executable kernel scope. Implement the Go workspace/build skeleton, obtain G0/G1/G2/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.01 through verification to done, then activate only P01.02. Business-feature code and P02+ implementation remain unauthorized."
 }
