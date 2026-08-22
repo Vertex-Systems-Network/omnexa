@@ -37,8 +37,8 @@ linters:
         linters:
           - gosec
       # These literals are synthetic credentials whose purpose is to prove
-      # secret/DSN redaction. They are not deployment credentials.
-      - path: kernel/internal/(config/config_test|database/(integration_test|pool_test))\.go
+      # secret/DSN/provider redaction. They are not deployment credentials.
+      - path: kernel/internal/(config/config_test|database/(integration_test|pool_test)|storage/(integration_test|storage_test|restart_test))\.go
         text: "G101:"
         linters:
           - gosec
