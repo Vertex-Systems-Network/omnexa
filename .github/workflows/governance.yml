@@ -82,24 +82,6 @@ jobs:
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
 
-      # Temporary fail-closed diagnostic. Remove after committing the exact
-      # canonical module metadata produced by the pinned Go toolchain.
-      - name: Diagnose P01.06 Go module metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          go work sync
-          go mod tidy
-          echo '----- P01.06 canonical go.mod -----'
-          cat go.mod
-          echo '----- P01.06 canonical go.sum -----'
-          cat go.sum
-          if [[ -n "$(git status --porcelain -- go.mod go.work go.sum)" ]]; then
-            echo "ERROR: P01.06 module metadata requires canonicalization before completion evidence" >&2
-            git status --short -- go.mod go.work go.sum >&2
-            exit 1
-          fi
-
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
         run: |
