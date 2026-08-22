@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v8-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v9-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -50,29 +50,6 @@ jobs:
           set -euo pipefail
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
-
-      - name: Diagnose P01.03 gofmt diff
-        shell: bash
-        run: |
-          set -uo pipefail
-          stdout_file="$(mktemp)"
-          stderr_file="$(mktemp)"
-          set +e
-          gofmt -d kernel/internal/failure/failure.go kernel/internal/failure/failure_test.go >"$stdout_file" 2>"$stderr_file"
-          code=$?
-          set -e
-          echo "gofmt exit code: $code"
-          if [[ -s "$stderr_file" ]]; then
-            echo "--- gofmt stderr ---"
-            cat "$stderr_file"
-          fi
-          if [[ -s "$stdout_file" ]]; then
-            echo "--- gofmt diff ---"
-            cat "$stdout_file"
-          fi
-          if [[ $code -ne 0 || -s "$stdout_file" || -s "$stderr_file" ]]; then
-            exit 1
-          fi
 
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
