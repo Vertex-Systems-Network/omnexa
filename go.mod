@@ -2,7 +2,10 @@ module github.com/Vertex-Systems-Network/omnexa
 
 go 1.26.7
 
-require github.com/jackc/pgx/v5 v5.10.0
+require (
+	github.com/jackc/pgx/v5 v5.10.0
+	github.com/valkey-io/valkey-go v1.0.75
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
