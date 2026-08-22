@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v4-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v5-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -37,6 +37,19 @@ jobs:
           test "${RUNNER_ENVIRONMENT}" = "github-hosted"
           test "${RUNNER_OS}" = "Linux"
           test "${RUNNER_ARCH}" = "X64"
+
+      - name: Set up pinned Go toolchain
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: .go-version
+          cache: false
+
+      - name: Verify pinned Go version
+        shell: bash
+        run: |
+          set -euo pipefail
+          go version
+          test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
 
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
@@ -76,3 +89,7 @@ jobs:
       - name: Validate complete P01 package specification set
         shell: bash
         run: python scripts/validate_p01_package_specs.py
+
+      - name: Verify P01.01 Go workspace and build skeleton
+        shell: bash
+        run: bash scripts/verify_p01_01.sh

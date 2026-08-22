@@ -1,7 +1,7 @@
 # Omnexa Toolchain Standard
 
-Status: **Canonical v1**  
-Work package: **P00.08**
+Status: **Canonical v1 — P01.01 Go selection active**  
+Foundation work package: **P00.08**
 
 Omnexa pins development/build toolchains so a clean checkout can reproduce the supported environment. Repository configuration, not a developer's globally installed latest version, defines the supported toolchain.
 
@@ -14,15 +14,27 @@ The architectural language baseline remains:
 - Rust for justified edge/native/security-sensitive components;
 - Python only for AI/data workloads where ecosystem value warrants it.
 
-P00.08 does not freeze a specific patch forever. It freezes **how versions are selected and upgraded**.
+P00.08 did not freeze a patch forever; it froze **how versions are selected and upgraded**.
+
+## Active Go selection — P01.01
+
+The first executable kernel package pins **Go 1.26.7**.
+
+- `.go-version` is the exact resolved toolchain declaration used by canonical CI and supported developer verification;
+- `go.mod` and `go.work` declare the same Go version so workspace/module semantics cannot drift from the selected toolchain;
+- canonical GitHub Actions uses `actions/setup-go` with `go-version-file: .go-version`;
+- `scripts/verify_p01_01.sh` fails if the resolved `go env GOVERSION` differs from the repository declaration;
+- no third-party Go dependency is introduced by P01.01.
+
+Go 1.27 was newly released immediately before this package; P01.01 deliberately starts on the maintained 1.26 patch line to reduce major-version adoption risk. A later upgrade is an explicit toolchain change with compatibility evidence, not incidental cleanup.
 
 ## Version policy
 
-Each active runtime/tool must have one repository-owned version declaration or lock source.
+Each active runtime/tool must have a repository-owned version declaration or lock source.
 
 Preferred mechanisms include:
 
-- Go: `go.mod` / workspace metadata plus pinned CI/bootstrap tool versions;
+- Go: `.go-version` plus compatible `go.mod` / workspace metadata and pinned CI/bootstrap tool versions;
 - Node: repository package-manager declaration + lockfile + runtime version declaration;
 - Rust: `rust-toolchain.toml` plus Cargo lock policy appropriate to application/library package type;
 - Python: explicit interpreter range/version plus locked environment/dependency artifact for each actual Python workload;
