@@ -36,14 +36,22 @@ if [[ ${#go_files[@]} -eq 0 ]]; then
   exit 1
 fi
 
+echo "gofmt input files: ${#go_files[@]}"
 : > "${FORMAT_DIFF}"
-gofmt -d "${go_files[@]}" > "${FORMAT_DIFF}"
-if [[ -s "${FORMAT_DIFF}" ]]; then
-  echo "ERROR: gofmt changes are required:" >&2
-  cat "${FORMAT_DIFF}" >&2
-  status=1
+if gofmt -d "${go_files[@]}" > "${FORMAT_DIFF}"; then
+  if [[ -s "${FORMAT_DIFF}" ]]; then
+    echo "ERROR: gofmt changes are required:" >&2
+    cat "${FORMAT_DIFF}" >&2
+    status=1
+  else
+    echo "gofmt: PASS"
+  fi
 else
-  echo "gofmt: PASS"
+  echo "ERROR: gofmt could not analyze one or more Go files" >&2
+  if [[ -s "${FORMAT_DIFF}" ]]; then
+    cat "${FORMAT_DIFF}" >&2
+  fi
+  status=1
 fi
 
 if ! "${TOOL_ROOT}/golangci-lint" run ./kernel/...; then
