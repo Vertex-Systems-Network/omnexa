@@ -259,3 +259,14 @@ Notes:
 - State files reconciled: `AGENTS.md`, `README.md`, `STATUS.md`, `P01_ENTRY_GATE.md`, `docs/development/DEVELOPER_COMMANDS.md`, plus the new UI quality plan.
 - Commit / PR: completion-reconciliation PR/merge SHA to be appended after merge.
 - Notes: WAVE is an evaluation input, not a certification. Future generated UI is held to the same standards as hand-authored UI; required unavailable WAVE automation is `BLOCKED`, not PASS.
+
+## 2026-08-22 — P01.05 cache abstraction completion / P01.06 activation
+
+- Phase / package: `P01.05 -> P01.06`.
+- Transition: P01.05 `active -> verification -> done`; P01.06 `planned -> active`.
+- Summary: Closed the bounded Redis-compatible cache abstraction after canonical hosted evidence proved deterministic namespaced/versioned keys, bounded TTL/value semantics, typed serialization, miss-versus-provider-error behavior, get/set/delete, bounded timeout/cancellation, FLUSHDB non-authority and provider restart/reconnect. P01.05 also established the permanent repository-wide Go quality gate with pinned golangci-lint and govulncheck. Activated only the S3-compatible object/file storage abstraction as the next executable kernel package.
+- Evidence: implementation PR #48 final head `c39ba2f0bee8da7c185608f8ca30d6090dc4e824`; canonical run `32571147128` / job `97026673348` SUCCESS on `GitHub Actions 1000009072`, Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04` `20260816.277.1`; Go `1.26.7`; Valkey `9.1.1`; valkey-go `v1.0.75`; golangci-lint `v2.12.2` with zero issues; govulncheck `v1.7.0` with no reachable vulnerabilities; G0/G1/G2/G3/G5/G6/G7 and P01.01-P01.04 regressions PASS; PR #48 squash-merged as `725cbbd87e9456e1be02306ce3788e43ab139bd5`; detailed evidence `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
+- Architecture impact: implements the already-authorized P01.05 cache substrate and repository Go quality gate only. No business cache models, sessions/authentication, tenant/organization behavior, module runtime, event/job fabric, object storage implementation, telemetry/health or frozen Foundation v1 change was introduced.
+- State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.05/P01.06 specs, P01 package sequence, developer-command contract and canonical completion evidence.
+- Commit / PR: implementation `#48` / `725cbbd87e9456e1be02306ce3788e43ab139bd5`; completion-reconciliation PR/merge SHA to be appended after merge.
+- Notes: diagnostic/failure runs `32569193459`, `32570210066`, `32570578340` and `32571033650` remain non-PASS history. P01.06 is now the sole active kernel scope. `business_feature_code_authorized=false`; P01.07+ and P02+ remain unauthorized.
