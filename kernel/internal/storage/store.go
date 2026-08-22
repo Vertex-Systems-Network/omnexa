@@ -15,6 +15,7 @@ import (
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/config"
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
@@ -257,7 +258,7 @@ func (store *Store) Put(ctx context.Context, key Key, upload Upload) (ObjectInfo
 		ContentType:    optionalString(upload.ContentType),
 		ChecksumSHA256: aws.String(checksumBase64),
 		Metadata:       metadata,
-	})
+	}, s3.WithAPIOptions(v4.SwapComputePayloadSHA256ForUnsignedPayloadMiddleware))
 	if err != nil {
 		return ObjectInfo{}, classifyOperationFailure(err)
 	}
