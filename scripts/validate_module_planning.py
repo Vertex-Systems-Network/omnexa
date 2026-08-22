@@ -15,6 +15,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "docs/roadmap/modules/SUBMODULE_CATALOG.json"
 INDEX = ROOT / "docs/roadmap/modules/README.md"
 DOSSIER_STANDARD = ROOT / "docs/roadmap/modules/DOSSIER_STANDARD.md"
+EXECUTION_PROFILES = ROOT / "docs/roadmap/modules/EXECUTION_PROFILES.md"
+EXECUTION_PROFILE_MAP = ROOT / "docs/roadmap/modules/EXECUTION_PROFILE_MAP.json"
 BLUEPRINT = ROOT / "docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md"
 AI_PROTOCOL = ROOT / "docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md"
 AI_POLICY = ROOT / "docs/governance/AI_EXECUTION_POLICY.md"
@@ -25,6 +27,8 @@ for path in (
     CATALOG,
     INDEX,
     DOSSIER_STANDARD,
+    EXECUTION_PROFILES,
+    EXECUTION_PROFILE_MAP,
     BLUEPRINT,
     AI_PROTOCOL,
     AI_POLICY,
@@ -94,9 +98,52 @@ for phase in phases:
         if sub_id not in dossier_text:
             raise SystemExit(f"ERROR: {sub_id} is cataloged but not documented in {dossier_rel}")
 
+profile_map = json.loads(EXECUTION_PROFILE_MAP.read_text(encoding="utf-8"))
+if profile_map.get("schema_version") != 1:
+    raise SystemExit("ERROR: unsupported EXECUTION_PROFILE_MAP schema_version")
+if profile_map.get("profiles_document") != "docs/roadmap/modules/EXECUTION_PROFILES.md":
+    raise SystemExit("ERROR: execution profile document mismatch")
+if profile_map.get("implementation_authority") != "docs/roadmap/STATE.json":
+    raise SystemExit("ERROR: execution profile map must not replace STATE.json authorization")
+
+valid_profiles = {f"EP{i:02d}" for i in range(1, 13)}
+profile_text = EXECUTION_PROFILES.read_text(encoding="utf-8")
+for profile in sorted(valid_profiles):
+    if profile not in profile_text:
+        raise SystemExit(f"ERROR: execution profile is mapped but undocumented: {profile}")
+
+def validate_profile_list(owner: str, values: object) -> None:
+    if not isinstance(values, list) or not values:
+        raise SystemExit(f"ERROR: {owner} requires at least one execution profile")
+    if len(values) > 3:
+        raise SystemExit(f"ERROR: {owner} has too many execution profiles; refine the planning boundary")
+    seen: set[str] = set()
+    for profile in values:
+        if profile not in valid_profiles:
+            raise SystemExit(f"ERROR: {owner} references unknown execution profile: {profile}")
+        if profile in seen:
+            raise SystemExit(f"ERROR: {owner} repeats execution profile: {profile}")
+        seen.add(profile)
+
+phase_defaults = profile_map.get("phase_defaults")
+if not isinstance(phase_defaults, dict) or list(phase_defaults.keys()) != expected:
+    raise SystemExit("ERROR: execution profile phase defaults must cover P02-P27 in exact order")
+for phase_id, profiles in phase_defaults.items():
+    validate_profile_list(phase_id, profiles)
+
+overrides = profile_map.get("submodule_overrides")
+if not isinstance(overrides, dict):
+    raise SystemExit("ERROR: execution profile submodule_overrides must be an object")
+for sub_id, profiles in overrides.items():
+    if sub_id not in submodule_ids:
+        raise SystemExit(f"ERROR: execution profile override references unknown submodule: {sub_id}")
+    validate_profile_list(sub_id, profiles)
+
 index_text = INDEX.read_text(encoding="utf-8")
 for required in [
     "DOSSIER_STANDARD.md",
+    "EXECUTION_PROFILES.md",
+    "EXECUTION_PROFILE_MAP.json",
     "FOUNDATION_P02_P06.md",
     "CORE_BUSINESS_P07_P15.md",
     "PLATFORM_P16_P18.md",
@@ -136,6 +183,12 @@ required_cross_document_markers = {
         "S01",
         "S10",
     ],
+    EXECUTION_PROFILES: [
+        "EP01",
+        "EP06",
+        "EP11",
+        "Profile composition rule",
+    ],
 }
 for path, markers in required_cross_document_markers.items():
     text = path.read_text(encoding="utf-8")
@@ -146,5 +199,7 @@ for path, markers in required_cross_document_markers.items():
 print("Omnexa module/submodule planning validation: PASS")
 print(f"Planned future phases: {len(phases)}")
 print(f"Preplanned submodules/families: {len(submodule_ids)}")
-print("Architecture/flow/options dossier system: ENFORCED")
+print(f"Execution profiles: {len(valid_profiles)}")
+print(f"Submodule profile overrides: {len(overrides)}")
+print("Architecture/flow/options/task-profile system: ENFORCED")
 print("Implementation authority: docs/roadmap/STATE.json")
