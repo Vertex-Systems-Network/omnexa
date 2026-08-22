@@ -3,6 +3,7 @@ schema_version: 1
 snapshot:
   verified_at: "2026-08-22T20:27:00+05:00"
   nature: "non-authoritative continuity snapshot"
+  base_main_commit: "753fc54dbb35071807bcc3fd51743f289c400b98"
   stale_rule: "Re-verify canonical state, branch/head, PR and latest CI before every material action. If this file conflicts with canonical sources, mark it stale and stop relying on the conflicting value."
 
 project:
@@ -23,7 +24,6 @@ current:
 
 repository:
   canonical_branch: "main"
-  canonical_commit: "753fc54dbb35071807bcc3fd51743f289c400b98"
   active_work_branch: "feat/p01-06-storage-clean"
   active_work_commit: "7028145965aa38194bdb0524ec511b98f206461c"
   working_tree_status: "not_applicable_to_remote_branch_snapshot"
