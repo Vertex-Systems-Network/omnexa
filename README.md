@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01 is DONE; P01.02 — Configuration & environment system is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01 and P01.02 are DONE; P01.03 — Structured error & result conventions is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -15,8 +15,9 @@ Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execut
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.02.md`
+- `docs/roadmap/work-packages/P01.03.md`
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
+- `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -51,7 +52,10 @@ runs-on: ubuntu-24.04
 
 The `governance` job fails unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
 
-P01.01 executable proof: PR #40, workflow run `32562869345`, job `97007065640`, Go `1.26.7`, all P01.01 verification checks PASS, merge `7257977264d788663083fa215462b1828f1e5afb`.
+Completed package evidence:
+
+- P01.01: PR #40, run `32562869345`, job `97007065640`, merge `7257977264d788663083fa215462b1828f1e5afb`.
+- P01.02: PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
 
 Repository-managed Dependabot configuration is present for weekly GitHub Actions dependency updates.
 
@@ -59,15 +63,19 @@ Repository-managed Dependabot configuration is present for weekly GitHub Actions
 
 ### P01.01 — done
 
-The Go workspace/build skeleton is complete: pinned Go toolchain, root workspace/module metadata, minimal kernel entrypoint, build metadata/tests, deterministic verification wrapper and hosted CI integration. Evidence is recorded at `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
+Pinned Go workspace/build skeleton and deterministic hosted verification. Evidence: `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
 
-### P01.02 — active
+### P01.02 — done
 
-P01.02 implements only the typed configuration/environment system: deterministic loading/validation, precedence, governed environment identity, required/optional settings, secret redaction, isolated test overrides and safe provenance diagnostics.
+Typed configuration/environment system with deterministic precedence, strict unknown-key handling, secret-safe redaction/provenance, race-tested isolated loader state and fail-closed startup validation. Evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
 
-It must **not** pull forward structured application error conventions beyond narrow config errors, PostgreSQL/migrations, cache/storage, telemetry, health endpoints, jobs, feature flags, audit transport, full developer CLI, identity/tenancy, module runtime or business-domain behavior.
+### P01.03 — active
 
-P01.03–P01.12 remain planned and strict sequential activation applies.
+P01.03 implements transport-neutral structured error/result conventions: stable machine codes, safe public detail, private causes, wrapping/unwrapping, explicit retryability/category metadata, bounded validation-field errors and correlation metadata hooks.
+
+It must **not** pull forward HTTP transport adapters, PostgreSQL/provider mapping, logging/telemetry, health endpoints, jobs, identity/tenancy, module runtime or business-domain error catalogs.
+
+P01.04–P01.12 remain planned and strict sequential activation applies.
 
 ## Public visibility / Issue #4
 
@@ -75,7 +83,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01 done; P01.02 active; P01 progress 1 / 12 done; kernel implementation authorized only for P01.02; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01/P01.02 done; P01.03 active; P01 progress 2 / 12 done; kernel implementation authorized only for P01.03; business features locked.**
 
 ## Product principle
 
