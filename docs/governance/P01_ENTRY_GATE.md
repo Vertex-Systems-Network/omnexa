@@ -1,6 +1,6 @@
 # Omnexa P01 Implementation Entry Gate
 
-Status: **SATISFIED — P01.01 authorized by the governed P00 → P01 transition**  
+Status: **SATISFIED — P01 execution active under strict sequential package control**  
 Owner phase: **P01 — Omnexa Kernel**
 
 Foundation Architecture v1 remains frozen. This document preserves the evidence that cleared executable kernel entry; it does not authorize business-domain implementation.
@@ -40,32 +40,37 @@ Canonical governance CI is GitHub-hosted only:
 runs-on: ubuntu-24.04
 ```
 
-The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited. PR #37 run `32541439589` is current positive hosted evidence; PR #31 established the hosted-only routing baseline.
+The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
 
 ### EG-04 — canonical executable verification command
-State: **OWNED BY ACTIVE P01.01**
+State: **SATISFIED BY P01.01**
 
-P01.01 must establish the first-class Go build/test/verification command mapping required by the frozen P00.07/P00.08 standards. This is an acceptance criterion of P01.01, not an entry blocker.
+P01.01 established the repository-owned Go toolchain/workspace and `scripts/verify_p01_01.sh`, which is invoked by the same GitHub-hosted governance job used for canonical verification. P01.01 completion evidence is recorded at `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
 
 ### EG-05 — implementation locks transition atomically
-State: **SATISFIED BY THIS GOVERNANCE TRANSITION**
+State: **SATISFIED**
 
-The transition state is:
+Current bounded state:
 
 - P00.10: `done`;
 - P00: `done`;
 - P01: `active`;
-- P01.01: `active`;
+- P01.01: `done`;
+- P01.02: `active`;
 - `kernel_code_authorized=true`;
 - `business_feature_code_authorized=false`;
-- P01.02–P01.12 remain `planned`;
+- P01.03–P01.12 remain `planned`;
 - ADR-0006 is historical-only and cannot authorize a current bypass.
-
-The transition contains no executable kernel implementation. The first kernel-code PR follows separately from canonical `main` after this transition is merged and verified.
 
 ## Active P01 package sequence
 
-`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution. P01.01 — **Go workspace / build skeleton** — is the sole active package. P01.02 may not start until P01.01 reaches `done` with required evidence.
+`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
+
+- P01.01 — **Go workspace / build skeleton**: `done` with PR #40 / run `32562869345` / job `97007065640` evidence.
+- P01.02 — **Configuration & environment system**: sole `active` package.
+- P01.03–P01.12: `planned`.
+
+Advancing to a later package requires the active package to reach `done` with its required hosted evidence and a governed state reconciliation.
 
 ## External distribution / Issue #4
 
@@ -76,14 +81,14 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Th
 ```text
 Foundation Architecture v1: FROZEN
 P00: DONE
-P00.10: DONE
 Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 Live main protection: protected:true
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01: ACTIVE — Go workspace/build skeleton
-P01.02-P01.12: PLANNED
+P01.01: DONE
+P01.02: ACTIVE — Configuration & environment system
+P01.03-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
