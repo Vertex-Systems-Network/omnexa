@@ -10,14 +10,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v11-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v12-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   governance:
     name: governance
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     services:
       postgres:
@@ -76,17 +76,6 @@ jobs:
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
 
-      - name: Diagnose P01.05 Go module metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          go work sync
-          go mod tidy
-          echo "----- canonical go.mod -----"
-          cat go.mod
-          echo "----- canonical go.sum -----"
-          cat go.sum
-
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
         run: |
@@ -125,6 +114,10 @@ jobs:
       - name: Validate complete P01 package specification set
         shell: bash
         run: python scripts/validate_p01_package_specs.py
+
+      - name: Verify repository Go code quality
+        shell: bash
+        run: bash scripts/verify_go_quality.sh
 
       - name: Verify P01.01 Go workspace and build skeleton
         shell: bash
