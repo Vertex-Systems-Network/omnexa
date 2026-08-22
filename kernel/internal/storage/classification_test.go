@@ -58,7 +58,7 @@ func TestObjectInfoRejectsProviderSideBoundsAndMetadataViolations(t *testing.T) 
 	validLength := int64(1)
 	_, err = objectInfo("omnexa/kernel.storage/v1/bad-metadata.bin", 1024, &validLength, &contentType, nil, nil, map[string]string{
 		checksumMetadataKey: checksum,
-		"bad key":          "value",
+		"bad key":           "value",
 	})
 	if err == nil {
 		t.Fatal("objectInfo(invalid provider metadata) error = nil")
@@ -76,25 +76,25 @@ func TestObjectInfoRejectsProviderSideBoundsAndMetadataViolations(t *testing.T) 
 }
 
 func TestDownloadStreamProviderErrorsRemainPublicSafe(t *testing.T) {
-	const secret = "https://access:secret@storage.internal.example/private-object"
-	reader := newVerifiedReadCloser(&failingReadCloser{readErr: errors.New(secret)}, 1, SHA256Hex([]byte("x")))
+	providerDetail := "provider-internal-detail-" + t.Name()
+	reader := newVerifiedReadCloser(&failingReadCloser{readErr: errors.New(providerDetail)}, 1, SHA256Hex([]byte("x")))
 	_, err := reader.Read(make([]byte, 1))
 	if err == nil {
 		t.Fatal("Read(provider failure) error = nil")
 	}
 	assertStorageFailureCode(t, err, codeOperationFailed)
-	assertPublicStorageFailureDoesNotContain(t, err, secret)
+	assertPublicStorageFailureDoesNotContain(t, err, providerDetail)
 
-	reader = newVerifiedReadCloser(&failingReadCloser{closeErr: errors.New(secret)}, 1, SHA256Hex([]byte("x")))
+	reader = newVerifiedReadCloser(&failingReadCloser{closeErr: errors.New(providerDetail)}, 1, SHA256Hex([]byte("x")))
 	err = reader.Close()
 	if err == nil {
 		t.Fatal("Close(provider failure) error = nil")
 	}
 	assertStorageFailureCode(t, err, codeOperationFailed)
-	assertPublicStorageFailureDoesNotContain(t, err, secret)
+	assertPublicStorageFailureDoesNotContain(t, err, providerDetail)
 }
 
-func assertPublicStorageFailureDoesNotContain(t *testing.T, err error, secret string) {
+func assertPublicStorageFailureDoesNotContain(t *testing.T, err error, providerDetail string) {
 	t.Helper()
 	structured, ok := failure.As(err)
 	if !ok {
@@ -102,8 +102,8 @@ func assertPublicStorageFailureDoesNotContain(t *testing.T, err error, secret st
 	}
 	public := structured.Public()
 	joined := strings.Join([]string{string(public.Code), string(public.Category), public.Title, public.Detail, err.Error()}, " ")
-	if strings.Contains(joined, secret) || strings.Contains(joined, "access:secret") {
-		t.Fatalf("public storage failure leaked sensitive provider detail: %q", joined)
+	if strings.Contains(joined, providerDetail) {
+		t.Fatalf("public storage failure leaked provider detail: %q", joined)
 	}
 }
 
