@@ -115,9 +115,12 @@ security:
 
 source_authority:
   execution_contract: "AGENTS.md"
+  ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
+  product_constitution: "docs/governance/PRODUCT_CONSTITUTION.md"
   canonical_state: "docs/roadmap/STATE.json"
   roadmap: "docs/roadmap/MASTER_PLAN.md"
   change_control: "docs/governance/CHANGE_CONTROL.md"
+  definition_of_done: "docs/governance/DEFINITION_OF_DONE.md"
   architecture:
     - "docs/architecture/SYSTEM_ARCHITECTURE.md"
     - "docs/architecture/MODULE_STANDARD.md"
