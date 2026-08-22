@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -18,7 +19,7 @@ func TestRunWithDefaultConfigurationPreservesKernelOutput(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("run() code = %d, stderr = %q", code, stderr.String())
 	}
-	want := "omnexa-kernel " + buildinfo.Current() + "\n"
+	want := fmt.Sprintf("omnexa-kernel %s\n", buildinfo.Current())
 	if stdout.String() != want {
 		t.Fatalf("stdout = %q, want %q", stdout.String(), want)
 	}
