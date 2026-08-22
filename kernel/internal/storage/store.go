@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
-	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -33,7 +32,7 @@ const (
 	storageKeyPrefixKey        = "storage_key_prefix"
 	storageMaxObjectBytesKey   = "storage_max_object_bytes"
 
-	maxSimpleObjectBytes = int64(5 * 1024 * 1024 * 1024)
+	maxSimpleObjectBytes int64 = 5 * 1024 * 1024 * 1024
 )
 
 var (
@@ -299,19 +298,20 @@ func (store *Store) Head(ctx context.Context, key Key) (ObjectInfo, error) {
 }
 
 // Open returns a streaming download whose terminal read verifies the stored
-// SHA-256 metadata. Provider errors and missing objects remain distinct.
+// SHA-256 metadata. Provider errors and missing objects remain distinct. The
+// bounded request context remains alive for the lifetime of the returned body.
 func (store *Store) Open(ctx context.Context, key Key) (*ObjectReader, error) {
 	rendered, err := store.renderKey(key)
 	if err != nil {
 		return nil, err
 	}
 	bounded, cancel := context.WithTimeout(ctx, store.settings.OperationTimeout)
-	defer cancel()
 	output, err := store.client.GetObject(bounded, &s3.GetObjectInput{
 		Bucket: aws.String(store.settings.Bucket),
 		Key:    aws.String(rendered),
 	})
 	if err != nil {
+		cancel()
 		return nil, classifyObjectOperationFailure(err)
 	}
 	info, err := objectInfo(
@@ -324,11 +324,13 @@ func (store *Store) Open(ctx context.Context, key Key) (*ObjectReader, error) {
 	)
 	if err != nil {
 		_ = output.Body.Close()
+		cancel()
 		return nil, err
 	}
+	body := &cancelReadCloser{body: output.Body, cancel: cancel}
 	return &ObjectReader{
 		Info: info,
-		Body: newVerifiedReadCloser(output.Body, info.ContentLength, info.SHA256),
+		Body: newVerifiedReadCloser(body, info.ContentLength, info.SHA256),
 	}, nil
 }
 
@@ -494,14 +496,4 @@ func classifyOperationFailure(cause error) error {
 		"storage operation failed",
 		failure.WithRetryable(true),
 	)
-}
-
-// drainVerified consumes an ObjectReader with bounded working memory. It is used
-// by deterministic integration evidence and deliberately never returns content.
-func drainVerified(reader *ObjectReader) error {
-	if reader == nil || reader.Body == nil {
-		return safeFailure(codeOperationFailed, failure.CategoryInvariant, "storage object reader is not initialized")
-	}
-	_, err := io.Copy(io.Discard, reader.Body)
-	return err
 }
