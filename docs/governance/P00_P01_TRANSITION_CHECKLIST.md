@@ -1,119 +1,105 @@
 # P00 → P01 Transition Checklist
 
-Status: **Prepared / not yet executable**  
-Owner phase: `P00.10`  
-Purpose: make the final foundation-to-kernel transition atomic, auditable and non-ambiguous.
+Status: **EXECUTING — governance transition; effective after verified merge**  
+Owner transition: `P00.10 -> P01.01`
 
-This checklist does not itself authorize P01. It becomes executable only after the remaining P01 entry blocker is cleared through one of the governed paths in `P01_ENTRY_GATE.md`.
+This checklist records the atomic handoff from the completed Foundation Program to the first executable kernel package. The transition PR is governance/state-only and contains no kernel implementation.
 
 ## A. Preconditions
 
-All items must be true before the transition PR is opened as ready-to-merge:
-
-- [ ] P00.01–P00.09 remain `done` and frozen.
-- [ ] P00.10 review artifacts are present and internally consistent.
-- [ ] `docs/governance/FOUNDATION_FREEZE.json` reports `architecture_status=FROZEN`.
-- [ ] Executable governance CI is operational on GitHub-hosted `ubuntu-24.04` only.
-- [ ] The required `governance` job proves `RUNNER_ENVIRONMENT=github-hosted` and passes all applicable validators.
-- [ ] No canonical governance workflow contains `self-hosted` or `LOCAL-WIN-*` runner routing.
-- [ ] Issue #14 remains resolved/completed.
-- [ ] EG-02 / Issue #3 is no longer blocked.
-- [ ] Live GitHub API reports `main.protected=true` and required strict `governance` check is enforced.
-- [ ] Force pushes/deletion are blocked and conversation resolution/admin enforcement are verified.
-- [ ] If EG-02 is superseded instead, an owner-approved ADR explicitly defines compensating controls, residual risk, expiry/review conditions and rollback path.
-- [ ] No architecture contradiction has been introduced since ADR-0010.
-- [ ] Repository is still free of unrelated project code.
+- [x] P00.01–P00.09 remain done/frozen.
+- [x] P00.10 freeze-review artifacts are present and internally consistent.
+- [x] `FOUNDATION_FREEZE.json` reports `architecture_status=FROZEN`.
+- [x] Executable governance CI is GitHub-hosted `ubuntu-24.04` only.
+- [x] Required job is `governance` and proves `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64.
+- [x] No canonical governance workflow contains self-hosted/LOCAL-WIN routing.
+- [x] Issue #14 is closed/satisfied.
+- [x] Issue #3 is closed/satisfied.
+- [x] Live GitHub API reports `main.protected=true`.
+- [x] Failed `governance` blocks merge (PR #34 / run `32540836431`).
+- [x] Direct update to `main` is rejected (probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2`).
+- [x] Force update is rejected.
+- [x] Conversation resolution is enforced (PR #37 / run `32541439589`).
+- [x] Valid green PR integration succeeds (PR #35 merge `843c615170058ab900ba69516dbed80a47f26973`).
+- [x] Deletion of `main` remains blocked by configured ruleset; destructive deletion was intentionally not attempted.
+- [x] Current review policy is compatible with the single-maintainer model: zero required approvals; CODEOWNERS documents ownership.
+- [x] No architecture contradiction has been introduced since ADR-0010.
+- [x] Repository is free of unrelated project code.
 
 ## B. Transition PR scope
 
-The transition PR is governance/state-only. It must not include kernel implementation.
+Required state on this branch:
 
-Required changes:
+- [x] `P00.10 -> done` / P00 exit `DONE`.
+- [x] P00 phase -> `done`.
+- [x] P01 phase -> `active`.
+- [x] `current_phase -> P01`.
+- [x] `current_work_package -> P01.01`.
+- [x] `kernel_code_authorized -> true`.
+- [x] `business_feature_code_authorized -> false`.
+- [x] P01.01 -> `active`.
+- [x] P01.02–P01.12 remain `planned`.
+- [x] ADR-0006 -> expired/historical-only.
+- [x] Issue #3 closing evidence recorded without deleting history.
+- [x] `P01_ENTRY_GATE.md` -> SATISFIED.
+- [x] `FOUNDATION_FREEZE.json` -> `p00_exit_status=DONE`.
+- [x] STATUS, STATE, README and AGENTS reconciled.
+- [x] Transition ledger entry prepared.
+- [x] No executable Go/kernel implementation included.
 
-- [ ] `P00.10.state: active -> done`.
-- [ ] P00 phase state -> `done`.
-- [ ] P00 `done_work_packages: 10`.
-- [ ] P01 phase -> `active`.
-- [ ] `current_phase -> P01`.
-- [ ] `current_work_package -> P01.01`.
-- [ ] `kernel_code_authorized -> true`.
-- [ ] `business_feature_code_authorized -> false`.
-- [ ] P01.01 -> `active`.
-- [ ] P01.02–P01.12 remain `planned`.
-- [ ] ADR-0006 explicitly becomes historical-only/inactive evidence.
-- [ ] Issue #3 closing/supersession evidence recorded exactly.
-- [ ] `P01_ENTRY_GATE.md` reflects `SATISFIED` rather than deleting history.
-- [ ] `FOUNDATION_FREEZE.json` records P00 exit status `DONE`.
-- [ ] `STATUS.md`, `STATE.json`, README and AGENTS are reconciled.
-- [ ] Append-only execution-ledger transition entry added.
+## C. Verification required on this transition PR
 
-## C. Verification required on the transition PR
+Before merge all must be PASS on GitHub-hosted `ubuntu-24.04`:
 
-The transition PR must produce:
+- [ ] `scripts/validate_governance.py`;
+- [ ] `scripts/validate_development_spec.py`;
+- [ ] `scripts/validate_operations_spec.py`;
+- [ ] `scripts/validate_freeze_review.py`;
+- [ ] `scripts/validate_p01_preparation.py`;
+- [ ] `scripts/validate_p01_package_specs.py`;
+- [ ] required `governance` job.
 
-- [ ] `scripts/validate_governance.py` PASS.
-- [ ] `scripts/validate_development_spec.py` PASS.
-- [ ] `scripts/validate_operations_spec.py` PASS.
-- [ ] `scripts/validate_freeze_review.py` PASS or its governed post-P00 successor.
-- [ ] `scripts/validate_p01_preparation.py` PASS.
-- [ ] `scripts/validate_p01_package_specs.py` PASS.
-- [ ] required `governance` job PASS on GitHub-hosted `ubuntu-24.04`.
-- [ ] hosted runtime evidence includes `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64.
-
-No `BLOCKED`, `NOT RUN` or manual-only exception may be relabeled PASS.
+These boxes become evidenced by the PR run rather than by editing them optimistically. `BLOCKED`, `NOT RUN` and `N/A` are not PASS.
 
 ## D. P01.01 activation invariants
 
-When P01 activates:
-
-- kernel code is authorized **only** for the active P01 work package;
+- kernel code is authorized only for active P01.01;
 - business-domain implementation remains prohibited;
-- no P02 identity/tenant implementation may be pulled forward;
-- no P03 module runtime may be prebuilt;
-- no persistence/infrastructure from P01.04+ may be added to P01.01;
-- every executable PR must use the canonical GitHub-hosted quality lane;
-- `docs/roadmap/work-packages/P01.01.md` is the controlling package specification;
+- no P02 identity/tenant implementation;
+- no P03 module runtime;
+- no persistence/infrastructure owned by P01.04+;
+- every executable PR uses GitHub-hosted canonical verification;
+- `P01.01.md` controls implementation;
 - strict sequential P01.01→P01.12 activation remains in force.
 
 ## E. Post-merge verification
 
-After the transition merge:
+After transition merge:
 
 - [ ] fetch canonical `main` SHA;
-- [ ] verify `STATE.json` from `main` reports P01 active/P01.01 active;
+- [ ] verify `STATE.json` reports P01 active/P01.01 active;
 - [ ] verify `kernel_code_authorized=true`;
 - [ ] verify `business_feature_code_authorized=false`;
-- [ ] verify no second P01 package is active;
-- [ ] verify latest governance run on canonical state passes on GitHub-hosted infrastructure;
-- [ ] append immutable merge SHA/run evidence through a reconciliation PR if the transition PR cannot know its own merge SHA.
+- [ ] verify exactly one active P01 package;
+- [ ] verify canonical hosted governance remains green;
+- [ ] append immutable transition merge SHA/run evidence through reconciliation if not knowable inside this PR.
 
 ## F. Abort conditions
 
-Do not complete the transition if any of these occur:
+Abort if live `main` loses protection, a local/self-hosted runner is used, final governance fails, business code becomes authorized, multiple P01 packages become active, P01.01 conflicts with frozen P00 architecture, or this transition PR contains executable kernel code.
 
-- hosted protection is assumed rather than observed;
-- compensating-control ADR is proposed but not explicitly owner-approved;
-- live `main` still reports `protected=false`;
-- a local/self-hosted runner is used for canonical governance verification;
-- final `governance` check fails/blocks;
-- state would authorize business code;
-- more than one P01 package becomes active;
-- P01.01 specification conflicts with a frozen P00 architecture rule;
-- the transition PR includes unrelated executable feature code.
-
-## Current result
+## Intended result after merge
 
 ```text
-P00 architecture: FROZEN
-P00.10: EXIT VERIFICATION
-Repository visibility: PUBLIC
-EG-02 / Issue #3: ACTIONABLE_UNPROTECTED
-Live main protection: false
-Executable CI: SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04
-Hosted proof: run 32537207455 / job 96940269306
-Local/self-hosted governance runner: PROHIBITED
-P01: BLOCKED
-P01.01-P01.12 specifications: PREPARED / PLANNED
-Kernel code: LOCKED
-Business feature code: LOCKED
+Foundation Architecture v1: FROZEN
+P00: DONE — 10 / 10
+P00.10: DONE
+EG-02 / Issue #3: SATISFIED / CLOSED
+EG-03 / Issue #14: SATISFIED
+Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
+P01: ACTIVE
+P01.01: ACTIVE
+P01.02-P01.12: PLANNED
+kernel_code_authorized: true
+business_feature_code_authorized: false
 ```

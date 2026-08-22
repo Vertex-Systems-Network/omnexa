@@ -1,24 +1,24 @@
 {
   "version": "foundation-v1",
   "architecture_status": "FROZEN",
-  "p00_exit_status": "VERIFICATION",
+  "p00_exit_status": "DONE",
   "frozen_packages": ["P00.01", "P00.02", "P00.03", "P00.04", "P00.05", "P00.06", "P00.07", "P00.08", "P00.09"],
   "p01_entry_gate": {
-    "state": "BLOCKED",
-    "kernel_code_authorized": false,
+    "state": "SATISFIED",
+    "kernel_code_authorized": true,
     "business_feature_code_authorized": false,
     "blockers": [
       {
         "id": "EG-02",
         "tracker": "issue:#3",
-        "state": "BLOCKED",
-        "description": "main branch/ruleset protection is not applied and verified"
+        "state": "SATISFIED",
+        "description": "main ruleset is verified: protected=true; PR-only integration and required governance are enforced; direct/force push and unresolved-conversation probes were rejected; Issue #3 is closed"
       },
       {
         "id": "EG-03",
         "tracker": "issue:#14",
         "state": "SATISFIED",
-        "description": "canonical local Windows executable CI is certified on LOCAL-WIN-4; PR #23 validation run 32528329184 produced LOCAL-WIN-4 pass evidence and final governance success"
+        "description": "canonical executable CI is GitHub-hosted only on ubuntu-24.04 and the required governance job passes"
       }
     ]
   },

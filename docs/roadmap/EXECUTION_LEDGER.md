@@ -182,3 +182,14 @@ Notes:
 - State files reconciled: PR #27 reconciled `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `AGENTS.md`, `README.md`, `docs/governance/P01_ENTRY_GATE.md`, and `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`.
 - Commit / PR: `#27` / `27a2476329b4df426637d4e9a7f08228c1729bdd`.
 - Notes: Issue #3 / EG-02 remains `BLOCKED_BY_PLAN`; `main` is still unprotected. `kernel_code_authorized=false` and `business_feature_code_authorized=false`. Do not start executable P01 until EG-02 is verified satisfied or deliberately superseded by an owner-approved governance ADR.
+
+## 2026-08-22 — P00 exit / P01.01 activation transition
+
+- Phase / package: `P00.10 -> P01.01`.
+- Transition: P00/P00.10 `done`; P01/P01.01 `active`; `kernel_code_authorized=false -> true`; business-feature authorization remains `false`.
+- Summary: Closed the final technical P01 entry gate after verifying protected `main`, required GitHub-hosted `governance`, PR-only integration, direct/force-update rejection and conversation resolution. Expired ADR-0006 and activated the strict sequential P01 package manifest with P01.01 as the sole active executable kernel scope.
+- Evidence: Issue #3 closed/completed; live `main.protected=true`; failed-governance PR #34/run `32540836431` rejected; direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` rejected; force-update probe rejected; CODEOWNERS/conversation PR #37/run `32541439589` blocked while unresolved then merged after resolution as `866646f5a2db444fc668dd62b8d1ff824b6359bc`; green Dependabot PR #35 merged as `843c615170058ab900ba69516dbed80a47f26973`.
+- Architecture impact: no change to frozen Foundation v1 and no executable kernel/business implementation in the transition. This is an execution-state authorization only.
+- State files reconciled: `STATE.json`, `STATUS.md`, `FOUNDATION_FREEZE.json`, `FOUNDATION_FREEZE_REVIEW.md`, `P01_ENTRY_GATE.md`, transition checklist, P01 package manifest/spec, README, AGENTS, hardening record and transition-aware validators.
+- Commit / PR: transition PR / merge SHA to be appended in a follow-up reconciliation entry after merge.
+- Notes: canonical CI remains GitHub-hosted only on `ubuntu-24.04`. P01.02–P01.12 and all business-domain implementation remain unauthorized. Issue #4 remains the external distribution/public-launch licensing/IP/trademark gate.

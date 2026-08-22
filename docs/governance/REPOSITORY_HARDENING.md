@@ -1,103 +1,73 @@
 # Omnexa Repository Hardening Baseline
 
-Status: **Required governance configuration**
+Status: **Applied and verified for current single-maintainer model**
 
-This document defines repository settings that protect the architecture/governance process from accidental or unauthorized drift. File-level controls are versioned in the repository; GitHub-hosted settings must be configured in repository rulesets/branch protection.
+This document defines repository settings that protect architecture/governance from accidental or unauthorized drift. File controls are versioned in-repo; hosted rules are enforced by GitHub rulesets/branch protection.
 
-## 1. Required `main` protection
+## 1. Required `main` policy
 
-Target configuration for `main`:
+Current required baseline:
 
-- require pull request before merge;
-- require at least one approving review for protected architecture/governance paths once the contributor model expands;
-- require review from Code Owners where GitHub plan/settings support it;
-- dismiss stale approvals when protected files change;
-- require conversation resolution before merge;
-- prohibit force pushes;
-- prohibit branch deletion;
-- block direct pushes except explicitly authorized emergency/break-glass actors;
-- require the Omnexa `governance` CI check;
-- require branch to be up to date before merge when CI/build topology makes that necessary;
-- do not allow ordinary administrators/maintainers to bypass the ruleset unless a documented break-glass process explicitly grants it.
+- pull request required before merge;
+- required `governance` status check;
+- conversation resolution required;
+- direct pushes blocked;
+- force pushes blocked;
+- branch deletion blocked;
+- ordinary bypass disabled; break-glass must be explicit and documented;
+- single-maintainer mode: required approvals `0`, required Code Owner review disabled to avoid self-review deadlock;
+- once an independent reviewer exists: require at least one independent approval and Code Owner review, with stale-approval policy appropriate to contributor model.
 
-## 2. Break-glass rule
+## 2. Verified 2026-08-22 evidence — Issue #3
 
-Emergency bypass must be exceptional. Any bypass must produce:
+Issue #3 is **closed/completed**.
 
-1. reason and incident reference;
-2. exact files/commits changed;
-3. security/architecture impact statement;
-4. follow-up PR/verification if normal gates were skipped;
-5. ledger entry when execution state or architecture evidence changes.
+Evidence:
 
-Emergency access must never be used for convenience or speed.
+- live GitHub API reports `main protected:true`;
+- failed-check PR #34 / run `32540836431` was rejected because required `governance` was failing;
+- direct fast-forward update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected because changes must be made through a PR and `governance` was expected;
+- force-update probe was rejected with `Cannot force-push to this branch`;
+- CODEOWNERS-path PR #37 / hosted run `32541439589` was blocked while an inline conversation remained unresolved; after resolution the same green PR merged as `866646f5a2db444fc668dd62b8d1ff824b6359bc`;
+- valid green PR #35 merged as `843c615170058ab900ba69516dbed80a47f26973`;
+- deletion of `main` remains blocked by configured ruleset. A destructive default-branch deletion test was intentionally not performed because it would create unnecessary recovery risk.
 
-## 3. File-level controls
+## 3. Break-glass rule
 
-Repository-managed controls include:
+Emergency bypass must be exceptional and explicitly authorized. Any use must record reason/incident, exact commits/files, security/architecture impact, skipped gates, follow-up verification and ledger reconciliation. Never use bypass for convenience or speed.
+
+## 4. Repository-managed controls
 
 - `.github/CODEOWNERS`;
 - `.github/pull_request_template.md`;
 - `.github/workflows/governance.yml`;
 - `.github/workflows/main-protection-admin.yml`;
+- `.github/dependabot.yml`;
 - `scripts/validate_governance.py`;
+- `scripts/validate_freeze_review.py`;
 - `scripts/validate_p01_preparation.py`;
-- `AGENTS.md`;
-- canonical architecture/governance/state documents.
+- `scripts/validate_p01_package_specs.py`;
+- `AGENTS.md` and canonical governance/architecture/state documents.
 
-## 4. Critical paths
+Critical execution-control paths include `AGENTS.md`, `docs/governance/**`, `docs/architecture/**`, `docs/roadmap/**`, `docs/adr/**` and `.github/**`. `STATE.json` changes are execution-control changes, not ordinary prose edits.
 
-The following paths require heightened review because they can redefine what future AI systems are allowed to do:
+## 5. CI and runner policy
 
-```text
-AGENTS.md
-docs/governance/**
-docs/architecture/**
-docs/roadmap/**
-docs/adr/**
-.github/**
-```
+The canonical required check is `governance` and runs only on GitHub-hosted `ubuntu-24.04`. The workflow must fail unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64.
 
-Changes to `STATE.json` must be treated as execution-control changes, not ordinary documentation edits.
+Local/self-hosted Actions runners are prohibited for canonical governance CI and repository administration automation. Future jobs may expand quality coverage but may not silently weaken P00.07 semantics or hosted-only execution.
 
-## 5. Required checks and runner policy
+## 6. Deterministic administration tooling
 
-The canonical required check is named `governance` and runs on GitHub-hosted `ubuntu-24.04`. The workflow must fail unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted Actions runners are prohibited for canonical governance CI and repository administration automation.
-
-Future P01+ quality gates may add jobs/checks, but must preserve the P00.07 semantics and hosted-only execution policy unless a later explicit governance change replaces it.
-
-## 6. Current configuration evidence
-
-The repository is now public. The former private-plan entitlement blocker is historical. Live GitHub metadata still reports `main` as unprotected with required status checks disabled, so the repository must retain Issue #3 until the hosted branch/ruleset settings match this specification.
-
-Hosted CI proof: run `32537207455`, job `96940269306`, `RUNNER_ENVIRONMENT=github-hosted`, Ubuntu 24.04.4 LTS / X64, with all canonical validators PASS.
-
-## 7. Verification procedure
-
-After hosted settings are configured:
-
-1. verify GitHub reports `protected:true`;
-2. verify strict required check `governance` is configured;
-3. verify direct non-exempt push to `main` is rejected;
-4. verify force push is rejected;
-5. verify protected branch deletion is rejected;
-6. open a test PR and verify governance CI is required;
-7. modify a CODEOWNERS path and verify required owner review behavior when enabled;
-8. record evidence in Issue #3 and the execution ledger if this changes a formal gate.
-
-## 8. Deterministic administration tooling
-
-P00.10 provides repository-managed administration helpers:
+Repository-managed helpers remain for audit/reapplication:
 
 - `docs/governance/BRANCH_PROTECTION_ADMIN_RUNBOOK.md`;
 - `.github/workflows/main-protection-admin.yml`;
 - `scripts/apply_main_protection.ps1`;
 - `scripts/verify_main_protection.ps1`.
 
-The administration workflow is `workflow_dispatch` only, runs on GitHub-hosted `ubuntu-24.04`, requires `RUNNER_ENVIRONMENT=github-hosted`, and consumes a short-lived owner-controlled `OMNEXA_GITHUB_ADMIN_TOKEN` GitHub Actions secret with repository Administration read/write permission.
+The admin workflow is manual (`workflow_dispatch`) and GitHub-hosted only. It requires an owner-controlled short-lived `OMNEXA_GITHUB_ADMIN_TOKEN` with repository Administration read/write. Ordinary `GITHUB_TOKEN` is not Administration authority.
 
-The ordinary Actions `GITHUB_TOKEN` is not sufficient repository Administration authority and must not be used as a substitute.
+## 7. Verification rule
 
-The current single-maintainer policy uses required approval count `0` while still requiring PR-based integration, because GitHub does not allow an author to approve their own PR. Once an independent reviewer exists, the baseline must be tightened to one or more approvals and Code Owner review according to the contributor model.
-
-The verifier is fail-closed and checks the hosted configuration, but it does not replace the controlled negative tests listed above. Issue #3 remains open until live GitHub evidence and the required rejection tests are complete.
+Protection must be demonstrated through live metadata plus controlled negative/positive behavior; documentation alone is not proof. If protection is changed later, rerun equivalent direct-push, required-check, conversation and valid-merge probes without using destructive tests unnecessarily.
