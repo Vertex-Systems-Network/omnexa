@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v9-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v10-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -18,6 +18,21 @@ jobs:
     name: governance
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:18.6
+        env:
+          POSTGRES_USER: omnexa
+          POSTGRES_PASSWORD: synthetic-p01-04
+          POSTGRES_DB: omnexa_p01_04
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U omnexa -d omnexa_p01_04"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout
@@ -101,3 +116,9 @@ jobs:
       - name: Verify P01.03 structured error and result conventions
         shell: bash
         run: bash scripts/verify_p01_03.sh
+
+      - name: Verify P01.04 PostgreSQL connection and migration foundation
+        shell: bash
+        env:
+          P01_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p01_04.sh

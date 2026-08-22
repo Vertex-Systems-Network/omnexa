@@ -80,29 +80,31 @@ Completed P01 packages retain their verification wrappers as mandatory regressio
 ```text
 bash scripts/verify_p01_01.sh
 bash scripts/verify_p01_02.sh
-```
-
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior.
-
-The active P01.03 structured failure package adds:
-
-```text
 bash scripts/verify_p01_03.sh
 ```
 
-P01.03 maps the currently applicable quality semantics as follows:
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions.
 
-- `verify format` -> `gofmt` cleanliness across kernel Go source;
-- `verify static` -> pinned Go, `go vet` and failure-package dependency boundary;
-- `verify unit` -> structured failure unit tests and race-enabled package tests;
-- `verify security` -> private-cause/public-redaction, bounded validation detail, invalid contract metadata and correlation-data negative tests;
-- `verify build` -> complete kernel package build with no transport/database/logging/telemetry coupling in the failure primitive.
+The active P01.04 PostgreSQL connection and migration foundation adds:
 
-The GitHub-hosted `governance` job invokes P01.01, P01.02 and P01.03 wrappers in sequence. The final `omnexa verify ...` CLI remains owned by P01.12.
+```text
+P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_04.sh
+```
 
-## Go result convention during P01.03
+P01.04 maps the currently applicable quality semantics as follows:
 
-P01.03 does **not** introduce a custom generic `Result[T]` container. The canonical Go call convention remains:
+- `verify format` / `verify static` -> pinned Go, `gofmt`, `go vet`, canonical Go module metadata and database-package dependency boundary;
+- `verify unit` -> database configuration, redaction, migration invariant and bounded-negative tests, including race-enabled package coverage;
+- `verify integration` -> PostgreSQL connection/ping, pool exhaustion and explicit transaction commit/rollback behavior;
+- `verify migrations` -> fresh, idempotent, synthetic upgrade, failed-migration rollback, immutable version-ledger/drift and advisory-lock coordination evidence;
+- `verify security` -> RESTRICTED database URL redaction, synthetic-data-only execution, no ORM and no P02/P03/business/later-capability schema pull-forward;
+- `verify build` -> complete kernel package build against pinned pgx v5.10.0.
+
+Canonical GitHub-hosted governance executes P01.01 through P01.04 in sequence on `ubuntu-24.04`. P01.04 additionally provisions the governed PostgreSQL 18.6 synthetic test service. The final `omnexa verify ...` CLI remains owned by P01.12.
+
+## Go result convention — completed P01.03
+
+P01.03 did **not** introduce a custom generic `Result[T]` container. The canonical Go call convention remains:
 
 ```go
 value, err := operation()
@@ -110,16 +112,29 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-Transport adapters, database/provider mappings and telemetry emission remain owned by later packages. Callers may wrap lower-level causes into the structured failure primitive while public projections remain cause-free.
+P01.04 database/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. Transport adapters and telemetry emission remain owned by their later packages.
 
-## Configuration startup contract — completed P01.02
+## Configuration startup contract — completed P01.02 / extended by active P01.04
 
-The kernel process accepts only explicit governed configuration sources. Current application-level controls are:
+The kernel process accepts only explicit governed configuration sources. Application-level controls remain:
 
 ```text
 OMNEXA_CONFIG_FILE=<explicit JSON file path>   # optional; no implicit file discovery
 OMNEXA_ENVIRONMENT=local|ci|preview|test|staging|production
 ```
+
+P01.04 composes these database settings only at the database boundary; it does not make the existing kernel startup path database-dependent:
+
+```text
+OMNEXA_DATABASE_URL=<RESTRICTED PostgreSQL DSN>
+OMNEXA_DATABASE_CONNECT_TIMEOUT=5s
+OMNEXA_DATABASE_MAX_CONNECTIONS=10
+OMNEXA_DATABASE_MIN_CONNECTIONS=0
+OMNEXA_DATABASE_MAX_CONNECTION_LIFETIME=30m
+OMNEXA_DATABASE_MAX_CONNECTION_IDLE_TIME=5m
+```
+
+`OMNEXA_DATABASE_URL` is RESTRICTED and must never be printed in logs, failures or artifacts. The remaining values are bounded by the P01.04 adapter before a pool is constructed.
 
 Configuration precedence remains:
 
