@@ -141,19 +141,19 @@ func NewStore(ctx context.Context, resolved config.Config) (*Store, error) {
 	}
 
 	client, err := valkey.NewClient(valkey.ClientOption{
-		InitAddress:            []string{settings.Address},
-		Username:               settings.Username,
-		Password:               settings.Password,
-		Dialer:                 net.Dialer{Timeout: settings.ConnectTimeout, KeepAlive: time.Second},
-		ConnWriteTimeout:        settings.OperationTimeout,
-		DisableRetry:            true,
-		DisableCache:            true,
-		DisableAutoPipelining:   true,
-		ForceSingleClient:       true,
-		BlockingPoolSize:        defaultBlockingPoolSize,
-		BlockingPoolCleanup:     time.Minute,
-		BlockingPoolMinSize:     0,
-		ClientSetInfo:           valkey.DisableClientSetInfo,
+		InitAddress:           []string{settings.Address},
+		Username:              settings.Username,
+		Password:              settings.Password,
+		Dialer:                net.Dialer{Timeout: settings.ConnectTimeout, KeepAlive: time.Second},
+		ConnWriteTimeout:      settings.OperationTimeout,
+		DisableRetry:          true,
+		DisableCache:          true,
+		DisableAutoPipelining: true,
+		ForceSingleClient:     true,
+		BlockingPoolSize:      defaultBlockingPoolSize,
+		BlockingPoolCleanup:   time.Minute,
+		BlockingPoolMinSize:   0,
+		ClientSetInfo:         valkey.DisableClientSetInfo,
 	})
 	if err != nil {
 		return nil, classifyConnectionFailure(err)
