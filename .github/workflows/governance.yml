@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v12-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v13-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -42,6 +42,12 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      s3mock:
+        image: adobe/s3mock:5.1.0
+        env:
+          COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: omnexa-p01-06
+        ports:
+          - 9090:9090
 
     steps:
       - name: Checkout
@@ -75,6 +81,24 @@ jobs:
           set -euo pipefail
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
+
+      # Temporary fail-closed diagnostic. Remove after committing the exact
+      # canonical module metadata produced by the pinned Go toolchain.
+      - name: Diagnose P01.06 Go module metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          go work sync
+          go mod tidy
+          echo '----- P01.06 canonical go.mod -----'
+          cat go.mod
+          echo '----- P01.06 canonical go.sum -----'
+          cat go.sum
+          if [[ -n "$(git status --porcelain -- go.mod go.work go.sum)" ]]; then
+            echo "ERROR: P01.06 module metadata requires canonicalization before completion evidence" >&2
+            git status --short -- go.mod go.work go.sum >&2
+            exit 1
+          fi
 
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
@@ -143,3 +167,11 @@ jobs:
           P01_05_TEST_CACHE_ADDRESS: 127.0.0.1:6379
           P01_05_TEST_VALKEY_IMAGE: valkey/valkey:9.1.1
         run: bash scripts/verify_p01_05.sh
+
+      - name: Verify P01.06 object and file storage abstraction
+        shell: bash
+        env:
+          P01_06_TEST_S3_ENDPOINT: http://127.0.0.1:9090
+          P01_06_TEST_S3_BUCKET: omnexa-p01-06
+          P01_06_TEST_S3_IMAGE: adobe/s3mock:5.1.0
+        run: bash scripts/verify_p01_06.sh

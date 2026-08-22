@@ -17,7 +17,6 @@ func TestS3CompatibleStoreSupportsConcurrentDistinctObjects(t *testing.T) {
 	var group sync.WaitGroup
 	group.Add(workers)
 	for index := 0; index < workers; index++ {
-		index := index
 		go func() {
 			defer group.Done()
 			payload := []byte(fmt.Sprintf("synthetic-concurrent-object-%d", index))
