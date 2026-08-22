@@ -1,5 +1,5 @@
 # Omnexa code ownership
-# Keep architecture/governance changes under explicit maintainer review.
+# Single-maintainer mode: CODEOWNERS documents ownership, while required approvals remain 0 until an independent reviewer exists.
 
 * @wpessential
 
