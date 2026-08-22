@@ -108,8 +108,6 @@ for marker in base_workflow_markers:
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
-# Every completed sequential package must retain immutable completion evidence and
-# its regression verifier in both the repository and canonical workflow.
 for index in range(current_index):
     package_number = index + 1
     evidence = ROOT / f"docs/roadmap/evidence/P01.{package_number:02d}_COMPLETION_2026-08-22.md"
@@ -122,10 +120,7 @@ for index in range(current_index):
     if workflow_marker not in workflow:
         raise SystemExit(f"ERROR: completed P01.{package_number:02d} verifier missing from governance workflow")
 
-# Active executable packages with implemented verification must fail closed in
-# canonical CI. This condition is intentionally bounded to the current package
-# and drops when governance advances to the next package.
-if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07"}:
+if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():

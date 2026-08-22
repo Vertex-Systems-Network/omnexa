@@ -161,3 +161,7 @@ jobs:
       - name: Verify P01.07 structured logging and OpenTelemetry baseline
         shell: bash
         run: bash scripts/verify_p01_07.sh
+
+      - name: Verify P01.08 health readiness and diagnostics
+        shell: bash
+        run: bash scripts/verify_p01_08.sh
