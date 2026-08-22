@@ -100,6 +100,7 @@ base_workflow_markers = [
     "python scripts/validate_freeze_review.py",
     "python scripts/validate_p01_preparation.py",
     "python scripts/validate_p01_package_specs.py",
+    "bash scripts/verify_go_quality.sh",
 ]
 for marker in base_workflow_markers:
     if marker not in workflow:
