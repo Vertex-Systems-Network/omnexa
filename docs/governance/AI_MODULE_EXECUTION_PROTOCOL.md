@@ -15,9 +15,12 @@ For P02-P27 work, use these sources in order:
 2. active work-package specification — executable scope and acceptance gates;
 3. `docs/roadmap/modules/SUBMODULE_CATALOG.json` — machine-readable phase/submodule identity;
 4. owning dossier under `docs/roadmap/modules/` — architecture, flows, options and boundaries;
-5. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` — standard ordered S01-S10 task decomposition;
-6. `docs/architecture/MODULE_STANDARD.md` and ownership/dependency/API/event/security standards;
-7. applicable UI/accessibility, developer-command and quality documents.
+5. `docs/roadmap/modules/EXECUTION_PROFILE_MAP.json` — default/override execution profile(s) for the resolved submodule;
+6. `docs/roadmap/modules/EXECUTION_PROFILES.md` — detailed reusable task shape for the resolved profile(s);
+7. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` — standard ordered S01-S10 task decomposition;
+8. `docs/roadmap/modules/DOSSIER_STANDARD.md` — executable task-card format;
+9. `docs/architecture/MODULE_STANDARD.md` and ownership/dependency/API/event/security standards;
+10. applicable UI/accessibility, developer-command and quality documents.
 
 A planning source never overrides `STATE.json`. A future submodule can be fully documented and still remain non-executable.
 
@@ -31,8 +34,10 @@ request
  -> identify owning module/submodule ID from SUBMODULE_CATALOG
  -> verify STATE.json authorization
  -> load owning dossier
- -> locate the relevant flow/options/contracts
- -> map work to S01-S10 task sequence
+ -> locate relevant architecture/flow/options/contracts
+ -> resolve execution profile(s) from EXECUTION_PROFILE_MAP
+ -> load profile-specific task focus
+ -> map work to S01-S10 and Sxx.Tyy task cards
  -> select next incomplete authorized task
  -> implement + test + document
  -> update explicit task/evidence state
@@ -50,7 +55,8 @@ Do not restart architecture planning merely because:
 - a different AI agent takes over;
 - the implementation branch contains many files;
 - the agent would personally choose another framework or folder split;
-- a submodule such as Page Builder, Template Builder, Form Builder, Dashboard Builder, Checkout, General Ledger or Agent Runtime is large.
+- a submodule such as Page Builder, Template Builder, Form Builder, Dashboard Builder, Checkout, General Ledger or Agent Runtime is large;
+- the execution profile feels generic—the profile is intentionally a reusable task skeleton combined with the owning dossier's specific flow/options/ownership.
 
 Replanning is allowed only when there is a concrete reason:
 
@@ -58,17 +64,19 @@ Replanning is allowed only when there is a concrete reason:
 - no owner exists for a required write model/capability;
 - a required dependency is missing or forbidden;
 - a public contract/phase boundary must change;
+- the mapped execution profile materially cannot represent the risk/task shape;
 - new regulatory/security evidence invalidates the existing design;
 - approved change control/ADR explicitly changes the baseline.
 
-When replanning is justified, update the canonical dossier/catalog atomically before implementation; do not keep a private alternate plan only in chat.
+When replanning is justified, update the canonical catalog/dossier/profile mapping as applicable before implementation; do not keep a private alternate plan only in chat.
 
 ## Required submodule task card
 
 Before executable coding, resolve a task card containing:
 
 - phase/module/submodule ID;
-- task ID/order under S01-S10;
+- execution profile(s);
+- task ID/order under S01-S10 / `Sxx.Tyy`;
 - owner/write boundary;
 - dependencies and forbidden dependencies;
 - in-scope/out-of-scope;
@@ -123,6 +131,7 @@ When an activated task includes browser UI, the task inherits `docs/quality/WEB_
 At the end of each implementation session, leave the branch/doc state so another agent can determine without chat history:
 
 - active phase/submodule/task;
+- resolved execution profile(s);
 - completed task IDs;
 - next incomplete task;
 - known blockers;
