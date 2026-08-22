@@ -257,11 +257,13 @@ func applyNamedValues(target map[string]rawValue, values map[string]string, defs
 func readJSONFile(path string) (map[string]string, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("read configuration file: %w", err)
+		// Do not return os.PathError because an explicitly supplied path may
+		// itself contain sensitive workstation/deployment information.
+		return nil, errors.New("configuration file could not be read")
 	}
 	var object map[string]json.RawMessage
 	if err := json.Unmarshal(data, &object); err != nil {
-		return nil, fmt.Errorf("parse configuration file: %w", err)
+		return nil, fmt.Errorf("configuration file is not valid JSON: %w", err)
 	}
 	values := make(map[string]string, len(object))
 	for key, raw := range object {
