@@ -3,8 +3,8 @@ schema_version: 1
 snapshot:
   verified_at: "2026-08-23T03:38:00+05:00"
   nature: "non-authoritative closure-branch continuity snapshot"
-  canonical_main_before_closure: "a2a93454bb283464bfa144bb5a38539041e40069"
-  closure_base_commit: "a2a93454bb283464bfa144bb5a38539041e40069"
+  canonical_main_before_closure: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -20,7 +20,8 @@ canonical_main_before_closure:
   work_package: "P01.08"
   status: "active"
   completed_p01_packages: 7
-  note: "P01.08 implementation is merged and completion-eligible, but protected main remains authoritative until closure PR #58 merges."
+  commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  note: "P01.08 implementation is merged and completion-eligible. Main later received only maintenance PR #57 for .github/dependabot.yml and still records P01.08 active until closure PR #58 merges."
 
 closure_candidate:
   phase: "P01"
@@ -34,7 +35,12 @@ closure_candidate:
 repository:
   canonical_branch: "main"
   closure_branch: "chore/p01-08-close-p01-09-activate"
-  closure_base_commit: "a2a93454bb283464bfa144bb5a38539041e40069"
+  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  main_maintenance_pr: 57
+  main_maintenance_scope: ".github/dependabot.yml only"
+  main_sync_commit: "0fce489f98a65639afa227fab9702e2423ad11b3"
+  main_sync_method: "explicit two-parent merge commit; no force update"
+  post_sync_relation: "ahead / behind_by=0"
   working_tree_status: "not_applicable_to_remote_branch_snapshot"
 
 implementation:
@@ -82,7 +88,7 @@ verification:
       reason: "Governance/state/spec validators passed; repository Go quality then found exactly two lint findings: redundant Go 1.22 loop-variable copying and a credential-shaped synthetic redaction fixture. gofmt passed and govulncheck found no vulnerabilities. Both findings were fixed without changing package scope."
   closure_verification:
     status: "REVERIFY_LIVE"
-    reason: "Closure continuity/state files are being reconciled. The exact final closure head must receive a fresh full governance result before merge."
+    reason: "Closure files are reconciled and the branch has been synchronized with current protected main. The exact final closure head must receive a fresh full governance result before merge."
 
 p01_08_contract_retained:
   - "process liveness is distinct from dependency readiness"
