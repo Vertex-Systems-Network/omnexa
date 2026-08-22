@@ -73,22 +73,50 @@ Each command maps to P00.07 quality gate classes and returns a non-zero exit sta
 
 `verify all` is a deterministic aggregate, not a secret CI-only path.
 
-## P01.01 current executable mapping
+## P01 executable mappings
 
-P01.01 introduces the first repository-owned executable verification wrapper while preserving the semantic command contract above:
+P01.01 established the first repository-owned verification wrapper:
 
 ```text
 bash scripts/verify_p01_01.sh
 ```
 
-For the active **Go workspace/build skeleton** package, that wrapper is the canonical shared local/CI implementation for the applicable subset of quality semantics:
+It remains a required regression gate for the completed Go workspace/build skeleton and covers pinned Go version, format/static checks, unit tests, dependency boundary, build/source metadata and process smoke behavior.
 
-- `verify format` -> `gofmt` cleanliness;
-- `verify static` -> exact pinned Go version, workspace/module canonicality, `go vet`, and dependency-boundary validation;
-- `verify unit` -> `go test ./kernel/...`;
-- `verify build` -> trimmed kernel build plus deterministic process smoke test and build-metadata leakage check.
+The active P01.02 configuration/environment package adds:
 
-The GitHub-hosted `governance` job invokes this same wrapper after the governance/specification validators. P01.01 does **not** implement the final `omnexa verify ...` CLI; that broader developer CLI belongs to P01.12. Contract/integration/migration/security/module-lifecycle/release checks that have no P01.01 implementation surface remain governed `N/A` rather than being fabricated as PASS.
+```text
+bash scripts/verify_p01_02.sh
+```
+
+P01.02 maps the currently applicable quality semantics as follows:
+
+- `verify format` -> `gofmt` cleanliness across the kernel Go source;
+- `verify static` -> exact pinned Go version, canonical workspace/module metadata, `go vet`, and Omnexa dependency-boundary validation;
+- `verify unit` -> kernel unit tests plus race-enabled configuration tests;
+- `verify security` -> invalid/unknown configuration rejection, secret redaction, raw-value non-disclosure and isolated-loader tests;
+- `verify build` -> trimmed kernel build, default/config-file/environment precedence startup smoke and fail-closed invalid startup.
+
+The GitHub-hosted `governance` job invokes both the completed P01.01 regression wrapper and the active P01.02 wrapper. P01.02 does **not** implement the final `omnexa verify ...` CLI; that broader developer CLI belongs to P01.12. Database migration, event replay, module lifecycle and other checks without an implemented owning capability remain governed `N/A`, not fabricated PASS.
+
+## Configuration startup contract during P01.02
+
+The kernel process accepts only explicit governed configuration sources. Current application-level controls are:
+
+```text
+OMNEXA_CONFIG_FILE=<explicit JSON file path>   # optional; no implicit file discovery
+OMNEXA_ENVIRONMENT=local|ci|preview|test|staging|production
+```
+
+The configuration file contains lowercase `snake_case` keys. Current application schema exposes only `environment`; the generic loader supports typed/required/sensitive definitions for later governed package-owned keys without pre-creating later infrastructure or business settings.
+
+Precedence is deterministic:
+
+```text
+default -> explicit JSON config file -> environment variable -> explicit in-process test override
+```
+
+Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors must identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a global runtime feature-flag/config registry.
 
 ## Module developer commands
 
