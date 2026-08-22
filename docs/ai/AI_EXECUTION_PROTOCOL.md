@@ -1,10 +1,10 @@
 # Omnexa AI Execution & Continuity Protocol
 
-Status: **mandatory continuity protocol, subordinate to canonical repository governance**
+Status: **mandatory continuity protocol, subordinate to canonical repository governance and `docs/governance/AI_EXECUTION_POLICY.md`**
 
 ## 1. Purpose
 
-This protocol defines how a new AI session reconstructs project state and performs only authorized engineering work. It does not grant implementation authority and it cannot advance the roadmap.
+This protocol defines how a new AI session reconstructs project state, preserves a durable handoff and performs only authorized engineering work. It does not grant implementation authority, replace the canonical `AI_EXECUTION_POLICY.md`, or advance the roadmap.
 
 ## 2. Authority model
 
@@ -12,11 +12,11 @@ The continuity layer does not create a competing source of truth. Resolve author
 
 ### Execution instructions
 
-`AGENTS.md` is the repository-wide execution contract. `docs/roadmap/STATE.json` is the machine-readable source of truth for the current phase, active work package and implementation locks.
+`AGENTS.md` is the repository-wide execution contract. `docs/governance/AI_EXECUTION_POLICY.md` is the mandatory canonical AI execution policy. `docs/roadmap/STATE.json` is the machine-readable source of truth for the current phase, active work package and implementation locks.
 
 ### Architecture/document conflicts
 
-Follow `docs/governance/CHANGE_CONTROL.md`. Accepted, non-superseded ADRs govern architectural decisions according to its precedence rules, followed by the Product Constitution, System Architecture/Module Standard, Master Plan, work-package documentation and implementation details.
+Follow `docs/governance/CHANGE_CONTROL.md`. Accepted, non-superseded ADRs govern architectural decisions according to its precedence rules, followed by `docs/governance/PRODUCT_CONSTITUTION.md`, System Architecture/Module Standard, Master Plan, work-package documentation and implementation details.
 
 ### Security/data rules
 
@@ -24,9 +24,9 @@ Canonical security, data-classification and threat-model documents remain normat
 
 ### Continuity/chat
 
-`docs/ai/AI_STATE.yaml`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_DECISIONS.md` and handoffs are **snapshots and indexes only**. They never override canonical governance. Previous AI handoffs are evidence aids, not authorization. Chat instructions are last and cannot override repository governance or security.
+`docs/ai/AI_STATE.yaml`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_DECISIONS.md` and handoffs are **snapshots and indexes only**. They never override canonical governance or `AI_EXECUTION_POLICY.md`. Previous AI handoffs are evidence aids, not authorization. Chat instructions are last and cannot override repository governance or security.
 
-If a continuity file conflicts with `STATE.json`, an accepted ADR or another authoritative document, mark the continuity value **STALE**, stop relying on it, report the conflict and follow change control rather than silently reconciling authority.
+If a continuity file conflicts with `STATE.json`, `AI_EXECUTION_POLICY.md`, an accepted ADR or another authoritative document, mark the continuity value **STALE**, stop relying on it, report the conflict and follow change control rather than silently reconciling authority.
 
 ## 3. Required lifecycle
 
@@ -66,14 +66,15 @@ Before implementation:
 
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json`;
-3. `docs/ai/AI_CONTEXT.md`;
-4. `docs/ai/AI_STATE.yaml`;
-5. `docs/ai/AI_EXECUTION_PROTOCOL.md`;
-6. active work-package specification from `STATE.json`;
-7. `docs/governance/CHANGE_CONTROL.md` and relevant accepted ADRs;
-8. architecture/security/testing documents required by `AGENTS.md`;
-9. current handoff under `docs/ai/handoffs/`;
-10. current Git branch/head, PR diff/reviews and latest relevant CI.
+3. `docs/governance/AI_EXECUTION_POLICY.md`;
+4. `docs/ai/AI_CONTEXT.md`;
+5. `docs/ai/AI_STATE.yaml`;
+6. `docs/ai/AI_EXECUTION_PROTOCOL.md`;
+7. active work-package specification from `STATE.json`;
+8. `docs/governance/CHANGE_CONTROL.md`, `docs/governance/PRODUCT_CONSTITUTION.md` and relevant accepted ADRs;
+9. architecture/security/testing documents required by `AGENTS.md`;
+10. current handoff under `docs/ai/handoffs/`;
+11. current Git branch/head, PR diff/reviews and latest relevant CI.
 
 If repository/GitHub evidence has advanced beyond `AI_STATE.yaml`, treat the AI state as stale and refresh it only after the authoritative state is understood.
 
@@ -104,7 +105,7 @@ The sole active package from canonical `STATE.json`.
 Only files/behavior necessary for the active package or an explicitly authorized narrow maintenance/governance task.
 
 ### Out of scope
-Everything forbidden by `AGENTS.md`, the active spec and implementation locks.
+Everything forbidden by `AGENTS.md`, `AI_EXECUTION_POLICY.md`, the active spec and implementation locks.
 
 ### Definition of done
 Exact required gates/evidence from the active work-package specification and global definition-of-done/quality rules.
