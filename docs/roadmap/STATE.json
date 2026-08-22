@@ -21,7 +21,9 @@
       "p00_exit_status": "DONE",
       "manifest": "docs/governance/FOUNDATION_FREEZE.json",
       "review": "docs/governance/FOUNDATION_FREEZE_REVIEW.md",
-      "adr": "docs/adr/ADR-0010-foundation-architecture-freeze.md"
+      "adr": "docs/adr/ADR-0010-foundation-architecture-freeze.md",
+      "transition_pr": 38,
+      "transition_merge": "e75fe8e5fe4028584115a005820819395f9dff91"
     },
     "p01_entry_gate": {
       "state": "SATISFIED",
@@ -56,13 +58,14 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32541439589,
+      "workflow_run": 32542183023,
+      "job": 96954177596,
       "evidence_environment": "github-hosted",
       "evidence_os": "Linux",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "final_check": "governance",
-      "note": "Canonical governance CI is GitHub-hosted only. PR #37 run 32541439589 passed after the hosted-only migration; local/self-hosted runners remain prohibited."
+      "note": "PR #38 transition run 32542183023 / job 96954177596 passed all canonical validators on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
