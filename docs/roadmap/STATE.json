@@ -5,12 +5,12 @@
   "last_reconciled": "2026-08-22",
   "program": "kernel",
   "current_phase": "P01",
-  "current_work_package": "P01.04",
+  "current_work_package": "P01.05",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P01.04 PostgreSQL connection and migration foundation implementation",
+      "P01.05 cache abstraction implementation",
       "P01 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -58,16 +58,16 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32565935613,
-      "job": 97014452248,
+      "workflow_run": 32567842071,
+      "job": 97019012280,
       "evidence_environment": "github-hosted",
-      "evidence_runner": "GitHub Actions 1000008114",
+      "evidence_runner": "GitHub Actions 1000008492",
       "evidence_os": "Ubuntu 24.04.4 LTS",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "runner_image_version": "20260816.277.1",
       "final_check": "governance",
-      "note": "P01.03 PR #44 final run 32565935613 / job 97014452248 passed all canonical governance, completed P01.01/P01.02 regressions and P01.03 structured-error/security/build gates on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
+      "note": "P01.04 PR #46 final run 32567842071 / job 97019012280 passed canonical governance, P01.01-P01.03 regressions and P01.04 PostgreSQL G1/G2/G3/G4/G5/G7 gates using PostgreSQL 18.6 on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -81,10 +81,10 @@
   "p01_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P01.04",
-    "work_package_name": "PostgreSQL connection & migration foundation",
+    "next_work_package": "P01.05",
+    "work_package_name": "Cache abstraction",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P01.04.md",
+    "work_package_spec": "docs/roadmap/work-packages/P01.05.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
     "mandatory_spec_count": 12,
@@ -92,7 +92,7 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01, P01.02 and P01.03 are done with GitHub-hosted executable evidence. P01.04 is the sole active kernel work package. P01.05-P01.12 remain planned and may not activate until the previous package is done."
+    "note": "P01.01-P01.04 are done with GitHub-hosted executable evidence. P01.05 is the sole active kernel work package. P01.06-P01.12 remain planned and may not activate until the previous package is done."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -100,7 +100,7 @@
     "name": "Omnexa Kernel",
     "state": "active",
     "mandatory_work_packages": 12,
-    "done_work_packages": 3,
+    "done_work_packages": 4,
     "work_packages": [
       {
         "id": "P01.01",
@@ -146,8 +146,28 @@
           "docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"
         ]
       },
-      {"id":"P01.04","name":"PostgreSQL connection & migration foundation","state":"active","depends_on":["P01.03"],"spec":"docs/roadmap/work-packages/P01.04.md"},
-      {"id":"P01.05","name":"Cache abstraction","state":"planned","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
+      {
+        "id": "P01.04",
+        "name": "PostgreSQL connection & migration foundation",
+        "state": "done",
+        "depends_on": ["P01.03"],
+        "spec": "docs/roadmap/work-packages/P01.04.md",
+        "evidence": [
+          "go.mod",
+          "go.sum",
+          "kernel/internal/database/errors.go",
+          "kernel/internal/database/pool.go",
+          "kernel/internal/database/pool_test.go",
+          "kernel/internal/database/transaction.go",
+          "kernel/internal/database/migration.go",
+          "kernel/internal/database/migration_test.go",
+          "kernel/internal/database/integration_test.go",
+          "kernel/migrations/README.md",
+          "scripts/verify_p01_04.sh",
+          "docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"
+        ]
+      },
+      {"id":"P01.05","name":"Cache abstraction","state":"active","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
       {"id":"P01.06","name":"Object & file storage abstraction","state":"planned","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md"},
       {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"planned","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
       {"id":"P01.08","name":"Health, readiness & diagnostics","state":"planned","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
@@ -159,7 +179,7 @@
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
-    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.04","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.05","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -187,5 +207,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01.04 is active and is the only authorized executable kernel scope. Implement the PostgreSQL connection and migration foundation, obtain required G0/G1/G2/G3/G4/G5/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.04 through verification to done, then activate only P01.05. Business-feature code and P02+ implementation remain unauthorized."
+  "next_transition_rule": "P01.05 is active and is the only authorized executable kernel scope. Implement the cache abstraction, obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.05 through verification to done, then activate only P01.06. Business-feature code and P02+ implementation remain unauthorized."
 }
