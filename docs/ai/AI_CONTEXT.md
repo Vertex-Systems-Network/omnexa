@@ -2,7 +2,7 @@
 
 Status: **continuity snapshot / subordinate to canonical governance**
 
-This is the first file to read inside `docs/ai/`. It exists so a new AI session can recover project context without previous chat history. It is not a replacement for `AGENTS.md`, `docs/roadmap/STATE.json`, accepted ADRs, architecture/security standards, or the active work-package specification.
+This is the first file to read inside `docs/ai/`. It exists so a new AI session can recover project context without previous chat history. It is not a replacement for `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/roadmap/STATE.json`, accepted ADRs, architecture/security standards, or the active work-package specification.
 
 ## Project identity
 
@@ -53,7 +53,7 @@ Snapshot verified: `2026-08-22T20:27:00+05:00`.
 - failure point: `Verify P01.01 Go workspace and build skeleton`
 - failure reason: the committed `go.sum` checksum for `gopkg.in/yaml.v3@v3.0.1` does not match the canonical downloaded checksum; repository Go quality passed before this failure, while P01.02-P01.06 were skipped.
 
-This section is a snapshot and can become stale. Always re-read `STATE.json`, the active work-package spec, the current branch/PR and latest CI before acting.
+This section is a snapshot and can become stale. Always re-read `STATE.json`, the canonical AI execution policy, the active work-package spec, the current branch/PR and latest CI before acting.
 
 ## Current restrictions
 
@@ -74,11 +74,15 @@ On PR `#50`, correct the `gopkg.in/yaml.v3@v3.0.1` checksum recorded in `go.sum`
 
 ## Authority and references
 
-For live execution state, `docs/roadmap/STATE.json` is authoritative. For architectural conflicts, follow `docs/governance/CHANGE_CONTROL.md` and accepted non-superseded ADRs. `docs/ai/*` is always subordinate.
+For live execution state, `docs/roadmap/STATE.json` is authoritative. `docs/governance/AI_EXECUTION_POLICY.md` is the mandatory AI execution policy. For architectural conflicts, follow `docs/governance/CHANGE_CONTROL.md` and accepted non-superseded ADRs. `docs/ai/*` is always subordinate.
 
 Mandatory references:
 
 - `AGENTS.md`
+- `docs/governance/AI_EXECUTION_POLICY.md`
+- `docs/governance/PRODUCT_CONSTITUTION.md`
+- `docs/governance/CHANGE_CONTROL.md`
+- `docs/governance/DEFINITION_OF_DONE.md`
 - `docs/roadmap/STATE.json`
 - `docs/roadmap/MASTER_PLAN.md`
 - `docs/roadmap/work-packages/P01.06.md`
@@ -88,7 +92,6 @@ Mandatory references:
 - `docs/security/SECURITY_STANDARD.md`
 - `docs/security/DATA_CLASSIFICATION.md`
 - `docs/security/THREAT_MODEL.md`
-- `docs/governance/CHANGE_CONTROL.md`
 - `docs/adr/ADR-0001-platform-architecture-baseline.md`
 - `docs/adr/ADR-0005-security-data-classification-baseline.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
