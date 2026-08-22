@@ -37,15 +37,16 @@ Before material work read:
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
 5. the active package specification (`P01.06.md` currently);
-6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
-7. identifier/money/time/locale/error/API/event standards;
-8. security/data-classification/threat model;
-9. testing/CI/release/quality standards, including `docs/quality/GO_CODE_QUALITY.md`;
-10. repository/local-development/toolchain/configuration/developer-command standards;
-11. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
-12. SLO/incident/reliability standards;
-13. AI Execution Policy, Change Control and Definition of Done;
-14. relevant ADRs, especially ADR-0010.
+6. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` whenever planning, implementing or extending any module/submodule/capability family;
+7. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
+8. identifier/money/time/locale/error/API/event standards;
+9. security/data-classification/threat model;
+10. testing/CI/release/quality standards, including `docs/quality/GO_CODE_QUALITY.md`;
+11. repository/local-development/toolchain/configuration/developer-command standards;
+12. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
+13. SLO/incident/reliability standards;
+14. AI Execution Policy, Change Control and Definition of Done;
+15. relevant ADRs, especially ADR-0010.
 
 If canonical documents conflict, resolve through change control before implementation.
 
@@ -77,6 +78,21 @@ runs-on: ubuntu-24.04
 The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=Linux` and `RUNNER_ARCH=X64`. Do not reintroduce `self-hosted`, `LOCAL-WIN-*`, local evidence fanout or local-runner fallback.
 
 The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it from required governance, weaken configured checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
+
+### Runner-deferred execution
+
+For an already-authorized work package, source/tests/docs/verifier work should normally be completed before consuming the canonical hosted runner. The hosted lane is the **final authoritative integration gate**, not a prerequisite for every implementation commit.
+
+The required sequence is:
+
+```text
+plan -> implement subtasks -> deterministic self/static/unit preparation
+-> final executable PR -> GitHub-hosted governance
+-> fix failures without weakening gates -> merge exact green head
+-> immutable completion/state/ledger reconciliation
+```
+
+Deferring the runner never permits an unverified `PASS`, `done` or protected merge claim.
 
 ## P01 execution rule
 
@@ -112,6 +128,20 @@ Allowed executable scope is limited to:
 P01.06 must not implement media library/CMS/file-management UI, public URL/CDN/image processing/thumbnails, tenant document or business object models, sessions/authentication, tenancy, module runtime, event/job fabric, malware-scanning implementation beyond a future hook boundary, retention/legal-hold semantics, logging/OpenTelemetry, health endpoints, scheduler primitives, feature registry, audit transport or later P01/P02+ behavior.
 
 P01.07 becomes active only after P01.06 reaches `done` with required evidence. More than one active P01 package is forbidden.
+
+## Module/submodule planning rule
+
+`docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md` is the mandatory decomposition plan for future large modules and nested capabilities such as page builder, template builder, theme system, block registry, form builder, dashboard builder and similar submodules.
+
+AI systems must use the hierarchy:
+
+```text
+Phase -> Module -> Submodule -> Work package -> Task -> Evidence
+```
+
+When the blueprint or owning phase plan already defines the decomposition, do **not** restart a generic planning cycle in a later chat/session. Load the canonical plan, select the next incomplete authorized task, verify dependencies/locks, execute it and record evidence. Replanning is reserved for a genuine architecture conflict, missing owner, changed requirement or approved change-control event.
+
+Pre-planning future module/submodule scope does not authorize its implementation. `STATE.json` remains the implementation lock.
 
 ## Business-feature lock
 
@@ -178,15 +208,17 @@ This future UI rule is planning only during P01; it does not authorize P12/P13/P
 For every material change:
 
 1. verify active phase/package and locks in `STATE.json`;
-2. inspect active package spec and frozen standards;
+2. inspect the active package spec, frozen standards and preplanned submodule task when applicable;
 3. preserve ownership/dependency boundaries;
 4. implement only authorized scope;
 5. add positive/negative evidence appropriate to risk;
-6. run canonical GitHub-hosted `governance`;
-7. inspect diff/status before merge;
-8. merge only when required checks are green;
-9. reconcile state/status/ledger only after completion evidence exists;
-10. use ADR/change control before changing frozen architecture.
+6. complete available deterministic static/unit/self-review preparation;
+7. inspect the implementation diff/scope before final verification;
+8. open/finalize the executable PR and run canonical GitHub-hosted `governance`;
+9. fix any failures without weakening required checks;
+10. re-audit diff/status/reviews and merge only the exact green head;
+11. reconcile immutable completion evidence/state/status/ledger only after merge evidence exists;
+12. use ADR/change control before changing frozen architecture.
 
 ## Forbidden behavior
 
@@ -198,4 +230,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.06 in a separate executable PR. Add a fail-closed P01.06 verifier and governed S3-compatible synthetic provider, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.05 regressions, move P01.06 `active -> verification -> done`, reconcile canonical state, then activate only P01.07.
+Complete P01.06 source/tests/docs/verifier on its executable branch, then obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.05 regressions. Only after a green exact-head merge may P01.06 move `active -> verification -> done`; the separate completion reconciliation may then activate only P01.07.
