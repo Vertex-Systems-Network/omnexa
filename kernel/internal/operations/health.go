@@ -21,6 +21,7 @@ const (
 
 var dependencyNamePattern = regexp.MustCompile(`^[a-z][a-z0-9._-]{0,63}$`)
 
+// State is a stable machine-readable health/readiness state.
 type State string
 
 const (
@@ -30,6 +31,7 @@ const (
 	StateUnready  State = "unready"
 )
 
+// Valid reports whether state is part of the P01.08 machine-state vocabulary.
 func (state State) Valid() bool {
 	switch state {
 	case StateStarting, StateHealthy, StateDegraded, StateUnready:
@@ -39,6 +41,7 @@ func (state State) Valid() bool {
 	}
 }
 
+// Lifecycle tracks process-level readiness transitions separately from dependency state.
 type Lifecycle string
 
 const (
@@ -48,6 +51,7 @@ const (
 	LifecycleFailed   Lifecycle = "failed"
 )
 
+// Criticality determines how a dependency result contributes to readiness.
 type Criticality string
 
 const (
@@ -56,6 +60,7 @@ const (
 	CriticalitySecurityCritical Criticality = "security_critical"
 )
 
+// Valid reports whether criticality is supported by P01.08.
 func (criticality Criticality) Valid() bool {
 	switch criticality {
 	case CriticalityRequired, CriticalityOptional, CriticalitySecurityCritical:
@@ -65,6 +70,7 @@ func (criticality Criticality) Valid() bool {
 	}
 }
 
+// ResultReason is a bounded diagnostic classification. Raw provider/check errors are never retained.
 type ResultReason string
 
 const (
@@ -74,8 +80,10 @@ const (
 	ReasonCanceled ResultReason = "canceled"
 )
 
+// Check is a dependency probe. Implementations should honor the supplied context.
 type Check func(context.Context) error
 
+// Dependency is one registered readiness dependency.
 type Dependency struct {
 	Name        string
 	Criticality Criticality
@@ -83,6 +91,7 @@ type Dependency struct {
 	Check       Check
 }
 
+// DependencyResult is the safe machine-readable projection of one dependency evaluation.
 type DependencyResult struct {
 	Name        string       `json:"name"`
 	Criticality Criticality  `json:"criticality"`
@@ -90,11 +99,14 @@ type DependencyResult struct {
 	Reason      ResultReason `json:"reason"`
 }
 
+// BuildIdentity is the bounded build identity exposed in diagnostics.
 type BuildIdentity struct {
 	Version string `json:"version"`
 	Commit  string `json:"commit"`
 }
 
+// Report is the bounded P01.08 operational diagnostic summary.
+// It intentionally contains no raw errors, connection details, object keys or payloads.
 type Report struct {
 	Build        BuildIdentity      `json:"build"`
 	Lifecycle    Lifecycle          `json:"lifecycle"`
@@ -103,6 +115,7 @@ type Report struct {
 	Dependencies []DependencyResult `json:"dependencies"`
 }
 
+// Manager owns the P01.08 dependency registry and process readiness lifecycle.
 type Manager struct {
 	mu           sync.RWMutex
 	dependencies map[string]Dependency
@@ -110,10 +123,17 @@ type Manager struct {
 	logger       *observability.Logger
 }
 
+// NewManager creates a manager in the startup state. Liveness is healthy while readiness is starting.
 func NewManager(logger *observability.Logger) *Manager {
-	return &Manager{dependencies: make(map[string]Dependency), lifecycle: LifecycleStarting, logger: logger}
+	return &Manager{
+		dependencies: make(map[string]Dependency),
+		lifecycle:    LifecycleStarting,
+		logger:       logger,
+	}
 }
 
+// Register adds one readiness dependency while the manager is still starting.
+// The registry freezes once startup transitions away from LifecycleStarting.
 func (manager *Manager) Register(dependency Dependency) error {
 	if manager == nil {
 		return safeFailure(codeRegistryInvalid, "health dependency registry is invalid")
@@ -121,6 +141,7 @@ func (manager *Manager) Register(dependency Dependency) error {
 	if !dependencyNamePattern.MatchString(dependency.Name) || !dependency.Criticality.Valid() || dependency.Check == nil || dependency.Timeout < minCheckTimeout || dependency.Timeout > maxCheckTimeout {
 		return safeFailure(codeDependencyInvalid, "health dependency registration is invalid")
 	}
+
 	manager.mu.Lock()
 	defer manager.mu.Unlock()
 	if manager.lifecycle != LifecycleStarting {
@@ -133,6 +154,7 @@ func (manager *Manager) Register(dependency Dependency) error {
 	return nil
 }
 
+// MarkReady transitions startup readiness exactly once. It does not override dependency failures.
 func (manager *Manager) MarkReady() bool {
 	if manager == nil {
 		return false
@@ -146,6 +168,7 @@ func (manager *Manager) MarkReady() bool {
 	return true
 }
 
+// MarkStopping prevents new work while keeping liveness healthy until process exit.
 func (manager *Manager) MarkStopping() bool {
 	if manager == nil {
 		return false
@@ -159,6 +182,7 @@ func (manager *Manager) MarkStopping() bool {
 	return true
 }
 
+// MarkFailed marks the process itself unable to function. Dependency failures never call this implicitly.
 func (manager *Manager) MarkFailed() bool {
 	if manager == nil {
 		return false
@@ -172,6 +196,7 @@ func (manager *Manager) MarkFailed() bool {
 	return true
 }
 
+// Lifecycle returns the current process lifecycle state.
 func (manager *Manager) Lifecycle() Lifecycle {
 	if manager == nil {
 		return LifecycleFailed
@@ -181,15 +206,26 @@ func (manager *Manager) Lifecycle() Lifecycle {
 	return manager.lifecycle
 }
 
-func (manager *Manager) Liveness() State { return livenessFor(manager.Lifecycle()) }
+// Liveness answers whether the process itself can function. Dependency readiness does not alter it.
+func (manager *Manager) Liveness() State {
+	return livenessFor(manager.Lifecycle())
+}
 
+// Evaluate runs a bounded readiness evaluation and returns only safe diagnostic state.
 func (manager *Manager) Evaluate(ctx context.Context) Report {
 	if ctx == nil {
 		ctx = context.Background()
 	}
+
 	dependencies, lifecycle := manager.snapshot()
 	results := evaluateDependencies(ctx, dependencies)
-	report := Report{Build: currentBuildIdentity(), Lifecycle: lifecycle, Liveness: livenessFor(lifecycle), Readiness: readinessFor(lifecycle, results), Dependencies: results}
+	report := Report{
+		Build:        currentBuildIdentity(),
+		Lifecycle:    lifecycle,
+		Liveness:     livenessFor(lifecycle),
+		Readiness:    readinessFor(lifecycle, results),
+		Dependencies: results,
+	}
 	manager.logEvaluation(ctx, report)
 	return report
 }
@@ -204,7 +240,9 @@ func (manager *Manager) snapshot() ([]Dependency, Lifecycle) {
 	for _, dependency := range manager.dependencies {
 		dependencies = append(dependencies, dependency)
 	}
-	sort.Slice(dependencies, func(left, right int) bool { return dependencies[left].Name < dependencies[right].Name })
+	sort.Slice(dependencies, func(left, right int) bool {
+		return dependencies[left].Name < dependencies[right].Name
+	})
 	return dependencies, manager.lifecycle
 }
 
@@ -215,21 +253,30 @@ func evaluateDependencies(parent context.Context, dependencies []Dependency) []D
 	results := make(chan DependencyResult, len(dependencies))
 	for _, dependency := range dependencies {
 		dependency := dependency
-		go func() { results <- evaluateDependency(parent, dependency) }()
+		go func() {
+			results <- evaluateDependency(parent, dependency)
+		}()
 	}
+
 	ordered := make([]DependencyResult, 0, len(dependencies))
 	for range dependencies {
 		ordered = append(ordered, <-results)
 	}
-	sort.Slice(ordered, func(left, right int) bool { return ordered[left].Name < ordered[right].Name })
+	sort.Slice(ordered, func(left, right int) bool {
+		return ordered[left].Name < ordered[right].Name
+	})
 	return ordered
 }
 
 func evaluateDependency(parent context.Context, dependency Dependency) DependencyResult {
 	bounded, cancel := context.WithTimeout(parent, dependency.Timeout)
 	defer cancel()
+
 	completed := make(chan error, 1)
-	go func() { completed <- runCheckSafely(bounded, dependency.Check) }()
+	go func() {
+		completed <- runCheckSafely(bounded, dependency.Check)
+	}()
+
 	var reason ResultReason
 	select {
 	case err := <-completed:
@@ -237,7 +284,13 @@ func evaluateDependency(parent context.Context, dependency Dependency) Dependenc
 	case <-bounded.Done():
 		reason = classifyResultReason(parent, bounded, bounded.Err())
 	}
-	return DependencyResult{Name: dependency.Name, Criticality: dependency.Criticality, State: stateForDependency(dependency.Criticality, reason), Reason: reason}
+
+	return DependencyResult{
+		Name:        dependency.Name,
+		Criticality: dependency.Criticality,
+		State:       stateForDependency(dependency.Criticality, reason),
+		Reason:      reason,
+	}
 }
 
 func runCheckSafely(ctx context.Context, check Check) (err error) {
@@ -316,7 +369,12 @@ func (manager *Manager) logEvaluation(ctx context.Context, report Report) {
 	if manager == nil || manager.logger == nil {
 		return
 	}
-	attrs := []slog.Attr{slog.String("lifecycle", string(report.Lifecycle)), slog.String("liveness", string(report.Liveness)), slog.String("readiness", string(report.Readiness)), slog.Int("dependency_count", len(report.Dependencies))}
+	attrs := []slog.Attr{
+		slog.String("lifecycle", string(report.Lifecycle)),
+		slog.String("liveness", string(report.Liveness)),
+		slog.String("readiness", string(report.Readiness)),
+		slog.Int("dependency_count", len(report.Dependencies)),
+	}
 	if report.Readiness == StateUnready {
 		manager.logger.Warn(ctx, "health evaluation completed", attrs...)
 		return
