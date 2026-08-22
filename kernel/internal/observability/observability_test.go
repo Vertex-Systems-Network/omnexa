@@ -68,12 +68,12 @@ func TestSettingsRejectInvalidBoundsWithoutLeakingValues(t *testing.T) {
 	resolved, err := LoadConfiguration(config.Options{
 		Overrides: map[string]string{
 			"environment":                   "ci",
-			observabilityServiceNameKey:      "INVALID NAME " + secret,
-			observabilityExportTimeoutKey:    "3s",
-			observabilityShutdownTimeoutKey:  "5s",
-			observabilityExportIntervalKey:   "30s",
-			observabilityEnabledKey:          "true",
-			observabilityLogLevelKey:         "info",
+			observabilityServiceNameKey:     "INVALID NAME " + secret,
+			observabilityExportTimeoutKey:   "3s",
+			observabilityShutdownTimeoutKey: "5s",
+			observabilityExportIntervalKey:  "30s",
+			observabilityEnabledKey:         "true",
+			observabilityLogLevelKey:        "info",
 		},
 		Strict: true,
 	})
@@ -262,10 +262,10 @@ func TestProviderResourceIdentityAndTraceMetricCapture(t *testing.T) {
 		values[string(attr.Key)] = attr.Value.AsString()
 	}
 	for key, want := range map[string]string{
-		"service.name":                  settings.ServiceName,
-		"service.version":               settings.ServiceVersion,
-		"deployment.environment.name":   string(settings.Environment),
-		"omnexa.phase":                  "P01",
+		"service.name":                settings.ServiceName,
+		"service.version":             settings.ServiceVersion,
+		"deployment.environment.name": string(settings.Environment),
+		"omnexa.phase":                "P01",
 	} {
 		if values[key] != want {
 			t.Fatalf("resource %s = %q, want %q", key, values[key], want)
