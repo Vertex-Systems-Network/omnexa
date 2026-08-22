@@ -11,7 +11,7 @@ import (
 const maxRenderedObjectKeyBytes = 1024
 
 var (
-	objectNamespacePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_.-]{0,127}$`)
+	objectNamespacePattern   = regexp.MustCompile(`^[a-z0-9][a-z0-9_.-]{0,127}$`)
 	objectPathSegmentPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$`)
 )
 
