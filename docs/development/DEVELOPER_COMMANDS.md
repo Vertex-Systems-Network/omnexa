@@ -86,13 +86,14 @@ P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01
 P01_05_TEST_CACHE_ADDRESS=127.0.0.1:6379 P01_05_TEST_VALKEY_IMAGE=valkey/valkey:9.1.1 bash scripts/verify_p01_05.sh
 P01_06_TEST_S3_ENDPOINT=http://127.0.0.1:9090 P01_06_TEST_S3_BUCKET=omnexa-p01-06 P01_06_TEST_S3_IMAGE=adobe/s3mock:5.1.0 bash scripts/verify_p01_06.sh
 bash scripts/verify_p01_07.sh
+bash scripts/verify_p01_08.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior. P01.06 covers the S3-compatible object/file storage foundation, including deterministic namespaced/versioned keys, bounded streaming, untrusted metadata validation, integrity checks, missing-object semantics, provider timeout/cancellation/unavailability, concurrent integration and provider restart behavior. P01.07 covers the structured `log/slog` and OpenTelemetry baseline, including stable fields, bounded correlation/W3C trace propagation, classification/sensitive-key redaction, isolated trace/metric providers, vendor-neutral exporter injection, deterministic capture and bounded flush/shutdown behavior.
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior. P01.06 covers the S3-compatible object/file storage foundation, including deterministic namespaced/versioned keys, bounded streaming, untrusted metadata validation, integrity checks, missing-object semantics, provider timeout/cancellation/unavailability, concurrent integration and provider restart behavior. P01.07 covers the structured `log/slog` and OpenTelemetry baseline, including stable fields, bounded correlation/W3C trace propagation, classification/sensitive-key redaction, isolated trace/metric providers, vendor-neutral exporter injection, deterministic capture and bounded flush/shutdown behavior. P01.08 covers portable health/readiness/diagnostic primitives, including distinct liveness/readiness, criticality-aware dependency results, startup lifecycle state, deterministic ordering, safe diagnostic projection, timeout/cancellation/panic resilience and P01.07 observability integration.
 
-Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.07 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. P01.07 uses deterministic in-process capture/exporter test doubles and pinned OpenTelemetry Go `v1.45.0`. The final `omnexa verify ...` CLI remains owned by P01.12.
+Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.08 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. P01.07 and P01.08 use deterministic in-process test doubles/primitives. The final `omnexa verify ...` CLI remains owned by P01.12.
 
 ## Completed P01.05
 
@@ -106,21 +107,25 @@ P01.06 is complete with canonical evidence in `docs/roadmap/evidence/P01.06_COMP
 
 P01.07 is complete with canonical evidence in `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Observability remains diagnostic infrastructure, does not become a correctness dependency or business source of truth, preserves vendor-neutral exporter boundaries and redacts prohibited secret/classified content.
 
-## Active P01.08
+## Completed P01.08
 
-P01.08 — Health, readiness & diagnostics is the sole active executable kernel package after the P01.07 closure transition.
+P01.08 is complete with canonical evidence in `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Liveness/readiness remain distinct, required/security-critical readiness fails closed, optional dependency failure may degrade, dependency probes remain bounded/panic-safe and diagnostics remain safe non-authoritative operational evidence.
 
-The active P01.08 implementation must map package requirements to:
+## Active P01.09
 
-- `verify format` / `verify static` -> pinned toolchain, repository Go quality, formatting/static checks and operations/health package dependency/scope boundaries;
-- `verify unit` -> liveness/readiness semantics, dependency criticality, startup/readiness transitions and stable diagnostic states;
-- `verify integration` -> deterministic healthy/degraded/unready dependency-check evaluation using completed kernel foundations where the package specification requires it;
-- `verify security` -> no connection-string, host-secret, credential, SQL, object-key or sensitive-payload leakage and no P03/business/later-capability pull-forward;
-- lifecycle/resilience evidence -> bounded dependency timeout/cancellation behavior and no health-evaluation hangs;
+P01.09 — Job & scheduler primitives is the sole active executable kernel package after the P01.08 closure transition.
+
+The active P01.09 implementation must map package requirements to:
+
+- `verify format` / `verify static` -> pinned toolchain, repository Go quality, jobs package dependency/scope boundaries and no durable-messaging/workflow pull-forward;
+- `verify unit` -> deterministic job registration/execution, unknown-job safe failure, retry/backoff bounds, schedule validation and handler-result behavior;
+- `verify contracts` / `verify integration` -> explicit idempotency/duplicate-safe handler contract, bounded worker execution, observability/correlation propagation and deterministic in-memory harness;
+- `verify security` -> scheduler/job identity grants no authority, future tenant/actor scope is not invented, no business/later-phase behavior is introduced and diagnostics/errors remain safe;
+- lifecycle/resilience evidence -> bounded concurrency, deadline/cancellation propagation, bounded graceful shutdown/drain/cancel and no infinite retries;
 - `verify build` -> complete kernel package build with canonical dependency metadata;
-- completed P01.01-P01.07 regression preservation.
+- completed P01.01-P01.08 regression preservation.
 
-P01.08 may not implement P01.09 scheduler, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI, public business status pages, P03 tenant/module health aggregation, SLO automation, Kubernetes-specific architecture, business behavior or AI runtime functionality. P01.09 becomes eligible only after P01.08 completion evidence and a separate governed transition.
+P01.09 may not implement NATS/JetStream durable streams/event consumers, transactional outbox/inbox, distributed workflow timers, business jobs, tenant-context runtime before P02, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI, P02+ behavior or AI runtime functionality. P01.10 becomes eligible only after P01.09 completion evidence and a separate governed transition.
 
 ## Go result convention — completed P01.03
 
@@ -132,7 +137,7 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-P01.04 database/provider, P01.05 cache/provider and P01.06 storage/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.07 observability must not expose those private causes or sensitive configuration merely because telemetry is available. P01.08 health/diagnostic output must likewise remain safe and must not expose provider internals or sensitive dependency data.
+P01.04 database/provider, P01.05 cache/provider and P01.06 storage/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.07 observability must not expose those private causes or sensitive configuration merely because telemetry is available. P01.08 health/diagnostic output likewise remains safe and does not expose provider internals or sensitive dependency data. P01.09 job/scheduler failures must reuse the existing safe failure/observability boundaries rather than emitting handler payloads or inventing a second error authority.
 
 ## Configuration startup contract
 
@@ -195,7 +200,7 @@ OMNEXA_OBSERVABILITY_SHUTDOWN_TIMEOUT=5s
 
 `OMNEXA_OBSERVABILITY_LOG_LEVEL=auto` resolves to debug in local/test environments and info otherwise. Export interval is bounded to 1s–10m; export and shutdown timeouts are each bounded to 10ms–30s. The completed P01.07 configuration intentionally contains no exporter credentials or backend-specific configuration.
 
-P01.08 may add only health/readiness/diagnostic configuration that is justified by `docs/roadmap/work-packages/P01.08.md` and implemented through the existing typed configuration boundary. No P01.08 configuration key or environment variable is canonical until it exists in repository implementation and verification.
+P01.08 introduced no canonical environment-variable surface. P01.09 may add only job/scheduler configuration justified by `docs/roadmap/work-packages/P01.09.md` and implemented through the existing typed configuration boundary. No P01.09 configuration key or environment variable is canonical until it exists in repository implementation and verification.
 
 Configuration precedence remains:
 

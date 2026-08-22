@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-23T00:58:00+05:00"
+  verified_at: "2026-08-23T03:38:00+05:00"
   nature: "non-authoritative closure-branch continuity snapshot"
-  canonical_main_before_closure: "245fd67d60c02a5ed546f0cd4dc934345b5b4d42"
-  closure_base_commit: "245fd67d60c02a5ed546f0cd4dc934345b5b4d42"
+  canonical_main_before_closure: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -17,100 +17,137 @@ mode:
 
 canonical_main_before_closure:
   phase: "P01"
-  work_package: "P01.07"
+  work_package: "P01.08"
   status: "active"
-  completed_p01_packages: 6
-  note: "P01.07 implementation is merged and completion-eligible, but protected main remains authoritative until closure PR #55 merges."
+  completed_p01_packages: 7
+  commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  note: "P01.08 implementation is merged and completion-eligible. Main later received only maintenance PR #57 for .github/dependabot.yml and still records P01.08 active until closure PR #58 merges."
 
 closure_candidate:
   phase: "P01"
-  completed_work_package: "P01.07"
-  next_work_package: "P01.08"
-  proposed_status: "P01.07 done / P01.08 active"
-  completed_p01_packages: 7
+  completed_work_package: "P01.08"
+  next_work_package: "P01.09"
+  proposed_status: "P01.08 done / P01.09 active"
+  completed_p01_packages: 8
   total_p01_packages: 12
   runtime_changes_in_closure: false
 
 repository:
   canonical_branch: "main"
-  closure_branch: "chore/p01-07-close-p01-08-activate"
-  closure_base_commit: "245fd67d60c02a5ed546f0cd4dc934345b5b4d42"
+  closure_branch: "chore/p01-08-close-p01-09-activate"
+  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  main_maintenance_pr: 57
+  main_maintenance_scope: ".github/dependabot.yml only"
+  main_sync_commit: "0fce489f98a65639afa227fab9702e2423ad11b3"
+  main_sync_method: "explicit two-parent merge commit; no force update"
+  post_sync_relation: "ahead / behind_by=0"
   working_tree_status: "not_applicable_to_remote_branch_snapshot"
 
 implementation:
-  pull_request: 54
+  pull_request: 56
   state: "merged"
-  final_strict_up_to_date_head: "f716bd8ce8b57394ce52462e0d3ec15ecaf93bad"
-  merge_commit: "245fd67d60c02a5ed546f0cd4dc934345b5b4d42"
-  canonical_run: 32595413156
-  canonical_job: 97085413083
+  final_strict_up_to_date_head: "988ef3673d49f54bbd105d3e0067ba134c66b236"
+  merge_commit: "a2a93454bb283464bfa144bb5a38539041e40069"
+  canonical_run: 32601741049
+  canonical_job: 97100949202
   result: "PASS"
+  runner: "GitHub Actions 1000010855"
+  runner_os: "Ubuntu 24.04.4 LTS / X64"
+  runner_image: "ubuntu-24.04 / 20260816.277.1"
   go: "1.26.7"
-  opentelemetry_go: "v1.45.0"
+  third_party_dependency_changes: false
 
 closure_pull_request:
-  number: 55
-  url: "https://github.com/Vertex-Systems-Network/omnexa/pull/55"
+  number: 58
+  url: "https://github.com/Vertex-Systems-Network/omnexa/pull/58"
   state_when_snapshot_written: "open"
   instruction: "Re-read live PR/head/latest CI; do not infer merge from this snapshot."
 
 verification:
   implementation_completion:
     workflow: "Omnexa Governance"
-    run: 32595413156
-    job: 97085413083
+    run: 32601741049
+    job: 97100949202
     status: "PASS"
     runner_policy: "GitHub-hosted ubuntu-24.04"
     passed:
-      - "canonical governance/state/spec validators"
+      - "canonical governance/state/development/operations/foundation-freeze validators"
+      - "P01 activation/readiness and package-sequence validators"
       - "repository Go quality"
-      - "P01.01-P01.06 regressions"
-      - "P01.07 G1 static/dependency/vendor boundary"
-      - "P01.07 G2 unit/race"
-      - "P01.07 G3 trace/metric SDK lifecycle and capture integration"
-      - "P01.07 G5 security/scope"
-      - "P01.07 G6 lifecycle/resilience"
-      - "P01.07 G7 build/package"
+      - "P01.01-P01.07 regressions"
+      - "P01.08 G1 format/static/dependency/portable boundary"
+      - "P01.08 G2 unit/race lifecycle/readiness/registry"
+      - "P01.08 G3 health contract/build identity/observability integration"
+      - "P01.08 G5 safe diagnostics/security-critical fail-closed/scope guard"
+      - "P01.08 G6 timeout/cancellation/panic/stopping resilience"
+      - "P01.08 G7 build/package"
   diagnostic_history:
-    - run: 32594612900
-      job: 97083515006
+    - run: 32601550204
+      job: 97100473606
       status: "FAIL"
-      reason: "Controlled go mod tidy diagnostic produced the exact canonical OpenTelemetry dependency/checksum reconciliation and failed closed until committed."
-    - run: 32594901567
-      job: 97084206328
-      status: "FAIL"
-      reason: "Repository Go quality failed only canonical gofmt alignment; exact formatter output was applied without logic changes."
+      reason: "Governance/state/spec validators passed; repository Go quality then found exactly two lint findings: redundant Go 1.22 loop-variable copying and a credential-shaped synthetic redaction fixture. gofmt passed and govulncheck found no vulnerabilities. Both findings were fixed without changing package scope."
   closure_verification:
     status: "REVERIFY_LIVE"
-    reason: "Closure branch continuity files were still being reconciled when this snapshot was written. The exact final closure head must receive a fresh full governance result before merge."
+    reason: "Closure files are reconciled and the branch has been synchronized with current protected main. The exact final closure head must receive a fresh full governance result before merge."
+
+p01_08_contract_retained:
+  - "process liveness is distinct from dependency readiness"
+  - "required/security-critical dependency failure is unready; optional failure can degrade"
+  - "dependency checks are timeout/cancellation bounded and panic-safe"
+  - "diagnostics expose stable safe states/reasons only and retain no raw probe/provider errors"
+  - "health diagnostics do not grant authorization, tenancy or business-state authority"
+  - "P01.08 verifier remains a mandatory completed-package regression"
+
+p01_09_candidate_scope_after_closure:
+  owner: "kernel.jobs"
+  allowed:
+    - "deterministic job identity/type registry"
+    - "kernel-local enqueue/execute result model"
+    - "bounded worker concurrency"
+    - "graceful bounded shutdown/drain/cancel"
+    - "cancellation/deadline propagation"
+    - "bounded retry/backoff policy"
+    - "idempotency-key hook and duplicate-safe handler contract"
+    - "simple recurring/one-shot kernel maintenance schedules"
+    - "P01.07 observability/correlation propagation"
+    - "deterministic in-memory/test harness"
+  forbidden:
+    - "NATS/JetStream durable streams or event consumers"
+    - "transactional outbox/inbox"
+    - "distributed workflow timers"
+    - "business jobs/workflows"
+    - "tenant-context implementation before P02"
+    - "P01.10 or later kernel package behavior"
+    - "AI/model/agent runtime"
 
 next_action:
-  type: "P01.07 closure verification"
-  target: "PR #55 / chore/p01-07-close-p01-08-activate"
-  instruction: "Verify the full GitHub-hosted governance lane on the exact final closure head, audit changed files/reviews/mergeability and squash-merge PR #55 only if all required evidence is green and the branch is current with protected main."
-  reason: "P01.07 implementation has passed and merged. The only remaining authorized step before P01.08 runtime implementation is the governed canonical state transition."
+  type: "P01.08 closure verification"
+  target: "PR #58 / chore/p01-08-close-p01-09-activate"
+  instruction: "Verify the full GitHub-hosted governance lane on the exact final closure head, audit changed files/reviews/mergeability and squash-merge PR #58 only if all required evidence is green and the branch is current with protected main."
+  reason: "P01.08 implementation has passed and merged. The only remaining authorized step before P01.09 runtime implementation is the governed canonical state transition."
 
 blocked_actions:
-  - "claim canonical P01.07 done before PR #55 merges"
-  - "implement P01.08 runtime before PR #55 merges"
-  - "activate or implement P01.09 or later P01 packages"
+  - "claim canonical P01.08 done before PR #58 merges"
+  - "implement P01.09 runtime before PR #58 merges"
+  - "activate or implement P01.10 or later P01 packages"
   - "start P02 or any later phase"
   - "implement CRM, ERP, commerce, CMS or any business module"
+  - "implement P04 durable messaging/outbox or P05 workflow timers under P01.09"
   - "implement AI model gateway, context engine, planner, memory/RAG, semantic business runtime, task graph, risk/approval engine, capability broker, agents or autonomous execution"
   - "grant AI direct database, object-store, payment-provider or business-state authority"
   - "weaken governance or branch protection to obtain PASS/merge"
 
 completion_requirements:
-  p01_07_evidence: "docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"
+  p01_08_evidence: "docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"
   closure_required:
-    - "P01.07 evidence file exists and matches PR #54 merge evidence"
-    - "STATE.json and package sequence identify exactly P01.01-P01.07 done and P01.08 active"
-    - "P01.07 spec state is done"
-    - "P01.08 spec state is active with kernel_code_authorized=true and business_feature_code_authorized=false"
+    - "P01.08 evidence file exists and matches PR #56 merge evidence"
+    - "STATE.json and package sequence identify exactly P01.01-P01.08 done and P01.09 active"
+    - "P01.08 spec state is done"
+    - "P01.09 spec state is active with kernel_code_authorized=true and business_feature_code_authorized=false"
     - "human-readable status/execution/developer/AI continuity documents agree with machine state"
     - "closure PR contains no runtime implementation or dependency changes"
     - "full GitHub-hosted governance lane PASS on exact final closure head"
-    - "P01.01-P01.07 regression verifiers remain PASS"
+    - "P01.01-P01.08 regression verifiers remain PASS"
     - "branch is current with protected main and review/conversation blockers are zero"
 
 future_architecture_direction_only:
@@ -140,14 +177,14 @@ source_authority:
   change_control: "docs/governance/CHANGE_CONTROL.md"
   definition_of_done: "docs/governance/DEFINITION_OF_DONE.md"
   current_closure_specs:
-    - "docs/roadmap/work-packages/P01.07.md"
     - "docs/roadmap/work-packages/P01.08.md"
+    - "docs/roadmap/work-packages/P01.09.md"
   relevant_adrs:
     - "docs/adr/ADR-0001-platform-architecture-baseline.md"
     - "docs/adr/ADR-0005-security-data-classification-baseline.md"
     - "docs/adr/ADR-0010-foundation-architecture-freeze.md"
 
 handoff:
-  last: "docs/ai/handoffs/P01.07.md"
-  closure_pr: 55
-  created_at: "2026-08-23T00:58:00+05:00"
+  last: "docs/ai/handoffs/P01.08.md"
+  closure_pr: 58
+  created_at: "2026-08-23T03:38:00+05:00"

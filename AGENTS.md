@@ -22,13 +22,14 @@ P01.04: DONE — PostgreSQL connection & migration foundation
 P01.05: DONE — Cache abstraction
 P01.06: DONE — Object & file storage abstraction
 P01.07: DONE — Structured logging & OpenTelemetry baseline
-P01.08: ACTIVE — Health, readiness & diagnostics
-P01.09-P01.12: PLANNED
+P01.08: DONE — Health, readiness & diagnostics
+P01.09: ACTIVE — Job & scheduler primitives
+P01.10-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.09+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.10+, P02+, module runtime or business features.
 
 ## Persistent AI continuity
 
@@ -42,7 +43,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.08.md` currently);
+5. the active package specification (`P01.09.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -98,27 +99,29 @@ Completed:
 - P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
 - P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
 - P01.06 — evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`;
-- P01.07 — evidence: `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`.
+- P01.07 — evidence: `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`;
+- P01.08 — evidence: `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.08 — Health, readiness & diagnostics**.
+Current active package: **P01.09 — Job & scheduler primitives**.
 
 Allowed executable scope is limited to:
 
-- semantically distinct liveness/readiness primitives;
-- dependency check registry with criticality classification;
-- bounded timeout/cancellation behavior;
-- startup/readiness transition model;
-- safe diagnostic summary with stable machine states;
-- build/version identity integration;
-- integration with the completed P01.07 observability boundary;
-- deterministic healthy/degraded/unready test harness;
-- completed P01.01-P01.07 regression verification;
+- deterministic kernel-local job identity/type registration and unknown-job safe failure;
+- enqueue/execute result primitives for kernel-local background work;
+- bounded worker concurrency with graceful stop/drain/cancel behavior;
+- caller cancellation/deadline propagation;
+- bounded retry/backoff metadata and execution semantics with no infinite loops;
+- explicit idempotency-key hook and duplicate-safe handler contract;
+- simple one-shot/recurring schedule definitions for kernel maintenance work;
+- P01.07 observability/correlation propagation through job execution;
+- deterministic in-memory/test harness;
+- completed P01.01-P01.08 regression verification;
 - permanent repository Go quality verification;
 - GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.08 must not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration automation, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler primitives, feature registry, audit transport, developer CLI behavior, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
+P01.09 must not implement NATS/JetStream or other P04 durable messaging/event consumers, transactional outbox/inbox, P05 distributed workflow timers, business jobs/workflows, tenant-context implementation before P02, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI or any later-phase/AI/model/agent functionality.
 
-P01.09 becomes active only after P01.08 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.10 becomes active only after P01.09 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -130,7 +133,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.08, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.07 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.09, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.08 regression verification. Tenancy, durable event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -145,16 +148,21 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.08 health/readiness rules
+## P01.09 job/scheduler rules
 
-- Liveness and readiness are distinct operational semantics; do not collapse them into one generic health boolean.
-- Dependency checks must be timeout-bounded and classify required versus optional/conditionally relevant dependencies explicitly.
-- Optional dependency degradation must not automatically kill the process; required security-critical capability failure must fail closed where applicable.
-- Diagnostic output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads.
-- Diagnostic states are operational signals, not authorization, tenancy or business-state authority.
-- Use the completed P01.07 observability boundary; do not create a parallel logging/tracing system.
-- Do not implement public status pages, module/tenant health aggregation, SLO automation or Kubernetes-specific architecture by anticipation.
-- P01.08 must not pull forward scheduler/feature-registry/audit/CLI or later-phase behavior.
+- Job registration and execution must be deterministic; unknown jobs fail safely.
+- Worker concurrency is explicitly bounded. Shutdown stops accepting new work and provides bounded drain/cancel behavior.
+- Cancellation and deadlines propagate into handlers; a scheduler identity never grants authority.
+- Retry/backoff is explicit, bounded and testable; no infinite retry loops or silent protected-side-effect duplication.
+- Idempotency is an explicit contract/hook, not an assumption. Duplicate-safe positive and negative evidence is mandatory.
+- Schedules are limited to simple recurring or one-shot kernel maintenance work; do not build distributed workflow timers.
+- Correlation/observability context uses the completed P01.07 boundary and remains diagnostic only.
+- Future tenant/actor scope must be explicit and revalidated when its owning phase exists; P01.09 must not invent tenancy.
+- Do not implement NATS/JetStream, durable event consumers, outbox/inbox, business jobs or workflow semantics by anticipation.
+
+## Completed P01.08 health/readiness rules retained
+
+Liveness and readiness remain distinct operational semantics. Dependency checks stay timeout-bounded with explicit required/optional/security-critical classification. Optional degradation does not automatically kill the process, while required security-critical capability failure remains fail-closed. Diagnostic output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads. Diagnostic state is not authorization, tenancy or business-state authority. The P01.08 verifier remains a mandatory regression gate.
 
 ## Completed P01.07 observability rules retained
 
@@ -203,4 +211,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.08 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.08.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.07 regressions, move P01.08 `active -> verification -> done`, reconcile canonical state, then activate only P01.09.
+Implement P01.09 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.09.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.08 regressions, move P01.09 `active -> verification -> done`, reconcile canonical state, then activate only P01.10.
