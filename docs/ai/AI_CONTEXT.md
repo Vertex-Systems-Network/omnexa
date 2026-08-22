@@ -14,7 +14,7 @@ This is the first file to read inside `docs/ai/`. It exists so a new AI session 
 - domain modules consume published capabilities, events, workflows or approved projections rather than private tables/packages;
 - tenant isolation, authorization, auditability, classification and versioned contracts are platform invariants;
 - infrastructure remains below capability/domain boundaries;
-- cache, storage, projections, analytics and AI are never alternate sources of business truth;
+- cache, storage, telemetry, projections, analytics and AI are never alternate sources of business truth;
 - AI may act only through governed identity/context, policy/approval and versioned capabilities when future roadmap phases authorize those systems;
 - AI must never receive unrestricted database, object-store, payment-provider or business-state authority;
 - architecture changes require change control and, when applicable, a superseding ADR.
@@ -39,38 +39,39 @@ This is architecture direction only. It does **not** authorize the AI platform, 
 
 ## Current snapshot
 
-Snapshot verified during P01.06 closure on `2026-08-22`.
+Snapshot verified during P01.07 closure on `2026-08-23`.
 
 Authoritative live facts verified before this snapshot:
 
-- canonical `main` before the closure transition: `f7867d9e1c570e3abbed90740970acf7b5a30bd7`;
-- P01.06 implementation PR `#50`: merged;
-- P01.06 final strict-up-to-date implementation run/job: `32588244996` / `97067784835` — PASS;
-- P01.06 implementation merge: `f7867d9e1c570e3abbed90740970acf7b5a30bd7`;
-- canonical main still records P01.06 active until the closure PR merges;
-- closure/state-transition PR: `#53`;
-- closure branch: `chore/p01-06-close-p01-07-activate`;
-- closure branch state proposes P01.06 `done`, P01 progress `6 / 12 done`, and P01.07 `active` only;
-- no P01.07 runtime implementation is part of the closure PR.
+- protected `main` after P01.07 implementation merge: `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`;
+- P01.07 implementation PR `#54`: merged;
+- P01.07 final strict-up-to-date implementation head: `f716bd8ce8b57394ce52462e0d3ec15ecaf93bad`;
+- P01.07 final implementation run/job: `32595413156` / `97085413083` — PASS;
+- P01.07 implementation merge: `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`;
+- protected main still records P01.07 `active` until the separate closure PR merges;
+- closure/state-transition PR: `#55`;
+- closure branch: `chore/p01-07-close-p01-08-activate`;
+- closure branch proposes P01.07 `done`, P01 progress `7 / 12 done`, and P01.08 `active` only;
+- no P01.08 runtime implementation is part of closure PR #55.
 
-Because this is a branch snapshot, a future session must re-read live `main`, PR #53 and its latest CI. If PR #53 has merged, the canonical active package becomes P01.07. If it has not merged, canonical main remains P01.06 active despite the proposed branch state.
+Because this is a closure-branch snapshot, a future session must re-read live protected `main`, `docs/roadmap/STATE.json`, PR #55 and its latest CI. If PR #55 has merged, the canonical active package becomes P01.08. If it has not merged, protected main remains P01.07 active despite the proposed branch state.
 
 ## Current restrictions
 
-Until the closure transition is actually merged:
+Until closure PR #55 actually merges:
 
-- do not claim canonical P01.06 `done` solely from the branch snapshot;
-- do not begin P01.07 runtime implementation;
-- do not start P01.08+ or P02+;
+- do not claim canonical P01.07 `done` solely from the closure branch snapshot;
+- do not begin P01.08 runtime implementation;
+- do not start P01.09+ or P02+;
 - do not implement business modules/features;
 - do not implement model gateway, context engine, planner, memory/RAG, semantic business state, task graphs, simulation, risk/approval engine, capability broker, governed agents or autonomous business OS;
 - do not weaken strict `governance` or main protection to obtain a merge.
 
-After PR #53 merges, only P01.07 becomes authorized under its active work-package specification; all later restrictions remain.
+After PR #55 merges, only P01.08 becomes authorized under `docs/roadmap/work-packages/P01.08.md`; all later restrictions remain.
 
 ## Exact next authorized action
 
-Verify the complete GitHub-hosted `governance` lane for closure PR `#53`. If the exact current closure head is green, scope/reviews/mergeability are clean and the branch is current with protected `main`, squash-merge PR #53. Do not start P01.07 implementation before that merge.
+Verify the complete GitHub-hosted `governance` lane for closure PR #55 on its exact final head. If all required validators/quality/P01.01-P01.07 regressions pass, the diff remains governance/documentation-only, reviews/conversations are clean and the branch is current with protected `main`, squash-merge PR #55. Do not start P01.08 runtime implementation before that merge.
 
 ## Authority and references
 
@@ -85,9 +86,9 @@ Mandatory references:
 - `docs/governance/DEFINITION_OF_DONE.md`
 - `docs/roadmap/STATE.json`
 - `docs/roadmap/MASTER_PLAN.md`
-- `docs/roadmap/work-packages/P01.06.md`
 - `docs/roadmap/work-packages/P01.07.md`
-- `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`
+- `docs/roadmap/work-packages/P01.08.md`
+- `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`
 - `docs/architecture/SYSTEM_ARCHITECTURE.md`
 - `docs/architecture/MODULE_STANDARD.md`
 - `docs/architecture/DOMAIN_OWNERSHIP.md`
@@ -100,4 +101,4 @@ Mandatory references:
 - `docs/ai/AI_STATE.yaml`
 - `docs/ai/AI_EXECUTION_PROTOCOL.md`
 - `docs/ai/AI_DECISIONS.md`
-- `docs/ai/handoffs/P01.06.md`
+- `docs/ai/handoffs/P01.07.md`
