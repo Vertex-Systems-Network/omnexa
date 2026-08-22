@@ -9,6 +9,11 @@ require (
 	github.com/aws/smithy-go v1.27.8
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/valkey-io/valkey-go v1.0.75
+	go.opentelemetry.io/otel v1.45.0
+	go.opentelemetry.io/otel/metric v1.45.0
+	go.opentelemetry.io/otel/sdk v1.45.0
+	go.opentelemetry.io/otel/sdk/metric v1.45.0
+	go.opentelemetry.io/otel/trace v1.45.0
 )
 
 require (
