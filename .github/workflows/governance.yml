@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v13-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v14-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -121,6 +121,20 @@ jobs:
         shell: bash
         run: python scripts/validate_p01_package_specs.py
 
+      - name: Diagnose P01.07 module metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          go work sync
+          go mod tidy
+          if [[ -n "$(git status --porcelain -- go.mod go.work go.sum)" ]]; then
+            echo "ERROR: P01.07 module metadata requires canonical reconciliation" >&2
+            git status --short -- go.mod go.work go.sum >&2
+            git diff -- go.mod go.work go.sum >&2
+            exit 1
+          fi
+          echo "P01.07 module metadata: canonical"
+
       - name: Verify repository Go code quality
         shell: bash
         run: bash scripts/verify_go_quality.sh
@@ -157,3 +171,7 @@ jobs:
           P01_06_TEST_S3_BUCKET: omnexa-p01-06
           P01_06_TEST_S3_IMAGE: adobe/s3mock:5.1.0
         run: bash scripts/verify_p01_06.sh
+
+      - name: Verify P01.07 structured logging and OpenTelemetry baseline
+        shell: bash
+        run: bash scripts/verify_p01_07.sh
