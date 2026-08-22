@@ -46,14 +46,14 @@ func (reader *integrityReader) Read(buffer []byte) (int, error) {
 		return 0, io.EOF
 	}
 
-	limit := len(buffer)
-	if int64(limit) > remaining {
-		limit = int(remaining)
+	readBuffer := buffer
+	if remaining < int64(len(buffer)) {
+		readBuffer = buffer[:remaining]
 	}
-	n, err := reader.reader.Read(buffer[:limit])
+	n, err := reader.reader.Read(readBuffer)
 	if n > 0 {
 		reader.read += int64(n)
-		_, _ = reader.hasher.Write(buffer[:n])
+		_, _ = reader.hasher.Write(readBuffer[:n])
 	}
 
 	if reader.read == reader.expectedLength {
@@ -141,14 +141,14 @@ func (reader *verifiedReadCloser) Read(buffer []byte) (int, error) {
 		return 0, io.EOF
 	}
 
-	limit := len(buffer)
-	if int64(limit) > remaining {
-		limit = int(remaining)
+	readBuffer := buffer
+	if remaining < int64(len(buffer)) {
+		readBuffer = buffer[:remaining]
 	}
-	n, err := reader.body.Read(buffer[:limit])
+	n, err := reader.body.Read(readBuffer)
 	if n > 0 {
 		reader.read += int64(n)
-		_, _ = reader.hasher.Write(buffer[:n])
+		_, _ = reader.hasher.Write(readBuffer[:n])
 	}
 
 	if reader.read == reader.expectedLength {
