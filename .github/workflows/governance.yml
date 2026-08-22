@@ -51,6 +51,16 @@ jobs:
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
 
+      - name: Diagnose P01.03 gofmt diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          diff="$(gofmt -d kernel/internal/failure/failure.go kernel/internal/failure/failure_test.go)"
+          if [[ -n "$diff" ]]; then
+            printf '%s\n' "$diff"
+            exit 1
+          fi
+
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
         run: |
