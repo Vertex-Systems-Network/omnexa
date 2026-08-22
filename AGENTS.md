@@ -20,13 +20,14 @@ P01.02: DONE — Configuration & environment system
 P01.03: DONE — Structured error & result conventions
 P01.04: DONE — PostgreSQL connection & migration foundation
 P01.05: DONE — Cache abstraction
-P01.06: ACTIVE — Object & file storage abstraction
-P01.07-P01.12: PLANNED
+P01.06: DONE — Object & file storage abstraction
+P01.07: ACTIVE — Structured logging & OpenTelemetry baseline
+P01.08-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.07+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.08+, P02+, module runtime or business features.
 
 ## Persistent AI continuity
 
@@ -40,7 +41,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.06.md` currently);
+5. the active package specification (`P01.07.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -70,7 +71,7 @@ Frozen primitives include UUIDv7 IDs, exact-decimal money with explicit currency
 
 ## Protected integration and CI
 
-Issue #3 / EG-02 is satisfied. `main` is protected with PR-only integration, required `governance`, blocked direct/force updates, failed-check merge rejection and required conversation resolution.
+Issue #3 / EG-02 is satisfied. `main` is protected with PR-only integration, strict required `governance`, blocked direct/force updates, failed-check merge rejection and required conversation resolution.
 
 Canonical governance CI is **GitHub-hosted only**:
 
@@ -82,6 +83,8 @@ The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=L
 
 The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it from required governance, weaken configured checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
 
+Strict protection requires an implementation/closure PR to be current with protected `main` before merge. P01.06 integration explicitly reconfirmed this behavior: stale green runs were not treated as merge permission; the branch was synchronized and a fresh full green lane was obtained.
+
 ## P01 execution rule
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` enforces a completed prefix, exactly one active package and a planned suffix.
@@ -92,30 +95,29 @@ Completed:
 - P01.02 — evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
 - P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
 - P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
-- P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
+- P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
+- P01.06 — evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.06 — Object & file storage abstraction**.
+Current active package: **P01.07 — Structured logging & OpenTelemetry baseline**.
 
 Allowed executable scope is limited to:
 
-- S3-compatible provider interface/adapter;
-- bucket/container configuration boundary;
-- deterministic namespaced/versioned object keys;
-- streaming upload/download APIs with explicit bounded-memory behavior;
-- untrusted content length/type/file metadata handling;
-- integrity metadata/checksum hooks;
-- put/get/head/delete and missing-object behavior;
-- P01.02 configuration integration;
-- P01.03 structured provider failure mapping;
-- bounded provider timeout/cancellation/unavailability behavior;
-- synthetic S3-compatible contract/integration evidence;
-- completed P01.01-P01.05 regression verification;
+- structured logger with stable field conventions;
+- log levels and environment-appropriate defaults;
+- correlation/trace context propagation helpers;
+- OpenTelemetry resource/service identity baseline;
+- trace and metric provider lifecycle;
+- vendor-neutral exporter/configuration boundary;
+- bounded exporter failure and safe shutdown/flush behavior;
+- redaction/filtering hooks aligned with data classification;
+- deterministic test-capture utilities;
+- completed P01.01-P01.06 regression verification;
 - permanent repository Go quality verification;
 - GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.06 must not implement media library/CMS/file-management UI, public URL/CDN/image processing/thumbnails, tenant document or business object models, sessions/authentication, tenancy, module runtime, event/job fabric, malware-scanning implementation beyond a future hook boundary, retention/legal-hold semantics, logging/OpenTelemetry, health endpoints, scheduler primitives, feature registry, audit transport or later P01/P02+ behavior.
+P01.07 must not implement product analytics/business metrics, dashboards/alerts/SLO automation, domain-specific spans/metrics, audit semantics, health/readiness, scheduler primitives, feature registry, audit transport, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
 
-P01.07 becomes active only after P01.06 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.08 becomes active only after P01.07 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -127,7 +129,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.06, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.05 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.07, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.06 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -142,18 +144,20 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.06 object/file storage rules
+## P01.07 observability rules
 
-- Object keys never imply authorization or tenancy.
-- Path traversal/file-name input must not escape the governed provider namespace.
-- Provider credentials are `RESTRICTED` and must not appear in logs, public failures or artifacts.
-- Signed URLs, secrets and sensitive object content must not be emitted by diagnostics.
-- Content type, file name, length and caller metadata are untrusted input.
-- Large upload/download flows must stream with explicit bounded memory behavior; whole-object buffering is not an acceptable hidden default for large objects.
-- Integrity/checksum mismatch must fail safely and must not return corrupted content as trusted success.
-- Missing object, provider failure and caller cancellation must remain distinguishable.
-- Tests use synthetic data only.
-- P01.06 does not implement CMS/media behavior or domain document models by anticipation.
+- Telemetry is diagnostic infrastructure, not a correctness dependency or source of business truth.
+- Secrets, auth tokens, private keys, raw `RESTRICTED` payloads and ordinary sensitive business content are prohibited from logs/telemetry by default.
+- Correlation/trace IDs are identifiers, not authorization credentials.
+- Exporter failure and shutdown/flush behavior must be bounded; an observability outage must not corrupt state or bypass security.
+- Structured logging, traces and metrics must preserve vendor-neutral boundaries; do not hard-code a proprietary backend into the kernel contract.
+- Audit events/semantics belong to P01.11 and must not be conflated with ordinary logs.
+- Product analytics/business metrics, dashboards/alerts and SLO automation remain out of scope.
+- P01.07 must not pull forward health/readiness or later P01 behavior.
+
+## Completed P01.06 storage rules retained
+
+Storage remains an infrastructure primitive below capability/domain boundaries. Object keys do not imply authorization or tenancy. Path/file-name input cannot escape the governed provider namespace. Provider credentials remain `RESTRICTED`; signed URLs, secrets and sensitive object content are not emitted by diagnostics. Content type, file name, length and caller metadata remain untrusted. Large object flows stream with bounded memory. Integrity mismatch fails safely. Missing object, provider failure, timeout and caller cancellation remain distinguishable. P01.06 regression verification stays mandatory.
 
 ## Completed P01.05 cache rules retained
 
@@ -165,17 +169,9 @@ Cache remains non-authoritative. Flush, restart, eviction or cache loss cannot c
 
 Future production browser UI must target WCAG 2.2 AA and standards-based semantic HTML/CSS, with W3C validation, WAVE evaluation and manual keyboard/focus/screen-reader/zoom-reflow checks appropriate to the affected surface.
 
-AI systems must not:
+AI systems must not use ARIA as a mechanical substitute for native semantics, disable validators/accessibility checks merely to obtain green CI, claim WAVE/WCAG/W3C compliance solely from automated scans, silently ignore WAVE Errors/Contrast Errors/Alerts, or expose WAVE secrets.
 
-- use ARIA as a mechanical substitute for correct native semantics;
-- disable validators/accessibility checks merely to obtain green CI;
-- claim “WAVE passed”, “WCAG compliant” or “W3C compliant” solely from an automated scan;
-- silently ignore WAVE Errors, Contrast Errors or Alerts;
-- expose WAVE API/license secrets in repository content or artifacts.
-
-A required WAVE automation dependency without an approved key/license is `BLOCKED`, not PASS. WAVE is an evaluation input and does not replace human accessibility judgment.
-
-This future UI rule is planning only during P01; it does not authorize P12/P13/P17 or any other business/UI implementation.
+A required WAVE automation dependency without an approved key/license is `BLOCKED`, not PASS. This future UI rule is planning only during P01.
 
 ## Required work protocol
 
@@ -188,7 +184,7 @@ For every material change:
 5. add positive/negative evidence appropriate to risk;
 6. run canonical GitHub-hosted `governance`;
 7. inspect diff/status before merge;
-8. merge only when required checks are green;
+8. merge only when required checks are green and the branch is current with protected `main`;
 9. reconcile state/status/ledger only after completion evidence exists;
 10. use ADR/change control before changing frozen architecture.
 
@@ -202,4 +198,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.06 in a separate executable PR. Add a fail-closed P01.06 verifier and governed S3-compatible synthetic provider, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.05 regressions, move P01.06 `active -> verification -> done`, reconcile canonical state, then activate only P01.07.
+Implement P01.07 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.07.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.06 regressions, move P01.07 `active -> verification -> done`, reconcile canonical state, then activate only P01.08.
