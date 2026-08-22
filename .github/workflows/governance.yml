@@ -66,17 +66,6 @@ jobs:
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
 
-      - name: Diagnose P01.04 Go module metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          go work sync
-          go mod tidy
-          echo "----- canonical go.mod -----"
-          cat go.mod
-          echo "----- canonical go.sum -----"
-          cat go.sum
-
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
         run: |
