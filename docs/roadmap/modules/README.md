@@ -12,17 +12,19 @@ Before implementing any P02-P27 module or submodule, an AI/human contributor mus
 
 1. `AGENTS.md` and `docs/roadmap/STATE.json`;
 2. the active work-package specification;
-3. `docs/governance/AI_EXECUTION_POLICY.md`;
+3. `docs/governance/AI_EXECUTION_POLICY.md` and `docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md`;
 4. `docs/architecture/MODULE_STANDARD.md` and ownership/dependency standards;
 5. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md`;
 6. `docs/roadmap/modules/SUBMODULE_CATALOG.json`;
 7. the owning program dossier in this directory;
-8. applicable API/event/security/data/accessibility standards.
+8. `docs/roadmap/modules/DOSSIER_STANDARD.md` when refining the submodule into executable tasks;
+9. applicable API/event/security/data/accessibility standards.
 
 If an approved submodule decomposition already exists here, implementation agents **must execute it rather than restart generic architecture planning**. A change to ownership, phase placement, public contracts, persistence ownership, or dependency class requires change control/ADR as applicable.
 
 ## Dossier set
 
+- `DOSSIER_STANDARD.md` — mandatory architecture/flow/options/task-card format used when a planned submodule becomes executable.
 - `FOUNDATION_P02_P06.md` — identity/tenancy, module runtime, data/event fabric, workflow OS, universal business foundation.
 - `CORE_BUSINESS_P07_P15.md` — CRM, finance/ERP, commerce, payments, POS, experience/CMS, portals, HR/projects/service, supply chain/manufacturing.
 - `PLATFORM_P16_P18.md` — integration fabric, low-code app builder, reporting/BI.
@@ -30,6 +32,7 @@ If an approved submodule decomposition already exists here, implementation agent
 - `ECOSYSTEM_P21_P22.md` — developer platform and marketplace.
 - `GLOBAL_ENTERPRISE_P23_P25.md` — globalization, enterprise governance/security/compliance, scale fabric.
 - `INDUSTRY_AUTONOMY_P26_P27.md` — industry packs and autonomous business OS.
+- `SUBMODULE_CATALOG.json` — machine-readable submodule/family identity and dossier mapping.
 
 ## Mandatory dossier structure
 
@@ -48,6 +51,8 @@ Every phase/submodule plan must define:
 - lifecycle, import/export and compatibility behavior;
 - UI accessibility/localization/RTL requirements when applicable;
 - ordered implementation tasks and evidence gates.
+
+When a phase activates, the owning work-package plan should refine these into `S01`-`S10` and `Sxx.Tyy` task cards using `DOSSIER_STANDARD.md`; it should not invent a parallel architecture document with conflicting ownership.
 
 ## Planning state versus implementation state
 
