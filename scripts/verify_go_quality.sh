@@ -30,8 +30,14 @@ else
   status=1
 fi
 
+mapfile -t go_files < <(find kernel -type f -name '*.go' -print | sort)
+if [[ ${#go_files[@]} -eq 0 ]]; then
+  echo "ERROR: no Go source files found under kernel/" >&2
+  exit 1
+fi
+
 : > "${FORMAT_DIFF}"
-gofmt -d kernel > "${FORMAT_DIFF}"
+gofmt -d "${go_files[@]}" > "${FORMAT_DIFF}"
 if [[ -s "${FORMAT_DIFF}" ]]; then
   echo "ERROR: gofmt changes are required:" >&2
   cat "${FORMAT_DIFF}" >&2
