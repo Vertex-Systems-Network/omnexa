@@ -45,16 +45,17 @@ The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github
 ### EG-04 — canonical executable verification command
 State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
-P01.01 established the pinned Go workspace/build verifier. P01.02 added the configuration/security verifier. P01.03 added the structured-failure/security verifier. P01.04 added the PostgreSQL connection/migration verifier. Every completed-package regression verifier remains mandatory in the same GitHub-hosted governance job.
+P01.01 established the pinned Go workspace/build verifier. P01.02 added the configuration/security verifier. P01.03 added the structured-failure/security verifier. P01.04 added the PostgreSQL connection/migration verifier. P01.05 added the Redis-compatible cache verifier and permanent repository-wide Go quality gate. Every completed-package regression verifier remains mandatory in the same GitHub-hosted governance job.
 
 Canonical evidence:
 
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
-- `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
+- `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
 
-Latest completed-package evidence is PR #46, run `32567842071`, job `97019012280`, merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
+Latest completed-package evidence is PR #48, run `32571147128`, job `97026673348`, merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`. The same run passed `golangci-lint v2.12.2` with zero issues and `govulncheck v1.7.0` with no reachable vulnerabilities.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
@@ -67,10 +68,11 @@ Current bounded state:
 - P01.02: `done`;
 - P01.03: `done`;
 - P01.04: `done`;
-- P01.05: `active`;
+- P01.05: `done`;
+- P01.06: `active`;
 - `kernel_code_authorized=true`;
 - `business_feature_code_authorized=false`;
-- P01.06–P01.12 remain `planned`;
+- P01.07–P01.12 remain `planned`;
 - ADR-0006 remains historical-only.
 
 ## Active P01 package sequence
@@ -81,10 +83,17 @@ Current bounded state:
 - P01.02 — **Configuration & environment system**: `done`; PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
 - P01.03 — **Structured error & result conventions**: `done`; PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
 - P01.04 — **PostgreSQL connection & migration foundation**: `done`; PR #46, run `32567842071`, job `97019012280`, merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
-- P01.05 — **Cache abstraction**: sole `active` package.
-- P01.06–P01.12: `planned`.
+- P01.05 — **Cache abstraction**: `done`; PR #48, run `32571147128`, job `97026673348`, merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`.
+- P01.06 — **Object & file storage abstraction**: sole `active` package.
+- P01.07–P01.12: `planned`.
 
-Advancing again requires P01.05 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence and a governed state reconciliation.
+Advancing again requires P01.06 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, P01.01-P01.05 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
+
+## Active P01.06 bounds
+
+P01.06 may implement only the governed S3-compatible object/file storage foundation: provider adapter, bucket/container configuration, namespaced/versioned object keys, streamed bounded upload/download, untrusted metadata handling, integrity/checksum hooks, put/get/head/delete, provider timeout/cancellation/error mapping and synthetic S3-compatible verification.
+
+It may not implement media library/CMS/file UI, public URL/CDN/image processing, tenant document/business models, module runtime, event/job fabric, retention/legal-hold behavior, later P01 capabilities or business features. Object keys do not imply authorization; provider credentials are RESTRICTED; path traversal cannot escape the storage namespace.
 
 ## Future browser UI planning requirement
 
@@ -108,8 +117,9 @@ P01.01: DONE
 P01.02: DONE
 P01.03: DONE
 P01.04: DONE
-P01.05: ACTIVE — Cache abstraction
-P01.06-P01.12: PLANNED
+P01.05: DONE
+P01.06: ACTIVE — Object & file storage abstraction
+P01.07-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
