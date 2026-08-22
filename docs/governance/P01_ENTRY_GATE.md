@@ -3,7 +3,7 @@
 Status: **SATISFIED — P01 execution active under strict sequential package control**  
 Owner phase: **P01 — Omnexa Kernel**
 
-Foundation Architecture v1 remains frozen. This document preserves the evidence that cleared executable kernel entry; it does not authorize business-domain implementation.
+Foundation Architecture v1 remains frozen. This document preserves the controls that authorize bounded executable kernel work; it does not authorize business-domain implementation.
 
 ## Entry controls
 
@@ -16,92 +16,85 @@ Evidence: `FOUNDATION_FREEZE_REVIEW.md`, `FOUNDATION_FREEZE.json`, ADR-0010.
 State: **SATISFIED**  
 Tracker: **Issue #3 — closed/completed**
 
-Verified 2026-08-22:
+Verified repository behavior includes:
 
-- repository visibility is `public`;
-- live GitHub branch metadata reports `main protected: true`;
-- required check is `governance`;
-- PR #34 intentionally failed `governance` in run `32540836431`; GitHub rejected merge with `Required status check "governance" is failing`;
-- controlled direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
-- force-update probe was rejected;
-- PR #37 run `32541439589` proved conversation resolution enforcement: an unresolved review thread blocked merge until explicit resolution;
-- green PR #35 merged normally;
-- force pushes and deletion of `main` remain blocked by the configured ruleset.
+- `protected: true` for `main`;
+- PR-only integration with strict required `governance`;
+- intentionally failing governance probe run `32540836431` blocked merge;
+- direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
+- force updates remain rejected;
+- conversation-resolution probe run `32541439589` blocked merge until the review thread was resolved;
+- green integration is permitted only when all required controls are satisfied.
 
-Current single-maintainer review policy intentionally requires `0` approvals and does not require Code Owner review. Tighten this when an independent reviewer exists.
+Current single-maintainer policy uses zero required approvals and does not require Code Owner review until an independent reviewer exists.
+
+P01.06 integration also reconfirmed the strict up-to-date requirement: PR #50 could not merge while its branch lagged protected `main`, despite previously green workflow runs. The branch was synchronized with current `main`, fresh run `32588244996` passed, and the PR then merged normally. Protection was not bypassed or weakened.
 
 ### EG-03 — executable verification lane
 State: **SATISFIED**  
 Tracker: **Issue #14 — closed/completed**
 
-Canonical governance CI is GitHub-hosted only:
-
-```yaml
-runs-on: ubuntu-24.04
-```
-
-The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
+Canonical governance CI is GitHub-hosted only on `ubuntu-24.04`. The job is named `governance` and fails closed unless the runner environment is GitHub-hosted Linux/X64. Local/self-hosted governance runners are prohibited.
 
 ### EG-04 — canonical executable verification command
 State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
-P01.01 established the pinned Go workspace/build verifier. P01.02 added the configuration/security verifier. P01.03 added the structured-failure/security verifier. P01.04 added the PostgreSQL connection/migration verifier. P01.05 added the Redis-compatible cache verifier and permanent repository-wide Go quality gate. Every completed-package regression verifier remains mandatory in the same GitHub-hosted governance job.
+Completed package regression verifiers remain mandatory in the same GitHub-hosted governance job. Repository Go quality remains enforced by `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
 
-Canonical evidence:
+Canonical completed-package evidence:
 
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
-- `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
+- `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`.
 
-Latest completed-package evidence is PR #48, run `32571147128`, job `97026673348`, merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`. The same run passed `golangci-lint v2.12.2` with zero issues and `govulncheck v1.7.0` with no reachable vulnerabilities.
+Latest completed-package implementation evidence is P01.06 PR #50, final strict-up-to-date run `32588244996`, job `97067784835`, merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
-Current bounded state:
+Current bounded state after the governed P01.06 closure transition:
 
 - P00/P00.10: `done`;
 - P01: `active`;
-- P01.01: `done`;
-- P01.02: `done`;
-- P01.03: `done`;
-- P01.04: `done`;
-- P01.05: `done`;
-- P01.06: `active`;
-- `kernel_code_authorized=true`;
-- `business_feature_code_authorized=false`;
-- P01.07–P01.12 remain `planned`;
-- ADR-0006 remains historical-only.
+- P01.01-P01.06: `done`;
+- P01.07: `active`;
+- P01.08-P01.12: `planned`;
+- `kernel_code_authorized=true` only for P01.07;
+- `business_feature_code_authorized=false`.
 
 ## Active P01 package sequence
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
 
-- P01.01 — **Go workspace / build skeleton**: `done`.
-- P01.02 — **Configuration & environment system**: `done`; PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
-- P01.03 — **Structured error & result conventions**: `done`; PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
-- P01.04 — **PostgreSQL connection & migration foundation**: `done`; PR #46, run `32567842071`, job `97019012280`, merge `6068202415dd124d3e74a196b6e0bbca5d75c4cd`.
-- P01.05 — **Cache abstraction**: `done`; PR #48, run `32571147128`, job `97026673348`, merge `725cbbd87e9456e1be02306ce3788e43ab139bd5`.
-- P01.06 — **Object & file storage abstraction**: sole `active` package.
-- P01.07–P01.12: `planned`.
+- P01.01 — **Go workspace/build skeleton**: done.
+- P01.02 — **Configuration & environment system**: done.
+- P01.03 — **Structured error & result conventions**: done.
+- P01.04 — **PostgreSQL connection & migration foundation**: done.
+- P01.05 — **Cache abstraction**: done.
+- P01.06 — **Object & file storage abstraction**: done; PR #50 / run `32588244996` / job `97067784835` / merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
+- P01.07 — **Structured logging & OpenTelemetry baseline**: sole active package.
+- P01.08-P01.12: planned.
 
-Advancing again requires P01.06 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, P01.01-P01.05 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
+Advancing again requires P01.07 to reach `done` with its required GitHub-hosted evidence, P01.01-P01.06 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
 
-## Active P01.06 bounds
+## Active P01.07 bounds
 
-P01.06 may implement only the governed S3-compatible object/file storage foundation: provider adapter, bucket/container configuration, namespaced/versioned object keys, streamed bounded upload/download, untrusted metadata handling, integrity/checksum hooks, put/get/head/delete, provider timeout/cancellation/error mapping and synthetic S3-compatible verification.
+P01.07 may implement only the structured logging/OpenTelemetry-compatible observability baseline defined in `docs/roadmap/work-packages/P01.07.md`: stable structured fields, levels/defaults, correlation/trace context helpers, OpenTelemetry resource/provider lifecycle, vendor-neutral exporter configuration, bounded shutdown/flush, redaction/filtering hooks and deterministic test capture.
 
-It may not implement media library/CMS/file UI, public URL/CDN/image processing, tenant document/business models, module runtime, event/job fabric, retention/legal-hold behavior, later P01 capabilities or business features. Object keys do not imply authorization; provider credentials are RESTRICTED; path traversal cannot escape the storage namespace.
+It may not implement product analytics/business metrics, dashboards/alerts/SLO automation, domain-specific telemetry, audit semantics, health/readiness, scheduler/feature-registry/audit transport, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
+
+Secrets, tokens, private keys and raw `RESTRICTED` content are prohibited from telemetry by default. Correlation IDs are not authorization credentials. Observability outage must not become a correctness/security bypass.
 
 ## Future browser UI planning requirement
 
-`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` records the future W3C/WCAG/WAVE execution requirements for authorized browser UI packages. It does not alter this P01 entry authorization and does not unlock business/UI implementation.
+`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` remains a planning requirement for future authorized browser UI packages. It does not alter P01 execution authorization.
 
 ## External distribution / Issue #4
 
-Issue #4 remains open for licensing/IP/trademark and public-launch decisions. The repository remains public and the current `LICENSE` remains GPLv3. This external distribution gate does not block the currently authorized P01 kernel engineering scope.
+Issue #4 remains open for licensing/IP/trademark and public-launch decisions. The repository remains public and the current `LICENSE` remains GPLv3. This external distribution gate does not block currently authorized P01 kernel engineering.
 
 ## Current decision
 
@@ -110,16 +103,11 @@ Foundation Architecture v1: FROZEN
 P00: DONE
 Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
-Live main protection: protected:true
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01: DONE
-P01.02: DONE
-P01.03: DONE
-P01.04: DONE
-P01.05: DONE
-P01.06: ACTIVE — Object & file storage abstraction
-P01.07-P01.12: PLANNED
+P01.01-P01.06: DONE
+P01.07: ACTIVE — Structured logging & OpenTelemetry baseline
+P01.08-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```

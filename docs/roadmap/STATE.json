@@ -5,12 +5,12 @@
   "last_reconciled": "2026-08-22",
   "program": "kernel",
   "current_phase": "P01",
-  "current_work_package": "P01.06",
+  "current_work_package": "P01.07",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P01.06 object and file storage abstraction implementation",
+      "P01.07 structured logging and OpenTelemetry baseline implementation",
       "P01 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -49,7 +49,7 @@
       "green_integration_pr": 35,
       "green_integration_merge": "843c615170058ab900ba69516dbed80a47f26973",
       "historical_private_attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
-      "note": "Issue #3 is closed. main reports protected=true; direct push and force-push probes were rejected; failed governance blocked PR #34; unresolved conversation blocked PR #37 until resolution; green PR #35 merged normally. Branch deletion remains blocked by the configured ruleset; destructive deletion of the default branch was intentionally not attempted. Current single-maintainer review policy requires zero approvals and does not require Code Owner review until an independent reviewer exists."
+      "note": "Issue #3 is closed. main reports protected=true; PR-only integration, strict required governance, direct/force update rejection and required conversation resolution remain enforced. Current single-maintainer review policy requires zero approvals and does not require Code Owner review until an independent reviewer exists."
     },
     "github_actions_ci": {
       "state": "operational_github_hosted",
@@ -58,16 +58,14 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32571147128,
-      "job": 97026673348,
+      "workflow_run": 32588244996,
+      "job": 97067784835,
       "evidence_environment": "github-hosted",
-      "evidence_runner": "GitHub Actions 1000009072",
-      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_os": "Ubuntu 24.04",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
-      "runner_image_version": "20260816.277.1",
       "final_check": "governance",
-      "note": "P01.05 PR #48 final run 32571147128 / job 97026673348 passed repository Go quality, P01.01-P01.04 regressions and P01.05 Valkey G1/G2/G3/G5/G6/G7 gates using Valkey 9.1.1 / valkey-go v1.0.75 on GitHub-hosted ubuntu-24.04. Local/self-hosted runners remain prohibited."
+      "note": "P01.06 PR #50 final strict-up-to-date run 32588244996 / job 97067784835 passed repository Go quality, P01.01-P01.05 regressions and P01.06 G1/G2/G3/G5/G6/G7 gates using adobe/s3mock:5.1.0 and the pinned AWS SDK for Go v2 storage dependencies. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -81,10 +79,10 @@
   "p01_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P01.06",
-    "work_package_name": "Object & file storage abstraction",
+    "next_work_package": "P01.07",
+    "work_package_name": "Structured logging & OpenTelemetry baseline",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P01.06.md",
+    "work_package_spec": "docs/roadmap/work-packages/P01.07.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
     "mandatory_spec_count": 12,
@@ -92,7 +90,7 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01-P01.05 are done with GitHub-hosted executable evidence. P01.06 is the sole active kernel work package. P01.07-P01.12 remain planned and may not activate until the previous package is done."
+    "note": "P01.01-P01.06 are done with GitHub-hosted executable evidence. P01.07 is the sole active kernel work package. P01.08-P01.12 remain planned and may not activate until the previous package is done."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -100,7 +98,7 @@
     "name": "Omnexa Kernel",
     "state": "active",
     "mandatory_work_packages": 12,
-    "done_work_packages": 5,
+    "done_work_packages": 6,
     "work_packages": [
       {
         "id": "P01.01",
@@ -189,8 +187,36 @@
           "docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"
         ]
       },
-      {"id":"P01.06","name":"Object & file storage abstraction","state":"active","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md"},
-      {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"planned","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
+      {
+        "id": "P01.06",
+        "name": "Object & file storage abstraction",
+        "state": "done",
+        "depends_on": ["P01.05"],
+        "spec": "docs/roadmap/work-packages/P01.06.md",
+        "evidence": [
+          ".github/workflows/governance.yml",
+          ".golangci.yml",
+          "go.mod",
+          "go.sum",
+          "kernel/internal/storage/classification_test.go",
+          "kernel/internal/storage/concurrency_integration_test.go",
+          "kernel/internal/storage/context_reader.go",
+          "kernel/internal/storage/errors.go",
+          "kernel/internal/storage/integration_test.go",
+          "kernel/internal/storage/key.go",
+          "kernel/internal/storage/metadata_control_test.go",
+          "kernel/internal/storage/model.go",
+          "kernel/internal/storage/restart_test.go",
+          "kernel/internal/storage/storage_test.go",
+          "kernel/internal/storage/store.go",
+          "kernel/internal/storage/stream.go",
+          "kernel/internal/storage/stream_terminal_test.go",
+          "kernel/internal/storage/timeout_test.go",
+          "scripts/verify_p01_06.sh",
+          "docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"
+        ]
+      },
+      {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"active","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
       {"id":"P01.08","name":"Health, readiness & diagnostics","state":"planned","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
       {"id":"P01.09","name":"Job & scheduler primitives","state":"planned","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
       {"id":"P01.10","name":"Feature flag & configuration registry","state":"planned","depends_on":["P01.09"],"spec":"docs/roadmap/work-packages/P01.10.md"},
@@ -200,7 +226,7 @@
   },
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
-    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.06","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.07","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
@@ -228,5 +254,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01.06 is active and is the only authorized executable kernel scope. Implement the object and file storage abstraction, obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.06 through verification to done, then activate only P01.07. Business-feature code and P02+ implementation remain unauthorized."
+  "next_transition_rule": "P01.07 is active and is the only authorized executable kernel scope. Implement the structured logging and OpenTelemetry baseline, obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.07 through verification to done, then activate only P01.08. Business-feature code and P02+ implementation remain unauthorized."
 }
