@@ -15,12 +15,12 @@
     {"id":"P01.05","name":"Cache abstraction","state":"done","depends_on":["P01.04"],"spec":"docs/roadmap/work-packages/P01.05.md"},
     {"id":"P01.06","name":"Object & file storage abstraction","state":"done","depends_on":["P01.05"],"spec":"docs/roadmap/work-packages/P01.06.md"},
     {"id":"P01.07","name":"Structured logging & OpenTelemetry baseline","state":"done","depends_on":["P01.06"],"spec":"docs/roadmap/work-packages/P01.07.md"},
-    {"id":"P01.08","name":"Health, readiness & diagnostics","state":"active","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
-    {"id":"P01.09","name":"Job & scheduler primitives","state":"planned","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
+    {"id":"P01.08","name":"Health, readiness & diagnostics","state":"done","depends_on":["P01.07"],"spec":"docs/roadmap/work-packages/P01.08.md"},
+    {"id":"P01.09","name":"Job & scheduler primitives","state":"active","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
     {"id":"P01.10","name":"Feature flag & configuration registry","state":"planned","depends_on":["P01.09"],"spec":"docs/roadmap/work-packages/P01.10.md"},
     {"id":"P01.11","name":"Audit transport foundation","state":"planned","depends_on":["P01.10"],"spec":"docs/roadmap/work-packages/P01.11.md"},
     {"id":"P01.12","name":"Developer CLI baseline","state":"planned","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
   ],
   "phase_exit": "Fresh install from zero must start, migrate, health-check, emit telemetry and run tests reproducibly without hidden manual steps.",
-  "note": "P01 is active. P01.01-P01.07 are done with GitHub-hosted executable evidence. P01.08 is the sole active executable kernel package; P01.09-P01.12 remain planned. Business-feature code remains unauthorized."
+  "note": "P01 is active. P01.01-P01.08 are done with GitHub-hosted executable evidence. P01.09 is the sole active executable kernel package; P01.10-P01.12 remain planned. Business-feature code remains unauthorized."
 }
