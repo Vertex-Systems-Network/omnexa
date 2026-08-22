@@ -28,21 +28,22 @@ type Settings struct {
 
 // Future is an in-memory completion handle for one queued request.
 type Future struct {
-	done <-chan outcome
+	completion *completion
 }
 
-// Wait returns the terminal outcome without changing execution ownership. A
-// caller that stops waiting does not silently grant permission to replay work.
+// Wait returns the repeatable terminal outcome without changing execution
+// ownership. A caller that stops waiting does not silently grant permission to
+// replay work.
 func (future *Future) Wait(ctx context.Context) (Result, error) {
-	if future == nil || future.done == nil {
+	if future == nil || future.completion == nil || future.completion.done == nil {
 		return Result{}, classifiedFailure(codeRequestInvalid, failure.CategoryValidation, "job completion handle is invalid", false)
 	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	select {
-	case completed := <-future.done:
-		return completed.result, completed.err
+	case <-future.completion.done:
+		return future.completion.outcome.result, future.completion.outcome.err
 	case <-ctx.Done():
 		return Result{}, contextFailure(ctx.Err())
 	}
@@ -52,24 +53,30 @@ func (future *Future) Wait(ctx context.Context) (Result, error) {
 // jobs. It intentionally has no persistence or delivery guarantee across a
 // process restart.
 type Executor struct {
-	registry    *Registry
-	logger      *observability.Logger
-	settings    Settings
-	queue       chan queuedRequest
-	rootCtx     context.Context
-	rootCancel  context.CancelFunc
-	workers     sync.WaitGroup
-	mu          sync.RWMutex
-	accepting   bool
-	shutdown    sync.Once
+	registry     *Registry
+	logger       *observability.Logger
+	settings     Settings
+	queue        chan queuedRequest
+	rootCtx      context.Context
+	rootCancel   context.CancelFunc
+	workers      sync.WaitGroup
+	work         sync.WaitGroup
+	mu           sync.RWMutex
+	accepting    bool
+	shutdown     sync.Once
 	shutdownDone chan struct{}
-	idempotency memoryIdempotency
+	idempotency  memoryIdempotency
 }
 
 type queuedRequest struct {
-	ctx     context.Context
-	request Request
-	done    chan outcome
+	ctx        context.Context
+	request    Request
+	completion *completion
+}
+
+type completion struct {
+	done    chan struct{}
+	outcome outcome
 }
 
 type outcome struct {
@@ -117,7 +124,8 @@ func NewExecutor(registry *Registry, logger *observability.Logger, settings Sett
 }
 
 // Execute runs one request synchronously using the same registry, retry,
-// idempotency, context, and observability contracts as queued work.
+// idempotency, context, and observability contracts as queued work. Admission is
+// lifecycle-aware: once shutdown starts, no new synchronous work is accepted.
 func (executor *Executor) Execute(ctx context.Context, request Request) (Result, error) {
 	if executor == nil || executor.registry == nil {
 		return Result{}, classifiedFailure(codeExecutorInvalid, failure.CategoryInvariant, "job executor is invalid", false)
@@ -126,6 +134,23 @@ func (executor *Executor) Execute(ctx context.Context, request Request) (Result,
 		ctx = context.Background()
 	}
 
+	executor.mu.RLock()
+	if !executor.accepting {
+		executor.mu.RUnlock()
+		return Result{}, classifiedFailure(codeExecutorStopping, failure.CategoryUnavailable, "job executor is not accepting work", false)
+	}
+	executor.work.Add(1)
+	executor.mu.RUnlock()
+	defer executor.work.Done()
+
+	executionCtx, cancel := linkedContext(ctx, executor.rootCtx)
+	defer cancel()
+	return executor.execute(executionCtx, request)
+}
+
+// execute runs work that has already passed executor admission. Queue workers
+// use this path so requests accepted before shutdown can drain normally.
+func (executor *Executor) execute(ctx context.Context, request Request) (Result, error) {
 	policy, err := validateRequest(request)
 	if err != nil {
 		return Result{}, err
@@ -185,26 +210,34 @@ func (executor *Executor) Enqueue(ctx context.Context, request Request) (*Future
 		return nil, contextFailure(ctx.Err())
 	}
 
-	done := make(chan outcome, 1)
-	queued := queuedRequest{ctx: ctx, request: request, done: done}
+	completion := &completion{done: make(chan struct{})}
+	queued := queuedRequest{ctx: ctx, request: request, completion: completion}
 
 	executor.mu.RLock()
 	defer executor.mu.RUnlock()
 	if !executor.accepting {
 		return nil, classifiedFailure(codeExecutorStopping, failure.CategoryUnavailable, "job executor is not accepting work", false)
 	}
+
+	// Accepted work is registered before it becomes visible to a worker. Holding
+	// the read lock guarantees Shutdown cannot begin waiting until this admission
+	// decision is complete.
+	executor.work.Add(1)
 	select {
 	case executor.queue <- queued:
-		return &Future{done: done}, nil
+		return &Future{completion: completion}, nil
 	case <-ctx.Done():
+		executor.work.Done()
 		return nil, contextFailure(ctx.Err())
 	default:
+		executor.work.Done()
 		return nil, classifiedFailure(codeQueueFull, failure.CategoryUnavailable, "job queue is full", true)
 	}
 }
 
-// Shutdown stops accepting work, drains queued work while the supplied context
-// remains valid, then cancels active work if the shutdown deadline is reached.
+// Shutdown stops accepting work, drains work accepted before shutdown while the
+// supplied context remains valid, then cancels active work if the shutdown
+// deadline is reached.
 func (executor *Executor) Shutdown(ctx context.Context) error {
 	if executor == nil {
 		return classifiedFailure(codeExecutorInvalid, failure.CategoryInvariant, "job executor is invalid", false)
@@ -220,6 +253,7 @@ func (executor *Executor) Shutdown(ctx context.Context) error {
 		executor.mu.Unlock()
 
 		go func() {
+			executor.work.Wait()
 			executor.workers.Wait()
 			executor.rootCancel()
 			close(executor.shutdownDone)
@@ -239,10 +273,11 @@ func (executor *Executor) worker() {
 	defer executor.workers.Done()
 	for queued := range executor.queue {
 		executionCtx, cancel := linkedContext(queued.ctx, executor.rootCtx)
-		result, err := executor.Execute(executionCtx, queued.request)
+		result, err := executor.execute(executionCtx, queued.request)
 		cancel()
-		queued.done <- outcome{result: result, err: err}
-		close(queued.done)
+		queued.completion.outcome = outcome{result: result, err: err}
+		close(queued.completion.done)
+		executor.work.Done()
 	}
 }
 
