@@ -16,7 +16,17 @@ Evidence: `FOUNDATION_FREEZE_REVIEW.md`, `FOUNDATION_FREEZE.json`, ADR-0010.
 State: **SATISFIED**  
 Tracker: **Issue #3 — closed/completed**
 
-Verified repository behavior includes `main protected:true`, PR-only integration, strict required `governance`, rejected direct/force updates, failed-check merge rejection and required conversation resolution. Current single-maintainer policy uses zero required approvals and does not require Code Owner review until an independent reviewer exists.
+Verified repository behavior includes:
+
+- `protected: true` for `main`;
+- PR-only integration with strict required `governance`;
+- intentionally failing governance probe run `32540836431` blocked merge;
+- direct-update probe commit `44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2` was rejected;
+- force updates remain rejected;
+- conversation-resolution probe run `32541439589` blocked merge until the review thread was resolved;
+- green integration is permitted only when all required controls are satisfied.
+
+Current single-maintainer policy uses zero required approvals and does not require Code Owner review until an independent reviewer exists.
 
 P01.06 integration also reconfirmed the strict up-to-date requirement: PR #50 could not merge while its branch lagged protected `main`, despite previously green workflow runs. The branch was synchronized with current `main`, fresh run `32588244996` passed, and the PR then merged normally. Protection was not bypassed or weakened.
 
