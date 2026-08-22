@@ -63,7 +63,7 @@ while IFS= read -r package; do
   esac
 done < <(go list -deps ./kernel/internal/database)
 
-if go list -m all | grep -E '(^|/)(gorm|entgo|bun)(/|$)' >/dev/null; then
+if go list -m all | grep -E '^(gorm\.io/|entgo\.io/ent($|/)|github\.com/uptrace/bun($|/))' >/dev/null; then
   echo "ERROR: P01.04 must not introduce an ORM" >&2
   exit 1
 fi
