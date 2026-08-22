@@ -98,7 +98,7 @@ func TestWrapPreservesCauseAndNeverPublishesPrivateCause(t *testing.T) {
 	}
 
 	for name, text := range map[string]string{
-		"Error()": failure.Error(),
+		"Error()":  failure.Error(),
 		"Public()": fmt.Sprintf("%+v", public),
 	} {
 		if strings.Contains(text, secret) || strings.Contains(text, "select-secret") || strings.Contains(text, "/home/private") {
