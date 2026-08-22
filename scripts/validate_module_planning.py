@@ -14,9 +14,23 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "docs/roadmap/modules/SUBMODULE_CATALOG.json"
 INDEX = ROOT / "docs/roadmap/modules/README.md"
+DOSSIER_STANDARD = ROOT / "docs/roadmap/modules/DOSSIER_STANDARD.md"
 BLUEPRINT = ROOT / "docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md"
+AI_PROTOCOL = ROOT / "docs/governance/AI_MODULE_EXECUTION_PROTOCOL.md"
+AI_POLICY = ROOT / "docs/governance/AI_EXECUTION_POLICY.md"
+AGENTS = ROOT / "AGENTS.md"
+MODULE_STANDARD = ROOT / "docs/architecture/MODULE_STANDARD.md"
 
-for path in (CATALOG, INDEX, BLUEPRINT):
+for path in (
+    CATALOG,
+    INDEX,
+    DOSSIER_STANDARD,
+    BLUEPRINT,
+    AI_PROTOCOL,
+    AI_POLICY,
+    AGENTS,
+    MODULE_STANDARD,
+):
     if not path.is_file():
         raise SystemExit(f"ERROR: missing module planning artifact: {path.relative_to(ROOT)}")
 
@@ -82,6 +96,7 @@ for phase in phases:
 
 index_text = INDEX.read_text(encoding="utf-8")
 for required in [
+    "DOSSIER_STANDARD.md",
     "FOUNDATION_P02_P06.md",
     "CORE_BUSINESS_P07_P15.md",
     "PLATFORM_P16_P18.md",
@@ -94,7 +109,42 @@ for required in [
     if required not in index_text:
         raise SystemExit(f"ERROR: module planning index missing reference: {required}")
 
+required_cross_document_markers = {
+    AI_POLICY: [
+        "SUBMODULE_CATALOG.json",
+        "AI_MODULE_EXECUTION_PROTOCOL.md",
+        "next incomplete authorized task",
+    ],
+    AGENTS: [
+        "SUBMODULE_CATALOG.json",
+        "AI_MODULE_EXECUTION_PROTOCOL.md",
+        "validate_module_planning.py",
+    ],
+    MODULE_STANDARD: [
+        "SUBMODULE_CATALOG.json",
+        "Option, setting and policy contract",
+        "Flow contract",
+    ],
+    AI_PROTOCOL: [
+        "SUBMODULE_CATALOG.json",
+        "No-replanning rule",
+        "Required submodule task card",
+    ],
+    DOSSIER_STANDARD: [
+        "Primary flows",
+        "Options/settings/policies",
+        "S01",
+        "S10",
+    ],
+}
+for path, markers in required_cross_document_markers.items():
+    text = path.read_text(encoding="utf-8")
+    for marker in markers:
+        if marker not in text:
+            raise SystemExit(f"ERROR: {path.relative_to(ROOT)} missing planning marker: {marker}")
+
 print("Omnexa module/submodule planning validation: PASS")
 print(f"Planned future phases: {len(phases)}")
 print(f"Preplanned submodules/families: {len(submodule_ids)}")
+print("Architecture/flow/options dossier system: ENFORCED")
 print("Implementation authority: docs/roadmap/STATE.json")
