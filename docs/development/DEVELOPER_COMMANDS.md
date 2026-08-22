@@ -73,6 +73,23 @@ Each command maps to P00.07 quality gate classes and returns a non-zero exit sta
 
 `verify all` is a deterministic aggregate, not a secret CI-only path.
 
+## P01.01 current executable mapping
+
+P01.01 introduces the first repository-owned executable verification wrapper while preserving the semantic command contract above:
+
+```text
+bash scripts/verify_p01_01.sh
+```
+
+For the active **Go workspace/build skeleton** package, that wrapper is the canonical shared local/CI implementation for the applicable subset of quality semantics:
+
+- `verify format` -> `gofmt` cleanliness;
+- `verify static` -> exact pinned Go version, workspace/module canonicality, `go vet`, and dependency-boundary validation;
+- `verify unit` -> `go test ./kernel/...`;
+- `verify build` -> trimmed kernel build plus deterministic process smoke test and build-metadata leakage check.
+
+The GitHub-hosted `governance` job invokes this same wrapper after the governance/specification validators. P01.01 does **not** implement the final `omnexa verify ...` CLI; that broader developer CLI belongs to P01.12. Contract/integration/migration/security/module-lifecycle/release checks that have no P01.01 implementation surface remain governed `N/A` rather than being fabricated as PASS.
+
 ## Module developer commands
 
 Future module SDK/CLI should support semantically stable operations such as:
