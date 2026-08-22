@@ -58,7 +58,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Why:** each kernel primitive becomes a verified dependency for the next package; multiple active foundation packages make evidence and authority ambiguous.
 
-**Current implication:** P01.07 implementation is merged and completion-eligible. Closure PR #55 proposes P01.01-P01.07 `done` and P01.08 as the sole active package. Until PR #55 merges, protected `main` remains authoritative and still records P01.07 as active. P01.08 runtime must not start before that transition; P01.09 remains blocked until P01.08 later completes and transitions canonically.
+**Current implication:** P01.08 implementation is merged and completion-eligible. Closure PR #58 proposes P01.01-P01.08 `done` and P01.09 as the sole active package. Until PR #58 merges, protected `main` remains authoritative and still records P01.08 as active. P01.09 runtime must not start before that transition; P01.10 remains blocked until P01.09 later completes and transitions canonically.
 
 ## D-007 — Repository continuity is a subordinate snapshot, not a new source of truth
 
@@ -91,3 +91,15 @@ This file preserves concise rationale that a future AI must not forget. It refer
 **Rejected:** proprietary telemetry coupling in the kernel contract, global-provider mutation as hidden process state, raw secret/classified/error leakage, audit semantics in ordinary logs, or treating telemetry availability as application correctness.
 
 **Future dependency:** P01.08 consumes the completed observability boundary for health/diagnostic integration; later audit/business/AI systems must preserve their own ownership and authority boundaries.
+
+## D-010 — Health/readiness diagnostics are bounded operational signals, not authority
+
+**Authoritative source:** `docs/roadmap/work-packages/P01.08.md`, `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`, `AGENTS.md`.
+
+**Why:** a process can be alive while temporarily unsuitable for work; optional dependency degradation must not be conflated with process death, and operational diagnostics must never become an authorization or business-state channel.
+
+**Implemented P01.08 direction:** liveness and readiness are distinct; dependency checks have explicit required/optional/security-critical classification; required/security-critical failures fail readiness closed; optional failures can degrade; checks are timeout/cancellation bounded and panic-safe; reports expose stable machine states/reasons and build identity without retaining raw probe/provider errors.
+
+**Rejected:** one generic health boolean, unbounded probes, raw secret/provider error exposure, treating object keys/connection details as diagnostics, module/tenant aggregation before P03, public business status semantics, or Kubernetes-specific architecture as the kernel contract.
+
+**Future dependency:** P01.09 and later kernel/runtime packages may consume safe observability/health primitives but must preserve their authority boundaries. P01.08 does not authorize scheduler, feature registry, audit transport, business state or AI behavior.
