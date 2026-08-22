@@ -84,34 +84,38 @@ bash scripts/verify_p01_02.sh
 bash scripts/verify_p01_03.sh
 P01_04_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_04.sh
 P01_05_TEST_CACHE_ADDRESS=127.0.0.1:6379 P01_05_TEST_VALKEY_IMAGE=valkey/valkey:9.1.1 bash scripts/verify_p01_05.sh
+P01_06_TEST_STORAGE_ENDPOINT=http://127.0.0.1:9090 P01_06_TEST_S3_IMAGE=adobe/s3mock:5.1.0 bash scripts/verify_p01_06.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior.
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior. P01.06 covers the S3-compatible object/file storage foundation, including deterministic namespaced/versioned keys, bounded streaming, untrusted metadata validation, integrity checks, missing-object semantics, provider timeout/cancellation/unavailability, concurrent integration and provider restart behavior.
 
-Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.05 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6 and P01.05 provisions Valkey 9.1.1 as governed synthetic services. The final `omnexa verify ...` CLI remains owned by P01.12.
+Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.06 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. The final `omnexa verify ...` CLI remains owned by P01.12.
 
 ## Completed P01.05
 
 P01.05 is complete with canonical evidence in `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Cache/provider mappings retain lower-level causes privately while public failures remain provider/credential safe.
 
-## Active P01.06
+## Completed P01.06
 
-P01.06 — Object & file storage abstraction is the sole active executable kernel package. Its implementation PR must add a fail-closed `scripts/verify_p01_06.sh` and a governed S3-compatible synthetic test provider/service before P01.06 can complete.
+P01.06 is complete with canonical evidence in `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Storage/provider mappings retain lower-level causes privately while public failures remain provider/credential safe; object identity does not imply tenancy or authorization.
 
-The active P01.06 verifier must map package requirements to:
+## Active P01.07
 
-- `verify format` / `verify static` -> pinned toolchain, repository Go quality, formatting/static checks and storage-package dependency/scope boundaries;
-- `verify unit` -> deterministic object-key namespace/version behavior, metadata/key validation, integrity/checksum helpers and missing-object semantics;
-- `verify integration` -> S3-compatible put/get/head/delete, missing-object behavior and provider contract tests against a real synthetic provider;
-- streaming evidence -> large synthetic objects must prove bounded-memory streaming rather than whole-object buffering;
-- `verify security` -> provider-secret/signed-URL/content redaction, path-traversal containment and no CMS/media/business/tenant/later-capability pull-forward;
-- lifecycle/resilience evidence -> bounded provider unavailable/timeout/cancellation behavior and recoverability appropriate to the selected provider;
-- `verify build` -> complete kernel package build with pinned storage dependency metadata;
-- completed P01.01-P01.05 regression preservation.
+P01.07 — Structured logging & OpenTelemetry baseline is the sole active executable kernel package after the P01.06 closure transition.
 
-Until that active verifier/service exists and passes on the canonical GitHub-hosted lane, P01.06 cannot be marked done.
+The active P01.07 implementation must map package requirements to:
+
+- `verify format` / `verify static` -> pinned toolchain, repository Go quality, formatting/static checks and observability package dependency/scope boundaries;
+- `verify unit` -> structured-record field conventions, level/default behavior, context propagation, redaction/filtering and deterministic test capture;
+- `verify integration` -> OpenTelemetry-compatible resource/provider/exporter lifecycle using governed deterministic test infrastructure where required by the package specification;
+- `verify security` -> prohibited secret/token/private-key/RESTRICTED-content redaction and no audit/business/tenant/later-capability pull-forward;
+- lifecycle/resilience evidence -> bounded exporter failure plus shutdown/flush behavior; observability failure must not alter application correctness;
+- `verify build` -> complete kernel package build with pinned observability dependency metadata;
+- completed P01.01-P01.06 regression preservation.
+
+P01.07 may not implement P01.08 health/readiness, P01.09 scheduler, P01.10 feature registry, P01.11 audit transport, business telemetry/analytics, domain-specific telemetry or AI runtime functionality. P01.08 becomes eligible only after P01.07 completion evidence and a separate governed transition.
 
 ## Go result convention — completed P01.03
 
@@ -123,7 +127,7 @@ value, err := operation()
 
 The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
 
-P01.04 database/provider mappings and P01.05 cache/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.06 storage/provider mappings must follow the same boundary. Transport adapters and telemetry emission remain owned by their later packages.
+P01.04 database/provider, P01.05 cache/provider and P01.06 storage/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.07 telemetry must not expose those private causes or sensitive configuration merely because observability is available.
 
 ## Configuration startup contract
 
@@ -158,7 +162,22 @@ OMNEXA_CACHE_MAX_VALUE_BYTES=1048576
 OMNEXA_CACHE_MAX_TTL=24h
 ```
 
-P01.06 may add only storage-specific configuration justified by its active specification. Storage credentials/endpoints/bucket secrets are sensitive or RESTRICTED as applicable and must never be printed in logs, public failures or artifacts.
+P01.06 storage settings are the completed boundary extension implemented by `kernel/internal/storage/store.go`:
+
+```text
+OMNEXA_STORAGE_ENDPOINT=<sensitive S3-compatible endpoint>
+OMNEXA_STORAGE_ACCESS_KEY=<sensitive provider access key>
+OMNEXA_STORAGE_SECRET_KEY=<RESTRICTED provider secret>
+OMNEXA_STORAGE_REGION=us-east-1
+OMNEXA_STORAGE_BUCKET=<governed bucket>
+OMNEXA_STORAGE_USE_PATH_STYLE=true
+OMNEXA_STORAGE_CONNECT_TIMEOUT=3s
+OMNEXA_STORAGE_OPERATION_TIMEOUT=5s
+OMNEXA_STORAGE_KEY_PREFIX=omnexa
+OMNEXA_STORAGE_MAX_OBJECT_BYTES=1073741824
+```
+
+P01.07 may add only observability-specific configuration justified by its active specification. Exporter endpoints/credentials and any sensitive telemetry configuration must use the existing configuration/secret handling rules; telemetry must not log its own secrets.
 
 Configuration precedence remains:
 
