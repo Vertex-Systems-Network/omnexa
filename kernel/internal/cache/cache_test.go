@@ -119,9 +119,9 @@ func TestRenderKeyIsDeterministicVersionedAndScoped(t *testing.T) {
 	otherNamespace, _ := RenderKey("omnexa", Key{Namespace: "kernel.other", Version: 2, Name: "fixture"})
 	otherName, _ := RenderKey("omnexa", Key{Namespace: "kernel.cache", Version: 2, Name: "other"})
 	for label, value := range map[string]string{
-		"version": otherVersion,
+		"version":   otherVersion,
 		"namespace": otherNamespace,
-		"name": otherName,
+		"name":      otherName,
 	} {
 		if value == first {
 			t.Fatalf("%s change collided with base cache key", label)
