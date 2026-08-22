@@ -49,21 +49,22 @@ Canonical completed-package evidence:
 - `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
 - `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`;
-- `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`.
+- `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`.
 
-Latest completed-package implementation evidence is P01.07 PR #54, final strict-up-to-date run `32595413156`, job `97085413083`, merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
+Latest completed-package implementation evidence is P01.08 PR #56, final strict-up-to-date head `988ef3673d49f54bbd105d3e0067ba134c66b236`, run `32601741049`, job `97100949202`, merge `a2a93454bb283464bfa144bb5a38539041e40069`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
-Current bounded state after the governed P01.07 closure transition:
+Current bounded state after the governed P01.08 closure transition:
 
 - P00/P00.10: `done`;
 - P01: `active`;
-- P01.01-P01.07: `done`;
-- P01.08: `active`;
-- P01.09-P01.12: `planned`;
-- `kernel_code_authorized=true` only for P01.08;
+- P01.01-P01.08: `done`;
+- P01.09: `active`;
+- P01.10-P01.12: `planned`;
+- `kernel_code_authorized=true` only for P01.09;
 - `business_feature_code_authorized=false`.
 
 ## Active P01 package sequence
@@ -77,18 +78,19 @@ Current bounded state after the governed P01.07 closure transition:
 - P01.05 — **Cache abstraction**: done.
 - P01.06 — **Object & file storage abstraction**: done; PR #50 / run `32588244996` / job `97067784835` / merge `f7867d9e1c570e3abbed90740970acf7b5a30bd7`.
 - P01.07 — **Structured logging & OpenTelemetry baseline**: done; PR #54 / run `32595413156` / job `97085413083` / merge `245fd67d60c02a5ed546f0cd4dc934345b5b4d42`.
-- P01.08 — **Health, readiness & diagnostics**: sole active package.
-- P01.09-P01.12: planned.
+- P01.08 — **Health, readiness & diagnostics**: done; PR #56 / run `32601741049` / job `97100949202` / merge `a2a93454bb283464bfa144bb5a38539041e40069`.
+- P01.09 — **Job & scheduler primitives**: sole active package.
+- P01.10-P01.12: planned.
 
-Advancing again requires P01.08 to reach `done` with its required GitHub-hosted evidence, P01.01-P01.07 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
+Advancing again requires P01.09 to reach `done` with its required GitHub-hosted evidence, P01.01-P01.08 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
 
-## Active P01.08 bounds
+## Active P01.09 bounds
 
-P01.08 may implement only the health/readiness/diagnostic foundation defined in `docs/roadmap/work-packages/P01.08.md`: distinct liveness/readiness semantics, dependency check registry with criticality, bounded timeout/cancellation, startup/readiness transitions, safe diagnostic machine states, build/version identity integration, P01.07 observability integration and deterministic healthy/degraded/unready tests.
+P01.09 may implement only the job/scheduler foundation defined in `docs/roadmap/work-packages/P01.09.md`: deterministic job identity/type registration, kernel-local enqueue/execute result semantics, bounded worker concurrency, graceful bounded shutdown/drain/cancel, cancellation/deadline propagation, bounded retry/backoff, explicit idempotency-key hooks, simple recurring/one-shot kernel maintenance schedules, P01.07 observability/correlation propagation and a deterministic in-memory/test harness.
 
-It may not implement a public business status page, P03 tenant/module health aggregation, SLO alerting/orchestration automation, Kubernetes-specific architecture, privileged sensitive diagnostics, scheduler/feature-registry/audit/CLI behavior, identity/tenancy/module/event/workflow/business behavior or AI/model/agent/planner functionality.
+It may not implement NATS/JetStream or other P04 durable streams/event consumers, transactional outbox/inbox, P05 distributed workflow timers, business jobs/workflows, tenant-context implementation before P02, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI, P02+ behavior or AI/model/agent/planner functionality.
 
-Health output must not expose connection strings, host secrets, credentials, SQL, object keys or sensitive payloads. Liveness and readiness are distinct operational signals. Diagnostic state does not grant authorization or become business truth.
+Scheduler/job identity does not grant authority. Retries must be bounded and may not silently duplicate protected side effects. Future tenant/actor scope remains explicit and must be revalidated when its owning phase exists.
 
 ## Future browser UI planning requirement
 
@@ -107,9 +109,9 @@ Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01-P01.07: DONE
-P01.08: ACTIVE — Health, readiness & diagnostics
-P01.09-P01.12: PLANNED
+P01.01-P01.08: DONE
+P01.09: ACTIVE — Job & scheduler primitives
+P01.10-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
