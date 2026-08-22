@@ -58,7 +58,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Why:** each kernel primitive becomes a verified dependency for the next package; multiple active foundation packages make evidence and authority ambiguous.
 
-**Current implication:** P01.06 is active; P01.07 is blocked until P01.06 is done and canonical state transitions.
+**Current implication:** after the governed P01.06 closure transition, P01.01-P01.06 are done and P01.07 is the sole active package. P01.08 remains blocked until P01.07 is done and canonical state transitions again. While closure PR #53 is unmerged, protected `main` remains authoritative and still records P01.06 as active.
 
 ## D-007 — Repository continuity is a subordinate snapshot, not a new source of truth
 
