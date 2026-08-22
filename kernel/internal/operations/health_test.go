@@ -154,7 +154,12 @@ func TestCallerCancellationIsBoundedAndClassified(t *testing.T) {
 }
 
 func TestDiagnosticSummaryAndObservabilityDoNotExposeProbeErrors(t *testing.T) {
-	const secret = "postgres://admin:super-secret@db.internal/omnexa?token=abc123"
+	probeText := strings.Join([]string{
+		"connection=internal-db",
+		"|private-marker=must-not-emit",
+		"|auth-marker=synthetic-value",
+		"|object-ref=tenant/private/file.pdf",
+	}, "")
 	logger, capture := captureLogger(t)
 	manager := NewManager(logger)
 	mustRegister(t, manager, Dependency{
@@ -162,7 +167,7 @@ func TestDiagnosticSummaryAndObservabilityDoNotExposeProbeErrors(t *testing.T) {
 		Criticality: CriticalityRequired,
 		Timeout:     100 * time.Millisecond,
 		Check: func(context.Context) error {
-			return errors.New(secret + " object-key=tenant/private/file.pdf")
+			return errors.New(probeText)
 		},
 	})
 	manager.MarkReady()
@@ -172,8 +177,10 @@ func TestDiagnosticSummaryAndObservabilityDoNotExposeProbeErrors(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal report: %v", err)
 	}
-	if strings.Contains(string(encoded), "super-secret") || strings.Contains(string(encoded), "abc123") || strings.Contains(string(encoded), "tenant/private") {
-		t.Fatalf("diagnostic report leaked private probe text: %s", encoded)
+	for _, marker := range []string{"must-not-emit", "synthetic-value", "tenant/private"} {
+		if strings.Contains(string(encoded), marker) {
+			t.Fatalf("diagnostic report leaked private probe marker %q: %s", marker, encoded)
+		}
 	}
 	if !strings.Contains(string(encoded), `"reason":"failed"`) {
 		t.Fatalf("diagnostic report missing stable failure reason: %s", encoded)
@@ -188,8 +195,10 @@ func TestDiagnosticSummaryAndObservabilityDoNotExposeProbeErrors(t *testing.T) {
 		serialized += key
 		serialized += stringify(value)
 	}
-	if strings.Contains(serialized, "super-secret") || strings.Contains(serialized, "abc123") || strings.Contains(serialized, "tenant/private") {
-		t.Fatalf("observability record leaked private probe text: %s", serialized)
+	for _, marker := range []string{"must-not-emit", "synthetic-value", "tenant/private"} {
+		if strings.Contains(serialized, marker) {
+			t.Fatalf("observability record leaked private probe marker %q: %s", marker, serialized)
+		}
 	}
 	if records[0].Severity != slog.LevelWarn {
 		t.Fatalf("unready evaluation severity = %v, want WARN", records[0].Severity)
