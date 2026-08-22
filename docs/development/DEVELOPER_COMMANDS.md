@@ -69,9 +69,7 @@ omnexa verify release
 omnexa verify all
 ```
 
-Each command maps to P00.07 quality gate classes and returns a non-zero exit status on failure. Machine-readable output should eventually be available for CI/release evidence.
-
-`verify all` is a deterministic aggregate, not a secret CI-only path.
+Each command maps to P00.07 quality gate classes and returns a non-zero exit status on failure. Machine-readable output should eventually be available for CI/release evidence. `verify all` is a deterministic aggregate, not a secret CI-only path.
 
 ## P01 executable mappings
 
@@ -87,13 +85,14 @@ P01_05_TEST_CACHE_ADDRESS=127.0.0.1:6379 P01_05_TEST_VALKEY_IMAGE=valkey/valkey:
 P01_06_TEST_S3_ENDPOINT=http://127.0.0.1:9090 P01_06_TEST_S3_BUCKET=omnexa-p01-06 P01_06_TEST_S3_IMAGE=adobe/s3mock:5.1.0 bash scripts/verify_p01_06.sh
 bash scripts/verify_p01_07.sh
 bash scripts/verify_p01_08.sh
+bash scripts/verify_p01_09.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed configuration, precedence, race tests, secret-safe configuration failures and startup behavior. P01.03 covers the transport-neutral structured failure contract, private-cause/public-redaction behavior and error/result conventions. P01.04 covers the PostgreSQL connection/migration substrate against PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1, including deterministic keys, bounded TTL/value semantics, serialization, miss/error distinction, provider outage/cancellation, flush non-authority and provider restart/reconnect behavior. P01.06 covers the S3-compatible object/file storage foundation, including deterministic namespaced/versioned keys, bounded streaming, untrusted metadata validation, integrity checks, missing-object semantics, provider timeout/cancellation/unavailability, concurrent integration and provider restart behavior. P01.07 covers the structured `log/slog` and OpenTelemetry baseline, including stable fields, bounded correlation/W3C trace propagation, classification/sensitive-key redaction, isolated trace/metric providers, vendor-neutral exporter injection, deterministic capture and bounded flush/shutdown behavior. P01.08 covers portable health/readiness/diagnostic primitives, including distinct liveness/readiness, criticality-aware dependency results, startup lifecycle state, deterministic ordering, safe diagnostic projection, timeout/cancellation/panic resilience and P01.07 observability integration.
+P01.01 covers the pinned Go workspace/build skeleton. P01.02 covers typed static configuration, precedence, race tests, secret-safe failures and startup behavior. P01.03 covers the transport-neutral structured failure contract. P01.04 covers PostgreSQL 18.6. P01.05 covers the Redis-compatible cache foundation against Valkey 9.1.1. P01.06 covers the S3-compatible object/file storage foundation. P01.07 covers structured `log/slog` and OpenTelemetry. P01.08 covers portable health/readiness/diagnostic primitives. P01.09 covers process-local job/scheduler primitives: deterministic registration, UUIDv7 execution IDs, bounded synchronous/queued execution, bounded retry/idempotency, repeatable completion handles, cancellation/deadlines, graceful drain/cancel, one-shot/fixed-interval schedules and safe observability propagation.
 
-Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.08 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. P01.07 and P01.08 use deterministic in-process test doubles/primitives. The final `omnexa verify ...` CLI remains owned by P01.12.
+Canonical GitHub-hosted governance executes repository Go quality and P01.01 through P01.09 in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. P01.07-P01.09 use deterministic in-process primitives/test doubles where appropriate. The final `omnexa verify ...` CLI remains owned by P01.12.
 
 ## Completed P01.05
 
@@ -111,21 +110,25 @@ P01.07 is complete with canonical evidence in `docs/roadmap/evidence/P01.07_COMP
 
 P01.08 is complete with canonical evidence in `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Liveness/readiness remain distinct, required/security-critical readiness fails closed, optional dependency failure may degrade, dependency probes remain bounded/panic-safe and diagnostics remain safe non-authoritative operational evidence.
 
-## Active P01.09
+## Completed P01.09
 
-P01.09 — Job & scheduler primitives is the sole active executable kernel package after the P01.08 closure transition.
+P01.09 is complete with canonical evidence in `docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md`. Its verifier remains a required regression gate. Job/scheduler identity remains non-authoritative; retries remain bounded and idempotency-protected where required; execution/queue capacity is bounded; shutdown retains accepted-work drain/cancel semantics; schedules remain process-local maintenance primitives rather than durable workflow timers.
 
-The active P01.09 implementation must map package requirements to:
+## Active P01.10
 
-- `verify format` / `verify static` -> pinned toolchain, repository Go quality, jobs package dependency/scope boundaries and no durable-messaging/workflow pull-forward;
-- `verify unit` -> deterministic job registration/execution, unknown-job safe failure, retry/backoff bounds, schedule validation and handler-result behavior;
-- `verify contracts` / `verify integration` -> explicit idempotency/duplicate-safe handler contract, bounded worker execution, observability/correlation propagation and deterministic in-memory harness;
-- `verify security` -> scheduler/job identity grants no authority, future tenant/actor scope is not invented, no business/later-phase behavior is introduced and diagnostics/errors remain safe;
-- lifecycle/resilience evidence -> bounded concurrency, deadline/cancellation propagation, bounded graceful shutdown/drain/cancel and no infinite retries;
+P01.10 — Feature flag & configuration registry is the sole active executable kernel package after the P01.09 closure transition.
+
+The active P01.10 implementation must map package requirements to:
+
+- `verify format` / `verify static` -> pinned toolchain, repository Go quality, `kernel.configuration` dependency/scope boundaries and no P02/business/P01.11+ pull-forward;
+- `verify unit` -> typed definition validation, duplicate stable identifiers, deterministic defaults/fallbacks, evaluation behavior and deterministic test provider;
+- `verify contracts` / `verify integration` -> provider-failure fallback, version/change metadata, bounded refresh/invalidation and explicit evaluation context behavior;
+- `verify security` -> flags cannot grant authority or bypass authorization/data isolation, security controls fail closed, sensitive values remain governed by classification/secrets policy and future scoped inputs do not create P02 identity;
+- lifecycle/resilience evidence -> provider outage/refresh/invalidation behavior remains bounded and deterministic;
 - `verify build` -> complete kernel package build with canonical dependency metadata;
-- completed P01.01-P01.08 regression preservation.
+- completed P01.01-P01.09 regression preservation.
 
-P01.09 may not implement NATS/JetStream durable streams/event consumers, transactional outbox/inbox, distributed workflow timers, business jobs, tenant-context runtime before P02, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI, P02+ behavior or AI runtime functionality. P01.10 becomes eligible only after P01.09 completion evidence and a separate governed transition.
+P01.10 may not implement product experimentation/analytics, tenant admin UI, pricing/entitlement/licensing, authorization based solely on flags, business-module flags before their owners exist, P01.11 audit transport, P01.12 developer CLI, P02+ behavior or AI runtime functionality. P01.11 becomes eligible only after P01.10 completion evidence and a separate governed transition.
 
 ## Go result convention — completed P01.03
 
@@ -135,80 +138,30 @@ P01.03 did **not** introduce a custom generic `Result[T]` container. The canonic
 value, err := operation()
 ```
 
-The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition, `errors.Is`/`errors.As` behavior and avoids forcing a second result abstraction throughout the kernel.
+The structured `kernel/internal/failure` primitive governs the `error` side when a stable Omnexa failure contract is required. This preserves normal Go composition and `errors.Is`/`errors.As` behavior.
 
-P01.04 database/provider, P01.05 cache/provider and P01.06 storage/provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.07 observability must not expose those private causes or sensitive configuration merely because telemetry is available. P01.08 health/diagnostic output likewise remains safe and does not expose provider internals or sensitive dependency data. P01.09 job/scheduler failures must reuse the existing safe failure/observability boundaries rather than emitting handler payloads or inventing a second error authority.
+Provider mappings retain lower-level causes privately while public failure projections remain provider/credential safe. P01.07 observability, P01.08 diagnostics, P01.09 jobs and P01.10 runtime configuration must reuse the existing safe failure/observability boundaries rather than inventing a second error authority.
 
 ## Configuration startup contract
 
-The kernel process accepts only explicit governed configuration sources. Application-level controls remain:
+The kernel process accepts only explicit governed static configuration sources. Application-level controls remain:
 
 ```text
 OMNEXA_CONFIG_FILE=<explicit JSON file path>   # optional; no implicit file discovery
 OMNEXA_ENVIRONMENT=local|ci|preview|test|staging|production
 ```
 
-P01.04 database settings remain a completed boundary extension:
+Completed P01.04 database, P01.05 cache, P01.06 storage and P01.07 observability configuration surfaces remain governed by their implemented typed configuration boundaries. P01.08 and P01.09 introduced no canonical environment-variable surface.
 
-```text
-OMNEXA_DATABASE_URL=<RESTRICTED PostgreSQL DSN>
-OMNEXA_DATABASE_CONNECT_TIMEOUT=5s
-OMNEXA_DATABASE_MAX_CONNECTIONS=10
-OMNEXA_DATABASE_MIN_CONNECTIONS=0
-OMNEXA_DATABASE_MAX_CONNECTION_LIFETIME=30m
-OMNEXA_DATABASE_MAX_CONNECTION_IDLE_TIME=5m
-```
+P01.10 is specifically a **runtime flag/configuration registry distinct from P01.02 static environment configuration**. No new P01.10 environment variable, provider credential, flag identifier or runtime configuration key is canonical until implemented and verified in the repository. Sensitive values remain subject to data classification/secrets rules and must not be turned into generic flags.
 
-P01.05 cache settings remain a completed boundary extension:
-
-```text
-OMNEXA_CACHE_ADDRESS=<sensitive Redis-compatible endpoint>
-OMNEXA_CACHE_USERNAME=<sensitive provider username, optional>
-OMNEXA_CACHE_PASSWORD=<RESTRICTED provider password, optional>
-OMNEXA_CACHE_CONNECT_TIMEOUT=3s
-OMNEXA_CACHE_OPERATION_TIMEOUT=2s
-OMNEXA_CACHE_KEY_PREFIX=omnexa
-OMNEXA_CACHE_MAX_VALUE_BYTES=1048576
-OMNEXA_CACHE_MAX_TTL=24h
-```
-
-P01.06 storage settings remain the completed boundary extension implemented by `kernel/internal/storage/store.go`:
-
-```text
-OMNEXA_STORAGE_ENDPOINT=<sensitive S3-compatible endpoint>
-OMNEXA_STORAGE_ACCESS_KEY=<sensitive provider access key>
-OMNEXA_STORAGE_SECRET_KEY=<RESTRICTED provider secret>
-OMNEXA_STORAGE_REGION=us-east-1
-OMNEXA_STORAGE_BUCKET=<governed bucket>
-OMNEXA_STORAGE_USE_PATH_STYLE=true
-OMNEXA_STORAGE_CONNECT_TIMEOUT=3s
-OMNEXA_STORAGE_OPERATION_TIMEOUT=5s
-OMNEXA_STORAGE_KEY_PREFIX=omnexa
-OMNEXA_STORAGE_MAX_OBJECT_BYTES=1073741824
-```
-
-P01.07 observability settings are the completed boundary extension implemented by `kernel/internal/observability/config.go`:
-
-```text
-OMNEXA_OBSERVABILITY_ENABLED=true
-OMNEXA_OBSERVABILITY_SERVICE_NAME=omnexa-kernel
-OMNEXA_OBSERVABILITY_LOG_LEVEL=auto
-OMNEXA_OBSERVABILITY_EXPORT_INTERVAL=30s
-OMNEXA_OBSERVABILITY_EXPORT_TIMEOUT=3s
-OMNEXA_OBSERVABILITY_SHUTDOWN_TIMEOUT=5s
-```
-
-`OMNEXA_OBSERVABILITY_LOG_LEVEL=auto` resolves to debug in local/test environments and info otherwise. Export interval is bounded to 1s–10m; export and shutdown timeouts are each bounded to 10ms–30s. The completed P01.07 configuration intentionally contains no exporter credentials or backend-specific configuration.
-
-P01.08 introduced no canonical environment-variable surface. P01.09 may add only job/scheduler configuration justified by `docs/roadmap/work-packages/P01.09.md` and implemented through the existing typed configuration boundary. No P01.09 configuration key or environment variable is canonical until it exists in repository implementation and verification.
-
-Configuration precedence remains:
+Configuration precedence for the static P01.02 boundary remains:
 
 ```text
 default -> explicit JSON config file -> environment variable -> explicit in-process test override
 ```
 
-Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a global runtime feature-flag/config registry.
+Unknown `OMNEXA_*` configuration variables fail in strict application mode. Configuration errors identify the key/problem without printing raw sensitive values. Test overrides are instance-local and are not a substitute for the P01.10 governed runtime registry.
 
 ## Future web UI quality commands
 
@@ -219,7 +172,7 @@ omnexa verify web-standards
 omnexa verify accessibility
 ```
 
-Their semantics must cover rendered-output W3C validation, WAVE evaluation where the owning package requires it, and manual-evidence hooks for keyboard/focus/screen-reader/zoom-reflow checks. A required WAVE API/license dependency that is unavailable is `BLOCKED`, not PASS. These commands are planning semantics only during P01 and do not authorize UI implementation.
+A required WAVE API/license dependency that is unavailable is `BLOCKED`, not PASS. These commands are planning semantics only during P01 and do not authorize UI implementation.
 
 ## Module developer commands
 
