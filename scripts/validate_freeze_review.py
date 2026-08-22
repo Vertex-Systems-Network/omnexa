@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Validate frozen P00 evidence and the completed P00 -> P01 handoff."""
+"""Validate frozen P00 evidence and the completed P00 -> active P01 handoff."""
 
 from __future__ import annotations
 
 import json
 import pathlib
-import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -22,7 +21,6 @@ REQUIRED_FILES = [
     "scripts/apply_main_protection.ps1",
     "scripts/verify_main_protection.ps1",
 ]
-
 for relative in REQUIRED_FILES:
     if not (ROOT / relative).is_file():
         raise SystemExit(f"ERROR: missing freeze/transition artifact: {relative}")
@@ -33,40 +31,36 @@ state = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"
 if manifest.get("version") != "foundation-v1" or manifest.get("architecture_status") != "FROZEN":
     raise SystemExit("ERROR: Foundation v1 must remain FROZEN")
 if manifest.get("p00_exit_status") != "DONE":
-    raise SystemExit("ERROR: P00 exit must be DONE after transition")
-
+    raise SystemExit("ERROR: P00 exit must remain DONE")
 expected_frozen = {f"P00.{i:02d}" for i in range(1, 10)}
 if set(manifest.get("frozen_packages") or []) != expected_frozen:
     raise SystemExit("ERROR: frozen architecture set must remain exactly P00.01-P00.09")
 
 entry = manifest.get("p01_entry_gate") or {}
-if entry.get("state") != "SATISFIED":
-    raise SystemExit("ERROR: P01 entry gate must be SATISFIED")
-if entry.get("kernel_code_authorized") is not True:
-    raise SystemExit("ERROR: kernel code must be authorized after P01 activation")
-if entry.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: business feature code must remain unauthorized")
-
+if entry.get("state") != "SATISFIED" or entry.get("kernel_code_authorized") is not True or entry.get("business_feature_code_authorized") is not False:
+    raise SystemExit("ERROR: P01 entry gate/implementation locks are inconsistent")
 controls = {item.get("tracker"): item.get("state") for item in entry.get("blockers") or []}
 if controls.get("issue:#3") != "SATISFIED" or controls.get("issue:#14") != "SATISFIED":
-    raise SystemExit("ERROR: EG-02/Issue #3 and EG-03/Issue #14 must be SATISFIED")
+    raise SystemExit("ERROR: EG-02/Issue #3 and EG-03/Issue #14 must remain SATISFIED")
 
-if state.get("current_phase") != "P01" or state.get("current_work_package") != "P01.01":
-    raise SystemExit("ERROR: canonical transition state must be P01 / P01.01")
+if state.get("current_phase") != "P01":
+    raise SystemExit("ERROR: canonical post-transition phase must be P01")
+current = state.get("current_work_package")
+expected_ids = [f"P01.{i:02d}" for i in range(1, 13)]
+if current not in expected_ids:
+    raise SystemExit(f"ERROR: invalid current P01 package: {current}")
 lock = state.get("implementation_lock") or {}
 if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: transition implementation locks are inconsistent")
+    raise SystemExit("ERROR: post-transition implementation locks are inconsistent")
 
 tracking = state.get("governance_tracking") or {}
 branch = tracking.get("main_branch_protection") or {}
 if branch.get("state") != "verified_protected" or branch.get("live_protected") is not True:
-    raise SystemExit("ERROR: main protection must be verified_protected / live_protected=true")
-if branch.get("issue") != 3 or branch.get("issue_state") != "closed":
-    raise SystemExit("ERROR: main protection must preserve closed Issue #3 tracking")
-if branch.get("required_check") != "governance":
-    raise SystemExit("ERROR: required status check must be governance")
+    raise SystemExit("ERROR: main protection must remain verified_protected / live_protected=true")
+if branch.get("issue") != 3 or branch.get("issue_state") != "closed" or branch.get("required_check") != "governance":
+    raise SystemExit("ERROR: protected integration evidence is inconsistent")
 if branch.get("repository_visibility") != "public":
-    raise SystemExit("ERROR: repository visibility must be public")
+    raise SystemExit("ERROR: repository visibility must remain public")
 if "HTTP 403" not in str(branch.get("historical_private_attempt_result") or ""):
     raise SystemExit("ERROR: historical private-repository 403 evidence must be retained")
 
@@ -79,7 +73,7 @@ if ci.get("evidence_environment") != "github-hosted" or ci.get("final_check") !=
     raise SystemExit("ERROR: CI evidence must prove github-hosted governance")
 
 p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8").lower()
-for marker in ["status: **satisfied", "issue #3", "protected: true", "32540836431", "44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2", "32541439589", "github-hosted", "p01.01"]:
+for marker in ["status: **satisfied", "issue #3", "protected: true", "32540836431", "44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2", "32541439589", "github-hosted"]:
     if marker.lower() not in p01_gate:
         raise SystemExit(f"ERROR: P01 entry gate missing verified marker: {marker}")
 
@@ -90,7 +84,7 @@ for marker in ["Issue #3 is **closed/completed**", "Required `governance`", "Can
 
 adr6 = (ROOT / "docs/adr/ADR-0006-temporary-p00-ci-evidence-exception.md").read_text(encoding="utf-8")
 if "Expired — historical evidence only" not in adr6 or "cannot authorize a present or future CI bypass" not in adr6:
-    raise SystemExit("ERROR: ADR-0006 must be expired/historical-only")
+    raise SystemExit("ERROR: ADR-0006 must remain expired/historical-only")
 
 external = manifest.get("external_distribution_gate") or {}
 if external.get("tracker") != "issue:#4" or external.get("state") != "BLOCKED":
@@ -106,6 +100,6 @@ print("Omnexa foundation freeze / P00 exit validation: PASS")
 print("Architecture: FROZEN")
 print("P00 exit: DONE")
 print("P01 entry: SATISFIED")
-print("P01.01: ACTIVE")
+print(f"Active P01 package: {current}")
 print("Kernel code: AUTHORIZED FOR ACTIVE P01 PACKAGE")
 print("Business feature code: LOCKED")
