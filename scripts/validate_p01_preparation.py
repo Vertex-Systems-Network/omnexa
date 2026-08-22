@@ -121,6 +121,15 @@ for index in range(current_index):
     if workflow_marker not in workflow:
         raise SystemExit(f"ERROR: completed P01.{package_number:02d} verifier missing from governance workflow")
 
+# Active P01.03 implementation must itself be fail-closed in canonical CI before
+# it can merge. This condition naturally drops after P01.03 is done/transitioned.
+if current == "P01.03":
+    active_verifier = ROOT / "scripts/verify_p01_03.sh"
+    if not active_verifier.is_file():
+        raise SystemExit("ERROR: active P01.03 verifier is missing")
+    if "bash scripts/verify_p01_03.sh" not in workflow:
+        raise SystemExit("ERROR: active P01.03 verifier is not enforced by governance workflow")
+
 print("Omnexa P01 activation/readiness validation: PASS")
 print("P00: DONE")
 print(f"Completed P01 packages: {current_index} / 12")
