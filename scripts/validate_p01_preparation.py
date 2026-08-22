@@ -125,7 +125,7 @@ for index in range(current_index):
 # Active executable packages with implemented verification must fail closed in
 # canonical CI. This condition is intentionally bounded to the current package
 # and drops when governance advances to the next package.
-if current in {"P01.03", "P01.04", "P01.05", "P01.06"}:
+if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():
