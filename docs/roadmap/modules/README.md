@@ -17,14 +17,17 @@ Before implementing any P02-P27 module or submodule, an AI/human contributor mus
 5. `docs/roadmap/MODULE_SUBMODULE_EXECUTION_BLUEPRINT.md`;
 6. `docs/roadmap/modules/SUBMODULE_CATALOG.json`;
 7. the owning program dossier in this directory;
-8. `docs/roadmap/modules/DOSSIER_STANDARD.md` when refining the submodule into executable tasks;
-9. applicable API/event/security/data/accessibility standards.
+8. `EXECUTION_PROFILE_MAP.json` and the referenced profiles in `EXECUTION_PROFILES.md`;
+9. `DOSSIER_STANDARD.md` when refining the submodule into executable task cards;
+10. applicable API/event/security/data/accessibility standards.
 
 If an approved submodule decomposition already exists here, implementation agents **must execute it rather than restart generic architecture planning**. A change to ownership, phase placement, public contracts, persistence ownership, or dependency class requires change control/ADR as applicable.
 
 ## Dossier set
 
 - `DOSSIER_STANDARD.md` — mandatory architecture/flow/options/task-card format used when a planned submodule becomes executable.
+- `EXECUTION_PROFILES.md` — reusable detailed task shapes such as governed record, state machine, ledger, builder, connector, analytics, security, edge and AI runtime.
+- `EXECUTION_PROFILE_MAP.json` — phase defaults and submodule-specific execution-profile overrides.
 - `FOUNDATION_P02_P06.md` — identity/tenancy, module runtime, data/event fabric, workflow OS, universal business foundation.
 - `CORE_BUSINESS_P07_P15.md` — CRM, finance/ERP, commerce, payments, POS, experience/CMS, portals, HR/projects/service, supply chain/manufacturing.
 - `PLATFORM_P16_P18.md` — integration fabric, low-code app builder, reporting/BI.
@@ -52,7 +55,7 @@ Every phase/submodule plan must define:
 - UI accessibility/localization/RTL requirements when applicable;
 - ordered implementation tasks and evidence gates.
 
-When a phase activates, the owning work-package plan should refine these into `S01`-`S10` and `Sxx.Tyy` task cards using `DOSSIER_STANDARD.md`; it should not invent a parallel architecture document with conflicting ownership.
+When a phase activates, resolve its catalog ID -> dossier -> execution profile(s) -> `S01`-`S10` -> `Sxx.Tyy` task cards using `DOSSIER_STANDARD.md`. This chain is the default implementation plan; do not invent a parallel architecture document with conflicting ownership.
 
 ## Planning state versus implementation state
 
