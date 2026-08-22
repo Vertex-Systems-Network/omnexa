@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v10-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v11-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -33,6 +33,15 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      valkey:
+        image: valkey/valkey:9.1.1
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "valkey-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout
@@ -49,6 +58,7 @@ jobs:
           git --version
           python --version
           pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion'
+          docker --version
           test "${RUNNER_ENVIRONMENT}" = "github-hosted"
           test "${RUNNER_OS}" = "Linux"
           test "${RUNNER_ARCH}" = "X64"
@@ -65,6 +75,17 @@ jobs:
           set -euo pipefail
           go version
           test "$(go env GOVERSION)" = "go$(tr -d '[:space:]' < .go-version)"
+
+      - name: Diagnose P01.05 Go module metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          go work sync
+          go mod tidy
+          echo "----- canonical go.mod -----"
+          cat go.mod
+          echo "----- canonical go.sum -----"
+          cat go.sum
 
       - name: Parse branch-protection PowerShell tooling
         shell: pwsh
@@ -122,3 +143,10 @@ jobs:
         env:
           P01_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p01_04.sh
+
+      - name: Verify P01.05 cache abstraction
+        shell: bash
+        env:
+          P01_05_TEST_CACHE_ADDRESS: 127.0.0.1:6379
+          P01_05_TEST_VALKEY_IMAGE: valkey/valkey:9.1.1
+        run: bash scripts/verify_p01_05.sh
