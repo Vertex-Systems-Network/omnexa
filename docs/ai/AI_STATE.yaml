@@ -1,0 +1,140 @@
+schema_version: 1
+
+snapshot:
+  verified_at: "2026-08-22T20:27:00+05:00"
+  nature: "non-authoritative continuity snapshot"
+  base_main_commit: "753fc54dbb35071807bcc3fd51743f289c400b98"
+  stale_rule: "Re-verify canonical state, branch/head, PR and latest CI before every material action. If this file conflicts with canonical sources, mark it stale and stop relying on the conflicting value."
+
+project:
+  name: "Omnexa"
+  category: "Composable Enterprise Business Operating System"
+
+mode:
+  type: "gated_evidence_based_architecture_first"
+  architecture: "strict modular monolith with service-ready boundaries"
+
+current:
+  phase: "P01"
+  work_package: "P01.06"
+  canonical_work_package_status: "active"
+  continuity_status: "VERIFYING_FAILED"
+  completed_p01_packages: 5
+  total_p01_packages: 12
+
+repository:
+  canonical_branch: "main"
+  active_work_branch: "feat/p01-06-storage-clean"
+  active_work_commit: "7028145965aa38194bdb0524ec511b98f206461c"
+  working_tree_status: "not_applicable_to_remote_branch_snapshot"
+
+pull_request:
+  number: 50
+  url: "https://github.com/Vertex-Systems-Network/omnexa/pull/50"
+  state: "open"
+  mergeable_when_observed: true
+
+verification:
+  latest_ci:
+    workflow: "Omnexa Governance"
+    run: 32581123619
+    job: 97050592422
+    status: "FAIL"
+    runner_policy: "GitHub-hosted ubuntu-24.04"
+    passed_before_failure:
+      - "GitHub-hosted runner/tooling check"
+      - "Go 1.26.7 pin"
+      - "branch-protection PowerShell parse"
+      - "canonical governance validator"
+      - "development specification validator"
+      - "threat/operations specification validator"
+      - "foundation freeze validator"
+      - "P01 activation/readiness validator"
+      - "P01 package specification validator"
+      - "repository Go quality gate"
+      - "gofmt"
+      - "golangci-lint v2.12.2: 0 issues"
+      - "govulncheck v1.7.0: 0 reachable vulnerabilities"
+    failed_step: "Verify P01.01 Go workspace and build skeleton"
+    failure_reason: "gopkg.in/yaml.v3@v3.0.1 checksum mismatch in go.sum; committed checksum does not match the canonical downloaded checksum"
+    skipped_after_failure:
+      - "P01.02 regression"
+      - "P01.03 regression"
+      - "P01.04 regression"
+      - "P01.05 regression"
+      - "P01.06 verification"
+
+next_action:
+  type: "P01.06 verification repair"
+  target: "PR #50 / feat/p01-06-storage-clean"
+  instruction: "Correct the gopkg.in/yaml.v3@v3.0.1 checksum in go.sum to the canonical value reported by run 32581123619, then rerun the full GitHub-hosted governance workflow."
+  reason: "The latest exact-head run failed before P01.06 gates because P01.01 module authentication rejected the committed checksum. P01.06 cannot be declared complete until the full required lane passes."
+
+blocked_actions:
+  - "mark P01.06 done before all required evidence passes"
+  - "activate or implement P01.07"
+  - "start P02 or any later phase"
+  - "implement CRM, ERP, commerce, CMS or any business module"
+  - "implement AI model gateway, context engine, planner, memory/RAG, semantic business runtime, task graph, risk/approval engine, capability broker, agents or autonomous execution"
+  - "grant AI direct database, object-store, payment-provider or business-state authority"
+  - "change canonical roadmap state from this continuity file"
+  - "weaken governance or quality checks to obtain PASS"
+
+completion_requirements:
+  source: "docs/roadmap/work-packages/P01.06.md"
+  required:
+    - "provider contract tests cover put/get/head/delete and missing-object behavior"
+    - "large-object tests prove streaming rather than whole-file buffering"
+    - "invalid metadata/key/path input fails safely and cannot escape provider namespace"
+    - "provider timeout/unavailability/cancellation is bounded and classified"
+    - "integrity metadata detects corrupted/mismatched content where supported"
+    - "provider credentials, signed URLs and sensitive object content remain redacted"
+    - "no CMS/media/business/tenant/module/event/later-P01 object model is introduced"
+    - "P01.01-P01.05 regression verifiers PASS"
+    - "repository-wide Go quality gate PASS"
+    - "G0/G1/G2/G3/G5/G6/G7 PASS on GitHub-hosted ubuntu-24.04"
+
+future_architecture_direction_only:
+  - "model gateway"
+  - "context engine"
+  - "memory"
+  - "semantic business state"
+  - "planner"
+  - "task graph"
+  - "simulation"
+  - "risk engine"
+  - "approval"
+  - "capability broker"
+  - "verification and replanning"
+  - "governed agents"
+  - "autonomous business OS"
+
+security:
+  secrets_or_transcripts_allowed_in_continuity_files: false
+  chain_of_thought_allowed_in_continuity_files: false
+
+source_authority:
+  execution_contract: "AGENTS.md"
+  ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
+  product_constitution: "docs/governance/PRODUCT_CONSTITUTION.md"
+  canonical_state: "docs/roadmap/STATE.json"
+  roadmap: "docs/roadmap/MASTER_PLAN.md"
+  change_control: "docs/governance/CHANGE_CONTROL.md"
+  definition_of_done: "docs/governance/DEFINITION_OF_DONE.md"
+  architecture:
+    - "docs/architecture/SYSTEM_ARCHITECTURE.md"
+    - "docs/architecture/MODULE_STANDARD.md"
+    - "docs/architecture/DOMAIN_OWNERSHIP.md"
+  security:
+    - "docs/security/SECURITY_STANDARD.md"
+    - "docs/security/DATA_CLASSIFICATION.md"
+    - "docs/security/THREAT_MODEL.md"
+  current_work_package: "docs/roadmap/work-packages/P01.06.md"
+  relevant_adrs:
+    - "docs/adr/ADR-0001-platform-architecture-baseline.md"
+    - "docs/adr/ADR-0005-security-data-classification-baseline.md"
+    - "docs/adr/ADR-0010-foundation-architecture-freeze.md"
+
+handoff:
+  last: "docs/ai/handoffs/P01.06.md"
+  created_at: "2026-08-22T20:27:00+05:00"

@@ -28,6 +28,10 @@ business_feature_code_authorized: false
 
 Kernel authorization is bounded to the sole active package. It is not permission to implement P01.07+, P02+, module runtime or business features.
 
+## Persistent AI continuity
+
+A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and the current `docs/ai/handoffs/<WORK_PACKAGE>.md` before material work. These files are subordinate snapshots/indexes: they never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or other canonical governance. If continuity content disagrees with authoritative repository/GitHub evidence, treat the continuity value as **STALE**, re-verify the authoritative sources and do not silently overwrite canonical state.
+
 ## Mandatory read order
 
 Before material work read:
