@@ -100,6 +100,7 @@ base_workflow_markers = [
     "python scripts/validate_freeze_review.py",
     "python scripts/validate_p01_preparation.py",
     "python scripts/validate_p01_package_specs.py",
+    "bash scripts/verify_go_quality.sh",
 ]
 for marker in base_workflow_markers:
     if marker not in workflow:
@@ -124,7 +125,7 @@ for index in range(current_index):
 # Active executable packages with implemented verification must fail closed in
 # canonical CI. This condition is intentionally bounded to the current package
 # and drops when governance advances to the next package.
-if current in {"P01.03", "P01.04"}:
+if current in {"P01.03", "P01.04", "P01.05"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():

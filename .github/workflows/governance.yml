@@ -10,14 +10,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v10-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v12-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   governance:
     name: governance
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     services:
       postgres:
@@ -30,6 +30,15 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd "pg_isready -U omnexa -d omnexa_p01_04"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      valkey:
+        image: valkey/valkey:9.1.1
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "valkey-cli ping"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -49,6 +58,7 @@ jobs:
           git --version
           python --version
           pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion'
+          docker --version
           test "${RUNNER_ENVIRONMENT}" = "github-hosted"
           test "${RUNNER_OS}" = "Linux"
           test "${RUNNER_ARCH}" = "X64"
@@ -105,6 +115,10 @@ jobs:
         shell: bash
         run: python scripts/validate_p01_package_specs.py
 
+      - name: Verify repository Go code quality
+        shell: bash
+        run: bash scripts/verify_go_quality.sh
+
       - name: Verify P01.01 Go workspace and build skeleton
         shell: bash
         run: bash scripts/verify_p01_01.sh
@@ -122,3 +136,10 @@ jobs:
         env:
           P01_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p01_04.sh
+
+      - name: Verify P01.05 cache abstraction
+        shell: bash
+        env:
+          P01_05_TEST_CACHE_ADDRESS: 127.0.0.1:6379
+          P01_05_TEST_VALKEY_IMAGE: valkey/valkey:9.1.1
+        run: bash scripts/verify_p01_05.sh
