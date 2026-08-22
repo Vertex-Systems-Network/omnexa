@@ -14,12 +14,12 @@ import (
 )
 
 const (
-	checksumMetadataKey = "omnexa-sha256"
-	fileNameMetadataKey = "omnexa-file-name"
-	maxMetadataEntries  = 16
-	maxMetadataKeyBytes = 64
+	checksumMetadataKey   = "omnexa-sha256"
+	fileNameMetadataKey   = "omnexa-file-name"
+	maxMetadataEntries    = 16
+	maxMetadataKeyBytes   = 64
 	maxMetadataValueBytes = 512
-	maxFileNameBytes    = 255
+	maxFileNameBytes      = 255
 )
 
 var metadataKeyPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,63}$`)
@@ -135,7 +135,7 @@ func validateFileName(value string) error {
 	if len(value) > maxFileNameBytes || !utf8.ValidString(value) {
 		return invalidMetadata("file name is invalid")
 	}
-	if strings.ContainsAny(value, `/\\\r\n\x00`) || value == "." || value == ".." {
+	if strings.ContainsAny(value, "/\\\r\n\x00") || value == "." || value == ".." {
 		return invalidMetadata("file name contains path or control characters")
 	}
 	return nil
