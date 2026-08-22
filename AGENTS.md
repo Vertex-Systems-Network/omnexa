@@ -19,13 +19,14 @@ P01.01: DONE — Go workspace/build skeleton
 P01.02: DONE — Configuration & environment system
 P01.03: DONE — Structured error & result conventions
 P01.04: DONE — PostgreSQL connection & migration foundation
-P01.05: ACTIVE — Cache abstraction
-P01.06-P01.12: PLANNED
+P01.05: DONE — Cache abstraction
+P01.06: ACTIVE — Object & file storage abstraction
+P01.07-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.06+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.07+, P02+, module runtime or business features.
 
 ## Mandatory read order
 
@@ -35,11 +36,11 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.05.md` currently);
+5. the active package specification (`P01.06.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
-9. testing/CI/release/quality standards;
+9. testing/CI/release/quality standards, including `docs/quality/GO_CODE_QUALITY.md`;
 10. repository/local-development/toolchain/configuration/developer-command standards;
 11. `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` whenever browser UI is in an authorized package;
 12. SLO/incident/reliability standards;
@@ -75,6 +76,8 @@ runs-on: ubuntu-24.04
 
 The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=Linux` and `RUNNER_ARCH=X64`. Do not reintroduce `self-hosted`, `LOCAL-WIN-*`, local evidence fanout or local-runner fallback.
 
+The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it from required governance, weaken configured checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
+
 ## P01 execution rule
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` enforces a completed prefix, exactly one active package and a planned suffix.
@@ -84,28 +87,31 @@ Completed:
 - P01.01 — evidence: `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
 - P01.02 — evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
 - P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`;
-- P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`.
+- P01.04 — evidence: `docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md`;
+- P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.05 — Cache abstraction**.
+Current active package: **P01.06 — Object & file storage abstraction**.
 
 Allowed executable scope is limited to:
 
-- Redis-compatible cache interface/provider adapter;
-- deterministic namespaced/versioned key conventions;
-- explicit TTL/expiry semantics;
-- typed serialization boundary;
-- get/set/delete and narrowly justified bounded atomic primitives;
+- S3-compatible provider interface/adapter;
+- bucket/container configuration boundary;
+- deterministic namespaced/versioned object keys;
+- streaming upload/download APIs with explicit bounded-memory behavior;
+- untrusted content length/type/file metadata handling;
+- integrity metadata/checksum hooks;
+- put/get/head/delete and missing-object behavior;
 - P01.02 configuration integration;
 - P01.03 structured provider failure mapping;
-- cache miss versus provider failure distinction;
-- bounded timeout/cancellation behavior;
-- synthetic Redis-compatible integration, flush/restart and non-authority evidence;
-- completed P01.01-P01.04 regression verification;
+- bounded provider timeout/cancellation/unavailability behavior;
+- synthetic S3-compatible contract/integration evidence;
+- completed P01.01-P01.05 regression verification;
+- permanent repository Go quality verification;
 - GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.05 must not implement business cache keys/models, sessions/authentication, tenant/organization behavior, module runtime, event/job fabric, object/file storage, logging/OpenTelemetry, health endpoints, feature registry, audit transport or use cache as a source of truth.
+P01.06 must not implement media library/CMS/file-management UI, public URL/CDN/image processing/thumbnails, tenant document or business object models, sessions/authentication, tenancy, module runtime, event/job fabric, malware-scanning implementation beyond a future hook boundary, retention/legal-hold semantics, logging/OpenTelemetry, health endpoints, scheduler primitives, feature registry, audit transport or later P01/P02+ behavior.
 
-P01.06 becomes active only after P01.05 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.07 becomes active only after P01.06 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -117,7 +123,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.05, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus completed P01.01-P01.04 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.06, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.05 regression verification. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -132,15 +138,22 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.05 cache rules
+## P01.06 object/file storage rules
 
-- Cache is never the authoritative system of record.
-- Flush, restart, eviction or cache loss must not corrupt protected state.
-- Cache provider credentials are sensitive and must not appear in logs, failures or artifacts.
+- Object keys never imply authorization or tenancy.
+- Path traversal/file-name input must not escape the governed provider namespace.
+- Provider credentials are `RESTRICTED` and must not appear in logs, public failures or artifacts.
+- Signed URLs, secrets and sensitive object content must not be emitted by diagnostics.
+- Content type, file name, length and caller metadata are untrusted input.
+- Large upload/download flows must stream with explicit bounded memory behavior; whole-object buffering is not an acceptable hidden default for large objects.
+- Integrity/checksum mismatch must fail safely and must not return corrupted content as trusted success.
+- Missing object, provider failure and caller cancellation must remain distinguishable.
 - Tests use synthetic data only.
-- Cache miss and provider failure must remain distinguishable.
-- Keys are explicitly namespaced/versioned; future tenant scope may not be inferred or invented during P01.05.
-- P01.05 does not implement sessions/authentication or later domain caching by anticipation.
+- P01.06 does not implement CMS/media behavior or domain document models by anticipation.
+
+## Completed P01.05 cache rules retained
+
+Cache remains non-authoritative. Flush, restart, eviction or cache loss cannot corrupt protected state. Cache provider credentials remain sensitive, cache miss remains distinct from provider failure, and keys remain namespaced/versioned without invented tenancy. P01.05 regression verification stays mandatory.
 
 ## Future browser UI quality rule
 
@@ -185,4 +198,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.05 in a separate executable PR. Obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence, move P01.05 `active -> verification -> done`, reconcile canonical state, then activate only P01.06.
+Implement P01.06 in a separate executable PR. Add a fail-closed P01.06 verifier and governed S3-compatible synthetic provider, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.05 regressions, move P01.06 `active -> verification -> done`, reconcile canonical state, then activate only P01.07.
