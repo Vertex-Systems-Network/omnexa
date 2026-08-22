@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v13-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v15-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -157,3 +157,7 @@ jobs:
           P01_06_TEST_S3_BUCKET: omnexa-p01-06
           P01_06_TEST_S3_IMAGE: adobe/s3mock:5.1.0
         run: bash scripts/verify_p01_06.sh
+
+      - name: Verify P01.07 structured logging and OpenTelemetry baseline
+        shell: bash
+        run: bash scripts/verify_p01_07.sh
