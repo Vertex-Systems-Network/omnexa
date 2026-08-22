@@ -156,8 +156,8 @@ func TestCancellationDuringRetryBackoffIsBounded(t *testing.T) {
 	defer cancel()
 	started := time.Now()
 	result, err := executor.Execute(ctx, Request{
-		Type: "cancel.task",
-		Retry: RetryPolicy{MaxAttempts: 3, InitialBackoff: 100 * time.Millisecond, MaxBackoff: 100 * time.Millisecond},
+		Type:        "cancel.task",
+		Retry:       RetryPolicy{MaxAttempts: 3, InitialBackoff: 100 * time.Millisecond, MaxBackoff: 100 * time.Millisecond},
 		Idempotency: &Idempotency{Key: "cancel-key", Fingerprint: "sha256:cancel-input"},
 	})
 	if elapsed := time.Since(started); elapsed > 500*time.Millisecond {
@@ -255,8 +255,8 @@ func TestGracefulShutdownDrainsQueuedWorkAndStopsAcceptance(t *testing.T) {
 	}()
 	close(release)
 
-	if err := <-shutdownDone; err != nil {
-		t.Fatalf("shutdown: %v", err)
+	if shutdownErr := <-shutdownDone; shutdownErr != nil {
+		t.Fatalf("shutdown: %v", shutdownErr)
 	}
 	for _, future := range []*Future{first, second} {
 		result, waitErr := future.Wait(context.Background())
