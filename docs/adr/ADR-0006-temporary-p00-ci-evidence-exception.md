@@ -1,54 +1,37 @@
 # ADR-0006 — Temporary P00 CI Evidence Exception
 
-Status: **Accepted — temporary**  
+Status: **Expired — historical evidence only**  
 Date: **2026-08-22**  
-Scope: **P00 architecture/governance/specification work only**
+Original scope: **P00 architecture/governance/specification work only**
 
 ## Context
 
-Omnexa's governance model normally requires successful GitHub Actions evidence before merging foundation work. During P00.06, the repository exhausted/disabled its GitHub Actions allowance. Multiple PR #13 workflow runs, including a rerun and three independent diagnostic jobs, failed before any runner step executed. Issue #14 records the infrastructure evidence.
+During P00.06, GitHub Actions allowance was exhausted/disabled and multiple runs failed before runner steps executed. The project owner authorized a narrow temporary exception for P00 documentation/specification work. Issue #14 recorded the infrastructure evidence.
 
-The project owner explicitly authorized skipping GitHub Actions while the quota condition persists and instructed the project to continue the remaining P00 planning/specification work.
+## Historical decision
 
-## Decision
-
-Adopt the narrow operational exception defined in `docs/governance/CI_EVIDENCE_EXCEPTION_2026-08-22.md`.
-
-While the exception is active:
-
-- hosted GitHub Actions evidence is recorded as `BLOCKED` or `NOT RUN`, never fabricated as `PASS`;
-- P00 documentation/specification packages may progress using repository diff inspection, evidence-file verification, state/dependency reconciliation and ADR review;
-- no runtime/kernel/business implementation is authorized;
-- no executable build, migration, test, security scan or release gate for P01+ may be waived by this ADR;
-- PR-based integration remains mandatory even though `main` branch protection is not yet technically enforced;
-- when hosted Actions return, the current governance validator is rerun and any discovered violation reopens affected work.
-
-## Why this is acceptable
-
-The active P00 work is architecture/governance/specification-only and the implementation lock explicitly prohibits runtime software. Therefore build, migration and runtime test gates are already `N/A` for these changes. The unavailable evidence is the hosted execution of governance checks, not executable product correctness.
-
-Manual evidence still must prove scope, artifact presence, state consistency and change-control reconciliation.
-
-## Rejected alternatives
-
-### Stop all P00 work until quota reset
-
-Rejected because it would block non-runtime architecture work solely due to hosted runner availability and the owner explicitly approved a temporary exception.
-
-### Treat failed Actions runs as successful
-
-Rejected. Infrastructure-blocked execution is not a pass.
-
-### Permanently remove CI as a requirement
-
-Rejected. P00.07 will define the durable testing/CI/release model and P01+ executable changes require real automated evidence.
-
-## Compatibility and risk
-
-Risk is limited by the P00 implementation lock and the docs/specification-only scope. The main residual risk is a governance-state/schema inconsistency that would normally be caught by automation. The mitigation is explicit manual verification plus mandatory revalidation when Actions returns.
+The exception allowed P00 documentation/specification packages to progress using explicit manual evidence while hosted execution was recorded as `BLOCKED`/`NOT RUN`, never as PASS. It never authorized runtime/kernel/business implementation and never waived executable build, migration, test, security or release gates for P01+.
 
 ## Expiry
 
-This ADR's operational exception expires before the first P01 implementation merge, at P00 exit review, when Actions becomes available, or when revoked by the owner—whichever occurs first.
+This exception expired on **2026-08-22** before executable P01 implementation because GitHub-hosted CI was restored and P00 exited.
 
-It remains in history afterward as evidence of why certain P00 merges show `BLOCKED` hosted-CI evidence.
+Current consequences:
+
+- ADR-0006 is historical provenance only;
+- it cannot authorize a present or future CI bypass;
+- canonical governance execution is GitHub-hosted only on `ubuntu-24.04`;
+- P01 executable changes require real automated evidence;
+- any future CI exception requires new explicit change control/ADR rather than reuse of this record.
+
+## Why history is retained
+
+The ADR explains why some P00 merges correctly carry `BLOCKED`/manual evidence instead of hosted PASS. Historical evidence must not be rewritten to make earlier progress look cleaner.
+
+## Rejected alternatives retained from the original decision
+
+- Treat failed Actions runs as successful — rejected.
+- Permanently remove CI as a requirement — rejected.
+- Extend the exception into P01 executable implementation — prohibited.
+
+No architecture, security, tenancy, API, event or product semantics were changed by this temporary operational exception.
