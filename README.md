@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01 and P01.02 are DONE; P01.03 — Structured error & result conventions is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.03 are DONE; P01.04 — PostgreSQL connection & migration foundation is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -15,9 +15,10 @@ Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execut
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.03.md`
+- `docs/roadmap/work-packages/P01.04.md`
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
 - `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`
+- `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -56,6 +57,7 @@ Completed package evidence:
 
 - P01.01: PR #40, run `32562869345`, job `97007065640`, merge `7257977264d788663083fa215462b1828f1e5afb`.
 - P01.02: PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
+- P01.03: PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
 
 Repository-managed Dependabot configuration is present for weekly GitHub Actions dependency updates.
 
@@ -69,13 +71,17 @@ Pinned Go workspace/build skeleton and deterministic hosted verification. Eviden
 
 Typed configuration/environment system with deterministic precedence, strict unknown-key handling, secret-safe redaction/provenance, race-tested isolated loader state and fail-closed startup validation. Evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
 
-### P01.03 — active
+### P01.03 — done
 
-P01.03 implements transport-neutral structured error/result conventions: stable machine codes, safe public detail, private causes, wrapping/unwrapping, explicit retryability/category metadata, bounded validation-field errors and correlation metadata hooks.
+Transport-neutral structured failure primitives with stable codes/categories, safe public projection, private causes, Go wrapping semantics, explicit retryability, bounded validation details and correlation metadata hooks. Evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
 
-It must **not** pull forward HTTP transport adapters, PostgreSQL/provider mapping, logging/telemetry, health endpoints, jobs, identity/tenancy, module runtime or business-domain error catalogs.
+### P01.04 — active
 
-P01.04–P01.12 remain planned and strict sequential activation applies.
+P01.04 implements only the PostgreSQL connection and migration foundation: governed pool construction from P01.02 configuration, safe P01.03 provider failure mapping, transaction helper boundary, migration runner/version ledger, deterministic fresh/upgrade execution and synthetic PostgreSQL integration tests.
+
+It must **not** pull forward tenant/organization tables, module-runtime schema, event outbox/inbox, business schemas/data, cache/storage, telemetry, health endpoints, production HA/backups or business-domain repositories.
+
+P01.05–P01.12 remain planned and strict sequential activation applies.
 
 ## Public visibility / Issue #4
 
@@ -83,7 +89,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01/P01.02 done; P01.03 active; P01 progress 2 / 12 done; kernel implementation authorized only for P01.03; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01-P01.03 done; P01.04 active; P01 progress 3 / 12 done; kernel implementation authorized only for P01.04; business features locked.**
 
 ## Product principle
 

@@ -17,13 +17,14 @@ Local/self-hosted governance runners: PROHIBITED
 P01: ACTIVE
 P01.01: DONE — Go workspace/build skeleton
 P01.02: DONE — Configuration & environment system
-P01.03: ACTIVE — Structured error & result conventions
-P01.04-P01.12: PLANNED
+P01.03: DONE — Structured error & result conventions
+P01.04: ACTIVE — PostgreSQL connection & migration foundation
+P01.05-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.04+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.05+, P02+, module runtime or business features.
 
 ## Mandatory read order
 
@@ -33,7 +34,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.03.md` currently);
+5. the active package specification (`P01.04.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -79,25 +80,26 @@ The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=L
 Completed:
 
 - P01.01 — evidence: `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
-- P01.02 — evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
+- P01.02 — evidence: `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
+- P01.03 — evidence: `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.03 — Structured error & result conventions**.
+Current active package: **P01.04 — PostgreSQL connection & migration foundation**.
 
 Allowed executable scope is limited to:
 
-- stable machine error codes;
-- safe public message/detail separated from private causes;
-- wrapping/unwrapping preserving standard Go error semantics;
-- explicit retryability/category metadata;
-- deterministic bounded validation-field errors;
-- correlation metadata hooks without telemetry emission;
-- negative redaction/security tests;
-- completed-package regression verification;
-- hosted CI evidence for these boundaries.
+- PostgreSQL pool/connection construction from P01.02 configuration;
+- bounded connection behavior and safe provider failures mapped through P01.03;
+- transaction helper boundary without domain writes;
+- migration runner/version ledger foundation;
+- deterministic fresh-install and synthetic upgrade migrations;
+- migration coordination and owner-scoped repository conventions;
+- synthetic PostgreSQL integration/migration tests;
+- completed P01.01-P01.03 regression verification;
+- GitHub-hosted G0/G1/G2/G3/G4/G5/G7 evidence.
 
-P01.03 must not implement HTTP transport adapters, PostgreSQL/provider-specific mapping, cache/storage behavior, logging/OpenTelemetry emission, health endpoints, jobs, feature flags, audit transport, identity/tenancy, module runtime or business-domain error catalogs.
+P01.04 must not implement tenant/organization tables, module-runtime schema, event outbox/inbox, business schemas/data, cross-module SQL, cache/storage, logging/OpenTelemetry, health endpoints, jobs, production HA/backups or business-domain repository behavior.
 
-P01.04 becomes active only after P01.03 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.05 becomes active only after P01.04 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -109,7 +111,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.03, required executable evidence is G0/G1/G2/G5/G7 plus completed P01.01/P01.02 regression verification. Persistence, tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.04, required executable evidence is G0/G1/G2/G3/G4/G5/G7 plus completed P01.01-P01.03 regression verification. PostgreSQL integration/migration checks are now applicable. Tenancy, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -123,6 +125,15 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - production sensitive data is prohibited locally by default;
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
+
+## P01.04 data rules
+
+- Database credentials are `RESTRICTED`; never print DSNs, passwords or secret query parameters in logs/errors/artifacts.
+- Tests use synthetic data only and must not require production snapshots.
+- Migrations are explicit, versioned, reviewable and reproducible from zero.
+- A failed migration must fail closed and must not claim a successful schema version.
+- P01.04 may establish only kernel migration metadata/foundation objects required to prove the migration substrate; it may not create P02/P03/business schemas by anticipation.
+- Cross-owner direct SQL/write coupling remains forbidden.
 
 ## Required work protocol
 
@@ -149,4 +160,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.03 in a separate executable PR. Obtain G0/G1/G2/G5/G7 evidence, move P01.03 `active -> verification -> done`, reconcile canonical state, then activate only P01.04.
+Implement P01.04 in a separate executable PR. Obtain G0/G1/G2/G3/G4/G5/G7 GitHub-hosted evidence, move P01.04 `active -> verification -> done`, reconcile canonical state, then activate only P01.05.

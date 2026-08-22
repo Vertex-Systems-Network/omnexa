@@ -45,12 +45,13 @@ The job is named `governance` and fails closed unless `RUNNER_ENVIRONMENT=github
 ### EG-04 — canonical executable verification command
 State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
-P01.01 established the pinned Go workspace/build verifier. P01.02 added its configuration/security verifier. Completed-package regression verifiers remain mandatory in the same GitHub-hosted governance job.
+P01.01 established the pinned Go workspace/build verifier. P01.02 added the configuration/security verifier. P01.03 added the structured-failure/security verifier. Every completed-package regression verifier remains mandatory in the same GitHub-hosted governance job.
 
 Canonical evidence:
 
 - `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`;
-- `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`.
+- `docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md`;
+- `docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
@@ -61,10 +62,11 @@ Current bounded state:
 - P01: `active`;
 - P01.01: `done`;
 - P01.02: `done`;
-- P01.03: `active`;
+- P01.03: `done`;
+- P01.04: `active`;
 - `kernel_code_authorized=true`;
 - `business_feature_code_authorized=false`;
-- P01.04–P01.12 remain `planned`;
+- P01.05–P01.12 remain `planned`;
 - ADR-0006 remains historical-only.
 
 ## Active P01 package sequence
@@ -73,10 +75,11 @@ Current bounded state:
 
 - P01.01 — **Go workspace / build skeleton**: `done`.
 - P01.02 — **Configuration & environment system**: `done`; PR #42, run `32563880800`, job `97009520624`, merge `c857bb9e7df1e347226653eeaded024d6ecd0271`.
-- P01.03 — **Structured error & result conventions**: sole `active` package.
-- P01.04–P01.12: `planned`.
+- P01.03 — **Structured error & result conventions**: `done`; PR #44, run `32565935613`, job `97014452248`, merge `bdeda5fad09a2369b2a6852e5c62550db50047ea`.
+- P01.04 — **PostgreSQL connection & migration foundation**: sole `active` package.
+- P01.05–P01.12: `planned`.
 
-Advancing again requires P01.03 to reach `done` with required hosted evidence and a governed state reconciliation.
+Advancing again requires P01.04 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G4/G5/G7 evidence and a governed state reconciliation.
 
 ## External distribution / Issue #4
 
@@ -94,8 +97,9 @@ EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
 P01.01: DONE
 P01.02: DONE
-P01.03: ACTIVE — Structured error & result conventions
-P01.04-P01.12: PLANNED
+P01.03: DONE
+P01.04: ACTIVE — PostgreSQL connection & migration foundation
+P01.05-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
