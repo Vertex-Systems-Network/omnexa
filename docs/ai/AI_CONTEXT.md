@@ -42,7 +42,7 @@ This is architectural direction only. It does **not** authorize the AI platform,
 Snapshot verified: `2026-08-22T20:27:00+05:00`.
 
 - canonical branch: `main`
-- canonical main commit: `753fc54dbb35071807bcc3fd51743f289c400b98`
+- snapshot base main commit: `753fc54dbb35071807bcc3fd51743f289c400b98`
 - phase: `P01 — Omnexa Kernel`
 - canonical work-package state: `P01.06 — Object & File Storage Abstraction` is `active`
 - completed P01 packages: `5 / 12`
