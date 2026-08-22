@@ -9,20 +9,20 @@ Omnexa is a **Composable Enterprise Business Operating System**. `docs/roadmap/S
 ```text
 Foundation Architecture v1: FROZEN
 P00: DONE — 10 / 10
-P00.10: DONE
 Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 EG-03 / Issue #14: SATISFIED
 Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
 Local/self-hosted governance runners: PROHIBITED
 P01: ACTIVE
-P01.01: ACTIVE — Go workspace/build skeleton
-P01.02-P01.12: PLANNED
+P01.01: DONE — Go workspace/build skeleton
+P01.02: ACTIVE — Configuration & environment system
+P01.03-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel implementation permission is bounded to the active work package. `kernel_code_authorized=true` is **not** permission to implement P01.02+, P02+, module runtime or business features.
+Kernel implementation permission is bounded to the active work package. `kernel_code_authorized=true` is **not** permission to implement P01.03+, P02+, module runtime or business features.
 
 ## Mandatory read order
 
@@ -30,9 +30,9 @@ Before material work read:
 
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
-3. `docs/governance/FOUNDATION_FREEZE.json` and `P01_ENTRY_GATE.md`;
+3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active work-package specification (`P01.01.md` currently);
+5. the active work-package specification (`P01.02.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. primitive/API/event standards;
 8. security/data classification/threat model;
@@ -63,7 +63,7 @@ Frozen primitives include UUIDv7 IDs, exact-decimal money with explicit currency
 
 Issue #3 / EG-02 is satisfied. Verified behavior includes `main.protected=true`, PR-only integration, required `governance`, blocked direct/force updates, failed-check merge rejection and required conversation resolution. Branch deletion remains blocked by the configured ruleset; destructive deletion of the default branch was intentionally not performed.
 
-Current single-maintainer review policy uses zero required approvals and no required Code Owner review. CODEOWNERS documents ownership. Tighten to independent approval + Code Owner review when a second reviewer exists.
+Current single-maintainer review policy uses zero required approvals and no required Code Owner review. Tighten to independent approval + Code Owner review when a second reviewer exists.
 
 Canonical governance CI is **GitHub-hosted only**:
 
@@ -77,24 +77,29 @@ The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=L
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` enforces strict sequential one-active-package execution.
 
-Current active package: **P01.01 — Go workspace/build skeleton**.
+Completed package: **P01.01 — Go workspace/build skeleton**. Canonical completion evidence is `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
+
+Current active package: **P01.02 — Configuration & environment system**.
 
 Allowed executable work is limited to:
 
-- repository-owned Go toolchain/version declaration;
-- Go workspace/module skeleton;
-- minimal `kernel` process entrypoint;
-- build/source metadata;
-- deterministic format/vet/test/build/smoke commands;
-- applicable hosted CI integration and tests.
+- typed configuration loading and validation;
+- explicit precedence across defaults, governed config files and environment variables;
+- governed environment identity;
+- required/optional setting semantics;
+- secret-safe redaction;
+- deterministic isolated test overrides;
+- configuration provenance that reveals source category/key but never secret value;
+- fail-closed startup/config construction on invalid required settings;
+- tests and hosted CI evidence needed for those boundaries.
 
-P01.01 must not implement configuration/environment semantics (P01.02), application errors (P01.03), PostgreSQL/migrations (P01.04), cache/storage, OpenTelemetry, health endpoints, jobs, feature flags, audit transport, full developer CLI, identity/tenancy (P02), module runtime (P03) or business modules.
+P01.02 must not implement P01.03 structured application error conventions beyond narrow package-local configuration errors; PostgreSQL/migrations (P01.04); cache/storage; telemetry; health endpoints; jobs; feature flags; audit transport; full developer CLI; identity/tenancy (P02); module runtime (P03); or business configuration/features.
 
-P01.02 becomes active only after P01.01 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.03 becomes active only after P01.02 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
-`business_feature_code_authorized=false` remains mandatory. Do not implement CRM, ERP, commerce, payment, POS, CMS, portal, HR/projects, supply chain, integrations, builders, BI, AI-agent business behavior or any other domain feature during P01.01.
+`business_feature_code_authorized=false` remains mandatory. Do not implement CRM, ERP, commerce, payment, POS, CMS, portal, HR/projects, supply chain, integrations, builders, BI, AI-agent business behavior or any other domain feature during P01.
 
 ## Quality and release rules
 
@@ -102,7 +107,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects. Releases prefer immutable build-once/promote artifacts with source SHA and gate evidence.
 
-For P01.01 the required executable evidence is primarily G0/G1/G2/G7. Tenant, migration, event-replay and module-lifecycle tests are N/A because those capabilities are not in scope; record N/A explicitly rather than silently omitting them.
+For P01.02 required executable evidence includes G0/G1/G2/G5/G7 with explicit negative tests for invalid required configuration, invalid environment identity and secret redaction. Database migration, event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -125,7 +130,7 @@ Every material new trust boundary/provider/privileged capability requires a thre
 
 Go backend/core; TypeScript+React web/admin/builder/SDK; Rust only when justified; Python only for justified AI/data work; PostgreSQL OLTP; Redis-compatible cache; S3-compatible storage; NATS/JetStream-class messaging; OpenTelemetry observability.
 
-P01.01 does **not** authorize adding the later infrastructure merely because it is part of the technology baseline.
+The active P01 package does **not** authorize adding later infrastructure merely because it is part of the technology baseline.
 
 ## Required work protocol
 
@@ -150,11 +155,11 @@ Do not use local/self-hosted runners for canonical governance; silently add doma
 
 ADR-0006 is expired/historical-only and cannot authorize a current CI bypass.
 
-Issue #4 remains an external distribution/public-launch licensing/IP/trademark gate. The repository is public and current `LICENSE` remains GPLv3. Issue #4 does not block the currently authorized P01.01 kernel engineering scope.
+Issue #4 remains an external distribution/public-launch licensing/IP/trademark gate. The repository is public and current `LICENSE` remains GPLv3. Issue #4 does not block the currently authorized P01 kernel engineering scope.
 
 ## Exact next transition
 
-Implement P01.01 in a **separate executable PR after this governance transition is merged and verified on `main`**. Obtain required G0/G1/G2/G7 evidence, move P01.01 `active -> verification -> done`, reconcile canonical state, then activate only P01.02.
+Implement P01.02 in a separate executable PR. Obtain required G0/G1/G2/G5/G7 evidence, move P01.02 `active -> verification -> done`, reconcile canonical state, then activate only P01.03.
 
 ## Scope drift
 

@@ -7,70 +7,64 @@ Last reconciled: **2026-08-22**
 - Program: **Kernel Program**
 - Phase: **P01 — Omnexa Kernel**
 - Phase state: **active**
-- Current work package: **P01.01 — Go workspace/build skeleton**
-- P01 progress: **0 / 12 done**
+- Current work package: **P01.02 — Configuration & environment system**
+- P01 progress: **1 / 12 done**
+- P01.01: **DONE — hosted executable evidence recorded**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
-- P00.10: **DONE**
 - Repository visibility: **PUBLIC**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
 - Kernel implementation: **AUTHORIZED ONLY FOR ACTIVE P01 PACKAGE**
 - Business-feature implementation: **NOT AUTHORIZED**
-- P01.02–P01.12: **PLANNED / NOT ACTIVE**
+- P01.03–P01.12: **PLANNED / NOT ACTIVE**
 
-## P00 exit result
+## P01.01 completion
 
-P00.01–P00.10 are complete. P00.01–P00.09 remain frozen as Omnexa Foundation Architecture v1; P00.10 verified and exited the foundation phase. Material reinterpretation of frozen architecture requires change control and a superseding accepted ADR.
+P01.01 merged through PR #40 as `7257977264d788663083fa215462b1828f1e5afb` after GitHub-hosted governance run `32562869345`, job `97007065640`, completed SUCCESS.
 
-ADR-0006's temporary P00 CI exception is expired and historical-only. It cannot authorize any current bypass.
+Completion evidence is canonicalized at `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md` and records:
 
-## P01 entry controls
+- Go `1.26.7` exact pin: PASS;
+- G0 governance: PASS;
+- G1 format/static/workspace/dependency-boundary: PASS;
+- G2 unit/smoke: PASS;
+- G7 build/package: PASS;
+- GitHub-hosted Ubuntu 24.04 / X64 execution: PASS;
+- no P01.02+, P02/P03 or business-domain behavior introduced.
 
-### EG-02 / Issue #3 — SATISFIED
+## Active P01 package — P01.02
 
-Verified controls include:
+P01.02 is the sole active package. It owns the typed configuration/environment system only:
 
-- live `main.protected=true`;
-- PR-only integration;
-- required `governance` status check;
-- direct fast-forward update rejected;
-- force update rejected;
-- failed-governance PR #34 rejected;
-- unresolved conversation on CODEOWNERS-path PR #37 rejected until resolution;
-- resolved, green PR #37 merged successfully;
-- green Dependabot PR #35 merged successfully;
-- force pushes and branch deletion remain blocked by configured ruleset.
+- deterministic configuration loading and validation;
+- explicit precedence across defaults, config file and environment variables;
+- governed environment identity;
+- required/optional setting semantics;
+- secret-safe redaction;
+- deterministic isolated test overrides;
+- provenance diagnostics that never reveal secret values;
+- fail-closed startup on invalid required configuration.
 
-Current single-maintainer review policy uses zero required approvals and no required Code Owner review to avoid self-review deadlock. Tighten this when an independent reviewer exists.
+Explicitly prohibited in P01.02: structured application error model beyond narrow config errors (P01.03), PostgreSQL/migrations, cache/storage clients, telemetry, health endpoints, jobs, feature flags, audit transport, tenancy/organizations, module runtime and business configuration.
 
-### EG-03 / Issue #14 — SATISFIED
+P01.03 may activate only after P01.02 reaches `done` with required G0/G1/G2/G5/G7 hosted evidence.
 
-Canonical governance CI runs only on:
+## Protected integration / CI
 
-```yaml
-runs-on: ubuntu-24.04
-```
+`main.protected=true` remains verified. PR-only integration, required `governance`, failed-check rejection, direct/force update rejection and conversation resolution are enforced. Current single-maintainer review policy keeps required approvals at zero until an independent reviewer exists.
 
-The required job is `governance` and must prove `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. PR #37 run `32541439589` is current positive evidence. No self-hosted/local fallback is permitted.
+Canonical governance CI remains GitHub-hosted only on `ubuntu-24.04`; local/self-hosted runners are prohibited.
 
 ## Dependabot
 
-Repository-managed `.github/dependabot.yml` is merged. GitHub Actions dependencies are checked weekly and minor/patch updates are grouped. Go/npm ecosystems will be added only when their manifests exist in governed implementation scope.
-
-## Active P01 package
-
-P01.01 is the sole active package. Scope is limited to the Go workspace/build skeleton: toolchain declaration, workspace/module layout, minimal kernel process, build metadata and deterministic format/vet/test/build/smoke verification.
-
-Explicitly prohibited in P01.01: configuration system, persistence/migrations, cache/storage, telemetry, health endpoints, jobs, feature flags, audit transport, full CLI, identity/tenancy, module runtime and business modules.
-
-P01.02 may activate only after P01.01 reaches `done` with required `G0/G1/G2/G7` hosted evidence.
+Repository-managed `.github/dependabot.yml` is merged. GitHub Actions dependencies are checked weekly. The P01.01 run emitted a non-blocking Node runtime deprecation warning for `actions/checkout@v4`; Dependabot remains the governed dependency-update path.
 
 ## Issue #4 — external distribution gate
 
-Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This gate does not block the authorized P01 kernel engineering scope, but it must be resolved before claims or decisions that depend on commercial/public distribution policy.
+Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This does not block the active P01 kernel package but must be resolved before decisions that depend on commercial/public distribution policy.
 
 ## Exact next work
 
-Implement **P01.01 only** in a separate executable PR after this governance transition is merged and verified on `main`. Keep `business_feature_code_authorized=false` and P01.02–P01.12 planned.
+Implement **P01.02 only**, obtain the required hosted configuration/security/build evidence, reconcile P01.02 to `done`, then activate only P01.03. Keep `business_feature_code_authorized=false` and P02+ implementation locked.

@@ -6,17 +6,17 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01 — Go workspace/build skeleton is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01 is DONE; P01.02 — Configuration & environment system is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Relevant entry/sequence sources:
+Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Relevant sources:
 
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
-- `docs/governance/P00_P01_TRANSITION_CHECKLIST.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.01.md`
+- `docs/roadmap/work-packages/P01.02.md`
+- `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -49,17 +49,25 @@ Canonical required job:
 runs-on: ubuntu-24.04
 ```
 
-The `governance` job fails unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited. PR #37 run `32541439589` is current positive hosted evidence.
+The `governance` job fails unless `RUNNER_ENVIRONMENT=github-hosted`, Linux and X64. Local/self-hosted runners are prohibited.
+
+P01.01 executable proof: PR #40, workflow run `32562869345`, job `97007065640`, Go `1.26.7`, all P01.01 verification checks PASS, merge `7257977264d788663083fa215462b1828f1e5afb`.
 
 Repository-managed Dependabot configuration is present for weekly GitHub Actions dependency updates.
 
-## P01.01 — active scope
+## P01 package status
 
-P01.01 establishes only the reproducible Go workspace/build skeleton: repository-owned Go toolchain declaration, workspace/module layout, minimal kernel process, build metadata and deterministic format/vet/test/build/smoke commands.
+### P01.01 — done
 
-It must **not** implement configuration, persistence/migrations, cache/storage, telemetry, health endpoints, jobs, feature flags, audit transport, full developer CLI, identity/tenancy, module runtime or any business-domain behavior. Those belong to later packages/phases.
+The Go workspace/build skeleton is complete: pinned Go toolchain, root workspace/module metadata, minimal kernel entrypoint, build metadata/tests, deterministic verification wrapper and hosted CI integration. Evidence is recorded at `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
 
-P01.02–P01.12 remain planned and strict sequential activation applies.
+### P01.02 — active
+
+P01.02 implements only the typed configuration/environment system: deterministic loading/validation, precedence, governed environment identity, required/optional settings, secret redaction, isolated test overrides and safe provenance diagnostics.
+
+It must **not** pull forward structured application error conventions beyond narrow config errors, PostgreSQL/migrations, cache/storage, telemetry, health endpoints, jobs, feature flags, audit transport, full developer CLI, identity/tenancy, module runtime or business-domain behavior.
+
+P01.03–P01.12 remain planned and strict sequential activation applies.
 
 ## Public visibility / Issue #4
 
@@ -67,7 +75,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01 active; P01 progress 0 / 12 done; kernel implementation authorized only for P01.01; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00–P27. Current canonical state: **P00 done; P01 active; P01.01 done; P01.02 active; P01 progress 1 / 12 done; kernel implementation authorized only for P01.02; business features locked.**
 
 ## Product principle
 

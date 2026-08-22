@@ -193,3 +193,25 @@ Notes:
 - State files reconciled: `STATE.json`, `STATUS.md`, `FOUNDATION_FREEZE.json`, `FOUNDATION_FREEZE_REVIEW.md`, `P01_ENTRY_GATE.md`, transition checklist, P01 package manifest/spec, README, AGENTS, hardening record and transition-aware validators.
 - Commit / PR: transition PR / merge SHA to be appended in a follow-up reconciliation entry after merge.
 - Notes: canonical CI remains GitHub-hosted only on `ubuntu-24.04`. P01.02–P01.12 and all business-domain implementation remain unauthorized. Issue #4 remains the external distribution/public-launch licensing/IP/trademark gate.
+
+## 2026-08-22 — P00/P01 transition merge reconciliation
+
+- Phase / package: `P00.10 -> P01.01`.
+- Transition: confirms P00 `done`, P01 `active`, P01.01 `active` at transition time.
+- Summary: Records immutable transition merge/run evidence without rewriting the earlier transition entry.
+- Evidence: PR #38 governance run `32542183023`, job `96954177596`, SUCCESS on GitHub-hosted `ubuntu-24.04`; PR #38 merged as `e75fe8e5fe4028584115a005820819395f9dff91`. Follow-up evidence-only PR #39 also passed hosted governance and merged as `776f0c01826ad727a5ff152f9393fc4c8d0d7486`.
+- Architecture impact: none; this entry reconciles immutable transition evidence only.
+- State files reconciled: transition checklist, `STATE.json`, and `docs/roadmap/P00_P01_TRANSITION_EVIDENCE_2026-08-22.md`.
+- Commit / PR: `#38` / `e75fe8e5fe4028584115a005820819395f9dff91`; `#39` / `776f0c01826ad727a5ff152f9393fc4c8d0d7486`.
+- Notes: canonical governance remains GitHub-hosted only; local/self-hosted runners remain prohibited.
+
+## 2026-08-22 — P01.01 Go workspace/build skeleton completion
+
+- Phase / package: `P01.01`.
+- Transition: `active -> verification -> done`; `P01.02 planned -> active` through the completion reconciliation.
+- Summary: Completed the first executable Omnexa Kernel package: pinned Go workspace/module foundation, minimal kernel process, build/source metadata, unit tests, deterministic verification wrapper, developer-command mapping and GitHub-hosted CI integration. No later P01, P02/P03 or business-domain behavior was introduced.
+- Evidence: PR #40 head `2f5e4088ce428bbd0ee45db94f7a282509e73fb6`; governance run `32562869345`, job `97007065640`, SUCCESS; runner `GitHub Actions 1000007484`, Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04` `20260816.277.1`; Go `1.26.7`; G0/G1/G2/G7 applicable checks PASS; squash merge `7257977264d788663083fa215462b1828f1e5afb`; detailed evidence `docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md`.
+- Architecture impact: implements the already-approved P01.01 build skeleton only; no frozen Foundation v1 semantics changed and no new ADR was required.
+- State files reconciled: `STATE.json`, `STATUS.md`, `AGENTS.md`, `README.md`, `P01_ENTRY_GATE.md`, P01.01/P01.02 specs, P01 package sequence and P01 validators.
+- Commit / PR: implementation `#40` / `7257977264d788663083fa215462b1828f1e5afb`; completion-reconciliation PR/merge SHA to be appended after merge.
+- Notes: P01.02 is now the sole active kernel scope. `business_feature_code_authorized=false`; P01.03+ and P02+ remain unauthorized.
