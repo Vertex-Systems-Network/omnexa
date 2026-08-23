@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-24"
-  nature: "non-authoritative P02.06 closure / P02.07 activation continuity snapshot"
-  implementation_merge: "083c2866f0cd0773b85201750c2196bfd2fcc167"
-  closure_branch: "governance/p02-06-close-p02-07-activate"
+  nature: "non-authoritative P02.07 closure / P02.08 activation continuity snapshot"
+  implementation_merge: "5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c"
+  closure_branch: "governance/p02-07-close-p02-08-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,8 +16,8 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  candidate_progress_after_closure: "6 / 10 done"
-  candidate_current_work_package_after_closure: "P02.07"
+  candidate_progress_after_closure: "7 / 10 done"
+  candidate_current_work_package_after_closure: "P02.08"
   candidate_owner_after_closure: "kernel.identity"
 
 p01_prerequisite:
@@ -77,70 +77,79 @@ p02_05_completion:
   evidence: "docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md"
 
 p02_06_completion:
-  state: "done_candidate_pending_closure_merge"
+  state: "done"
   implementation_pr: 79
   final_exact_head: "dbbd105fd5f2543ca7dd5df93375eaf1057928fc"
   canonical_run: 32664834112
   canonical_job: 97256520050
   result: "PASS"
   implementation_merge: "083c2866f0cd0773b85201750c2196bfd2fcc167"
-  runner: "GitHub Actions 1000015801"
+  evidence: "docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md"
+
+p02_07_completion:
+  state: "done_candidate_pending_closure_merge"
+  implementation_pr: 81
+  final_exact_head: "51ccaa12c3534f74fba6eab9d4698ee483ef4ffd"
+  canonical_run: 32669167972
+  canonical_job: 97267175953
+  result: "PASS"
+  implementation_merge: "5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c"
+  runner: "GitHub Actions 1000016379"
   environment: "github-hosted"
   os: "Ubuntu 24.04.4 LTS"
   arch: "X64"
   runner_image: "ubuntu-24.04 / 20260816.277.1"
   go: "1.26.7"
   postgresql: "18.6"
-  g4: "N/A for new P02.06 persistence; retained P02.05 migration regression PASS"
-  evidence: "docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md"
+  evidence: "docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md"
   diagnostic_failures:
-    - "32664671013 / 97256120056 on 68a295957e30453afdfa8e4303ad8924b08dc530 — repository Go quality stopped on one gofmt alignment-space correction in contextual_errors.go; fixed without behavior, acceptance or gate change"
+    - "32668735841 / 97266149110 on 0ab9873367586ab0191a91f658da275f449de796 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
 
 candidate_active_contract:
-  work_package: "P02.07"
-  name: "MFA/passkey-ready flows"
+  work_package: "P02.08"
+  name: "Service accounts & API credentials"
   owner: "kernel.identity"
-  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.07 active in a later governed session."
+  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.08 active in a later governed session."
   authorized:
-    - "MFA factor enrollment/verification/removal lifecycle"
-    - "passkey/WebAuthn-ready credential and challenge contract using approved platform security primitives"
-    - "approved additional factor semantics where implemented"
-    - "one-way/secure recovery-code lifecycle"
-    - "strong-auth/step-up policy hooks for privileged operations without replacing authorization"
-    - "challenge replay/expiry/principal-session binding validation"
-    - "synthetic fixtures and no-secret telemetry/audit behavior"
+    - "distinct non-human Service Account principal under kernel.identity"
+    - "tenant/organization binding and capability/permission scope composition through accepted P02 authorization foundations"
+    - "API credential issue/identify/verify/rotate/revoke/expire lifecycle"
+    - "one-time secret presentation where applicable and non-reversible verifier storage"
+    - "classification-safe credential inventory/audit metadata while raw secrets remain RESTRICTED"
+    - "classification-safe last-used/rotation metadata where useful"
+    - "allowed-scope plus wrong-tenant/wrong-scope/revoked/expired deterministic evidence"
     - "applicable owner-bounded persistence/migrations and focused identity/security evidence"
   forbidden:
-    - "P02.08 service-account/API credential lifecycle"
+    - "OAuth developer applications owned later by platform.developer"
+    - "external connector/provider integration (P16)"
+    - "device identities/POS (P11)"
+    - "AI agent execution identity behavior (P19-P20)"
     - "P02.09 tenant-scoped settings"
     - "P02.10 phase-exit product behavior"
-    - "P24 enterprise SSO/SAML/SCIM"
-    - "business portal UI/features"
-    - "custom cryptographic algorithms or private-key management outside approved platform primitives"
+    - "business API scopes or business features/UI"
     - "deployment/Kubernetes authority"
-    - "AI/model/agent runtime"
 
 security:
   kernel_code_authorized_after_closure: true
-  kernel_authority_scope_after_closure: "P02.07 only"
+  kernel_authority_scope_after_closure: "P02.08 only"
   business_feature_code_authorized: false
-  factor_material_classification: "RESTRICTED"
-  secret_values_in_logs_traces_errors_audit_allowed: false
-  expired_replayed_wrong_principal_challenge_allowed: false
-  strong_auth_replaces_authorization: false
-  session_invalidation_on_factor_or_security_policy_change: "according to policy"
+  raw_api_credential_classification: "RESTRICTED"
+  raw_credentials_in_logs_traces_errors_audit_allowed: false
+  reversible_raw_credential_storage_allowed: false
+  fake_human_service_accounts_allowed: false
+  credential_possession_bypasses_authorization: false
+  generic_platform_superkey_allowed: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json, identify P02.07 as sole active package, then STOP this execution session. Implement P02.07 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.08 as sole active package, then STOP this execution session. Implement P02.08 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.07 in the same execution session after its activation closure merges"
-  - "activate or implement P02.08-P02.10 early"
+  - "implement P02.08 in the same execution session after its activation closure merges"
+  - "activate or implement P02.09-P02.10 early"
+  - "implement OAuth developer apps, connectors, device/POS identities or AI agents early"
   - "implement P03 or business modules/features"
-  - "implement P24 enterprise SSO/SAML/SCIM early"
-  - "implement AI/model/agent runtime"
   - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
 
 source_authority:
@@ -151,8 +160,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  candidate_active_spec: "docs/roadmap/work-packages/P02.07.md"
+  candidate_active_spec: "docs/roadmap/work-packages/P02.08.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P02.06.md"
-  candidate_active: "docs/ai/handoffs/P02.07.md"
+  completed: "docs/ai/handoffs/P02.07.md"
+  candidate_active: "docs/ai/handoffs/P02.08.md"
