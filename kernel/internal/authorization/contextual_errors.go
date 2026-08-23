@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	codeContextInvalid                failure.Code = "authorization.context.invalid"
+	codeContextInvalid               failure.Code = "authorization.context.invalid"
 	codeRelationshipResolutionFailed failure.Code = "authorization.relationship_resolution.failed"
 	codeContextConstraintFailed      failure.Code = "authorization.context_constraint.failed"
 )
