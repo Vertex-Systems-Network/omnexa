@@ -3,7 +3,7 @@
 Status: **Canonical v1 semantic contract**  
 Work package: **P00.08**
 
-This document freezes developer command semantics. P01.12 is authorized to implement the first repository-owned CLI surface, but local development and CI must continue to call the same governed underlying operations.
+This document freezes developer command semantics. P01.12 implemented the first repository-owned CLI surface by composing existing governed operations. P01 is now complete; the CLI remains a kernel capability but creates no future-phase authority.
 
 ## Development lifecycle
 
@@ -17,7 +17,7 @@ omnexa dev reset
 
 `dev bootstrap` verifies pinned toolchains, prepares non-secret local config, provisions disposable local dependencies, waits for health, installs dependencies and applies migrations. `dev reset` must fail closed if target identity is ambiguous.
 
-These lifecycle names remain the canonical future command contract. P01.12 does **not** pull deployment orchestration or destructive reset/bootstrap behavior forward merely to fill these names; only the bounded baseline explicitly listed under **Active P01.12** is executable during P01.
+These lifecycle names remain the canonical future command contract. P01.12 did **not** pull deployment orchestration or destructive reset/bootstrap behavior forward merely to fill these names; they remain unimplemented until a later governed scope authorizes them.
 
 ## Database lifecycle
 
@@ -30,7 +30,7 @@ omnexa db seed
 
 Production migration execution is a separate release/operations concern and must not inherit unsafe local-reset semantics.
 
-P01.12 implements only the safe `db migrate` boundary. `db status`, `db fresh` and `db seed` remain contract names for later governed implementation and are not silently approximated.
+P01.12 implemented only the safe `db migrate` boundary. `db status`, `db fresh` and `db seed` remain contract names for later governed implementation and are not silently approximated.
 
 ## Quality commands
 
@@ -69,24 +69,21 @@ bash scripts/verify_p01_08.sh
 bash scripts/verify_p01_09.sh
 bash scripts/verify_p01_10.sh
 bash scripts/verify_p01_11.sh
+P01_12_TEST_DATABASE_URL=<synthetic PostgreSQL test DSN> bash scripts/verify_p01_12.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-Canonical GitHub-hosted governance executes repository Go quality and completed P01 regressions in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. Later completed packages use deterministic in-process primitives/test doubles where appropriate.
+Canonical GitHub-hosted governance executes repository Go quality and P01 regressions in sequence on `ubuntu-24.04`. P01.04 uses PostgreSQL 18.6, P01.05 uses Valkey 9.1.1 and P01.06 uses `adobe/s3mock:5.1.0` as governed synthetic services. Later completed packages use deterministic in-process primitives/test doubles where appropriate.
 
-## Completed P01.11
+## Completed P01.12 developer CLI
 
-P01.11 is complete with canonical evidence in `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`. Its verifier remains a required regression gate. Protected audit remains separate from ordinary logs; required-audit failures do not silently succeed; generic audit rejects secret/auth/key/payment-sensitive metadata; audit write does not imply read/export authority; and descriptive actor/scope metadata does not grant identity, tenancy or authorization authority.
+P01.12 — Developer CLI Baseline is complete with canonical evidence in `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md` and the satisfied phase exit gate in `docs/governance/P01_EXIT_GATE.md`.
 
-## Active P01.12
-
-P01.12 — Developer CLI Baseline is the sole active executable kernel package and owns the P01 exit proof.
-
-The first repository-owned executable surface is intentionally bounded to:
+The repository-owned executable surface is intentionally bounded to:
 
 ```text
-omnexa                         # existing minimal kernel startup/smoke path
+omnexa                         # minimal kernel startup/smoke path
 omnexa help
 omnexa version
 omnexa health
@@ -94,7 +91,7 @@ omnexa db migrate
 omnexa verify <target>
 ```
 
-Implementation ownership is `kernel.developer`. The CLI composes completed kernel capabilities and approved repository tooling; it does not become a business/domain owner or privileged administration path.
+Implementation ownership is `kernel.developer`. The CLI composes completed kernel capabilities and approved repository tooling; it is not a business/domain owner or privileged administration path.
 
 ### Help and version
 
@@ -106,7 +103,7 @@ Implementation ownership is `kernel.developer`. The CLI composes completed kerne
 
 ### Database migration guard
 
-P01.12 `db migrate`:
+`db migrate`:
 
 - requires an **explicit** configured environment source rather than silently accepting the default `local` identity;
 - requires the governed P01.04 database configuration/resource identity;
@@ -117,7 +114,7 @@ P01.12 `db migrate`:
 
 ### Verification target mappings
 
-P01.12 does not reimplement quality logic. It invokes fixed allowlisted executables (`python`, `bash`, `go`) without shell-string expansion and maps targets to existing governed operations:
+P01.12 does not reimplement quality logic. It invokes fixed allowlisted executable/argument tuples (`python`, `bash`, `go`) without shell-string expansion and maps targets to existing governed operations:
 
 - `verify governance` -> canonical governance/development/operations/freeze/P01 readiness/package validators;
 - `verify format`, `verify lint`, `verify static` -> `scripts/verify_go_quality.sh`;
@@ -128,16 +125,16 @@ P01.12 does not reimplement quality logic. It invokes fixed allowlisted executab
 - `verify security` -> repository Go quality plus completed security-relevant P01 verifier subset;
 - `verify build` -> kernel build;
 - `verify release` -> repository Go quality + module checksum verification + kernel build;
-- `verify module-lifecycle` -> explicit `N/A` during P01 because P03 module runtime is not active; it is never relabeled PASS;
-- `verify all` -> canonical governance validators + repository Go quality + **P01.01-P01.11** completed regression verifiers + `go mod verify` + kernel build.
+- `verify module-lifecycle` -> explicit `N/A` because P03 module runtime is not active; it is never relabeled PASS;
+- `verify all` -> canonical governance validators + repository Go quality + **P01.01-P01.11** regression verifiers + `go mod verify` + kernel build.
 
-`verify all` intentionally does not recursively invoke `scripts/verify_p01_12.sh`. Canonical governance runs real `omnexa verify all` and the focused P01.12 verifier as separate sequential gates, preventing recursive verification while proving that local and CI use the same underlying semantics.
+`verify all` intentionally does not recursively invoke `scripts/verify_p01_12.sh`. Canonical governance runs real `omnexa verify all` and the focused P01.12 verifier as separate sequential gates, preventing recursive verification while proving local/CI semantic parity.
 
 ### P01.12 focused verifier and exit path
 
-`scripts/verify_p01_12.sh` is fail-closed and covers applicable G0-G8 P01.12 risk. It verifies active-package governance, formatting/static analysis, unit/race behavior, deterministic help/version/health, guarded PostgreSQL migration, secret-safe negatives, command allowlisting, build/package and module checksum integrity.
+`scripts/verify_p01_12.sh` is fail-closed and covers applicable G0-G8 P01.12 risk. It verifies governance/readiness, formatting/static analysis, unit/race behavior, deterministic help/version/health, guarded PostgreSQL migration, secret-safe negatives, command allowlisting, build/package and module checksum integrity.
 
-Canonical GitHub-hosted governance additionally invokes:
+Canonical GitHub-hosted governance invokes:
 
 ```text
 omnexa db migrate
@@ -145,9 +142,9 @@ omnexa verify all
 bash scripts/verify_p01_12.sh
 ```
 
-with synthetic PostgreSQL/Valkey/S3-compatible providers already provisioned by the governed `ubuntu-24.04` job. This gives the P01 exit proof one reproducible lane covering configuration resolution, kernel start/build, migration, cache/storage contracts, safe observability, readiness/diagnostics, jobs/configuration/audit primitives, developer verification and required quality/security/supply-chain/build checks without hidden manual steps.
+with synthetic PostgreSQL/Valkey/S3-compatible providers provisioned by the governed `ubuntu-24.04` job. Final implementation run/job `32629072886 / 97168916985` passed this lane, establishing the P01 exit proof for configuration resolution, kernel start/build, migration, cache/storage contracts, safe observability, readiness/diagnostics, jobs/configuration/audit primitives, developer verification and required quality/security/supply-chain/build checks without hidden manual steps.
 
-P01.12 may not implement production super-admin CLI, P02 tenant/user/role administration, P03 module install/runtime commands, P04+ event/workflow/domain commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI runtime.
+The CLI does not authorize production super-admin behavior, P02 tenant/user/role administration, P03 module install/runtime commands, P04+ event/workflow/domain commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI runtime.
 
 ## Go result convention
 
@@ -185,7 +182,7 @@ omnexa verify web-standards
 omnexa verify accessibility
 ```
 
-A required WAVE API/license dependency that is unavailable is `BLOCKED`, not PASS. These commands are planning semantics only during P01.
+A required WAVE API/license dependency that is unavailable is `BLOCKED`, not PASS. These commands are planning semantics only until an authorized browser-UI package exists.
 
 ## Exit-code contract
 
@@ -197,6 +194,8 @@ A blocked external dependency must not return success merely to keep pipelines g
 ## Safety guardrails
 
 Destructive commands require explicit environment/resource identity. `local` is not inferred from hostname alone. Commands must never silently target production because credentials happen to be present. CLI convenience does not create authority; privileged future operations must use governed authentication, authorization and audit paths.
+
+At the P01-complete checkpoint both `kernel_code_authorized` and `business_feature_code_authorized` are false. No future command surface may be implemented until a governed phase activation authorizes it.
 
 ## No hidden manual steps
 

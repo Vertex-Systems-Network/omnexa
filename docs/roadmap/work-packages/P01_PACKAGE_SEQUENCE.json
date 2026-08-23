@@ -2,11 +2,12 @@
   "schema_version": 1,
   "phase": "P01",
   "name": "Omnexa Kernel",
-  "state": "active",
+  "state": "done",
   "activation_policy": "strict_sequential_one_active_package",
   "entry_gate": "docs/governance/P01_ENTRY_GATE.md",
+  "exit_gate": "docs/governance/P01_EXIT_GATE.md",
   "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
-  "implementation_authorized": true,
+  "implementation_authorized": false,
   "packages": [
     {"id":"P01.01","name":"Go workspace/build skeleton","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P01.01.md"},
     {"id":"P01.02","name":"Configuration & environment system","state":"done","depends_on":["P01.01"],"spec":"docs/roadmap/work-packages/P01.02.md"},
@@ -19,8 +20,8 @@
     {"id":"P01.09","name":"Job & scheduler primitives","state":"done","depends_on":["P01.08"],"spec":"docs/roadmap/work-packages/P01.09.md"},
     {"id":"P01.10","name":"Feature flag & configuration registry","state":"done","depends_on":["P01.09"],"spec":"docs/roadmap/work-packages/P01.10.md"},
     {"id":"P01.11","name":"Audit transport foundation","state":"done","depends_on":["P01.10"],"spec":"docs/roadmap/work-packages/P01.11.md"},
-    {"id":"P01.12","name":"Developer CLI baseline","state":"active","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
+    {"id":"P01.12","name":"Developer CLI baseline","state":"done","depends_on":["P01.11"],"spec":"docs/roadmap/work-packages/P01.12.md"}
   ],
-  "phase_exit": "Fresh install from zero must start, migrate, health-check, emit telemetry and run tests reproducibly without hidden manual steps.",
-  "note": "P01 is active. P01.01-P01.11 are done with GitHub-hosted executable evidence. P01.12 is the sole active executable kernel package and owns the P01 exit proof. Business-feature code remains unauthorized."
+  "phase_exit": "SATISFIED — fresh install from zero starts, migrates, health-checks, emits safe telemetry and runs tests reproducibly without hidden manual steps. See docs/governance/P01_EXIT_GATE.md.",
+  "note": "P01 is complete at 12 / 12 with GitHub-hosted executable evidence. No P01 package is active and P01 implementation is locked. P02 remains planned and requires a separate governed activation before any P02 implementation. Business-feature code remains unauthorized."
 }

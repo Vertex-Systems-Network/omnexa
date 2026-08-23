@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate frozen P00 evidence and the completed P00 -> active P01 handoff."""
+"""Validate frozen P00 evidence and the P00 -> P01 handoff through P01 completion."""
 
 from __future__ import annotations
 
@@ -38,20 +38,29 @@ if set(manifest.get("frozen_packages") or []) != expected_frozen:
 
 entry = manifest.get("p01_entry_gate") or {}
 if entry.get("state") != "SATISFIED" or entry.get("kernel_code_authorized") is not True or entry.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: P01 entry gate/implementation locks are inconsistent")
+    raise SystemExit("ERROR: historical P01 entry gate/implementation locks are inconsistent")
 controls = {item.get("tracker"): item.get("state") for item in entry.get("blockers") or []}
 if controls.get("issue:#3") != "SATISFIED" or controls.get("issue:#14") != "SATISFIED":
     raise SystemExit("ERROR: EG-02/Issue #3 and EG-03/Issue #14 must remain SATISFIED")
 
 if state.get("current_phase") != "P01":
-    raise SystemExit("ERROR: canonical post-transition phase must be P01")
+    raise SystemExit("ERROR: canonical P01 checkpoint must identify P01")
 current = state.get("current_work_package")
 expected_ids = [f"P01.{i:02d}" for i in range(1, 13)]
-if current not in expected_ids:
-    raise SystemExit(f"ERROR: invalid current P01 package: {current}")
+phase = state.get("phase") or {}
+terminal = phase.get("state") == "done"
 lock = state.get("implementation_lock") or {}
-if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: post-transition implementation locks are inconsistent")
+
+if terminal:
+    if current is not None or phase.get("done_work_packages") != 12:
+        raise SystemExit("ERROR: completed P01 checkpoint must have 12/12 done and no current package")
+    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: completed P01 checkpoint must lock implementation")
+else:
+    if phase.get("state") != "active" or current not in expected_ids:
+        raise SystemExit(f"ERROR: invalid active P01 package: {current}")
+    if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: active P01 implementation locks are inconsistent")
 
 tracking = state.get("governance_tracking") or {}
 branch = tracking.get("main_branch_protection") or {}
@@ -100,6 +109,11 @@ print("Omnexa foundation freeze / P00 exit validation: PASS")
 print("Architecture: FROZEN")
 print("P00 exit: DONE")
 print("P01 entry: SATISFIED")
-print(f"Active P01 package: {current}")
-print("Kernel code: AUTHORIZED FOR ACTIVE P01 PACKAGE")
+if terminal:
+    print("P01 state: DONE / 12 OF 12")
+    print("Active P01 package: NONE")
+    print("Kernel code: LOCKED PENDING SEPARATE PHASE ACTIVATION")
+else:
+    print(f"Active P01 package: {current}")
+    print("Kernel code: AUTHORIZED FOR ACTIVE P01 PACKAGE")
 print("Business feature code: LOCKED")
