@@ -79,8 +79,17 @@ if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|ker
   exit 1
 fi
 
-if grep -R -nE 'type[[:space:]]+(Tenant|Organization|Membership|Session|Credential|Role|Permission|Policy|MFA|Passkey|ServiceAccount|APIKey|Person)([[:space:]]|$)' kernel/internal/identity --include='*.go'; then
-  echo "ERROR: P02.01 declares unauthorized tenancy/authentication/authorization/service-account/business concepts" >&2
+# P02.01's historical boundary remains enforced on the P02.01-owned runtime
+# foundation files. Additive P02.04 authentication/session files are authorized by
+# the current canonical package and must not force the completed prerequisite gate
+# to reject its own owner's newly activated scope.
+p02_01_runtime=(
+  kernel/internal/identity/types.go
+  kernel/internal/identity/repository.go
+  kernel/internal/identity/postgres_repository.go
+)
+if grep -nE 'type[[:space:]]+(Tenant|Organization|Membership|Session|Credential|Role|Permission|Policy|MFA|Passkey|ServiceAccount|APIKey|Person)([[:space:]]|$)' "${p02_01_runtime[@]}"; then
+  echo "ERROR: P02.01 foundation files declare unauthorized tenancy/authentication/authorization/service-account/business concepts" >&2
   exit 1
 fi
 
