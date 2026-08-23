@@ -39,7 +39,7 @@ verify targets:
   security module-lifecycle build release all
 `
 
-var errRepositoryRootNotFound = errors.New("Omnexa repository root could not be found")
+var errRepositoryRootNotFound = errors.New("omnexa repository root could not be found")
 
 // Options supplies explicit process inputs to the P01.12 developer CLI.
 type Options struct {
