@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is DONE at 12 / 12. P01 exit is SATISFIED. No work package is active. P02 remains PLANNED / NOT ACTIVE.** `kernel_code_authorized=false`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 0 / 10 done. P02.01 — Principal & user identity foundation is the sole active work package.** `kernel_code_authorized=true` only for P02.01; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -15,11 +15,12 @@ Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execut
 Key references:
 
 - `docs/governance/FOUNDATION_FREEZE.json`
-- `docs/governance/P01_ENTRY_GATE.md`
 - `docs/governance/P01_EXIT_GATE.md`
-- `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.12.md`
-- `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md`
+- `docs/governance/P02_ENTRY_GATE.md`
+- `docs/governance/P02_EXIT_GATE.md`
+- `docs/governance/P01_P02_TRANSITION_CHECKLIST.md`
+- `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`
+- `docs/roadmap/work-packages/P02.01.md`
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
@@ -40,36 +41,27 @@ Key references:
 
 Issue #3 is closed and `main` is protected with PR-only integration, strict required `governance`, blocked direct/force updates, failed-check merge rejection, required conversation resolution and up-to-date branch enforcement.
 
-Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed unless the runner is GitHub-hosted Linux/X64. Local/self-hosted governance runners are prohibited. Permanent repository-wide Go quality runs before package regressions through `bash scripts/verify_go_quality.sh`, using pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
+Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed unless the runner is GitHub-hosted Linux/X64. Local/self-hosted governance runners are prohibited. Permanent repository-wide Go quality runs through `bash scripts/verify_go_quality.sh` using pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
 
-## P01 completion
+## P01 completion retained
 
-P01.01-P01.12 are complete with canonical executable evidence. The final P01.12 implementation delivered the bounded `kernel.developer` CLI baseline and P01 fresh-install exit proof:
+P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. `docs/governance/P01_EXIT_GATE.md` remains **SATISFIED**, and all P01 regressions remain mandatory during P02.
 
-- deterministic `help` and `version`;
-- safe structured `health` diagnostics;
-- guarded non-production `db migrate`;
-- fail-closed `verify <target>` orchestration using existing governed validators/verifiers;
-- exact subprocess command allowlisting without shell-string expansion;
-- runtime configuration isolation from verification subprocesses;
-- real canonical `verify all` execution;
-- focused positive/negative/race checks;
-- P01 G0-G8 exit evidence.
+## P02 readiness and active scope
 
-Final P01.12 evidence: implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. See `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md` and `docs/governance/P01_EXIT_GATE.md`.
+P02 readiness preparation merged through PR #67 as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final exact-head canonical run `32632920772 / 97178312240` passed.
 
-The P01 exit gate proves clean configuration/startup, fresh PostgreSQL migration, cache/storage provider contracts, safe telemetry, readiness/diagnostics, jobs/configuration/audit primitives, developer verification, security/static checks, module checksum verification and build/package behavior reproducibly without hidden manual steps.
+P02 uses a strict sequential 10-package sequence. Only P02.01 is active. Its owner is `kernel.identity`, and its authorized scope is the canonical human principal/User identity foundation with deterministic lifecycle semantics, safe identity attributes and owner-bounded persistence where required.
+
+P02.01 explicitly does **not** authorize tenant lifecycle/membership authority, organization hierarchy, authentication/session behavior, RBAC/policy, MFA/passkeys, service-account/API credential lifecycle, P03 module runtime, business modules or AI/model/agent runtime. User remains distinct from business Person.
 
 ## Current implementation lock
 
-No product-development phase is active. P02 is planned but not activated. Until a separate governed P02 readiness/activation transition merges:
-
-- kernel/P02 implementation is not authorized;
-- business-feature implementation is not authorized;
-- P03+ implementation is not authorized;
-- AI/model/agent runtime implementation is not authorized.
-
-Governance/specification/readiness preparation may proceed only within the allowance recorded in `STATE.json`.
+- `kernel_code_authorized=true` only for P02.01.
+- `business_feature_code_authorized=false`.
+- P02.02-P02.10 remain planned.
+- P03+ remains planned.
+- AI/model/agent runtime implementation remains unauthorized.
 
 ## Future browser UI quality/accessibility
 
@@ -81,7 +73,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P01 exit satisfied; P02 planned/not active; both implementation locks false.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P01 exit satisfied; P02 active 0 / 10; P02.01 sole active package; business features locked.**
 
 ## Product principle
 
