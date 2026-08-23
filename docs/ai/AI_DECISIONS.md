@@ -58,7 +58,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Why:** each kernel primitive becomes a verified dependency for the next package; multiple active foundation packages make evidence and authority ambiguous.
 
-**Current implication:** P01.08 implementation is merged and completion-eligible. Closure PR #58 proposes P01.01-P01.08 `done` and P01.09 as the sole active package. Until PR #58 merges, protected `main` remains authoritative and still records P01.08 as active. P01.09 runtime must not start before that transition; P01.10 remains blocked until P01.09 later completes and transitions canonically.
+**Current implication:** P01.10 implementation is merged with exact-head canonical PASS evidence. The separate closure branch `chore/p01-10-close-p01-11-activate` reconciles P01.01-P01.10 `done`, P01.11 as the sole active package and P01.12 planned. P01.11 runtime must not start until that closure merges; after the closure merge the execution session must stop, and P01.11 implementation starts only in a new governed session.
 
 ## D-007 — Repository continuity is a subordinate snapshot, not a new source of truth
 
@@ -90,7 +90,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Rejected:** proprietary telemetry coupling in the kernel contract, global-provider mutation as hidden process state, raw secret/classified/error leakage, audit semantics in ordinary logs, or treating telemetry availability as application correctness.
 
-**Future dependency:** P01.08 consumes the completed observability boundary for health/diagnostic integration; later audit/business/AI systems must preserve their own ownership and authority boundaries.
+**Future dependency:** P01.11 audit transport must remain a separate protected contract from ordinary observability.
 
 ## D-010 — Health/readiness diagnostics are bounded operational signals, not authority
 
@@ -102,4 +102,4 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Rejected:** one generic health boolean, unbounded probes, raw secret/provider error exposure, treating object keys/connection details as diagnostics, module/tenant aggregation before P03, public business status semantics, or Kubernetes-specific architecture as the kernel contract.
 
-**Future dependency:** P01.09 and later kernel/runtime packages may consume safe observability/health primitives but must preserve their authority boundaries. P01.08 does not authorize scheduler, feature registry, audit transport, business state or AI behavior.
+**Future dependency:** P01.11 transport health may expose safe operational state but must not log protected audit payloads or create authorization/business authority.

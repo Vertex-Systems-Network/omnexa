@@ -39,36 +39,36 @@ State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
 Completed package regression verifiers remain mandatory in the same GitHub-hosted governance job. Repository Go quality remains enforced by `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
 
-Canonical completion evidence exists for P01.01 through P01.09 under `docs/roadmap/evidence/`. Latest completed-package implementation evidence is P01.09 PR #59, final strict-up-to-date head `61e9c1115d05300ac9aedf5a555138c6a5a5be1e`, run `32605309150`, job `97109396616`, merge `0bcafbfc52324acba1df9d8eff84a264dda0f233`.
+Canonical completion evidence exists for P01.01 through P01.10 under `docs/roadmap/evidence/`. Latest completed-package implementation evidence is P01.10 PR #61, final exact head `4c9914e4641d0d6e94a895d0fcd16c3a6bf4d962`, run `32609018028`, job `97118796940`, implementation merge `9d11b9250eb74ca2ade531ee58e8f905468cf103`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
-Current bounded state after the governed P01.09 closure transition:
+Current bounded state proposed by the governed P01.10 closure transition:
 
 - P00/P00.10: `done`;
 - P01: `active`;
-- P01.01-P01.09: `done`;
-- P01.10: `active`;
-- P01.11-P01.12: `planned`;
-- `kernel_code_authorized=true` only for P01.10;
+- P01.01-P01.10: `done`;
+- P01.11: `active`;
+- P01.12: `planned`;
+- `kernel_code_authorized=true` only for P01.11;
 - `business_feature_code_authorized=false`.
 
 ## Active P01 package sequence
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
 
-P01.01 through P01.09 are done. P01.09 canonical evidence is `docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md`. **P01.10 — Feature flag & configuration registry** is the sole active package. P01.11-P01.12 remain planned.
+P01.01 through P01.10 are done. P01.10 canonical evidence is `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`. **P01.11 — Audit Transport Foundation** is the sole next active package in this closure transition. P01.12 remains planned.
 
-Advancing again requires P01.10 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, P01.01-P01.09 regressions and repository Go quality all PASS, followed by a governed state reconciliation.
+Advancing again requires P01.11 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, P01.01-P01.10 regressions and repository Go quality all PASS, followed by a separate governed state reconciliation.
 
-## Active P01.10 bounds
+## Active P01.11 bounds
 
-P01.10 may implement only the runtime flag/configuration registry defined in `docs/roadmap/work-packages/P01.10.md`: typed definitions, stable identifiers/descriptions/owner metadata, explicit deterministic defaults/fallbacks, runtime evaluation, future-scope-aware evaluation inputs without P02 identity, version/change metadata hooks, bounded cache-safe refresh/invalidation, explicitly declared operational kill switches and a deterministic test provider.
+P01.11 may implement only the audit transport foundation defined in `docs/roadmap/work-packages/P01.11.md`: stable classification-aware audit envelope; actor/action/target/scope/outcome/correlation/reason/approval metadata without P02 identity; append-oriented sink interface; explicit required-audit failure semantics; classification/redaction enforcement; UUIDv7/timestamp immutability conventions; impersonation/privileged-action metadata; deterministic local/test sink; and bounded protected-payload-safe transport health observability.
 
-It may not implement product experimentation/analytics, tenant admin UI, pricing/entitlement/licensing, authorization based solely on flags, business-module flags before their owner modules exist, P01.11 audit transport, P01.12 developer CLI, P02+ identity/tenancy/business behavior or AI/model/agent/planner functionality.
+It may not implement P02 identity/tenant/role catalogs, business-domain audit events, compliance export/reporting UI, long-term legal hold/retention, domain-event replacement, P01.12 CLI, durable messaging/outbox/inbox pull-forward, later business modules or AI/model/agent behavior.
 
-Flags do not grant authority. Security controls fail closed and cannot be disabled through undeclared generic flags. Sensitive configuration remains governed by classification/secrets policy.
+Audit write access does not imply audit read/export authority. Audit metadata is descriptive and does not create authorization, tenancy or identity authority during P01.11. Protected audit remains separate from ordinary logs, and required-audit sink failure must not silently claim success.
 
 ## Future browser UI planning requirement
 
@@ -87,9 +87,9 @@ Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01-P01.09: DONE
-P01.10: ACTIVE — Feature flag & configuration registry
-P01.11-P01.12: PLANNED
+P01.01-P01.10: DONE
+P01.11: ACTIVE — Audit transport foundation
+P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
