@@ -2,15 +2,15 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-08-22",
+  "last_reconciled": "2026-08-23",
   "program": "kernel",
   "current_phase": "P01",
-  "current_work_package": "P01.10",
+  "current_work_package": "P01.11",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P01.10 feature flag and configuration registry implementation",
+      "P01.11 audit transport foundation implementation",
       "P01 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -30,10 +30,7 @@
       "document": "docs/governance/P01_ENTRY_GATE.md",
       "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
       "blockers": [],
-      "satisfied": [
-        3,
-        14
-      ],
+      "satisfied": [3, 14],
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false
     },
@@ -61,14 +58,14 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32605309150,
-      "job": 97109396616,
+      "workflow_run": 32609018028,
+      "job": 97118796940,
       "evidence_environment": "github-hosted",
       "evidence_os": "Ubuntu 24.04.4 LTS",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "final_check": "governance",
-      "note": "P01.09 PR #59 final strict-up-to-date run 32605309150 / job 97109396616 passed repository Go quality, P01.01-P01.08 regressions and P01.09 G1/G2/G3/G5/G6/G7 gates on GitHub-hosted Ubuntu 24.04.4 LTS / X64 with Go 1.26.7. Local/self-hosted runners remain prohibited."
+      "note": "P01.10 PR #61 final exact-head run 32609018028 / job 97118796940 passed repository Go quality, P01.01-P01.09 regressions and P01.10 G1/G2/G3/G5/G6/G7 gates on GitHub-hosted Ubuntu 24.04.4 LTS / X64 with Go 1.26.7. Local/self-hosted runners remain prohibited."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -82,10 +79,10 @@
   "p01_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P01.10",
-    "work_package_name": "Feature flag & configuration registry",
+    "next_work_package": "P01.11",
+    "work_package_name": "Audit transport foundation",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P01.10.md",
+    "work_package_spec": "docs/roadmap/work-packages/P01.11.md",
     "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 12,
     "mandatory_spec_count": 12,
@@ -93,7 +90,7 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01-P01.09 are done with GitHub-hosted executable evidence. P01.10 is the sole active kernel work package. P01.11-P01.12 remain planned and may not activate until the previous package is done."
+    "note": "P01.01-P01.10 are done with GitHub-hosted executable evidence. P01.11 is the sole active kernel work package. P01.12 remains planned and may not activate until P01.11 is done."
   },
   "state_vocabulary": [
     "planned",
@@ -109,7 +106,7 @@
     "name": "Omnexa Kernel",
     "state": "active",
     "mandatory_work_packages": 12,
-    "done_work_packages": 9,
+    "done_work_packages": 10,
     "work_packages": [
       {
         "id": "P01.01",
@@ -117,361 +114,129 @@
         "state": "done",
         "depends_on": [],
         "spec": "docs/roadmap/work-packages/P01.01.md",
-        "evidence": [
-          ".go-version",
-          "go.mod",
-          "go.work",
-          "kernel/cmd/omnexa/main.go",
-          "kernel/internal/buildinfo/buildinfo.go",
-          "kernel/internal/buildinfo/buildinfo_test.go",
-          "scripts/verify_p01_01.sh",
-          "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_01.sh", "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.02",
         "name": "Configuration & environment system",
         "state": "done",
-        "depends_on": [
-          "P01.01"
-        ],
+        "depends_on": ["P01.01"],
         "spec": "docs/roadmap/work-packages/P01.02.md",
-        "evidence": [
-          "kernel/internal/config/config.go",
-          "kernel/internal/config/config_test.go",
-          "kernel/cmd/omnexa/main_test.go",
-          "scripts/verify_p01_02.sh",
-          "docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_02.sh", "docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.03",
         "name": "Structured error & result conventions",
         "state": "done",
-        "depends_on": [
-          "P01.02"
-        ],
+        "depends_on": ["P01.02"],
         "spec": "docs/roadmap/work-packages/P01.03.md",
-        "evidence": [
-          "kernel/internal/failure/failure.go",
-          "kernel/internal/failure/failure_test.go",
-          "scripts/verify_p01_03.sh",
-          "docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_03.sh", "docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.04",
         "name": "PostgreSQL connection & migration foundation",
         "state": "done",
-        "depends_on": [
-          "P01.03"
-        ],
+        "depends_on": ["P01.03"],
         "spec": "docs/roadmap/work-packages/P01.04.md",
-        "evidence": [
-          "go.mod",
-          "go.sum",
-          "kernel/internal/database/errors.go",
-          "kernel/internal/database/pool.go",
-          "kernel/internal/database/pool_test.go",
-          "kernel/internal/database/transaction.go",
-          "kernel/internal/database/migration.go",
-          "kernel/internal/database/migration_test.go",
-          "kernel/internal/database/integration_test.go",
-          "kernel/migrations/README.md",
-          "scripts/verify_p01_04.sh",
-          "docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_04.sh", "docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.05",
         "name": "Cache abstraction",
         "state": "done",
-        "depends_on": [
-          "P01.04"
-        ],
+        "depends_on": ["P01.04"],
         "spec": "docs/roadmap/work-packages/P01.05.md",
-        "evidence": [
-          ".golangci.yml",
-          "docs/quality/GO_CODE_QUALITY.md",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/cache/cache_test.go",
-          "kernel/internal/cache/codec.go",
-          "kernel/internal/cache/errors.go",
-          "kernel/internal/cache/integration_test.go",
-          "kernel/internal/cache/key.go",
-          "kernel/internal/cache/store.go",
-          "scripts/verify_go_quality.sh",
-          "scripts/verify_p01_05.sh",
-          "docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_05.sh", "docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.06",
         "name": "Object & file storage abstraction",
         "state": "done",
-        "depends_on": [
-          "P01.05"
-        ],
+        "depends_on": ["P01.05"],
         "spec": "docs/roadmap/work-packages/P01.06.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          ".golangci.yml",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/storage/classification_test.go",
-          "kernel/internal/storage/concurrency_integration_test.go",
-          "kernel/internal/storage/context_reader.go",
-          "kernel/internal/storage/errors.go",
-          "kernel/internal/storage/integration_test.go",
-          "kernel/internal/storage/key.go",
-          "kernel/internal/storage/metadata_control_test.go",
-          "kernel/internal/storage/model.go",
-          "kernel/internal/storage/restart_test.go",
-          "kernel/internal/storage/storage_test.go",
-          "kernel/internal/storage/store.go",
-          "kernel/internal/storage/stream.go",
-          "kernel/internal/storage/stream_terminal_test.go",
-          "kernel/internal/storage/timeout_test.go",
-          "scripts/verify_p01_06.sh",
-          "docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_06.sh", "docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.07",
         "name": "Structured logging & OpenTelemetry baseline",
         "state": "done",
-        "depends_on": [
-          "P01.06"
-        ],
+        "depends_on": ["P01.06"],
         "spec": "docs/roadmap/work-packages/P01.07.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          "go.mod",
-          "go.sum",
-          "kernel/internal/observability/config.go",
-          "kernel/internal/observability/context.go",
-          "kernel/internal/observability/errors.go",
-          "kernel/internal/observability/logger.go",
-          "kernel/internal/observability/observability_test.go",
-          "kernel/internal/observability/provider.go",
-          "scripts/validate_p01_preparation.py",
-          "scripts/verify_p01_07.sh",
-          "docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_07.sh", "docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.08",
         "name": "Health, readiness & diagnostics",
         "state": "done",
-        "depends_on": [
-          "P01.07"
-        ],
+        "depends_on": ["P01.07"],
         "spec": "docs/roadmap/work-packages/P01.08.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          "kernel/internal/operations/errors.go",
-          "kernel/internal/operations/health.go",
-          "kernel/internal/operations/health_test.go",
-          "scripts/validate_p01_preparation.py",
-          "scripts/verify_p01_08.sh",
-          "docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_08.sh", "docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.09",
         "name": "Job & scheduler primitives",
         "state": "done",
-        "depends_on": [
-          "P01.08"
-        ],
+        "depends_on": ["P01.08"],
         "spec": "docs/roadmap/work-packages/P01.09.md",
-        "evidence": [
-          ".github/workflows/governance.yml",
-          "go.mod",
-          "kernel/internal/jobs/errors.go",
-          "kernel/internal/jobs/executor.go",
-          "kernel/internal/jobs/jobs_test.go",
-          "kernel/internal/jobs/lifecycle_test.go",
-          "kernel/internal/jobs/registry.go",
-          "kernel/internal/jobs/types.go",
-          "scripts/validate_p01_preparation.py",
-          "scripts/verify_p01_09.sh",
-          "docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md"
-        ]
+        "evidence": ["scripts/verify_p01_09.sh", "docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md"]
       },
       {
         "id": "P01.10",
         "name": "Feature flag & configuration registry",
-        "state": "active",
-        "depends_on": [
-          "P01.09"
-        ],
-        "spec": "docs/roadmap/work-packages/P01.10.md"
+        "state": "done",
+        "depends_on": ["P01.09"],
+        "spec": "docs/roadmap/work-packages/P01.10.md",
+        "evidence": [
+          "kernel/internal/configuration/configuration_test.go",
+          "scripts/verify_p01_10.sh",
+          "docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md"
+        ]
       },
       {
         "id": "P01.11",
         "name": "Audit transport foundation",
-        "state": "planned",
-        "depends_on": [
-          "P01.10"
-        ],
+        "state": "active",
+        "depends_on": ["P01.10"],
         "spec": "docs/roadmap/work-packages/P01.11.md"
       },
       {
         "id": "P01.12",
         "name": "Developer CLI baseline",
         "state": "planned",
-        "depends_on": [
-          "P01.11"
-        ],
+        "depends_on": ["P01.11"],
         "spec": "docs/roadmap/work-packages/P01.12.md"
       }
     ]
   },
   "phases": [
-    {
-      "id": "P00",
-      "name": "Product Constitution & Architecture Freeze",
-      "state": "done"
-    },
-    {
-      "id": "P01",
-      "name": "Omnexa Kernel",
-      "state": "active",
-      "active_work_package": "P01.10",
-      "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"
-    },
-    {
-      "id": "P02",
-      "name": "Identity, Tenancy & Organization",
-      "state": "planned"
-    },
-    {
-      "id": "P03",
-      "name": "Module Runtime",
-      "state": "planned"
-    },
-    {
-      "id": "P04",
-      "name": "Data, Jobs & Event Fabric",
-      "state": "planned"
-    },
-    {
-      "id": "P05",
-      "name": "Omnexa Flow / Workflow OS",
-      "state": "planned"
-    },
-    {
-      "id": "P06",
-      "name": "Universal Business Foundation",
-      "state": "planned"
-    },
-    {
-      "id": "P07",
-      "name": "CRM, Sales & Customer 360",
-      "state": "planned"
-    },
-    {
-      "id": "P08",
-      "name": "Finance & ERP Core",
-      "state": "planned"
-    },
-    {
-      "id": "P09",
-      "name": "Commerce OS",
-      "state": "planned"
-    },
-    {
-      "id": "P10",
-      "name": "Payment Fabric",
-      "state": "planned"
-    },
-    {
-      "id": "P11",
-      "name": "POS & Edge",
-      "state": "planned"
-    },
-    {
-      "id": "P12",
-      "name": "Experience Builder & CMS",
-      "state": "planned"
-    },
-    {
-      "id": "P13",
-      "name": "Portal Platform",
-      "state": "planned"
-    },
-    {
-      "id": "P14",
-      "name": "HR, Projects & Service Operations",
-      "state": "planned"
-    },
-    {
-      "id": "P15",
-      "name": "Supply Chain, Warehouse & Manufacturing",
-      "state": "planned"
-    },
-    {
-      "id": "P16",
-      "name": "Omnexa Connect / Integration Fabric",
-      "state": "planned"
-    },
-    {
-      "id": "P17",
-      "name": "Low-code App Builder",
-      "state": "planned"
-    },
-    {
-      "id": "P18",
-      "name": "Data, Reporting & BI",
-      "state": "planned"
-    },
-    {
-      "id": "P19",
-      "name": "Omnexa Intelligence Platform",
-      "state": "planned"
-    },
-    {
-      "id": "P20",
-      "name": "Governed AI Agents",
-      "state": "planned"
-    },
-    {
-      "id": "P21",
-      "name": "Developer Platform",
-      "state": "planned"
-    },
-    {
-      "id": "P22",
-      "name": "Omnexa Exchange / Marketplace",
-      "state": "planned"
-    },
-    {
-      "id": "P23",
-      "name": "Globalization & Country Packs",
-      "state": "planned"
-    },
-    {
-      "id": "P24",
-      "name": "Enterprise Governance, Security & Compliance",
-      "state": "planned"
-    },
-    {
-      "id": "P25",
-      "name": "Scale Fabric",
-      "state": "planned"
-    },
-    {
-      "id": "P26",
-      "name": "Industry Packs",
-      "state": "planned"
-    },
-    {
-      "id": "P27",
-      "name": "Autonomous Business OS",
-      "state": "planned"
-    }
+    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
+    {"id":"P01","name":"Omnexa Kernel","state":"active","active_work_package":"P01.11","package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json"},
+    {"id":"P02","name":"Identity, Tenancy & Organization","state":"planned"},
+    {"id":"P03","name":"Module Runtime","state":"planned"},
+    {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
+    {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
+    {"id":"P06","name":"Universal Business Foundation","state":"planned"},
+    {"id":"P07","name":"CRM, Sales & Customer 360","state":"planned"},
+    {"id":"P08","name":"Finance & ERP Core","state":"planned"},
+    {"id":"P09","name":"Commerce OS","state":"planned"},
+    {"id":"P10","name":"Payment Fabric","state":"planned"},
+    {"id":"P11","name":"POS & Edge","state":"planned"},
+    {"id":"P12","name":"Experience Builder & CMS","state":"planned"},
+    {"id":"P13","name":"Portal Platform","state":"planned"},
+    {"id":"P14","name":"HR, Projects & Service Operations","state":"planned"},
+    {"id":"P15","name":"Supply Chain, Warehouse & Manufacturing","state":"planned"},
+    {"id":"P16","name":"Omnexa Connect / Integration Fabric","state":"planned"},
+    {"id":"P17","name":"Low-code App Builder","state":"planned"},
+    {"id":"P18","name":"Data, Reporting & BI","state":"planned"},
+    {"id":"P19","name":"Omnexa Intelligence Platform","state":"planned"},
+    {"id":"P20","name":"Governed AI Agents","state":"planned"},
+    {"id":"P21","name":"Developer Platform","state":"planned"},
+    {"id":"P22","name":"Omnexa Exchange / Marketplace","state":"planned"},
+    {"id":"P23","name":"Globalization & Country Packs","state":"planned"},
+    {"id":"P24","name":"Enterprise Governance, Security & Compliance","state":"planned"},
+    {"id":"P25","name":"Scale Fabric","state":"planned"},
+    {"id":"P26","name":"Industry Packs","state":"planned"},
+    {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01.10 is active and is the only authorized executable kernel scope. Implement the governed typed feature flag and runtime configuration registry with explicit owner metadata, deterministic defaults/fallbacks, bounded provider refresh/invalidation, future-scope-aware evaluation without implementing P02 identity, and explicit kill-switch semantics that cannot grant authority or bypass authorization/data isolation. Obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.10 through verification to done, then activate only P01.11. Business-feature code, P02+ implementation and entitlement/experimentation behavior remain unauthorized."
+  "next_transition_rule": "P01.11 is active and is the only authorized executable kernel scope. Implement the governed audit transport foundation with a stable append-oriented audit envelope, classification/redaction enforcement, explicit required-audit failure semantics, immutable identifier/time conventions, deterministic local/test sink and protected-payload-safe transport health observability without implementing P02 identities or business audit catalogs. Obtain required G0/G1/G2/G3/G5/G6/G7 evidence on the GitHub-hosted ubuntu-24.04 governance lane, move P01.11 through verification to done, then activate only P01.12 through a separate closure transition. Business-feature code, P02+ implementation, durable messaging pull-forward and AI/model/agent behavior remain unauthorized."
 }
