@@ -237,3 +237,9 @@ jobs:
         env:
           P02_05_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p02_05.sh
+
+      - name: Verify P02.06 relationship/context-aware authorization
+        shell: bash
+        env:
+          P02_06_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p02_06.sh
