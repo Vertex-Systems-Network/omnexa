@@ -2,15 +2,15 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-08-23",
+  "last_reconciled": "2026-08-24",
   "program": "kernel",
   "current_phase": "P02",
-  "current_work_package": "P02.05",
+  "current_work_package": "P02.06",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P02.05 RBAC foundation implementation and verification",
+      "P02.06 relationship/context-aware authorization implementation and verification",
       "P02 governance and verification",
       "narrow repository-maintenance fixes"
     ]
@@ -60,10 +60,10 @@
       "blockers": [],
       "readiness_pr": 67,
       "readiness_merge": "c6301ca4a5eec5dd62bcb75481d900e40ad968bd",
-      "current_work_package": "P02.05",
+      "current_work_package": "P02.06",
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "P02 entry remains satisfied; P02.01-P02.04 are completed and implementation authority is bounded to the sole active package P02.05."
+      "note": "P02 entry remains satisfied; P02.01-P02.05 are completed and implementation authority is bounded to the sole active package P02.06."
     },
     "p02_01_completion": {
       "state": "PASS",
@@ -131,6 +131,27 @@
         "32653382151 / 97228307755 — four corrected gosec G101 findings and one corrected staticcheck simplification"
       ]
     },
+    "p02_05_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md",
+      "implementation_pr": 77,
+      "final_exact_head": "2df8d2a8bef0cea60256a832986d6f8495c80378",
+      "implementation_merge": "7b6a59e83c9bd696e6e008385b4413d529254171",
+      "workflow_run": 32660848145,
+      "job": 97246683239,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000015357",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32656689041 / 97236397635 — 29 corrected govet shadow findings and one corrected gosec G304 test-helper finding",
+        "32660398632 / 97245574862 — P02.05 verifier direct-dependency check incorrectly judged transitive prerequisite imports and was corrected without gate weakening"
+      ]
+    },
     "main_branch_protection": {
       "state": "verified_protected",
       "issue": 3,
@@ -155,14 +176,14 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 32653747461,
-      "job": 97229198036,
+      "workflow_run": 32660848145,
+      "job": 97246683239,
       "evidence_environment": "github-hosted",
       "evidence_os": "Ubuntu 24.04.4 LTS",
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "runner_image_version": "20260816.277.1",
-      "runner": "GitHub Actions 1000014748",
+      "runner": "GitHub Actions 1000015357",
       "go": "1.26.7",
       "final_check": "governance",
       "note": "Canonical governance remains GitHub-hosted ubuntu-24.04 only; P01.01-P01.12 and completed P02 regressions remain mandatory."
@@ -196,10 +217,10 @@
   "p02_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P02.05",
-    "work_package_name": "RBAC foundation",
+    "next_work_package": "P02.06",
+    "work_package_name": "Relationship/context-aware authorization",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P02.05.md",
+    "work_package_spec": "docs/roadmap/work-packages/P02.06.md",
     "package_sequence": "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 10,
     "mandatory_spec_count": 10,
@@ -209,7 +230,7 @@
     "validator": "scripts/validate_p02_preparation.py",
     "package_validator": "scripts/validate_p02_package_specs.py",
     "blocking_gate": null,
-    "note": "P02 is active at 4 / 10 done. P02.05 is the sole active package; P02.06-P02.10 remain planned and business-feature code remains unauthorized."
+    "note": "P02 is active at 5 / 10 done. P02.06 is the sole active package; P02.07-P02.10 remain planned and business-feature code remains unauthorized."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
@@ -217,14 +238,14 @@
     "name": "Identity, Tenancy & Organization",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 4,
+    "done_work_packages": 5,
     "work_packages": [
       {"id":"P02.01","name":"Principal & user identity foundation","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P02.01.md","evidence":["docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md"]},
       {"id":"P02.02","name":"Tenant lifecycle & trusted tenant context","state":"done","depends_on":["P02.01"],"spec":"docs/roadmap/work-packages/P02.02.md","evidence":["docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md"]},
       {"id":"P02.03","name":"Organization hierarchy & scoped memberships","state":"done","depends_on":["P02.02"],"spec":"docs/roadmap/work-packages/P02.03.md","evidence":["docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md"]},
       {"id":"P02.04","name":"Authentication & session lifecycle","state":"done","depends_on":["P02.03"],"spec":"docs/roadmap/work-packages/P02.04.md","evidence":["docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md"]},
-      {"id":"P02.05","name":"RBAC foundation","state":"active","depends_on":["P02.04"],"spec":"docs/roadmap/work-packages/P02.05.md"},
-      {"id":"P02.06","name":"Relationship/context-aware authorization","state":"planned","depends_on":["P02.05"],"spec":"docs/roadmap/work-packages/P02.06.md"},
+      {"id":"P02.05","name":"RBAC foundation","state":"done","depends_on":["P02.04"],"spec":"docs/roadmap/work-packages/P02.05.md","evidence":["docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md"]},
+      {"id":"P02.06","name":"Relationship/context-aware authorization","state":"active","depends_on":["P02.05"],"spec":"docs/roadmap/work-packages/P02.06.md"},
       {"id":"P02.07","name":"MFA/passkey-ready flows","state":"planned","depends_on":["P02.06"],"spec":"docs/roadmap/work-packages/P02.07.md"},
       {"id":"P02.08","name":"Service accounts & API credentials","state":"planned","depends_on":["P02.07"],"spec":"docs/roadmap/work-packages/P02.08.md"},
       {"id":"P02.09","name":"Tenant-scoped settings","state":"planned","depends_on":["P02.08"],"spec":"docs/roadmap/work-packages/P02.09.md"},
@@ -234,7 +255,7 @@
   "phases": [
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
     {"id":"P01","name":"Omnexa Kernel","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json","exit_gate":"docs/governance/P01_EXIT_GATE.md"},
-    {"id":"P02","name":"Identity, Tenancy & Organization","state":"active","active_work_package":"P02.05","package_sequence":"docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P02_ENTRY_GATE.md","exit_gate":"docs/governance/P02_EXIT_GATE.md"},
+    {"id":"P02","name":"Identity, Tenancy & Organization","state":"active","active_work_package":"P02.06","package_sequence":"docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P02_ENTRY_GATE.md","exit_gate":"docs/governance/P02_EXIT_GATE.md"},
     {"id":"P03","name":"Module Runtime","state":"planned"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
     {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
@@ -261,5 +282,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P02.05 is the sole active implementation scope. After this closure merges, verify protected main and canonical state, identify P02.05 as the next authorized action, then STOP. Implement P02.05 only in a later governed execution session from the then-current protected main. P02.06-P02.10, P03+, business-feature code and AI/model/agent runtime remain unauthorized."
+  "next_transition_rule": "P02.06 is the sole active implementation scope after this closure merges and protected-main state is verified. The closure session must then STOP. Implement P02.06 only in a later governed execution session from the then-current protected main. P02.07-P02.10, P03+, business-feature code and AI/model/agent runtime remain unauthorized."
 }

@@ -57,17 +57,19 @@ P02.03 is complete through implementation PR #73, exact head `20bcafb9d2ccb5829e
 
 P02.04 is complete through implementation PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical run/job `32653747461 / 97229198036` PASS and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`. Completion evidence is retained in `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md`.
 
+P02.05 is complete through implementation PR #77, exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, canonical run/job `32660848145 / 97246683239` PASS and merge `7b6a59e83c9bd696e6e008385b4413d529254171`. Completion evidence is retained in `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md`.
+
 The current closure state is:
 
 - P02: `active`;
-- P02.01-P02.04: `done`;
-- P02.05: `active`;
-- P02.06-P02.10: `planned`;
-- P02 progress: `4 / 10 done`;
-- `kernel_code_authorized=true` bounded only to P02.05;
+- P02.01-P02.05: `done`;
+- P02.06: `active`;
+- P02.07-P02.10: `planned`;
+- P02 progress: `5 / 10 done`;
+- `kernel_code_authorized=true` bounded only to P02.06;
 - `business_feature_code_authorized=false`.
 
-No P02.05 runtime/schema implementation belongs in this closure transition.
+No P02.06 runtime/schema implementation belongs in this closure transition.
 
 ## Phase security invariants
 
@@ -108,13 +110,13 @@ P00: DONE
 P01: DONE — 12 / 12
 P01 exit satisfied
 P02 specs: PREPARED — 10 / 10
-P02: ACTIVE — 4 / 10 done
-P02.01-P02.04: DONE
-P02.05: ACTIVE
-P02.06-P02.10: PLANNED
-kernel_code_authorized: true — P02.05 only
+P02: ACTIVE — 5 / 10 done
+P02.01-P02.05: DONE
+P02.06: ACTIVE
+P02.07-P02.10: PLANNED
+kernel_code_authorized: true — P02.06 only
 business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this closure transition merges, the execution session must STOP. P02.05 implementation starts only in a later governed execution session from the then-current protected `main`.
+After this closure transition merges, the execution session must STOP. P02.06 implementation starts only in a later governed execution session from the then-current protected `main`.
