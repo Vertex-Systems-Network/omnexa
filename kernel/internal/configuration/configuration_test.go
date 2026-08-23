@@ -191,12 +191,12 @@ func TestCacheRefreshInvalidationAndChangeMetadataAreBounded(t *testing.T) {
 		t.Fatalf("refreshed metadata = %#v", refreshed)
 	}
 
-	change, err := evaluator.Invalidate(definition.Key, scope)
+	change, existed, err := evaluator.Invalidate(definition.Key, scope)
 	if err != nil {
 		t.Fatalf("Invalidate() error = %v", err)
 	}
-	if change == nil || change.Action != ChangeInvalidated || change.ProviderRevision != revisionTwo {
-		t.Fatalf("invalidation change = %#v", change)
+	if !existed || change.Action != ChangeInvalidated || change.ProviderRevision != revisionTwo {
+		t.Fatalf("invalidation change = %#v existed=%v", change, existed)
 	}
 	if evaluator.CacheSize() != 0 {
 		t.Fatalf("CacheSize() = %d, want 0", evaluator.CacheSize())
