@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate frozen P00 evidence and the P00 -> P01 handoff through P01 completion."""
+"""Validate frozen P00 evidence and completed P01 prerequisites across P02."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 REQUIRED_FILES = [
     "docs/governance/FOUNDATION_FREEZE_REVIEW.md",
     "docs/governance/P01_ENTRY_GATE.md",
+    "docs/governance/P01_EXIT_GATE.md",
     "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
     "docs/governance/FOUNDATION_FREEZE.json",
     "docs/governance/REPOSITORY_HARDENING.md",
@@ -38,29 +39,29 @@ if set(manifest.get("frozen_packages") or []) != expected_frozen:
 
 entry = manifest.get("p01_entry_gate") or {}
 if entry.get("state") != "SATISFIED" or entry.get("kernel_code_authorized") is not True or entry.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: historical P01 entry gate/implementation locks are inconsistent")
+    raise SystemExit("ERROR: historical P01 entry gate evidence is inconsistent")
 controls = {item.get("tracker"): item.get("state") for item in entry.get("blockers") or []}
 if controls.get("issue:#3") != "SATISFIED" or controls.get("issue:#14") != "SATISFIED":
     raise SystemExit("ERROR: EG-02/Issue #3 and EG-03/Issue #14 must remain SATISFIED")
 
-if state.get("current_phase") != "P01":
-    raise SystemExit("ERROR: canonical P01 checkpoint must identify P01")
-current = state.get("current_work_package")
-expected_ids = [f"P01.{i:02d}" for i in range(1, 13)]
-phase = state.get("phase") or {}
-terminal = phase.get("state") == "done"
-lock = state.get("implementation_lock") or {}
+if state.get("current_phase") not in {"P01", "P02"}:
+    raise SystemExit("ERROR: freeze validator must be reviewed before advancing beyond P02")
+phases = {item.get("id"): item for item in state.get("phases") or []}
+if (phases.get("P00") or {}).get("state") != "done":
+    raise SystemExit("ERROR: phases[] P00 must remain done")
+p01 = phases.get("P01") or {}
+if p01.get("state") != "done" or p01.get("active_work_package") is not None:
+    raise SystemExit("ERROR: phases[] P01 must remain done with no active work package")
 
-if terminal:
-    if current is not None or phase.get("done_work_packages") != 12:
-        raise SystemExit("ERROR: completed P01 checkpoint must have 12/12 done and no current package")
-    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: completed P01 checkpoint must lock implementation")
-else:
-    if phase.get("state") != "active" or current not in expected_ids:
-        raise SystemExit(f"ERROR: invalid active P01 package: {current}")
-    if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: active P01 implementation locks are inconsistent")
+p01_manifest = json.loads((ROOT / "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json").read_text(encoding="utf-8"))
+if p01_manifest.get("state") != "done" or p01_manifest.get("implementation_authorized") is not False:
+    raise SystemExit("ERROR: completed P01 package manifest must remain locked")
+if len(p01_manifest.get("packages") or []) != 12 or any(item.get("state") != "done" for item in p01_manifest.get("packages") or []):
+    raise SystemExit("ERROR: P01 must remain complete at 12 / 12")
+
+p01_exit = (ROOT / "docs/governance/P01_EXIT_GATE.md").read_text(encoding="utf-8")
+if "Status: **SATISFIED**" not in p01_exit:
+    raise SystemExit("ERROR: P01 exit must remain SATISFIED")
 
 tracking = state.get("governance_tracking") or {}
 branch = tracking.get("main_branch_protection") or {}
@@ -84,7 +85,7 @@ if ci.get("evidence_environment") != "github-hosted" or ci.get("final_check") !=
 p01_gate = (ROOT / "docs/governance/P01_ENTRY_GATE.md").read_text(encoding="utf-8").lower()
 for marker in ["status: **satisfied", "issue #3", "protected: true", "32540836431", "44ca19e80c5fccccebfd8d4f96dde6dc5af14bc2", "32541439589", "github-hosted"]:
     if marker.lower() not in p01_gate:
-        raise SystemExit(f"ERROR: P01 entry gate missing verified marker: {marker}")
+        raise SystemExit(f"ERROR: P01 entry gate missing verified historical marker: {marker}")
 
 hardening = (ROOT / "docs/governance/REPOSITORY_HARDENING.md").read_text(encoding="utf-8")
 for marker in ["Issue #3 is **closed/completed**", "Required `governance`", "Cannot force-push", "conversation", "BRANCH_PROTECTION_ADMIN_RUNBOOK.md"]:
@@ -105,15 +106,18 @@ if "runs-on: ubuntu-24.04" not in workflow or "RUNNER_ENVIRONMENT" not in workfl
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: canonical governance workflow must not use local/self-hosted runners")
 
-print("Omnexa foundation freeze / P00 exit validation: PASS")
+lock = state.get("implementation_lock") or {}
+if lock.get("business_feature_code_authorized") is not False:
+    raise SystemExit("ERROR: business-feature implementation must remain locked")
+if state.get("current_phase") == "P01" and lock.get("kernel_code_authorized") is not False:
+    raise SystemExit("ERROR: completed-P01 readiness checkpoint must keep kernel implementation locked")
+if state.get("current_phase") == "P02" and lock.get("kernel_code_authorized") is not True:
+    raise SystemExit("ERROR: active P02 must explicitly authorize bounded kernel implementation")
+
+print("Omnexa foundation freeze / completed P01 prerequisite validation: PASS")
 print("Architecture: FROZEN")
 print("P00 exit: DONE")
-print("P01 entry: SATISFIED")
-if terminal:
-    print("P01 state: DONE / 12 OF 12")
-    print("Active P01 package: NONE")
-    print("Kernel code: LOCKED PENDING SEPARATE PHASE ACTIVATION")
-else:
-    print(f"Active P01 package: {current}")
-    print("Kernel code: AUTHORIZED FOR ACTIVE P01 PACKAGE")
+print("P01: DONE / 12 OF 12")
+print("P01 exit: SATISFIED")
+print(f"Current phase: {state.get('current_phase')}")
 print("Business feature code: LOCKED")
