@@ -35,8 +35,9 @@ func TestRecordEnvelopeUsesUUIDv7UTCAndIsImmutable(t *testing.T) {
 	if record.OccurredAt().Location() != time.UTC {
 		t.Fatalf("OccurredAt() location = %v, want UTC", record.OccurredAt().Location())
 	}
-	if err := record.Verify(); err != nil {
-		t.Fatalf("Verify() error = %v", err)
+	verifyErr := record.Verify()
+	if verifyErr != nil {
+		t.Fatalf("Verify() error = %v", verifyErr)
 	}
 	if len(record.IntegrityDigest()) != 64 {
 		t.Fatalf("IntegrityDigest() length = %d, want 64", len(record.IntegrityDigest()))
@@ -56,9 +57,9 @@ func TestRecordEnvelopeUsesUUIDv7UTCAndIsImmutable(t *testing.T) {
 func TestRecordRejectsSecretsAndUnsafeClassification(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name  string
+		name   string
 		mutate func(*RecordInput)
-		code  failure.Code
+		code   failure.Code
 	}{
 		{
 			name: "sensitive key",
@@ -121,11 +122,13 @@ func TestMemorySinkIsAppendOnlyDeterministicAndRejectsTamper(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewRecord(second) error = %v", err)
 	}
-	if err := sink.Append(context.Background(), first); err != nil {
-		t.Fatalf("Append(first) error = %v", err)
+	appendFirstErr := sink.Append(context.Background(), first)
+	if appendFirstErr != nil {
+		t.Fatalf("Append(first) error = %v", appendFirstErr)
 	}
-	if err := sink.Append(context.Background(), second); err != nil {
-		t.Fatalf("Append(second) error = %v", err)
+	appendSecondErr := sink.Append(context.Background(), second)
+	if appendSecondErr != nil {
+		t.Fatalf("Append(second) error = %v", appendSecondErr)
 	}
 	if got := sink.Snapshot(); len(got) != 2 || got[0].ID() != first.ID() || got[1].ID() != second.ID() {
 		t.Fatalf("Snapshot() did not preserve deterministic append order")
@@ -135,8 +138,9 @@ func TestMemorySinkIsAppendOnlyDeterministicAndRejectsTamper(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewRecord(third) error = %v", err)
 	}
-	if err := sink.Append(context.Background(), third); !failure.IsCode(err, codeSinkFull) {
-		t.Fatalf("Append(full) error = %v, want %s", err, codeSinkFull)
+	appendFullErr := sink.Append(context.Background(), third)
+	if !failure.IsCode(appendFullErr, codeSinkFull) {
+		t.Fatalf("Append(full) error = %v, want %s", appendFullErr, codeSinkFull)
 	}
 
 	tampered := first
@@ -145,8 +149,9 @@ func TestMemorySinkIsAppendOnlyDeterministicAndRejectsTamper(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewMemorySink(tamper) error = %v", err)
 	}
-	if err := tamperSink.Append(context.Background(), tampered); !failure.IsCode(err, codeRecordIntegrity) {
-		t.Fatalf("Append(tampered) error = %v, want %s", err, codeRecordIntegrity)
+	appendTamperErr := tamperSink.Append(context.Background(), tampered)
+	if !failure.IsCode(appendTamperErr, codeRecordIntegrity) {
+		t.Fatalf("Append(tampered) error = %v, want %s", appendTamperErr, codeRecordIntegrity)
 	}
 }
 
@@ -245,8 +250,9 @@ func TestCallerCancellationAndSinkPanicFailSafely(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewWriter(memory) error = %v", err)
 	}
-	if _, err := writer.Write(canceled, RequirementRequired, validInput()); !failure.IsCode(err, codeDeliveryCanceled) {
-		t.Fatalf("Write(canceled) error = %v, want %s", err, codeDeliveryCanceled)
+	_, canceledErr := writer.Write(canceled, RequirementRequired, validInput())
+	if !failure.IsCode(canceledErr, codeDeliveryCanceled) {
+		t.Fatalf("Write(canceled) error = %v, want %s", canceledErr, codeDeliveryCanceled)
 	}
 
 	panicWriter, err := NewWriter(failingSink{panic: true}, nil)
