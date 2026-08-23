@@ -9,13 +9,13 @@ import (
 )
 
 const (
-	maxReferenceRunes   = 128
-	maxActionRunes      = 128
-	maxReasonRunes      = 512
-	maxFieldKeyRunes    = 64
-	maxFieldValueRunes  = 1024
-	maxFields           = 32
-	maxTagsPerField     = 16
+	maxReferenceRunes  = 128
+	maxActionRunes     = 128
+	maxReasonRunes     = 512
+	maxFieldKeyRunes   = 64
+	maxFieldValueRunes = 1024
+	maxFields          = 32
+	maxTagsPerField    = 16
 )
 
 var (
@@ -202,10 +202,10 @@ const (
 type DeliveryReason string
 
 const (
-	DeliveryReasonNone          DeliveryReason = "none"
-	DeliveryReasonSinkFailure   DeliveryReason = "sink_failure"
-	DeliveryReasonCanceled      DeliveryReason = "canceled"
-	DeliveryReasonDeadline      DeliveryReason = "deadline_exceeded"
+	DeliveryReasonNone        DeliveryReason = "none"
+	DeliveryReasonSinkFailure DeliveryReason = "sink_failure"
+	DeliveryReasonCanceled    DeliveryReason = "canceled"
+	DeliveryReasonDeadline    DeliveryReason = "deadline_exceeded"
 )
 
 // Receipt is a classification-safe audit delivery projection.
