@@ -37,14 +37,14 @@ State: **SATISFIED**
 
 P02 packages preserve canonical ownership:
 
-- users/service accounts: `kernel.identity`;
+- users/service accounts and authentication/session lifecycle: `kernel.identity`;
 - tenant boundary: `kernel.tenancy`;
 - organization hierarchy: `kernel.organization`;
 - roles/policy: `kernel.authorization`;
 - tenant settings: `kernel.configuration`;
 - immutable security audit transport: `kernel.audit`.
 
-Authenticated `User` is not a business `Person`. Tenant `Organization` is not a business Party Organization. `admin`, `owner` or role names never create bypass authority.
+Authenticated `User` is not a business `Person`. Tenant `Organization` is not a business Party Organization. `admin`, `owner`, `superuser` or any role name never creates bypass authority.
 
 ### EG-07 — Bounded sequential implementation authority
 State: **SATISFIED**
@@ -53,19 +53,21 @@ P02.01 is complete through implementation PR #69, exact head `76919a9588f70aeea7
 
 P02.02 is complete through implementation PR #71, exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, canonical run/job `32637760875 / 97189971101` PASS and merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
 
-P02.03 is complete through implementation PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical run/job `32640790333 / 97197453122` PASS and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`. Completion evidence is retained in `docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md`.
+P02.03 is complete through implementation PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical run/job `32640790333 / 97197453122` PASS and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
+
+P02.04 is complete through implementation PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical run/job `32653747461 / 97229198036` PASS and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`. Completion evidence is retained in `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md`.
 
 The current closure state is:
 
 - P02: `active`;
-- P02.01-P02.03: `done`;
-- P02.04: `active`;
-- P02.05-P02.10: `planned`;
-- P02 progress: `3 / 10 done`;
-- `kernel_code_authorized=true` bounded only to P02.04;
+- P02.01-P02.04: `done`;
+- P02.05: `active`;
+- P02.06-P02.10: `planned`;
+- P02 progress: `4 / 10 done`;
+- `kernel_code_authorized=true` bounded only to P02.05;
 - `business_feature_code_authorized=false`.
 
-No P02.04 runtime/schema implementation belongs in this closure transition.
+No P02.05 runtime/schema implementation belongs in this closure transition.
 
 ## Phase security invariants
 
@@ -76,7 +78,7 @@ P02 implementation must preserve:
 - RBAC plus relationship/context policy rather than role-name bypasses;
 - same-tenant positive and cross-tenant negative tests for tenant-owned access;
 - explicit organization/sub-scope authorization;
-- short-lived access/session semantics with revocation and current-policy rechecks when later authorized;
+- short-lived access/session semantics with revocation and current-policy rechecks;
 - authentication material handled as `RESTRICTED`, never ordinary logs/traces;
 - non-human principals represented as service identities rather than fake human users;
 - privileged identity/permission operations attributable through the governed audit foundation;
@@ -106,13 +108,13 @@ P00: DONE
 P01: DONE — 12 / 12
 P01 exit satisfied
 P02 specs: PREPARED — 10 / 10
-P02: ACTIVE — 3 / 10 done
-P02.01-P02.03: DONE
-P02.04: ACTIVE
-P02.05-P02.10: PLANNED
-kernel_code_authorized: true — P02.04 only
+P02: ACTIVE — 4 / 10 done
+P02.01-P02.04: DONE
+P02.05: ACTIVE
+P02.06-P02.10: PLANNED
+kernel_code_authorized: true — P02.05 only
 business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this closure transition merges, the execution session must STOP. P02.04 implementation starts only in a later governed execution session from the then-current protected `main`.
+After this closure transition merges, the execution session must STOP. P02.05 implementation starts only in a later governed execution session from the then-current protected `main`.

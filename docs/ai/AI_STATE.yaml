@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-23T17:50:00+05:00"
-  nature: "non-authoritative P02.03 closure / P02.04 activation continuity snapshot"
-  implementation_merge: "03b3d42a67d98638129b7f9d2b2f49467ae1fcec"
-  closure_branch: "governance/p02-03-close-p02-04-activate"
+  verified_at: "2026-08-23T22:24:00+05:00"
+  nature: "non-authoritative P02.04 closure / P02.05 activation continuity snapshot"
+  implementation_merge: "769423a94ec03a9f2d7b9e667b9d4527fb0660bf"
+  closure_branch: "governance/p02-04-close-p02-05-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,9 +16,9 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  progress: "3 / 10 done"
-  current_work_package: "P02.04"
-  owner: "kernel.identity"
+  candidate_progress_after_closure: "4 / 10 done"
+  candidate_current_work_package_after_closure: "P02.05"
+  candidate_owner_after_closure: "kernel.authorization"
 
 p01_prerequisite:
   state: "done"
@@ -54,61 +54,68 @@ p02_03_completion:
   canonical_job: 97197453122
   result: "PASS"
   implementation_merge: "03b3d42a67d98638129b7f9d2b2f49467ae1fcec"
-  runner: "GitHub Actions 1000014421"
+  evidence: "docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md"
+
+p02_04_completion:
+  state: "done_candidate_pending_closure_merge"
+  implementation_pr: 75
+  final_exact_head: "83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f"
+  canonical_run: 32653747461
+  canonical_job: 97229198036
+  result: "PASS"
+  implementation_merge: "769423a94ec03a9f2d7b9e667b9d4527fb0660bf"
+  runner: "GitHub Actions 1000014748"
   environment: "github-hosted"
   os: "Ubuntu 24.04.4 LTS"
   arch: "X64"
   runner_image: "ubuntu-24.04 / 20260816.277.1"
   go: "1.26.7"
-  evidence: "docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md"
+  postgresql: "18.6"
+  evidence: "docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md"
   diagnostic_failures:
-    - "32640199607 / 97196005995 — govet shadow findings"
-    - "32640419476 / 97196545810 — narrow dependency allowlist omitted governed transitive prerequisites"
+    - "32653382151 / 97228307755 on 5f8be7f6eb0ad9e807a9dc5d0d29121604822716 — four corrected gosec G101 findings plus one corrected staticcheck simplification"
 
-active_contract:
-  work_package: "P02.04"
-  name: "Authentication & session lifecycle"
-  owner: "kernel.identity"
+candidate_active_contract:
+  work_package: "P02.05"
+  name: "RBAC foundation"
+  owner: "kernel.authorization"
+  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.05 active in a later governed session."
   authorized:
-    - "authentication mechanism boundary and approved adaptive password hashing where passwords are supported"
-    - "session/access/refresh credential expiry, rotation and revocation"
-    - "short-lived access credentials relative to refresh/session credentials"
-    - "device/session inventory semantics where supported"
-    - "deterministic invalidation after material account/security changes"
-    - "tenant/organization context re-authorization rather than stale-client authority"
-    - "disclosure-safe authentication failures and synthetic security fixtures"
-    - "classification-safe audit hooks without secret payloads"
-    - "applicable migrations and focused security/lifecycle verification"
+    - "stable permission identifiers and governed capability-oriented permission semantics"
+    - "Role as deterministic permission composition, never bypass identity"
+    - "tenant/organization scoped role definitions and assignments where authorized"
+    - "assignment/revocation lifecycle and deterministic direct RBAC evaluation"
+    - "privileged role/permission mutation checks and classification-safe audit hooks"
+    - "allow, deny and privilege-escalation negative tests"
+    - "applicable migrations and focused authorization verification"
   forbidden:
-    - "P02.05-P02.06 RBAC/policy implementation"
+    - "P02.06 relationship/context-aware policy implementation"
     - "P02.07 MFA/passkeys"
     - "P02.08 service-account/API credential lifecycle"
     - "P02.09 tenant-scoped settings"
-    - "P02.10 phase-exit audit product behavior"
-    - "SAML/SCIM/enterprise SSO"
-    - "business login portals/UI or business features"
-    - "P03 module runtime"
+    - "P02.10 phase-exit behavior"
+    - "P03 module permission registration"
+    - "business-module permissions or hidden super-admin behavior"
     - "deployment/Kubernetes authority"
     - "AI/model/agent runtime"
 
 security:
-  kernel_code_authorized: true
-  kernel_authority_scope: "P02.04 only"
+  kernel_code_authorized_after_closure: true
+  kernel_authority_scope_after_closure: "P02.05 only"
   business_feature_code_authorized: false
-  authentication_is_authorization: false
-  plaintext_or_reversible_password_storage_allowed: false
-  session_secret_logging_allowed: false
-  bearer_possession_bypasses_current_policy: false
-  stale_tenant_org_context_is_authority: false
+  deny_by_default_required: true
+  role_name_bypass_allowed: false
+  server_side_privileged_mutation_authorization_required: true
+  cross_tenant_or_org_scope_substitution_allowed: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json, identify P02.04 as sole authorized scope, then STOP this execution session. Implement P02.04 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.05 as sole active package, then STOP this execution session. Implement P02.05 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.04 in the same execution session after its activation closure merges"
-  - "activate or implement P02.05-P02.10 early"
+  - "implement P02.05 in the same execution session after its activation closure merges"
+  - "activate or implement P02.06-P02.10 early"
   - "implement P03 or business modules/features"
   - "implement AI/model/agent runtime"
   - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
@@ -121,8 +128,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P02.04.md"
+  candidate_active_spec: "docs/roadmap/work-packages/P02.05.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P02.03.md"
-  active: "docs/ai/handoffs/P02.04.md"
+  completed: "docs/ai/handoffs/P02.04.md"
+  candidate_active: "docs/ai/handoffs/P02.05.md"
