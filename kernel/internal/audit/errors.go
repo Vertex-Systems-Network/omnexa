@@ -8,17 +8,17 @@ import (
 )
 
 const (
-	codeRecordInvalid       failure.Code = "audit.record.invalid"
-	codeRecordProhibited    failure.Code = "audit.record.prohibited"
-	codeRecordIntegrity     failure.Code = "audit.record.integrity"
-	codeIdentifierFailed    failure.Code = "audit.identifier.failed"
-	codeWriterInvalid       failure.Code = "audit.writer.invalid"
-	codeRequirementInvalid  failure.Code = "audit.requirement.invalid"
-	codeSinkInvalid         failure.Code = "audit.sink.invalid"
-	codeSinkFull            failure.Code = "audit.sink.full"
-	codeSinkRequiredFailed  failure.Code = "audit.sink.required_failed"
-	codeDeliveryCanceled    failure.Code = "audit.delivery.canceled"
-	codeDeliveryDeadline    failure.Code = "audit.delivery.deadline"
+	codeRecordInvalid      failure.Code = "audit.record.invalid"
+	codeRecordProhibited   failure.Code = "audit.record.prohibited"
+	codeRecordIntegrity    failure.Code = "audit.record.integrity"
+	codeIdentifierFailed   failure.Code = "audit.identifier.failed"
+	codeWriterInvalid      failure.Code = "audit.writer.invalid"
+	codeRequirementInvalid failure.Code = "audit.requirement.invalid"
+	codeSinkInvalid        failure.Code = "audit.sink.invalid"
+	codeSinkFull           failure.Code = "audit.sink.full"
+	codeSinkRequiredFailed failure.Code = "audit.sink.required_failed"
+	codeDeliveryCanceled   failure.Code = "audit.delivery.canceled"
+	codeDeliveryDeadline   failure.Code = "audit.delivery.deadline"
 )
 
 func invalidRecordFailure() error {
