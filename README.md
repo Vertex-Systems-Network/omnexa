@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.10 are DONE; P01.11 — Audit Transport Foundation is the sole active package.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
+> **Current execution state:** **P01 — Omnexa Kernel is ACTIVE. P01.01-P01.11 are DONE; P01.12 — Developer CLI Baseline is the sole active package and owns the P01 exit proof.** `kernel_code_authorized=true`; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -17,8 +17,8 @@ Key references:
 - `docs/governance/FOUNDATION_FREEZE.json`
 - `docs/governance/P01_ENTRY_GATE.md`
 - `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P01.11.md`
-- `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`
+- `docs/roadmap/work-packages/P01.12.md`
+- `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
@@ -43,19 +43,21 @@ Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed un
 
 ## P01 package status
 
-### P01.10 — done
+### P01.11 — done
 
-P01.10 implemented the governed runtime feature flag/configuration registry: typed definitions, stable owner/version metadata, deterministic defaults/provider/fallbacks, future UUIDv7 scope references as opaque metadata only, bounded non-authoritative cache/refresh/invalidation, value-free change metadata, explicit fail-closed disable-only kill switches and a deterministic test provider. Flags do not grant authority or establish tenancy, and the registry is not a secrets store.
+P01.11 implemented the governed `kernel.audit` transport foundation: immutable classification-aware UUIDv7/UTC audit records, tamper-evident integrity, descriptive actor/action/target/scope/outcome/correlation/reason/approval and privileged/impersonation metadata without P02 authority, append-only sink capability, explicit required-audit failure/best-effort degradation semantics, bounded deterministic memory sink, prohibited-secret handling and protected-payload-safe transport health.
 
-Final implementation evidence: PR #61, exact head `4c9914e4641d0d6e94a895d0fcd16c3a6bf4d962`, run `32609018028`, job `97118796940`, merge `9d11b9250eb74ca2ade531ee58e8f905468cf103`. Canonical evidence: `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`.
+Final implementation evidence: PR #63, exact head `1c1ab1f8d5120fb6b1e5908fdb93cffef9275940`, run `32610902537`, job `97123708250`, merge `10c94a638b89d47da05f5481fb2db298a2da6942`. Canonical evidence: `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`.
 
-### P01.11 — active
+Audit write capability does not imply read/export authority, and actor/scope metadata does not grant identity, tenancy or authorization authority.
 
-P01.11 owns only the governed `kernel.audit` transport foundation: a stable classification-aware audit envelope, actor/action/target/scope/outcome/correlation/reason/approval metadata without P02 identity, append-oriented sink semantics, explicit required-audit failure behavior, classification/redaction enforcement, UUIDv7/timestamp immutability, impersonation/privileged metadata representation, deterministic local/test sink and protected-payload-safe transport health observability.
+### P01.12 — active
 
-P01.11 must not implement P02 identity/tenant/role catalogs, business audit event definitions, compliance/reporting UI, legal retention/hold systems, P01.12 CLI, durable messaging/outbox/inbox pull-forward, later business modules or AI/model/agent behavior. Audit write capability does not imply audit read/export authority.
+P01.12 owns only the governed developer CLI baseline and P01 exit proof: deterministic help/version/verify behavior, fail-closed verification orchestration, explicit structured-safe output/exit codes, safe composition of existing P01 configuration/migration/diagnostic capabilities, no-secret/no-RESTRICTED output, clean-checkout/CI reproducibility and the complete fresh-install P01 exit path.
 
-P01.12 remains planned and strict sequential activation applies.
+P01.12 must not implement production super-admin authority, P02 tenant/user/role administration, P03 module runtime administration, P04+ domain/event/workflow commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI/model/agent behavior.
+
+P01 progress is **11 / 12 done**. P02 remains planned until P01.12 completes and P01 exit is reconciled through a separate governed transition.
 
 ## Future browser UI quality/accessibility
 
@@ -67,7 +69,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current closure state: **P00 done; P01 active; P01.01-P01.10 done; P01.11 active; P01 progress 10 / 12 done; kernel implementation authorized only for P01.11; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current closure state: **P00 done; P01 active; P01.01-P01.11 done; P01.12 active; P01 progress 11 / 12 done; kernel implementation authorized only for P01.12; business features locked.**
 
 ## Product principle
 
