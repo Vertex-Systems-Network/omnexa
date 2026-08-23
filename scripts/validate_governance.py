@@ -296,8 +296,11 @@ def validate_state(state: dict) -> None:
 
     current_phase = state.get("current_phase")
     phase = state.get("phase") or {}
-    if phase.get("id") != current_phase or phase.get("state") != "active":
-        fail("current phase identity/state is inconsistent")
+    if phase.get("id") != current_phase:
+        fail("current phase identity is inconsistent")
+    if phase.get("state") not in {"active", "done"}:
+        fail("current phase must be active or a fully completed terminal checkpoint")
+    terminal = phase.get("state") == "done"
 
     work_packages = phase.get("work_packages") or []
     if phase.get("mandatory_work_packages") != len(work_packages):
@@ -339,21 +342,41 @@ def validate_state(state: dict) -> None:
         fail("done_work_packages does not match actual done count")
 
     active_packages = [pkg for pkg in work_packages if pkg.get("state") == "active"]
-    if len(active_packages) != 1:
-        fail("foundation execution requires exactly one active work package")
-    if active_packages[0].get("id") != state.get("current_work_package"):
-        fail("current_work_package is not the active work package")
+    current_package = state.get("current_work_package")
+    lock = state.get("implementation_lock") or {}
+
+    if terminal:
+        if current_phase != "P01" or done_count != len(work_packages):
+            fail("terminal checkpoint is valid only for fully completed P01")
+        if active_packages or current_package is not None:
+            fail("completed P01 must have no active/current work package")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            fail("completed P01 must lock kernel and business-feature implementation")
+    else:
+        if len(active_packages) != 1:
+            fail("active foundation execution requires exactly one active work package")
+        if active_packages[0].get("id") != current_package:
+            fail("current_work_package is not the active work package")
 
     phase_rows = state.get("phases") or []
     phase_ids = [item.get("id") for item in phase_rows]
     if len(phase_ids) != len(set(phase_ids)):
         fail("duplicate phase IDs detected")
     active_phases = [item for item in phase_rows if item.get("state") == "active"]
-    if len(active_phases) != 1 or active_phases[0].get("id") != current_phase:
+
+    if terminal:
+        p01_row = next((item for item in phase_rows if item.get("id") == "P01"), {})
+        p02_row = next((item for item in phase_rows if item.get("id") == "P02"), {})
+        if active_phases:
+            fail("completed P01 checkpoint must not silently activate another phase")
+        if p01_row.get("state") != "done" or p01_row.get("active_work_package") is not None:
+            fail("phases[] P01 row must be done with no active work package")
+        if p02_row.get("state") != "planned":
+            fail("P02 must remain planned until a separate governed activation")
+    elif len(active_phases) != 1 or active_phases[0].get("id") != current_phase:
         fail("phases[] must contain exactly one active phase matching current_phase")
 
     if current_phase == "P00":
-        lock = state.get("implementation_lock") or {}
         if lock.get("business_feature_code_authorized") is not False:
             fail("business feature code must remain locked during P00")
         if lock.get("kernel_code_authorized") is not False:
@@ -366,11 +389,14 @@ def validate_status(state: dict) -> None:
     except OSError as exc:
         fail(f"STATUS.md unreadable: {exc}")
 
-    current_package = state["current_work_package"]
+    current_package = state.get("current_work_package")
     phase = state["phase"]
     expected_progress = f"{phase['done_work_packages']} / {phase['mandatory_work_packages']} done"
 
-    if current_package not in status:
+    if current_package is None:
+        if "Current work package: **NONE**" not in status:
+            fail("STATUS.md must record Current work package: NONE at the completed checkpoint")
+    elif current_package not in status:
         fail(f"STATUS.md does not mention current work package {current_package}")
     if expected_progress not in status:
         fail(f"STATUS.md does not contain canonical progress '{expected_progress}'")
@@ -386,7 +412,7 @@ def main() -> int:
     validate_status(state)
     print("Omnexa governance validation: PASS")
     print(f"Current phase: {state['current_phase']}")
-    print(f"Current work package: {state['current_work_package']}")
+    print(f"Current work package: {state.get('current_work_package') or 'NONE'}")
     print(f"Progress: {state['phase']['done_work_packages']} / {state['phase']['mandatory_work_packages']} done")
     return 0
 
