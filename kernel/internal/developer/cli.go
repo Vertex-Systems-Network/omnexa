@@ -52,6 +52,9 @@ type Options struct {
 
 // Run executes one bounded developer CLI command and returns a stable process exit code.
 func Run(ctx context.Context, options Options) int {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	options = withDefaults(options)
 	if len(options.Arguments) == 0 {
 		return writeFailure(options.Stderr, "omnexa: command is required", exitUsage)
@@ -74,6 +77,9 @@ func Run(ctx context.Context, options Options) int {
 }
 
 func withDefaults(options Options) Options {
+	if options.Environment == nil {
+		options.Environment = os.Environ()
+	}
 	if options.Stdout == nil {
 		options.Stdout = io.Discard
 	}
