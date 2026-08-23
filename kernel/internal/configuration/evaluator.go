@@ -145,10 +145,10 @@ func (evaluator *Evaluator) Refresh(ctx context.Context, key Key, scope Evaluati
 }
 
 // Invalidate removes one exact cached context and returns value-free change metadata.
-func (evaluator *Evaluator) Invalidate(key Key, scope EvaluationContext) (*Change, error) {
+func (evaluator *Evaluator) Invalidate(key Key, scope EvaluationContext) (Change, bool, error) {
 	definition, err := evaluator.definitionAndScope(key, scope)
 	if err != nil {
-		return nil, err
+		return Change{}, false, err
 	}
 	address := cacheAddress{key: key, scope: scope.cacheKey()}
 	now := evaluator.now().UTC()
@@ -157,17 +157,17 @@ func (evaluator *Evaluator) Invalidate(key Key, scope EvaluationContext) (*Chang
 	defer evaluator.mu.Unlock()
 	entry, exists := evaluator.cache[address]
 	if !exists {
-		return nil, nil
+		return Change{}, false, nil
 	}
 	delete(evaluator.cache, address)
-	return &Change{
+	return Change{
 		Key:               key,
 		Action:            ChangeInvalidated,
 		Source:            entry.source,
 		DefinitionVersion: definition.Version,
 		ProviderRevision:  entry.providerRevision,
 		At:                now,
-	}, nil
+	}, true, nil
 }
 
 // InvalidateKey removes every bounded cached scope for one definition in deterministic scope order.
