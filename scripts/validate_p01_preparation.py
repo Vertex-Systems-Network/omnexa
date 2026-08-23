@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate activated P01 handoff, entry controls, and bounded current-package authorization."""
+"""Validate P01 handoff, entry controls, bounded authorization, and terminal completion."""
 
 from __future__ import annotations
 
@@ -21,22 +21,35 @@ for relative in REQUIRED_FILES:
 
 state = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"))
 if state.get("current_phase") != "P01":
-    raise SystemExit("ERROR: current phase must be P01")
+    raise SystemExit("ERROR: current phase checkpoint must be P01")
 
 current = state.get("current_work_package")
 expected_ids = [f"P01.{i:02d}" for i in range(1, 13)]
-if current not in expected_ids:
-    raise SystemExit(f"ERROR: invalid active P01 package: {current}")
-current_index = expected_ids.index(current)
-active_spec = ROOT / f"docs/roadmap/work-packages/{current}.md"
+phase = state.get("phase") or {}
+terminal = phase.get("state") == "done"
+
+if terminal:
+    if current is not None or phase.get("done_work_packages") != 12:
+        raise SystemExit("ERROR: completed P01 must have 12 / 12 done and no current package")
+    current_index = 12
+    active_spec = ROOT / "docs/roadmap/work-packages/P01.12.md"
+else:
+    if phase.get("state") != "active" or current not in expected_ids:
+        raise SystemExit(f"ERROR: invalid active P01 package: {current}")
+    current_index = expected_ids.index(current)
+    active_spec = ROOT / f"docs/roadmap/work-packages/{current}.md"
 if not active_spec.is_file():
-    raise SystemExit(f"ERROR: missing active P01 specification: {active_spec.relative_to(ROOT)}")
+    raise SystemExit(f"ERROR: missing P01 specification: {active_spec.relative_to(ROOT)}")
 
 lock = state.get("implementation_lock") or {}
-if lock.get("kernel_code_authorized") is not True:
-    raise SystemExit("ERROR: kernel code must be authorized for active P01")
-if lock.get("business_feature_code_authorized") is not False:
-    raise SystemExit("ERROR: business feature code must remain locked")
+if terminal:
+    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: completed P01 must lock kernel and business-feature implementation")
+else:
+    if lock.get("kernel_code_authorized") is not True:
+        raise SystemExit("ERROR: kernel code must be authorized for active P01")
+    if lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: business feature code must remain locked")
 
 tracking = state.get("governance_tracking") or {}
 branch = tracking.get("main_branch_protection") or {}
@@ -56,39 +69,60 @@ if ci.get("runner_label") != "ubuntu-24.04" or ci.get("self_hosted_allowed") is 
     raise SystemExit("ERROR: canonical runner policy mismatch")
 
 phases = {item.get("id"): item for item in state.get("phases") or []}
-if (phases.get("P00") or {}).get("state") != "done" or (phases.get("P01") or {}).get("state") != "active":
-    raise SystemExit("ERROR: P00 must be done and P01 active")
-if (phases.get("P01") or {}).get("active_work_package") != current:
-    raise SystemExit("ERROR: phases[] P01 active_work_package mismatch")
+if (phases.get("P00") or {}).get("state") != "done":
+    raise SystemExit("ERROR: P00 must remain done")
+if terminal:
+    if (phases.get("P01") or {}).get("state") != "done" or (phases.get("P01") or {}).get("active_work_package") is not None:
+        raise SystemExit("ERROR: phases[] P01 must be done with no active package")
+    if (phases.get("P02") or {}).get("state") != "planned":
+        raise SystemExit("ERROR: P02 must remain planned until a separate governed activation")
+else:
+    if (phases.get("P01") or {}).get("state") != "active":
+        raise SystemExit("ERROR: P01 must be active during package implementation")
+    if (phases.get("P01") or {}).get("active_work_package") != current:
+        raise SystemExit("ERROR: phases[] P01 active_work_package mismatch")
 
 prep = state.get("p01_preparation") or {}
-for key, expected in {
-    "state": "activated",
-    "phase_state": "active",
-    "next_work_package": current,
-    "work_package_state": "active",
-    "work_package_spec": f"docs/roadmap/work-packages/{current}.md",
-    "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
-}.items():
+if terminal:
+    expected_prep = {
+        "state": "completed",
+        "phase_state": "done",
+        "next_work_package": None,
+        "work_package_state": "done",
+        "work_package_spec": "docs/roadmap/work-packages/P01.12.md",
+        "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
+    }
+else:
+    expected_prep = {
+        "state": "activated",
+        "phase_state": "active",
+        "next_work_package": current,
+        "work_package_state": "active",
+        "work_package_spec": f"docs/roadmap/work-packages/{current}.md",
+        "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
+    }
+for key, expected in expected_prep.items():
     if prep.get(key) != expected:
         raise SystemExit(f"ERROR: p01_preparation.{key} must be {expected}")
 if prep.get("prepared_spec_count") != 12 or prep.get("mandatory_spec_count") != 12:
     raise SystemExit("ERROR: P01 must retain 12 / 12 prepared specifications")
 if prep.get("blocking_gate") is not None:
-    raise SystemExit("ERROR: active P01 must have no blocking entry gate")
+    raise SystemExit("ERROR: P01 checkpoint must have no unresolved blocking entry gate")
 
 package = active_spec.read_text(encoding="utf-8")
-for marker in [
-    current,
-    "State: `active`",
-    "kernel_code_authorized=true",
+required_markers = [
+    "P01.12" if terminal else current,
+    "State: `done`" if terminal else "State: `active`",
     "business_feature_code_authorized=false",
     "Acceptance criteria",
     "Completion evidence",
     "GitHub-hosted",
-]:
+]
+if not terminal:
+    required_markers.append("kernel_code_authorized=true")
+for marker in required_markers:
     if marker.lower() not in package.lower():
-        raise SystemExit(f"ERROR: active {current} spec missing marker: {marker}")
+        raise SystemExit(f"ERROR: P01 specification missing marker: {marker}")
 
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 base_workflow_markers = [
@@ -108,13 +142,11 @@ for marker in base_workflow_markers:
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
-# Completion evidence dates are immutable historical facts. Keep the exact
-# filename for each completed package instead of assuming every package closed
-# on the same calendar day.
 completion_evidence = {
     **{f"P01.{number:02d}": f"docs/roadmap/evidence/P01.{number:02d}_COMPLETION_2026-08-22.md" for number in range(1, 10)},
     "P01.10": "docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md",
     "P01.11": "docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md",
+    "P01.12": "docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md",
 }
 
 for index in range(current_index):
@@ -133,8 +165,11 @@ for index in range(current_index):
     if workflow_marker not in workflow:
         raise SystemExit(f"ERROR: completed {package_id} verifier missing from governance workflow")
 
-# The active verifier is introduced by each executable package implementation PR.
-if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10", "P01.11", "P01.12"}:
+if terminal:
+    exit_gate = ROOT / "docs/governance/P01_EXIT_GATE.md"
+    if not exit_gate.is_file() or "Status: **SATISFIED**" not in exit_gate.read_text(encoding="utf-8"):
+        raise SystemExit("ERROR: completed P01 requires a satisfied P01 exit gate")
+elif current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10", "P01.11", "P01.12"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():
@@ -145,7 +180,10 @@ if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.
 print("Omnexa P01 activation/readiness validation: PASS")
 print("P00: DONE")
 print(f"Completed P01 packages: {current_index} / 12")
-print(f"Active package: {current}")
+print(f"Active package: {current or 'NONE'}")
 print("Governance runner: GITHUB-HOSTED ONLY / ubuntu-24.04")
-print(f"Kernel code: AUTHORIZED FOR {current}")
+if terminal:
+    print("Kernel code: LOCKED PENDING SEPARATE PHASE ACTIVATION")
+else:
+    print(f"Kernel code: AUTHORIZED FOR {current}")
 print("Business feature code: LOCKED")
