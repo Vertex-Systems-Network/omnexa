@@ -16,19 +16,19 @@ Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
 Local/self-hosted governance runners: PROHIBITED
 P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
-P02: ACTIVE — 1 / 10 done
-P02.01: DONE — Principal & user identity foundation
-Current work package: P02.02 — Tenant lifecycle & trusted tenant context
-P02.03-P02.10: PLANNED
-kernel_code_authorized: true — P02.02 only
+P02: ACTIVE — 2 / 10 done
+P02.01-P02.02: DONE
+Current work package: P02.03 — Organization hierarchy & scoped memberships
+P02.04-P02.10: PLANNED
+kernel_code_authorized: true — P02.03 only
 business_feature_code_authorized: false
 ```
 
-Implementation authority is bounded to the single active package P02.02. No later P02 package, P03+, business feature, deployment administration or AI/model/agent runtime is authorized.
+Implementation authority is bounded to the single active package P02.03. No later P02 package, P03+, business feature, deployment administration or AI/model/agent runtime is authorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.02.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.03.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
 ## Mandatory read order
 
@@ -37,7 +37,7 @@ Before material work read:
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. P01/P02 entry/exit gates and transition checklist;
-4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` and the active `docs/roadmap/work-packages/P02.02.md`;
+4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` and the active `docs/roadmap/work-packages/P02.03.md`;
 5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
@@ -78,56 +78,56 @@ Strict protection requires implementation/closure/activation PRs to be current w
 
 P01.01-P01.12 remain `done`, P01 exit remains **SATISFIED**, and all P01 regression verifiers remain mandatory during P02. Final P01 evidence remains implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-## Completed P02.01 evidence retained
+## Completed P02.01-P02.02 evidence retained
 
-P02.01 is complete under `kernel.identity`.
+P02.01 is complete under `kernel.identity`: PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, run/job `32635243643 / 97183883007` PASS, merge `44882e91e49d0364d841b511edbfd0619d05de1f`, evidence `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`.
 
-- implementation PR: #69
-- final exact head: `76919a9588f70aeea7e00f5214b82dcbf34cbee7`
-- canonical run/job: `32635243643 / 97183883007` — PASS
-- implementation merge: `44882e91e49d0364d841b511edbfd0619d05de1f`
+P02.02 is complete under `kernel.tenancy`:
+
+- implementation PR: #71
+- final exact head: `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`
+- canonical run/job: `32637760875 / 97189971101` — PASS
+- implementation merge: `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`
 - GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7
-- repository Go quality, P01.01-P01.12 regressions and P02.01 G0-G8: PASS
-- completion evidence: `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`
+- repository Go quality, P01.01-P01.12, P02.01 and P02.02 G0-G8: PASS
+- completion evidence: `docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md`
 
-Initial run `32635051321 / 97183427697` remains diagnostic FAIL for corrected `govet` shadow findings and is not completion evidence.
+P02.02 invariants remain binding: client-provided tenant IDs are not authority; trusted context derives from active persisted Tenant/membership state; there is no global-tenant fallback; cross-tenant forged selectors fail closed; tenant membership remains separate from P02.01 User identity and from later authorization policy.
 
-P02.01 invariants remain binding: User is not business Person; non-human principals are not fake users; identity attributes do not grant authority; authentication secrets/sessions were not introduced; owner-bounded `kernel.identity` persistence remains authoritative.
+## Active P02.03 boundary
 
-## Active P02.02 boundary
+Owner: `kernel.organization`.
 
-Owner: `kernel.tenancy`.
+P02.03 may implement only the tenant-contained Organization hierarchy and scoped membership foundation described by `docs/roadmap/work-packages/P02.03.md`, including:
 
-P02.02 may implement only the Tenant lifecycle and trusted tenant-context foundation described by `docs/roadmap/work-packages/P02.02.md`, including:
-
-- authoritative Tenant identity/lifecycle/state;
-- explicit tenant-scoped persistence/query semantics where applicable;
-- trusted tenant context derived from governed identity/execution relationships rather than client payload claims;
-- only the minimum relationship/membership primitive needed for later scoped authorization;
-- fail-closed same-tenant/cross-tenant boundaries;
-- applicable fresh/upgrade migration evidence;
+- Organization, Legal Entity, Business Unit, Branch, Team and Location hierarchy semantics required by frozen architecture;
+- tenant-bound parent/child validation and scoped organization membership relationships;
+- deterministic hierarchy traversal/validation with cycle and cross-tenant rejection;
+- organization/sub-scope context primitives for later policy evaluation without granting authority;
+- classification-safe persistence and applicable fresh/upgrade migration evidence;
 - focused positive/negative tests and a dedicated verifier.
 
-P02.02 invariants:
+P02.03 invariants:
 
-- a client-provided `tenant_id` is never authorization authority;
-- there is no global-tenant fallback;
-- tenant isolation applies independently of data classification;
-- no hidden support-superuser or cross-tenant bypass;
-- `kernel.tenancy` owns this write boundary;
-- P02.01 User identity remains separate from tenant membership/authority.
+- every hierarchy node remains tenant-bound;
+- hierarchy relationships never cross tenant boundaries;
+- tenant membership alone does not authorize every organization/sub-scope;
+- Organization is not business Party Organization;
+- P02.02 trusted tenant context remains the enclosing isolation boundary;
+- `kernel.organization` owns this write boundary and does not write another owner's private tables.
 
-Explicitly forbidden in P02.02:
+Explicitly forbidden in P02.03:
 
-- P02.03 organization hierarchy;
+- business Party/Person/Customer/Supplier models;
 - P02.04 authentication/session implementation;
-- P02.05-P02.06 RBAC or relationship/context policy beyond the minimum trusted tenant relationship primitive authorized by P02.02;
+- P02.05-P02.06 RBAC or policy enforcement beyond P02.03 relationship/context primitives;
 - P02.07 MFA/passkeys;
 - P02.08 service-account/API credential lifecycle;
 - P02.09 tenant settings;
 - P02.10 phase-exit audit product behavior;
+- HR, warehouse/store, CRM or other business behavior;
 - P03 module runtime;
-- business modules/features;
+- business modules/features/UI;
 - deployment/Kubernetes authority;
 - AI/model/agent runtime.
 
@@ -141,7 +141,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-P02.02 implementation must retain repository Go quality, P01.01-P01.12 regressions and P02.01 regression evidence; add risk-appropriate same-tenant/cross-tenant tests; and add migration evidence if persistence changes. Canonical completion evidence must come from GitHub-hosted `ubuntu-24.04`.
+P02.03 implementation must retain repository Go quality, P01.01-P01.12 regressions and P02.01-P02.02 regression evidence; add risk-appropriate same-tenant hierarchy positives, cross-tenant/cycle/membership negatives; and add migration evidence if persistence changes. Canonical completion evidence must come from GitHub-hosted `ubuntu-24.04`.
 
 ## Repository/local-development rules
 
@@ -183,4 +183,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-This closure marks P02.01 done and activates P02.02 as the sole next implementation scope. After the closure PR merges, verify protected `main` and canonical `STATE.json`, identify P02.02 implementation as the next authorized action, then **STOP**. P02.02 implementation starts only in a later governed execution session from the then-current protected `main`.
+This closure marks P02.02 done and activates P02.03 as the sole next implementation scope. After the closure PR merges, verify protected `main` and canonical `STATE.json`, identify P02.03 implementation as the next authorized action, then **STOP**. P02.03 implementation starts only in a later governed execution session from the then-current protected `main`.
