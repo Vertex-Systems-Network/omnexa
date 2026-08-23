@@ -173,3 +173,7 @@ jobs:
       - name: Verify P01.10 feature flag and configuration registry
         shell: bash
         run: bash scripts/verify_p01_10.sh
+
+      - name: Verify P01.11 audit transport foundation
+        shell: bash
+        run: bash scripts/verify_p01_11.sh
