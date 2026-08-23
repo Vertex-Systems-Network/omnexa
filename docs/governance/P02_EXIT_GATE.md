@@ -3,7 +3,7 @@
 Status: **NOT SATISFIED — PHASE ACTIVE**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 3 / 10 done: P02.01-P02.03 are complete and P02.04 is active.
+This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 4 / 10 done: P02.01-P02.04 are complete and P02.05 is active.
 
 ## Mandatory exit evidence
 
@@ -29,11 +29,13 @@ P02.02 completion is recorded in `docs/roadmap/evidence/P02.02_COMPLETION_2026-0
 
 P02.03 completion is recorded in `docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md` from implementation PR #73, final exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical run/job `32640790333 / 97197453122` PASS and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
 
-P02.02 provides the trusted tenant-isolation boundary. P02.03 adds tenant-contained organization hierarchy, scoped membership, deterministic cycle rejection and non-authorizing organization scope context. Together they advance the tenant/organization foundation only. They do not satisfy later role/permission differences, service-account lifecycle or authentication/session invalidation requirements.
+P02.04 completion is recorded in `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md` from implementation PR #75, final exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical run/job `32653747461 / 97229198036` PASS and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`.
+
+P02.04 now proves the interactive authentication/session portion of the phase exit: explicit access/refresh/session expiry, rotation/revocation, replay denial, password-change and account-lifecycle invalidation, secret non-disclosure, current tenant/organization context reauthorization and fresh/upgrade persistence evidence. It does not satisfy later role/permission differences, relationship/context policy or service-account lifecycle requirements.
 
 ## Exit-denial conditions
 
-P02 exit is blocked by any known required-gate failure, unresolved cross-tenant or privilege-escalation defect, hidden administrator bypass, unverified migration path, secret leakage, ambiguous identity/organization ownership, incomplete P02 package sequence, or premature P03/business/AI scope.
+P02 exit is blocked by any known required-gate failure, unresolved cross-tenant or privilege-escalation defect, hidden administrator bypass, unverified migration path, secret leakage, ambiguous identity/organization/authorization ownership, incomplete P02 package sequence, or premature P03/business/AI scope.
 
 ## Transition rule
 
