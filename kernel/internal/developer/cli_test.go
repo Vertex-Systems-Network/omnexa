@@ -58,7 +58,7 @@ func TestHelpAndVersionAreDeterministic(t *testing.T) {
 }
 
 func TestHealthOutputIsSafeAndStructured(t *testing.T) {
-	const secret = "super-secret-password"
+	sensitiveFixture := strings.Repeat("x", 24)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
@@ -66,7 +66,7 @@ func TestHealthOutputIsSafeAndStructured(t *testing.T) {
 		Arguments: []string{"health"},
 		Environment: []string{
 			"OMNEXA_ENVIRONMENT=ci",
-			"OMNEXA_DATABASE_URL=postgres://omnexa:" + secret + "@127.0.0.1:5432/omnexa?sslmode=disable",
+			"OMNEXA_DATABASE_URL=postgres://omnexa:" + sensitiveFixture + "@127.0.0.1:5432/omnexa?sslmode=disable",
 		},
 		Stdout: &stdout,
 		Stderr: &stderr,
@@ -77,7 +77,7 @@ func TestHealthOutputIsSafeAndStructured(t *testing.T) {
 	if !strings.Contains(stdout.String(), `"readiness":"healthy"`) {
 		t.Fatalf("health output = %q", stdout.String())
 	}
-	if strings.Contains(stdout.String(), secret) || strings.Contains(stderr.String(), secret) {
+	if strings.Contains(stdout.String(), sensitiveFixture) || strings.Contains(stderr.String(), sensitiveFixture) {
 		t.Fatal("health output leaked restricted configuration")
 	}
 	if strings.Contains(stdout.String(), "postgres://") {
@@ -86,7 +86,7 @@ func TestHealthOutputIsSafeAndStructured(t *testing.T) {
 }
 
 func TestDatabaseMigrationRequiresExplicitDeveloperEnvironment(t *testing.T) {
-	const secret = "migration-secret"
+	sensitiveFixture := strings.Repeat("y", 24)
 	cases := []struct {
 		name        string
 		environment []string
@@ -94,21 +94,21 @@ func TestDatabaseMigrationRequiresExplicitDeveloperEnvironment(t *testing.T) {
 		{
 			name: "default environment is not explicit",
 			environment: []string{
-				"OMNEXA_DATABASE_URL=postgres://omnexa:" + secret + "@127.0.0.1:5432/omnexa?sslmode=disable",
+				"OMNEXA_DATABASE_URL=postgres://omnexa:" + sensitiveFixture + "@127.0.0.1:5432/omnexa?sslmode=disable",
 			},
 		},
 		{
 			name: "production is forbidden",
 			environment: []string{
 				"OMNEXA_ENVIRONMENT=production",
-				"OMNEXA_DATABASE_URL=postgres://omnexa:" + secret + "@127.0.0.1:5432/omnexa?sslmode=disable",
+				"OMNEXA_DATABASE_URL=postgres://omnexa:" + sensitiveFixture + "@127.0.0.1:5432/omnexa?sslmode=disable",
 			},
 		},
 		{
 			name: "staging is outside developer migration authority",
 			environment: []string{
 				"OMNEXA_ENVIRONMENT=staging",
-				"OMNEXA_DATABASE_URL=postgres://omnexa:" + secret + "@127.0.0.1:5432/omnexa?sslmode=disable",
+				"OMNEXA_DATABASE_URL=postgres://omnexa:" + sensitiveFixture + "@127.0.0.1:5432/omnexa?sslmode=disable",
 			},
 		},
 	}
@@ -129,7 +129,7 @@ func TestDatabaseMigrationRequiresExplicitDeveloperEnvironment(t *testing.T) {
 			if stdout.Len() != 0 {
 				t.Fatalf("stdout = %q, want empty", stdout.String())
 			}
-			if strings.Contains(stderr.String(), secret) || strings.Contains(stderr.String(), "postgres://") {
+			if strings.Contains(stderr.String(), sensitiveFixture) || strings.Contains(stderr.String(), "postgres://") {
 				t.Fatal("db migrate failure leaked restricted configuration")
 			}
 		})
