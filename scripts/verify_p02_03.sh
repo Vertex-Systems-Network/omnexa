@@ -79,7 +79,7 @@ P02_03_TEST_DATABASE_URL="$integration_url" go test -v ./kernel/internal/organiz
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/organization"|"$module_prefix/kernel/internal/tenancy"|"$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/organization"|"$module_prefix/kernel/internal/tenancy"|"$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/database"|"$module_prefix/kernel/internal/config"|"$module_prefix/kernel/internal/failure") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.03 organization package imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
