@@ -4,38 +4,38 @@ Last reconciled: **2026-08-23**
 
 ## Current position
 
-- Program: **Kernel Program checkpoint**
-- Phase: **P01 — Omnexa Kernel**
-- Phase state: **done**
-- Current work package: **NONE**
-- P01 progress: **12 / 12 done**
-- P01.01–P01.12: **DONE**
+- Program: **Kernel Program**
+- Phase: **P02 — Identity, Tenancy & Organization**
+- Phase state: **active**
+- Current work package: **P02.01 — Principal & user identity foundation**
+- P02 progress: **0 / 10 done**
+- P02.01: **ACTIVE**
+- P02.02-P02.10: **PLANNED**
+- P01: **DONE — 12 / 12**
 - P01 exit gate: **SATISFIED**
-- P02+: **PLANNED / NOT ACTIVE**
+- P02 entry gate: **SATISFIED**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
 - Repository visibility: **PUBLIC**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation: **NOT AUTHORIZED UNTIL SEPARATE PHASE ACTIVATION**
+- Kernel implementation: **AUTHORIZED ONLY FOR P02.01**
 - Business-feature implementation: **NOT AUTHORIZED**
 
-## Latest completed package — P01.12
+## P02 readiness and activation
 
-P01.12 — Developer CLI Baseline is completion-eligible and its implementation is merged. PR #65 passed final exact-head canonical run `32629072886` / job `97168916985` and merged as `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. Final implementation head: `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`.
+P02 readiness preparation completed through PR #67. Final exact-head canonical run `32632920772 / 97178312240` passed on the GitHub-hosted `ubuntu-24.04` lane and the readiness PR merged as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd`.
 
-Canonical evidence was produced on runner `GitHub Actions 1000013010`, GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7. Repository Go quality passed with golangci-lint v2.12.2 at 0 issues and govulncheck v1.7.0 reporting no vulnerabilities. P01.01-P01.11 regressions passed, real `omnexa db migrate` passed, real `omnexa verify all` passed and P01.12 G0-G8 passed.
+The prepared phase contains exactly 10 strict sequential packages. This activation transition moves only P02/P02.01 to active and leaves P02.02-P02.10 planned. No P02 runtime/schema implementation is part of the activation transition.
 
-The initial implementation run `32628865023 / 97168401358` remains retained as **FAIL** for corrected gofmt, gosec G204 and staticcheck ST1005 findings. It is not completion evidence and no gate was weakened.
+P02.01 is owned by `kernel.identity` and is limited to the canonical human principal/User identity foundation. User remains distinct from business Person. Tenant lifecycle, organization hierarchy, authentication/session behavior, RBAC/policy, MFA/passkeys, service-account credential lifecycle, P03 module runtime, business domains and AI/model/agent behavior remain outside P02.01.
 
-Detailed evidence: `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md`.
+## P01 completion retained
 
-## P01 exit
+P01.01-P01.12 remain complete with final P01.12 implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, and merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-`docs/governance/P01_EXIT_GATE.md` records the P01 exit gate as **SATISFIED**. The canonical lane proves configuration/startup, fresh PostgreSQL migration, Valkey and S3-compatible provider contracts, safe logging/OpenTelemetry, health/readiness, jobs/configuration/audit primitives, developer verification, static/security checks, module checksum verification and kernel build/package behavior reproducibly without undocumented manual steps.
-
-P01 is therefore reconciled at **12 / 12 done** with no active P01 work package.
+`docs/governance/P01_EXIT_GATE.md` remains **SATISFIED**. P01 executable regressions continue to run in canonical governance during P02.
 
 ## Repository Go quality
 
@@ -43,12 +43,12 @@ P01 is therefore reconciled at **12 / 12 done** with no active P01 work package.
 
 ## Protected integration / CI
 
-`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates, required conversation resolution and strict up-to-date enforcement. Local/self-hosted governance runners remain prohibited. P01.01-P01.12 verifiers remain regression evidence.
+`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates, required conversation resolution and strict up-to-date enforcement. Local/self-hosted governance runners remain prohibited.
 
 ## Issue #4 — external distribution gate
 
-Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This does not retroactively invalidate P01 kernel completion, but it remains an external distribution/public-launch decision gate.
+Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This does not block internal P02 engineering.
 
 ## Exact next work
 
-After this P01 completion closure merges, **STOP this execution session**. P02 remains `planned` and no implementation scope is active. A new governed execution session may prepare/reconcile P02 specifications, readiness evidence and an explicit P02 activation transition. P02 implementation, business features and AI/model/agent implementation remain locked until that transition authorizes them.
+After this P02.01 activation transition merges, **STOP this execution session**. In a later governed session, create a fresh implementation branch from protected `main` and implement only P02.01 with focused positive/negative tests, applicable migration evidence, a dedicated verifier and canonical GitHub-hosted CI. Do not auto-advance to P02.02.
