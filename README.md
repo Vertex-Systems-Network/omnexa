@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 0 / 10 done. P02.01 — Principal & user identity foundation is the sole active work package.** `kernel_code_authorized=true` only for P02.01; `business_feature_code_authorized=false`.
+> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 1 / 10 done. P02.01 is DONE and P02.02 — Tenant lifecycle & trusted tenant context is the sole active work package.** `kernel_code_authorized=true` only for P02.02; `business_feature_code_authorized=false`.
 
 ## Mandatory contributor / AI start here
 
@@ -18,11 +18,10 @@ Key references:
 - `docs/governance/P01_EXIT_GATE.md`
 - `docs/governance/P02_ENTRY_GATE.md`
 - `docs/governance/P02_EXIT_GATE.md`
-- `docs/governance/P01_P02_TRANSITION_CHECKLIST.md`
 - `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P02.01.md`
+- `docs/roadmap/work-packages/P02.02.md`
+- `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`
 - `docs/quality/GO_CODE_QUALITY.md`
-- `docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
 ## Core laws
@@ -45,27 +44,26 @@ Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed un
 
 ## P01 completion retained
 
-P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. `docs/governance/P01_EXIT_GATE.md` remains **SATISFIED**, and all P01 regressions remain mandatory during P02.
+P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. P01 regressions remain mandatory during P02.
 
-## P02 readiness and active scope
+## P02.01 completion
 
-P02 readiness preparation merged through PR #67 as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final exact-head canonical run `32632920772 / 97178312240` passed.
+P02.01 completed through implementation PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical GitHub-hosted run/job `32635243643 / 97183883007`, and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
 
-P02 uses a strict sequential 10-package sequence. Only P02.01 is active. Its owner is `kernel.identity`, and its authorized scope is the canonical human principal/User identity foundation with deterministic lifecycle semantics, safe identity attributes and owner-bounded persistence where required.
+Repository Go quality, P01.01-P01.12 regressions, real PostgreSQL integration and P02.01 G0-G8 all passed. Initial run `32635051321 / 97183427697` remains diagnostic FAIL for corrected `govet` shadow findings; no gate was weakened.
 
-P02.01 explicitly does **not** authorize tenant lifecycle/membership authority, organization hierarchy, authentication/session behavior, RBAC/policy, MFA/passkeys, service-account/API credential lifecycle, P03 module runtime, business modules or AI/model/agent runtime. User remains distinct from business Person.
+## Active P02.02 scope
+
+P02.02 owner is `kernel.tenancy`. Authorized scope is limited to authoritative Tenant identity/lifecycle, trusted tenant context, explicit tenant-scoped persistence/query semantics, the minimum relationship primitive needed by later scoped authorization, same-tenant allow/cross-tenant deny tests and applicable migrations.
+
+A client-provided tenant ID is never authority. No global tenant fallback or hidden super-admin bypass is permitted. P02.03 organization hierarchy, P02.04 authentication/session implementation, P02.05+ authorization features, business data/features, P03+, deployment authority and AI/model/agent runtime remain unauthorized.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` only for P02.01.
+- `kernel_code_authorized=true` only for P02.02.
 - `business_feature_code_authorized=false`.
-- P02.02-P02.10 remain planned.
+- P02.03-P02.10 remain planned.
 - P03+ remains planned.
-- AI/model/agent runtime implementation remains unauthorized.
-
-## Future browser UI quality/accessibility
-
-`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` is the AI/human execution plan for future authorized browser UI work. It does not itself authorize UI implementation.
 
 ## Public visibility / Issue #4
 
@@ -73,7 +71,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P01 exit satisfied; P02 active 0 / 10; P02.01 sole active package; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P02 active 1 / 10; P02.01 done; P02.02 sole active package; business features locked.**
 
 ## Product principle
 
