@@ -120,7 +120,7 @@ for index in range(current_index):
     if workflow_marker not in workflow:
         raise SystemExit(f"ERROR: completed P01.{package_number:02d} verifier missing from governance workflow")
 
-if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09"}:
+if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():
