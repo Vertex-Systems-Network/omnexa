@@ -1,190 +1,117 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-23T03:38:00+05:00"
-  nature: "non-authoritative closure-branch continuity snapshot"
-  canonical_main_before_closure: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
-  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
+  verified_at: "2026-08-23T04:37:00+05:00"
+  nature: "non-authoritative P01.09 closure-transition continuity snapshot"
+  canonical_main_before_closure: "0bcafbfc52324acba1df9d8eff84a264dda0f233"
+  closure_branch: "chore/p01-09-close-p01-10-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
   name: "Omnexa"
   category: "Composable Enterprise Business Operating System"
+  mode: "gated_evidence_based_architecture_first"
 
-mode:
-  type: "gated_evidence_based_architecture_first"
-  architecture: "strict modular monolith with service-ready boundaries"
+implementation:
+  work_package: "P01.09"
+  pull_request: 59
+  state: "merged"
+  final_strict_up_to_date_head: "61e9c1115d05300ac9aedf5a555138c6a5a5be1e"
+  merge_commit: "0bcafbfc52324acba1df9d8eff84a264dda0f233"
+  canonical_run: 32605309150
+  canonical_job: 97109396616
+  result: "PASS"
+  runner: "GitHub Actions 1000011549"
+  runner_os: "Ubuntu 24.04.4 LTS / X64"
+  runner_image: "ubuntu-24.04 / 20260816.277.1"
+  runner_version: "2.336.0"
+  go: "1.26.7"
+  code_quality: "PASS; golangci-lint v2.12.2 0 issues; govulncheck v1.7.0 no vulnerabilities"
+  completed_regressions: "P01.01-P01.08 PASS"
+  p01_09_gates: "G0/G1/G2/G3/G5/G6/G7 PASS"
 
-canonical_main_before_closure:
-  phase: "P01"
-  work_package: "P01.08"
-  status: "active"
-  completed_p01_packages: 7
-  commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
-  note: "P01.08 implementation is merged and completion-eligible. Main later received only maintenance PR #57 for .github/dependabot.yml and still records P01.08 active until closure PR #58 merges."
+diagnostic_history:
+  - run: 32604728124
+    job: 97108038830
+    status: "FAIL"
+    reason: "Canonical gofmt differences in three P01.09 files plus one govet shadowing finding; govulncheck clean. Fixed without weakening the gate."
+  - run: 32604931754
+    job: 97108518734
+    status: "FAIL"
+    reason: "Go quality passed; retained P01.01 regression exposed unknown-job validation occurring after shutdown admission. Validation ordering fixed while valid post-shutdown work remains rejected."
+
+p01_09_completed_contract:
+  - "deterministic job type registration and safe unknown-job failure"
+  - "UUIDv7 execution identity"
+  - "bounded process-local synchronous and queued execution"
+  - "bounded retry/backoff with explicit idempotency for retried work"
+  - "duplicate/conflict/in-progress in-memory idempotency protection"
+  - "repeatable in-memory completion handles"
+  - "cancellation/deadline propagation"
+  - "graceful accepted queued and synchronous drain/cancel lifecycle"
+  - "one-shot and fixed-interval UTC-normalized maintenance schedules"
+  - "safe P01.07 observability/correlation propagation"
+  - "no durable messaging, workflow timer, tenant runtime, business or AI pull-forward"
 
 closure_candidate:
   phase: "P01"
-  completed_work_package: "P01.08"
-  next_work_package: "P01.09"
-  proposed_status: "P01.08 done / P01.09 active"
-  completed_p01_packages: 8
+  completed_work_package: "P01.09"
+  next_work_package: "P01.10"
+  proposed_status: "P01.09 done / P01.10 active"
+  completed_p01_packages: 9
   total_p01_packages: 12
   runtime_changes_in_closure: false
+  branch: "chore/p01-09-close-p01-10-activate"
+  base_commit: "0bcafbfc52324acba1df9d8eff84a264dda0f233"
 
-repository:
-  canonical_branch: "main"
-  closure_branch: "chore/p01-08-close-p01-09-activate"
-  closure_base_commit: "7e92b8acc5f5465774a2f5ef9bdc13c7dda2d2a8"
-  main_maintenance_pr: 57
-  main_maintenance_scope: ".github/dependabot.yml only"
-  main_sync_commit: "0fce489f98a65639afa227fab9702e2423ad11b3"
-  main_sync_method: "explicit two-parent merge commit; no force update"
-  post_sync_relation: "ahead / behind_by=0"
-  working_tree_status: "not_applicable_to_remote_branch_snapshot"
-
-implementation:
-  pull_request: 56
-  state: "merged"
-  final_strict_up_to_date_head: "988ef3673d49f54bbd105d3e0067ba134c66b236"
-  merge_commit: "a2a93454bb283464bfa144bb5a38539041e40069"
-  canonical_run: 32601741049
-  canonical_job: 97100949202
-  result: "PASS"
-  runner: "GitHub Actions 1000010855"
-  runner_os: "Ubuntu 24.04.4 LTS / X64"
-  runner_image: "ubuntu-24.04 / 20260816.277.1"
-  go: "1.26.7"
-  third_party_dependency_changes: false
-
-closure_pull_request:
-  number: 58
-  url: "https://github.com/Vertex-Systems-Network/omnexa/pull/58"
-  state_when_snapshot_written: "open"
-  instruction: "Re-read live PR/head/latest CI; do not infer merge from this snapshot."
-
-verification:
-  implementation_completion:
-    workflow: "Omnexa Governance"
-    run: 32601741049
-    job: 97100949202
-    status: "PASS"
-    runner_policy: "GitHub-hosted ubuntu-24.04"
-    passed:
-      - "canonical governance/state/development/operations/foundation-freeze validators"
-      - "P01 activation/readiness and package-sequence validators"
-      - "repository Go quality"
-      - "P01.01-P01.07 regressions"
-      - "P01.08 G1 format/static/dependency/portable boundary"
-      - "P01.08 G2 unit/race lifecycle/readiness/registry"
-      - "P01.08 G3 health contract/build identity/observability integration"
-      - "P01.08 G5 safe diagnostics/security-critical fail-closed/scope guard"
-      - "P01.08 G6 timeout/cancellation/panic/stopping resilience"
-      - "P01.08 G7 build/package"
-  diagnostic_history:
-    - run: 32601550204
-      job: 97100473606
-      status: "FAIL"
-      reason: "Governance/state/spec validators passed; repository Go quality then found exactly two lint findings: redundant Go 1.22 loop-variable copying and a credential-shaped synthetic redaction fixture. gofmt passed and govulncheck found no vulnerabilities. Both findings were fixed without changing package scope."
-  closure_verification:
-    status: "REVERIFY_LIVE"
-    reason: "Closure files are reconciled and the branch has been synchronized with current protected main. The exact final closure head must receive a fresh full governance result before merge."
-
-p01_08_contract_retained:
-  - "process liveness is distinct from dependency readiness"
-  - "required/security-critical dependency failure is unready; optional failure can degrade"
-  - "dependency checks are timeout/cancellation bounded and panic-safe"
-  - "diagnostics expose stable safe states/reasons only and retain no raw probe/provider errors"
-  - "health diagnostics do not grant authorization, tenancy or business-state authority"
-  - "P01.08 verifier remains a mandatory completed-package regression"
-
-p01_09_candidate_scope_after_closure:
-  owner: "kernel.jobs"
+p01_10_candidate_scope_after_closure:
+  owner: "kernel.configuration"
   allowed:
-    - "deterministic job identity/type registry"
-    - "kernel-local enqueue/execute result model"
-    - "bounded worker concurrency"
-    - "graceful bounded shutdown/drain/cancel"
-    - "cancellation/deadline propagation"
-    - "bounded retry/backoff policy"
-    - "idempotency-key hook and duplicate-safe handler contract"
-    - "simple recurring/one-shot kernel maintenance schedules"
-    - "P01.07 observability/correlation propagation"
-    - "deterministic in-memory/test harness"
+    - "typed flag/config definition registry"
+    - "stable identifiers, descriptions and owner metadata"
+    - "deterministic defaults/fallbacks"
+    - "runtime evaluation distinct from P01.02 static configuration"
+    - "future-scope-aware evaluation inputs without P02 identity"
+    - "version/change metadata hooks"
+    - "bounded cache-safe refresh/invalidation"
+    - "explicitly declared operational kill switches"
+    - "deterministic test provider"
   forbidden:
-    - "NATS/JetStream durable streams or event consumers"
-    - "transactional outbox/inbox"
-    - "distributed workflow timers"
-    - "business jobs/workflows"
-    - "tenant-context implementation before P02"
-    - "P01.10 or later kernel package behavior"
+    - "product experimentation or analytics"
+    - "tenant admin UI"
+    - "pricing, entitlement or licensing engine"
+    - "authorization based solely on flags"
+    - "business-module flags before their owners exist"
+    - "P01.11 or P01.12 implementation"
+    - "P02+ identity, tenancy or business behavior"
     - "AI/model/agent runtime"
 
-next_action:
-  type: "P01.08 closure verification"
-  target: "PR #58 / chore/p01-08-close-p01-09-activate"
-  instruction: "Verify the full GitHub-hosted governance lane on the exact final closure head, audit changed files/reviews/mergeability and squash-merge PR #58 only if all required evidence is green and the branch is current with protected main."
-  reason: "P01.08 implementation has passed and merged. The only remaining authorized step before P01.09 runtime implementation is the governed canonical state transition."
-
-blocked_actions:
-  - "claim canonical P01.08 done before PR #58 merges"
-  - "implement P01.09 runtime before PR #58 merges"
-  - "activate or implement P01.10 or later P01 packages"
-  - "start P02 or any later phase"
-  - "implement CRM, ERP, commerce, CMS or any business module"
-  - "implement P04 durable messaging/outbox or P05 workflow timers under P01.09"
-  - "implement AI model gateway, context engine, planner, memory/RAG, semantic business runtime, task graph, risk/approval engine, capability broker, agents or autonomous execution"
-  - "grant AI direct database, object-store, payment-provider or business-state authority"
-  - "weaken governance or branch protection to obtain PASS/merge"
-
-completion_requirements:
-  p01_08_evidence: "docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"
-  closure_required:
-    - "P01.08 evidence file exists and matches PR #56 merge evidence"
-    - "STATE.json and package sequence identify exactly P01.01-P01.08 done and P01.09 active"
-    - "P01.08 spec state is done"
-    - "P01.09 spec state is active with kernel_code_authorized=true and business_feature_code_authorized=false"
-    - "human-readable status/execution/developer/AI continuity documents agree with machine state"
-    - "closure PR contains no runtime implementation or dependency changes"
-    - "full GitHub-hosted governance lane PASS on exact final closure head"
-    - "P01.01-P01.08 regression verifiers remain PASS"
-    - "branch is current with protected main and review/conversation blockers are zero"
-
-future_architecture_direction_only:
-  - "model gateway"
-  - "context engine"
-  - "memory"
-  - "semantic business state"
-  - "planner"
-  - "task graph"
-  - "simulation"
-  - "risk engine"
-  - "approval"
-  - "capability broker"
-  - "verification and replanning"
-  - "governed agents"
-  - "autonomous business OS"
-
 security:
+  business_feature_code_authorized: false
+  flags_grant_authority: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
+next_action:
+  if_closure_open: "Verify exact-head full GitHub-hosted governance, branch freshness and review/conversation blockers, then merge only when all required evidence is green."
+  if_closure_merged: "Re-read protected main and STATE.json, then implement P01.10 only in a separate executable PR."
+
+blocked_actions:
+  - "start P01.10 implementation before the P01.09 closure merges"
+  - "activate or implement P01.11 or P01.12 early"
+  - "start P02 or later phases"
+  - "implement business modules/features"
+  - "grant flags authorization/tenancy/business authority"
+  - "implement AI/model/agent runtime"
+  - "weaken governance or branch protection"
+
 source_authority:
   execution_contract: "AGENTS.md"
-  ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   canonical_state: "docs/roadmap/STATE.json"
-  roadmap: "docs/roadmap/MASTER_PLAN.md"
-  change_control: "docs/governance/CHANGE_CONTROL.md"
-  definition_of_done: "docs/governance/DEFINITION_OF_DONE.md"
-  current_closure_specs:
-    - "docs/roadmap/work-packages/P01.08.md"
-    - "docs/roadmap/work-packages/P01.09.md"
-  relevant_adrs:
-    - "docs/adr/ADR-0001-platform-architecture-baseline.md"
-    - "docs/adr/ADR-0005-security-data-classification-baseline.md"
-    - "docs/adr/ADR-0010-foundation-architecture-freeze.md"
+  ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
+  active_after_closure_spec: "docs/roadmap/work-packages/P01.10.md"
+  completion_evidence: "docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md"
 
 handoff:
-  last: "docs/ai/handoffs/P01.08.md"
-  closure_pr: 58
-  created_at: "2026-08-23T03:38:00+05:00"
+  completed: "docs/ai/handoffs/P01.09.md"
+  next: "docs/ai/handoffs/P01.10.md"

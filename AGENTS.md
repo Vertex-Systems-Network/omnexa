@@ -23,13 +23,14 @@ P01.05: DONE — Cache abstraction
 P01.06: DONE — Object & file storage abstraction
 P01.07: DONE — Structured logging & OpenTelemetry baseline
 P01.08: DONE — Health, readiness & diagnostics
-P01.09: ACTIVE — Job & scheduler primitives
-P01.10-P01.12: PLANNED
+P01.09: DONE — Job & scheduler primitives
+P01.10: ACTIVE — Feature flag & configuration registry
+P01.11-P01.12: PLANNED
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.10+, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P01.11+, P02+, module runtime or business features.
 
 ## Persistent AI continuity
 
@@ -43,7 +44,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.09.md` currently);
+5. the active package specification (`P01.10.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -100,28 +101,28 @@ Completed:
 - P01.05 — evidence: `docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md`;
 - P01.06 — evidence: `docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md`;
 - P01.07 — evidence: `docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md`;
-- P01.08 — evidence: `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`.
+- P01.08 — evidence: `docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md`;
+- P01.09 — evidence: `docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md`.
 
-Current active package: **P01.09 — Job & scheduler primitives**.
+Current active package: **P01.10 — Feature flag & configuration registry**.
 
 Allowed executable scope is limited to:
 
-- deterministic kernel-local job identity/type registration and unknown-job safe failure;
-- enqueue/execute result primitives for kernel-local background work;
-- bounded worker concurrency with graceful stop/drain/cancel behavior;
-- caller cancellation/deadline propagation;
-- bounded retry/backoff metadata and execution semantics with no infinite loops;
-- explicit idempotency-key hook and duplicate-safe handler contract;
-- simple one-shot/recurring schedule definitions for kernel maintenance work;
-- P01.07 observability/correlation propagation through job execution;
-- deterministic in-memory/test harness;
-- completed P01.01-P01.08 regression verification;
+- typed flag/config definition registry with stable identifiers and owner metadata;
+- explicit deterministic default/fallback behavior;
+- runtime evaluation boundary distinct from static P01.02 environment configuration;
+- future tenant/org/user evaluation inputs without implementing P02 identity or authority;
+- version/change metadata hooks;
+- bounded cache-safe refresh/invalidation semantics;
+- explicitly declared operational kill-switch behavior;
+- deterministic test provider;
+- completed P01.01-P01.09 regression verification;
 - permanent repository Go quality verification;
 - GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
 
-P01.09 must not implement NATS/JetStream or other P04 durable messaging/event consumers, transactional outbox/inbox, P05 distributed workflow timers, business jobs/workflows, tenant-context implementation before P02, P01.10 feature registry, P01.11 audit transport, P01.12 developer CLI or any later-phase/AI/model/agent functionality.
+P01.10 must not implement product experimentation/analytics, tenant admin UI, pricing/entitlement/licensing, authorization decisions based solely on flags, business-module flags before their owners exist, P01.11 audit transport, P01.12 developer CLI, P02 identity/tenancy runtime, later business behavior or AI/model/agent functionality.
 
-P01.10 becomes active only after P01.09 reaches `done` with required evidence. More than one active P01 package is forbidden.
+P01.11 becomes active only after P01.10 reaches `done` with required evidence. More than one active P01 package is forbidden.
 
 ## Business-feature lock
 
@@ -133,7 +134,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.09, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.08 regression verification. Tenancy, durable event replay and module lifecycle remain N/A until their owning capabilities exist.
+For P01.10, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.09 regression verification. Tenancy, durable event replay and module lifecycle remain N/A until their owning capabilities exist.
 
 ## Repository/local-development rules
 
@@ -148,17 +149,20 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## P01.09 job/scheduler rules
+## P01.10 feature flag/configuration registry rules
 
-- Job registration and execution must be deterministic; unknown jobs fail safely.
-- Worker concurrency is explicitly bounded. Shutdown stops accepting new work and provides bounded drain/cancel behavior.
-- Cancellation and deadlines propagate into handlers; a scheduler identity never grants authority.
-- Retry/backoff is explicit, bounded and testable; no infinite retry loops or silent protected-side-effect duplication.
-- Idempotency is an explicit contract/hook, not an assumption. Duplicate-safe positive and negative evidence is mandatory.
-- Schedules are limited to simple recurring or one-shot kernel maintenance work; do not build distributed workflow timers.
-- Correlation/observability context uses the completed P01.07 boundary and remains diagnostic only.
-- Future tenant/actor scope must be explicit and revalidated when its owning phase exists; P01.09 must not invent tenancy.
-- Do not implement NATS/JetStream, durable event consumers, outbox/inbox, business jobs or workflow semantics by anticipation.
+- Definitions are typed, stable and owner-declared; duplicate identifiers fail validation.
+- Defaults and provider-failure fallback behavior are deterministic and contract-tested.
+- Runtime evaluation is distinct from static environment configuration in P01.02.
+- Future tenant/org/user context may be represented only as explicit evaluation inputs; P01.10 must not invent P02 identity, tenancy or authorization semantics.
+- Refresh/invalidation is bounded and cache-safe; provider failure cannot silently mutate authority or business truth.
+- Kill switches must be explicitly declared operational controls and cannot weaken authorization, tenant isolation or mandatory security controls.
+- Sensitive configuration values remain governed by data classification and secrets policy rather than generic feature flags.
+- Product experimentation, analytics, entitlements, pricing/licensing and business-module flags remain out of scope.
+
+## Completed P01.09 job/scheduler rules retained
+
+Job registration/execution remains deterministic; unknown jobs fail safely. Worker concurrency/queue capacity remain bounded. Shutdown stops admission and provides bounded drain/cancel semantics for queued and synchronous accepted work. Cancellation/deadlines propagate into handlers. Retry/backoff remains bounded with explicit idempotency where retries can duplicate protected effects. Scheduler/job identity never grants authority. Schedules remain process-local one-shot/fixed-interval maintenance definitions rather than distributed workflow timers. P01.09 regression verification stays mandatory.
 
 ## Completed P01.08 health/readiness rules retained
 
@@ -211,4 +215,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-Implement P01.09 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.09.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.08 regressions, move P01.09 `active -> verification -> done`, reconcile canonical state, then activate only P01.10.
+Implement P01.10 in a separate executable PR. Add the package-specific fail-closed verification required by `docs/roadmap/work-packages/P01.10.md`, obtain G0/G1/G2/G3/G5/G6/G7 GitHub-hosted evidence plus repository Go quality and P01.01-P01.09 regressions, move P01.10 `active -> verification -> done`, reconcile canonical state, then activate only P01.11.
