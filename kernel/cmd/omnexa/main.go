@@ -1,17 +1,31 @@
-// Command omnexa is the minimal Omnexa kernel process entrypoint.
+// Command omnexa is the Omnexa kernel process and developer CLI entrypoint.
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/buildinfo"
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/config"
+	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/developer"
 )
 
 func main() {
-	os.Exit(run(os.Stdout, os.Stderr, os.Environ()))
+	os.Exit(runCommand(context.Background(), os.Args[1:], os.Stdout, os.Stderr, os.Environ()))
+}
+
+func runCommand(ctx context.Context, arguments []string, stdout io.Writer, stderr io.Writer, environ []string) int {
+	if len(arguments) == 0 {
+		return run(stdout, stderr, environ)
+	}
+	return developer.Run(ctx, developer.Options{
+		Arguments:   arguments,
+		Environment: environ,
+		Stdout:      stdout,
+		Stderr:      stderr,
+	})
 }
 
 func run(stdout io.Writer, stderr io.Writer, environ []string) int {

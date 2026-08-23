@@ -133,9 +133,8 @@ for index in range(current_index):
     if workflow_marker not in workflow:
         raise SystemExit(f"ERROR: completed {package_id} verifier missing from governance workflow")
 
-# The active verifier is introduced by the executable package implementation PR.
-# P01.12 activation therefore does not invent an unimplemented verifier during closure.
-if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10", "P01.11"}:
+# The active verifier is introduced by each executable package implementation PR.
+if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10", "P01.11", "P01.12"}:
     package_number = current.split(".")[1]
     active_verifier = ROOT / f"scripts/verify_p01_{package_number}.sh"
     if not active_verifier.is_file():

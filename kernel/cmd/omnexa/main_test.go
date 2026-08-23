@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -25,6 +26,52 @@ func TestRunWithDefaultConfigurationPreservesKernelOutput(t *testing.T) {
 	}
 	if stderr.Len() != 0 {
 		t.Fatalf("stderr = %q, want empty", stderr.String())
+	}
+}
+
+func TestRunCommandWithoutArgumentsPreservesKernelStartup(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	code := runCommand(context.Background(), nil, &stdout, &stderr, nil)
+	if code != 0 {
+		t.Fatalf("runCommand() code = %d, stderr = %q", code, stderr.String())
+	}
+	want := fmt.Sprintf("omnexa-kernel %s\n", buildinfo.Current())
+	if stdout.String() != want {
+		t.Fatalf("stdout = %q, want %q", stdout.String(), want)
+	}
+}
+
+func TestRunCommandExposesHelpAndVersion(t *testing.T) {
+	for _, arguments := range [][]string{{"help"}, {"version"}} {
+		var stdout bytes.Buffer
+		var stderr bytes.Buffer
+		code := runCommand(context.Background(), arguments, &stdout, &stderr, nil)
+		if code != 0 {
+			t.Fatalf("arguments %v code = %d, stderr = %q", arguments, code, stderr.String())
+		}
+		if stdout.Len() == 0 {
+			t.Fatalf("arguments %v produced empty stdout", arguments)
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("arguments %v stderr = %q", arguments, stderr.String())
+		}
+	}
+}
+
+func TestRunCommandUnknownCommandFailsClosed(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	code := runCommand(context.Background(), []string{"admin"}, &stdout, &stderr, nil)
+	if code == 0 {
+		t.Fatal("runCommand() code = 0, want failure")
+	}
+	if stdout.Len() != 0 {
+		t.Fatalf("stdout = %q, want empty", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "unknown command") {
+		t.Fatalf("stderr = %q", stderr.String())
 	}
 }
 
