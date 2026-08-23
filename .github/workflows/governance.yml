@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v15-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v16-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -177,3 +177,25 @@ jobs:
       - name: Verify P01.11 audit transport foundation
         shell: bash
         run: bash scripts/verify_p01_11.sh
+
+      - name: Verify P01.12 canonical developer aggregate and migration boundary
+        shell: bash
+        env:
+          OMNEXA_ENVIRONMENT: ci
+          OMNEXA_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+          P01_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+          P01_05_TEST_CACHE_ADDRESS: 127.0.0.1:6379
+          P01_05_TEST_VALKEY_IMAGE: valkey/valkey:9.1.1
+          P01_06_TEST_S3_ENDPOINT: http://127.0.0.1:9090
+          P01_06_TEST_S3_BUCKET: omnexa-p01-06
+          P01_06_TEST_S3_IMAGE: adobe/s3mock:5.1.0
+        run: |
+          set -euo pipefail
+          go run ./kernel/cmd/omnexa db migrate
+          go run ./kernel/cmd/omnexa verify all
+
+      - name: Verify P01.12 developer CLI baseline
+        shell: bash
+        env:
+          P01_12_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p01_12.sh
