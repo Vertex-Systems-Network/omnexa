@@ -143,7 +143,10 @@ for marker in \
   fi
 done
 
-if grep -R -nE '(DecisionAllow|PermissionID|RoleID|ContextService|authorization\.)' kernel/internal/identity/strong_auth_*.go kernel/internal/identity/postgres_strong_auth_repository.go; then
+# Direct imports of kernel.authorization are rejected above. This guard separately
+# rejects authorization-domain symbols in strong-auth runtime without treating
+# explanatory comments containing the word "authorization" as executable authority.
+if grep -R -nE '(DecisionAllow|PermissionID|RoleID|ContextService)' kernel/internal/identity/strong_auth_*.go kernel/internal/identity/postgres_strong_auth_repository.go; then
   echo "ERROR: P02.07 strong authentication is attempting to become authorization authority" >&2
   exit 1
 fi
