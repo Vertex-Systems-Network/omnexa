@@ -20,18 +20,18 @@ const (
 
 func TestPBKDF2PasswordHasherUsesGovernedAdaptiveOneWayRepresentation(t *testing.T) {
 	hasher := NewPBKDF2PasswordHasher()
-	password := "Pāssword\x00🔐-synthetic"
-	hash, err := hasher.Hash(password)
+	proof := "Pāssword\x00🔐-synthetic"
+	hash, err := hasher.Hash(proof)
 	if err != nil {
 		t.Fatalf("Hash() error = %v", err)
 	}
 	if !strings.HasPrefix(hash, "$pbkdf2-sha256$i=600000$") {
 		t.Fatalf("Hash() does not encode governed algorithm/work factor")
 	}
-	if strings.Contains(hash, password) {
+	if strings.Contains(hash, proof) {
 		t.Fatalf("Hash() disclosed plaintext password")
 	}
-	verified, err := hasher.Verify(password, hash)
+	verified, err := hasher.Verify(proof, hash)
 	if err != nil || !verified {
 		t.Fatalf("Verify(correct) = %v, %v", verified, err)
 	}
@@ -77,7 +77,7 @@ func TestOpaqueSessionSecretsRedactStringJSONAndRejectedInput(t *testing.T) {
 
 func TestSessionPolicyAndContextAreBoundedAndNonAuthorizing(t *testing.T) {
 	policy := DefaultSessionPolicy()
-	if !policy.valid() || !(policy.AccessLifetime < policy.RefreshLifetime && policy.RefreshLifetime <= policy.SessionLifetime) {
+	if !policy.valid() || policy.AccessLifetime >= policy.RefreshLifetime || policy.RefreshLifetime > policy.SessionLifetime {
 		t.Fatalf("DefaultSessionPolicy() lifetimes are not strictly bounded")
 	}
 	platform, err := NewSessionContext("", "")

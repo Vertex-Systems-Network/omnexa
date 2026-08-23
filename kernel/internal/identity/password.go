@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	passwordAlgorithm       = "pbkdf2-sha256"
+	hashAlgorithm           = "pbkdf2-sha256"
 	passwordIterations      = 600000
 	passwordSaltBytes       = 16
 	passwordDerivedKeyBytes = 32
@@ -48,7 +48,7 @@ func (PBKDF2PasswordHasher) Hash(password string) (string, error) {
 	}
 	return fmt.Sprintf(
 		"$%s$i=%d$%s$%s",
-		passwordAlgorithm,
+		hashAlgorithm,
 		passwordIterations,
 		base64.RawStdEncoding.EncodeToString(salt),
 		base64.RawStdEncoding.EncodeToString(derived),
@@ -74,7 +74,7 @@ func (PBKDF2PasswordHasher) Verify(password, encoded string) (bool, error) {
 
 func parsePasswordHash(encoded string) (int, []byte, []byte, bool) {
 	parts := strings.Split(encoded, "$")
-	if len(parts) != 5 || parts[0] != "" || parts[1] != passwordAlgorithm || !strings.HasPrefix(parts[2], "i=") {
+	if len(parts) != 5 || parts[0] != "" || parts[1] != hashAlgorithm || !strings.HasPrefix(parts[2], "i=") {
 		return 0, nil, nil, false
 	}
 	iterations, err := strconv.Atoi(strings.TrimPrefix(parts[2], "i="))

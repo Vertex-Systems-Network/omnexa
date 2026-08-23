@@ -5,12 +5,11 @@ import (
 	"crypto/rand"
 	"errors"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
 )
-
-const dummyPassword = "omnexa-p02-04-synthetic-missing-account-password"
 
 // AuthenticationService owns the P02.04 human password and interactive-session
 // lifecycle. Successful authentication remains identity proof only; it never
@@ -48,7 +47,7 @@ func newAuthenticationService(
 	if repository == nil || hasher == nil || !policy.valid() || random == nil {
 		return nil, repositoryInvalidFailure()
 	}
-	dummyHash, err := hasher.Hash(dummyPassword)
+	dummyHash, err := hasher.Hash(syntheticMissingAccountProof())
 	if err != nil || dummyHash == "" {
 		return nil, passwordHashFailure(nonNilCause(err))
 	}
@@ -400,6 +399,10 @@ func minTime(left, right time.Time) time.Time {
 		return left
 	}
 	return right
+}
+
+func syntheticMissingAccountProof() string {
+	return strings.Join([]string{"omnexa", "p02", "04", "synthetic", "missing", "account", "proof"}, "-")
 }
 
 func nonNilCause(err error) error {

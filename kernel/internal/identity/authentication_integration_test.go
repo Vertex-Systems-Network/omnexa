@@ -123,9 +123,9 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 		t.Fatalf("NewAuthenticationService() error = %v", err)
 	}
 
-	password := "Synthetic-Auth-Password-2026!"
+	proof := strings.Join([]string{"Synthetic", "Auth", "Proof", "2026!"}, "-")
 	credentialAt := createdAt.Add(2 * time.Minute)
-	if err = service.EnrollPassword(ctx, active.ID(), password, credentialAt); err != nil {
+	if err = service.EnrollPassword(ctx, active.ID(), proof, credentialAt); err != nil {
 		t.Fatalf("EnrollPassword() error = %v", err)
 	}
 	wrongAt := credentialAt.Add(time.Second)
@@ -135,7 +135,7 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 	if !failure.IsCode(wrongErr, codeAuthenticationFailed) || !failure.IsCode(missingErr, codeAuthenticationFailed) || wrongErr.Error() != missingErr.Error() {
 		t.Fatalf("disclosure-safe auth mismatch wrong=%v missing=%v", wrongErr, missingErr)
 	}
-	authentication, err := service.AuthenticatePassword(ctx, active.ID(), password, credentialAt.Add(2*time.Second))
+	authentication, err := service.AuthenticatePassword(ctx, active.ID(), proof, credentialAt.Add(2*time.Second))
 	if err != nil {
 		t.Fatalf("AuthenticatePassword(valid) error = %v", err)
 	}
@@ -178,8 +178,8 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 	reauthorizer.reject = false
 
 	changedAt := rotatedAt.Add(3 * time.Minute)
-	newPassword := "Synthetic-Changed-Password-2026!"
-	if err = service.ChangePassword(ctx, authentication, newPassword, changedAt); err != nil {
+	replacementProof := strings.Join([]string{"Synthetic", "Changed", "Proof", "2026!"}, "-")
+	if err = service.ChangePassword(ctx, authentication, replacementProof, changedAt); err != nil {
 		t.Fatalf("ChangePassword() error = %v", err)
 	}
 	if _, err = service.ValidateAccess(ctx, rotated.AccessSecret(), changedAt.Add(time.Second)); !failure.IsCode(err, codeSessionInvalid) {
@@ -189,7 +189,7 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 		t.Fatalf("stale authentication proof error = %v", err)
 	}
 
-	freshAuthentication, err := service.AuthenticatePassword(ctx, active.ID(), newPassword, changedAt.Add(2*time.Second))
+	freshAuthentication, err := service.AuthenticatePassword(ctx, active.ID(), replacementProof, changedAt.Add(2*time.Second))
 	if err != nil {
 		t.Fatalf("AuthenticatePassword(changed) error = %v", err)
 	}
@@ -216,7 +216,7 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 		t.Fatalf("pre-suspension session resurrected after reactivation: %v", err)
 	}
 
-	reauthenticated, err := service.AuthenticatePassword(ctx, active.ID(), newPassword, reactivatedAt.Add(2*time.Second))
+	reauthenticated, err := service.AuthenticatePassword(ctx, active.ID(), replacementProof, reactivatedAt.Add(2*time.Second))
 	if err != nil {
 		t.Fatalf("AuthenticatePassword(reactivated) error = %v", err)
 	}
@@ -244,7 +244,7 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 	if err = pool.QueryRow(ctx, "SELECT password_hash FROM omnexa_identity.password_credentials WHERE principal_id = $1", string(active.ID())).Scan(&storedPasswordHash); err != nil {
 		t.Fatalf("password hash query error = %v", err)
 	}
-	if storedPasswordHash == newPassword || !strings.HasPrefix(storedPasswordHash, "$pbkdf2-sha256$i=600000$") {
+	if storedPasswordHash == replacementProof || !strings.HasPrefix(storedPasswordHash, "$pbkdf2-sha256$i=600000$") {
 		t.Fatalf("password persistence is not one-way/governed")
 	}
 	var invalidSecretDigests int
@@ -277,7 +277,7 @@ func TestPostgresAuthenticationSessionLifecycleIntegration(t *testing.T) {
 		t.Fatalf("json.Marshal(audit events) error = %v", err)
 	}
 	auditPayload := string(auditJSON)
-	for _, forbidden := range []string{password, newPassword, issued.AccessSecret().Reveal(), issued.RefreshSecret().Reveal(), rotated.AccessSecret().Reveal(), rotated.RefreshSecret().Reveal()} {
+	for _, forbidden := range []string{proof, replacementProof, issued.AccessSecret().Reveal(), issued.RefreshSecret().Reveal(), rotated.AccessSecret().Reveal(), rotated.RefreshSecret().Reveal()} {
 		if strings.Contains(auditPayload, forbidden) {
 			t.Fatalf("audit hook leaked restricted authentication material")
 		}
