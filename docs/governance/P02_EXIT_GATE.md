@@ -3,7 +3,7 @@
 Status: **NOT SATISFIED — PHASE ACTIVE**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 1 / 10 done: P02.01 is complete and P02.02 is active.
+This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 2 / 10 done: P02.01-P02.02 are complete and P02.03 is active.
 
 ## Mandatory exit evidence
 
@@ -25,7 +25,9 @@ P02 exit requires all P02.01-P02.10 packages to be `done` and exact canonical Gi
 
 P02.01 completion is recorded in `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md` from implementation PR #69, final exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical run/job `32635243643 / 97183883007` PASS and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
 
-This evidence satisfies P02.01 only. It does not satisfy cross-tenant, object/scope, role, service account or session invalidation phase-exit requirements that belong to later P02 packages.
+P02.02 completion is recorded in `docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md` from implementation PR #71, final exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, canonical run/job `32637760875 / 97189971101` PASS and merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
+
+P02.02 provides canonical same-tenant allow/cross-tenant forged-selector deny/no-global-fallback evidence and establishes the trusted tenant boundary. This satisfies the tenant-isolation foundation portion only. It does not satisfy organization/object/scope authorization, role/permission differences, service-account lifecycle or session invalidation requirements that belong to later P02 packages.
 
 ## Exit-denial conditions
 
