@@ -176,13 +176,13 @@ func TestPostgresOrganizationFoundationIntegration(t *testing.T) {
 		t.Fatalf("NewPostgresRepository() error = %v", repositoryErr)
 	}
 
-	orgA, err := NewOrganization(tenantA.ID())
-	if err != nil {
-		t.Fatalf("NewOrganization(A) error = %v", err)
+	orgA, orgAErr := NewOrganization(tenantA.ID())
+	if orgAErr != nil {
+		t.Fatalf("NewOrganization(A) error = %v", orgAErr)
 	}
-	orgB, err := NewOrganization(tenantB.ID())
-	if err != nil {
-		t.Fatalf("NewOrganization(B) error = %v", err)
+	orgB, orgBErr := NewOrganization(tenantB.ID())
+	if orgBErr != nil {
+		t.Fatalf("NewOrganization(B) error = %v", orgBErr)
 	}
 	if err := repository.CreateNode(ctx, scopeA, orgA); err != nil {
 		t.Fatalf("CreateNode(orgA) error = %v", err)
@@ -259,16 +259,16 @@ func TestPostgresOrganizationFoundationIntegration(t *testing.T) {
 		t.Fatalf("ScopedContext.ScopeFor(other scope) error = %v, want %s", err, codeScopeDenied)
 	}
 
-	crossTenantMembership, err := NewMembership(tenantB.ID(), orgB.ID(), userB.ID())
-	if err != nil {
-		t.Fatalf("NewMembership(B) error = %v", err)
+	crossTenantMembership, crossTenantMembershipErr := NewMembership(tenantB.ID(), orgB.ID(), userB.ID())
+	if crossTenantMembershipErr != nil {
+		t.Fatalf("NewMembership(B) error = %v", crossTenantMembershipErr)
 	}
 	if createErr := repository.CreateMembership(ctx, scopeA, crossTenantMembership); !failure.IsCode(createErr, codeScopeDenied) {
 		t.Fatalf("cross-tenant membership error = %v, want %s", createErr, codeScopeDenied)
 	}
-	wrongTenantPrincipalMembership, err := NewMembership(tenantA.ID(), branchA.ID(), userB.ID())
-	if err != nil {
-		t.Fatalf("NewMembership(A/userB) error = %v", err)
+	wrongTenantPrincipalMembership, wrongTenantPrincipalMembershipErr := NewMembership(tenantA.ID(), branchA.ID(), userB.ID())
+	if wrongTenantPrincipalMembershipErr != nil {
+		t.Fatalf("NewMembership(A/userB) error = %v", wrongTenantPrincipalMembershipErr)
 	}
 	if createErr := repository.CreateMembership(ctx, scopeA, wrongTenantPrincipalMembership); !failure.IsCode(createErr, codeScopeDenied) {
 		t.Fatalf("wrong-tenant principal membership error = %v, want %s", createErr, codeScopeDenied)
@@ -290,9 +290,9 @@ func TestPostgresOrganizationFoundationIntegration(t *testing.T) {
 		t.Fatalf("revoked scoped context error = %v, want %s", err, codeContextUntrusted)
 	}
 
-	replacementMembership, err := NewMembership(tenantA.ID(), branchA.ID(), userA.ID())
-	if err != nil {
-		t.Fatalf("NewMembership(replacement) error = %v", err)
+	replacementMembership, replacementMembershipErr := NewMembership(tenantA.ID(), branchA.ID(), userA.ID())
+	if replacementMembershipErr != nil {
+		t.Fatalf("NewMembership(replacement) error = %v", replacementMembershipErr)
 	}
 	if createErr := repository.CreateMembership(ctx, scopeA, replacementMembership); createErr != nil {
 		t.Fatalf("CreateMembership(replacement) error = %v", createErr)
