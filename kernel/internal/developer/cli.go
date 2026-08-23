@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/buildinfo"
@@ -168,7 +169,23 @@ func runVerify(ctx context.Context, options Options) int {
 	if err != nil {
 		return writeFailure(options.Stderr, "omnexa verify: repository root not found", exitOperationFailed)
 	}
-	return runVerification(ctx, root, options.Environment, options.Stdout, options.Stderr, options.Runner, options.Arguments[1])
+	return runVerification(ctx, root, verificationEnvironment(options.Environment), options.Stdout, options.Stderr, options.Runner, options.Arguments[1])
+}
+
+// verificationEnvironment prevents runtime Omnexa configuration, including
+// restricted provider URLs and future credentials, from leaking into repository
+// verification subprocesses. Synthetic P01_* provider variables and ordinary
+// toolchain/process variables remain available to the governed scripts.
+func verificationEnvironment(environment []string) []string {
+	filtered := make([]string, 0, len(environment))
+	for _, item := range environment {
+		key, _, ok := strings.Cut(item, "=")
+		if ok && strings.HasPrefix(key, "OMNEXA_") {
+			continue
+		}
+		filtered = append(filtered, item)
+	}
+	return filtered
 }
 
 func explicitEnvironment(resolved config.Config) bool {
