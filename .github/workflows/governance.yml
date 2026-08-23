@@ -169,3 +169,7 @@ jobs:
       - name: Verify P01.09 job and scheduler primitives
         shell: bash
         run: bash scripts/verify_p01_09.sh
+
+      - name: Verify P01.10 feature flag and configuration registry
+        shell: bash
+        run: bash scripts/verify_p01_10.sh
