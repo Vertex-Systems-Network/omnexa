@@ -207,3 +207,9 @@ jobs:
         env:
           P01_12_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p01_12.sh
+
+      - name: Verify P02.01 principal and User identity foundation
+        shell: bash
+        env:
+          P02_01_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p02_01.sh
