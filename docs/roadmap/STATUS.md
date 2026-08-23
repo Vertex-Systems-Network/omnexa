@@ -4,13 +4,13 @@ Last reconciled: **2026-08-23**
 
 ## Current position
 
-- Program: **Kernel Program**
+- Program: **Kernel Program checkpoint**
 - Phase: **P01 — Omnexa Kernel**
-- Phase state: **active**
-- Current work package: **P01.12 — Developer CLI baseline**
-- P01 progress: **11 / 12 done**
-- P01.01–P01.11: **DONE**
-- P01.12: **ACTIVE**
+- Phase state: **done**
+- Current work package: **NONE**
+- P01 progress: **12 / 12 done**
+- P01.01–P01.12: **DONE**
+- P01 exit gate: **SATISFIED**
 - P02+: **PLANNED / NOT ACTIVE**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
@@ -18,44 +18,37 @@ Last reconciled: **2026-08-23**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation: **AUTHORIZED ONLY FOR ACTIVE P01 PACKAGE**
+- Kernel implementation: **NOT AUTHORIZED UNTIL SEPARATE PHASE ACTIVATION**
 - Business-feature implementation: **NOT AUTHORIZED**
 
-## Latest completed package — P01.11
+## Latest completed package — P01.12
 
-P01.11 — Audit Transport Foundation is complete. Implementation PR #63 passed final exact-head GitHub-hosted run `32610902537` / job `97123708250` and merged as `10c94a638b89d47da05f5481fb2db298a2da6942`. Canonical evidence: `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`.
+P01.12 — Developer CLI Baseline is completion-eligible and its implementation is merged. PR #65 passed final exact-head canonical run `32629072886` / job `97168916985` and merged as `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. Final implementation head: `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`.
 
-The completed boundary provides an immutable classification-aware audit envelope; UUIDv7 identifiers and UTC timestamps; tamper-evident integrity; actor/action/target/scope/outcome/correlation/reason/approval and privileged/impersonation metadata without P02 authority; append-only sink capability; explicit required-audit failure and best-effort degradation semantics; bounded deterministic memory sink; secret/prohibited-field rejection; and protected-payload-safe transport-health observability.
+Canonical evidence was produced on runner `GitHub Actions 1000013010`, GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7. Repository Go quality passed with golangci-lint v2.12.2 at 0 issues and govulncheck v1.7.0 reporting no vulnerabilities. P01.01-P01.11 regressions passed, real `omnexa db migrate` passed, real `omnexa verify all` passed and P01.12 G0-G8 passed.
 
-Repository Go quality and P01.01-P01.10 regressions passed on the final implementation run. P01.11 G1/G2/G3/G5/G6/G7 all passed. Initial diagnostic run `32610720614` / job `97123236672` remains retained as **FAIL** for corrected gofmt/govet shadow findings and is not completion evidence.
+The initial implementation run `32628865023 / 97168401358` remains retained as **FAIL** for corrected gofmt, gosec G204 and staticcheck ST1005 findings. It is not completion evidence and no gate was weakened.
 
-## Active P01 package — P01.12
+Detailed evidence: `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md`.
 
-P01.12 is the sole active package and final P01 work package. Its owner/domain is `kernel.developer` and its authorized scope is defined by `docs/roadmap/work-packages/P01.12.md`:
+## P01 exit
 
-- stable repository-owned `omnexa`/developer command surface for version, verify, build/test helpers and approved local diagnostics;
-- deterministic canonical `verify` orchestration with fail-closed exit status;
-- explicit structured-safe output and help/version metadata;
-- safe composition of existing P01 configuration, migration and diagnostics capabilities;
-- no-secret / no-RESTRICTED-output policy;
-- deterministic clean-checkout and CI invocation;
-- P01.01-P01.11 regression preservation;
-- complete fresh-install P01 exit proof covering configuration, build/start, migration, cache/storage contracts, safe telemetry, readiness/diagnostics, job/configuration/audit primitives, developer verification, security, supply-chain and build gates.
+`docs/governance/P01_EXIT_GATE.md` records the P01 exit gate as **SATISFIED**. The canonical lane proves configuration/startup, fresh PostgreSQL migration, Valkey and S3-compatible provider contracts, safe logging/OpenTelemetry, health/readiness, jobs/configuration/audit primitives, developer verification, static/security checks, module checksum verification and kernel build/package behavior reproducibly without undocumented manual steps.
 
-P01.12 must not implement production super-admin authority, P02 tenant/user/role administration, P03 module runtime administration, P04+ domain/event/workflow commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI/model/agent behavior. CLI convenience never creates authority.
+P01 is therefore reconciled at **12 / 12 done** with no active P01 work package.
 
 ## Repository Go quality
 
-`docs/quality/GO_CODE_QUALITY.md` remains the permanent Go quality gate. Canonical `governance` executes `bash scripts/verify_go_quality.sh` before package regressions using pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
+`docs/quality/GO_CODE_QUALITY.md` remains the permanent Go quality gate. Canonical `governance` runs on GitHub-hosted `ubuntu-24.04` using pinned Go 1.26.7, golangci-lint v2.12.2 and govulncheck v1.7.0.
 
 ## Protected integration / CI
 
-`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates, required conversation resolution and strict up-to-date enforcement. Canonical governance CI remains GitHub-hosted only on `ubuntu-24.04`; local/self-hosted governance runners are prohibited. Completed P01.01-P01.11 verifiers remain regression gates.
+`main` remains protected with PR-only integration, strict required `governance`, blocked direct/force updates, required conversation resolution and strict up-to-date enforcement. Local/self-hosted governance runners remain prohibited. P01.01-P01.12 verifiers remain regression evidence.
 
 ## Issue #4 — external distribution gate
 
-Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This does not block authorized P01 kernel engineering.
+Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. This does not retroactively invalidate P01 kernel completion, but it remains an external distribution/public-launch decision gate.
 
 ## Exact next work
 
-After this P01.11 closure transition merges, **STOP this execution session**. A new governed execution session may implement **P01.12 only**, add its focused tests/verifier and P01 fresh-install exit proof, preserve repository Go quality and P01.01-P01.11 regressions, and obtain applicable GitHub-hosted G0-G8 evidence. P02+, business features and AI/model/agent implementation remain locked until separate governed transitions.
+After this P01 completion closure merges, **STOP this execution session**. P02 remains `planned` and no implementation scope is active. A new governed execution session may prepare/reconcile P02 specifications, readiness evidence and an explicit P02 activation transition. P02 implementation, business features and AI/model/agent implementation remain locked until that transition authorizes them.
