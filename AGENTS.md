@@ -15,15 +15,14 @@ EG-03 / Issue #14: SATISFIED
 Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
 Local/self-hosted governance runners: PROHIBITED
 P01: ACTIVE
-P01.01-P01.10: DONE
-P01.11: ACTIVE — Audit transport foundation
-P01.12: PLANNED
-P01 progress: 10 / 12 done
+P01.01-P01.11: DONE
+P01.12: ACTIVE — Developer CLI baseline / P01 exit proof
+P01 progress: 11 / 12 done
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
 
-Kernel authorization is bounded to the sole active package. It is not permission to implement P01.12, P02+, module runtime or business features.
+Kernel authorization is bounded to the sole active package. It is not permission to implement P02+, module runtime, business features, deployment administration or AI/model/agent runtime.
 
 ## Persistent AI continuity
 
@@ -37,7 +36,7 @@ Before material work read:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/FOUNDATION_FREEZE.json` and `docs/governance/P01_ENTRY_GATE.md`;
 4. `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`;
-5. the active package specification (`P01.11.md` currently);
+5. the active package specification (`P01.12.md` currently);
 6. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
 7. identifier/money/time/locale/error/API/event standards;
 8. security/data-classification/threat model;
@@ -76,42 +75,39 @@ Strict protection requires implementation/closure PRs to be current with protect
 
 ## P01 execution rule
 
-`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` enforces a completed prefix, exactly one active package and a planned suffix.
+`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` enforces a completed prefix and exactly one active package.
 
-P01.01 through P01.10 are complete with canonical evidence under `docs/roadmap/evidence/`. Latest completed evidence is `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`, based on implementation PR #61, exact head `4c9914e4641d0d6e94a895d0fcd16c3a6bf4d962`, final canonical run/job `32609018028 / 97118796940`, and implementation merge `9d11b9250eb74ca2ade531ee58e8f905468cf103`.
+P01.01 through P01.11 are complete with canonical evidence under `docs/roadmap/evidence/`. Latest completed evidence is `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`, based on implementation PR #63, final exact head `1c1ab1f8d5120fb6b1e5908fdb93cffef9275940`, final canonical run/job `32610902537 / 97123708250`, and implementation merge `10c94a638b89d47da05f5481fb2db298a2da6942`.
 
-Current active package: **P01.11 — Audit Transport Foundation**.
+Current active package: **P01.12 — Developer CLI Baseline**. It is the final P01 package and owns the P01 fresh-install exit proof.
 
-P01.12 becomes active only after P01.11 reaches `done` with required evidence and a separate governed closure transition. More than one active P01 package is forbidden.
+P02 may not activate until P01.12 reaches `done` with required evidence and a separate governed P01-exit reconciliation. More than one active P01 package is forbidden.
 
-## P01.11 audit transport rules
+## P01.12 developer CLI / P01 exit rules
 
-Authorized P01.11 scope is limited to:
+Authorized P01.12 scope is limited to:
 
-- stable classification-aware audit record envelope;
-- actor/action/target/scope/outcome/correlation/reason/approval metadata without implementing P02 identities;
-- append-oriented sink interface;
-- explicit required-audit failure semantics;
-- classification/redaction enforcement boundary;
-- immutable UUIDv7/timestamp conventions;
-- impersonation/privileged-action metadata representation;
-- deterministic local/test sink;
-- bounded transport-health observability without protected-payload logging;
-- P01.01-P01.10 regression verification;
-- permanent repository Go quality verification;
-- GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence.
+- stable repository-owned `omnexa`/developer command surface for version, verify, build/test helpers and approved local diagnostics;
+- deterministic canonical `verify` orchestration mapped to applicable quality gates;
+- explicit fail-closed exit codes and structured-safe output;
+- command help/version metadata;
+- safe composition of P01.02 configuration, P01.04 migration and P01.08 diagnostics where explicitly authorized;
+- no-secret / no-RESTRICTED-output behavior;
+- deterministic invocation from a clean checkout and canonical CI;
+- P01.01-P01.11 regression preservation;
+- full P01 fresh-install exit proof: configuration, build/start, fresh migration, cache/storage contracts, safe telemetry, readiness/diagnostics, jobs/configuration/audit primitives, canonical developer verification and required security/supply-chain/build gates.
 
-P01.11 must not implement P02 identity/tenant/role catalogs, business-domain audit event definitions, compliance export/reporting UI, long-term legal retention/hold, replacement of domain events with audit records, P01.12 CLI, durable messaging/outbox/inbox pull-forward, business modules or AI/model/agent behavior.
+P01.12 must not implement production super-admin authority, P02 tenant/user/role administration, P03 module install/runtime administration, P04+ domain/event/workflow commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI/model/agent behavior.
 
-Protected audit is separate from ordinary logs. Required-audit sink failure cannot silently claim success. Records must reject secrets/auth equivalents by default. Audit write capability does not imply audit read/export authority. Actor/scope identifiers are descriptive metadata and do not grant authorization, tenancy or identity authority.
+CLI convenience never creates authority. Destructive operations require explicit environment/resource semantics. Privileged future operations must authenticate, authorize and audit through governed capabilities rather than hidden CLI bypasses.
 
-## Completed P01.10 configuration-registry rules retained
+## Completed P01.11 audit rules retained
 
-Runtime configuration remains distinct from P01.02 static process configuration. Definitions are typed, stable and owner-declared. Defaults/fallbacks are deterministic. Cache/refresh/invalidation remains bounded and non-authoritative. Kill switches are explicitly declared disable-only mitigation controls and cannot grant authority or weaken authorization/data isolation. Future tenant/org/user references are opaque UUIDv7 metadata only. Generic runtime configuration is not a secrets store. P01.10 regression verification remains mandatory.
+Protected audit remains separate from ordinary logs. P01.11 records are immutable/tamper-evident, classification-aware and append-oriented. Required-audit failure cannot silently claim success. Generic audit records reject secret/auth/key/payment-sensitive fields. Audit write capability does not imply audit read/export authority, and actor/scope metadata does not grant authentication, authorization, tenancy or identity authority. P01.11 regression verification remains mandatory.
 
 ## Completed lower-package invariants retained
 
-P01.09 jobs remain deterministic, bounded and non-authoritative with bounded retry/idempotency and graceful shutdown semantics. P01.08 health/readiness remains safe operational evidence rather than authority. P01.07 observability remains diagnostic infrastructure rather than audit/correctness authority. P01.06 storage and P01.05 cache remain infrastructure primitives without tenancy/authorization authority. Their regression verifiers remain mandatory.
+P01.10 runtime configuration remains distinct from P01.02 static process configuration; kill switches cannot grant authority. P01.09 jobs remain deterministic, bounded and non-authoritative. P01.08 health/readiness remains safe operational evidence rather than authority. P01.07 observability remains diagnostic infrastructure rather than audit/correctness authority. P01.06 storage and P01.05 cache remain infrastructure primitives without tenancy/authorization authority. Their regression verifiers remain mandatory.
 
 ## Business-feature lock
 
@@ -123,7 +119,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-For P01.11, required executable evidence is G0/G1/G2/G3/G5/G6/G7 plus repository Go quality and completed P01.01-P01.10 regression verification. P02 tenancy/catalog behavior, durable event replay and business module lifecycle remain outside P01.11.
+For P01.12 and P01 exit, record applicable G0-G8 evidence accurately, preserve repository Go quality plus P01.01-P01.11 regressions, and prove the fresh-install exit path reproducibly on canonical GitHub-hosted `ubuntu-24.04` without hidden manual steps.
 
 ## Repository/local-development rules
 
@@ -157,11 +153,11 @@ For every material change:
 9. reconcile state/status/continuity only after completion evidence exists;
 10. use ADR/change control before changing frozen architecture.
 
-The AI must not automatically advance to the next work package. After a package closure activates the next package, identify the next authorized action and **STOP**; do not implement that next package in the same execution session.
+The AI must not automatically advance to the next work package or phase. After a package closure activates the next package, identify the next authorized action and **STOP**; do not implement that newly activated package in the same execution session.
 
 ## Forbidden behavior
 
-Do not use local/self-hosted runners for canonical governance; silently add domains; duplicate ownership; invent conflicting contracts/security/quality semantics; bypass tenancy/authz/audit/classification; grant AI unrestricted write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; claim untested evidence; implement later P01/P02/P03/business scope early; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
+Do not use local/self-hosted runners for canonical governance; silently add domains; duplicate ownership; invent conflicting contracts/security/quality semantics; bypass tenancy/authz/audit/classification; grant AI unrestricted write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; claim untested evidence; implement P02/P03/business scope early; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
 ## Issue #4
 
@@ -169,4 +165,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-After the P01.10 closure PR merges, begin P01.11 only in a **new governed execution session**. Implement the bounded `kernel.audit` transport foundation, add its fail-closed package verifier, preserve P01.01-P01.10 regressions and repository Go quality, obtain exact-head GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, then use a separate closure transition before P01.12.
+This closure transition records P01.11 `done` and activates only P01.12. After this closure merges, **STOP**. A new governed execution session may then implement only the bounded P01.12 developer CLI baseline and P01 exit proof. P02+, business features and AI/model/agent runtime remain locked until their own governed transitions.

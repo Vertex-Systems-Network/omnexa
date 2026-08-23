@@ -3,7 +3,7 @@
 Status: **Canonical v1 semantic contract**  
 Work package: **P00.08**
 
-This document freezes developer command semantics, not the final CLI implementation. P01+ tooling may expose these through an `omnexa` CLI, Task/Make wrapper or equivalent, but local development and CI must call the same underlying operations.
+This document freezes developer command semantics. P01.12 is authorized to implement the first repository-owned CLI surface, but local development and CI must continue to call the same governed underlying operations.
 
 ## Development lifecycle
 
@@ -46,7 +46,7 @@ omnexa verify release
 omnexa verify all
 ```
 
-Each command maps to the P00.07 quality gate classes and returns a non-zero exit status on failure. Machine-readable output should eventually be available for CI/release evidence. `verify all` is a deterministic aggregate, not a secret CI-only path.
+Each command maps to the P00.07 quality gate classes and returns a non-zero exit status on failure. Machine-readable output may distinguish exact evidence states. `verify all` is a deterministic aggregate, not a secret CI-only path.
 
 ## P01 executable mappings
 
@@ -64,31 +64,34 @@ bash scripts/verify_p01_07.sh
 bash scripts/verify_p01_08.sh
 bash scripts/verify_p01_09.sh
 bash scripts/verify_p01_10.sh
+bash scripts/verify_p01_11.sh
 ```
 
 `verify_go_quality.sh` is a permanent repository-wide fail-closed Go quality gate. It verifies `gofmt`, pinned `golangci-lint v2.12.2` and pinned `govulncheck v1.7.0` against `./kernel/...`. It does not use `@latest`, silently modify source or convert required findings into warnings.
 
-Canonical GitHub-hosted governance executes repository Go quality and completed P01 regressions in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. Later completed packages use deterministic in-process primitives/test doubles where appropriate. The final `omnexa verify ...` CLI remains owned by P01.12.
+Canonical GitHub-hosted governance executes repository Go quality and completed P01 regressions in sequence on `ubuntu-24.04`. P01.04 provisions PostgreSQL 18.6, P01.05 provisions Valkey 9.1.1 and P01.06 provisions `adobe/s3mock:5.1.0` as governed synthetic services. Later completed packages use deterministic in-process primitives/test doubles where appropriate.
 
-## Completed P01.10
+## Completed P01.11
 
-P01.10 is complete with canonical evidence in `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`. Its verifier remains a required regression gate. Runtime configuration remains distinct from P01.02 static configuration; flags do not grant authority; future scoped UUIDv7 references are metadata only; cache/refresh/invalidation remains bounded and non-authoritative; kill switches remain explicit disable-only fail-closed mitigation controls.
+P01.11 is complete with canonical evidence in `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`. Its verifier remains a required regression gate. Protected audit remains separate from ordinary logs; required-audit failures do not silently succeed; generic audit rejects secret/auth/key/payment-sensitive metadata; audit write does not imply read/export authority; and descriptive actor/scope metadata does not grant identity, tenancy or authorization authority.
 
-## Active P01.11
+## Active P01.12
 
-P01.11 — Audit Transport Foundation is the sole active executable kernel package after the P01.10 closure transition.
+P01.12 — Developer CLI Baseline is the sole active executable kernel package and owns the P01 exit proof.
 
-The active P01.11 implementation must map package requirements to:
+The active P01.12 implementation must map package requirements to the existing semantic command contract rather than create a competing verification path:
 
-- `verify format` / `verify static` -> pinned toolchain, repository Go quality, `kernel.audit` ownership/dependency boundaries and no P01.12/P02/business pull-forward;
-- `verify unit` -> stable envelope validation, immutable identifier/timestamp semantics, classification/redaction rules and deterministic local/test sink;
-- `verify contracts` / `verify integration` -> append-oriented sink behavior, required-audit failure propagation, metadata representation and safe transport-health boundary;
-- `verify security` -> reject secrets/auth equivalents and prohibited protected payload behavior; audit write does not imply read/export authority; actor/scope metadata does not create authorization/tenancy identity;
-- lifecycle/resilience evidence -> sink failure, cancellation/timeout/panic behavior is bounded and required-audit failure cannot silently claim success;
-- `verify build` -> complete kernel package build with canonical dependency metadata;
-- completed P01.01-P01.10 regression preservation.
+- `help` / `version` -> deterministic repository/build identity with no machine-secret leakage;
+- `verify governance` / `verify all` -> compose the canonical governance/readiness/package and repository Go-quality gates with fail-closed non-zero exit behavior;
+- `verify format`, `verify lint`, `verify static`, `verify unit`, `verify contracts`, `verify integration`, `verify migrations`, `verify security`, `verify build`, `verify release` -> invoke governed underlying operations without silently weakening or reimplementing their semantics;
+- configuration-facing commands -> compose P01.02 startup configuration rules without turning the CLI into a secrets store;
+- migration-facing commands -> compose P01.04 boundaries with explicit environment/resource identity and no hidden production reset semantics;
+- diagnostic/health commands -> compose P01.08 safe projections without leaking provider errors, credentials or RESTRICTED payloads;
+- P01 exit proof -> from a clean environment prove configuration, build/start, fresh migration, cache/storage provider contracts, safe logs/telemetry, readiness/diagnostics, job/configuration/audit primitive tests, canonical developer verification and required security/supply-chain/build gates reproducibly.
 
-P01.11 may not implement P02 identity/tenant/role catalogs, business-domain audit event definitions, compliance export/reporting UI, long-term legal retention/hold, domain-event replacement, P01.12 developer CLI, durable messaging/outbox/inbox pull-forward, business modules or AI runtime. P01.12 becomes eligible only after P01.11 completion evidence and a separate governed transition.
+P01.12 must add focused positive/negative tests and a fail-closed P01.12 verifier during its implementation PR. This closure transition does not create that verifier or any P01.12 runtime code.
+
+P01.12 may not implement production super-admin CLI, P02 tenant/user/role administration, P03 module install/runtime commands, P04+ event/workflow/domain commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI runtime.
 
 ## Go result convention
 
@@ -137,7 +140,7 @@ A blocked external dependency must not return success merely to keep pipelines g
 
 ## Safety guardrails
 
-Destructive commands require explicit environment/resource identity. `local` is not inferred from hostname alone. Commands must never silently target production because credentials happen to be present.
+Destructive commands require explicit environment/resource identity. `local` is not inferred from hostname alone. Commands must never silently target production because credentials happen to be present. CLI convenience does not create authority; privileged future operations must use governed authentication, authorization and audit paths.
 
 ## No hidden manual steps
 

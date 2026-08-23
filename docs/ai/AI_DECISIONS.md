@@ -58,7 +58,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Why:** each kernel primitive becomes a verified dependency for the next package; multiple active foundation packages make evidence and authority ambiguous.
 
-**Current implication:** P01.10 implementation is merged with exact-head canonical PASS evidence. The separate closure branch `chore/p01-10-close-p01-11-activate` reconciles P01.01-P01.10 `done`, P01.11 as the sole active package and P01.12 planned. P01.11 runtime must not start until that closure merges; after the closure merge the execution session must stop, and P01.11 implementation starts only in a new governed session.
+**Current implication:** P01.11 implementation is merged with exact-head canonical PASS evidence. The separate closure branch `chore/p01-11-close-p01-12-activate` reconciles P01.01-P01.11 `done`, P01.12 as the sole active package and P01 progress to `11 / 12 done`. P01.12 runtime must not start until that closure merges; after the closure merge the execution session must stop, and P01.12 implementation starts only in a new governed session. P02 may not activate until P01.12 completes and a separate P01-exit reconciliation records complete evidence.
 
 ## D-007 — Repository continuity is a subordinate snapshot, not a new source of truth
 
@@ -90,7 +90,7 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Rejected:** proprietary telemetry coupling in the kernel contract, global-provider mutation as hidden process state, raw secret/classified/error leakage, audit semantics in ordinary logs, or treating telemetry availability as application correctness.
 
-**Future dependency:** P01.11 audit transport must remain a separate protected contract from ordinary observability.
+**Retained dependency:** completed P01.11 audit transport is a separate protected contract from ordinary observability; P01.12 diagnostics/CLI output must preserve that separation and must not expose protected audit payloads.
 
 ## D-010 — Health/readiness diagnostics are bounded operational signals, not authority
 
@@ -102,4 +102,4 @@ This file preserves concise rationale that a future AI must not forget. It refer
 
 **Rejected:** one generic health boolean, unbounded probes, raw secret/provider error exposure, treating object keys/connection details as diagnostics, module/tenant aggregation before P03, public business status semantics, or Kubernetes-specific architecture as the kernel contract.
 
-**Future dependency:** P01.11 transport health may expose safe operational state but must not log protected audit payloads or create authorization/business authority.
+**Retained dependency:** P01.12 may expose approved diagnostics only by composing the safe P01.08 boundary; CLI output must not create authority or leak raw provider/protected data.
