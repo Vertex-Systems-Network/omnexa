@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v16-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v17-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -113,13 +113,21 @@ jobs:
         shell: bash
         run: python scripts/validate_freeze_review.py
 
-      - name: Validate P01 implementation-readiness preparation
+      - name: Validate completed P01 prerequisite
         shell: bash
         run: python scripts/validate_p01_preparation.py
 
-      - name: Validate complete P01 package specification set
+      - name: Validate completed P01 package specification set
         shell: bash
         run: python scripts/validate_p01_package_specs.py
+
+      - name: Validate P02 implementation-readiness preparation
+        shell: bash
+        run: python scripts/validate_p02_preparation.py
+
+      - name: Validate complete P02 package specification set
+        shell: bash
+        run: python scripts/validate_p02_package_specs.py
 
       - name: Verify repository Go code quality
         shell: bash
