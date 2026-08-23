@@ -4,14 +4,14 @@
   "product_category": "Composable Enterprise Business Operating System",
   "last_reconciled": "2026-08-23",
   "program": "kernel",
-  "current_phase": "P01",
-  "current_work_package": null,
+  "current_phase": "P02",
+  "current_work_package": "P02.01",
   "implementation_lock": {
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": false,
+    "kernel_code_authorized": true,
     "allowed_work": [
-      "P01 completion governance and verification",
-      "P02 specification, readiness and activation planning without implementation",
+      "P02.01 Principal & user identity foundation implementation and verification",
+      "P02 governance and verification",
       "narrow repository-maintenance fixes"
     ]
   },
@@ -33,7 +33,7 @@
       "satisfied": [3, 14],
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "Historical P01 entry authorization. It does not grant implementation authority after P01 completion."
+      "note": "Historical P01 entry authorization only."
     },
     "p01_exit_gate": {
       "state": "SATISFIED",
@@ -50,7 +50,20 @@
       "runner_image": "ubuntu-24.04",
       "go": "1.26.7",
       "p01_progress": "12 / 12 done",
-      "p02_activated": false
+      "p02_activated": true
+    },
+    "p02_entry_gate": {
+      "state": "SATISFIED",
+      "document": "docs/governance/P02_ENTRY_GATE.md",
+      "transition_checklist": "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
+      "package_sequence": "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
+      "blockers": [],
+      "readiness_pr": 67,
+      "readiness_merge": "c6301ca4a5eec5dd62bcb75481d900e40ad968bd",
+      "current_work_package": "P02.01",
+      "kernel_code_authorized": true,
+      "business_feature_code_authorized": false,
+      "note": "P02 entry prerequisites are satisfied; implementation authority is bounded to the single active package P02.01."
     },
     "main_branch_protection": {
       "state": "verified_protected",
@@ -67,7 +80,7 @@
       "green_integration_pr": 35,
       "green_integration_merge": "843c615170058ab900ba69516dbed80a47f26973",
       "historical_private_attempt_result": "HTTP 403: Upgrade to GitHub Pro or make this repository public to enable this feature.",
-      "note": "Issue #3 is closed. main reports protected=true; PR-only integration, strict required governance, direct/force update rejection and required conversation resolution remain enforced. Current single-maintainer review policy requires zero approvals and does not require Code Owner review until an independent reviewer exists."
+      "note": "Issue #3 is closed. main remains protected with PR-only integration, strict required governance, direct/force update rejection, required conversation resolution and up-to-date enforcement."
     },
     "github_actions_ci": {
       "state": "operational_github_hosted",
@@ -83,7 +96,7 @@
       "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "final_check": "governance",
-      "note": "P01.12 PR #65 final exact-head run 32629072886 / job 97168916985 passed repository Go quality, P01.01-P01.11 regressions, real developer migration/verify-all execution and P01.12 G0-G8 on GitHub-hosted Ubuntu 24.04.4 LTS / X64 with Go 1.26.7. Local/self-hosted runners remain prohibited."
+      "note": "Canonical governance remains GitHub-hosted ubuntu-24.04 only; P01.01-P01.12 regressions remain mandatory during P02."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -109,143 +122,75 @@
     "validator": "scripts/validate_p01_preparation.py",
     "package_validator": "scripts/validate_p01_package_specs.py",
     "blocking_gate": null,
-    "note": "P01.01-P01.12 are done with GitHub-hosted executable evidence. P01 exit is satisfied. P02 remains planned and inactive until a separate governed readiness/activation transition."
+    "note": "P01.01-P01.12 remain completed historical prerequisites with executable regression evidence."
+  },
+  "p02_preparation": {
+    "state": "activated",
+    "phase_state": "active",
+    "next_work_package": "P02.01",
+    "work_package_name": "Principal & user identity foundation",
+    "work_package_state": "active",
+    "work_package_spec": "docs/roadmap/work-packages/P02.01.md",
+    "package_sequence": "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
+    "prepared_spec_count": 10,
+    "mandatory_spec_count": 10,
+    "entry_gate": "docs/governance/P02_ENTRY_GATE.md",
+    "exit_gate": "docs/governance/P02_EXIT_GATE.md",
+    "transition_checklist": "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
+    "validator": "scripts/validate_p02_preparation.py",
+    "package_validator": "scripts/validate_p02_package_specs.py",
+    "blocking_gate": null,
+    "note": "P02 is active with exactly P02.01 authorized. P02.02-P02.10 remain planned; business-feature code remains unauthorized."
   },
   "state_vocabulary": ["planned", "ready", "active", "blocked", "verification", "done", "superseded"],
   "phase": {
-    "id": "P01",
-    "name": "Omnexa Kernel",
-    "state": "done",
-    "mandatory_work_packages": 12,
-    "done_work_packages": 12,
+    "id": "P02",
+    "name": "Identity, Tenancy & Organization",
+    "state": "active",
+    "mandatory_work_packages": 10,
+    "done_work_packages": 0,
     "work_packages": [
-      {
-        "id": "P01.01",
-        "name": "Go workspace/build skeleton",
-        "state": "done",
-        "depends_on": [],
-        "spec": "docs/roadmap/work-packages/P01.01.md",
-        "evidence": [".go-version", "go.mod", "go.work", "kernel/cmd/omnexa/main.go", "kernel/internal/buildinfo/buildinfo.go", "kernel/internal/buildinfo/buildinfo_test.go", "scripts/verify_p01_01.sh", "docs/roadmap/evidence/P01.01_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.02",
-        "name": "Configuration & environment system",
-        "state": "done",
-        "depends_on": ["P01.01"],
-        "spec": "docs/roadmap/work-packages/P01.02.md",
-        "evidence": ["kernel/internal/config/config.go", "kernel/internal/config/config_test.go", "kernel/cmd/omnexa/main_test.go", "scripts/verify_p01_02.sh", "docs/roadmap/evidence/P01.02_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.03",
-        "name": "Structured error & result conventions",
-        "state": "done",
-        "depends_on": ["P01.02"],
-        "spec": "docs/roadmap/work-packages/P01.03.md",
-        "evidence": ["kernel/internal/failure/failure.go", "kernel/internal/failure/failure_test.go", "scripts/verify_p01_03.sh", "docs/roadmap/evidence/P01.03_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.04",
-        "name": "PostgreSQL connection & migration foundation",
-        "state": "done",
-        "depends_on": ["P01.03"],
-        "spec": "docs/roadmap/work-packages/P01.04.md",
-        "evidence": ["go.mod", "go.sum", "kernel/internal/database/errors.go", "kernel/internal/database/pool.go", "kernel/internal/database/pool_test.go", "kernel/internal/database/transaction.go", "kernel/internal/database/migration.go", "kernel/internal/database/migration_test.go", "kernel/internal/database/integration_test.go", "kernel/migrations/README.md", "scripts/verify_p01_04.sh", "docs/roadmap/evidence/P01.04_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.05",
-        "name": "Cache abstraction",
-        "state": "done",
-        "depends_on": ["P01.04"],
-        "spec": "docs/roadmap/work-packages/P01.05.md",
-        "evidence": [".golangci.yml", "docs/quality/GO_CODE_QUALITY.md", "go.mod", "go.sum", "kernel/internal/cache/cache_test.go", "kernel/internal/cache/codec.go", "kernel/internal/cache/errors.go", "kernel/internal/cache/integration_test.go", "kernel/internal/cache/key.go", "kernel/internal/cache/store.go", "scripts/verify_go_quality.sh", "scripts/verify_p01_05.sh", "docs/roadmap/evidence/P01.05_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.06",
-        "name": "Object & file storage abstraction",
-        "state": "done",
-        "depends_on": ["P01.05"],
-        "spec": "docs/roadmap/work-packages/P01.06.md",
-        "evidence": [".github/workflows/governance.yml", ".golangci.yml", "go.mod", "go.sum", "kernel/internal/storage/classification_test.go", "kernel/internal/storage/concurrency_integration_test.go", "kernel/internal/storage/context_reader.go", "kernel/internal/storage/errors.go", "kernel/internal/storage/integration_test.go", "kernel/internal/storage/key.go", "kernel/internal/storage/metadata_control_test.go", "kernel/internal/storage/model.go", "kernel/internal/storage/restart_test.go", "kernel/internal/storage/storage_test.go", "kernel/internal/storage/store.go", "kernel/internal/storage/stream.go", "kernel/internal/storage/stream_terminal_test.go", "kernel/internal/storage/timeout_test.go", "scripts/verify_p01_06.sh", "docs/roadmap/evidence/P01.06_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.07",
-        "name": "Structured logging & OpenTelemetry baseline",
-        "state": "done",
-        "depends_on": ["P01.06"],
-        "spec": "docs/roadmap/work-packages/P01.07.md",
-        "evidence": [".github/workflows/governance.yml", "go.mod", "go.sum", "kernel/internal/observability/config.go", "kernel/internal/observability/context.go", "kernel/internal/observability/errors.go", "kernel/internal/observability/logger.go", "kernel/internal/observability/observability_test.go", "kernel/internal/observability/provider.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_07.sh", "docs/roadmap/evidence/P01.07_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.08",
-        "name": "Health, readiness & diagnostics",
-        "state": "done",
-        "depends_on": ["P01.07"],
-        "spec": "docs/roadmap/work-packages/P01.08.md",
-        "evidence": [".github/workflows/governance.yml", "kernel/internal/operations/errors.go", "kernel/internal/operations/health.go", "kernel/internal/operations/health_test.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_08.sh", "docs/roadmap/evidence/P01.08_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.09",
-        "name": "Job & scheduler primitives",
-        "state": "done",
-        "depends_on": ["P01.08"],
-        "spec": "docs/roadmap/work-packages/P01.09.md",
-        "evidence": [".github/workflows/governance.yml", "go.mod", "kernel/internal/jobs/errors.go", "kernel/internal/jobs/executor.go", "kernel/internal/jobs/jobs_test.go", "kernel/internal/jobs/lifecycle_test.go", "kernel/internal/jobs/registry.go", "kernel/internal/jobs/types.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_09.sh", "docs/roadmap/evidence/P01.09_COMPLETION_2026-08-22.md"]
-      },
-      {
-        "id": "P01.10",
-        "name": "Feature flag & configuration registry",
-        "state": "done",
-        "depends_on": ["P01.09"],
-        "spec": "docs/roadmap/work-packages/P01.10.md",
-        "evidence": [".github/workflows/governance.yml", "kernel/internal/configuration/configuration_test.go", "kernel/internal/configuration/errors.go", "kernel/internal/configuration/evaluator.go", "kernel/internal/configuration/memory_provider.go", "kernel/internal/configuration/registry.go", "kernel/internal/configuration/types.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_10.sh", "docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md"]
-      },
-      {
-        "id": "P01.11",
-        "name": "Audit transport foundation",
-        "state": "done",
-        "depends_on": ["P01.10"],
-        "spec": "docs/roadmap/work-packages/P01.11.md",
-        "evidence": [".github/workflows/governance.yml", "kernel/internal/audit/audit_test.go", "kernel/internal/audit/errors.go", "kernel/internal/audit/memory_sink.go", "kernel/internal/audit/record.go", "kernel/internal/audit/sink.go", "kernel/internal/audit/types.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_11.sh", "docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md"]
-      },
-      {
-        "id": "P01.12",
-        "name": "Developer CLI baseline",
-        "state": "done",
-        "depends_on": ["P01.11"],
-        "spec": "docs/roadmap/work-packages/P01.12.md",
-        "evidence": [".github/workflows/governance.yml", "docs/development/DEVELOPER_COMMANDS.md", "kernel/cmd/omnexa/main.go", "kernel/cmd/omnexa/main_test.go", "kernel/internal/developer/cli.go", "kernel/internal/developer/cli_test.go", "kernel/internal/developer/runner.go", "kernel/internal/developer/verify.go", "scripts/validate_p01_preparation.py", "scripts/verify_p01_12.sh", "docs/governance/P01_EXIT_GATE.md", "docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md"]
-      }
+      {"id":"P02.01","name":"Principal & user identity foundation","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P02.01.md"},
+      {"id":"P02.02","name":"Tenant lifecycle & trusted tenant context","state":"planned","depends_on":["P02.01"],"spec":"docs/roadmap/work-packages/P02.02.md"},
+      {"id":"P02.03","name":"Organization hierarchy & scoped memberships","state":"planned","depends_on":["P02.02"],"spec":"docs/roadmap/work-packages/P02.03.md"},
+      {"id":"P02.04","name":"Authentication & session lifecycle","state":"planned","depends_on":["P02.03"],"spec":"docs/roadmap/work-packages/P02.04.md"},
+      {"id":"P02.05","name":"RBAC foundation","state":"planned","depends_on":["P02.04"],"spec":"docs/roadmap/work-packages/P02.05.md"},
+      {"id":"P02.06","name":"Relationship/context-aware authorization","state":"planned","depends_on":["P02.05"],"spec":"docs/roadmap/work-packages/P02.06.md"},
+      {"id":"P02.07","name":"MFA/passkey-ready flows","state":"planned","depends_on":["P02.06"],"spec":"docs/roadmap/work-packages/P02.07.md"},
+      {"id":"P02.08","name":"Service accounts & API credentials","state":"planned","depends_on":["P02.07"],"spec":"docs/roadmap/work-packages/P02.08.md"},
+      {"id":"P02.09","name":"Tenant-scoped settings","state":"planned","depends_on":["P02.08"],"spec":"docs/roadmap/work-packages/P02.09.md"},
+      {"id":"P02.10","name":"Identity/permission audit trails & P02 exit proof","state":"planned","depends_on":["P02.09"],"spec":"docs/roadmap/work-packages/P02.10.md"}
     ]
   },
   "phases": [
-    {"id": "P00", "name": "Product Constitution & Architecture Freeze", "state": "done"},
-    {"id": "P01", "name": "Omnexa Kernel", "state": "done", "active_work_package": null, "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json", "exit_gate": "docs/governance/P01_EXIT_GATE.md"},
-    {"id": "P02", "name": "Identity, Tenancy & Organization", "state": "planned"},
-    {"id": "P03", "name": "Module Runtime", "state": "planned"},
-    {"id": "P04", "name": "Data, Jobs & Event Fabric", "state": "planned"},
-    {"id": "P05", "name": "Omnexa Flow / Workflow OS", "state": "planned"},
-    {"id": "P06", "name": "Universal Business Foundation", "state": "planned"},
-    {"id": "P07", "name": "CRM, Sales & Customer 360", "state": "planned"},
-    {"id": "P08", "name": "Finance & ERP Core", "state": "planned"},
-    {"id": "P09", "name": "Commerce OS", "state": "planned"},
-    {"id": "P10", "name": "Payment Fabric", "state": "planned"},
-    {"id": "P11", "name": "POS & Edge", "state": "planned"},
-    {"id": "P12", "name": "Experience Builder & CMS", "state": "planned"},
-    {"id": "P13", "name": "Portal Platform", "state": "planned"},
-    {"id": "P14", "name": "HR, Projects & Service Operations", "state": "planned"},
-    {"id": "P15", "name": "Supply Chain, Warehouse & Manufacturing", "state": "planned"},
-    {"id": "P16", "name": "Omnexa Connect / Integration Fabric", "state": "planned"},
-    {"id": "P17", "name": "Low-code App Builder", "state": "planned"},
-    {"id": "P18", "name": "Data, Reporting & BI", "state": "planned"},
-    {"id": "P19", "name": "Omnexa Intelligence Platform", "state": "planned"},
-    {"id": "P20", "name": "Governed AI Agents", "state": "planned"},
-    {"id": "P21", "name": "Developer Platform", "state": "planned"},
-    {"id": "P22", "name": "Omnexa Exchange / Marketplace", "state": "planned"},
-    {"id": "P23", "name": "Globalization & Country Packs", "state": "planned"},
-    {"id": "P24", "name": "Enterprise Governance, Security & Compliance", "state": "planned"},
-    {"id": "P25", "name": "Scale Fabric", "state": "planned"},
-    {"id": "P26", "name": "Industry Packs", "state": "planned"},
-    {"id": "P27", "name": "Autonomous Business OS", "state": "planned"}
+    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
+    {"id":"P01","name":"Omnexa Kernel","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json","exit_gate":"docs/governance/P01_EXIT_GATE.md"},
+    {"id":"P02","name":"Identity, Tenancy & Organization","state":"active","active_work_package":"P02.01","package_sequence":"docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P02_ENTRY_GATE.md","exit_gate":"docs/governance/P02_EXIT_GATE.md"},
+    {"id":"P03","name":"Module Runtime","state":"planned"},
+    {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
+    {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
+    {"id":"P06","name":"Universal Business Foundation","state":"planned"},
+    {"id":"P07","name":"CRM, Sales & Customer 360","state":"planned"},
+    {"id":"P08","name":"Finance & ERP Core","state":"planned"},
+    {"id":"P09","name":"Commerce OS","state":"planned"},
+    {"id":"P10","name":"Payment Fabric","state":"planned"},
+    {"id":"P11","name":"POS & Edge","state":"planned"},
+    {"id":"P12","name":"Experience Builder & CMS","state":"planned"},
+    {"id":"P13","name":"Portal Platform","state":"planned"},
+    {"id":"P14","name":"HR, Projects & Service Operations","state":"planned"},
+    {"id":"P15","name":"Supply Chain, Warehouse & Manufacturing","state":"planned"},
+    {"id":"P16","name":"Omnexa Connect / Integration Fabric","state":"planned"},
+    {"id":"P17","name":"Low-code App Builder","state":"planned"},
+    {"id":"P18","name":"Data, Reporting & BI","state":"planned"},
+    {"id":"P19","name":"Omnexa Intelligence Platform","state":"planned"},
+    {"id":"P20","name":"Governed AI Agents","state":"planned"},
+    {"id":"P21","name":"Developer Platform","state":"planned"},
+    {"id":"P22","name":"Omnexa Exchange / Marketplace","state":"planned"},
+    {"id":"P23","name":"Globalization & Country Packs","state":"planned"},
+    {"id":"P24","name":"Enterprise Governance, Security & Compliance","state":"planned"},
+    {"id":"P25","name":"Scale Fabric","state":"planned"},
+    {"id":"P26","name":"Industry Packs","state":"planned"},
+    {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P01 is complete at 12 / 12 with its exit gate satisfied. P02 remains planned and inactive. The next governed work is P02 specification/readiness preparation and an explicit activation transition. Until that transition merges, kernel implementation, P02 implementation, business-feature code and AI/model/agent behavior remain unauthorized."
+  "next_transition_rule": "P02.01 is the sole active implementation scope. Implement only the Principal & user identity foundation in a separate governed implementation PR; P02.02-P02.10, P03+, business-feature code and AI/model/agent runtime remain unauthorized. After a closure activates another package or phase, STOP before implementing it."
 }
