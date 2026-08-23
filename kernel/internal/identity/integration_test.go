@@ -20,28 +20,28 @@ func TestPostgresIdentityFoundationIntegration(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	pool, err := pgxpool.New(ctx, databaseURL)
-	if err != nil {
-		t.Fatalf("pgxpool.New() error = %v", err)
+	pool, poolErr := pgxpool.New(ctx, databaseURL)
+	if poolErr != nil {
+		t.Fatalf("pgxpool.New() error = %v", poolErr)
 	}
 	defer pool.Close()
-	if err := pool.Ping(ctx); err != nil {
-		t.Fatalf("pool.Ping() error = %v", err)
+	if pingErr := pool.Ping(ctx); pingErr != nil {
+		t.Fatalf("pool.Ping() error = %v", pingErr)
 	}
 
-	foundationMigrator, err := database.NewMigrator(pool, "kernel.foundation", nil, 5*time.Second)
-	if err != nil {
-		t.Fatalf("NewMigrator(kernel.foundation) error = %v", err)
+	foundationMigrator, foundationMigratorErr := database.NewMigrator(pool, "kernel.foundation", nil, 5*time.Second)
+	if foundationMigratorErr != nil {
+		t.Fatalf("NewMigrator(kernel.foundation) error = %v", foundationMigratorErr)
 	}
-	if err := foundationMigrator.Run(ctx); err != nil {
-		t.Fatalf("foundation migrator Run() error = %v", err)
+	if runErr := foundationMigrator.Run(ctx); runErr != nil {
+		t.Fatalf("foundation migrator Run() error = %v", runErr)
 	}
 
-	if _, err := pool.Exec(ctx, "DROP SCHEMA IF EXISTS omnexa_identity CASCADE"); err != nil {
-		t.Fatalf("drop identity schema error = %v", err)
+	if _, dropErr := pool.Exec(ctx, "DROP SCHEMA IF EXISTS omnexa_identity CASCADE"); dropErr != nil {
+		t.Fatalf("drop identity schema error = %v", dropErr)
 	}
-	if _, err := pool.Exec(ctx, "DELETE FROM omnexa_kernel.schema_migrations WHERE owner = 'kernel.identity'"); err != nil {
-		t.Fatalf("reset identity migration ledger error = %v", err)
+	if _, resetErr := pool.Exec(ctx, "DELETE FROM omnexa_kernel.schema_migrations WHERE owner = 'kernel.identity'"); resetErr != nil {
+		t.Fatalf("reset identity migration ledger error = %v", resetErr)
 	}
 	defer func() {
 		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -50,91 +50,91 @@ func TestPostgresIdentityFoundationIntegration(t *testing.T) {
 		_, _ = pool.Exec(cleanupCtx, "DELETE FROM omnexa_kernel.schema_migrations WHERE owner = 'kernel.identity'")
 	}()
 
-	migrationSQL, err := os.ReadFile("../../migrations/kernel.identity/1_create_identity_foundation.sql")
-	if err != nil {
-		t.Fatalf("read identity migration error = %v", err)
+	migrationSQL, migrationReadErr := os.ReadFile("../../migrations/kernel.identity/1_create_identity_foundation.sql")
+	if migrationReadErr != nil {
+		t.Fatalf("read identity migration error = %v", migrationReadErr)
 	}
 	migrations := []database.Migration{{
 		Version: 1,
 		Name:    "create_identity_foundation",
 		SQL:     string(migrationSQL),
 	}}
-	migrator, err := database.NewMigrator(pool, "kernel.identity", migrations, 5*time.Second)
-	if err != nil {
-		t.Fatalf("NewMigrator(kernel.identity) error = %v", err)
+	migrator, migratorErr := database.NewMigrator(pool, "kernel.identity", migrations, 5*time.Second)
+	if migratorErr != nil {
+		t.Fatalf("NewMigrator(kernel.identity) error = %v", migratorErr)
 	}
-	if err := migrator.Run(ctx); err != nil {
-		t.Fatalf("fresh identity migration error = %v", err)
+	if runErr := migrator.Run(ctx); runErr != nil {
+		t.Fatalf("fresh identity migration error = %v", runErr)
 	}
-	if err := migrator.Run(ctx); err != nil {
-		t.Fatalf("idempotent identity migration error = %v", err)
+	if runErr := migrator.Run(ctx); runErr != nil {
+		t.Fatalf("idempotent identity migration error = %v", runErr)
 	}
 
 	var ledgerCount int
-	if err := pool.QueryRow(
+	if queryErr := pool.QueryRow(
 		ctx,
 		"SELECT count(*) FROM omnexa_kernel.schema_migrations WHERE owner = 'kernel.identity' AND version = 1",
-	).Scan(&ledgerCount); err != nil {
-		t.Fatalf("identity ledger query error = %v", err)
+	).Scan(&ledgerCount); queryErr != nil {
+		t.Fatalf("identity ledger query error = %v", queryErr)
 	}
 	if ledgerCount != 1 {
 		t.Fatalf("identity migration ledger count = %d, want 1", ledgerCount)
 	}
 
-	repository, err := NewPostgresRepository(pool)
-	if err != nil {
-		t.Fatalf("NewPostgresRepository() error = %v", err)
+	repository, repositoryErr := NewPostgresRepository(pool)
+	if repositoryErr != nil {
+		t.Fatalf("NewPostgresRepository() error = %v", repositoryErr)
 	}
 	createdAt := time.Date(2026, time.August, 23, 10, 0, 0, 0, time.UTC)
-	user, err := newUserAt(fixedUserID, "owner@example.com", createdAt)
-	if err != nil {
-		t.Fatalf("newUserAt() error = %v", err)
+	user, userErr := newUserAt(fixedUserID, "owner@example.com", createdAt)
+	if userErr != nil {
+		t.Fatalf("newUserAt() error = %v", userErr)
 	}
-	if err := repository.Create(ctx, user); err != nil {
-		t.Fatalf("repository.Create() error = %v", err)
+	if createErr := repository.Create(ctx, user); createErr != nil {
+		t.Fatalf("repository.Create() error = %v", createErr)
 	}
 
-	stored, err := repository.Get(ctx, user.ID())
-	if err != nil {
-		t.Fatalf("repository.Get() error = %v", err)
+	stored, getErr := repository.Get(ctx, user.ID())
+	if getErr != nil {
+		t.Fatalf("repository.Get() error = %v", getErr)
 	}
 	if stored.ID() != user.ID() || stored.PrimaryEmail() != "owner@example.com" || stored.State() != LifecycleProvisioned {
 		t.Fatalf("stored User mismatch: id=%q state=%q", stored.ID(), stored.State())
 	}
 
-	active, err := repository.Transition(
+	active, transitionErr := repository.Transition(
 		ctx,
 		user.ID(),
 		LifecycleProvisioned,
 		LifecycleActive,
 		createdAt.Add(time.Minute),
 	)
-	if err != nil {
-		t.Fatalf("repository.Transition() error = %v", err)
+	if transitionErr != nil {
+		t.Fatalf("repository.Transition() error = %v", transitionErr)
 	}
 	if active.State() != LifecycleActive {
 		t.Fatalf("transition state = %q, want %q", active.State(), LifecycleActive)
 	}
-	if _, err := repository.Transition(
+	if _, staleErr := repository.Transition(
 		ctx,
 		user.ID(),
 		LifecycleProvisioned,
 		LifecycleActive,
 		createdAt.Add(2*time.Minute),
-	); !failure.IsCode(err, codeUserConflict) {
-		t.Fatalf("stale transition error = %v, want %s", err, codeUserConflict)
+	); !failure.IsCode(staleErr, codeUserConflict) {
+		t.Fatalf("stale transition error = %v, want %s", staleErr, codeUserConflict)
 	}
-	if err := repository.Create(ctx, user); !failure.IsCode(err, codeUserConflict) {
-		t.Fatalf("duplicate create error = %v, want %s", err, codeUserConflict)
+	if duplicateErr := repository.Create(ctx, user); !failure.IsCode(duplicateErr, codeUserConflict) {
+		t.Fatalf("duplicate create error = %v, want %s", duplicateErr, codeUserConflict)
 	}
 
 	missingID := UserID("01890f3e-7b9a-7cc0-98c4-dc0c0c073990")
-	if _, err := repository.Get(ctx, missingID); !failure.IsCode(err, codeUserNotFound) {
-		t.Fatalf("missing Get() error = %v, want %s", err, codeUserNotFound)
+	if _, missingErr := repository.Get(ctx, missingID); !failure.IsCode(missingErr, codeUserNotFound) {
+		t.Fatalf("missing Get() error = %v, want %s", missingErr, codeUserNotFound)
 	}
 
 	var forbiddenColumns int
-	if err := pool.QueryRow(
+	if queryErr := pool.QueryRow(
 		ctx,
 		`SELECT count(*)
 		 FROM information_schema.columns
@@ -143,19 +143,19 @@ func TestPostgresIdentityFoundationIntegration(t *testing.T) {
 		       'tenant_id', 'organization_id', 'password', 'password_hash',
 		       'session_id', 'role_id', 'permission_id', 'mfa_secret', 'api_key'
 		   )`,
-	).Scan(&forbiddenColumns); err != nil {
-		t.Fatalf("forbidden-column query error = %v", err)
+	).Scan(&forbiddenColumns); queryErr != nil {
+		t.Fatalf("forbidden-column query error = %v", queryErr)
 	}
 	if forbiddenColumns != 0 {
 		t.Fatalf("identity schema contains %d premature authority/credential columns", forbiddenColumns)
 	}
 
 	var nonHumanRows int
-	if err := pool.QueryRow(
+	if queryErr := pool.QueryRow(
 		ctx,
 		"SELECT count(*) FROM omnexa_identity.principals WHERE principal_type <> 'human_user'",
-	).Scan(&nonHumanRows); err != nil {
-		t.Fatalf("non-human principal query error = %v", err)
+	).Scan(&nonHumanRows); queryErr != nil {
+		t.Fatalf("non-human principal query error = %v", queryErr)
 	}
 	if nonHumanRows != 0 {
 		t.Fatalf("P02.01 persisted %d unauthorized non-human principals", nonHumanRows)
@@ -166,11 +166,11 @@ func TestPostgresIdentityFoundationIntegration(t *testing.T) {
 		Name:    "create_identity_foundation",
 		SQL:     string(migrationSQL) + "\n-- rewritten migration must fail closed\n",
 	}}
-	driftMigrator, err := database.NewMigrator(pool, "kernel.identity", drifted, 5*time.Second)
-	if err != nil {
-		t.Fatalf("NewMigrator(drifted) error = %v", err)
+	driftMigrator, driftMigratorErr := database.NewMigrator(pool, "kernel.identity", drifted, 5*time.Second)
+	if driftMigratorErr != nil {
+		t.Fatalf("NewMigrator(drifted) error = %v", driftMigratorErr)
 	}
-	if err := driftMigrator.Run(ctx); err == nil {
+	if driftErr := driftMigrator.Run(ctx); driftErr == nil {
 		t.Fatalf("rewritten applied identity migration unexpectedly succeeded")
 	}
 }
