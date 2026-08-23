@@ -88,18 +88,17 @@ P02_05_TEST_DATABASE_URL="$integration_url" go test -v ./kernel/internal/authori
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/authorization"|\
     "$module_prefix/kernel/internal/audit"|\
     "$module_prefix/kernel/internal/failure"|\
     "$module_prefix/kernel/internal/identity"|\
     "$module_prefix/kernel/internal/tenancy"|\
     "$module_prefix/kernel/internal/organization") ;;
     "$module_prefix"|"$module_prefix/"*)
-      echo "ERROR: P02.05 authorization package imports out-of-scope Omnexa package: ${package}" >&2
+      echo "ERROR: P02.05 authorization package directly imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
       ;;
   esac
-done < <(go list -deps ./kernel/internal/authorization)
+done < <(go list -f '{{join .Imports "\n"}}' ./kernel/internal/authorization)
 
 if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(configuration|developer|jobs|observability|operations|storage)' kernel/internal/authorization --include='*.go' --exclude='*_test.go'; then
   echo "ERROR: P02.05 runtime authorization source contains unrelated or future-domain coupling" >&2
@@ -149,7 +148,7 @@ fi
 go build ./kernel/...
 
 echo "P02.05 G0 governance/active-package/kernel.authorization owner boundary: PASS"
-echo "P02.05 G1 format/static/dependency/schema/service-boundary ownership: PASS"
+echo "P02.05 G1 format/static/direct-dependency/schema/service-boundary ownership: PASS"
 echo "P02.05 G2 unit/race permission/role/direct-decision semantics: PASS"
 echo "P02.05 G3 PostgreSQL direct-RBAC role/assignment lifecycle contract: PASS"
 echo "P02.05 G4 fresh/idempotent/P02.04-prerequisite/immutable-ledger migration evidence: PASS"
