@@ -15,8 +15,9 @@ import (
 )
 
 type recordedCommand struct {
-	executable string
-	arguments  []string
+	environment []string
+	executable  string
+	arguments   []string
 }
 
 type recordingRunner struct {
@@ -24,8 +25,12 @@ type recordingRunner struct {
 	failOn   int
 }
 
-func (runner *recordingRunner) Run(_ context.Context, _ string, _ []string, _ io.Writer, _ io.Writer, executable string, arguments ...string) error {
-	runner.commands = append(runner.commands, recordedCommand{executable: executable, arguments: append([]string(nil), arguments...)})
+func (runner *recordingRunner) Run(_ context.Context, _ string, environment []string, _ io.Writer, _ io.Writer, executable string, arguments ...string) error {
+	runner.commands = append(runner.commands, recordedCommand{
+		environment: append([]string(nil), environment...),
+		executable:  executable,
+		arguments:   append([]string(nil), arguments...),
+	})
 	if runner.failOn > 0 && len(runner.commands) == runner.failOn {
 		return errors.New("synthetic command failure")
 	}
@@ -144,10 +149,16 @@ func TestVerifyAllUsesCanonicalOrderedOperations(t *testing.T) {
 
 	code := Run(context.Background(), Options{
 		Arguments: []string{"verify", "all"},
-		Stdout:    &stdout,
-		Stderr:    &stderr,
-		WorkDir:   filepath.Join(root, "kernel", "cmd"),
-		Runner:    runner,
+		Environment: []string{
+			"PATH=/usr/bin",
+			"P01_04_TEST_DATABASE_URL=synthetic-database",
+			"OMNEXA_ENVIRONMENT=ci",
+			"OMNEXA_DATABASE_URL=restricted-database",
+		},
+		Stdout:  &stdout,
+		Stderr:  &stderr,
+		WorkDir: filepath.Join(root, "kernel", "cmd"),
+		Runner:  runner,
 	})
 	if code != exitOK {
 		t.Fatalf("verify all code = %d, stderr = %q", code, stderr.String())
@@ -161,6 +172,7 @@ func TestVerifyAllUsesCanonicalOrderedOperations(t *testing.T) {
 	assertCommand(t, runner.commands[17], "bash", "scripts/verify_p01_11.sh")
 	assertCommand(t, runner.commands[18], "go", "mod", "verify")
 	assertCommand(t, runner.commands[19], "go", "build", "./kernel/...")
+	assertEnvironment(t, runner.commands[0].environment, "PATH=/usr/bin", "P01_04_TEST_DATABASE_URL=synthetic-database")
 	if !strings.Contains(stdout.String(), "omnexa verify all: PASS") {
 		t.Fatalf("stdout = %q", stdout.String())
 	}
@@ -263,5 +275,17 @@ func assertCommand(t *testing.T, command recordedCommand, executable string, arg
 	}
 	if strings.Join(command.arguments, "\x00") != strings.Join(arguments, "\x00") {
 		t.Fatalf("arguments = %q, want %q", command.arguments, arguments)
+	}
+}
+
+func assertEnvironment(t *testing.T, environment []string, expected ...string) {
+	t.Helper()
+	if strings.Join(environment, "\x00") != strings.Join(expected, "\x00") {
+		t.Fatalf("environment = %q, want %q", environment, expected)
+	}
+	for _, item := range environment {
+		if strings.HasPrefix(item, "OMNEXA_") {
+			t.Fatalf("verification environment leaked runtime configuration: %q", item)
+		}
 	}
 }
