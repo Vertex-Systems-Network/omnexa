@@ -108,17 +108,29 @@ for marker in base_workflow_markers:
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
+# Completion evidence dates are immutable historical facts. Keep the exact
+# filename for each completed package instead of assuming every package closed
+# on the same calendar day.
+completion_evidence = {
+    **{f"P01.{number:02d}": f"docs/roadmap/evidence/P01.{number:02d}_COMPLETION_2026-08-22.md" for number in range(1, 10)},
+    "P01.10": "docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md",
+}
+
 for index in range(current_index):
     package_number = index + 1
-    evidence = ROOT / f"docs/roadmap/evidence/P01.{package_number:02d}_COMPLETION_2026-08-22.md"
+    package_id = f"P01.{package_number:02d}"
+    evidence_relative = completion_evidence.get(package_id)
+    if evidence_relative is None:
+        raise SystemExit(f"ERROR: completed {package_id} has no canonical evidence mapping")
+    evidence = ROOT / evidence_relative
     verifier = ROOT / f"scripts/verify_p01_{package_number:02d}.sh"
     if not evidence.is_file():
-        raise SystemExit(f"ERROR: completed P01.{package_number:02d} missing canonical completion evidence")
+        raise SystemExit(f"ERROR: completed {package_id} missing canonical completion evidence")
     if not verifier.is_file():
-        raise SystemExit(f"ERROR: completed P01.{package_number:02d} missing regression verifier")
+        raise SystemExit(f"ERROR: completed {package_id} missing regression verifier")
     workflow_marker = f"bash scripts/verify_p01_{package_number:02d}.sh"
     if workflow_marker not in workflow:
-        raise SystemExit(f"ERROR: completed P01.{package_number:02d} verifier missing from governance workflow")
+        raise SystemExit(f"ERROR: completed {package_id} verifier missing from governance workflow")
 
 if current in {"P01.03", "P01.04", "P01.05", "P01.06", "P01.07", "P01.08", "P01.09", "P01.10"}:
     package_number = current.split(".")[1]
