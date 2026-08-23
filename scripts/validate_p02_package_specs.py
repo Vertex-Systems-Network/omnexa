@@ -108,6 +108,24 @@ if active:
     if (STATE.get("phase") or {}).get("done_work_packages") != done_count:
         raise SystemExit("ERROR: active P02 done_work_packages must match completed sequential prefix")
 
+workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
+for index, item in enumerate(packages, start=1):
+    if item.get("state") != "done":
+        continue
+    verifier = ROOT / f"scripts/verify_p02_{index:02d}.sh"
+    marker = f"bash scripts/verify_p02_{index:02d}.sh"
+    if not verifier.is_file():
+        raise SystemExit(f"ERROR: completed {item.get('id')} missing regression verifier")
+    if marker not in workflow:
+        raise SystemExit(f"ERROR: completed {item.get('id')} verifier missing from governance workflow")
+
+if active:
+    active_index = EXPECTED.index(current) + 1
+    active_verifier = ROOT / f"scripts/verify_p02_{active_index:02d}.sh"
+    active_marker = f"bash scripts/verify_p02_{active_index:02d}.sh"
+    if active_verifier.is_file() and active_marker not in workflow:
+        raise SystemExit(f"ERROR: implemented active {current} verifier missing from governance workflow")
+
 p02_10 = (ROOT / "docs/roadmap/work-packages/P02.10.md").read_text(encoding="utf-8").lower()
 for marker in ["cross-tenant", "object/scope", "role", "service-account", "session invalidation", "p02 exit"]:
     if marker not in p02_10:
