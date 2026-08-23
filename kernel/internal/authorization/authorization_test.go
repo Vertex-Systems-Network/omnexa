@@ -14,15 +14,15 @@ import (
 
 func TestRoleCompositionIsDeterministicAndRoleNameIsNotAuthority(t *testing.T) {
 	scope := testTenantScope()
-	role, err := newRoleAt(
+	role, roleErr := newRoleAt(
 		RoleID("01890f3e-7b9a-7cc0-98c4-dc0c0c073980"),
 		scope,
 		"superuser",
 		[]PermissionID{PermissionRoleRead, PermissionAssignmentRead, PermissionRoleRead},
 		time.Unix(1_700_000_000, 0).UTC(),
 	)
-	if err != nil {
-		t.Fatalf("newRoleAt() error = %v", err)
+	if roleErr != nil {
+		t.Fatalf("newRoleAt() error = %v", roleErr)
 	}
 	want := []PermissionID{PermissionAssignmentRead, PermissionRoleRead}
 	got := role.Permissions()
@@ -37,19 +37,19 @@ func TestRoleCompositionIsDeterministicAndRoleNameIsNotAuthority(t *testing.T) {
 func TestServiceDeniesByDefaultAndRejectsExactScopeSubstitution(t *testing.T) {
 	repository := newFakeRepository()
 	writer, _ := testAuditWriter(t)
-	service, err := NewService(repository, writer)
-	if err != nil {
-		t.Fatalf("NewService() error = %v", err)
+	service, serviceErr := NewService(repository, writer)
+	if serviceErr != nil {
+		t.Fatalf("NewService() error = %v", serviceErr)
 	}
 
 	subjectA := testTenantSubject("01890f3e-7b9a-7cc0-98c4-dc0c0c073981", "01890f3e-7b9a-7cc0-98c4-dc0c0c073991")
 	subjectB := testTenantSubject("01890f3e-7b9a-7cc0-98c4-dc0c0c073982", "01890f3e-7b9a-7cc0-98c4-dc0c0c073992")
-	decision, err := service.Check(context.Background(), subjectA, PermissionRoleRead)
-	if err != nil || decision != DecisionDeny {
-		t.Fatalf("unassigned Check() = %q, %v; want deny, nil", decision, err)
+	decision, checkErr := service.Check(context.Background(), subjectA, PermissionRoleRead)
+	if checkErr != nil || decision != DecisionDeny {
+		t.Fatalf("unassigned Check() = %q, %v; want deny, nil", decision, checkErr)
 	}
-	if err := service.Require(context.Background(), subjectA, PermissionRoleRead); !failure.IsCode(err, codeDenied) {
-		t.Fatalf("Require() error = %v, want %s", err, codeDenied)
+	if requireErr := service.Require(context.Background(), subjectA, PermissionRoleRead); !failure.IsCode(requireErr, codeDenied) {
+		t.Fatalf("Require() error = %v, want %s", requireErr, codeDenied)
 	}
 	if subjectA.Scope().Equal(subjectB.Scope()) {
 		t.Fatal("different tenant scopes unexpectedly compare equal")
@@ -68,25 +68,25 @@ func TestPrivilegedMutationsRequireCapabilityPreventEscalationAndAudit(t *testin
 	repository := newFakeRepository()
 	writer, sink := testAuditWriter(t)
 	fixed := time.Unix(1_700_000_100, 0).UTC()
-	service, err := newServiceWithClock(repository, writer, func() time.Time { return fixed })
-	if err != nil {
-		t.Fatalf("newServiceWithClock() error = %v", err)
+	service, serviceErr := newServiceWithClock(repository, writer, func() time.Time { return fixed })
+	if serviceErr != nil {
+		t.Fatalf("newServiceWithClock() error = %v", serviceErr)
 	}
 	actor := testTenantSubject("01890f3e-7b9a-7cc0-98c4-dc0c0c073983", "01890f3e-7b9a-7cc0-98c4-dc0c0c073991")
 	seedGrant(t, repository, actor, []PermissionID{PermissionRoleManage, PermissionRoleRead})
 	metadata := MutationMetadata{CorrelationID: "p02-05-unit", Reason: "exercise privileged role mutation"}
 
-	role, err := service.CreateRole(context.Background(), actor, "admin", []PermissionID{PermissionRoleRead}, metadata)
-	if err != nil {
-		t.Fatalf("CreateRole(allowed) error = %v", err)
+	role, createErr := service.CreateRole(context.Background(), actor, "admin", []PermissionID{PermissionRoleRead}, metadata)
+	if createErr != nil {
+		t.Fatalf("CreateRole(allowed) error = %v", createErr)
 	}
 	if role.Name() != "admin" || role.HasPermission(PermissionAssignmentManage) {
 		t.Fatal("admin role name changed permission composition")
 	}
 
-	_, err = service.CreateRole(context.Background(), actor, "escalated", []PermissionID{PermissionAssignmentManage}, metadata)
-	if !failure.IsCode(err, codeDenied) {
-		t.Fatalf("CreateRole(escalation) error = %v, want %s", err, codeDenied)
+	_, escalationErr := service.CreateRole(context.Background(), actor, "escalated", []PermissionID{PermissionAssignmentManage}, metadata)
+	if !failure.IsCode(escalationErr, codeDenied) {
+		t.Fatalf("CreateRole(escalation) error = %v, want %s", escalationErr, codeDenied)
 	}
 	if sink.Len() != 2 {
 		t.Fatalf("audit record count = %d, want 2", sink.Len())
@@ -106,12 +106,12 @@ func TestAssignmentRequiresExactActorTargetScopeAndRevocationRemovesAuthority(t 
 	repository := newFakeRepository()
 	writer, sink := testAuditWriter(t)
 	clock := time.Unix(1_700_000_200, 0).UTC()
-	service, err := newServiceWithClock(repository, writer, func() time.Time {
+	service, serviceErr := newServiceWithClock(repository, writer, func() time.Time {
 		clock = clock.Add(time.Second)
 		return clock
 	})
-	if err != nil {
-		t.Fatalf("newServiceWithClock() error = %v", err)
+	if serviceErr != nil {
+		t.Fatalf("newServiceWithClock() error = %v", serviceErr)
 	}
 	actor := testTenantSubject("01890f3e-7b9a-7cc0-98c4-dc0c0c073984", "01890f3e-7b9a-7cc0-98c4-dc0c0c073991")
 	target := testTenantSubject("01890f3e-7b9a-7cc0-98c4-dc0c0c073985", "01890f3e-7b9a-7cc0-98c4-dc0c0c073991")
@@ -121,28 +121,28 @@ func TestAssignmentRequiresExactActorTargetScopeAndRevocationRemovesAuthority(t 
 	if roleErr != nil {
 		t.Fatalf("newRole() error = %v", roleErr)
 	}
-	if err := repository.createRole(context.Background(), role); err != nil {
-		t.Fatalf("seed role error = %v", err)
+	if createRoleErr := repository.createRole(context.Background(), role); createRoleErr != nil {
+		t.Fatalf("seed role error = %v", createRoleErr)
 	}
 	metadata := MutationMetadata{CorrelationID: "p02-05-assignment", Reason: "exercise direct assignment lifecycle"}
 
-	if _, err := service.AssignRole(context.Background(), actor, wrongTenant, role.ID(), metadata); !failure.IsCode(err, codeScopeDenied) {
-		t.Fatalf("cross-tenant AssignRole() error = %v, want %s", err, codeScopeDenied)
+	if _, crossTenantErr := service.AssignRole(context.Background(), actor, wrongTenant, role.ID(), metadata); !failure.IsCode(crossTenantErr, codeScopeDenied) {
+		t.Fatalf("cross-tenant AssignRole() error = %v, want %s", crossTenantErr, codeScopeDenied)
 	}
-	assignment, err := service.AssignRole(context.Background(), actor, target, role.ID(), metadata)
-	if err != nil {
-		t.Fatalf("AssignRole() error = %v", err)
+	assignment, assignmentErr := service.AssignRole(context.Background(), actor, target, role.ID(), metadata)
+	if assignmentErr != nil {
+		t.Fatalf("AssignRole() error = %v", assignmentErr)
 	}
-	decision, err := service.Check(context.Background(), target, PermissionRoleRead)
-	if err != nil || decision != DecisionAllow {
-		t.Fatalf("assigned Check() = %q, %v; want allow, nil", decision, err)
+	decision, checkErr := service.Check(context.Background(), target, PermissionRoleRead)
+	if checkErr != nil || decision != DecisionAllow {
+		t.Fatalf("assigned Check() = %q, %v; want allow, nil", decision, checkErr)
 	}
-	if _, err := service.RevokeAssignment(context.Background(), actor, assignment.ID(), metadata); err != nil {
-		t.Fatalf("RevokeAssignment() error = %v", err)
+	if _, revokeErr := service.RevokeAssignment(context.Background(), actor, assignment.ID(), metadata); revokeErr != nil {
+		t.Fatalf("RevokeAssignment() error = %v", revokeErr)
 	}
-	decision, err = service.Check(context.Background(), target, PermissionRoleRead)
-	if err != nil || decision != DecisionDeny {
-		t.Fatalf("revoked Check() = %q, %v; want deny, nil", decision, err)
+	decision, checkErr = service.Check(context.Background(), target, PermissionRoleRead)
+	if checkErr != nil || decision != DecisionDeny {
+		t.Fatalf("revoked Check() = %q, %v; want deny, nil", decision, checkErr)
 	}
 	if sink.Len() != 3 {
 		t.Fatalf("audit record count = %d, want 3", sink.Len())
@@ -162,32 +162,32 @@ func testTenantSubject(principalID, tenantID string) Subject {
 
 func testAuditWriter(t *testing.T) (*audit.Writer, *audit.MemorySink) {
 	t.Helper()
-	sink, err := audit.NewMemorySink(64)
-	if err != nil {
-		t.Fatalf("audit.NewMemorySink() error = %v", err)
+	sink, sinkErr := audit.NewMemorySink(64)
+	if sinkErr != nil {
+		t.Fatalf("audit.NewMemorySink() error = %v", sinkErr)
 	}
-	writer, err := audit.NewWriter(sink, nil)
-	if err != nil {
-		t.Fatalf("audit.NewWriter() error = %v", err)
+	writer, writerErr := audit.NewWriter(sink, nil)
+	if writerErr != nil {
+		t.Fatalf("audit.NewWriter() error = %v", writerErr)
 	}
 	return writer, sink
 }
 
 func seedGrant(t *testing.T, repository *fakeRepository, subject Subject, permissions []PermissionID) {
 	t.Helper()
-	role, err := newRole(subject.Scope(), "fixture authority", permissions, time.Unix(1_700_000_000, 0).UTC())
-	if err != nil {
-		t.Fatalf("seed newRole() error = %v", err)
+	role, roleErr := newRole(subject.Scope(), "fixture authority", permissions, time.Unix(1_700_000_000, 0).UTC())
+	if roleErr != nil {
+		t.Fatalf("seed newRole() error = %v", roleErr)
 	}
-	if err := repository.createRole(context.Background(), role); err != nil {
-		t.Fatalf("seed createRole() error = %v", err)
+	if createRoleErr := repository.createRole(context.Background(), role); createRoleErr != nil {
+		t.Fatalf("seed createRole() error = %v", createRoleErr)
 	}
-	assignment, err := newAssignment(role, subject, time.Unix(1_700_000_001, 0).UTC())
-	if err != nil {
-		t.Fatalf("seed newAssignment() error = %v", err)
+	assignment, assignmentErr := newAssignment(role, subject, time.Unix(1_700_000_001, 0).UTC())
+	if assignmentErr != nil {
+		t.Fatalf("seed newAssignment() error = %v", assignmentErr)
 	}
-	if err := repository.createAssignment(context.Background(), assignment); err != nil {
-		t.Fatalf("seed createAssignment() error = %v", err)
+	if createAssignmentErr := repository.createAssignment(context.Background(), assignment); createAssignmentErr != nil {
+		t.Fatalf("seed createAssignment() error = %v", createAssignmentErr)
 	}
 }
 
@@ -226,13 +226,13 @@ func (repository *fakeRepository) getRole(_ context.Context, scope Scope, id Rol
 }
 
 func (repository *fakeRepository) replaceRolePermissions(_ context.Context, scope Scope, id RoleID, permissions []PermissionID, changedAt time.Time) (Role, error) {
-	role, err := repository.getRole(context.Background(), scope, id)
-	if err != nil {
-		return Role{}, err
+	role, roleErr := repository.getRole(context.Background(), scope, id)
+	if roleErr != nil {
+		return Role{}, roleErr
 	}
-	updated, err := rehydrateRole(role.ID(), role.Scope(), role.Name(), permissions, role.CreatedAt(), changedAt)
-	if err != nil {
-		return Role{}, err
+	updated, updateErr := rehydrateRole(role.ID(), role.Scope(), role.Name(), permissions, role.CreatedAt(), changedAt)
+	if updateErr != nil {
+		return Role{}, updateErr
 	}
 	repository.roles[id] = updated
 	return updated, nil
@@ -257,19 +257,19 @@ func (repository *fakeRepository) getAssignment(_ context.Context, scope Scope, 
 }
 
 func (repository *fakeRepository) revokeAssignment(_ context.Context, scope Scope, id AssignmentID, changedAt time.Time) (Assignment, error) {
-	assignment, err := repository.getAssignment(context.Background(), scope, id)
-	if err != nil {
-		return Assignment{}, err
+	assignment, assignmentErr := repository.getAssignment(context.Background(), scope, id)
+	if assignmentErr != nil {
+		return Assignment{}, assignmentErr
 	}
 	if assignment.State() != AssignmentActive {
 		return Assignment{}, assignmentConflictFailure()
 	}
-	revoked, err := newAssignmentAt(
+	revoked, revokeErr := newAssignmentAt(
 		assignment.ID(), assignment.RoleID(), assignment.PrincipalID(), assignment.Scope(), AssignmentRevoked,
 		assignment.CreatedAt(), changedAt,
 	)
-	if err != nil {
-		return Assignment{}, err
+	if revokeErr != nil {
+		return Assignment{}, revokeErr
 	}
 	repository.assignments[id] = revoked
 	return revoked, nil

@@ -43,9 +43,9 @@ func (service *Service) Check(ctx context.Context, subject Subject, permission P
 	if !permission.Valid() {
 		return DecisionDeny, invalidPermissionFailure()
 	}
-	allowed, err := service.repository.hasPermission(ctx, subject, permission)
-	if err != nil {
-		return DecisionDeny, err
+	allowed, permissionErr := service.repository.hasPermission(ctx, subject, permission)
+	if permissionErr != nil {
+		return DecisionDeny, permissionErr
 	}
 	if !allowed {
 		return DecisionDeny, nil
@@ -56,9 +56,9 @@ func (service *Service) Check(ctx context.Context, subject Subject, permission P
 // Require returns a disclosure-safe authorization failure unless Check allows
 // the exact permission at the exact subject scope.
 func (service *Service) Require(ctx context.Context, subject Subject, permission PermissionID) error {
-	decision, err := service.Check(ctx, subject, permission)
-	if err != nil {
-		return err
+	decision, checkErr := service.Check(ctx, subject, permission)
+	if checkErr != nil {
+		return checkErr
 	}
 	if !decision.Allowed() {
 		return deniedFailure()
@@ -75,31 +75,31 @@ func (service *Service) CreateRole(
 	permissions []PermissionID,
 	metadata MutationMetadata,
 ) (Role, error) {
-	if err := service.validateMutation(actor, metadata); err != nil {
-		return Role{}, err
+	if validationErr := service.validateMutation(actor, metadata); validationErr != nil {
+		return Role{}, validationErr
 	}
-	role, err := newRole(actor.Scope(), name, permissions, service.now())
-	if err != nil {
-		return Role{}, err
+	role, roleErr := newRole(actor.Scope(), name, permissions, service.now())
+	if roleErr != nil {
+		return Role{}, roleErr
 	}
-	if err := service.requireMutationAuthority(ctx, actor, PermissionRoleManage); err != nil {
-		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), metadata, err)
+	if authorityErr := service.requireMutationAuthority(ctx, actor, PermissionRoleManage); authorityErr != nil {
+		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), metadata, authorityErr)
 	}
-	exists, err := service.repository.permissionsExist(ctx, role.Permissions())
-	if err != nil {
-		return Role{}, err
+	exists, existenceErr := service.repository.permissionsExist(ctx, role.Permissions())
+	if existenceErr != nil {
+		return Role{}, existenceErr
 	}
 	if !exists {
 		return Role{}, invalidPermissionFailure()
 	}
-	if err := service.ensureGrantable(ctx, actor, role.Permissions()); err != nil {
-		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), metadata, err)
+	if grantErr := service.ensureGrantable(ctx, actor, role.Permissions()); grantErr != nil {
+		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), metadata, grantErr)
 	}
-	if err := service.repository.createRole(ctx, role); err != nil {
-		return Role{}, err
+	if createErr := service.repository.createRole(ctx, role); createErr != nil {
+		return Role{}, createErr
 	}
-	if err := service.auditMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), audit.OutcomeSucceeded, metadata); err != nil {
-		return Role{}, err
+	if auditErr := service.auditMutation(ctx, actor, "authorization.role.create", "authorization.role", string(role.ID()), audit.OutcomeSucceeded, metadata); auditErr != nil {
+		return Role{}, auditErr
 	}
 	return role, nil
 }
@@ -113,39 +113,39 @@ func (service *Service) ReplaceRolePermissions(
 	permissions []PermissionID,
 	metadata MutationMetadata,
 ) (Role, error) {
-	if err := service.validateMutation(actor, metadata); err != nil {
-		return Role{}, err
+	if validationErr := service.validateMutation(actor, metadata); validationErr != nil {
+		return Role{}, validationErr
 	}
 	if !roleID.Valid() {
 		return Role{}, invalidRoleFailure()
 	}
-	if err := service.requireMutationAuthority(ctx, actor, PermissionRoleManage); err != nil {
-		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(roleID), metadata, err)
+	if authorityErr := service.requireMutationAuthority(ctx, actor, PermissionRoleManage); authorityErr != nil {
+		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(roleID), metadata, authorityErr)
 	}
-	role, err := service.repository.getRole(ctx, actor.Scope(), roleID)
-	if err != nil {
-		return Role{}, err
+	role, roleErr := service.repository.getRole(ctx, actor.Scope(), roleID)
+	if roleErr != nil {
+		return Role{}, roleErr
 	}
-	normalized, err := normalizePermissions(permissions)
-	if err != nil {
-		return Role{}, err
+	normalized, normalizeErr := normalizePermissions(permissions)
+	if normalizeErr != nil {
+		return Role{}, normalizeErr
 	}
-	exists, err := service.repository.permissionsExist(ctx, normalized)
-	if err != nil {
-		return Role{}, err
+	exists, existenceErr := service.repository.permissionsExist(ctx, normalized)
+	if existenceErr != nil {
+		return Role{}, existenceErr
 	}
 	if !exists {
 		return Role{}, invalidPermissionFailure()
 	}
-	if err := service.ensureGrantable(ctx, actor, normalized); err != nil {
-		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(role.ID()), metadata, err)
+	if grantErr := service.ensureGrantable(ctx, actor, normalized); grantErr != nil {
+		return Role{}, service.deniedMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(role.ID()), metadata, grantErr)
 	}
-	updated, err := service.repository.replaceRolePermissions(ctx, actor.Scope(), role.ID(), normalized, service.now())
-	if err != nil {
-		return Role{}, err
+	updated, replaceErr := service.repository.replaceRolePermissions(ctx, actor.Scope(), role.ID(), normalized, service.now())
+	if replaceErr != nil {
+		return Role{}, replaceErr
 	}
-	if err := service.auditMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(role.ID()), audit.OutcomeSucceeded, metadata); err != nil {
-		return Role{}, err
+	if auditErr := service.auditMutation(ctx, actor, "authorization.role.permissions.replace", "authorization.role", string(role.ID()), audit.OutcomeSucceeded, metadata); auditErr != nil {
+		return Role{}, auditErr
 	}
 	return updated, nil
 }
@@ -159,39 +159,39 @@ func (service *Service) AssignRole(
 	roleID RoleID,
 	metadata MutationMetadata,
 ) (Assignment, error) {
-	if err := service.validateMutation(actor, metadata); err != nil {
-		return Assignment{}, err
+	if validationErr := service.validateMutation(actor, metadata); validationErr != nil {
+		return Assignment{}, validationErr
 	}
 	if !target.Valid() || !roleID.Valid() {
 		return Assignment{}, invalidAssignmentFailure()
 	}
 	if !actor.Scope().Equal(target.Scope()) {
-		err := scopeDeniedFailure()
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(roleID), metadata, err)
+		scopeErr := scopeDeniedFailure()
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(roleID), metadata, scopeErr)
 	}
-	if err := service.requireMutationAuthority(ctx, actor, PermissionAssignmentManage); err != nil {
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(roleID), metadata, err)
+	if authorityErr := service.requireMutationAuthority(ctx, actor, PermissionAssignmentManage); authorityErr != nil {
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(roleID), metadata, authorityErr)
 	}
-	role, err := service.repository.getRole(ctx, actor.Scope(), roleID)
-	if err != nil {
-		return Assignment{}, err
+	role, roleErr := service.repository.getRole(ctx, actor.Scope(), roleID)
+	if roleErr != nil {
+		return Assignment{}, roleErr
 	}
 	if !role.Scope().Equal(target.Scope()) {
-		err := scopeDeniedFailure()
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(role.ID()), metadata, err)
+		scopeErr := scopeDeniedFailure()
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(role.ID()), metadata, scopeErr)
 	}
-	if err := service.ensureGrantable(ctx, actor, role.Permissions()); err != nil {
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(role.ID()), metadata, err)
+	if grantErr := service.ensureGrantable(ctx, actor, role.Permissions()); grantErr != nil {
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.create", "authorization.role", string(role.ID()), metadata, grantErr)
 	}
-	assignment, err := newAssignment(role, target, service.now())
-	if err != nil {
-		return Assignment{}, err
+	assignment, assignmentErr := newAssignment(role, target, service.now())
+	if assignmentErr != nil {
+		return Assignment{}, assignmentErr
 	}
-	if err := service.repository.createAssignment(ctx, assignment); err != nil {
-		return Assignment{}, err
+	if createErr := service.repository.createAssignment(ctx, assignment); createErr != nil {
+		return Assignment{}, createErr
 	}
-	if err := service.auditMutation(ctx, actor, "authorization.assignment.create", "authorization.assignment", string(assignment.ID()), audit.OutcomeSucceeded, metadata); err != nil {
-		return Assignment{}, err
+	if auditErr := service.auditMutation(ctx, actor, "authorization.assignment.create", "authorization.assignment", string(assignment.ID()), audit.OutcomeSucceeded, metadata); auditErr != nil {
+		return Assignment{}, auditErr
 	}
 	return assignment, nil
 }
@@ -204,29 +204,29 @@ func (service *Service) RevokeAssignment(
 	assignmentID AssignmentID,
 	metadata MutationMetadata,
 ) (Assignment, error) {
-	if err := service.validateMutation(actor, metadata); err != nil {
-		return Assignment{}, err
+	if validationErr := service.validateMutation(actor, metadata); validationErr != nil {
+		return Assignment{}, validationErr
 	}
 	if !assignmentID.Valid() {
 		return Assignment{}, invalidAssignmentFailure()
 	}
-	if err := service.requireMutationAuthority(ctx, actor, PermissionAssignmentManage); err != nil {
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignmentID), metadata, err)
+	if authorityErr := service.requireMutationAuthority(ctx, actor, PermissionAssignmentManage); authorityErr != nil {
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignmentID), metadata, authorityErr)
 	}
-	assignment, err := service.repository.getAssignment(ctx, actor.Scope(), assignmentID)
-	if err != nil {
-		return Assignment{}, err
+	assignment, assignmentErr := service.repository.getAssignment(ctx, actor.Scope(), assignmentID)
+	if assignmentErr != nil {
+		return Assignment{}, assignmentErr
 	}
 	if !assignment.Scope().Equal(actor.Scope()) {
-		err := scopeDeniedFailure()
-		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignmentID), metadata, err)
+		scopeErr := scopeDeniedFailure()
+		return Assignment{}, service.deniedMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignmentID), metadata, scopeErr)
 	}
-	revoked, err := service.repository.revokeAssignment(ctx, actor.Scope(), assignment.ID(), service.now())
-	if err != nil {
-		return Assignment{}, err
+	revoked, revokeErr := service.repository.revokeAssignment(ctx, actor.Scope(), assignment.ID(), service.now())
+	if revokeErr != nil {
+		return Assignment{}, revokeErr
 	}
-	if err := service.auditMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignment.ID()), audit.OutcomeSucceeded, metadata); err != nil {
-		return Assignment{}, err
+	if auditErr := service.auditMutation(ctx, actor, "authorization.assignment.revoke", "authorization.assignment", string(assignment.ID()), audit.OutcomeSucceeded, metadata); auditErr != nil {
+		return Assignment{}, auditErr
 	}
 	return revoked, nil
 }
@@ -247,8 +247,8 @@ func (service *Service) requireMutationAuthority(ctx context.Context, actor Subj
 
 func (service *Service) ensureGrantable(ctx context.Context, actor Subject, permissions []PermissionID) error {
 	for _, permission := range permissions {
-		if err := service.Require(ctx, actor, permission); err != nil {
-			return err
+		if requireErr := service.Require(ctx, actor, permission); requireErr != nil {
+			return requireErr
 		}
 	}
 	return nil
@@ -282,7 +282,7 @@ func (service *Service) auditMutation(
 	if actor.Scope().Kind() == ScopeOrganization {
 		scope.OrganizationID = string(actor.Scope().OrganizationID())
 	}
-	_, err := service.audit.Write(ctx, audit.RequirementRequired, audit.RecordInput{
+	_, writeErr := service.audit.Write(ctx, audit.RequirementRequired, audit.RecordInput{
 		Classification: audit.ClassificationInternal,
 		Actor: audit.Actor{
 			Kind:      actorKindUser,
@@ -299,5 +299,5 @@ func (service *Service) auditMutation(
 		Reason:        metadata.Reason,
 		Privileged:    true,
 	})
-	return err
+	return writeErr
 }
