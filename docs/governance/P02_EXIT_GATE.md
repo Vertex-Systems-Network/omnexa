@@ -3,7 +3,7 @@
 Status: **NOT SATISFIED — PHASE ACTIVE**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 5 / 10 done: P02.01-P02.05 are complete and P02.06 is active.
+This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 6 / 10 done: P02.01-P02.06 are complete and P02.07 is active.
 
 ## Mandatory exit evidence
 
@@ -33,9 +33,13 @@ P02.04 completion is recorded in `docs/roadmap/evidence/P02.04_COMPLETION_2026-0
 
 P02.05 completion is recorded in `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md` from implementation PR #77, final exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, canonical run/job `32660848145 / 97246683239` PASS and merge `7b6a59e83c9bd696e6e008385b4413d529254171`.
 
+P02.06 completion is recorded in `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md` from implementation PR #79, final exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, canonical run/job `32664834112 / 97256520050` PASS and merge `083c2866f0cd0773b85201750c2196bfd2fcc167`.
+
 P02.04 proves the interactive authentication/session portion of the phase exit: explicit access/refresh/session expiry, rotation/revocation, replay denial, password-change and account-lifecycle invalidation, secret non-disclosure, current tenant/organization context reauthorization and fresh/upgrade persistence evidence.
 
-P02.05 now proves the direct RBAC portion of the phase exit: stable capability permission identifiers, deterministic Role composition, deny-by-default direct decisions, tenant/organization exact-scope assignments, anti-escalation on privileged mutation, assignment revocation, role-name non-bypass, classification-safe required audit records and owner-bounded PostgreSQL persistence. It does not satisfy P02.06 relationship/object/context-aware policy or later service-account lifecycle requirements.
+P02.05 proves the direct RBAC portion of the phase exit: stable capability permission identifiers, deterministic Role composition, deny-by-default direct decisions, tenant/organization exact-scope assignments, anti-escalation on privileged mutation, assignment revocation, role-name non-bypass, classification-safe required audit records and owner-bounded PostgreSQL persistence.
+
+P02.06 now proves the relationship/context-aware authorization portion of the phase exit: accepted direct RBAC remains mandatory; trusted relationship evidence is exact principal/object/tenant/organization scoped; contextual constraints cannot widen authority; wrong tenant/org/object, missing permission and internal/background bypass attempts deny deterministically; field/export capability boundaries may be stricter than ordinary read; material denials and privileged decisions are audited safely; and dependency failures fail closed. P02.06 introduced no new persistence, so its G4 is N/A for new migration while retained P02.05 migration evidence passed. It does not satisfy P02.07 MFA/passkey/recovery requirements or later service-account lifecycle requirements.
 
 ## Exit-denial conditions
 
