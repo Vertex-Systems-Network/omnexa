@@ -138,12 +138,6 @@ if ! grep -Fq 'passwordIterations      = 600000' kernel/internal/identity/passwo
   exit 1
 fi
 
-if grep -R -nE 'type[[:space:]]+SecurityAuditEvent' kernel/internal/identity/authentication_types.go >/dev/null; then
-  if grep -nE '(Password|Hash|Secret|Digest|Token)[[:space:]]' kernel/internal/identity/authentication_types.go | grep -E 'SecurityAuditEvent|password|secret|digest|token'; then
-    :
-  fi
-fi
-
 go build ./kernel/...
 
 echo "P02.04 G0 governance/active-package/kernel.identity owner boundary: PASS"
