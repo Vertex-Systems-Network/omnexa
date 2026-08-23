@@ -257,8 +257,8 @@ func createRepositoryMarkers(t *testing.T) string {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
 	for path, content := range map[string]string{
-		filepath.Join(root, ".go-version"):                       "1.26.7\n",
-		filepath.Join(root, "go.work"):                           "go 1.26.0\n",
+		filepath.Join(root, ".go-version"):                     "1.26.7\n",
+		filepath.Join(root, "go.work"):                         "go 1.26.0\n",
 		filepath.Join(root, "scripts", "verify_go_quality.sh"): "#!/usr/bin/env bash\n",
 	} {
 		if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
