@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-23T15:23:00+05:00"
-  nature: "non-authoritative P02.01 activation continuity snapshot"
-  preparation_merge: "c6301ca4a5eec5dd62bcb75481d900e40ad968bd"
-  activation_branch: "governance/p02-01-activate"
+  verified_at: "2026-08-23T16:10:00+05:00"
+  nature: "non-authoritative P02.01 closure / P02.02 activation continuity snapshot"
+  implementation_merge: "44882e91e49d0364d841b511edbfd0619d05de1f"
+  closure_branch: "governance/p02-01-close-p02-02-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,58 +16,58 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  progress: "0 / 10 done"
-  current_work_package: "P02.01"
-  owner: "kernel.identity"
+  progress: "1 / 10 done"
+  current_work_package: "P02.02"
+  owner: "kernel.tenancy"
 
 p01_prerequisite:
   state: "done"
   progress: "12 / 12 done"
   exit_gate: "SATISFIED"
-  final_package_pr: 65
-  final_package_exact_head: "2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9"
-  final_package_run: 32629072886
-  final_package_job: 97168916985
-  final_package_merge: "eeebaf5ae3817588b014ddf4c9911bca52c97ed7"
   regressions: "P01.01-P01.12 remain mandatory"
 
-p02_readiness:
-  pull_request: 67
-  final_exact_head: "ec936b12ecc23f56c7dbd56d7bdb440d0c5a13b9"
-  canonical_run: 32632920772
-  canonical_job: 97178312240
+p02_01_completion:
+  state: "done"
+  implementation_pr: 69
+  final_exact_head: "76919a9588f70aeea7e00f5214b82dcbf34cbee7"
+  canonical_run: 32635243643
+  canonical_job: 97183883007
   result: "PASS"
-  merge_commit: "c6301ca4a5eec5dd62bcb75481d900e40ad968bd"
-  prepared_specs: 10
-  activation_policy: "strict_sequential_one_active_package"
+  implementation_merge: "44882e91e49d0364d841b511edbfd0619d05de1f"
+  runner: "GitHub Actions 1000013607"
+  environment: "github-hosted"
+  os: "Ubuntu 24.04.4 LTS"
+  arch: "X64"
+  runner_image: "ubuntu-24.04 / 20260816.277.1"
+  go: "1.26.7"
+  evidence: "docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md"
 
 diagnostic_history:
-  - run: 32632854943
-    job: 97178139290
+  - run: 32635051321
+    job: 97183427697
     status: "FAIL"
-    reason: "New P02 readiness validator required the literal Master Plan exit marker 'session invalidation'; exit-gate text was aligned without weakening validation."
+    reason: "Repository Go quality rejected 13 govet shadow findings in the new P02.01 integration test; source variables were renamed without weakening any linter or governance gate."
 
 active_contract:
-  work_package: "P02.01"
-  name: "Principal & user identity foundation"
-  owner: "kernel.identity"
+  work_package: "P02.02"
+  name: "Tenant lifecycle & trusted tenant context"
+  owner: "kernel.tenancy"
   authorized:
-    - "stable UUIDv7 principal/User identifiers"
-    - "deterministic User lifecycle semantics"
-    - "classification-safe identity attributes"
-    - "kernel.identity owned persistence boundary when required"
-    - "safe structured errors"
-    - "focused positive and negative tests"
-    - "applicable fresh and supported-upgrade migration evidence"
+    - "authoritative Tenant identity/lifecycle/state"
+    - "explicit tenant-scoped persistence/query semantics"
+    - "trusted tenant context derived from governed identity/execution relationships"
+    - "minimum tenant relationship primitive required for later scoped authorization"
+    - "same-tenant positive and cross-tenant negative evidence"
+    - "fresh and supported-upgrade migration evidence where persistence changes"
+    - "focused tests and a dedicated verifier"
   forbidden:
-    - "business Person model"
-    - "P02.02 tenant lifecycle or membership authority"
     - "P02.03 organization hierarchy"
-    - "P02.04 authentication or session lifecycle"
-    - "P02.05-P02.06 RBAC or relationship/context authorization"
+    - "P02.04 authentication/session implementation"
+    - "P02.05-P02.06 RBAC or relationship policy beyond P02.02 minimum relationship primitive"
     - "P02.07 MFA/passkeys"
     - "P02.08 service-account/API credential lifecycle"
     - "P02.09 tenant-scoped settings"
+    - "hidden global-tenant/support-superuser bypass"
     - "P03 module runtime"
     - "business modules/features"
     - "deployment/Kubernetes authority"
@@ -75,23 +75,22 @@ active_contract:
 
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P02.01 only"
+  kernel_authority_scope: "P02.02 only"
   business_feature_code_authorized: false
-  user_is_business_person: false
   client_tenant_id_is_authority: false
+  global_tenant_fallback_allowed: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  if_activation_open: "Verify exact-head GitHub-hosted governance, branch freshness, diff and review/conversation blockers; merge only when all required evidence is green and no runtime/schema code is present."
-  if_activation_merged: "Verify protected main and STATE.json, identify P02.01 as sole authorized scope, then STOP this execution session. Implement P02.01 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.02 as sole authorized scope, then STOP this execution session. Implement P02.02 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.01 in the activation session after activation merge"
-  - "activate or implement P02.02-P02.10 early"
+  - "implement P02.02 in the same execution session after its activation closure merges"
+  - "activate or implement P02.03-P02.10 early"
   - "implement P03 or business modules/features"
   - "implement AI/model/agent runtime"
-  - "weaken governance, branch protection, P01 regressions or P02 validators"
+  - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -101,7 +100,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P02.01.md"
+  active_spec: "docs/roadmap/work-packages/P02.02.md"
 
 handoff:
-  active: "docs/ai/handoffs/P02.01.md"
+  completed: "docs/ai/handoffs/P02.01.md"
+  active: "docs/ai/handoffs/P02.02.md"

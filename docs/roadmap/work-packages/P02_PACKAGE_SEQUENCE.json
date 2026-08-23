@@ -9,8 +9,8 @@
   "transition_checklist": "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
   "implementation_authorized": true,
   "packages": [
-    {"id":"P02.01","name":"Principal & user identity foundation","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P02.01.md","owner":"kernel.identity"},
-    {"id":"P02.02","name":"Tenant lifecycle & trusted tenant context","state":"planned","depends_on":["P02.01"],"spec":"docs/roadmap/work-packages/P02.02.md","owner":"kernel.tenancy"},
+    {"id":"P02.01","name":"Principal & user identity foundation","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P02.01.md","owner":"kernel.identity"},
+    {"id":"P02.02","name":"Tenant lifecycle & trusted tenant context","state":"active","depends_on":["P02.01"],"spec":"docs/roadmap/work-packages/P02.02.md","owner":"kernel.tenancy"},
     {"id":"P02.03","name":"Organization hierarchy & scoped memberships","state":"planned","depends_on":["P02.02"],"spec":"docs/roadmap/work-packages/P02.03.md","owner":"kernel.organization"},
     {"id":"P02.04","name":"Authentication & session lifecycle","state":"planned","depends_on":["P02.03"],"spec":"docs/roadmap/work-packages/P02.04.md","owner":"kernel.identity"},
     {"id":"P02.05","name":"RBAC foundation","state":"planned","depends_on":["P02.04"],"spec":"docs/roadmap/work-packages/P02.05.md","owner":"kernel.authorization"},
@@ -21,5 +21,5 @@
     {"id":"P02.10","name":"Identity/permission audit trails & P02 exit proof","state":"planned","depends_on":["P02.09"],"spec":"docs/roadmap/work-packages/P02.10.md","owner":"kernel.audit"}
   ],
   "phase_exit": "NOT SATISFIED — requires canonical proof of cross-tenant isolation, object/scope permissions, role differences, service-account scoping and session invalidation behavior plus applicable G0-G8 evidence.",
-  "note": "P02 is active with exactly one active package: P02.01. implementation_authorized=true is bounded to P02.01 kernel identity work only; business_feature_code_authorized=false. P02.02-P02.10 remain planned."
+  "note": "P02 is active at 1 / 10 done with exactly one active package: P02.02. implementation_authorized=true is bounded to P02.02 kernel tenancy work only; business_feature_code_authorized=false. P02.03-P02.10 remain planned."
 }

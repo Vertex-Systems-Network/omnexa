@@ -9,51 +9,52 @@ This file never overrides `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`,
 - Foundation Architecture v1: FROZEN.
 - P00: DONE.
 - P01: DONE — 12 / 12; exit gate SATISFIED.
-- P02: ACTIVE — 0 / 10 done.
-- sole active package: `P02.01 — Principal & user identity foundation`.
-- owner: `kernel.identity`.
-- `kernel_code_authorized=true` only for P02.01.
+- P02: ACTIVE — 1 / 10 done.
+- P02.01: DONE — Principal & user identity foundation.
+- sole active package after this closure merges: `P02.02 — Tenant lifecycle & trusted tenant context`.
+- owner: `kernel.tenancy`.
+- `kernel_code_authorized=true` only for P02.02.
 - `business_feature_code_authorized=false`.
-- P02.02-P02.10, P03+, business modules and AI/model/agent runtime remain unauthorized.
+- P02.03-P02.10, P03+, business modules and AI/model/agent runtime remain unauthorized.
 
-## P02 readiness evidence
+## P02.01 completion evidence
 
-Preparation PR #67 created the 10-package P02 sequence, entry/exit gates, transition checklist, P02 readiness/package validators and permanent completed-P01 prerequisite guards.
+- implementation PR: #69
+- final exact implementation head: `76919a9588f70aeea7e00f5214b82dcbf34cbee7`
+- canonical run/job: `32635243643 / 97183883007` — PASS
+- implementation merge: `44882e91e49d0364d841b511edbfd0619d05de1f`
+- runner: `GitHub Actions 1000013607`, GitHub-hosted Ubuntu 24.04.4 LTS / X64
+- runner image: `ubuntu-24.04 / 20260816.277.1`
+- Go: 1.26.7
+- repository Go quality, P01.01-P01.12 regressions, real PostgreSQL integration and P02.01 G0-G8: PASS
+- evidence: `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`
 
-- readiness final exact head: `ec936b12ecc23f56c7dbd56d7bdb440d0c5a13b9`;
-- canonical readiness run/job: `32632920772 / 97178312240` — PASS;
-- preparation merge: `c6301ca4a5eec5dd62bcb75481d900e40ad968bd`;
-- canonical runner policy: GitHub-hosted `ubuntu-24.04`, Linux/X64 only;
-- repository Go quality and P01.01-P01.12 regressions remained green.
+Initial canonical run `32635051321 / 97183427697` remains diagnostic FAIL for corrected `govet` shadow findings. No gate was weakened.
 
-Initial readiness run `32632854943 / 97178139290` remains retained as diagnostic FAIL for a missing literal `session invalidation` marker in the newly introduced exit-gate document. The gate text was aligned to the canonical Master Plan vocabulary; no validator or quality gate was weakened.
+## Retained P02.01 contract
 
-## Active P02.01 boundary
+P02.01 established the owner-bounded `kernel.identity` human User foundation using UUIDv7, deterministic lifecycle semantics, classification-safe PII handling, immutable owner migration and safe structured failures. User remains distinct from business Person; identity attributes do not create authority; no tenant/authentication/session/RBAC/service-account authority was pulled forward.
 
-P02.01 may establish only the canonical human principal/User identity foundation:
+## Active P02.02 boundary
 
-- stable UUIDv7 principal/User identifiers;
-- deterministic User lifecycle states/transitions;
-- classification-safe identity attributes;
-- `kernel.identity` owned repository/persistence boundary where required;
-- safe structured errors;
-- focused positive/negative tests;
-- applicable fresh/upgrade migration evidence.
+P02.02 may implement only:
 
-P02.01 must not pull forward tenant lifecycle/membership authority, organization hierarchy, authentication/session behavior, RBAC or relationship policy, MFA/passkeys, service-account/API credential lifecycle, tenant settings, P03 module runtime, business domains, deployment authority or AI/model/agent runtime.
+- authoritative Tenant identity/lifecycle/state under `kernel.tenancy`;
+- explicit tenant-scoped persistence/query semantics;
+- trusted tenant context derived from governed identity/execution relationships rather than request payload claims;
+- minimum tenant relationship primitive required for later scoped authorization;
+- same-tenant allow and cross-tenant deny evidence;
+- applicable fresh/upgrade migration evidence;
+- focused deterministic positive/negative tests and a dedicated verifier.
 
-User remains authentication identity and is not the business `Person` model. Non-human identities are not fake users. Identity attributes do not create authorization.
-
-## Retained P01 evidence
-
-Final P01.12 implementation evidence remains PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, and merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. P01 regressions remain enforced by governance during P02.
+P02.02 must not implement organization hierarchy, authentication/session lifecycle, RBAC/policy, hidden support-superuser/global-tenant bypasses, tenant business data, P03 module runtime, business modules, deployment authority or AI/model/agent runtime.
 
 ## Exact next authorized action
 
-This snapshot accompanies the P02.01 activation transition. After that activation PR merges, verify protected `main` and `STATE.json`, identify P02.01 as the sole authorized implementation scope, then **STOP the execution session**.
+After the P02.01 closure/P02.02 activation PR merges, verify protected `main` and `STATE.json`, identify P02.02 as the sole authorized implementation scope, then **STOP the execution session**.
 
-In the next governed session, create a fresh implementation branch from the exact protected-main SHA and implement only P02.01. Do not auto-advance to P02.02.
+In the next governed session, create a fresh implementation branch from the exact protected-main SHA and implement only P02.02. Do not auto-advance to P02.03.
 
 ## Authority and references
 
-Mandatory sources remain `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/governance/P02_ENTRY_GATE.md`, `docs/governance/P02_EXIT_GATE.md`, `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/work-packages/P02.01.md`, `docs/governance/AI_EXECUTION_POLICY.md`, Change Control, Definition of Done, accepted ADRs, architecture/security/quality standards, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.01.md`.
+Mandatory sources remain `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P02 entry/exit gates, `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/work-packages/P02.02.md`, `docs/governance/AI_EXECUTION_POLICY.md`, Change Control, Definition of Done, accepted ADRs, architecture/security/quality standards, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.02.md`.

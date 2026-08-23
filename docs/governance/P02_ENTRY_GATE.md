@@ -3,7 +3,7 @@
 Status: **SATISFIED**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This gate records the governed transition from completed P01 into active P02. Canonical implementation authority exists only when this activation transition is merged and `docs/roadmap/STATE.json` identifies P02/P02.01 as active.
+This gate records the governed transition from completed P01 into active P02. It remains satisfied while strict sequential P02 execution advances only through separately verified package closures.
 
 ## Entry controls
 
@@ -15,7 +15,7 @@ State: **SATISFIED**
 ### EG-02 — Foundation architecture remains frozen
 State: **SATISFIED**
 
-Foundation Architecture v1 remains `FROZEN`; P02 is a planned foundation phase from the canonical Master Plan and does not change phase order or tenancy/authorization architecture.
+Foundation Architecture v1 remains `FROZEN`; P02 does not change phase order or frozen tenancy/authorization architecture.
 
 ### EG-03 — Protected integration remains enforced
 State: **SATISFIED**
@@ -25,12 +25,12 @@ Issue #3 remains closed. `main` remains protected with PR-only integration, requ
 ### EG-04 — Canonical verification lane remains executable
 State: **SATISFIED**
 
-Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. P01 regressions and repository Go quality remain mandatory.
+Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. P01 regressions, completed P02 regressions and repository Go quality remain mandatory.
 
 ### EG-05 — P02 package decomposition is complete
 State: **SATISFIED**
 
-Preparation PR #67 merged as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final canonical run `32632920772 / 97178312240` passed. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` defines 10 strict sequential packages matching the 10 P02 capability areas in `MASTER_PLAN.md`.
+Preparation PR #67 merged as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final canonical run `32632920772 / 97178312240` passed. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` defines 10 strict sequential packages.
 
 ### EG-06 — Security, ownership and terminology are explicit
 State: **SATISFIED**
@@ -46,18 +46,22 @@ P02 packages preserve canonical ownership:
 
 Authenticated `User` is not a business `Person`. Tenant `Organization` is not a business Party Organization. `admin`, `owner` or role names never create bypass authority.
 
-### EG-07 — Bounded implementation activation
-State: **SATISFIED BY THIS TRANSITION**
+### EG-07 — Bounded sequential implementation authority
+State: **SATISFIED**
 
-The activation state is:
+P02.01 has completed through implementation PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical run/job `32635243643 / 97183883007` PASS and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
+
+The current closure state is:
 
 - P02: `active`;
-- P02.01: `active`;
-- P02.02-P02.10: `planned`;
-- `kernel_code_authorized=true` bounded only to P02.01;
+- P02.01: `done`;
+- P02.02: `active`;
+- P02.03-P02.10: `planned`;
+- P02 progress: `1 / 10 done`;
+- `kernel_code_authorized=true` bounded only to P02.02;
 - `business_feature_code_authorized=false`.
 
-No P02 runtime/schema implementation belongs in this activation transition.
+No P02.02 runtime/schema implementation belongs in this closure transition.
 
 ## Phase security invariants
 
@@ -68,7 +72,7 @@ P02 implementation must preserve:
 - RBAC plus relationship/context policy rather than role-name bypasses;
 - same-tenant positive and cross-tenant negative tests for tenant-owned access;
 - explicit organization/sub-scope authorization;
-- short-lived access/session semantics with revocation and current-policy rechecks;
+- short-lived access/session semantics with revocation and current-policy rechecks when later authorized;
 - authentication material handled as `RESTRICTED`, never ordinary logs/traces;
 - non-human principals represented as service identities rather than fake human users;
 - privileged identity/permission operations attributable through the governed audit foundation;
@@ -83,7 +87,7 @@ P02 cannot be done until canonical GitHub-hosted evidence proves at minimum:
 3. role differences and privilege-escalation denial;
 4. service-account scoping/credential lifecycle;
 5. session invalidation behavior;
-6. applicable fresh/upgrade migrations, security/static checks, audit evidence and P01 regressions.
+6. applicable fresh/upgrade migrations, security/static checks, audit evidence and P01/completed-P02 regressions.
 
 See `docs/governance/P02_EXIT_GATE.md`.
 
@@ -91,19 +95,20 @@ See `docs/governance/P02_EXIT_GATE.md`.
 
 Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It does not block internal P02 engineering.
 
-## Activation decision
+## Current decision
 
 ```text
 P00: DONE
 P01: DONE — 12 / 12
-P01 exit: SATISFIED
+P01 exit satisfied
 P02 specs: PREPARED — 10 / 10
-P02: ACTIVE
-P02.01: ACTIVE
-P02.02-P02.10: PLANNED
-kernel_code_authorized: true — P02.01 only
-business_feature_code_authorized: false
+P02: ACTIVE — 1 / 10 done
+P02.01: DONE
+P02.02: ACTIVE
+P02.03-P02.10: PLANNED
+kernel_code_authorized: true — P02.02 only
+business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this activation transition merges, the execution session must STOP. P02.01 implementation starts only in a later governed execution session from the then-current protected `main`.
+After this closure transition merges, the execution session must STOP. P02.02 implementation starts only in a later governed execution session from the then-current protected `main`.

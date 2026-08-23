@@ -16,18 +16,19 @@ Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
 Local/self-hosted governance runners: PROHIBITED
 P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
-P02: ACTIVE — 0 / 10 done
-Current work package: P02.01 — Principal & user identity foundation
-P02.02-P02.10: PLANNED
-kernel_code_authorized: true — P02.01 only
+P02: ACTIVE — 1 / 10 done
+P02.01: DONE — Principal & user identity foundation
+Current work package: P02.02 — Tenant lifecycle & trusted tenant context
+P02.03-P02.10: PLANNED
+kernel_code_authorized: true — P02.02 only
 business_feature_code_authorized: false
 ```
 
-Implementation authority is bounded to the single active package P02.01. No later P02 package, P03+, business feature, deployment administration or AI/model/agent runtime is authorized.
+Implementation authority is bounded to the single active package P02.02. No later P02 package, P03+, business feature, deployment administration or AI/model/agent runtime is authorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.01.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.02.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
 ## Mandatory read order
 
@@ -35,9 +36,9 @@ Before material work read:
 
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
-3. `docs/governance/P01_EXIT_GATE.md`, `docs/governance/P02_ENTRY_GATE.md`, `docs/governance/P02_EXIT_GATE.md` and `docs/governance/P01_P02_TRANSITION_CHECKLIST.md`;
-4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` and the active `docs/roadmap/work-packages/P02.01.md`;
-5. Product Constitution, system/module architecture, glossary, naming, ownership and dependency matrix;
+3. P01/P02 entry/exit gates and transition checklist;
+4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` and the active `docs/roadmap/work-packages/P02.02.md`;
+5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
 8. testing/CI/release/quality standards including `docs/quality/GO_CODE_QUALITY.md`;
@@ -46,7 +47,7 @@ Before material work read:
 11. AI Execution Policy, Change Control and Definition of Done;
 12. relevant accepted ADRs, especially ADR-0010.
 
-If canonical documents conflict, resolve through change control before implementation.
+If canonical documents conflict, reconcile through change control before implementation.
 
 ## Frozen architecture laws
 
@@ -67,70 +68,72 @@ Frozen primitives include UUIDv7 IDs, exact-decimal money with explicit currency
 
 Issue #3 is satisfied. `main` is protected with PR-only integration, strict required `governance`, blocked direct/force updates, failed-check merge rejection, required conversation resolution and strict up-to-date enforcement.
 
-Canonical governance CI is **GitHub-hosted only** on `ubuntu-24.04`. The job must fail closed unless `RUNNER_ENVIRONMENT=github-hosted`, `RUNNER_OS=Linux` and `RUNNER_ARCH=X64`. Do not reintroduce `self-hosted`, local evidence fanout or local-runner fallback.
+Canonical governance CI is **GitHub-hosted only** on `ubuntu-24.04`, Linux/X64. Do not reintroduce `self-hosted`, local evidence fanout or local-runner fallback.
 
-The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not remove it, weaken checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
+The permanent repository Go quality gate runs through `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`. Do not weaken checks merely to obtain green CI, use `@latest`, or silently auto-fix source in CI.
 
 Strict protection requires implementation/closure/activation PRs to be current with protected `main` before merge. Stale green runs are not merge permission.
 
 ## Completed P01 prerequisite retained
 
-`docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` records P01.01-P01.12 as `done` with zero active packages and `implementation_authorized=false`. `docs/governance/P01_EXIT_GATE.md` is **SATISFIED**. All P01 regression verifiers remain mandatory during P02.
+P01.01-P01.12 remain `done`, P01 exit remains **SATISFIED**, and all P01 regression verifiers remain mandatory during P02. Final P01 evidence remains implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-Final P01 evidence is retained under `docs/roadmap/evidence/P01.12_COMPLETION_2026-08-23.md`, based on implementation PR #65, final exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, canonical run/job `32629072886 / 97168916985`, and merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
+## Completed P02.01 evidence retained
 
-## P02 activation and sequencing
+P02.01 is complete under `kernel.identity`.
 
-P02 readiness preparation merged through PR #67 as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final exact-head canonical run `32632920772 / 97178312240` PASS.
+- implementation PR: #69
+- final exact head: `76919a9588f70aeea7e00f5214b82dcbf34cbee7`
+- canonical run/job: `32635243643 / 97183883007` — PASS
+- implementation merge: `44882e91e49d0364d841b511edbfd0619d05de1f`
+- GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7
+- repository Go quality, P01.01-P01.12 regressions and P02.01 G0-G8: PASS
+- completion evidence: `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`
 
-`docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution. At this checkpoint:
+Initial run `32635051321 / 97183427697` remains diagnostic FAIL for corrected `govet` shadow findings and is not completion evidence.
 
-- P02.01 is `active`;
-- P02.02-P02.10 are `planned`;
-- P02 progress is `0 / 10 done`;
-- `kernel_code_authorized=true` only for P02.01;
-- `business_feature_code_authorized=false`.
+P02.01 invariants remain binding: User is not business Person; non-human principals are not fake users; identity attributes do not grant authority; authentication secrets/sessions were not introduced; owner-bounded `kernel.identity` persistence remains authoritative.
 
-The AI must not automatically advance to another package. Implementation and closure/state transition remain separate governed PRs.
+## Active P02.02 boundary
 
-## Active P02.01 boundary
+Owner: `kernel.tenancy`.
 
-Owner: `kernel.identity`.
+P02.02 may implement only the Tenant lifecycle and trusted tenant-context foundation described by `docs/roadmap/work-packages/P02.02.md`, including:
 
-P02.01 may implement only the canonical human principal/User identity foundation described by `docs/roadmap/work-packages/P02.01.md`, including stable UUIDv7 identity/principal IDs, deterministic User lifecycle semantics, classification-safe identity attributes, owner-bounded persistence if required, safe errors, focused positive/negative tests and applicable migration evidence.
+- authoritative Tenant identity/lifecycle/state;
+- explicit tenant-scoped persistence/query semantics where applicable;
+- trusted tenant context derived from governed identity/execution relationships rather than client payload claims;
+- only the minimum relationship/membership primitive needed for later scoped authorization;
+- fail-closed same-tenant/cross-tenant boundaries;
+- applicable fresh/upgrade migration evidence;
+- focused positive/negative tests and a dedicated verifier.
 
-P02.01 invariants:
+P02.02 invariants:
 
-- User is authentication identity, not business Person;
-- non-human principals are not fake human users;
-- identity attributes do not imply authorization;
-- authentication secrets/session credentials are not introduced here;
-- tenant claims are not authority;
-- only `kernel.identity` owns this write boundary;
-- no direct writes into later domains.
+- a client-provided `tenant_id` is never authorization authority;
+- there is no global-tenant fallback;
+- tenant isolation applies independently of data classification;
+- no hidden support-superuser or cross-tenant bypass;
+- `kernel.tenancy` owns this write boundary;
+- P02.01 User identity remains separate from tenant membership/authority.
 
-Explicitly forbidden in P02.01:
+Explicitly forbidden in P02.02:
 
-- P02.02 tenant lifecycle/membership authority;
 - P02.03 organization hierarchy;
-- P02.04 authentication/session lifecycle;
-- P02.05-P02.06 RBAC or relationship/context policy;
+- P02.04 authentication/session implementation;
+- P02.05-P02.06 RBAC or relationship/context policy beyond the minimum trusted tenant relationship primitive authorized by P02.02;
 - P02.07 MFA/passkeys;
 - P02.08 service-account/API credential lifecycle;
-- P02.09 tenant-scoped settings;
-- P02.10 identity/permission audit-trail product behavior beyond reuse of the existing P01 audit transport where required;
+- P02.09 tenant settings;
+- P02.10 phase-exit audit product behavior;
 - P03 module runtime;
 - business modules/features;
 - deployment/Kubernetes authority;
 - AI/model/agent runtime.
 
-## Completed P01 capability rules retained
+## Completed kernel capability rules retained
 
-Protected audit remains separate from ordinary logs. P01.11 audit is immutable/tamper-evident, classification-aware and append-oriented; required-audit failure cannot silently claim success and audit write does not imply read/export authority.
-
-P01.10 runtime configuration remains distinct from P01.02 static process configuration; kill switches cannot grant authority. P01.09 jobs remain deterministic, bounded and non-authoritative. P01.08 health/readiness remains safe operational evidence rather than authority. P01.07 observability remains diagnostic infrastructure rather than audit/correctness authority. P01.06 storage and P01.05 cache remain infrastructure primitives without tenancy/authorization authority.
-
-The completed `kernel.developer` CLI remains convenience tooling only; it does not grant production super-admin, identity/tenant administration, module runtime, business or deployment authority.
+Protected audit remains separate from ordinary logs. P01.11 audit is immutable/tamper-evident, classification-aware and append-oriented; required-audit failure cannot silently claim success and audit write does not imply read/export authority. P01.10 configuration flags cannot grant authority. P01.09 jobs remain non-authoritative. P01.08 diagnostics remain operational evidence rather than authority. Cache/storage/observability remain infrastructure primitives without tenancy/authorization authority. The developer CLI remains convenience tooling only.
 
 ## Quality and release rules
 
@@ -138,7 +141,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-P02.01 implementation must retain repository Go quality and P01.01-P01.12 regressions, add risk-appropriate positive/negative tests, and add fresh/supported-upgrade migration evidence if persistence changes. Canonical completion evidence must come from GitHub-hosted `ubuntu-24.04`.
+P02.02 implementation must retain repository Go quality, P01.01-P01.12 regressions and P02.01 regression evidence; add risk-appropriate same-tenant/cross-tenant tests; and add migration evidence if persistence changes. Canonical completion evidence must come from GitHub-hosted `ubuntu-24.04`.
 
 ## Repository/local-development rules
 
@@ -153,22 +156,18 @@ Canonical roots: `apps/`, `kernel/`, `modules/`, `platform/`, `shared/`, `infras
 - Linux is canonical backend/CI environment;
 - supported workflows must not depend on hidden manual SQL/file/UI steps.
 
-## Future browser UI quality rule
-
-`docs/quality/WEB_UI_ACCESSIBILITY_PLAN.md` is a mandatory planning input whenever a future package authorizes browser UI. It does not authorize UI work by itself.
-
 ## Required work protocol
 
 For every material change:
 
 1. verify phase/package and locks in `STATE.json`;
-2. inspect the authorized specification/governance scope and frozen standards;
+2. inspect authorized specification/governance scope and frozen standards;
 3. preserve ownership/dependency boundaries;
 4. implement only explicitly authorized scope;
 5. add positive/negative evidence appropriate to risk;
 6. run canonical GitHub-hosted `governance`;
 7. inspect diff/status before merge;
-8. merge only when required checks are green and the branch is current with protected `main`;
+8. merge only when required checks are green and branch is current with protected `main`;
 9. reconcile state/status/continuity only after completion evidence exists;
 10. use ADR/change control before changing frozen architecture.
 
@@ -184,4 +183,4 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next transition
 
-This activation transition makes P02.01 the sole active implementation scope. After the activation PR merges, verify protected `main` and canonical `STATE.json`, identify the next authorized action as P02.01 implementation, then **STOP**. P02.01 implementation starts only in a later governed execution session from the then-current protected `main`.
+This closure marks P02.01 done and activates P02.02 as the sole next implementation scope. After the closure PR merges, verify protected `main` and canonical `STATE.json`, identify P02.02 implementation as the next authorized action, then **STOP**. P02.02 implementation starts only in a later governed execution session from the then-current protected `main`.
