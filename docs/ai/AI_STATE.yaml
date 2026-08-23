@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-23T16:10:00+05:00"
-  nature: "non-authoritative P02.01 closure / P02.02 activation continuity snapshot"
-  implementation_merge: "44882e91e49d0364d841b511edbfd0619d05de1f"
-  closure_branch: "governance/p02-01-close-p02-02-activate"
+  verified_at: "2026-08-23T17:01:00+05:00"
+  nature: "non-authoritative P02.02 closure / P02.03 activation continuity snapshot"
+  implementation_merge: "2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d"
+  closure_branch: "governance/p02-02-close-p02-03-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,9 +16,9 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  progress: "1 / 10 done"
-  current_work_package: "P02.02"
-  owner: "kernel.tenancy"
+  progress: "2 / 10 done"
+  current_work_package: "P02.03"
+  owner: "kernel.organization"
 
 p01_prerequisite:
   state: "done"
@@ -34,60 +34,68 @@ p02_01_completion:
   canonical_job: 97183883007
   result: "PASS"
   implementation_merge: "44882e91e49d0364d841b511edbfd0619d05de1f"
-  runner: "GitHub Actions 1000013607"
+  evidence: "docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md"
+
+p02_02_completion:
+  state: "done"
+  implementation_pr: 71
+  final_exact_head: "a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7"
+  canonical_run: 32637760875
+  canonical_job: 97189971101
+  result: "PASS"
+  implementation_merge: "2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d"
+  runner: "GitHub Actions 1000014047"
   environment: "github-hosted"
   os: "Ubuntu 24.04.4 LTS"
   arch: "X64"
   runner_image: "ubuntu-24.04 / 20260816.277.1"
   go: "1.26.7"
-  evidence: "docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md"
-
-diagnostic_history:
-  - run: 32635051321
-    job: 97183427697
-    status: "FAIL"
-    reason: "Repository Go quality rejected 13 govet shadow findings in the new P02.01 integration test; source variables were renamed without weakening any linter or governance gate."
+  evidence: "docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md"
+  diagnostic_failures: 0
 
 active_contract:
-  work_package: "P02.02"
-  name: "Tenant lifecycle & trusted tenant context"
-  owner: "kernel.tenancy"
+  work_package: "P02.03"
+  name: "Organization hierarchy & scoped memberships"
+  owner: "kernel.organization"
   authorized:
-    - "authoritative Tenant identity/lifecycle/state"
-    - "explicit tenant-scoped persistence/query semantics"
-    - "trusted tenant context derived from governed identity/execution relationships"
-    - "minimum tenant relationship primitive required for later scoped authorization"
-    - "same-tenant positive and cross-tenant negative evidence"
-    - "fresh and supported-upgrade migration evidence where persistence changes"
-    - "focused tests and a dedicated verifier"
+    - "Organization, Legal Entity, Business Unit, Branch, Team and Location hierarchy semantics"
+    - "tenant-bound parent/child validation"
+    - "scoped organization membership relationships"
+    - "deterministic hierarchy traversal/validation with cycle and cross-tenant rejection"
+    - "organization/sub-scope context primitives for later policy evaluation without granting authority"
+    - "classification-safe persistence and fresh/supported-upgrade migration evidence where applicable"
+    - "focused positive/negative tests and a dedicated verifier"
   forbidden:
-    - "P02.03 organization hierarchy"
+    - "business Party/Person/Customer/Supplier models"
     - "P02.04 authentication/session implementation"
-    - "P02.05-P02.06 RBAC or relationship policy beyond P02.02 minimum relationship primitive"
+    - "P02.05-P02.06 RBAC or policy enforcement beyond P02.03 relationship/context primitives"
     - "P02.07 MFA/passkeys"
     - "P02.08 service-account/API credential lifecycle"
     - "P02.09 tenant-scoped settings"
-    - "hidden global-tenant/support-superuser bypass"
+    - "P02.10 phase-exit audit product behavior"
+    - "HR/warehouse/CRM or other business behavior"
     - "P03 module runtime"
-    - "business modules/features"
+    - "business modules/features/UI"
     - "deployment/Kubernetes authority"
     - "AI/model/agent runtime"
 
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P02.02 only"
+  kernel_authority_scope: "P02.03 only"
   business_feature_code_authorized: false
   client_tenant_id_is_authority: false
   global_tenant_fallback_allowed: false
+  organization_cross_tenant_edges_allowed: false
+  tenant_membership_implies_all_org_scope: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json, identify P02.02 as sole authorized scope, then STOP this execution session. Implement P02.02 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.03 as sole authorized scope, then STOP this execution session. Implement P02.03 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.02 in the same execution session after its activation closure merges"
-  - "activate or implement P02.03-P02.10 early"
+  - "implement P02.03 in the same execution session after its activation closure merges"
+  - "activate or implement P02.04-P02.10 early"
   - "implement P03 or business modules/features"
   - "implement AI/model/agent runtime"
   - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
@@ -100,8 +108,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P02.02.md"
+  active_spec: "docs/roadmap/work-packages/P02.03.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P02.01.md"
-  active: "docs/ai/handoffs/P02.02.md"
+  completed: "docs/ai/handoffs/P02.02.md"
+  active: "docs/ai/handoffs/P02.03.md"
