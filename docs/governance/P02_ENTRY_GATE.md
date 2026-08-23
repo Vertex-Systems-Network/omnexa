@@ -53,17 +53,19 @@ P02.01 is complete through implementation PR #69, exact head `76919a9588f70aeea7
 
 P02.02 is complete through implementation PR #71, exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, canonical run/job `32637760875 / 97189971101` PASS and merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
 
+P02.03 is complete through implementation PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical run/job `32640790333 / 97197453122` PASS and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`. Completion evidence is retained in `docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md`.
+
 The current closure state is:
 
 - P02: `active`;
-- P02.01-P02.02: `done`;
-- P02.03: `active`;
-- P02.04-P02.10: `planned`;
-- P02 progress: `2 / 10 done`;
-- `kernel_code_authorized=true` bounded only to P02.03;
+- P02.01-P02.03: `done`;
+- P02.04: `active`;
+- P02.05-P02.10: `planned`;
+- P02 progress: `3 / 10 done`;
+- `kernel_code_authorized=true` bounded only to P02.04;
 - `business_feature_code_authorized=false`.
 
-No P02.03 runtime/schema implementation belongs in this closure transition.
+No P02.04 runtime/schema implementation belongs in this closure transition.
 
 ## Phase security invariants
 
@@ -104,13 +106,13 @@ P00: DONE
 P01: DONE — 12 / 12
 P01 exit satisfied
 P02 specs: PREPARED — 10 / 10
-P02: ACTIVE — 2 / 10 done
-P02.01-P02.02: DONE
-P02.03: ACTIVE
-P02.04-P02.10: PLANNED
-kernel_code_authorized: true — P02.03 only
+P02: ACTIVE — 3 / 10 done
+P02.01-P02.03: DONE
+P02.04: ACTIVE
+P02.05-P02.10: PLANNED
+kernel_code_authorized: true — P02.04 only
 business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this closure transition merges, the execution session must STOP. P02.03 implementation starts only in a later governed execution session from the then-current protected `main`.
+After this closure transition merges, the execution session must STOP. P02.04 implementation starts only in a later governed execution session from the then-current protected `main`.

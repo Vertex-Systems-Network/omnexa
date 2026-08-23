@@ -3,7 +3,7 @@
 Status: **NOT SATISFIED — PHASE ACTIVE**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 2 / 10 done: P02.01-P02.02 are complete and P02.03 is active.
+This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 3 / 10 done: P02.01-P02.03 are complete and P02.04 is active.
 
 ## Mandatory exit evidence
 
@@ -27,7 +27,9 @@ P02.01 completion is recorded in `docs/roadmap/evidence/P02.01_COMPLETION_2026-0
 
 P02.02 completion is recorded in `docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md` from implementation PR #71, final exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, canonical run/job `32637760875 / 97189971101` PASS and merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
 
-P02.02 provides canonical same-tenant allow/cross-tenant forged-selector deny/no-global-fallback evidence and establishes the trusted tenant boundary. This satisfies the tenant-isolation foundation portion only. It does not satisfy organization/object/scope authorization, role/permission differences, service-account lifecycle or session invalidation requirements that belong to later P02 packages.
+P02.03 completion is recorded in `docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md` from implementation PR #73, final exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical run/job `32640790333 / 97197453122` PASS and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
+
+P02.02 provides the trusted tenant-isolation boundary. P02.03 adds tenant-contained organization hierarchy, scoped membership, deterministic cycle rejection and non-authorizing organization scope context. Together they advance the tenant/organization foundation only. They do not satisfy later role/permission differences, service-account lifecycle or authentication/session invalidation requirements.
 
 ## Exit-denial conditions
 
