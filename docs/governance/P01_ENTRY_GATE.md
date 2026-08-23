@@ -39,36 +39,36 @@ State: **SATISFIED BY COMPLETED P01 PACKAGES**
 
 Completed package regression verifiers remain mandatory in the same GitHub-hosted governance job. Repository Go quality remains enforced by `bash scripts/verify_go_quality.sh` with pinned `golangci-lint v2.12.2` and `govulncheck v1.7.0`.
 
-Canonical completion evidence exists for P01.01 through P01.10 under `docs/roadmap/evidence/`. Latest completed-package implementation evidence is P01.10 PR #61, final exact head `4c9914e4641d0d6e94a895d0fcd16c3a6bf4d962`, run `32609018028`, job `97118796940`, implementation merge `9d11b9250eb74ca2ade531ee58e8f905468cf103`.
+Canonical completion evidence exists for P01.01 through P01.11 under `docs/roadmap/evidence/`. Latest completed-package implementation evidence is P01.11 PR #63, final exact head `1c1ab1f8d5120fb6b1e5908fdb93cffef9275940`, run `32610902537`, job `97123708250`, implementation merge `10c94a638b89d47da05f5481fb2db298a2da6942`.
 
 ### EG-05 — implementation locks transition atomically
 State: **SATISFIED**
 
-Current bounded state proposed by the governed P01.10 closure transition:
+Current bounded state proposed by the governed P01.11 closure transition:
 
 - P00/P00.10: `done`;
 - P01: `active`;
-- P01.01-P01.10: `done`;
-- P01.11: `active`;
-- P01.12: `planned`;
-- `kernel_code_authorized=true` only for P01.11;
+- P01.01-P01.11: `done`;
+- P01.12: `active`;
+- P02+: `planned`;
+- `kernel_code_authorized=true` only for P01.12;
 - `business_feature_code_authorized=false`.
 
 ## Active P01 package sequence
 
 `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
 
-P01.01 through P01.10 are done. P01.10 canonical evidence is `docs/roadmap/evidence/P01.10_COMPLETION_2026-08-23.md`. **P01.11 — Audit Transport Foundation** is the sole next active package in this closure transition. P01.12 remains planned.
+P01.01 through P01.11 are done. P01.11 canonical evidence is `docs/roadmap/evidence/P01.11_COMPLETION_2026-08-23.md`. **P01.12 — Developer CLI Baseline** is the sole active package in this closure transition and owns the final P01 exit proof.
 
-Advancing again requires P01.11 to reach `done` with required GitHub-hosted G0/G1/G2/G3/G5/G6/G7 evidence, P01.01-P01.10 regressions and repository Go quality all PASS, followed by a separate governed state reconciliation.
+Advancing beyond P01 requires P01.12 to reach `done` with applicable GitHub-hosted G0-G8 evidence, P01.01-P01.11 regressions, repository Go quality and fresh-install P01 exit proof all accurately recorded, followed by a separate governed P01-exit reconciliation. P02 may not activate early.
 
-## Active P01.11 bounds
+## Active P01.12 bounds
 
-P01.11 may implement only the audit transport foundation defined in `docs/roadmap/work-packages/P01.11.md`: stable classification-aware audit envelope; actor/action/target/scope/outcome/correlation/reason/approval metadata without P02 identity; append-oriented sink interface; explicit required-audit failure semantics; classification/redaction enforcement; UUIDv7/timestamp immutability conventions; impersonation/privileged-action metadata; deterministic local/test sink; and bounded protected-payload-safe transport health observability.
+P01.12 may implement only the developer CLI/P01 exit boundary defined in `docs/roadmap/work-packages/P01.12.md`: stable repository-owned version/help/verify/build-test/approved-diagnostic command surfaces; deterministic fail-closed verification orchestration; explicit exit codes and structured-safe output; safe composition of P01 configuration/migration/diagnostic capabilities; no-secret/no-RESTRICTED output; deterministic clean-checkout/CI behavior; completed-package regression preservation; and the governed fresh-install P01 exit proof.
 
-It may not implement P02 identity/tenant/role catalogs, business-domain audit events, compliance export/reporting UI, long-term legal hold/retention, domain-event replacement, P01.12 CLI, durable messaging/outbox/inbox pull-forward, later business modules or AI/model/agent behavior.
+It may not implement production super-admin authority, P02 tenant/user/role administration, P03 module install/runtime administration, P04+ domain/event/workflow commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, later business modules or AI/model/agent behavior.
 
-Audit write access does not imply audit read/export authority. Audit metadata is descriptive and does not create authorization, tenancy or identity authority during P01.11. Protected audit remains separate from ordinary logs, and required-audit sink failure must not silently claim success.
+CLI convenience does not create authority. Privileged future operations must authenticate/authorize/audit through governed capabilities. Destructive operations require explicit target/environment semantics rather than hidden inference.
 
 ## Future browser UI planning requirement
 
@@ -87,9 +87,9 @@ Repository visibility: PUBLIC
 EG-02 / Issue #3: SATISFIED / CLOSED
 EG-03 / Issue #14: SATISFIED / GITHUB-HOSTED ONLY
 P01: ACTIVE
-P01.01-P01.10: DONE
-P01.11: ACTIVE — Audit transport foundation
-P01.12: PLANNED
+P01.01-P01.11: DONE
+P01.12: ACTIVE — Developer CLI baseline / P01 exit proof
+P01 progress: 11 / 12 done
 kernel_code_authorized: true
 business_feature_code_authorized: false
 ```
