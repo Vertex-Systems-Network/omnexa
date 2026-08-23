@@ -243,3 +243,9 @@ jobs:
         env:
           P02_06_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p02_06.sh
+
+      - name: Verify P02.07 MFA and passkey-ready strong authentication
+        shell: bash
+        env:
+          P02_07_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p02_07.sh
