@@ -14,12 +14,12 @@
     {"id":"P02.03","name":"Organization hierarchy & scoped memberships","state":"done","depends_on":["P02.02"],"spec":"docs/roadmap/work-packages/P02.03.md","owner":"kernel.organization"},
     {"id":"P02.04","name":"Authentication & session lifecycle","state":"done","depends_on":["P02.03"],"spec":"docs/roadmap/work-packages/P02.04.md","owner":"kernel.identity"},
     {"id":"P02.05","name":"RBAC foundation","state":"done","depends_on":["P02.04"],"spec":"docs/roadmap/work-packages/P02.05.md","owner":"kernel.authorization"},
-    {"id":"P02.06","name":"Relationship/context-aware authorization","state":"active","depends_on":["P02.05"],"spec":"docs/roadmap/work-packages/P02.06.md","owner":"kernel.authorization"},
-    {"id":"P02.07","name":"MFA/passkey-ready flows","state":"planned","depends_on":["P02.06"],"spec":"docs/roadmap/work-packages/P02.07.md","owner":"kernel.identity"},
+    {"id":"P02.06","name":"Relationship/context-aware authorization","state":"done","depends_on":["P02.05"],"spec":"docs/roadmap/work-packages/P02.06.md","owner":"kernel.authorization"},
+    {"id":"P02.07","name":"MFA/passkey-ready flows","state":"active","depends_on":["P02.06"],"spec":"docs/roadmap/work-packages/P02.07.md","owner":"kernel.identity"},
     {"id":"P02.08","name":"Service accounts & API credentials","state":"planned","depends_on":["P02.07"],"spec":"docs/roadmap/work-packages/P02.08.md","owner":"kernel.identity"},
     {"id":"P02.09","name":"Tenant-scoped settings","state":"planned","depends_on":["P02.08"],"spec":"docs/roadmap/work-packages/P02.09.md","owner":"kernel.configuration"},
     {"id":"P02.10","name":"Identity/permission audit trails & P02 exit proof","state":"planned","depends_on":["P02.09"],"spec":"docs/roadmap/work-packages/P02.10.md","owner":"kernel.audit"}
   ],
   "phase_exit": "NOT SATISFIED — requires canonical proof of cross-tenant isolation, object/scope permissions, role differences, service-account scoping and session invalidation behavior plus applicable G0-G8 evidence.",
-  "note": "P02 is active at 5 / 10 done with exactly one active package: P02.06. implementation_authorized=true is bounded to P02.06 kernel.authorization relationship/context-aware authorization work only; business_feature_code_authorized=false. P02.07-P02.10 remain planned."
+  "note": "P02 is active at 6 / 10 done with exactly one active package: P02.07. implementation_authorized=true is bounded to P02.07 kernel.identity MFA/passkey-ready work only; business_feature_code_authorized=false. P02.08-P02.10 remain planned."
 }
