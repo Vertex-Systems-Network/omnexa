@@ -17,6 +17,8 @@ omnexa dev reset
 
 `dev bootstrap` verifies pinned toolchains, prepares non-secret local config, provisions disposable local dependencies, waits for health, installs dependencies and applies migrations. `dev reset` must fail closed if target identity is ambiguous.
 
+These lifecycle names remain the canonical future command contract. P01.12 does **not** pull deployment orchestration or destructive reset/bootstrap behavior forward merely to fill these names; only the bounded baseline explicitly listed under **Active P01.12** is executable during P01.
+
 ## Database lifecycle
 
 ```text
@@ -27,6 +29,8 @@ omnexa db seed
 ```
 
 Production migration execution is a separate release/operations concern and must not inherit unsafe local-reset semantics.
+
+P01.12 implements only the safe `db migrate` boundary. `db status`, `db fresh` and `db seed` remain contract names for later governed implementation and are not silently approximated.
 
 ## Quality commands
 
@@ -79,17 +83,69 @@ P01.11 is complete with canonical evidence in `docs/roadmap/evidence/P01.11_COMP
 
 P01.12 — Developer CLI Baseline is the sole active executable kernel package and owns the P01 exit proof.
 
-The active P01.12 implementation must map package requirements to the existing semantic command contract rather than create a competing verification path:
+The first repository-owned executable surface is intentionally bounded to:
 
-- `help` / `version` -> deterministic repository/build identity with no machine-secret leakage;
-- `verify governance` / `verify all` -> compose the canonical governance/readiness/package and repository Go-quality gates with fail-closed non-zero exit behavior;
-- `verify format`, `verify lint`, `verify static`, `verify unit`, `verify contracts`, `verify integration`, `verify migrations`, `verify security`, `verify build`, `verify release` -> invoke governed underlying operations without silently weakening or reimplementing their semantics;
-- configuration-facing commands -> compose P01.02 startup configuration rules without turning the CLI into a secrets store;
-- migration-facing commands -> compose P01.04 boundaries with explicit environment/resource identity and no hidden production reset semantics;
-- diagnostic/health commands -> compose P01.08 safe projections without leaking provider errors, credentials or RESTRICTED payloads;
-- P01 exit proof -> from a clean environment prove configuration, build/start, fresh migration, cache/storage provider contracts, safe logs/telemetry, readiness/diagnostics, job/configuration/audit primitive tests, canonical developer verification and required security/supply-chain/build gates reproducibly.
+```text
+omnexa                         # existing minimal kernel startup/smoke path
+omnexa help
+omnexa version
+omnexa health
+omnexa db migrate
+omnexa verify <target>
+```
 
-P01.12 must add focused positive/negative tests and a fail-closed P01.12 verifier during its implementation PR. This closure transition does not create that verifier or any P01.12 runtime code.
+Implementation ownership is `kernel.developer`. The CLI composes completed kernel capabilities and approved repository tooling; it does not become a business/domain owner or privileged administration path.
+
+### Help and version
+
+`help` is static deterministic command metadata. `version` renders only the bounded P01.01 build identity (`version` and `commit`) and does not expose timestamps, usernames, working directories or machine metadata.
+
+### Health
+
+`health` composes the P01.02/P01.04 configuration boundary with the P01.08 safe diagnostic projection. Output is JSON containing bounded build/lifecycle/liveness/readiness/dependency state only. Database URLs, provider errors, credentials and RESTRICTED values are not rendered.
+
+### Database migration guard
+
+P01.12 `db migrate`:
+
+- requires an **explicit** configured environment source rather than silently accepting the default `local` identity;
+- requires the governed P01.04 database configuration/resource identity;
+- is allowed only for `local`, `ci`, `preview` and `test` developer environments;
+- fails closed for `staging` and `production` because production/staging release migration authority is outside this developer CLI baseline;
+- invokes the existing P01.04 connection/migration foundation and does not add hidden SQL discovery, reset, seed or destructive mutation semantics;
+- emits only the safe environment label on success and never the database URL.
+
+### Verification target mappings
+
+P01.12 does not reimplement quality logic. It invokes fixed allowlisted executables (`python`, `bash`, `go`) without shell-string expansion and maps targets to existing governed operations:
+
+- `verify governance` -> canonical governance/development/operations/freeze/P01 readiness/package validators;
+- `verify format`, `verify lint`, `verify static` -> `scripts/verify_go_quality.sh`;
+- `verify unit` -> repository kernel Go tests;
+- `verify contracts` -> completed contract-oriented P01 verifier subset;
+- `verify integration` -> PostgreSQL/cache/storage integration verifier subset;
+- `verify migrations` -> P01.04 verifier;
+- `verify security` -> repository Go quality plus completed security-relevant P01 verifier subset;
+- `verify build` -> kernel build;
+- `verify release` -> repository Go quality + module checksum verification + kernel build;
+- `verify module-lifecycle` -> explicit `N/A` during P01 because P03 module runtime is not active; it is never relabeled PASS;
+- `verify all` -> canonical governance validators + repository Go quality + **P01.01-P01.11** completed regression verifiers + `go mod verify` + kernel build.
+
+`verify all` intentionally does not recursively invoke `scripts/verify_p01_12.sh`. Canonical governance runs real `omnexa verify all` and the focused P01.12 verifier as separate sequential gates, preventing recursive verification while proving that local and CI use the same underlying semantics.
+
+### P01.12 focused verifier and exit path
+
+`scripts/verify_p01_12.sh` is fail-closed and covers applicable G0-G8 P01.12 risk. It verifies active-package governance, formatting/static analysis, unit/race behavior, deterministic help/version/health, guarded PostgreSQL migration, secret-safe negatives, command allowlisting, build/package and module checksum integrity.
+
+Canonical GitHub-hosted governance additionally invokes:
+
+```text
+omnexa db migrate
+omnexa verify all
+bash scripts/verify_p01_12.sh
+```
+
+with synthetic PostgreSQL/Valkey/S3-compatible providers already provisioned by the governed `ubuntu-24.04` job. This gives the P01 exit proof one reproducible lane covering configuration resolution, kernel start/build, migration, cache/storage contracts, safe observability, readiness/diagnostics, jobs/configuration/audit primitives, developer verification and required quality/security/supply-chain/build checks without hidden manual steps.
 
 P01.12 may not implement production super-admin CLI, P02 tenant/user/role administration, P03 module install/runtime commands, P04+ event/workflow/domain commands, deployment/Kubernetes orchestration, hidden SQL/file mutation, business modules or AI runtime.
 
