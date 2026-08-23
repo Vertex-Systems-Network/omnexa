@@ -13,7 +13,7 @@ P02 exit requires all P02.01-P02.10 packages to be `done` and exact canonical Gi
 - organization/object/scope permissions enforce same-scope allow and wrong-scope deny behavior;
 - role/permission differences are deterministic and no role name creates a bypass;
 - service accounts are non-human principals with bounded, rotatable/revocable credentials and scope;
-- interactive sessions expire, rotate/revoke and invalidate after required account/security changes;
+- session invalidation behavior is explicit: interactive sessions expire, rotate/revoke and invalidate after required account/security changes;
 - authentication secrets/tokens/recovery material are not leaked to ordinary logs, traces, errors, audit payloads or test fixtures;
 - identity, tenant, organization and authorization mutations use their authoritative owners;
 - privileged identity/permission actions emit classification-safe attributable audit evidence through `kernel.audit`;
