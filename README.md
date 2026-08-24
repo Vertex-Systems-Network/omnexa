@@ -30,6 +30,8 @@ Key references:
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
+For strategic architecture/roadmap work, also inspect the proposed AI-native expansion under `docs/adr/ADR-0011-ai-native-business-os-strategic-expansion.md`, `docs/roadmap/STRATEGIC_PROGRAMS.json`, `docs/roadmap/STRATEGIC_CROSS_CUTTING_PROGRAMS.md`, `docs/roadmap/STRATEGIC_ACCEPTANCE_GATES.md`, `docs/roadmap/AI_NATIVE_STRATEGIC_AUDIT_2026.md`, `docs/architecture/AI_NATIVE_BUSINESS_OS_ARCHITECTURE.md` and `docs/architecture/PRODUCT_FEDERATION_AND_APP_MESH.md`. Proposed strategic files do **not** activate future implementation by themselves.
+
 ## Core laws
 
 - Kernel before business modules.
@@ -60,11 +62,11 @@ P02.02 completed through implementation PR #71, exact head `a63bd45523ed35c4b11d
 
 P02.03 completed through implementation PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical GitHub-hosted run/job `32640790333 / 97197453122`, and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
 
-P02.04 completed through implementation PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical GitHub-hosted run/job `32653747461 / 97229198036`, and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`.
+P02.04 completed through implementation PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical GitHub-hosted run/job `32653747461 / 97229198036`, and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`, evidence `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md`.
 
-P02.05 completed through implementation PR #77, exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, canonical GitHub-hosted run/job `32660848145 / 97246683239`, and merge `7b6a59e83c9bd696e6e008385b4413d529254171`.
+P02.05 completed through implementation PR #77, exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, canonical GitHub-hosted run/job `32660848145 / 97246683239`, and merge `7b6a59e83c9bd696e6e008385b4413d529254171`, evidence `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md`.
 
-P02.06 completed through implementation PR #79, exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, canonical GitHub-hosted run/job `32664834112 / 97256520050`, and merge `083c2866f0cd0773b85201750c2196bfd2fcc167`.
+P02.06 completed through implementation PR #79, exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, canonical GitHub-hosted run/job `32664834112 / 97256520050`, and merge `083c2866f0cd0773b85201750c2196bfd2fcc167`, evidence `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md`.
 
 P02.07 completed through implementation PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, canonical GitHub-hosted run/job `32669167972 / 97267175953`, and merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`.
 
@@ -86,6 +88,15 @@ OAuth developer applications, external connector/provider integration, device/PO
 - `business_feature_code_authorized=false`.
 - P02.09-P02.10 remain planned.
 - P03+ remains planned.
+- All proposed `X..` strategic programs remain planning-only until accepted, dependency-ready and activated through canonical work-package/state governance.
+
+## Strategic AI-native direction
+
+The proposed strategic layer does not replace P00-P27. It adds cross-cutting intelligence/control systems so Omnexa can evolve beyond feature aggregation into:
+
+**deterministic domain truth + universal workflow + governed data/Business Graph + Process Graph + System Graph + AI Control Tower + model governance + simulation + continuous controls + measurable outcomes + constrained autonomy.**
+
+Standalone first-party products should join through `XPF-200 Product Federation & App Mesh` as native, embedded, federated or edge products according to architecture evidence rather than being force-merged into one codebase/database.
 
 ## Public visibility / Issue #4
 
@@ -94,6 +105,8 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 ## Roadmap
 
 `docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P02 active 7 / 10; P02.01-P02.07 done; P02.08 sole active package; business features locked.**
+
+`docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
 
 ## Product principle
 

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "proposed",
+  "authority": "AI_NATIVE_ENGINEERING_ROLES.md under ADR-0011 when accepted",
+  "roles": [
+    {
+      "id": "AI-ARCHITECT",
+      "purpose": "architecture, ownership, dependencies, ADRs, compatibility and blast-radius analysis",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-DESIGN",
+      "purpose": "enterprise UX, design system, accessibility, workflow ergonomics and AI interaction design",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-PERFORMANCE",
+      "purpose": "performance, capacity, concurrency and cost-performance analysis/optimization",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-SYSTEMS",
+      "purpose": "whole-system topology, dependencies, deployment, failure domains and System Graph analysis",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-ANALYZER",
+      "purpose": "evidence-backed code/runtime/security/data/process/financial/AI/outcome diagnosis",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-DEVELOPER",
+      "purpose": "bounded implementation of the currently authorized work package",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-EXPERT",
+      "purpose": "versioned domain knowledge, rules, risks, scenarios and recommendation",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-MLM",
+      "purpose": "AI Model Lifecycle Management: model/provider/eval/lineage/drift/fallback/deprecation governance",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-ENGINEER",
+      "purpose": "production engineering, reliability, security, observability, CI/CD, data/AI runtime and operations",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-CONSTRUCTOR",
+      "purpose": "generate complete governed module/app/connector/agent artifact sets from approved specifications",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-SECURITY-REDTEAM",
+      "purpose": "independent threat, abuse, prompt/tool, tenancy, privilege, payment and supply-chain review",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-DATA-KNOWLEDGE",
+      "purpose": "data contracts, lineage, MDM, Business Graph, knowledge/retrieval and derived-store governance",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-QA-VERIFIER",
+      "purpose": "independent tests/evals/evidence and test-oracle integrity",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-RELEASE-OPS",
+      "purpose": "reviewed/tested/built/promoted identity, deployment, rollback, SLO and recovery evidence",
+      "may_author_implementation": true,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-PRODUCT-OUTCOME",
+      "purpose": "Research/VOC/CTQ, observed business outcomes and value/control loops",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    },
+    {
+      "id": "AI-GRC-FINANCIAL-CONTROLS",
+      "purpose": "SoD, maker-checker, financial controls, compliance and high-risk business review",
+      "may_author_implementation": false,
+      "may_self_certify_high_critical": false
+    }
+  ],
+  "risk_independence": {
+    "low": ["author", "automated-gates"],
+    "medium": ["author", "reviewer", "test-evidence"],
+    "high": ["author", "distinct-architecture-or-security-review", "AI-QA-VERIFIER", "target-evidence"],
+    "critical": ["author", "independent-security-or-domain-review", "AI-QA-VERIFIER", "exact-head-verification", "recovery-or-reconciliation-evidence", "explicit-approval-when-policy-requires"]
+  },
+  "global_rules": [
+    "A role registry never grants work-package authority.",
+    "Child-agent authority is a subset of parent authority.",
+    "High/critical work cannot be self-certified by the implementation-authoring authority path.",
+    "AI-authored prose is not machine evidence by itself.",
+    "Hidden chain-of-thought is not project evidence."
+  ]
+}

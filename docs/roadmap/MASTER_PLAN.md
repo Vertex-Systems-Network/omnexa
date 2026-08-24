@@ -12,6 +12,7 @@ Execution mode: gated, evidence-based, architecture-first
 5. `docs/roadmap/STATE.json` is the machine-readable state; this document defines intent, dependencies and gates.
 6. A phase is `done` only when required evidence exists under `DEFINITION_OF_DONE.md`.
 7. Scope additions are routed through `CHANGE_CONTROL.md` rather than silently absorbed.
+8. Strategic cross-cutting `X..` programs complement P00-P27 without renumbering or implementation authority; activation still requires canonical phase/work-package planning and accepted change control where applicable.
 
 ## 2. Product progression
 
@@ -45,6 +46,8 @@ Global / Enterprise / Scale
       ↓
 Industry + Autonomous Business OS
 ```
+
+Strategic cross-cutting overlays are defined separately in `STRATEGIC_CROSS_CUTTING_PROGRAMS.md` and machine-readable `STRATEGIC_PROGRAMS.json`. They do not create a parallel execution cursor.
 
 ---
 
@@ -266,6 +269,8 @@ Scope:
 - budgeting/fixed-assets progression;
 - procurement foundation where accounting ownership is clear.
 
+Strategic overlay when activated: `XGRC-100` for SoD/maker-checker/continuous financial access controls and `XEPM-200` for planning/EPM depth.
+
 Exit: double-entry invariants, period controls, immutable audit history, multi-currency rules and reconciliation tests proven.
 
 ---
@@ -300,6 +305,8 @@ Scope:
 - settlement/reconciliation;
 - payout/dispute expansion;
 - PCI-scope-minimizing integration patterns.
+
+Strategic overlay when activated: `XPS-100` specialized payment-security/provider certification. Generic module acceptance never implies payment-security certification.
 
 Exit: at least two provider adapters demonstrate that commerce/finance do not contain provider-specific lifecycle logic.
 
@@ -349,6 +356,8 @@ Scope:
 - scoped authentication/authorization;
 - self-service documents, requests and status surfaces.
 
+Strategic overlay when activated: `XWORK-200` evolves role-based portal/work surfaces into an intent-driven unified Business Work/Command Center without creating a new authorization stack.
+
 Exit: one runtime hosts multiple portal personas without duplicating identity/security stacks.
 
 ---
@@ -363,6 +372,8 @@ Scope families:
 - service tickets/cases;
 - scheduling/resource allocation;
 - payroll integration boundaries rather than premature country-specific payroll hard-coding.
+
+Strategic overlay candidate: `XESM-200` for later ServiceNow-class enterprise service management/CMDB/business-service depth.
 
 Exit: domain boundaries between HR, project costing, service and finance are explicit and contract-tested.
 
@@ -394,6 +405,8 @@ Deliver connector SDK, OAuth credential handling, webhooks, sync jobs, mapping/t
 
 Initial connector classes: email/calendar/storage, commerce channels, messaging, shipping, accounting, payments, AI providers and generic REST/webhook.
 
+Strategic overlays when activated: `XMIG-200` for governed migration/onboarding and `XTRUST-100` for connector/package trust/runtime controls.
+
 ---
 
 ## P17 — Low-code App Builder
@@ -402,6 +415,8 @@ Deliver governed custom objects, forms, list/kanban/calendar views, relationship
 
 Custom apps must use the same tenant/policy/audit/event foundations as first-party modules.
 
+Strategic overlay when activated: `XALM-200` for versioned configuration-as-code and DEV/TEST/UAT/PROD promotion of low-code/workflow/agent/config assets.
+
 ---
 
 ## P18 — Data, Reporting & BI
@@ -409,6 +424,8 @@ Custom apps must use the same tenant/policy/audit/event foundations as first-par
 Deliver semantic metrics, dashboards, scheduled reports, cross-domain read projections, export, analytical pipeline/warehouse boundary and governed data access.
 
 Heavy analytics must not degrade OLTP correctness/availability.
+
+Strategic overlays when activated include `XDG-100`, `XBG-100`, `XPROC-200`, `XPERF-200`, `XEPM-200`, `XFIN-200`, `XOUT-200` and `XDOC-200`. These extend BI into governed data/semantic/process/performance/planning/cost/outcome intelligence without giving analytics cross-domain write authority.
 
 ---
 
@@ -428,6 +445,8 @@ Deliver:
 - AI permissions;
 - human-approval hooks.
 
+Strategic overlays when activated: `XAIC-200` AI Control Tower, `XMLM-200` model lifecycle/evaluation governance, `XDOC-200` enterprise knowledge/document intelligence, and Business/System Graph grounding.
+
 Exit: AI can retrieve and propose actions across authorized context without unrestricted write access.
 
 ---
@@ -435,6 +454,8 @@ Exit: AI can retrieve and propose actions across authorized context without unre
 ## P20 — Governed AI Agents
 
 Deliver role/domain agents such as sales, finance, procurement, support and executive analysis through approved capabilities.
+
+Strategic overlays when activated: `XAIS-200` Agent Studio/multi-agent/external interoperability and `XAIC-200` centralized agent governance.
 
 Exit: end-to-end agent actions are permissioned, approval-aware, auditable, replay-safe and measurable.
 
@@ -446,11 +467,15 @@ Exit: end-to-end agent actions are permissioned, approval-aware, auditable, repl
 
 Deliver public API surface, SDKs, CLI, sandbox tenant, module generator, contract/event explorer, local harness, developer docs and compatibility tooling.
 
+Strategic overlays when activated: AI Constructor capability under `XQ-100`, `XALM-200`, `XMIG-200`, System Graph developer inspection, and package trust tooling.
+
 ---
 
 ## P22 — Omnexa Exchange / Marketplace
 
 Deliver signed packages, publisher identity, declared scopes, automated validation, install/upgrade/revoke flow, ratings/release metadata and governance for modules/connectors/themes/workflows/AI tools/country packs.
+
+Strategic overlay when activated: mature `XTRUST-100` package runtime/sandbox/revocation and evidence-backed package profiles.
 
 ---
 
@@ -470,6 +495,8 @@ Expand SSO/SAML/SCIM, device/session policy, privileged access, policy administr
 
 Security starts earlier; this phase deepens enterprise-grade controls.
 
+Strategic overlays when activated: `XGRC-200`, mature `XTRUST-100`, AI Control Tower governance and model/agent lifecycle controls.
+
 ---
 
 ## P25 — Scale Fabric
@@ -485,6 +512,8 @@ Introduce only based on measured need:
 - disaster recovery automation;
 - tenant placement/mobility;
 - service extraction for justified domains.
+
+Strategic evidence sources when activated: `XSG-100`, `XPERF-100/200`, `XFIN-200` and operational SLO/incident evidence. Scale remains evidence-earned.
 
 Exit gates use measured SLO, RTO/RPO, load and fault-injection evidence.
 
@@ -508,13 +537,16 @@ Target state:
 Business objective
  -> governed intelligence analysis
  -> evidence/recommendations
- -> policy/human approval
- -> multi-domain workflow execution
+ -> simulation/constraint check where consequential
+ -> policy/human approval or earned autonomy budget
+ -> multi-domain workflow/agent execution
  -> measurement
  -> feedback/optimization
 ```
 
 Examples may include profitability improvement, inventory optimization, purchasing recommendations, churn reduction or marketing reallocation.
+
+Strategic overlays when activated: `XDEC-300` Decision/Scenario Simulation, `XWORK-200` unified Business Work/Command Center and `XAUTO-300` Autonomous Business Governor.
 
 The platform must preserve human control, policy limits, auditability and deterministic financial/business records even as autonomy increases.
 
@@ -534,6 +566,8 @@ After P06: P07-P15 may have controlled parallel teams only when:
 
 P16-P18 depend on stable enough business capability contracts. P19-P20 depend on governed data and authorization foundations. P21-P22 depend on stable extension contracts. P23-P25 deepen global/enterprise maturity and may feed requirements back through change control.
 
+Cross-cutting `X..` programs may progress only when their declared dependencies and a canonical active work package permit them. Their presence in the strategic registry is not a parallel implementation license.
+
 # 4. Release philosophy
 
 Do not wait for P27 to release useful products. Release coherent capability sets behind maturity labels:
@@ -551,3 +585,23 @@ A domain can mature independently while the overall roadmap continues, provided 
 Progress percentage is based on accepted work packages, not lines of code, number of screens or subjective effort.
 
 If tests or architecture evidence invalidate a completed package, its state must be reopened rather than preserving an inaccurate percentage.
+
+# 6. Strategic cross-cutting architecture
+
+The proposed strategic layer under ADR-0011 is documented in:
+
+- `docs/roadmap/STRATEGIC_PROGRAMS.json` — machine-readable X-program registry;
+- `docs/roadmap/STRATEGIC_CROSS_CUTTING_PROGRAMS.md` — program scope/dependencies;
+- `docs/roadmap/AI_NATIVE_STRATEGIC_AUDIT_2026.md` — gap/loophole/market audit;
+- `docs/architecture/AI_NATIVE_BUSINESS_OS_ARCHITECTURE.md` — three-graph + AI-native target architecture;
+- `docs/governance/AI_NATIVE_ENGINEERING_ROLES.md` — AI Architect/Design/Performance/Systems/Analyzer/Developer/Expert/MLM/Engineer/Constructor and independent assurance roles.
+
+The three graph planes have distinct meanings:
+
+- **Business Graph** — semantic business entities/relationships;
+- **Process Graph** — actual business-process execution over time;
+- **System Graph** — software/runtime/data/security/deployment topology and evidence.
+
+None is allowed to become a hidden cross-domain write model.
+
+The strategic layer is designed to move Omnexa beyond conventional ERP feature aggregation toward a governed system of record + workflow + context + intelligence + governance + simulation + work. It remains subordinate to canonical execution state and change control.
