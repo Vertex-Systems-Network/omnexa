@@ -129,3 +129,50 @@ If later evidence proves a supposedly completed package violates an invariant or
 ## 6. Zero-error interpretation
 
 "Zero errors" means zero known failing required gates in the verified target environment. It does not mean the absence of all possible defects. Claims must always be tied to the exact tests/build/migration/runtime evidence executed.
+
+## 7. Strategic AI-native applicability gate
+
+When an accepted future strategic program from `docs/roadmap/STRATEGIC_PROGRAMS.json` applies, the work package must explicitly decide the following rather than silently omitting them:
+
+- Research/problem/VOC/CTQ and intended business outcome;
+- architecture/ADR and domain write owner;
+- DataFlow, classification, lineage, retention/delete/export and derived-store behavior;
+- Business Graph contribution or `N/A`;
+- Process Graph contribution or `N/A`;
+- System Graph/Flow contribution and evidence provenance or `N/A`;
+- security/threat model and FMEA for high/critical material failure paths;
+- tenancy/authorization/SoD/approval implications;
+- AI/model/agent/tool context and evaluation implications;
+- performance/capacity/cost budget;
+- reliability/SLO/recovery/reconciliation behavior;
+- configuration/environment promotion impact;
+- migration/onboarding/rollback impact;
+- tests/evals/target evidence;
+- post-release outcome/control evidence.
+
+`N/A` requires a rationale. This section does not activate proposed X-program implementation ahead of canonical phase/work-package authority.
+
+## 8. AI-authored work and evidence independence
+
+For material AI-assisted implementation:
+
+- AI-authored PASS prose is not machine evidence;
+- the reviewed/tested source SHA must be identifiable;
+- deleted/skipped/weakened tests or reduced security/performance thresholds are explicit review signals;
+- a code-authoring AI must not silently weaken governance/workflow/security controls to make its own change pass;
+- high/critical work requires a distinct review context plus objective evidence appropriate to the risk;
+- stale review is invalid when the reviewed head changes materially;
+- modelled/AI-inferred graph/process/business outcomes are not observed facts;
+- target/provider/runtime claims require the target/provider/runtime evidence specified by the owning gate.
+
+## 9. Graph and derived-intelligence completion rule
+
+When Business Graph, Process Graph, System Graph, analytics, search, simulation or AI projections are involved:
+
+- authoritative domain ownership remains unchanged;
+- source/provenance is recorded;
+- tenant/org/field authorization is preserved;
+- rebuild/consistency behavior for derived stores is defined;
+- evidence class remains explicit (`declared`, `static`, `observed`, `tested`, `production-observed`, `modelled`, `ai-inferred` as applicable);
+- sensitive topology/data is redacted and access-controlled;
+- a generated diagram/dashboard does not substitute for execution evidence.
