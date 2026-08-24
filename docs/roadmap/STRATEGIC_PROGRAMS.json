@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "status": "proposed",
+  "authority": "ADR-0011 when accepted",
+  "purpose": "Cross-cutting strategic programs that complement P00-P27 without renumbering or authorizing future implementation.",
+  "current_execution_unchanged": {
+    "phase": "P02",
+    "work_package": "P02.08",
+    "business_feature_code_authorized": false
+  },
+  "programs": [
+    {
+      "id": "XQ-100",
+      "name": "AI-Native Engineering Governance & Quality OS",
+      "priority": "P0",
+      "placement": ["P02-P03 governance maturity", "all future phases"],
+      "depends_on": ["P00", "P01"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["ResearchBrief/VOC/CTQ", "DMADV for new systems", "DMAIC for defects", "FMEA for high-risk flows", "root-cause/control plan", "AI development run manifest", "scope leases", "test-oracle integrity", "evidence attestation", "independent exact-head review", "multi-agent coordination", "bounded retry/cost"]
+    },
+    {
+      "id": "XDG-100",
+      "name": "Enterprise Data Governance, Catalog, Lineage & Master Data",
+      "priority": "P0",
+      "placement": ["P04-P06 foundation", "P18 maturity"],
+      "depends_on": ["P04", "P06"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["data catalog", "authoritative owner", "data contracts", "lineage", "classification", "retention/delete/export propagation", "master/reference data", "golden-record/entity resolution", "data quality", "residency", "AI/analytics exposure policy", "derived-store governance"]
+    },
+    {
+      "id": "XBG-100",
+      "name": "Unified Business Graph & Semantic Business Context",
+      "priority": "P0",
+      "placement": ["P06 foundation", "P07-P18 incremental enrichment", "P19-P27 governed consumption"],
+      "depends_on": ["P06", "XDG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["canonical business entity references", "typed relationships", "semantic ontology", "temporal relationships", "business-policy context", "graph query contract", "tenant/org scoping", "provenance", "rebuildable projections", "AI grounding"]
+    },
+    {
+      "id": "XSG-100",
+      "name": "System Graph Foundation & Flow Intelligence",
+      "priority": "P0",
+      "placement": ["P03-P06 foundation", "P18/P21/P24/P25 enrichment"],
+      "depends_on": ["P03", "P04", "P01 observability"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["typed system nodes/edges", "declared/static/observed/tested/production-observed evidence", "module/capability/event/job/data/network topology", "security trust paths", "error propagation", "state/transaction/retry views", "package lifecycle", "expected-vs-observed drift", "runtime replay", "diff/history", "change impact", "blast radius"]
+    },
+    {
+      "id": "XPROC-200",
+      "name": "Process Intelligence, Mining & Conformance",
+      "priority": "P1",
+      "placement": ["P18", "P27"],
+      "depends_on": ["P04", "P05", "P18", "XBG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["process discovery", "conformance checking", "variant analysis", "bottleneck/wait/rework analysis", "approval-cycle analysis", "cross-domain process graph", "automation opportunity detection", "process KPIs", "modelled-vs-actual comparison"]
+    },
+    {
+      "id": "XTRUST-100",
+      "name": "Module, Connector, Agent & Package Trust Runtime",
+      "priority": "P0",
+      "placement": ["P03 contract", "P16/P21/P22 maturity", "P24 enforcement"],
+      "depends_on": ["P03", "P24"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["publisher identity", "signature/provenance", "SBOM", "dependency/advisory scanning", "declared data/network/secret scope", "runtime trust tiers", "sandbox/isolation", "network broker", "secret broker", "file broker", "resource quotas", "kill switch", "revocation", "malicious-package fixtures"]
+    },
+    {
+      "id": "XPS-100",
+      "name": "Payment Security & Provider Certification Gate",
+      "priority": "P0",
+      "placement": ["P10"],
+      "depends_on": ["P10", "XTRUST-100", "XSG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["provider-hosted/tokenized default", "raw account-data exclusion", "payment secret/network brokers", "webhook signature/freshness/replay protection", "tenant/provider binding", "3DS/SCA state", "idempotency/concurrency", "ambiguous-timeout reconciliation", "protected payment surface", "sandbox certification", "credential rotation/revocation", "provider kill switch"]
+    },
+    {
+      "id": "XPERF-100",
+      "name": "Performance, Capacity & Runtime Attribution Foundation",
+      "priority": "P0",
+      "placement": ["P03-P06", "before broad P07-P15 parallel expansion"],
+      "depends_on": ["P01 observability", "P03", "P04"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["request/capability/module attribution", "DB/cache/event/workflow/network timing", "tenant/resource attribution", "performance budgets", "load/capacity profiles", "queue/event lag", "memory/CPU/connection metrics", "noisy-neighbor evidence", "regression baselines"]
+    },
+    {
+      "id": "XPERF-200",
+      "name": "Performance Intelligence & Optimization Center",
+      "priority": "P1",
+      "placement": ["P18", "P25"],
+      "depends_on": ["XPERF-100", "XSG-100", "P18"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["cross-layer bottleneck analysis", "version comparisons", "capacity forecasting", "module/tenant/provider attribution", "query/cache/network recommendations", "performance history", "alerts", "AI-grounded remediation", "measured scale-trigger evidence"]
+    },
+    {
+      "id": "XGRC-100",
+      "name": "Financial SoD, Maker-Checker & Continuous Control Foundation",
+      "priority": "P0",
+      "placement": ["P08"],
+      "depends_on": ["P02 authorization", "P08"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["segregation of duties", "sensitive permission conflicts", "maker-checker", "approval authority", "financial role conflicts", "period-control integration", "privilege escalation checks", "continuous access monitoring"]
+    },
+    {
+      "id": "XGRC-200",
+      "name": "Enterprise GRC, Policy, Risk & Compliance Automation",
+      "priority": "P1",
+      "placement": ["P24"],
+      "depends_on": ["XGRC-100", "P24"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["risk registers", "control library", "continuous transaction/config monitoring", "role certification", "access reviews", "control testing", "policy exceptions", "legal hold/retention evidence", "compliance evidence automation", "fraud/risk indicators"]
+    },
+    {
+      "id": "XEPM-200",
+      "name": "Enterprise Planning & Performance Management",
+      "priority": "P1",
+      "placement": ["P08/P18"],
+      "depends_on": ["P08", "P18", "XBG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["budgeting", "rolling forecasts", "driver-based planning", "cash/workforce/sales/supply-chain/capex planning", "scenario versions", "profitability/cost allocation", "consolidation/close support", "variance analysis", "what-if planning"]
+    },
+    {
+      "id": "XAIC-200",
+      "name": "AI Control Tower",
+      "priority": "P1",
+      "placement": ["P19-P20", "P24"],
+      "depends_on": ["P19", "P20", "XBG-100", "XSG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["AI asset discovery/inventory", "models/agents/prompts/tools/MCP/datasets", "ownership/lineage", "risk classification", "permissions/data access", "runtime observability", "eval status", "cost/value/ROI", "policy/compliance gates", "shadow AI detection", "kill switch", "incident/case workflow"]
+    },
+    {
+      "id": "XAIS-200",
+      "name": "Agent Studio, Multi-Agent Orchestration & Interoperability",
+      "priority": "P1",
+      "placement": ["P19-P21"],
+      "depends_on": ["P19", "P20", "P21", "XAIC-200"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["low-code/pro-code agent builder", "typed tools", "agent teams", "supervisor/specialist patterns", "deterministic workflow + agent hybrid", "human approval", "sandbox/evals", "MCP", "external-agent identity", "provider-neutral model access", "versioned publish/rollback"]
+    },
+    {
+      "id": "XMLM-200",
+      "name": "AI Model Lifecycle, Evaluation & MLOps Governance",
+      "priority": "P1",
+      "placement": ["P19-P20", "P24-P25"],
+      "depends_on": ["P19", "XAIC-200"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["model/provider registry", "routing/fallback policy", "model cards", "datasets/eval sets", "prompt/tool/version lineage", "offline evals", "online evals", "drift/quality monitoring", "fine-tune/training governance", "red-team suites", "cost/latency/quality trade-offs", "deprecation/rollback"]
+    },
+    {
+      "id": "XALM-200",
+      "name": "Configuration-as-Code & Environment Lifecycle Management",
+      "priority": "P1",
+      "placement": ["P17", "P21"],
+      "depends_on": ["P17", "P21", "P05"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["export/import", "semantic diff", "dependency graph", "validation", "DEV/TEST/UAT/PROD promotion", "approval", "rollback", "drift detection", "environment variables", "secret references", "workflow/app/agent/report/policy versioning"]
+    },
+    {
+      "id": "XMIG-200",
+      "name": "Migration, Data Onboarding & Reconciliation Center",
+      "priority": "P1",
+      "placement": ["P16", "P21"],
+      "depends_on": ["P06", "P16", "XDG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["source discovery", "mapping", "transform", "data quality", "dry run", "idempotent resume", "duplicate handling", "exception queue", "financial/control reconciliation", "incremental cutover", "migration audit", "mapping templates", "rollback/compensation"]
+    },
+    {
+      "id": "XFIN-200",
+      "name": "FinOps & Resource Cost Intelligence",
+      "priority": "P1",
+      "placement": ["P18", "P25"],
+      "depends_on": ["P18", "XPERF-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["cost per tenant/module/capability/workflow/event/provider/agent", "storage/DB/cache/network/search/AI cost attribution", "budgets", "anomaly detection", "unit economics", "capacity-cost trade-offs", "AI cost/value correlation"]
+    },
+    {
+      "id": "XOUT-200",
+      "name": "Business Outcome & Value Intelligence",
+      "priority": "P1",
+      "placement": ["P18", "P27"],
+      "depends_on": ["P18", "XBG-100", "XPROC-200"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["goal/CTQ registry", "business KPI linkage", "feature/process/agent outcome measurement", "adoption/task success", "cycle time/error/rework", "financial value", "AI ROI", "post-release control loop"]
+    },
+    {
+      "id": "XDEC-300",
+      "name": "Decision Intelligence, Scenario Simulation & Business Digital Twin",
+      "priority": "P2",
+      "placement": ["P18-P27"],
+      "depends_on": ["XBG-100", "XPROC-200", "XEPM-200", "XOUT-200"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["scenario models", "constraint/policy modelling", "simulation", "forecast uncertainty", "optimization", "counterfactual comparison", "supply/finance/workforce/capacity scenarios", "simulation-vs-live separation", "approval before consequential actions"]
+    },
+    {
+      "id": "XWORK-200",
+      "name": "Unified Business Work & Command Center",
+      "priority": "P2",
+      "placement": ["P13", "P19-P20"],
+      "depends_on": ["P13", "P19", "P20", "XBG-100", "XPROC-200"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["role/intention-driven workspace", "unified approvals", "exceptions", "tasks", "KPIs", "alerts", "cases", "AI recommendations", "cross-domain search", "natural-language action", "personalized but policy-safe work queues"]
+    },
+    {
+      "id": "XDOC-200",
+      "name": "Document Intelligence, Enterprise Knowledge & Semantic Search",
+      "priority": "P1",
+      "placement": ["P06/P13/P18/P19"],
+      "depends_on": ["P06", "P18", "P19", "XDG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["document ingestion", "OCR/IDP", "classification", "entity extraction", "knowledge graph linking", "enterprise search", "RAG-ready access", "retention/legal hold hooks", "citation/provenance", "permission-aware retrieval"]
+    },
+    {
+      "id": "XESM-200",
+      "name": "Enterprise Service Management, CMDB & Business Service Graph",
+      "priority": "P2",
+      "placement": ["P14/P18/P24/P25"],
+      "depends_on": ["P14", "P18", "XSG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["IT/service catalog", "CMDB/configuration items", "business services", "incident/problem/change/request", "service dependency graph", "asset/service ownership", "SLA/SLO linkage", "automation/agent integration", "operational impact analysis"]
+    },
+    {
+      "id": "XAUTO-300",
+      "name": "Autonomous Business Governor",
+      "priority": "P2",
+      "placement": ["P27"],
+      "depends_on": ["P20", "XGRC-200", "XAIC-200", "XMLM-200", "XOUT-200", "XDEC-300"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["autonomy levels", "risk/action budgets", "policy envelopes", "approval thresholds", "kill/containment", "multi-agent conflict resolution", "objective constraints", "simulation-before-action policy", "continuous outcome/control monitoring", "reversal/compensation requirements"]
+    }
+  ],
+  "future_domain_gap_candidates": [
+    "marketing automation / customer-data activation",
+    "contract lifecycle management and e-signature",
+    "treasury/cash/risk management depth",
+    "strategic sourcing/supplier-risk/business network",
+    "enterprise asset management/field service depth",
+    "native knowledge/collaboration/communications where product strategy justifies owning rather than integrating",
+    "revenue management/subscription billing/revenue recognition depth",
+    "fraud/financial-crime/risk engines where regulated verticals require them"
+  ],
+  "rules": [
+    "P00-P27 are not renumbered by this registry.",
+    "No X-program is implementation authority by itself.",
+    "Current P02.08 remains the sole active implementation package until canonical state changes.",
+    "Owning business domains remain authoritative for write state; graph/analytics/AI systems are not hidden write owners.",
+    "Infrastructure specialization requires measured need and ADR.",
+    "High-risk AI/payment/security/financial capabilities require independent evidence and review."
+  ]
+}
