@@ -12,6 +12,8 @@ A 2026 strategic audit against the intended product category — a composable en
 
 The audit also found that Omnexa's existing AI execution/continuity policy is strong procedurally, but future AI-assisted engineering needs stronger machine-level orchestration: exact-run identity, scope leases, self-modification protections, test-oracle integrity, evidence attestation, independent exact-head review, multi-agent coordination and bounded retry/cost controls.
 
+The product strategy also requires many systems developed in separate repositories/products to become part of the Omnexa ecosystem. Folding every standalone product into one codebase/database would undermine modularity and independent lifecycle, while leaving them disconnected would duplicate identity, permissions, workflows and AI. A governed Product Federation/App Mesh is therefore required.
+
 External market direction in 2026 reinforces the need for these foundations: major enterprise platforms are converging on trusted business-data fabrics/knowledge graphs, process-aware agents, central AI control towers, agent studios, multi-agent orchestration, continuous controls, model governance and outcome/value measurement. Omnexa should not copy vendor implementations; it should provide provider-neutral governed equivalents integrated with its own kernel, Business Graph, Process Graph and System Graph.
 
 ## Problem
@@ -27,7 +29,8 @@ If Omnexa continues with only the current phase catalog, several risks emerge:
 7. enterprise finance can mature before segregation-of-duties/continuous-control foundations are deep enough;
 8. performance/capacity/cost decisions can remain distributed across tests and operations instead of becoming explainable platform intelligence;
 9. low-code/agents/workflows/configuration can become difficult to promote safely across environments;
-10. autonomous decisioning can arrive before simulation, outcome measurement and autonomy-risk controls are mature.
+10. autonomous decisioning can arrive before simulation, outcome measurement and autonomy-risk controls are mature;
+11. standalone first-party products can either become disconnected silos or be force-merged into an unsafe mega-monolith without a federation contract.
 
 ## Decision
 
@@ -43,6 +46,7 @@ Core strategic programs include:
 - System Graph and Flow Intelligence;
 - Process Intelligence / process mining;
 - module/package trust and runtime security;
+- Product Federation / App Mesh for standalone first-party and partner systems;
 - payment-security certification layer;
 - performance/capacity intelligence;
 - GRC / SoD / continuous controls;
@@ -58,6 +62,21 @@ Core strategic programs include:
 - document intelligence and enterprise knowledge;
 - service management/CMDB/business-service graph;
 - autonomous-business governor.
+
+## Product federation decision
+
+Standalone products may attach as:
+
+1. native module;
+2. embedded application;
+3. federated connected product/service;
+4. edge/local product.
+
+Attachment mode is chosen by ownership, lifecycle, scale, deployment, data-residency and operational constraints.
+
+Federation must use versioned identity/tenant mapping, capabilities/events/workflows/data contracts, Business/System Graph contributions, AI tool contracts, entitlement/health/SLO metadata and revoke/disconnect semantics. First-party status never permits private database coupling or blanket trust.
+
+Detailed contract: `docs/architecture/PRODUCT_FEDERATION_AND_APP_MESH.md`.
 
 ## Three-graph architecture
 
@@ -111,7 +130,7 @@ Future implementations must be additive and use existing kernel/module/capabilit
 
 None for this planning change.
 
-Future graph/data/AI-control systems must define additive migrations, backfills, rebuild semantics for derived stores and clear uninstall/deprecation behavior.
+Future graph/data/AI-control/federation systems must define additive migrations, backfills, rebuild semantics for derived stores and clear uninstall/deprecation behavior.
 
 ## Security and tenancy impact
 
@@ -120,17 +139,18 @@ The expansion strengthens security requirements:
 - Graph and AI-control surfaces are sensitive reconnaissance/authority surfaces and default-deny access;
 - tenant/org scope must propagate into all graph, AI, analytics, process and model evidence;
 - AI and graphs never gain direct cross-domain write authority;
+- federated products preserve audience/scoped identity and explicit tenant/org mapping;
 - third-party modules/agents/models/connectors require declared permissions/data/network/secrets and supply-chain provenance;
 - payment/security/financial evidence remains separately certified;
 - sensitive telemetry and model context are redacted by classification.
 
 ## Operational impact
 
-Adds future telemetry, lineage, graph, model-governance and process-intelligence workloads. Infrastructure choice must remain evidence-based; specialized graph/vector/stream/warehouse infrastructure is not mandated until measured need justifies it.
+Adds future telemetry, lineage, graph, model-governance, product-federation and process-intelligence workloads. Infrastructure choice must remain evidence-based; specialized graph/vector/stream/warehouse infrastructure is not mandated until measured need justifies it.
 
 ## Rollback / forward-fix
 
-Because this is a planning expansion, rollback means removing the proposed strategic addendum before acceptance. After acceptance, individual strategic programs may be deferred/resequenced through normal change control, but the three-graph separation, domain-write-authority rule and AI least-authority principles require a superseding ADR to change.
+Because this is a planning expansion, rollback means removing the proposed strategic addendum before acceptance. After acceptance, individual strategic programs may be deferred/resequenced through normal change control, but the three-graph separation, domain-write-authority rule, Product Federation boundary and AI least-authority principles require a superseding ADR to change materially.
 
 ## Documents/work packages affected
 
@@ -139,8 +159,11 @@ This proposal adds or updates:
 - `docs/roadmap/MASTER_PLAN.md`
 - `docs/roadmap/STRATEGIC_CROSS_CUTTING_PROGRAMS.md`
 - `docs/roadmap/STRATEGIC_PROGRAMS.json`
+- `docs/roadmap/STRATEGIC_ACCEPTANCE_GATES.md`
 - `docs/roadmap/AI_NATIVE_STRATEGIC_AUDIT_2026.md`
+- `docs/roadmap/FUTURE_DOMAIN_EXPANSION.md`
 - `docs/architecture/AI_NATIVE_BUSINESS_OS_ARCHITECTURE.md`
+- `docs/architecture/PRODUCT_FEDERATION_AND_APP_MESH.md`
 - `docs/governance/AI_NATIVE_ENGINEERING_ROLES.md`
 - `docs/governance/AI_EXECUTION_POLICY.md`
 - `docs/quality/QUALITY_GATE_MATRIX.md`
