@@ -70,6 +70,16 @@
       "capabilities": ["publisher identity", "signature/provenance", "SBOM", "dependency/advisory scanning", "declared data/network/secret scope", "runtime trust tiers", "sandbox/isolation", "network broker", "secret broker", "file broker", "resource quotas", "kill switch", "revocation", "malicious-package fixtures"]
     },
     {
+      "id": "XPF-200",
+      "name": "Product Federation & App Mesh",
+      "priority": "P0",
+      "placement": ["P03 contract", "P13/P16/P21 integration", "P22/P25 maturity"],
+      "depends_on": ["P03", "P16", "P21", "XTRUST-100", "XBG-100", "XSG-100"],
+      "status": "planned",
+      "implementation_authorized": false,
+      "capabilities": ["native/embedded/federated/edge product attachment modes", "shared identity/tenant federation", "versioned product capabilities/events", "data-contract federation", "Business Graph contribution", "System Graph contribution", "workflow federation", "AI tool federation", "unified navigation/search/work", "entitlements", "health/SLO/version identity", "disconnect/revoke/deprecation", "standalone-product autonomy without code-copy mega-monolith"]
+    },
+    {
       "id": "XPS-100",
       "name": "Payment Security & Provider Certification Gate",
       "priority": "P0",
@@ -265,6 +275,7 @@
     "No X-program is implementation authority by itself.",
     "Current P02.08 remains the sole active implementation package until canonical state changes.",
     "Owning business domains remain authoritative for write state; graph/analytics/AI systems are not hidden write owners.",
+    "Standalone first-party products join through Product Federation/App Mesh contracts rather than mandatory code/database merging.",
     "Infrastructure specialization requires measured need and ADR.",
     "High-risk AI/payment/security/financial capabilities require independent evidence and review."
   ]
