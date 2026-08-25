@@ -121,8 +121,8 @@ func (assignment ServiceAccountAssignment) validate() error {
 	return nil
 }
 
-func (assignment ServiceAccountAssignment) ID() AssignmentID   { return assignment.id }
-func (assignment ServiceAccountAssignment) RoleID() RoleID     { return assignment.roleID }
+func (assignment ServiceAccountAssignment) ID() AssignmentID { return assignment.id }
+func (assignment ServiceAccountAssignment) RoleID() RoleID   { return assignment.roleID }
 func (assignment ServiceAccountAssignment) PrincipalID() identity.ServiceAccountID {
 	return assignment.principalID
 }
