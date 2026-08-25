@@ -168,7 +168,7 @@ type memoryServiceAccountRepository struct {
 
 func newMemoryServiceAccountRepository() *memoryServiceAccountRepository {
 	return &memoryServiceAccountRepository{
-		accounts: make(map[ServiceAccountID]ServiceAccount),
+		accounts:    make(map[ServiceAccountID]ServiceAccount),
 		credentials: make(map[APICredentialID]memoryServiceCredential),
 	}
 }
