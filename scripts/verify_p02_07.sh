@@ -89,7 +89,8 @@ module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
     "$module_prefix/kernel/internal/database"|\
-    "$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/audit") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.07 identity package directly imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -97,7 +98,9 @@ while IFS= read -r package; do
   esac
 done < <(go list -f '{{join .Imports "\n"}}' ./kernel/internal/identity)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|audit|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
+# P02.10 authorizes the secret-free identity audit adapter. Strong authentication
+# still cannot import authorization/tenancy/organization or unrelated owners.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
   echo "ERROR: P02.07 runtime identity source contains unrelated/future-owner coupling" >&2
   exit 1
 fi
@@ -163,4 +166,4 @@ echo "P02.07 G4 fresh/idempotent/P02.04-upgrade/immutable-ledger migration evide
 echo "P02.07 G5 wrong-principal/wrong-session/expiry/replay/recovery/audit negatives: PASS"
 echo "P02.07 G6 verifier-failure/counter/session-invalidation fail-closed resilience: PASS"
 echo "P02.07 G7 build/package: PASS"
-echo "P02.07 G8 pinned identity/database/failure dependency chain: PASS"
+echo "P02.07 G8 pinned identity/database/failure dependencies plus authorized audit consumer: PASS"

@@ -79,7 +79,15 @@ P02_03_TEST_DATABASE_URL="$integration_url" go test -v ./kernel/internal/organiz
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/organization"|"$module_prefix/kernel/internal/tenancy"|"$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/database"|"$module_prefix/kernel/internal/config"|"$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/organization"|\
+    "$module_prefix/kernel/internal/tenancy"|\
+    "$module_prefix/kernel/internal/identity"|\
+    "$module_prefix/kernel/internal/database"|\
+    "$module_prefix/kernel/internal/config"|\
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/audit"|\
+    "$module_prefix/kernel/internal/observability"|\
+    "$module_prefix/kernel/internal/buildinfo") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.03 organization package imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -87,8 +95,10 @@ while IFS= read -r package; do
   esac
 done < <(go list -deps ./kernel/internal/organization)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(audit|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/organization --include='*.go' --exclude='*_test.go'; then
-  echo "ERROR: P02.03 organization runtime source contains later-domain or unrelated kernel coupling" >&2
+# P02.10 authorizes kernel.organization to consume required kernel.audit delivery
+# for material hierarchy/membership mutations. Other future coupling stays blocked.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/organization --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: P02.03 organization runtime source contains unrelated/future kernel coupling" >&2
   exit 1
 fi
 
@@ -133,4 +143,4 @@ echo "P02.03 G4 fresh/idempotent/P02.02-upgrade/immutable-ledger migration evide
 echo "P02.03 G5 same-tenant allow/cross-tenant parent+membership deny/non-authorizing scope context: PASS"
 echo "P02.03 G6 cycle/stale-context/revoked-membership hierarchy resilience: PASS"
 echo "P02.03 G7 build/package: PASS"
-echo "P02.03 G8 pinned identity/tenancy/database dependency chain: PASS"
+echo "P02.03 G8 pinned identity/tenancy/database dependencies plus authorized audit consumer: PASS"

@@ -104,7 +104,8 @@ module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
     "$module_prefix/kernel/internal/database"|\
-    "$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/audit") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.08 identity package directly imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -112,7 +113,9 @@ while IFS= read -r package; do
   esac
 done < <(go list -f '{{join .Imports "\n"}}' ./kernel/internal/identity)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|audit|cache|configuration|developer|jobs|observability|operations|storage)' \
+# P02.10 authorizes the secret-free identity audit adapter. Service-account
+# credential scope/redaction and authorization composition remain unchanged.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|cache|configuration|developer|jobs|observability|operations|storage)' \
   kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
   echo "ERROR: P02.08 identity runtime crossed its owner/dependency boundary" >&2
   exit 1
@@ -165,4 +168,4 @@ echo "P02.08 G4 fresh/idempotent/P02.07+P02.05 supported-upgrade migration evide
 echo "P02.08 G5 wrong-tenant/wrong-org/wrong-permission/revoked/expired/superseded negatives: PASS"
 echo "P02.08 G6 current-principal/current-tenant/revocation/rotation fail-closed resilience: PASS"
 echo "P02.08 G7 build/package: PASS"
-echo "P02.08 G8 pinned identity/database/authorization dependency chain: PASS"
+echo "P02.08 G8 pinned identity/database/authorization dependencies plus authorized audit consumer: PASS"

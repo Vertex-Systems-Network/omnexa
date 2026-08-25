@@ -75,7 +75,14 @@ P02_02_TEST_DATABASE_URL="$integration_url" go test -v ./kernel/internal/tenancy
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/tenancy"|"$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/database"|"$module_prefix/kernel/internal/failure"|"$module_prefix/kernel/internal/config") ;;
+    "$module_prefix/kernel/internal/tenancy"|\
+    "$module_prefix/kernel/internal/identity"|\
+    "$module_prefix/kernel/internal/database"|\
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/config"|\
+    "$module_prefix/kernel/internal/audit"|\
+    "$module_prefix/kernel/internal/observability"|\
+    "$module_prefix/kernel/internal/buildinfo") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.02 tenancy package imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -83,8 +90,10 @@ while IFS= read -r package; do
   esac
 done < <(go list -deps ./kernel/internal/tenancy)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(audit|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/tenancy --include='*.go' --exclude='*_test.go'; then
-  echo "ERROR: P02.02 tenancy runtime source contains later-domain or unrelated kernel coupling" >&2
+# P02.10 authorizes the tenancy owner to consume required kernel.audit delivery
+# for material lifecycle mutations. All unrelated/future coupling stays blocked.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/tenancy --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: P02.02 tenancy runtime source contains unrelated/future kernel coupling" >&2
   exit 1
 fi
 
@@ -125,4 +134,4 @@ echo "P02.02 G4 fresh/idempotent/P02.01-upgrade/immutable-ledger migration evide
 echo "P02.02 G5 same-tenant allow/cross-tenant forged-selector deny/no-global-fallback: PASS"
 echo "P02.02 G6 tenant suspension/membership revocation/stale-transition resilience: PASS"
 echo "P02.02 G7 build/package: PASS"
-echo "P02.02 G8 pinned identity/database dependencies: PASS"
+echo "P02.02 G8 pinned identity/database dependencies plus authorized audit consumer: PASS"
