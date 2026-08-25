@@ -13,12 +13,12 @@ import (
 type ServiceAccountAuditAction string
 
 const (
-	ServiceAccountAuditCreated             ServiceAccountAuditAction = "identity.service_account.created"
-	ServiceAccountAuditTransitioned        ServiceAccountAuditAction = "identity.service_account.transitioned"
-	ServiceAccountAuditCredentialIssued    ServiceAccountAuditAction = "identity.service_account.credential_issued"
-	ServiceAccountAuditCredentialVerified  ServiceAccountAuditAction = "identity.service_account.credential_verified"
-	ServiceAccountAuditCredentialRotated   ServiceAccountAuditAction = "identity.service_account.credential_rotated"
-	ServiceAccountAuditCredentialRevoked   ServiceAccountAuditAction = "identity.service_account.credential_revoked"
+	ServiceAccountAuditCreated            ServiceAccountAuditAction = "identity.service_account.created"
+	ServiceAccountAuditTransitioned       ServiceAccountAuditAction = "identity.service_account.transitioned"
+	ServiceAccountAuditCredentialIssued   ServiceAccountAuditAction = "identity.service_account.credential_issued"
+	ServiceAccountAuditCredentialVerified ServiceAccountAuditAction = "identity.service_account.credential_verified"
+	ServiceAccountAuditCredentialRotated  ServiceAccountAuditAction = "identity.service_account.credential_rotated"
+	ServiceAccountAuditCredentialRevoked  ServiceAccountAuditAction = "identity.service_account.credential_revoked"
 )
 
 // ServiceAccountAuditEvent intentionally has no field capable of carrying raw
