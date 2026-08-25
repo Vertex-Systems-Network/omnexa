@@ -117,8 +117,14 @@ if grep -R -nE 'if[[:space:]].*(CallerInternal|CallerBackground).*(DecisionAllow
   exit 1
 fi
 
-if find kernel/migrations/kernel.authorization -maxdepth 1 -type f -name '2_*' -print | grep -q .; then
-  echo "ERROR: P02.06 unexpectedly added authorization persistence; this implementation is a dependency-inverted policy layer" >&2
+# P02.06 itself remains a persistence-free policy layer. P02.08 later introduced
+# one governed additive authorization migration solely to let service principals
+# participate in the existing direct-RBAC assignment owner. Permit only that
+# known later migration; any other v2 migration still fails closed.
+unexpected_v2="$(find kernel/migrations/kernel.authorization -maxdepth 1 -type f -name '2_*' ! -name '2_allow_service_account_assignments.sql' -print)"
+if [[ -n "$unexpected_v2" ]]; then
+  echo "ERROR: unexpected authorization v2 migration beyond the governed P02.08 prerequisite:" >&2
+  printf '%s\n' "$unexpected_v2" >&2
   exit 1
 fi
 
