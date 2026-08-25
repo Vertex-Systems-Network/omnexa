@@ -1,9 +1,9 @@
 # Omnexa P02 Exit Gate
 
-Status: **NOT SATISFIED — PHASE ACTIVE**  
+Status: **SATISFIED**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 9 / 10 done: P02.01-P02.09 are complete and P02.10 is active.
+This document records the accepted P02 exit checkpoint. P02 is complete at 10 / 10. No P02 package is active. This gate is evidence, not authority for P03 implementation.
 
 ## Mandatory exit evidence
 
@@ -21,7 +21,9 @@ P02 exit requires all P02.01-P02.10 packages to be `done` and exact canonical Gi
 - repository Go quality and all completed P01/P02 regressions pass;
 - applicable G0-G8 gates are recorded using only PASS/FAIL/BLOCKED/NOT RUN/N/A.
 
-## Current retained evidence
+All mandatory exit requirements are satisfied by the retained package evidence plus the P02.10 aggregate exit proof below.
+
+## Retained package evidence
 
 P02.01 completion is recorded in `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md` from implementation PR #69, final exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical run/job `32635243643 / 97183883007` PASS and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
 
@@ -41,22 +43,28 @@ P02.08 completion is recorded in `docs/roadmap/evidence/P02.08_COMPLETION_2026-0
 
 P02.09 completion is recorded in `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md` from implementation PR #86, final exact head `0618904a18f82231469dd173aeb3d9d51edb73ed`, canonical run/job `32895186252 / 97956097639` PASS and merge `8ef86d2644b5ed455b3610192b8379d94204692f`.
 
-P02.04 proves the interactive authentication/session portion of the phase exit: explicit access/refresh/session expiry, rotation/revocation, replay denial, password-change and account-lifecycle invalidation, secret non-disclosure, current tenant/organization context reauthorization and fresh/upgrade persistence evidence.
+P02.10 completion is recorded in `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md` from implementation PR #88, final exact head `975e4925060a035780ca13b68c5437634ed0f4ea`, canonical run/job `32904678957 / 97986011269` PASS and implementation merge `88799aa41da8ce8c22540146d157d488565e2ce9`.
 
-P02.05 proves the direct RBAC portion of the phase exit: stable capability permission identifiers, deterministic Role composition, deny-by-default direct decisions, tenant/organization exact-scope assignments, anti-escalation on privileged mutation, assignment revocation, role-name non-bypass, classification-safe required audit records and owner-bounded PostgreSQL persistence.
+## Exit proof
 
-P02.06 proves the relationship/context-aware authorization portion of the phase exit: accepted direct RBAC remains mandatory; trusted relationship evidence is exact principal/object/tenant/organization scoped; contextual constraints cannot widen authority; wrong tenant/org/object, missing permission and internal/background bypass attempts deny deterministically; field/export capability boundaries may be stricter than ordinary read; material denials and privileged decisions are audited safely; and dependency failures fail closed. P02.06 introduced no new persistence, so its G4 is N/A for new migration while retained P02.05 migration evidence passed.
+P02.04 proves the interactive authentication/session portion: explicit access/refresh/session expiry, rotation/revocation, replay denial, password-change and account-lifecycle invalidation, secret non-disclosure, current tenant/organization context reauthorization and migration evidence.
 
-P02.07 proves the human strong-authentication portion of the phase exit: passkey factor lifecycle is deterministic; challenges are exact User/session bound, expiring and replay-safe; recovery codes are one-time and persisted only as digests; step-up proof is session-bound and non-authorizing; factor removal follows explicit session invalidation policy; restricted factor/challenge/recovery material is excluded from ordinary telemetry/audit; and fresh/idempotent/P02.04-upgrade migration evidence passed.
+P02.05-P02.06 prove direct and relationship/context-aware authorization: stable permissions, deterministic role composition, deny-by-default, exact tenant/organization/object scope, role-name non-bypass, anti-escalation, assignment revocation, stricter field/export boundaries, safe audit records and fail-closed dependency behavior.
 
-P02.08 proves the service-account/API-credential portion of the phase exit: Service Accounts are distinct non-human principals; credential proof is exact tenant/organization bound; raw secrets are one-time issuance material with SHA-256 verifier-only persistence; revoked, expired and superseded credentials deny; rotation invalidates the prior credential transactionally; current principal/tenant/assignment state remains authoritative; direct RBAC exact-scope permission composition passes; and fresh/idempotent/P02.07+P02.05 supported-upgrade migration evidence passed.
+P02.07 proves strong-authentication lifecycle: exact User/session-bound challenge handling, replay-safe expiry, one-time recovery codes, session-bound non-authorizing step-up, factor-removal invalidation policy and no restricted factor material in ordinary telemetry/audit.
 
-P02.09 proves the tenant-settings portion of the phase exit: trusted setting scope derives only from accepted tenant/organization context; exact organization overrides fall back only to the enclosing tenant and then the registered definition default; no global/user override exists; protected reads and all writes pass through current authorization; generic RESTRICTED/secret values are rejected; security-significant changes are audited without values; cross-tenant/wrong-org access denies; and fresh/idempotent/P02.08 supported-upgrade migration evidence passed. P02.10 still must provide the aggregate identity/permission audit-trail coverage and final P02 exit proof.
+P02.08 proves service-account/API-credential behavior: distinct non-human principals, exact scope, one-time raw credential issuance, verifier-only persistence, revocation/expiry/supersession denial, rotation invalidation and current RBAC authority.
+
+P02.09 proves tenant-scoped settings: trusted scope derivation, deterministic organization→tenant→definition precedence, no global/user override, protected reads/writes through authorization, no generic RESTRICTED secret surface, value-free security audit and cross-tenant/wrong-org denial.
+
+P02.10 supplies the aggregate phase proof: existing secret-free identity/session/strong-auth/service-account producer hooks are integrated with `kernel.audit`; material tenancy/organization mutations have required-audit boundaries; same-tenant success and cross-tenant denial are proven against PostgreSQL; required-audit failure is explicit; the complete P02 migration baseline is replayed idempotently; all P01.01-P01.12 and P02.01-P02.09 regression verifiers pass; repository Go quality passes; and P02.10 G0-G8 pass on the canonical GitHub-hosted `ubuntu-24.04` lane.
+
+The diagnostic run `32903969206 / 97983773781` remains historical FAIL evidence for a corrected undefined helper reference and is not acceptance evidence.
 
 ## Exit-denial conditions
 
-P02 exit is blocked by any known required-gate failure, unresolved cross-tenant or privilege-escalation defect, hidden administrator bypass, unverified migration path, secret leakage, ambiguous identity/organization/authorization/configuration ownership, incomplete P02 package sequence, or premature P03/business/AI scope.
+P02 exit would be blocked by any known required-gate failure, unresolved cross-tenant or privilege-escalation defect, hidden administrator bypass, unverified migration path, secret leakage, ambiguous identity/organization/authorization/configuration ownership, incomplete P02 package sequence, or premature P03/business/AI scope. No such blocker remains in the accepted P02 exit evidence.
 
 ## Transition rule
 
-P03 remains planned until P02 exit is satisfied through a separate governed closure. Completion of P02.10 does not implicitly activate P03.
+P02 is `done` at 10 / 10 with this exit gate `SATISFIED`. `kernel_code_authorized=false` and `business_feature_code_authorized=false` at this terminal checkpoint. P03 remains `planned` and inactive. A separate governed P03 specification/readiness preparation and explicit activation transition is required before any P03 implementation may begin.
