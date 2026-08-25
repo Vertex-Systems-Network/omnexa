@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	identityAuditActorSystem = "kernel.identity"
-	identityAuditActorUser   = "user"
-	identityAuditActorSystemKind = "system"
+	identityAuditActorSystem         = "kernel.identity"
+	identityAuditActorUser           = "user"
+	identityAuditActorSystemKind     = "system"
 	identityAuditActorServiceAccount = "service_account"
 )
 
@@ -45,7 +45,7 @@ func (adapter *AuditAdapter) RecordSecurityEvent(event SecurityAuditEvent) {
 	if event.SessionID.Valid() {
 		target = audit.Target{Kind: "identity.session", Reference: string(event.SessionID)}
 	}
-	adapter.writeBestEffort(event.OccurredAt, audit.RecordInput{
+	adapter.writeBestEffort(audit.RecordInput{
 		Classification: audit.ClassificationConfidential,
 		Actor:          actor,
 		Action:         string(event.Action),
@@ -74,7 +74,7 @@ func (adapter *AuditAdapter) RecordServiceAccountEvent(event ServiceAccountAudit
 	if event.CredentialID.Valid() {
 		target = audit.Target{Kind: "identity.api_credential", Reference: string(event.CredentialID)}
 	}
-	adapter.writeBestEffort(event.OccurredAt, audit.RecordInput{
+	adapter.writeBestEffort(audit.RecordInput{
 		Classification: audit.ClassificationConfidential,
 		Actor:          actor,
 		Action:         string(event.Action),
@@ -85,7 +85,7 @@ func (adapter *AuditAdapter) RecordServiceAccountEvent(event ServiceAccountAudit
 	})
 }
 
-func (adapter *AuditAdapter) writeBestEffort(_ time.Time, input audit.RecordInput) {
+func (adapter *AuditAdapter) writeBestEffort(input audit.RecordInput) {
 	_, _ = adapter.writer.Write(context.Background(), audit.RequirementBestEffort, input)
 }
 
