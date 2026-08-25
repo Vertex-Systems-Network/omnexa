@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/audit"
-	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/identity"
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/tenancy"
 )
 
@@ -115,10 +114,3 @@ func (repository *AuditedRepository) auditMutation(ctx context.Context, scope te
 }
 
 var _ Repository = (*AuditedRepository)(nil)
-var _ TenantContextResolver = (*AuditedRepository)(nil)
-
-// ResolveContext satisfies TenantContextResolver only through the delegated
-// tenancy owner when an AuditedRepository is explicitly used as a resolver.
-func (repository *AuditedRepository) ResolveTenantContext(ctx context.Context, principalID identity.UserID, tenantID tenancy.TenantID) (tenancy.TrustedContext, error) {
-	return tenancy.TrustedContext{}, repositoryInvalidFailure()
-}
