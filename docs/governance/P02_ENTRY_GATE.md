@@ -49,23 +49,22 @@ Authenticated `User` is not a business `Person`. Tenant `Organization` is not a 
 ### EG-07 — Bounded sequential implementation authority
 State: **SATISFIED**
 
-P02.01-P02.07 remain completed with their immutable evidence and mandatory regression verifiers.
+P02.01-P02.08 remain completed with their immutable evidence and mandatory regression verifiers.
 
-P02.08 is complete through implementation PR #84, exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, canonical run/job `32885950897 / 97926598423` PASS and merge `32eb7187eb229327585551e4e28b0d596de78bd9`. Completion evidence is retained in `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`.
+P02.09 is complete through implementation PR #86, exact head `0618904a18f82231469dd173aeb3d9d51edb73ed`, canonical run/job `32895186252 / 97956097639` PASS and merge `8ef86d2644b5ed455b3610192b8379d94204692f`. Completion evidence is retained in `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`.
 
-The accepted P02.08 lane passed repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.07 regressions and P02.08 G0-G8 on GitHub-hosted Ubuntu 24.04.4 LTS / X64. Its diagnostic failures remain explicitly recorded in the immutable evidence file and are not completion evidence.
+The accepted P02.09 lane passed repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.08 regressions and P02.09 G0-G8 on GitHub-hosted Ubuntu 24.04.4 LTS / X64. Its diagnostic G304 failure remains explicitly recorded in the immutable evidence file and is not completion evidence.
 
 The current closure state is:
 
 - P02: `active`;
-- P02.01-P02.08: `done`;
-- P02.09: `active`;
-- P02.10: `planned`;
-- P02 progress: `8 / 10 done`;
-- `kernel_code_authorized=true` bounded only to P02.09 after this closure merges and protected-main state is verified;
+- P02.01-P02.09: `done`;
+- P02.10: `active`;
+- P02 progress: `9 / 10 done`;
+- `kernel_code_authorized=true` bounded only to P02.10 after this closure merges and protected-main state is verified;
 - `business_feature_code_authorized=false`.
 
-No P02.09 runtime/schema implementation belongs in this closure transition.
+No P02.10 runtime/schema implementation belongs in this closure transition.
 
 ## Phase security invariants
 
@@ -107,13 +106,12 @@ P00: DONE
 P01: DONE — 12 / 12
 P01 exit satisfied
 P02 specs: PREPARED — 10 / 10
-P02: ACTIVE — 8 / 10 done
-P02.01-P02.08: DONE
-P02.09: ACTIVE
-P02.10: PLANNED
-kernel_code_authorized: true — P02.09 only after closure merge/post-merge verification
+P02: ACTIVE — 9 / 10 done
+P02.01-P02.09: DONE
+P02.10: ACTIVE
+kernel_code_authorized: true — P02.10 only after closure merge/post-merge verification
 business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this closure transition merges, the execution session must STOP. P02.09 implementation starts only in a later governed execution session from the then-current protected `main`.
+After this closure transition merges, the execution session must STOP. P02.10 implementation starts only in a later governed execution session from the then-current protected `main`.
