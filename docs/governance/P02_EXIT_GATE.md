@@ -3,7 +3,7 @@
 Status: **NOT SATISFIED — PHASE ACTIVE**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 8 / 10 done: P02.01-P02.08 are complete, P02.09 is active and P02.10 remains planned.
+This document defines the evidence required before P02 may be reconciled `done`. It is a gate definition, not implementation authority. Current progress is 9 / 10 done: P02.01-P02.09 are complete and P02.10 is active.
 
 ## Mandatory exit evidence
 
@@ -39,6 +39,8 @@ P02.07 completion is recorded in `docs/roadmap/evidence/P02.07_COMPLETION_2026-0
 
 P02.08 completion is recorded in `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md` from implementation PR #84, final exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, canonical run/job `32885950897 / 97926598423` PASS and merge `32eb7187eb229327585551e4e28b0d596de78bd9`.
 
+P02.09 completion is recorded in `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md` from implementation PR #86, final exact head `0618904a18f82231469dd173aeb3d9d51edb73ed`, canonical run/job `32895186252 / 97956097639` PASS and merge `8ef86d2644b5ed455b3610192b8379d94204692f`.
+
 P02.04 proves the interactive authentication/session portion of the phase exit: explicit access/refresh/session expiry, rotation/revocation, replay denial, password-change and account-lifecycle invalidation, secret non-disclosure, current tenant/organization context reauthorization and fresh/upgrade persistence evidence.
 
 P02.05 proves the direct RBAC portion of the phase exit: stable capability permission identifiers, deterministic Role composition, deny-by-default direct decisions, tenant/organization exact-scope assignments, anti-escalation on privileged mutation, assignment revocation, role-name non-bypass, classification-safe required audit records and owner-bounded PostgreSQL persistence.
@@ -47,7 +49,9 @@ P02.06 proves the relationship/context-aware authorization portion of the phase 
 
 P02.07 proves the human strong-authentication portion of the phase exit: passkey factor lifecycle is deterministic; challenges are exact User/session bound, expiring and replay-safe; recovery codes are one-time and persisted only as digests; step-up proof is session-bound and non-authorizing; factor removal follows explicit session invalidation policy; restricted factor/challenge/recovery material is excluded from ordinary telemetry/audit; and fresh/idempotent/P02.04-upgrade migration evidence passed.
 
-P02.08 now proves the service-account/API-credential portion of the phase exit: Service Accounts are distinct non-human principals; credential proof is exact tenant/organization bound; raw secrets are one-time issuance material with SHA-256 verifier-only persistence; revoked, expired and superseded credentials deny; rotation invalidates the prior credential transactionally; current principal/tenant/assignment state remains authoritative; direct RBAC exact-scope permission composition passes; and fresh/idempotent/P02.07+P02.05 supported-upgrade migration evidence passed. It does not satisfy P02.09 tenant-settings or P02.10 final audit/exit-proof requirements.
+P02.08 proves the service-account/API-credential portion of the phase exit: Service Accounts are distinct non-human principals; credential proof is exact tenant/organization bound; raw secrets are one-time issuance material with SHA-256 verifier-only persistence; revoked, expired and superseded credentials deny; rotation invalidates the prior credential transactionally; current principal/tenant/assignment state remains authoritative; direct RBAC exact-scope permission composition passes; and fresh/idempotent/P02.07+P02.05 supported-upgrade migration evidence passed.
+
+P02.09 proves the tenant-settings portion of the phase exit: trusted setting scope derives only from accepted tenant/organization context; exact organization overrides fall back only to the enclosing tenant and then the registered definition default; no global/user override exists; protected reads and all writes pass through current authorization; generic RESTRICTED/secret values are rejected; security-significant changes are audited without values; cross-tenant/wrong-org access denies; and fresh/idempotent/P02.08 supported-upgrade migration evidence passed. P02.10 still must provide the aggregate identity/permission audit-trail coverage and final P02 exit proof.
 
 ## Exit-denial conditions
 
