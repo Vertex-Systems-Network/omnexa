@@ -2,12 +2,12 @@
   "schema_version": 1,
   "phase": "P02",
   "name": "Identity, Tenancy & Organization",
-  "state": "active",
+  "state": "done",
   "activation_policy": "strict_sequential_one_active_package",
   "entry_gate": "docs/governance/P02_ENTRY_GATE.md",
   "exit_gate": "docs/governance/P02_EXIT_GATE.md",
   "transition_checklist": "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
-  "implementation_authorized": true,
+  "implementation_authorized": false,
   "packages": [
     {"id":"P02.01","name":"Principal & user identity foundation","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P02.01.md","owner":"kernel.identity"},
     {"id":"P02.02","name":"Tenant lifecycle & trusted tenant context","state":"done","depends_on":["P02.01"],"spec":"docs/roadmap/work-packages/P02.02.md","owner":"kernel.tenancy"},
@@ -18,8 +18,8 @@
     {"id":"P02.07","name":"MFA/passkey-ready flows","state":"done","depends_on":["P02.06"],"spec":"docs/roadmap/work-packages/P02.07.md","owner":"kernel.identity"},
     {"id":"P02.08","name":"Service accounts & API credentials","state":"done","depends_on":["P02.07"],"spec":"docs/roadmap/work-packages/P02.08.md","owner":"kernel.identity"},
     {"id":"P02.09","name":"Tenant-scoped settings","state":"done","depends_on":["P02.08"],"spec":"docs/roadmap/work-packages/P02.09.md","owner":"kernel.configuration"},
-    {"id":"P02.10","name":"Identity/permission audit trails & P02 exit proof","state":"active","depends_on":["P02.09"],"spec":"docs/roadmap/work-packages/P02.10.md","owner":"kernel.audit"}
+    {"id":"P02.10","name":"Identity/permission audit trails & P02 exit proof","state":"done","depends_on":["P02.09"],"spec":"docs/roadmap/work-packages/P02.10.md","owner":"kernel.audit"}
   ],
-  "phase_exit": "NOT SATISFIED — requires canonical proof of cross-tenant isolation, object/scope permissions, role differences, service-account scoping and session invalidation behavior plus applicable G0-G8 evidence.",
-  "note": "P02 is active at 9 / 10 done with exactly one active package: P02.10. implementation_authorized=true is bounded to P02.10 kernel.audit exit-proof work only after this closure merges and protected-main state is verified; business_feature_code_authorized=false. P03 remains planned."
+  "phase_exit": "SATISFIED — P02.10 final exact head 975e4925060a035780ca13b68c5437634ed0f4ea passed the complete GitHub-hosted ubuntu-24.04 governance lane in run 32904678957 / job 97986011269, including repository Go quality, P01.01-P01.12, P02.01-P02.09 regressions and P02.10 G0-G8.",
+  "note": "P02 is complete at 10 / 10. No P02 package is active and implementation_authorized=false. P03 remains planned and inactive until a separate governed readiness/activation transition; business_feature_code_authorized=false."
 }
