@@ -16,4 +16,8 @@ type repository interface {
 	getAssignment(context.Context, Scope, AssignmentID) (Assignment, error)
 	revokeAssignment(context.Context, Scope, AssignmentID, time.Time) (Assignment, error)
 	hasPermission(context.Context, Subject, PermissionID) (bool, error)
+	createServiceAccountAssignment(context.Context, ServiceAccountAssignment) error
+	getServiceAccountAssignment(context.Context, Scope, AssignmentID) (ServiceAccountAssignment, error)
+	revokeServiceAccountAssignment(context.Context, Scope, AssignmentID, time.Time) (ServiceAccountAssignment, error)
+	hasServiceAccountPermission(context.Context, ServiceAccountSubject, PermissionID) (bool, error)
 }
