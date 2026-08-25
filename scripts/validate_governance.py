@@ -346,12 +346,12 @@ def validate_state(state: dict) -> None:
     lock = state.get("implementation_lock") or {}
 
     if terminal:
-        if current_phase != "P01" or done_count != len(work_packages):
-            fail("terminal checkpoint is valid only for fully completed P01")
+        if current_phase not in {"P01", "P02"} or done_count != len(work_packages):
+            fail("terminal checkpoint is valid only for a fully completed governed phase")
         if active_packages or current_package is not None:
-            fail("completed P01 must have no active/current work package")
+            fail("completed phase must have no active/current work package")
         if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
-            fail("completed P01 must lock kernel and business-feature implementation")
+            fail("completed phase must lock kernel and business-feature implementation")
     else:
         if len(active_packages) != 1:
             fail("active foundation execution requires exactly one active work package")
@@ -365,14 +365,19 @@ def validate_state(state: dict) -> None:
     active_phases = [item for item in phase_rows if item.get("state") == "active"]
 
     if terminal:
-        p01_row = next((item for item in phase_rows if item.get("id") == "P01"), {})
-        p02_row = next((item for item in phase_rows if item.get("id") == "P02"), {})
+        current_row = next((item for item in phase_rows if item.get("id") == current_phase), {})
+        try:
+            current_number = int(current_phase[1:])
+        except (TypeError, ValueError):
+            fail("terminal checkpoint current phase identifier is invalid")
+        next_phase_id = f"P{current_number + 1:02d}"
+        next_row = next((item for item in phase_rows if item.get("id") == next_phase_id), {})
         if active_phases:
-            fail("completed P01 checkpoint must not silently activate another phase")
-        if p01_row.get("state") != "done" or p01_row.get("active_work_package") is not None:
-            fail("phases[] P01 row must be done with no active work package")
-        if p02_row.get("state") != "planned":
-            fail("P02 must remain planned until a separate governed activation")
+            fail("completed phase checkpoint must not silently activate another phase")
+        if current_row.get("state") != "done" or current_row.get("active_work_package") is not None:
+            fail(f"phases[] {current_phase} row must be done with no active work package")
+        if next_row and next_row.get("state") != "planned":
+            fail(f"{next_phase_id} must remain planned until a separate governed activation")
     elif len(active_phases) != 1 or active_phases[0].get("id") != current_phase:
         fail("phases[] must contain exactly one active phase matching current_phase")
 
