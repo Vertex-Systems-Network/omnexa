@@ -313,7 +313,34 @@ func assertP0209StringEvaluation(t *testing.T, evaluation ScopedEvaluation, want
 
 func readP0209Migration(t *testing.T, version int64, name, path string) database.Migration {
 	t.Helper()
-	contents, err := os.ReadFile(path)
+	var (
+		contents []byte
+		err      error
+	)
+	switch path {
+	case "../../migrations/kernel.identity/1_create_identity_foundation.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.identity/1_create_identity_foundation.sql")
+	case "../../migrations/kernel.identity/2_create_authentication_sessions.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.identity/2_create_authentication_sessions.sql")
+	case "../../migrations/kernel.identity/3_create_strong_authentication.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.identity/3_create_strong_authentication.sql")
+	case "../../migrations/kernel.identity/4_create_service_accounts_api_credentials.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.identity/4_create_service_accounts_api_credentials.sql")
+	case "../../migrations/kernel.tenancy/1_create_tenancy_foundation.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.tenancy/1_create_tenancy_foundation.sql")
+	case "../../migrations/kernel.organization/1_create_organization_foundation.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.organization/1_create_organization_foundation.sql")
+	case "../../migrations/kernel.authorization/1_create_rbac_foundation.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.authorization/1_create_rbac_foundation.sql")
+	case "../../migrations/kernel.authorization/2_allow_service_account_assignments.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.authorization/2_allow_service_account_assignments.sql")
+	case "../../migrations/kernel.authorization/3_add_configuration_permissions.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.authorization/3_add_configuration_permissions.sql")
+	case "../../migrations/kernel.configuration/1_create_scoped_settings.sql":
+		contents, err = os.ReadFile("../../migrations/kernel.configuration/1_create_scoped_settings.sql")
+	default:
+		t.Fatalf("unsupported migration fixture %q", path)
+	}
 	if err != nil {
 		t.Fatalf("read migration %s error = %v", path, err)
 	}
