@@ -221,7 +221,7 @@ func TestPostgresServiceAccountCredentialIntegration(t *testing.T) {
 	}
 }
 
-func readP0208Migration(t *testing.T, version int, name, path string) database.Migration {
+func readP0208Migration(t *testing.T, version int64, name, path string) database.Migration {
 	t.Helper()
 	contents, err := os.ReadFile(path)
 	if err != nil {
