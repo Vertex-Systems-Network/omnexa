@@ -15,14 +15,16 @@ Canonical CI: GITHUB-HOSTED ONLY / ubuntu-24.04
 Local/self-hosted governance runners: PROHIBITED
 P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
-P02: ACTIVE — 9 / 10 done
-P02.01-P02.09: DONE
-Current work package: P02.10 — Identity / Permission Audit Trails & P02 Exit Proof
-kernel_code_authorized: true — P02.10 only after this closure merges and protected-main state is verified
+P02: DONE — 10 / 10
+P02 exit gate: SATISFIED
+P02.01-P02.10: DONE
+Current work package: NONE
+P03: PLANNED — NOT ACTIVATED
+kernel_code_authorized: false
 business_feature_code_authorized: false
 ```
 
-Implementation authority is bounded to the single active package P02.10 after this closure merges and protected-main state is verified. No P03+, business feature, deployment administration or AI/model/agent runtime is authorized.
+There is no active implementation package at the terminal P02 checkpoint. P02 completion does not authorize P03. The next possible governed work is P03 specification/readiness preparation and a separate explicit activation transition; implementation remains locked until that transition is accepted on protected `main`.
 
 ## Persistent AI continuity
 
@@ -35,7 +37,7 @@ Before material work read:
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. P01/P02 entry/exit gates and transition checklist;
-4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` and the active `docs/roadmap/work-packages/P02.10.md`;
+4. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/work-packages/P02.10.md` and P02.10 completion evidence;
 5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
@@ -74,73 +76,36 @@ Strict protection requires implementation/closure/activation PRs to be current w
 
 ## Completed P01 prerequisite retained
 
-P01.01-P01.12 remain `done`, P01 exit remains **SATISFIED**, and all P01 regression verifiers remain mandatory during P02. Final P01 evidence remains implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
+P01.01-P01.12 remain `done`, P01 exit remains **SATISFIED**, and all P01 regression verifiers remain mandatory. Final P01 evidence remains implementation PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-## Completed P02.01-P02.09 evidence retained
+## Completed P02 retained
 
-P02.01 is complete under `kernel.identity`: PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, run/job `32635243643 / 97183883007` PASS, merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
+P02.01-P02.10 are `done` and `docs/governance/P02_EXIT_GATE.md` is **SATISFIED**. The terminal implementation evidence is:
 
-P02.02 is complete under `kernel.tenancy`: PR #71, exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, run/job `32637760875 / 97189971101` PASS, merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
+- implementation PR: #88
+- final exact head: `975e4925060a035780ca13b68c5437634ed0f4ea`
+- canonical run/job: `32904678957 / 97986011269` — PASS
+- implementation merge: `88799aa41da8ce8c22540146d157d488565e2ce9`
+- runner: `GitHub Actions 1000023269`, GitHub-hosted Ubuntu 24.04.4 LTS / X64
+- image: `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7, PostgreSQL 18.6, Valkey 9.1.1, S3 mock 5.1.0
+- repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.09 and P02.10 G0-G8: PASS
+- completion evidence: `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 
-P02.03 is complete under `kernel.organization`: PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, run/job `32640790333 / 97197453122` PASS, merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
+Diagnostic run `32903969206 / 97983773781` remains explicit FAIL evidence for the corrected undefined helper reference and is not acceptance evidence.
 
-P02.04 is complete under `kernel.identity`: PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, run/job `32653747461 / 97229198036` PASS, merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`, evidence `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md`.
+P02 retained invariants remain binding: User is not business Person; trusted tenant context comes from authoritative tenant/membership state; no global tenant fallback; organization hierarchy is tenant-contained and Organization is not business Party Organization; authentication/strong authentication/credential possession prove identity rather than authority; secrets remain non-disclosable; sessions are revocable and current context is reauthorized; authorization is deny-by-default with exact trusted scope and no role-name/internal/background bypass; contextual policy narrows only; service accounts are distinct non-human principals with revocable/rotatable exact-scope credentials; settings cannot create authority and have no global/user override; audit is classification-safe, separate from ordinary logs and contains no credentials/authentication material; required-audit protected mutations cannot silently claim success when audit delivery fails.
 
-P02.05 is complete under `kernel.authorization`: PR #77, exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, run/job `32660848145 / 97246683239` PASS, merge `7b6a59e83c9bd696e6e008385b4413d529254171`, evidence `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md`.
+## Terminal P02 lock
 
-P02.06 is complete under `kernel.authorization`: PR #79, exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, run/job `32664834112 / 97256520050` PASS, merge `083c2866f0cd0773b85201750c2196bfd2fcc167`, evidence `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md`.
+At this checkpoint:
 
-P02.07 is complete under `kernel.identity`: PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, run/job `32669167972 / 97267175953` PASS, merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`, evidence `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`.
+- `kernel_code_authorized=false`;
+- `business_feature_code_authorized=false`;
+- there is no active package;
+- P03 remains planned;
+- P03 module runtime, business features, P04 workflows/events, generic audit UI/export, support impersonation product behavior and AI/model/agent runtime are not authorized.
 
-P02.08 is complete under `kernel.identity`: PR #84, exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, run/job `32885950897 / 97926598423` PASS, merge `32eb7187eb229327585551e4e28b0d596de78bd9`, evidence `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`.
-
-P02.09 is complete under `kernel.configuration`:
-
-- implementation PR: #86
-- final exact head: `0618904a18f82231469dd173aeb3d9d51edb73ed`
-- canonical run/job: `32895186252 / 97956097639` — PASS
-- implementation merge: `8ef86d2644b5ed455b3610192b8379d94204692f`
-- runner: `GitHub Actions 1000022922`, GitHub-hosted Ubuntu 24.04.4 LTS / X64
-- image: `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7, PostgreSQL 18.6
-- repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.08 and P02.09 G0-G8: PASS
-- completion evidence: `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`
-
-P02.09 diagnostic run `32894368734 / 97953417878` remains explicit FAIL evidence for the corrected gosec G304 variable-path integration migration helper. The final canonical lane proves the fixed allow-list helper and all historical regressions pass without runtime/schema/acceptance changes.
-
-P02.01-P02.09 invariants remain binding: User is not business Person; trusted tenant context derives from current authoritative Tenant/membership state; no global tenant fallback exists; hierarchy edges remain tenant-contained; Organization is not business Party Organization; organization scope context is not authorization; authentication proves identity rather than authority; passwords are never plaintext/reversible; access/refresh/session secrets are not logged; session context is reauthorized against current state; direct RBAC denies by default; role names never bypass permission checks; privileged grants cannot escalate beyond actor authority; direct role assignments are exact tenant/organization scope; relationship/context policy cannot bypass RBAC, trust client identifiers as authority, widen beyond trusted principal/scope relationships, or allow internal/background caller bypass; field/export authority may be stricter than ordinary read; passkey/recovery material is `RESTRICTED`; strong-auth challenges are principal/session bound, expiring and replay-safe; recovery codes are not stored reversibly; strong authentication never replaces authorization; non-human Service Accounts are never fake Users; raw API credentials are `RESTRICTED`, digest-only at rest, rotatable/revocable and exact-scope bound; credential possession never replaces current authorization; settings never create authority; tenant/org setting scope is trusted; no global/user override exists; protected reads and mutations remain authorization-bound; generic RESTRICTED setting values are rejected and security-significant changes are audited without values.
-
-## Active P02.10 boundary
-
-Owner: `kernel.audit` with `kernel.identity`, `kernel.tenancy`, `kernel.organization`, `kernel.authorization`, `kernel.configuration` producers.
-
-P02.10 may implement only the Identity / Permission Audit Trails & P02 Exit Proof contract described by `docs/roadmap/work-packages/P02.10.md`, including:
-
-- attributable audit records for material identity/session/tenant/org/role/policy/service-account/settings security operations;
-- classification-safe actor/action/target/scope/outcome/correlation/reason metadata using the existing `kernel.audit` boundary;
-- explicit required-audit failure semantics for privileged operations where correctness requires audit;
-- aggregate P02 verification composed from completed package verifiers;
-- final cross-tenant, object/scope permission, role-difference, service-account and session-invalidation evidence;
-- fresh + supported-upgrade P02 migration proof;
-- repository Go quality, P01.01-P01.12 and P02.01-P02.09 regression preservation.
-
-P02.10 invariants:
-
-- audit remains separate from ordinary logs and contains no credentials/authentication factors/secrets;
-- audit write does not imply audit read/export authority;
-- required-audit protected mutations fail closed on audit failure;
-- cross-tenant and privilege-escalation failures are release blockers;
-- no P03 activation is implied by P02.10 implementation acceptance;
-- P02.01-P02.09 ownership/security boundaries remain intact.
-
-Explicitly forbidden in P02.10:
-
-- generic audit read/export/admin UI;
-- support impersonation product surface;
-- P03 module runtime/permission registration;
-- business domains/business-feature audit catalogs;
-- P04 events/workflows;
-- AI/model/agent behavior;
-- automatic P03 activation.
+A later preparation/readiness session may define governed P03 package specifications and entry controls. That planning work must not be confused with implementation authority.
 
 ## Completed kernel capability rules retained
 
@@ -152,7 +117,7 @@ Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Cont
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-P02.10 implementation must retain repository Go quality, P01.01-P01.12 and P02.01-P02.09 regression evidence; add aggregate identity/permission audit, required-audit, cross-tenant/object-scope/role/service-account/session and migration proof appropriate to the frozen acceptance criteria. Canonical completion evidence must come from GitHub-hosted `ubuntu-24.04`.
+Canonical completion evidence comes from GitHub-hosted `ubuntu-24.04`. All completed P01/P02 regressions remain mandatory until a future governed change explicitly replaces them.
 
 ## Repository/local-development rules
 
@@ -182,7 +147,7 @@ For every material change:
 9. reconcile state/status/continuity only after completion evidence exists;
 10. use ADR/change control before changing frozen architecture.
 
-After a closure activates a new package or phase, identify the next authorized action and **STOP**; do not implement that newly activated scope in the same execution session.
+After a closure activates a new package or phase, identify the next authorized action and **STOP**; do not implement newly activated scope in the same execution session.
 
 ## Forbidden behavior
 
@@ -190,8 +155,10 @@ Do not use local/self-hosted runners for canonical governance; silently add doma
 
 ## Issue #4
 
-Issue #4 remains the external distribution/public-launch licensing/IP/trademark gate. Repository visibility is public and current `LICENSE` remains GPLv3. It does not block internal P02 engineering.
+Issue #4 remains the external distribution/public-launch licensing/IP/trademark gate. Repository visibility is public and current `LICENSE` remains GPLv3.
 
 ## Exact next transition
 
-This closure marks P02.09 done and activates P02.10 as the sole next implementation scope. After the closure PR merges, verify protected `main` and canonical `STATE.json`, identify P02.10 implementation as the next authorized action, then **STOP**. P02.10 implementation starts only in a later governed execution session from the then-current protected `main`.
+This closure records P02 as DONE 10 / 10 and P02 exit as SATISFIED, with no active implementation package. After the closure PR merges, verify protected `main` and canonical `STATE.json`, confirm P03 remains planned and both implementation locks remain false, then **STOP**.
+
+P03 specification/readiness preparation and explicit activation belong to a later governed execution session. Never implement P03 before that separate activation is accepted.

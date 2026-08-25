@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the prepared/active P02 strict sequential package specification set."""
+"""Validate prepared, active, or terminal P02 strict sequential package state."""
 
 from __future__ import annotations
 
@@ -39,16 +39,21 @@ if [item.get("id") for item in packages] != EXPECTED:
 
 current_phase = STATE.get("current_phase")
 current = STATE.get("current_work_package")
-planning = current_phase == "P01" and current is None and (STATE.get("phase") or {}).get("state") == "done"
-active = current_phase == "P02" and (STATE.get("phase") or {}).get("state") == "active" and current in EXPECTED
-if not (planning or active):
-    raise SystemExit("ERROR: P02 specs may be validated only at the completed-P01 planning checkpoint or active P02")
+phase = STATE.get("phase") or {}
+planning = current_phase == "P01" and current is None and phase.get("state") == "done"
+active = current_phase == "P02" and phase.get("state") == "active" and current in EXPECTED
+terminal = current_phase == "P02" and phase.get("state") == "done" and current is None
+if not (planning or active or terminal):
+    raise SystemExit("ERROR: P02 specs may be validated only at completed-P01 planning, active P02, or completed-P02 terminal checkpoint")
 
 if planning:
     if MANIFEST.get("state") != "planned" or MANIFEST.get("implementation_authorized") is not False:
         raise SystemExit("ERROR: P02 readiness manifest must remain planned with implementation_authorized=false")
-    current_index = 0
     expected_states = ["planned"] * len(EXPECTED)
+elif terminal:
+    if MANIFEST.get("state") != "done" or MANIFEST.get("implementation_authorized") is not False:
+        raise SystemExit("ERROR: completed P02 manifest must be done with implementation_authorized=false")
+    expected_states = ["done"] * len(EXPECTED)
 else:
     if MANIFEST.get("state") != "active" or MANIFEST.get("implementation_authorized") is not True:
         raise SystemExit("ERROR: active P02 manifest must be active with implementation_authorized=true")
@@ -87,26 +92,36 @@ for index, item in enumerate(packages):
             raise SystemExit(f"ERROR: {pid} spec missing marker: {marker}")
 
 active_packages = [item.get("id") for item in packages if item.get("state") == "active"]
-if planning and active_packages:
-    raise SystemExit(f"ERROR: P02 readiness must have no active package, got {active_packages}")
+if (planning or terminal) and active_packages:
+    raise SystemExit(f"ERROR: non-executing P02 checkpoint must have no active package, got {active_packages}")
 if active and active_packages != [current]:
     raise SystemExit(f"ERROR: active P02 must have exactly current package {current}, got {active_packages}")
 
 p02_row = next((item for item in STATE.get("phases") or [] if item.get("id") == "P02"), {})
+p03_row = next((item for item in STATE.get("phases") or [] if item.get("id") == "P03"), {})
 if planning and p02_row.get("state") != "planned":
     raise SystemExit("ERROR: phases[] P02 must remain planned during readiness preparation")
-if active:
-    if p02_row.get("state") != "active" or p02_row.get("active_work_package") != current:
-        raise SystemExit("ERROR: phases[] P02 must be active and identify current package")
-    phase_packages = (STATE.get("phase") or {}).get("work_packages") or []
+if active and (p02_row.get("state") != "active" or p02_row.get("active_work_package") != current):
+    raise SystemExit("ERROR: phases[] P02 must be active and identify current package")
+if terminal:
+    if p02_row.get("state") != "done" or p02_row.get("active_work_package") is not None:
+        raise SystemExit("ERROR: completed phases[] P02 must be done with no active package")
+    if p03_row.get("state") != "planned":
+        raise SystemExit("ERROR: P03 must remain planned until a separate governed activation")
+    lock = STATE.get("implementation_lock") or {}
+    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: completed P02 checkpoint must lock kernel and business implementation")
+
+if active or terminal:
+    phase_packages = phase.get("work_packages") or []
     if [item.get("id") for item in phase_packages] != EXPECTED:
-        raise SystemExit("ERROR: active STATE.phase package order must match P02 manifest")
+        raise SystemExit("ERROR: STATE.phase package order must match P02 manifest")
     for manifest_item, state_item in zip(packages, phase_packages):
         if manifest_item.get("state") != state_item.get("state"):
             raise SystemExit(f"ERROR: STATE/manifest state mismatch for {manifest_item.get('id')}")
     done_count = sum(item.get("state") == "done" for item in packages)
-    if (STATE.get("phase") or {}).get("done_work_packages") != done_count:
-        raise SystemExit("ERROR: active P02 done_work_packages must match completed sequential prefix")
+    if phase.get("done_work_packages") != done_count:
+        raise SystemExit("ERROR: P02 done_work_packages must match manifest completion")
 
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 for index, item in enumerate(packages, start=1):
@@ -131,9 +146,17 @@ for marker in ["cross-tenant", "object/scope", "role", "service-account", "sessi
     if marker not in p02_10:
         raise SystemExit(f"ERROR: P02.10 must retain phase-exit marker: {marker}")
 
+if terminal:
+    exit_gate = (ROOT / "docs/governance/P02_EXIT_GATE.md").read_text(encoding="utf-8")
+    if "Status: **SATISFIED**" not in exit_gate:
+        raise SystemExit("ERROR: completed P02 requires SATISFIED P02 exit gate")
+    evidence = ROOT / "docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md"
+    if not evidence.is_file():
+        raise SystemExit("ERROR: completed P02 requires P02.10 completion evidence")
+
 print("Omnexa P02 package specification validation: PASS")
 print("Prepared specs: 10 / 10")
 print("Activation policy: STRICT SEQUENTIAL / ONE ACTIVE PACKAGE WHILE EXECUTING")
-print(f"Mode: {'PLANNING' if planning else 'ACTIVE'}")
+print(f"Mode: {'PLANNING' if planning else 'ACTIVE' if active else 'COMPLETED'}")
 print(f"Active package: {current or 'NONE'}")
 print("Business feature code: LOCKED")

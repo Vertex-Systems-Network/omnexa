@@ -34,13 +34,13 @@ Tenant isolation, deny-by-default authorization, secrets handling, audit authori
 
 Foundation Architecture v1 is frozen. Contradictions are reopened through change control rather than normalized through local implementation convenience or CI bypasses.
 
-## D-006 — P01 execution was strictly sequential and is now complete
+## D-006 — P01 execution was strictly sequential and is complete
 
 **Authoritative source:** `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`, `docs/governance/P01_EXIT_GATE.md`.
 
 Each P01 kernel primitive was verified before the next package activated. While P01 was executing, exactly one package was active. Final P01.12 implementation PR #65 passed canonical run/job `32629072886 / 97168916985` and merged as `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-**Current implication:** P01.01-P01.12 are `done`, P01 is `done` at 12/12 and its exit gate is satisfied. No P01 package is active. P02 remains `planned`, both implementation locks are false, and P02 must not activate implicitly as part of P01 completion. A separate governed readiness/activation transition is required.
+**Historical implication:** P01 completion created a terminal checkpoint with no active package and did not implicitly activate P02. P02 was later activated only through its separate governed readiness/activation transition.
 
 ## D-007 — Repository continuity is subordinate, not authority
 
@@ -66,10 +66,18 @@ Logs/traces/metrics explain runtime behavior but are not business-state, authori
 
 Liveness/readiness are distinct; dependency checks are classified and bounded; required/security-critical failures fail closed; optional failures may degrade; raw provider errors/secrets are not exposed. Diagnostics never create tenancy, authorization or business authority.
 
-## D-011 — P01 terminal checkpoint does not auto-activate P02
+## D-011 — Completed phases do not auto-activate the next phase
 
-**Authoritative source:** `docs/governance/DEFINITION_OF_DONE.md`, `docs/roadmap/MASTER_PLAN.md`, `docs/governance/P01_EXIT_GATE.md`, `docs/roadmap/STATE.json`.
+**Authoritative source:** `docs/governance/DEFINITION_OF_DONE.md`, `docs/roadmap/MASTER_PLAN.md`, phase exit gates and `docs/roadmap/STATE.json`.
 
 A completed phase can be truthfully represented at a terminal checkpoint with no active package/phase implementation scope while the next phase remains planned. This prevents evidence-based phase completion from silently granting next-phase authority.
 
-The validators therefore preserve strict one-active-package semantics during active P01 execution and allow zero active packages only when P01 is fully `done` at 12/12, the exit gate is satisfied, P02 remains planned and both implementation locks are false. This is a terminal-state representation, not a phase-order change or permission bypass.
+Validators preserve strict one-active-package semantics during active execution and allow zero active packages only for a fully completed phase with its exit evidence reconciled and implementation locks false. This is a terminal-state representation, not a phase-order change or permission bypass.
+
+## D-012 — P02 is complete; P03 requires separate readiness and activation
+
+**Authoritative source:** `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/governance/P02_EXIT_GATE.md`, `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
+
+P02 executed strictly sequentially through P02.10. Terminal implementation PR #88 final exact head `975e4925060a035780ca13b68c5437634ed0f4ea` passed canonical GitHub-hosted run/job `32904678957 / 97986011269` and merged as `88799aa41da8ce8c22540146d157d488565e2ce9`.
+
+**Current implication after terminal closure:** P02 is `done` at 10 / 10, P02 exit is `SATISFIED`, there is no active work package, P03 remains `planned`, and both `kernel_code_authorized` and `business_feature_code_authorized` are false. P03 specification/readiness preparation and an explicit activation transition are separate governed work; P03 implementation cannot begin before that activation is accepted.

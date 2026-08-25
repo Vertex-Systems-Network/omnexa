@@ -109,10 +109,22 @@ if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
 lock = state.get("implementation_lock") or {}
 if lock.get("business_feature_code_authorized") is not False:
     raise SystemExit("ERROR: business-feature implementation must remain locked")
-if state.get("current_phase") == "P01" and lock.get("kernel_code_authorized") is not False:
+current_phase = state.get("current_phase")
+phase = state.get("phase") or {}
+if current_phase == "P01" and lock.get("kernel_code_authorized") is not False:
     raise SystemExit("ERROR: completed-P01 readiness checkpoint must keep kernel implementation locked")
-if state.get("current_phase") == "P02" and lock.get("kernel_code_authorized") is not True:
-    raise SystemExit("ERROR: active P02 must explicitly authorize bounded kernel implementation")
+if current_phase == "P02":
+    if phase.get("state") == "active" and lock.get("kernel_code_authorized") is not True:
+        raise SystemExit("ERROR: active P02 must explicitly authorize bounded kernel implementation")
+    if phase.get("state") == "done":
+        if lock.get("kernel_code_authorized") is not False:
+            raise SystemExit("ERROR: completed P02 checkpoint must lock kernel implementation")
+        p02 = phases.get("P02") or {}
+        p03 = phases.get("P03") or {}
+        if p02.get("state") != "done" or p02.get("active_work_package") is not None:
+            raise SystemExit("ERROR: completed phases[] P02 must be done with no active package")
+        if p03.get("state") != "planned":
+            raise SystemExit("ERROR: P03 must remain planned until separate activation")
 
 print("Omnexa foundation freeze / completed P01 prerequisite validation: PASS")
 print("Architecture: FROZEN")
