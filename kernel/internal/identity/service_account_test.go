@@ -68,7 +68,7 @@ func TestServiceAccountCredentialLifecycleAndRedaction(t *testing.T) {
 		t.Fatalf("VerifyCredential() = %+v/%v", authenticated, err)
 	}
 	wrongBinding := mustServiceBinding(t, "01890f3e-7b9a-7cc0-98c4-dc0c0c073992", "")
-	if _, err = service.VerifyCredential(context.Background(), parsed, wrongBinding, verifiedAt.Add(time.Second)); !failure.IsCode(err, codeAPICredentialAuthentication) {
+	if _, err = service.VerifyCredential(context.Background(), parsed, wrongBinding, verifiedAt.Add(time.Second)); !failure.IsCode(err, codeAPIAuthenticationFailed) {
 		t.Fatalf("wrong-binding VerifyCredential() error = %v", err)
 	}
 
@@ -77,7 +77,7 @@ func TestServiceAccountCredentialLifecycleAndRedaction(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RotateCredential() error = %v", err)
 	}
-	if _, err = service.VerifyCredential(context.Background(), parsed, binding, rotatedAt.Add(time.Second)); !failure.IsCode(err, codeAPICredentialAuthentication) {
+	if _, err = service.VerifyCredential(context.Background(), parsed, binding, rotatedAt.Add(time.Second)); !failure.IsCode(err, codeAPIAuthenticationFailed) {
 		t.Fatalf("superseded credential VerifyCredential() error = %v", err)
 	}
 	rotatedParsed, _ := ParseAPICredentialSecret(rotated.Secret().Reveal())
@@ -89,11 +89,11 @@ func TestServiceAccountCredentialLifecycleAndRedaction(t *testing.T) {
 	if _, err = service.RevokeCredential(context.Background(), rotatedAuth, revokedAt); err != nil {
 		t.Fatalf("RevokeCredential() error = %v", err)
 	}
-	if _, err = service.VerifyCredential(context.Background(), rotatedParsed, binding, revokedAt.Add(time.Second)); !failure.IsCode(err, codeAPICredentialAuthentication) {
+	if _, err = service.VerifyCredential(context.Background(), rotatedParsed, binding, revokedAt.Add(time.Second)); !failure.IsCode(err, codeAPIAuthenticationFailed) {
 		t.Fatalf("revoked credential VerifyCredential() error = %v", err)
 	}
 
-	if _, err = service.VerifyCredential(context.Background(), rotatedParsed, binding, rotated.Credential().ExpiresAt()); !failure.IsCode(err, codeAPICredentialAuthentication) {
+	if _, err = service.VerifyCredential(context.Background(), rotatedParsed, binding, rotated.Credential().ExpiresAt()); !failure.IsCode(err, codeAPIAuthenticationFailed) {
 		t.Fatalf("expired credential VerifyCredential() error = %v", err)
 	}
 	for _, event := range audit.events {
