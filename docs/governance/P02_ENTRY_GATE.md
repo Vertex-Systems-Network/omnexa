@@ -1,9 +1,9 @@
 # Omnexa P02 Implementation Entry Gate
 
-Status: **SATISFIED**  
+Status: **SATISFIED — HISTORICAL ENTRY AUTHORIZATION**  
 Owner phase: **P02 — Identity, Tenancy & Organization**
 
-This gate records the governed transition from completed P01 into active P02. It remains satisfied while strict sequential P02 execution advances only through separately verified package closures.
+This gate records the governed transition from completed P01 into P02. It remains immutable entry evidence, but after P02 completion it no longer grants implementation authority. Current authority is defined only by canonical `STATE.json`.
 
 ## Entry controls
 
@@ -15,7 +15,7 @@ State: **SATISFIED**
 ### EG-02 — Foundation architecture remains frozen
 State: **SATISFIED**
 
-Foundation Architecture v1 remains `FROZEN`; P02 does not change phase order or frozen tenancy/authorization architecture.
+Foundation Architecture v1 remains `FROZEN`; P02 did not change phase order or frozen tenancy/authorization architecture.
 
 ### EG-03 — Protected integration remains enforced
 State: **SATISFIED**
@@ -25,17 +25,17 @@ Issue #3 remains closed. `main` remains protected with PR-only integration, requ
 ### EG-04 — Canonical verification lane remains executable
 State: **SATISFIED**
 
-Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. P01 regressions, completed P02 regressions and repository Go quality remain mandatory.
+Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. P01 and completed P02 regressions plus repository Go quality remain mandatory.
 
-### EG-05 — P02 package decomposition is complete
+### EG-05 — P02 package decomposition was complete
 State: **SATISFIED**
 
-Preparation PR #67 merged as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final canonical run `32632920772 / 97178312240` passed. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` defines 10 strict sequential packages.
+Preparation PR #67 merged as `c6301ca4a5eec5dd62bcb75481d900e40ad968bd` after final canonical run `32632920772 / 97178312240` passed. `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json` defines the 10 strict sequential packages that are now all complete.
 
 ### EG-06 — Security, ownership and terminology are explicit
 State: **SATISFIED**
 
-P02 packages preserve canonical ownership:
+P02 retains canonical ownership:
 
 - users/service accounts and authentication/session lifecycle: `kernel.identity`;
 - tenant boundary: `kernel.tenancy`;
@@ -46,29 +46,37 @@ P02 packages preserve canonical ownership:
 
 Authenticated `User` is not a business `Person`. Tenant `Organization` is not a business Party Organization. `admin`, `owner`, `superuser` or any role name never creates bypass authority.
 
-### EG-07 — Bounded sequential implementation authority
+### EG-07 — Bounded sequential implementation authority completed
 State: **SATISFIED**
 
-P02.01-P02.08 remain completed with their immutable evidence and mandatory regression verifiers.
+P02.01-P02.10 are complete with immutable package evidence and mandatory regression verifiers.
 
-P02.09 is complete through implementation PR #86, exact head `0618904a18f82231469dd173aeb3d9d51edb73ed`, canonical run/job `32895186252 / 97956097639` PASS and merge `8ef86d2644b5ed455b3610192b8379d94204692f`. Completion evidence is retained in `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`.
+Terminal P02.10 evidence:
 
-The accepted P02.09 lane passed repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.08 regressions and P02.09 G0-G8 on GitHub-hosted Ubuntu 24.04.4 LTS / X64. Its diagnostic G304 failure remains explicitly recorded in the immutable evidence file and is not completion evidence.
+- implementation PR #88;
+- exact head `975e4925060a035780ca13b68c5437634ed0f4ea`;
+- canonical run/job `32904678957 / 97986011269` PASS;
+- protected-main implementation merge `88799aa41da8ce8c22540146d157d488565e2ce9`;
+- completion evidence `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
 
-The current closure state is:
+The accepted lane passed repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.09 and P02.10 G0-G8 on GitHub-hosted Ubuntu 24.04.4 LTS / X64.
 
-- P02: `active`;
-- P02.01-P02.09: `done`;
-- P02.10: `active`;
-- P02 progress: `9 / 10 done`;
-- `kernel_code_authorized=true` bounded only to P02.10 after this closure merges and protected-main state is verified;
+The current terminal closure state is:
+
+- P02: `done`;
+- P02.01-P02.10: `done`;
+- P02 progress: `10 / 10 done`;
+- P02 exit gate: `SATISFIED`;
+- current work package: `NONE`;
+- P03: `planned` / not activated;
+- `kernel_code_authorized=false`;
 - `business_feature_code_authorized=false`.
 
-No P02.10 runtime/schema implementation belongs in this closure transition.
+Historical P02 entry authorization cannot be reused to implement P03 or any other future phase.
 
-## Phase security invariants
+## Phase security invariants retained
 
-P02 implementation must preserve:
+P02 completion preserves:
 
 - tenant context derived from trusted identity/policy context; client-provided tenant IDs are never authority;
 - deny-by-default authorization at capability boundaries;
@@ -80,38 +88,29 @@ P02 implementation must preserve:
 - non-human principals represented as service identities rather than fake human users;
 - tenant settings cannot create authority or use untrusted scope identifiers;
 - privileged identity/permission/settings operations attributable through the governed audit foundation where applicable;
-- no P03 module-runtime, business-domain or AI/model/agent implementation.
+- no implicit P03 module-runtime, business-domain or AI/model/agent implementation authority.
 
 ## P02 phase exit
 
-P02 cannot be done until canonical GitHub-hosted evidence proves at minimum:
-
-1. cross-tenant isolation;
-2. object/scope permission enforcement;
-3. role differences and privilege-escalation denial;
-4. service-account scoping/credential lifecycle;
-5. session invalidation behavior;
-6. applicable fresh/upgrade migrations, security/static checks, audit evidence and P01/completed-P02 regressions.
-
-See `docs/governance/P02_EXIT_GATE.md`.
+`docs/governance/P02_EXIT_GATE.md` is **SATISFIED** using P02.01-P02.10 canonical evidence, including the aggregate P02.10 exit proof.
 
 ## External distribution gate
 
-Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It does not block internal P02 engineering.
+Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate.
 
 ## Current decision
 
 ```text
 P00: DONE
 P01: DONE — 12 / 12
-P01 exit satisfied
-P02 specs: PREPARED — 10 / 10
-P02: ACTIVE — 9 / 10 done
-P02.01-P02.09: DONE
-P02.10: ACTIVE
-kernel_code_authorized: true — P02.10 only after closure merge/post-merge verification
+P01 exit: SATISFIED
+P02: DONE — 10 / 10
+P02 exit: SATISFIED
+Current work package: NONE
+P03: PLANNED — NOT ACTIVATED
+kernel_code_authorized=false
 business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-After this closure transition merges, the execution session must STOP. P02.10 implementation starts only in a later governed execution session from the then-current protected `main`.
+A separate governed P03 specification/readiness preparation and explicit activation transition is required before P03 implementation. This historical P02 entry gate provides no such authority.
