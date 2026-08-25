@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "phase": "P03",
+  "name": "Module Runtime",
+  "state": "planned",
+  "activation_policy": "strict_sequential_one_active_package",
+  "entry_gate": "docs/governance/P03_ENTRY_GATE.md",
+  "exit_gate": "docs/governance/P03_EXIT_GATE.md",
+  "transition_checklist": "docs/governance/P02_P03_TRANSITION_CHECKLIST.md",
+  "ai_native_alignment": "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md",
+  "implementation_authorized": false,
+  "packages": [
+    {"id":"P03.01","name":"Module manifest schema","state":"planned","depends_on":[],"spec":"docs/roadmap/work-packages/P03.01.md","owner":"kernel.modules"},
+    {"id":"P03.02","name":"Registry & deterministic discovery","state":"planned","depends_on":["P03.01"],"spec":"docs/roadmap/work-packages/P03.02.md","owner":"kernel.modules"},
+    {"id":"P03.03","name":"Dependency graph resolver","state":"planned","depends_on":["P03.02"],"spec":"docs/roadmap/work-packages/P03.03.md","owner":"kernel.modules"},
+    {"id":"P03.04","name":"Module lifecycle state machine","state":"planned","depends_on":["P03.03"],"spec":"docs/roadmap/work-packages/P03.04.md","owner":"kernel.modules"},
+    {"id":"P03.05","name":"Module settings & feature flags","state":"planned","depends_on":["P03.04"],"spec":"docs/roadmap/work-packages/P03.05.md","owner":"kernel.modules"},
+    {"id":"P03.06","name":"Capability registry","state":"planned","depends_on":["P03.05"],"spec":"docs/roadmap/work-packages/P03.06.md","owner":"kernel.modules"},
+    {"id":"P03.07","name":"Permission registration","state":"planned","depends_on":["P03.06"],"spec":"docs/roadmap/work-packages/P03.07.md","owner":"kernel.modules"},
+    {"id":"P03.08","name":"UI contribution registry contract","state":"planned","depends_on":["P03.07"],"spec":"docs/roadmap/work-packages/P03.08.md","owner":"kernel.modules"},
+    {"id":"P03.09","name":"Migration ownership registry","state":"planned","depends_on":["P03.08"],"spec":"docs/roadmap/work-packages/P03.09.md","owner":"kernel.modules"},
+    {"id":"P03.10","name":"Module health reporting","state":"planned","depends_on":["P03.09"],"spec":"docs/roadmap/work-packages/P03.10.md","owner":"kernel.modules"},
+    {"id":"P03.11","name":"Package trust hooks & P03 exit proof","state":"planned","depends_on":["P03.10"],"spec":"docs/roadmap/work-packages/P03.11.md","owner":"kernel.modules"}
+  ],
+  "phase_exit": "NOT SATISFIED — P03 is planned and not activated. Reference-module exit evidence is required after all 11 packages complete.",
+  "note": "P03 readiness only. All packages remain planned, implementation_authorized=false, kernel_code_authorized=false and business_feature_code_authorized=false until a separate governed activation transition."
+}
