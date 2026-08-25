@@ -33,7 +33,7 @@ if find kernel/migrations -maxdepth 1 -type d -name 'kernel.audit' | grep -q .; 
   exit 1
 fi
 
-for verifier in $(seq -w 1 9); do
+for verifier in 01 02 03 04 05 06 07 08 09; do
   script="scripts/verify_p02_${verifier}.sh"
   if [[ ! -f "$script" ]]; then
     echo "ERROR: missing completed P02 regression verifier: ${script}" >&2
