@@ -6,16 +6,16 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 9 / 10 done. P02.01-P02.09 are DONE and P02.10 — Identity / Permission Audit Trails & P02 Exit Proof is the sole active work package.** `kernel_code_authorized=true` only for P02.10 after this closure merges and protected-main state is verified; `business_feature_code_authorized=false`.
+> **Current execution state:** **P02 — Identity, Tenancy & Organization is DONE at 10 / 10 and its exit gate is SATISFIED. There is no active implementation package. P03 remains PLANNED / NOT ACTIVATED.** `kernel_code_authorized=false`; `business_feature_code_authorized=false`.
 
 ## Project progress
 
 ```text
 P00  Product Constitution & Architecture Freeze  [██████████] 10/10  DONE
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
-P02  Identity, Tenancy & Organization            [█████████░]  9/10  ACTIVE
-      └─ Current: P02.10 — Identity / Permission Audit Trails & P02 Exit Proof
-      └─ Next:    P02 exit closure after P02.10 acceptance; P03 does not activate implicitly
+P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
+      └─ Exit:    SATISFIED
+      └─ Current: NONE — terminal P02 checkpoint
 P03+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
@@ -42,6 +42,7 @@ Key references:
 - `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`
 - `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`
 - `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`
+- `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
@@ -67,45 +68,24 @@ Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed un
 
 ## P01 completion retained
 
-P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. P01 regressions remain mandatory during P02.
+P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. P01 regressions remain mandatory.
 
-## P02.01-P02.09 completion
+## P02 completion
 
-P02.01 completed through implementation PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical GitHub-hosted run/job `32635243643 / 97183883007`, and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
+P02.01-P02.10 are complete with retained package-specific evidence and mandatory regression verifiers. The terminal package, P02.10, completed through implementation PR #88, final exact head `975e4925060a035780ca13b68c5437634ed0f4ea`, canonical GitHub-hosted run/job `32904678957 / 97986011269`, and protected-main implementation merge `88799aa41da8ce8c22540146d157d488565e2ce9`.
 
-P02.02 completed through implementation PR #71, exact head `a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7`, canonical GitHub-hosted run/job `32637760875 / 97189971101`, and merge `2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d`.
+P02.10 canonical evidence passed repository Go quality, P01.01-P01.12, real `omnexa db migrate`, real `omnexa verify all`, P02.01-P02.09, aggregate PostgreSQL exit proof and P02.10 G0-G8. It proves classification-safe audit integration for accepted P02 security lifecycle hooks, required-audit mutation behavior, same-tenant success/cross-tenant denial, migration replay/idempotency, no-secret audit behavior and preservation of identity/tenancy/organization/authz/service-account/session/settings boundaries.
 
-P02.03 completed through implementation PR #73, exact head `20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c`, canonical GitHub-hosted run/job `32640790333 / 97197453122`, and merge `03b3d42a67d98638129b7f9d2b2f49467ae1fcec`.
+Diagnostic run `32903969206 / 97983773781` remains historical **FAIL** evidence for a corrected undefined helper reference and is not acceptance evidence. Immutable completion evidence is `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
 
-P02.04 completed through implementation PR #75, exact head `83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f`, canonical GitHub-hosted run/job `32653747461 / 97229198036`, and merge `769423a94ec03a9f2d7b9e667b9d4527fb0660bf`, evidence `docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md`.
-
-P02.05 completed through implementation PR #77, exact head `2df8d2a8bef0cea60256a832986d6f8495c80378`, canonical GitHub-hosted run/job `32660848145 / 97246683239`, and merge `7b6a59e83c9bd696e6e008385b4413d529254171`, evidence `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md`.
-
-P02.06 completed through implementation PR #79, exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, canonical GitHub-hosted run/job `32664834112 / 97256520050`, and merge `083c2866f0cd0773b85201750c2196bfd2fcc167`, evidence `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md`.
-
-P02.07 completed through implementation PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, canonical GitHub-hosted run/job `32669167972 / 97267175953`, and merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`, evidence `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`.
-
-P02.08 completed through implementation PR #84, exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, canonical GitHub-hosted run/job `32885950897 / 97926598423`, and merge `32eb7187eb229327585551e4e28b0d596de78bd9`, evidence `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`.
-
-P02.09 completed through implementation PR #86, exact head `0618904a18f82231469dd173aeb3d9d51edb73ed`, canonical GitHub-hosted run/job `32895186252 / 97956097639`, and merge `8ef86d2644b5ed455b3610192b8379d94204692f`.
-
-P02.09 canonical evidence passed repository Go quality, P01.01-P01.12 regressions, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.08 regressions and applicable P02.09 G0-G8. It proves trusted tenant/organization setting scope, deterministic organization -> tenant -> definition-default precedence, no global/user override path, protected read/write authorization, owner-bounded configuration persistence, classification-aware no-secret behavior, value-free required audit records, cache invalidation and cross-tenant/wrong-org denial. Immutable evidence is `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`.
-
-Diagnostic run `32894368734 / 97953417878` remains recorded as FAIL for the corrected gosec G304 variable-path integration migration helper and is not acceptance evidence.
-
-## Active P02.10 scope
-
-P02.10 owner is `kernel.audit` with P02 identity/tenancy/organization/authorization/configuration producers. Authorized scope is limited to attributable classification-safe audit evidence for material P02 security operations; required-audit fail-closed behavior where correctness requires it; aggregate P02 verification; cross-tenant/object-scope/role/service-account/session evidence; fresh + supported-upgrade P02 migration proof; and repository Go quality plus P01.01-P01.12/P02.01-P02.09 regression preservation.
-
-Audit remains separate from ordinary logs, stores no credentials/authentication factors/secrets, and audit write authority never implies audit read/export authority. Cross-tenant and privilege-escalation failures remain release blockers. P02.10 implementation acceptance does not implicitly activate P03.
-
-Generic audit read/export/admin UI, support impersonation product behavior, P03 module runtime, business domains/business-feature audit catalogs, P04 events/workflows, AI/model/agent behavior and automatic P03 activation remain unauthorized.
+`docs/governance/P02_EXIT_GATE.md` is **SATISFIED**. P02 completion does not implicitly activate P03.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` only for P02.10 after this closure merges and protected-main state is verified.
+- `kernel_code_authorized=false`.
 - `business_feature_code_authorized=false`.
-- P03+ remains planned.
+- P03 remains planned and inactive.
+- The next governed work is P03 specification/readiness preparation and, only after separate acceptance, an explicit activation transition.
 - All proposed `X..` strategic programs remain planning-only until accepted, dependency-ready and activated through canonical work-package/state governance.
 
 ## Strategic AI-native direction
@@ -122,7 +102,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done 10 / 10; P01 done 12 / 12; P02 active 9 / 10; P02.01-P02.09 done; P02.10 sole active package; P03+ and business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done 10 / 10; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; no active package; P03+ and business implementation locked.**
 
 `docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
 
