@@ -1,17 +1,16 @@
 # Omnexa Program Status
 
-Last reconciled: **2026-08-25**
+Last reconciled: **2026-08-26**
 
 ## Current position
 
 - Program: **Kernel Program**
 - Phase: **P02 — Identity, Tenancy & Organization**
 - Phase state: **active**
-- Current work package: **P02.09 — Tenant-Scoped Settings**
-- P02 progress: **8 / 10 done**
-- P02.01-P02.08: **DONE**
-- P02.09: **ACTIVE**
-- P02.10: **PLANNED**
+- Current work package: **P02.10 — Identity / Permission Audit Trails & P02 Exit Proof**
+- P02 progress: **9 / 10 done**
+- P02.01-P02.09: **DONE**
+- P02.10: **ACTIVE**
 - P01: **DONE — 12 / 12**
 - P01 exit gate: **SATISFIED**
 - P02 entry gate: **SATISFIED**
@@ -22,20 +21,20 @@ Last reconciled: **2026-08-25**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation: **AUTHORIZED ONLY FOR P02.09 after this closure merges and protected-main state is verified**
+- Kernel implementation: **AUTHORIZED ONLY FOR P02.10 after this closure merges and protected-main state is verified**
 - Business-feature implementation: **NOT AUTHORIZED**
 
-## P02.08 completion
+## P02.09 completion
 
-P02.08 implementation completed through PR #84. Final exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543` passed canonical GitHub-hosted run/job `32885950897 / 97926598423` and merged as `32eb7187eb229327585551e4e28b0d596de78bd9`.
+P02.09 implementation completed through PR #86. Final exact head `0618904a18f82231469dd173aeb3d9d51edb73ed` passed canonical GitHub-hosted run/job `32895186252 / 97956097639` and merged as `8ef86d2644b5ed455b3610192b8379d94204692f`.
 
-The accepted lane ran on runner `GitHub Actions 1000022204`, GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260823.283.1`, Go 1.26.7 and PostgreSQL 18.6. Repository Go quality passed over 121 Go files, golangci-lint v2.12.2 reported 0 issues and govulncheck v1.7.0 reported no vulnerabilities. P01.01-P01.12 regressions, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.07 regressions and applicable P02.08 G0-G8 all passed.
+The accepted lane ran on runner `GitHub Actions 1000022922`, GitHub-hosted Ubuntu 24.04.4 LTS / X64, image `ubuntu-24.04 / 20260816.277.1`, Go 1.26.7 and PostgreSQL 18.6. Repository Go quality, P01.01-P01.12 regressions, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.08 regressions and applicable P02.09 G0-G8 all passed.
 
-P02.08 evidence proves a distinct non-human Service Account lifecycle; exact tenant/organization credential binding; SHA-256 verifier-only API credential persistence; issue/verify/rotate/revoke/expire semantics; superseded/revoked/expired fail-closed behavior; current-principal/current-tenant checks; direct RBAC composition through `kernel.authorization`; wrong-tenant/wrong-org/wrong-permission negative evidence; and fresh/idempotent/P02.07+P02.05 supported-upgrade migration evidence. Raw credential material remains `RESTRICTED` and absent from ordinary persistence/logging/audit/error paths.
+P02.09 evidence proves trusted tenant/organization setting scope; deterministic organization -> tenant -> definition-default precedence; no global/user override path; authorization on protected reads and every mutation; `kernel.configuration`-owned persistence; classification-aware value policy with generic RESTRICTED/secret values rejected; value-free required audit records; cache invalidation after mutation; same-tenant success and cross-tenant/wrong-org denial; and fresh/idempotent/P02.08 supported-upgrade migration evidence while preserving accepted human RBAC behavior.
 
-Diagnostic runs remain retained as failures: `32882746486 / 97915911717` for corrected gofmt/type mismatch; `32884311341 / 97921359088` for corrected gosec G304/G101 findings; and `32884939579 / 97923224921` for a stale historical P02.04 future-scope verifier guard. Run `32885758158` was superseded/cancelled after the candidate head moved. The final lane proves P02.04-P02.07 regressions remain PASS after the narrow verifier compatibility corrections. Immutable completion evidence: `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`.
+Diagnostic run `32894368734 / 97953417878` remains explicit **FAIL** evidence for a corrected gosec G304 variable-path integration migration helper. The fixed allow-list helper changed no runtime/schema/acceptance semantics. Immutable completion evidence: `docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md`.
 
-## Retained P02.01-P02.07 completion
+## Retained P02.01-P02.08 completion
 
 P02.01 remains complete through PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical run/job `32635243643 / 97183883007`, and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
 
@@ -51,13 +50,13 @@ P02.06 remains complete through PR #79, exact head `dbbd105fd5f2543ca7dd5df93375
 
 P02.07 remains complete through PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, canonical run/job `32669167972 / 97267175953`, and merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`. Its strong-authentication, replay, recovery-secret and session-invalidation invariants remain mandatory.
 
-## Active P02.09 boundary
+P02.08 remains complete through PR #84, exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, canonical run/job `32885950897 / 97926598423`, and merge `32eb7187eb229327585551e4e28b0d596de78bd9`. Its service-account/API-credential lifecycle, exact scope, no-secret and authorization-composition invariants remain mandatory.
 
-P02.09 is owned by `kernel.configuration`. It may implement only the Tenant-Scoped Settings contract defined by `docs/roadmap/work-packages/P02.09.md`: tenant-scoped and approved organization-scoped setting resolution; trusted scope derived from P02 identity/tenancy context rather than arbitrary payload identifiers; authorization around protected setting reads/writes; classification-aware values and no-secret output behavior; deterministic precedence only for explicitly supported scopes; change audit hooks for security-significant settings; and same-tenant allow plus cross-tenant/wrong-scope negative evidence.
+## Active P02.10 boundary
 
-Settings and feature flags cannot create authority by themselves. Tenant/org scope is trusted context, not a client assertion. `kernel.configuration` remains authoritative owner. There is no cross-tenant fallback or global-write shortcut, and values remain subject to normal data-classification/logging restrictions.
+P02.10 is owned by `kernel.audit` with `kernel.identity`, `kernel.tenancy`, `kernel.organization`, `kernel.authorization` and `kernel.configuration` producers. It may implement only the contract defined by `docs/roadmap/work-packages/P02.10.md`: attributable classification-safe audit evidence for material P02 security operations; explicit required-audit fail-closed behavior where applicable; aggregate P02 verification; cross-tenant/object-scope/role/service-account/session evidence; fresh + supported-upgrade P02 migration proof; and repository/P01/P02 regression preservation.
 
-P02.09 does **not** authorize business-module settings, P03 module runtime, a secrets-management product surface, feature/config values that independently grant authority, deployment/environment orchestration, P02.10 implementation or other future scope.
+Audit remains separate from ordinary logs and must contain no credentials, authentication factors or secrets. Audit write authority does not imply audit read/export authority. P02.10 cannot activate P03 or implement business domains, generic audit UI/export, support impersonation product behavior, P04 workflows/events, or AI/model/agent runtime.
 
 ## P01 completion retained
 
@@ -73,4 +72,4 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-After this P02.08 closure/P02.09 activation transition passes, merges and protected `main` plus canonical `STATE.json` confirm P02.09 as the sole active package, **STOP this execution session**. P02.09 implementation starts only in a later governed execution session from the then-current protected `main`. Do not auto-advance to P02.10.
+After this P02.09 closure/P02.10 activation transition passes, merges and protected `main` plus canonical `STATE.json` confirm P02.10 as the sole active package, **STOP this execution session**. P02.10 implementation starts only in a later governed execution session from the then-current protected `main`. Do not auto-advance to P03.
