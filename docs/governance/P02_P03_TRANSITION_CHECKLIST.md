@@ -1,9 +1,9 @@
 # P02 → P03 Transition Checklist
 
-Status: **READY — ACTIVATION PENDING**  
+Status: **ACTIVATION CANDIDATE — VERIFICATION REQUIRED**  
 Owner transition: `P02 done -> P03.01 active`
 
-This checklist prepares a governance/state-only activation transition. It contains no P03 runtime/schema implementation.
+This checklist records a governance/state-only activation transition. It contains no P03 runtime/schema implementation.
 
 ## A. Preconditions
 
@@ -19,25 +19,24 @@ This checklist prepares a governance/state-only activation transition. It contai
 - [x] P03 entry and exit gates are defined.
 - [x] P03 AI-native compatibility mapping is documented without strategic-program activation.
 - [x] P03 readiness/package validators are wired into canonical governance.
-- [x] no P03 runtime/schema implementation exists in this readiness preparation.
+- [x] completed P01/P02 historical validators explicitly retain their evidence through P03 without weakening their completed-state requirements.
+- [x] no P03 runtime/schema implementation exists in this activation transition.
 - [x] Issue #4 remains an external distribution gate rather than implicit P03 authorization.
 
-## B. Activation state to be applied separately
+## B. Activation state applied in this candidate
 
-The later activation PR must atomically establish:
-
-- [ ] `current_phase=P03`.
-- [ ] `current_work_package=P03.01`.
-- [ ] P00/P01/P02 remain `done`.
-- [ ] P03 -> `active`.
-- [ ] P03.01 -> `active`.
-- [ ] P03.02-P03.11 remain `planned`.
-- [ ] `kernel_code_authorized=true` only for P03.01.
-- [ ] `business_feature_code_authorized=false`.
-- [ ] P03 entry gate -> `SATISFIED`.
-- [ ] P03 package manifest -> `active / implementation_authorized=true`.
-- [ ] canonical `p03_preparation` metadata is added/reconciled for the active package.
-- [ ] no P03 runtime/schema code is included in the activation PR.
+- [x] `current_phase=P03`.
+- [x] `current_work_package=P03.01`.
+- [x] P00/P01/P02 remain `done`.
+- [x] P03 -> `active`.
+- [x] P03.01 -> `active`.
+- [x] P03.02-P03.11 remain `planned`.
+- [x] `kernel_code_authorized=true` only for P03.01.
+- [x] `business_feature_code_authorized=false`.
+- [x] P03 entry gate -> `SATISFIED`.
+- [x] P03 package manifest -> `active / implementation_authorized=true`.
+- [x] canonical `p03_preparation` metadata identifies P03.01 as the sole active package.
+- [x] no P03 runtime/schema code is included in the activation PR.
 
 ## C. Activation verification
 
@@ -53,18 +52,21 @@ Before activation merge:
 - [ ] PR is mergeable with required conversations resolved.
 - [ ] diff contains no P03 runtime/schema implementation.
 
+These boxes are intentionally left unchecked until exact-head GitHub evidence exists. Do not relabel planned/unrun evidence as PASS.
+
 ## D. Post-merge rule
 
 After activation merges, verify protected `main` and canonical `STATE.json`, identify P03.01 as the sole authorized implementation scope, then **STOP that execution session**. P03.01 implementation starts only in a later governed execution session.
 
-## Current readiness checkpoint
+## Activation candidate checkpoint
 
 ```text
 P02: DONE — 10 / 10
 P02 exit: SATISFIED
 P03 specifications: 11 / 11 prepared
-P03: PLANNED / NOT ACTIVE
-P03.01-P03.11: PLANNED
-kernel_code_authorized: false
+P03: ACTIVE — 0 / 11 done
+P03.01: ACTIVE
+P03.02-P03.11: PLANNED
+kernel_code_authorized: true — P03.01 only
 business_feature_code_authorized: false
 ```

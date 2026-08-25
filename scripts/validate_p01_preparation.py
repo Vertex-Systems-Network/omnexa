@@ -24,8 +24,8 @@ state = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"
 manifest = json.loads((ROOT / "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json").read_text(encoding="utf-8"))
 phases = {item.get("id"): item for item in state.get("phases") or []}
 
-if state.get("current_phase") not in {"P01", "P02"}:
-    raise SystemExit("ERROR: completed P01 validator must be reviewed before advancing beyond P02")
+if state.get("current_phase") not in {"P01", "P02", "P03"}:
+    raise SystemExit("ERROR: completed P01 validator must be reviewed before advancing beyond P03")
 if (phases.get("P00") or {}).get("state") != "done":
     raise SystemExit("ERROR: P00 must remain done")
 p01_row = phases.get("P01") or {}
@@ -114,9 +114,8 @@ if state.get("current_phase") == "P01":
     lock = state.get("implementation_lock") or {}
     if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
         raise SystemExit("ERROR: completed P01 planning checkpoint must keep implementation locked")
-else:
-    if (state.get("implementation_lock") or {}).get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: business-feature implementation must remain locked during P02")
+elif (state.get("implementation_lock") or {}).get("business_feature_code_authorized") is not False:
+    raise SystemExit("ERROR: business-feature implementation must remain locked in P02/P03")
 
 print("Omnexa completed P01 prerequisite validation: PASS")
 print("P00: DONE")

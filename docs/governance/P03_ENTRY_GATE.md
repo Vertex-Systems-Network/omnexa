@@ -1,9 +1,9 @@
 # Omnexa P03 Implementation Entry Gate
 
-Status: **READY — NOT ACTIVATED**  
+Status: **SATISFIED**  
 Owner phase: **P03 — Module Runtime**
 
-This gate prepares the explicit transition from completed P02 into P03. It does not authorize P03 implementation by itself. Canonical implementation authority exists only after a separate activation PR merges and `docs/roadmap/STATE.json` identifies P03/P03.01 as active.
+This gate records the explicit transition from completed P02 into P03. It authorizes only the single canonical package identified by `docs/roadmap/STATE.json`; at this checkpoint that package is P03.01. It does not authorize P03.02+, business features, P04+, strategic X-program runtime, or AI/model/agent runtime.
 
 ## Entry controls
 
@@ -15,7 +15,7 @@ State: **SATISFIED**
 ### EG-02 — Foundation architecture remains frozen
 State: **SATISFIED**
 
-Foundation Architecture v1 remains `FROZEN`. P03 is the next planned foundation phase in `docs/roadmap/MASTER_PLAN.md`; this readiness work does not change phase order, the modular-monolith baseline, ownership rules, tenancy, authorization, audit, identifier, API or event standards.
+Foundation Architecture v1 remains `FROZEN`. P03 is the next foundation phase in `docs/roadmap/MASTER_PLAN.md`; this activation does not change phase order, the modular-monolith baseline, ownership rules, tenancy, authorization, audit, identifier, API or event standards.
 
 ### EG-03 — Protected integration remains enforced
 State: **SATISFIED**
@@ -28,16 +28,16 @@ State: **SATISFIED**
 Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. Repository Go quality and all completed P01/P02 regression verifiers remain mandatory.
 
 ### EG-05 — P03 package decomposition is complete
-State: **SATISFIED FOR READINESS**
+State: **SATISFIED**
 
-`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines 11 strict sequential packages matching the 11 P03 work-package areas in `MASTER_PLAN.md`. `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py` fail closed on missing, reordered, ownership-mismatched or prematurely active packages.
+`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines 11 strict sequential packages matching the 11 P03 work-package areas in `MASTER_PLAN.md`. `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py` fail closed on missing, reordered, ownership-mismatched or multiply-active packages.
 
 ### EG-06 — Module ownership and dependency law are explicit
-State: **SATISFIED FOR READINESS**
+State: **SATISFIED**
 
 `kernel.modules` owns module manifest and lifecycle metadata. P03 extends the mandatory `MODULE_STANDARD.md`, `DOMAIN_OWNERSHIP.md` and `DEPENDENCY_MATRIX.md` rather than creating a parallel module model.
 
-P03 must preserve:
+P03 preserves:
 
 - one authoritative write owner per concept;
 - required, optional, platform and forbidden dependency classes;
@@ -48,26 +48,27 @@ P03 must preserve:
 - capability, permission, settings, migration, UI and health registration do not transfer authority away from their owning kernel/domain contracts.
 
 ### EG-07 — AI-native strategic overlays are mapped without activation
-State: **SATISFIED FOR READINESS**
+State: **SATISFIED**
 
 `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md` records forward-compatibility requirements for `XQ-100`, `XSG-100`, `XTRUST-100`, `XPF-200` and `XPERF-100`.
 
-Those strategic programs remain planning-only and `implementation_authorized=false`. P03 readiness does not implement AI/model/agent runtime, System Graph runtime, package trust enforcement, product federation or performance intelligence.
+Those strategic programs remain planning-only and `implementation_authorized=false`. P03 activation does not implement AI/model/agent runtime, System Graph runtime, package trust enforcement, product federation or performance intelligence.
 
-### EG-08 — Implementation locks change only in activation transition
-State: **PENDING ACTIVATION**
+### EG-08 — Implementation lock is bounded to P03.01
+State: **SATISFIED**
 
-At this readiness checkpoint:
+At the activated checkpoint:
 
 - P02: `done`;
 - P02 exit: `SATISFIED`;
-- P03: `planned`;
-- P03.01-P03.11: `planned`;
-- current work package: `NONE`;
-- `kernel_code_authorized=false`;
+- P03: `active`;
+- P03.01: `active`;
+- P03.02-P03.11: `planned`;
+- current work package: `P03.01`;
+- `kernel_code_authorized=true` only for P03.01;
 - `business_feature_code_authorized=false`.
 
-The later activation transition may atomically set only P03/P03.01 active and `kernel_code_authorized=true` for P03.01. Business-feature code remains locked.
+No runtime/schema implementation is part of this activation transition. P03.01 implementation begins only in a later governed session from the protected-main activation merge.
 
 ## Phase security and architecture invariants
 
@@ -103,9 +104,9 @@ See `docs/governance/P03_EXIT_GATE.md`.
 
 ## External distribution gate
 
-Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It does not activate P03 and is not silently treated as internal P03 runtime authority.
+Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It does not broaden P03 runtime authority.
 
-## Readiness decision
+## Activation decision
 
 ```text
 P00: DONE
@@ -113,11 +114,12 @@ P01: DONE — 12 / 12
 P02: DONE — 10 / 10
 P02 exit: SATISFIED
 P03 specs: PREPARED — 11 / 11
-P03: PLANNED / NOT ACTIVE
-P03.01-P03.11: PLANNED
-kernel_code_authorized: false
+P03: ACTIVE — 0 / 11 done
+P03.01: ACTIVE
+P03.02-P03.11: PLANNED
+kernel_code_authorized: true — P03.01 only
 business_feature_code_authorized: false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
 
-A separate governed activation PR is required before any P03 runtime/schema implementation.
+After this activation transition merges, verify protected `main` and canonical `STATE.json`, identify P03.01 as the sole authorized implementation scope, then STOP. P03.01 implementation belongs to a later governed session.

@@ -6,76 +6,69 @@ This file never overrides `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`,
 
 ## Current governed checkpoint
 
-After this closure is accepted and merged, the intended canonical checkpoint is:
+The activation candidate establishes:
 
 - Foundation Architecture v1: FROZEN.
 - P00: DONE — 10 / 10.
 - P01: DONE — 12 / 12; exit gate SATISFIED.
 - P02: DONE — 10 / 10; exit gate SATISFIED.
-- P02.01-P02.10: DONE.
-- current work package: NONE.
-- P03: PLANNED — NOT ACTIVATED.
-- `kernel_code_authorized=false`.
+- P03: ACTIVE — 0 / 11 done.
+- current work package: P03.01 — Module Manifest Schema.
+- P03.02-P03.11: PLANNED.
+- `kernel_code_authorized=true` only for P03.01.
 - `business_feature_code_authorized=false`.
-- P03+, business modules and AI/model/agent runtime remain unauthorized until a separate governed preparation/readiness and activation transition.
 
-Until this closure merges, protected `main` remains authoritative. This continuity file creates no implementation authority.
+Until the activation PR merges, protected `main` remains authoritative. This continuity file creates no implementation authority by itself.
 
-## P02.10 completion evidence
+## P03 readiness evidence
 
-- implementation PR: #88
-- final exact implementation head: `975e4925060a035780ca13b68c5437634ed0f4ea`
-- canonical run/job: `32904678957 / 97986011269` — PASS
-- implementation merge: `88799aa41da8ce8c22540146d157d488565e2ce9`
-- runner: `GitHub Actions 1000023269`, GitHub-hosted Ubuntu 24.04.4 LTS / X64
-- runner image: `ubuntu-24.04 / 20260816.277.1`
-- Go: 1.26.7
-- PostgreSQL: 18.6
-- Valkey: 9.1.1
-- S3 mock: 5.1.0
-- repository Go quality, P01.01-P01.12, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.09 and P02.10 G0-G8: PASS
-- evidence: `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
+- readiness PR: #90
+- exact readiness head: `411c61f161a589b813ea28458cd43ce97be49f01`
+- canonical run/job: `32910704583 / 98004146744` — PASS
+- readiness merge: `712064870ce77d01902c2450c9eed240cda9c44e`
+- runner: GitHub-hosted `ubuntu-24.04`
+- artifacts: P03.01-P03.11 specs, P03 entry/exit gates, transition checklist, P03 validators, AI-native compatibility matrix
 
-Retained diagnostic failure remains visible rather than relabeled: `32903969206 / 97983773781` failed repository Go quality because the organization decorator referenced an undefined `invalidScopeFailure`. The defect was corrected with the existing owner-consistent `scopeDeniedFailure`; the final exact head passed the complete canonical lane.
+## Retained P02 evidence
 
-## Retained P02 contract
+P02 remains a completed prerequisite. Terminal P02.10 evidence remains PR #88, exact head `975e4925060a035780ca13b68c5437634ed0f4ea`, run/job `32904678957 / 97986011269` PASS, merge `88799aa41da8ce8c22540146d157d488565e2ce9`, evidence `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
 
-P02.01 retains the owner-bounded `kernel.identity` human User foundation. User remains distinct from business Person and identity attributes do not create authority.
+Diagnostic run `32903969206 / 97983773781` remains FAIL history and is not acceptance evidence. All P01/P02 regressions remain mandatory.
 
-P02.02 retains the owner-bounded `kernel.tenancy` foundation: UUIDv7 Tenant lifecycle, minimal User↔Tenant membership with terminal revocation, trusted tenant context derived from active persisted Tenant/membership state, explicit tenant-safe scope equality, owner-bounded PostgreSQL persistence and no global-tenant fallback.
+## Active P03.01 contract
 
-P02.03 retains the `kernel.organization` tenant-contained Organization/Legal Entity/Business Unit/Branch/Team/Location hierarchy, scoped memberships, deterministic cycle/cross-tenant rejection and non-authorizing organization scope context. Organization remains distinct from business Party Organization.
+Owner: `kernel.modules`.
 
-P02.04 retains the `kernel.identity` authentication/session foundation: approved adaptive password hashing, disclosure-safe authentication, opaque access/refresh credentials with digest-only persistence, explicit expiry, deterministic rotation/revocation/replay rejection, password/account invalidation, safe device/session inventory, tenant/organization context re-authorization and classification-safe security lifecycle hooks. Authentication remains distinct from authorization.
+P03.01 is limited to the canonical machine-readable module manifest schema and deterministic validation contract:
 
-P02.05 retains the `kernel.authorization` direct RBAC foundation: stable capability-oriented permission identifiers, deterministic Role composition, trusted tenant/organization scoped assignments, deny-by-default direct permission checks, privileged server-side mutations with anti-escalation, assignment revocation, role-name non-bypass and classification-safe required audit records.
+- stable module ID/name/version/contract version/owner metadata;
+- required platform and required/optional/platform dependency declarations;
+- declared contribution/security metadata;
+- minimal forward-compatible publisher/provenance/SBOM/scope metadata hooks without trust enforcement;
+- bounded parsing and deterministic safe validation errors;
+- positive/negative schema fixtures and explicit P03.01 verification.
 
-P02.06 retains the contextual authorization layer: direct RBAC first; trusted relationship evidence exact to principal/object/tenant/organization scope; contextual constraints narrow only; internal/background origin never bypasses; field/export capability may be stricter than read; material denials/privileged decisions use safe audit; dependency failure fails closed.
+P03.01 must treat manifests/package metadata as untrusted data and must not execute package code while parsing or validating. Declarations never grant authorization and manifests never contain secret values.
 
-P02.07 retains strong-authentication semantics: injected passkey verification, exact principal/session-bound expiring/replay-safe challenges, one-time digest-only recovery codes, session-bound non-authorizing step-up, explicit factor-removal invalidation and no restricted factor material in ordinary telemetry/audit.
+## Explicitly unauthorized
 
-P02.08 retains distinct non-human Service Account/API credentials: exact tenant/organization binding, one-time high-entropy issuance, verifier-only persistence, verify/rotate/revoke/expire lifecycle, supersession/revocation/expiry denial, direct RBAC composition and raw-secret non-disclosure. Credential possession never creates authority.
+- P03.02 registry/discovery;
+- P03.03 dependency resolver;
+- P03.04 lifecycle runtime/persistence;
+- P03.05-P03.11 later registries/trust/exit runtime;
+- marketplace, System Graph, product federation or performance-intelligence runtime;
+- P04 events/workflows;
+- business modules/features;
+- AI/model/agent runtime.
 
-P02.09 retains tenant-scoped settings: trusted tenant/organization scope, deterministic organization→tenant→registered-definition-default precedence, no global/user override, current authorization on protected reads/mutations, owner-bounded persistence, generic RESTRICTED/secret values rejected, value-free security audit and cross-tenant/wrong-org fail-closed behavior. Settings never create authority.
+The XQ-100/XSG-100/XTRUST-100/XPF-200/XPERF-100 alignment remains planning-only and non-authorizing.
 
-P02.10 retains the accepted aggregate audit/exit behavior: secret-free identity/session/strong-auth/service-account lifecycle hooks bridge to `kernel.audit`; material tenancy/organization mutations use required-audit owner-preserving decorators; required-audit failure cannot silently claim success; same-tenant success and cross-tenant denial are proven; complete P02 migrations replay idempotently; and all P01/P02 regressions remain mandatory.
+## Exact next action
 
-## Terminal P02 boundary
+After the activation PR merges, verify protected `main` and `STATE.json` confirm P03/P03.01 active, `kernel_code_authorized=true` only for P03.01 and `business_feature_code_authorized=false`, then **STOP**.
 
-P02 completion creates no P03 authority. At this checkpoint:
-
-- there is no active implementation package;
-- kernel implementation is locked;
-- business-feature implementation is locked;
-- P03 is only planned;
-- no generic audit UI/export, support impersonation product surface, module runtime, business domain, workflow/event, or AI/model/agent implementation is authorized by P02 completion.
-
-## Exact next authorized action
-
-After this P02 terminal closure merges, verify protected `main` and canonical `STATE.json`, confirm P02 is DONE 10 / 10 with exit SATISFIED, current work package NONE, P03 PLANNED and both implementation locks false, then **STOP the execution session**.
-
-A later governed session may prepare P03 specifications/readiness and an explicit activation transition. It must not implement P03 before that activation is accepted.
+A later governed session must branch from that exact main SHA and implement only P03.01. Implementation and closure/state transition remain separate.
 
 ## Authority and references
 
-Mandatory sources remain `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P02 entry/exit gates, `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/work-packages/P02.10.md`, `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`, `docs/governance/AI_EXECUTION_POLICY.md`, Change Control, Definition of Done, accepted ADRs, architecture/security/quality standards, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P02.10.md`.
+Mandatory sources: `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/governance/P03_ENTRY_GATE.md`, `docs/governance/P03_EXIT_GATE.md`, `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`, `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, `docs/roadmap/work-packages/P03.01.md`, `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`, `docs/governance/AI_EXECUTION_POLICY.md`, Change Control, Definition of Done, accepted ADRs, architecture/security/quality standards, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P03.01.md`.
