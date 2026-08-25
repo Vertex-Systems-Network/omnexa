@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-25"
-  nature: "non-authoritative P02.08 closure / P02.09 activation continuity snapshot"
-  implementation_merge: "32eb7187eb229327585551e4e28b0d596de78bd9"
-  closure_branch: "governance/p02-08-close-p02-09-activate"
+  verified_at: "2026-08-26"
+  nature: "non-authoritative P02.09 closure / P02.10 activation continuity snapshot"
+  implementation_merge: "8ef86d2644b5ed455b3610192b8379d94204692f"
+  closure_branch: "p02-09-closure"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,9 +16,9 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  candidate_progress_after_closure: "8 / 10 done"
-  candidate_current_work_package_after_closure: "P02.09"
-  candidate_owner_after_closure: "kernel.configuration"
+  candidate_progress_after_closure: "9 / 10 done"
+  candidate_current_work_package_after_closure: "P02.10"
+  candidate_owner_after_closure: "kernel.audit"
 
 p01_prerequisite:
   state: "done"
@@ -28,72 +28,70 @@ p01_prerequisite:
 
 p02_completed_prefix:
   state: "done_candidate_pending_closure_merge"
-  packages: "P02.01-P02.08"
-  regressions: "P02.01-P02.08 remain mandatory after activation"
+  packages: "P02.01-P02.09"
+  regressions: "P02.01-P02.09 remain mandatory after activation"
 
-p02_08_completion:
+p02_09_completion:
   state: "done_candidate_pending_closure_merge"
-  implementation_pr: 84
-  final_exact_head: "43bdcf525ce5e0cfdb9dc0707fbafee7cd552543"
-  canonical_run: 32885950897
-  canonical_job: 97926598423
+  implementation_pr: 86
+  final_exact_head: "0618904a18f82231469dd173aeb3d9d51edb73ed"
+  canonical_run: 32895186252
+  canonical_job: 97956097639
   result: "PASS"
-  implementation_merge: "32eb7187eb229327585551e4e28b0d596de78bd9"
-  runner: "GitHub Actions 1000022204"
+  implementation_merge: "8ef86d2644b5ed455b3610192b8379d94204692f"
+  runner: "GitHub Actions 1000022922"
   environment: "github-hosted"
   os: "Ubuntu 24.04.4 LTS"
   arch: "X64"
-  runner_image: "ubuntu-24.04 / 20260823.283.1"
+  runner_image: "ubuntu-24.04 / 20260816.277.1"
   go: "1.26.7"
   postgresql: "18.6"
-  evidence: "docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md"
+  evidence: "docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md"
   diagnostic_failures:
-    - "32882746486 / 97915911717 — corrected gofmt drift and one migration-version test-helper int/int64 mismatch"
-    - "32884311341 / 97921359088 — corrected gosec G304 variable-path helper and G101 credential-looking internal identifiers without broad suppression"
-    - "32884939579 / 97923224921 — stale historical P02.04 future-scope guard rejected ServiceAccount; narrowed without weakening P02.04 invariants"
-  superseded_run: "32885758158 — cancelled after candidate head moved; not acceptance evidence"
+    - "32894368734 / 97953417878 — corrected gosec G304 variable-path integration migration helper using a fixed repository-fixture allow-list"
 
 candidate_active_contract:
-  work_package: "P02.09"
-  name: "Tenant-Scoped Settings"
-  owner: "kernel.configuration"
-  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.09 active in a later governed session."
+  work_package: "P02.10"
+  name: "Identity / Permission Audit Trails & P02 Exit Proof"
+  owner: "kernel.audit with kernel.identity/kernel.tenancy/kernel.organization/kernel.authorization/kernel.configuration producers"
+  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.10 active in a later governed session."
   authorized:
-    - "tenant-scoped and approved organization-scoped setting resolution using kernel.configuration"
-    - "trusted scope derived from P02 identity/tenancy context rather than arbitrary payload identifiers"
-    - "authorization around protected setting reads/writes"
-    - "classification-aware values and no-secret output behavior"
-    - "deterministic precedence only for explicitly supported scopes"
-    - "change audit hooks for security-significant settings"
-    - "same-tenant allow plus cross-tenant/wrong-scope deterministic evidence"
-    - "applicable owner-bounded persistence/migrations and focused configuration/security evidence"
+    - "attributable classification-safe audit evidence for material identity/session/tenant/org/role/policy/service-account/settings security operations"
+    - "explicit required-audit fail-closed behavior for privileged operations where correctness requires audit"
+    - "aggregate P02 verification composed from completed package verifiers"
+    - "final cross-tenant isolation, object/scope permission, role-difference, service-account and session-invalidation evidence"
+    - "fresh plus supported-upgrade migration proof for the P02 schema baseline"
+    - "repository Go quality, P01.01-P01.12 and P02.01-P02.09 regression preservation"
+    - "applicable G0-G8 evidence on canonical GitHub-hosted ubuntu-24.04"
   forbidden:
-    - "business-module settings and P03 module runtime"
-    - "secrets-management product surface"
-    - "feature/config values that grant authority independent of authorization"
-    - "deployment/environment orchestration"
-    - "P02.10 phase-exit implementation"
-    - "P03+, business features/UI or AI/model/agent runtime"
+    - "generic audit read/export/admin UI"
+    - "support impersonation product surface"
+    - "P03 module runtime/permission registration"
+    - "business domains or business-feature audit catalogs"
+    - "P04 events/workflows"
+    - "AI/model/agent behavior"
+    - "automatic P03 activation"
 
 security:
   kernel_code_authorized_after_closure: true
-  kernel_authority_scope_after_closure: "P02.09 only"
+  kernel_authority_scope_after_closure: "P02.10 only"
   business_feature_code_authorized: false
-  settings_can_create_authority: false
-  tenant_org_scope_client_assertion_allowed: false
-  cross_tenant_fallback_allowed: false
-  global_write_shortcut_allowed: false
+  audit_is_ordinary_logging: false
+  audit_write_implies_read_export: false
+  secrets_or_authentication_material_allowed_in_audit: false
+  cross_tenant_failure_is_release_blocker: true
+  privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json, identify P02.09 as sole active package, then STOP this execution session. Implement P02.09 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.10 as sole active package, then STOP this execution session. Implement P02.10 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.09 in the same execution session after its activation closure merges"
-  - "activate or implement P02.10 early"
+  - "implement P02.10 in the same execution session after its activation closure merges"
+  - "activate P03 early or treat P02.10 implementation acceptance as P02 exit"
   - "implement P03 or business modules/features"
-  - "implement secrets-management or deployment orchestration as P02.09"
+  - "implement generic audit UI/export, support impersonation, P04 workflow/event or AI runtime scope as P02.10"
   - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
 
 source_authority:
@@ -104,8 +102,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  candidate_active_spec: "docs/roadmap/work-packages/P02.09.md"
+  candidate_active_spec: "docs/roadmap/work-packages/P02.10.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P02.08.md"
-  candidate_active: "docs/ai/handoffs/P02.09.md"
+  completed: "docs/ai/handoffs/P02.09.md"
+  candidate_active: "docs/ai/handoffs/P02.10.md"
