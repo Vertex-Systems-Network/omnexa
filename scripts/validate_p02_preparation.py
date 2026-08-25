@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate P02 readiness and the later bounded activation transition."""
+"""Validate P02 readiness, bounded activation, and terminal completion."""
 
 from __future__ import annotations
 
@@ -37,9 +37,9 @@ phase_rows = {item.get("id"): item for item in state.get("phases") or []}
 lock = state.get("implementation_lock") or {}
 
 if (phase_rows.get("P00") or {}).get("state") != "done":
-    raise SystemExit("ERROR: P00 must remain done before P02")
+    raise SystemExit("ERROR: P00 must remain done before/after P02")
 if (phase_rows.get("P01") or {}).get("state") != "done":
-    raise SystemExit("ERROR: P01 must remain done before P02")
+    raise SystemExit("ERROR: P01 must remain done before/after P02")
 
 p01_exit = (ROOT / "docs/governance/P01_EXIT_GATE.md").read_text(encoding="utf-8")
 if "Status: **SATISFIED**" not in p01_exit:
@@ -59,10 +59,12 @@ if ci.get("runner_label") != "ubuntu-24.04" or ci.get("self_hosted_allowed") is 
 
 current_phase = state.get("current_phase")
 current = state.get("current_work_package")
-planning = current_phase == "P01" and current is None and (state.get("phase") or {}).get("state") == "done"
-active = current_phase == "P02" and (state.get("phase") or {}).get("state") == "active" and isinstance(current, str) and current.startswith("P02.")
-if not (planning or active):
-    raise SystemExit("ERROR: invalid P02 readiness/activation checkpoint")
+phase = state.get("phase") or {}
+planning = current_phase == "P01" and current is None and phase.get("state") == "done"
+active = current_phase == "P02" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P02.")
+terminal = current_phase == "P02" and current is None and phase.get("state") == "done"
+if not (planning or active or terminal):
+    raise SystemExit("ERROR: invalid P02 readiness/activation/completion checkpoint")
 
 entry = (ROOT / "docs/governance/P02_ENTRY_GATE.md").read_text(encoding="utf-8")
 for marker in ["P01 exit satisfied", "GitHub-hosted", "strict sequential", "kernel.identity", "kernel.tenancy", "kernel.authorization", "business_feature_code_authorized=false"]:
@@ -70,7 +72,7 @@ for marker in ["P01 exit satisfied", "GitHub-hosted", "strict sequential", "kern
         raise SystemExit(f"ERROR: P02 entry gate missing marker: {marker}")
 
 exit_gate = (ROOT / "docs/governance/P02_EXIT_GATE.md").read_text(encoding="utf-8")
-for marker in ["cross-tenant", "object/scope", "role", "service account", "session invalidation", "NOT SATISFIED"]:
+for marker in ["cross-tenant", "object/scope", "role", "service account", "session invalidation"]:
     if marker.lower() not in exit_gate.lower():
         raise SystemExit(f"ERROR: P02 exit gate missing marker: {marker}")
 
@@ -83,7 +85,7 @@ if planning:
         raise SystemExit("ERROR: P02 readiness manifest must remain planned/unauthorized")
     if "Status: **READY — NOT ACTIVATED**" not in entry:
         raise SystemExit("ERROR: planning-mode P02 entry gate must be READY — NOT ACTIVATED")
-else:
+elif active:
     expected_ids = [f"P02.{i:02d}" for i in range(1, 11)]
     if current not in expected_ids:
         raise SystemExit(f"ERROR: invalid active P02 package: {current}")
@@ -114,6 +116,36 @@ else:
             raise SystemExit(f"ERROR: p02_preparation.{key} must be {expected}")
     if prep.get("blocking_gate") is not None:
         raise SystemExit("ERROR: active P02 must have no unresolved entry blocker")
+else:
+    if (phase_rows.get("P02") or {}).get("state") != "done" or (phase_rows.get("P02") or {}).get("active_work_package") is not None:
+        raise SystemExit("ERROR: completed P02 must be done with no active package")
+    if (phase_rows.get("P03") or {}).get("state") != "planned":
+        raise SystemExit("ERROR: P03 must remain planned until a separate governed activation")
+    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: completed P02 must lock kernel and business implementation")
+    if manifest.get("state") != "done" or manifest.get("implementation_authorized") is not False:
+        raise SystemExit("ERROR: completed P02 manifest must be done/unauthorized")
+    if "Status: **SATISFIED**" not in exit_gate:
+        raise SystemExit("ERROR: completed P02 requires SATISFIED exit gate")
+    prep = state.get("p02_preparation") or {}
+    expected_prep = {
+        "state": "completed",
+        "phase_state": "done",
+        "next_work_package": None,
+        "work_package_state": "done",
+        "work_package_spec": "docs/roadmap/work-packages/P02.10.md",
+        "package_sequence": "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
+        "prepared_spec_count": 10,
+        "mandatory_spec_count": 10,
+        "entry_gate": "docs/governance/P02_ENTRY_GATE.md",
+        "exit_gate": "docs/governance/P02_EXIT_GATE.md",
+        "transition_checklist": "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
+    }
+    for key, expected in expected_prep.items():
+        if prep.get(key) != expected:
+            raise SystemExit(f"ERROR: terminal p02_preparation.{key} must be {expected}")
+    if prep.get("blocking_gate") is not None:
+        raise SystemExit("ERROR: completed P02 must have no unresolved P02 blocker")
 
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 for marker in [
@@ -130,10 +162,11 @@ for marker in [
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
+mode = "PLANNING / NOT ACTIVATED" if planning else "ACTIVE" if active else "COMPLETED / NOT ADVANCED"
 print("Omnexa P02 preparation/readiness validation: PASS")
 print("P01 exit: SATISFIED")
 print("P02 specifications: 10 / 10")
-print(f"Mode: {'PLANNING / NOT ACTIVATED' if planning else 'ACTIVE'}")
+print(f"Mode: {mode}")
 print(f"Active package: {current if active else 'NONE'}")
 print("Governance runner: GITHUB-HOSTED ONLY / ubuntu-24.04")
 print(f"Kernel code: {'AUTHORIZED FOR ' + current if active else 'LOCKED'}")
