@@ -101,8 +101,11 @@ if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|ker
   exit 1
 fi
 
-if grep -R -nE 'type[[:space:]]+(Role|Permission|Policy|MFA|Passkey|ServiceAccount|APIKey|TenantSetting|Party|Person|Customer|Supplier|Employee)([[:space:]]|$)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
-  echo "ERROR: P02.04 declares unauthorized authorization/MFA/service-account/settings/business concepts" >&2
+# P02.08 now owns ServiceAccount under kernel.identity. Keep this historical
+# P02.04 guard focused on concepts that remain outside the P02.04 session model;
+# it must not reject a later authorized identity principal type.
+if grep -R -nE 'type[[:space:]]+(Role|Permission|Policy|MFA|Passkey|APIKey|TenantSetting|Party|Person|Customer|Supplier|Employee)([[:space:]]|$)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: P02.04 declares unauthorized authorization/MFA/settings/business concepts" >&2
   exit 1
 fi
 
