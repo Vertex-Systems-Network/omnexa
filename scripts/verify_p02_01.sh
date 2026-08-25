@@ -66,7 +66,13 @@ go test -v ./kernel/internal/identity -run '^TestPostgresIdentityFoundationInteg
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/database"|"$module_prefix/kernel/internal/failure"|"$module_prefix/kernel/internal/config") ;;
+    "$module_prefix/kernel/internal/identity"|\
+    "$module_prefix/kernel/internal/database"|\
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/config"|\
+    "$module_prefix/kernel/internal/audit"|\
+    "$module_prefix/kernel/internal/observability"|\
+    "$module_prefix/kernel/internal/buildinfo") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.01 identity package imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -74,15 +80,15 @@ while IFS= read -r package; do
   esac
 done < <(go list -deps ./kernel/internal/identity)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(audit|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go'; then
-  echo "ERROR: P02.01 identity source contains later-domain or unrelated kernel coupling" >&2
+# P02.10 authorizes kernel.identity to consume the accepted kernel.audit writer
+# through a secret-free producer adapter. All other later/unrelated coupling stays blocked.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go'; then
+  echo "ERROR: P02.01 identity source contains unrelated kernel/future-domain coupling" >&2
   exit 1
 fi
 
 # P02.01's historical boundary remains enforced on the P02.01-owned runtime
-# foundation files. Additive P02.04 authentication/session files are authorized by
-# the current canonical package and must not force the completed prerequisite gate
-# to reject its own owner's newly activated scope.
+# foundation files. Additive later-P02 files must not redefine the foundation model.
 p02_01_runtime=(
   kernel/internal/identity/types.go
   kernel/internal/identity/repository.go
@@ -113,4 +119,4 @@ echo "P02.01 G4 fresh/idempotent/immutable-ledger migration evidence: PASS"
 echo "P02.01 G5 CONFIDENTIAL-PII safe output/no-premature-authority negatives: PASS"
 echo "P02.01 G6 stale transition/disabled terminal lifecycle resilience: PASS"
 echo "P02.01 G7 build/package: PASS"
-echo "P02.01 G8 pinned identity/database dependencies: PASS"
+echo "P02.01 G8 pinned identity/database dependencies plus authorized audit consumer: PASS"
