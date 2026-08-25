@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v18-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v19-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -255,3 +255,9 @@ jobs:
         env:
           P02_08_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p02_08.sh
+
+      - name: Verify P02.09 tenant-scoped settings
+        shell: bash
+        env:
+          P02_09_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p02_09.sh

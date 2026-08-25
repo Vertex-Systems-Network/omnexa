@@ -40,35 +40,44 @@ go test ./kernel/...
 go test -race ./kernel/internal/configuration -count=1
 go test -v ./kernel/internal/configuration -run 'Test(Registry|Evaluation|KillSwitch|Cache|Refresh|Caller|Provider|Concurrent)' -count=1
 
+# P01.10 originally owned the whole configuration package. P02.09 now adds an
+# authorized scoped layer in that same owner. Keep this historical regression
+# guard on direct runtime dependencies so the new layer may compose only the
+# accepted P02 audit/authorization/tenancy/organization capabilities without
+# turning transitive prerequisite imports into false coupling failures.
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/configuration"|"$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/audit"|\
+    "$module_prefix/kernel/internal/authorization"|\
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/organization"|\
+    "$module_prefix/kernel/internal/tenancy") ;;
     "$module_prefix"|"$module_prefix/"*)
-      echo "ERROR: P01.10 configuration package imports out-of-scope Omnexa package: ${package}" >&2
+      echo "ERROR: configuration runtime directly imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
       ;;
   esac
-done < <(go list -deps ./kernel/internal/configuration)
+done < <(go list -f '{{join .Imports "\n"}}' ./kernel/internal/configuration)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(config|cache|database|storage|operations|jobs|observability)' kernel/internal/configuration --include='*.go'; then
-  echo "ERROR: P01.10 runtime configuration source contains static/provider/later-kernel coupling" >&2
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(config|cache|database|storage|operations|jobs|observability)' kernel/internal/configuration --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: configuration runtime source contains static/provider/later-kernel coupling" >&2
   exit 1
 fi
 
 if go list -f '{{join .Imports "\n"}}' ./kernel/internal/configuration | grep -E '(^|/)(database/sql|net/http)(/|$)|github\.com/nats-io|go\.temporal\.io|robfig/cron'; then
-  echo "ERROR: P01.10 imports unauthorized persistence, transport, messaging, or workflow machinery" >&2
+  echo "ERROR: configuration runtime imports unauthorized transport, messaging, or workflow machinery" >&2
   exit 1
 fi
 
-if grep -R -nE 'type[[:space:]]+(Tenant|Organization|User|Customer|Order|Invoice|Product|Payment|Workflow|Event|Outbox|Inbox|Agent|Planner|Model|Permission|Role|Entitlement|Experiment|AuditRecord|Secret|Credential|Token)([[:space:]]|$)' kernel/internal/configuration --include='*.go'; then
-  echo "ERROR: P01.10 declares unauthorized identity, business, authorization, entitlement, audit, secret, or AI concepts" >&2
+if grep -R -nE 'type[[:space:]]+(Tenant|Organization|User|Customer|Order|Invoice|Product|Payment|Workflow|Event|Outbox|Inbox|Agent|Planner|Model|Permission|Role|Entitlement|Experiment|AuditRecord|Secret|Credential|Token)([[:space:]]|$)' kernel/internal/configuration --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: configuration runtime declares unauthorized identity, business, authorization-owner, entitlement, secret, or AI concepts" >&2
   exit 1
 fi
 
 go build ./kernel/...
 
-echo "P01.10 G1 format/static/dependency/ownership boundary: PASS"
+echo "P01.10 G1 format/static/direct-runtime-dependency/ownership boundary: PASS"
 echo "P01.10 G2 unit/race definitions/evaluation/cache/change metadata: PASS"
 echo "P01.10 G3 provider/default/fallback/context contract integration: PASS"
 echo "P01.10 G5 kill-switch fail-closed/non-authority/scope/security negatives: PASS"
