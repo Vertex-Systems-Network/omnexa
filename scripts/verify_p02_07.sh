@@ -102,8 +102,10 @@ if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|ker
   exit 1
 fi
 
-if grep -R -nE 'type[[:space:]]+(ServiceAccount|APIKey|TenantSetting|SSO|SAML|SCIM|Party|Person|Customer|Supplier|Employee)([[:space:]]|$)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
-  echo "ERROR: P02.07 declares unauthorized P02.08+/P24/settings/business concepts" >&2
+# P02.08 service-account/API-credential types and migration are now canonically
+# active. Keep the historical P02.07 guard only on concepts that remain future.
+if grep -R -nE 'type[[:space:]]+(TenantSetting|SSO|SAML|SCIM|Party|Person|Customer|Supplier|Employee)([[:space:]]|$)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: P02.07 declares unauthorized P02.09+/P24/settings/business concepts" >&2
   exit 1
 fi
 
@@ -148,11 +150,6 @@ done
 # explanatory comments containing the word "authorization" as executable authority.
 if grep -R -nE '(DecisionAllow|PermissionID|RoleID|ContextService)' kernel/internal/identity/strong_auth_*.go kernel/internal/identity/postgres_strong_auth_repository.go; then
   echo "ERROR: P02.07 strong authentication is attempting to become authorization authority" >&2
-  exit 1
-fi
-
-if find kernel/migrations/kernel.identity -maxdepth 1 -type f -name '4_*' -print | grep -q .; then
-  echo "ERROR: P02.07 unexpectedly pulled a future kernel.identity migration forward" >&2
   exit 1
 fi
 
