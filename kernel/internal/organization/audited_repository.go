@@ -97,7 +97,7 @@ func (repository *AuditedRepository) ResolveContext(ctx context.Context, trusted
 
 func (repository *AuditedRepository) auditMutation(ctx context.Context, scope tenancy.Scope, action, targetKind, targetReference string) error {
 	if !scope.Valid() {
-		return invalidScopeFailure()
+		return scopeDeniedFailure()
 	}
 	_, err := repository.writer.Write(ctx, audit.RequirementRequired, audit.RecordInput{
 		Classification: audit.ClassificationConfidential,
