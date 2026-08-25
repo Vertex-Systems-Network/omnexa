@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-24"
-  nature: "non-authoritative P02.07 closure / P02.08 activation continuity snapshot"
-  implementation_merge: "5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c"
-  closure_branch: "governance/p02-07-close-p02-08-activate"
+  verified_at: "2026-08-25"
+  nature: "non-authoritative P02.08 closure / P02.09 activation continuity snapshot"
+  implementation_merge: "32eb7187eb229327585551e4e28b0d596de78bd9"
+  closure_branch: "governance/p02-08-close-p02-09-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,9 +16,9 @@ phase:
   current: "P02"
   name: "Identity, Tenancy & Organization"
   state: "active"
-  candidate_progress_after_closure: "7 / 10 done"
-  candidate_current_work_package_after_closure: "P02.08"
-  candidate_owner_after_closure: "kernel.identity"
+  candidate_progress_after_closure: "8 / 10 done"
+  candidate_current_work_package_after_closure: "P02.09"
+  candidate_owner_after_closure: "kernel.configuration"
 
 p01_prerequisite:
   state: "done"
@@ -26,130 +26,74 @@ p01_prerequisite:
   exit_gate: "SATISFIED"
   regressions: "P01.01-P01.12 remain mandatory"
 
-p02_01_completion:
-  state: "done"
-  implementation_pr: 69
-  final_exact_head: "76919a9588f70aeea7e00f5214b82dcbf34cbee7"
-  canonical_run: 32635243643
-  canonical_job: 97183883007
-  result: "PASS"
-  implementation_merge: "44882e91e49d0364d841b511edbfd0619d05de1f"
-  evidence: "docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md"
-
-p02_02_completion:
-  state: "done"
-  implementation_pr: 71
-  final_exact_head: "a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7"
-  canonical_run: 32637760875
-  canonical_job: 97189971101
-  result: "PASS"
-  implementation_merge: "2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d"
-  evidence: "docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md"
-
-p02_03_completion:
-  state: "done"
-  implementation_pr: 73
-  final_exact_head: "20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c"
-  canonical_run: 32640790333
-  canonical_job: 97197453122
-  result: "PASS"
-  implementation_merge: "03b3d42a67d98638129b7f9d2b2f49467ae1fcec"
-  evidence: "docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md"
-
-p02_04_completion:
-  state: "done"
-  implementation_pr: 75
-  final_exact_head: "83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f"
-  canonical_run: 32653747461
-  canonical_job: 97229198036
-  result: "PASS"
-  implementation_merge: "769423a94ec03a9f2d7b9e667b9d4527fb0660bf"
-  evidence: "docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md"
-
-p02_05_completion:
-  state: "done"
-  implementation_pr: 77
-  final_exact_head: "2df8d2a8bef0cea60256a832986d6f8495c80378"
-  canonical_run: 32660848145
-  canonical_job: 97246683239
-  result: "PASS"
-  implementation_merge: "7b6a59e83c9bd696e6e008385b4413d529254171"
-  evidence: "docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md"
-
-p02_06_completion:
-  state: "done"
-  implementation_pr: 79
-  final_exact_head: "dbbd105fd5f2543ca7dd5df93375eaf1057928fc"
-  canonical_run: 32664834112
-  canonical_job: 97256520050
-  result: "PASS"
-  implementation_merge: "083c2866f0cd0773b85201750c2196bfd2fcc167"
-  evidence: "docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md"
-
-p02_07_completion:
+p02_completed_prefix:
   state: "done_candidate_pending_closure_merge"
-  implementation_pr: 81
-  final_exact_head: "51ccaa12c3534f74fba6eab9d4698ee483ef4ffd"
-  canonical_run: 32669167972
-  canonical_job: 97267175953
+  packages: "P02.01-P02.08"
+  regressions: "P02.01-P02.08 remain mandatory after activation"
+
+p02_08_completion:
+  state: "done_candidate_pending_closure_merge"
+  implementation_pr: 84
+  final_exact_head: "43bdcf525ce5e0cfdb9dc0707fbafee7cd552543"
+  canonical_run: 32885950897
+  canonical_job: 97926598423
   result: "PASS"
-  implementation_merge: "5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c"
-  runner: "GitHub Actions 1000016379"
+  implementation_merge: "32eb7187eb229327585551e4e28b0d596de78bd9"
+  runner: "GitHub Actions 1000022204"
   environment: "github-hosted"
   os: "Ubuntu 24.04.4 LTS"
   arch: "X64"
-  runner_image: "ubuntu-24.04 / 20260816.277.1"
+  runner_image: "ubuntu-24.04 / 20260823.283.1"
   go: "1.26.7"
   postgresql: "18.6"
-  evidence: "docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md"
+  evidence: "docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md"
   diagnostic_failures:
-    - "32668735841 / 97266149110 on 0ab9873367586ab0191a91f658da275f449de796 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
+    - "32882746486 / 97915911717 — corrected gofmt drift and one migration-version test-helper int/int64 mismatch"
+    - "32884311341 / 97921359088 — corrected gosec G304 variable-path helper and G101 credential-looking internal identifiers without broad suppression"
+    - "32884939579 / 97923224921 — stale historical P02.04 future-scope guard rejected ServiceAccount; narrowed without weakening P02.04 invariants"
+  superseded_run: "32885758158 — cancelled after candidate head moved; not acceptance evidence"
 
 candidate_active_contract:
-  work_package: "P02.08"
-  name: "Service accounts & API credentials"
-  owner: "kernel.identity"
-  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.08 active in a later governed session."
+  work_package: "P02.09"
+  name: "Tenant-Scoped Settings"
+  owner: "kernel.configuration"
+  authority_condition: "Only after this closure merges and protected main plus canonical STATE.json confirm P02.09 active in a later governed session."
   authorized:
-    - "distinct non-human Service Account principal under kernel.identity"
-    - "tenant/organization binding and capability/permission scope composition through accepted P02 authorization foundations"
-    - "API credential issue/identify/verify/rotate/revoke/expire lifecycle"
-    - "one-time secret presentation where applicable and non-reversible verifier storage"
-    - "classification-safe credential inventory/audit metadata while raw secrets remain RESTRICTED"
-    - "classification-safe last-used/rotation metadata where useful"
-    - "allowed-scope plus wrong-tenant/wrong-scope/revoked/expired deterministic evidence"
-    - "applicable owner-bounded persistence/migrations and focused identity/security evidence"
+    - "tenant-scoped and approved organization-scoped setting resolution using kernel.configuration"
+    - "trusted scope derived from P02 identity/tenancy context rather than arbitrary payload identifiers"
+    - "authorization around protected setting reads/writes"
+    - "classification-aware values and no-secret output behavior"
+    - "deterministic precedence only for explicitly supported scopes"
+    - "change audit hooks for security-significant settings"
+    - "same-tenant allow plus cross-tenant/wrong-scope deterministic evidence"
+    - "applicable owner-bounded persistence/migrations and focused configuration/security evidence"
   forbidden:
-    - "OAuth developer applications owned later by platform.developer"
-    - "external connector/provider integration (P16)"
-    - "device identities/POS (P11)"
-    - "AI agent execution identity behavior (P19-P20)"
-    - "P02.09 tenant-scoped settings"
-    - "P02.10 phase-exit product behavior"
-    - "business API scopes or business features/UI"
-    - "deployment/Kubernetes authority"
+    - "business-module settings and P03 module runtime"
+    - "secrets-management product surface"
+    - "feature/config values that grant authority independent of authorization"
+    - "deployment/environment orchestration"
+    - "P02.10 phase-exit implementation"
+    - "P03+, business features/UI or AI/model/agent runtime"
 
 security:
   kernel_code_authorized_after_closure: true
-  kernel_authority_scope_after_closure: "P02.08 only"
+  kernel_authority_scope_after_closure: "P02.09 only"
   business_feature_code_authorized: false
-  raw_api_credential_classification: "RESTRICTED"
-  raw_credentials_in_logs_traces_errors_audit_allowed: false
-  reversible_raw_credential_storage_allowed: false
-  fake_human_service_accounts_allowed: false
-  credential_possession_bypasses_authorization: false
-  generic_platform_superkey_allowed: false
+  settings_can_create_authority: false
+  tenant_org_scope_client_assertion_allowed: false
+  cross_tenant_fallback_allowed: false
+  global_write_shortcut_allowed: false
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json, identify P02.08 as sole active package, then STOP this execution session. Implement P02.08 only in a later governed session from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json, identify P02.09 as sole active package, then STOP this execution session. Implement P02.09 only in a later governed session from the exact protected-main SHA."
 
 blocked_actions:
-  - "implement P02.08 in the same execution session after its activation closure merges"
-  - "activate or implement P02.09-P02.10 early"
-  - "implement OAuth developer apps, connectors, device/POS identities or AI agents early"
+  - "implement P02.09 in the same execution session after its activation closure merges"
+  - "activate or implement P02.10 early"
   - "implement P03 or business modules/features"
+  - "implement secrets-management or deployment orchestration as P02.09"
   - "weaken governance, branch protection, P01/P02 regressions or P02 validators"
 
 source_authority:
@@ -160,8 +104,8 @@ source_authority:
   entry_gate: "docs/governance/P02_ENTRY_GATE.md"
   exit_gate: "docs/governance/P02_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  candidate_active_spec: "docs/roadmap/work-packages/P02.08.md"
+  candidate_active_spec: "docs/roadmap/work-packages/P02.09.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P02.07.md"
-  candidate_active: "docs/ai/handoffs/P02.08.md"
+  completed: "docs/ai/handoffs/P02.08.md"
+  candidate_active: "docs/ai/handoffs/P02.09.md"

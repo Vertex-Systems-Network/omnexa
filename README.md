@@ -6,7 +6,20 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 7 / 10 done. P02.01-P02.07 are DONE and P02.08 — Service accounts & API credentials is the sole active work package.** `kernel_code_authorized=true` only for P02.08; `business_feature_code_authorized=false`.
+> **Current execution state:** **P02 — Identity, Tenancy & Organization is ACTIVE at 8 / 10 done. P02.01-P02.08 are DONE and P02.09 — Tenant-Scoped Settings is the sole active work package.** `kernel_code_authorized=true` only for P02.09 after this closure merges and protected-main state is verified; `business_feature_code_authorized=false`.
+
+## Project progress
+
+```text
+P00  Product Constitution & Architecture Freeze  [██████████] 10/10  DONE
+P01  Omnexa Kernel                               [██████████] 12/12  DONE
+P02  Identity, Tenancy & Organization            [████████░░]  8/10  ACTIVE
+      └─ Current: P02.09 — Tenant-Scoped Settings
+      └─ Next:    P02.10 — Identity/permission audit trails & P02 exit proof
+P03+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
+```
+
+The bars report only comparable package completion **inside each governed phase**. Omnexa does not publish a synthetic overall roadmap percentage across P00-P27 because later phases contain unequal scope and would make a single percentage misleading. The authoritative execution cursor remains `docs/roadmap/STATE.json`.
 
 ## Mandatory contributor / AI start here
 
@@ -19,7 +32,7 @@ Key references:
 - `docs/governance/P02_ENTRY_GATE.md`
 - `docs/governance/P02_EXIT_GATE.md`
 - `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P02.08.md`
+- `docs/roadmap/work-packages/P02.09.md`
 - `docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md`
 - `docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md`
 - `docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md`
@@ -27,6 +40,7 @@ Key references:
 - `docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md`
 - `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md`
 - `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`
+- `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`
 - `docs/quality/GO_CODE_QUALITY.md`
 - `docs/adr/ADR-0010-foundation-architecture-freeze.md`
 
@@ -54,7 +68,7 @@ Canonical required CI uses GitHub-hosted `ubuntu-24.04` only and fails closed un
 
 P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evidence: PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`. P01 regressions remain mandatory during P02.
 
-## P02.01-P02.07 completion
+## P02.01-P02.08 completion
 
 P02.01 completed through implementation PR #69, exact head `76919a9588f70aeea7e00f5214b82dcbf34cbee7`, canonical GitHub-hosted run/job `32635243643 / 97183883007`, and merge `44882e91e49d0364d841b511edbfd0619d05de1f`.
 
@@ -68,25 +82,27 @@ P02.05 completed through implementation PR #77, exact head `2df8d2a8bef0cea60256
 
 P02.06 completed through implementation PR #79, exact head `dbbd105fd5f2543ca7dd5df93375eaf1057928fc`, canonical GitHub-hosted run/job `32664834112 / 97256520050`, and merge `083c2866f0cd0773b85201750c2196bfd2fcc167`, evidence `docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md`.
 
-P02.07 completed through implementation PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, canonical GitHub-hosted run/job `32669167972 / 97267175953`, and merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`.
+P02.07 completed through implementation PR #81, exact head `51ccaa12c3534f74fba6eab9d4698ee483ef4ffd`, canonical GitHub-hosted run/job `32669167972 / 97267175953`, and merge `5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c`, evidence `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`.
 
-P02.07 canonical evidence passed repository Go quality, P01.01-P01.12 regressions, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.06 regressions and applicable P02.07 G0-G8. It proves deterministic passkey factor lifecycle; approved passkey verification via an injected verifier instead of custom protocol/private-key crypto; exact User/session challenge expiry/replay enforcement; recovery-code digest-only persistence and replay denial; session-bound non-authorizing step-up proof; explicit factor-removal session invalidation policy; restricted-material redaction; and fresh/idempotent/P02.04-upgrade migration evidence. Immutable evidence is `docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md`.
+P02.08 completed through implementation PR #84, exact head `43bdcf525ce5e0cfdb9dc0707fbafee7cd552543`, canonical GitHub-hosted run/job `32885950897 / 97926598423`, and merge `32eb7187eb229327585551e4e28b0d596de78bd9`.
 
-Diagnostic run `32668735841 / 97266149110` remains FAIL for a corrected P02.07 verifier comment false-positive. The correction changed no runtime, schema, test, acceptance, security or gate behavior.
+P02.08 canonical evidence passed repository Go quality, P01.01-P01.12 regressions, `omnexa db migrate`, `omnexa verify all`, P02.01-P02.07 regressions and applicable P02.08 G0-G8. It proves distinct non-human Service Account lifecycle; exact tenant/organization credential binding; SHA-256 verifier-only credential persistence; current-state verification; transactional rotation; revocation/expiry/supersession denial; direct RBAC composition; raw-secret redaction; and fresh/idempotent/P02.07+P02.05 supported-upgrade migration evidence. Immutable evidence is `docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md`.
 
-## Active P02.08 scope
+Diagnostic implementation runs remain recorded as FAIL rather than being hidden: `32882746486 / 97915911717`, `32884311341 / 97921359088`, and `32884939579 / 97923224921`. Run `32885758158` was superseded/cancelled and is not acceptance evidence. The final canonical lane validates the narrow historical-verifier compatibility fixes without weakening retained P02.04-P02.07 regressions.
 
-P02.08 owner is `kernel.identity`. Authorized scope is limited to a distinct non-human Service Account principal; tenant/organization binding and capability/permission scope composition through accepted P02 authorization foundations; API credential issue/identify/verify/rotate/revoke/expire lifecycle; one-time secret presentation where applicable; non-reversible verifier storage; classification-safe credential inventory/audit metadata; classification-safe last-used/rotation metadata where useful; deterministic allowed-scope plus wrong-tenant/wrong-scope/revoked/expired evidence; and applicable owner-bounded persistence/migration evidence.
+## Active P02.09 scope
 
-Non-human principals are never fake human Users. Raw API credentials are `RESTRICTED`, never logged, traced, audited or stored reversibly. Credentials remain least-privilege, rotatable, revocable and tenant/organization bound. Credential possession never bypasses current authorization state. No generic platform superkey/master-token mechanism is authorized.
+P02.09 owner is `kernel.configuration`. Authorized scope is limited to tenant-scoped and approved organization-scoped setting resolution using the completed P01 configuration registry; trusted scope derived from P02 identity/tenancy context rather than arbitrary payload identifiers; authorization around protected setting reads/writes; classification-aware values and no-secret output behavior; deterministic precedence only for explicitly supported scopes; change audit hooks for security-significant settings; and same-tenant allow plus cross-tenant/wrong-scope negative evidence.
 
-OAuth developer applications, external connector/provider integration, device/POS identities, AI agent execution identity, P02.09 tenant settings, P02.10 phase-exit behavior, business API scopes/features/UI, deployment authority and other future scope remain unauthorized.
+Settings and feature flags cannot create authority by themselves. Tenant/org scope is trusted context, not a client assertion. Values inherit normal data-classification and logging restrictions. `kernel.configuration` remains authoritative owner, with no cross-tenant fallback or global-write shortcut.
+
+Business-module settings, P03 module runtime, a secrets-management product surface, feature/config values that independently grant authority, deployment/environment orchestration, P02.10 implementation and other future scope remain unauthorized.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` only for P02.08.
+- `kernel_code_authorized=true` only for P02.09 after this closure merges and protected-main state is verified.
 - `business_feature_code_authorized=false`.
-- P02.09-P02.10 remain planned.
+- P02.10 remains planned.
 - P03+ remains planned.
 - All proposed `X..` strategic programs remain planning-only until accepted, dependency-ready and activated through canonical work-package/state governance.
 
@@ -104,7 +120,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P02 active 7 / 10; P02.01-P02.07 done; P02.08 sole active package; business features locked.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done 10 / 10; P01 done 12 / 12; P02 active 8 / 10; P02.01-P02.08 done; P02.09 sole active package; P02.10 planned; business features locked.**
 
 `docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
 
