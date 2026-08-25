@@ -88,7 +88,13 @@ P02_04_TEST_DATABASE_URL="$integration_url" go test -v ./kernel/internal/identit
 module_prefix="github.com/Vertex-Systems-Network/omnexa"
 while IFS= read -r package; do
   case "$package" in
-    "$module_prefix/kernel/internal/identity"|"$module_prefix/kernel/internal/database"|"$module_prefix/kernel/internal/config"|"$module_prefix/kernel/internal/failure") ;;
+    "$module_prefix/kernel/internal/identity"|\
+    "$module_prefix/kernel/internal/database"|\
+    "$module_prefix/kernel/internal/config"|\
+    "$module_prefix/kernel/internal/failure"|\
+    "$module_prefix/kernel/internal/audit"|\
+    "$module_prefix/kernel/internal/observability"|\
+    "$module_prefix/kernel/internal/buildinfo") ;;
     "$module_prefix"|"$module_prefix/"*)
       echo "ERROR: P02.04 identity package imports out-of-scope Omnexa package: ${package}" >&2
       exit 1
@@ -96,14 +102,15 @@ while IFS= read -r package; do
   esac
 done < <(go list -deps ./kernel/internal/identity)
 
-if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|audit|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
-  echo "ERROR: P02.04 runtime identity source contains future-domain or unrelated kernel coupling" >&2
+# P02.10 authorizes the secret-free identity audit adapter. Authentication still
+# cannot import authorization/tenancy/organization or unrelated runtime owners.
+if grep -R -nE 'github\.com/Vertex-Systems-Network/omnexa/(modules|platform)|kernel/internal/(authorization|tenancy|organization|cache|configuration|developer|jobs|observability|operations|storage)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
+  echo "ERROR: P02.04 runtime identity source contains unauthorized/future coupling" >&2
   exit 1
 fi
 
 # P02.08 now owns ServiceAccount under kernel.identity. Keep this historical
-# P02.04 guard focused on concepts that remain outside the P02.04 session model;
-# it must not reject a later authorized identity principal type.
+# P02.04 guard focused on concepts that remain outside the P02.04 session model.
 if grep -R -nE 'type[[:space:]]+(Role|Permission|Policy|MFA|Passkey|APIKey|TenantSetting|Party|Person|Customer|Supplier|Employee)([[:space:]]|$)' kernel/internal/identity --include='*.go' --exclude='*_test.go'; then
   echo "ERROR: P02.04 declares unauthorized authorization/MFA/settings/business concepts" >&2
   exit 1
@@ -151,4 +158,4 @@ echo "P02.04 G4 fresh/idempotent/P02.01-upgrade/immutable-ledger migration evide
 echo "P02.04 G5 disclosure-safe authentication/current-context reauthorization/no-future-authz scope: PASS"
 echo "P02.04 G6 refresh replay/revocation/password-change/account-lifecycle invalidation resilience: PASS"
 echo "P02.04 G7 build/package: PASS"
-echo "P02.04 G8 pinned identity/database dependency chain: PASS"
+echo "P02.04 G8 pinned identity/database dependency chain plus authorized audit consumer: PASS"
