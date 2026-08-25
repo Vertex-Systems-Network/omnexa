@@ -45,7 +45,9 @@ func (subject ServiceAccountSubject) Valid() bool {
 	return subject.principalID.Valid() && subject.scope.Valid()
 }
 
-func (subject ServiceAccountSubject) PrincipalID() identity.ServiceAccountID { return subject.principalID }
+func (subject ServiceAccountSubject) PrincipalID() identity.ServiceAccountID {
+	return subject.principalID
+}
 func (subject ServiceAccountSubject) Scope() Scope { return subject.scope }
 
 func scopeFromServiceAccountBinding(binding identity.ServiceAccountBinding) (Scope, error) {
@@ -119,13 +121,15 @@ func (assignment ServiceAccountAssignment) validate() error {
 	return nil
 }
 
-func (assignment ServiceAccountAssignment) ID() AssignmentID { return assignment.id }
-func (assignment ServiceAccountAssignment) RoleID() RoleID { return assignment.roleID }
-func (assignment ServiceAccountAssignment) PrincipalID() identity.ServiceAccountID { return assignment.principalID }
-func (assignment ServiceAccountAssignment) Scope() Scope { return assignment.scope }
+func (assignment ServiceAccountAssignment) ID() AssignmentID   { return assignment.id }
+func (assignment ServiceAccountAssignment) RoleID() RoleID     { return assignment.roleID }
+func (assignment ServiceAccountAssignment) PrincipalID() identity.ServiceAccountID {
+	return assignment.principalID
+}
+func (assignment ServiceAccountAssignment) Scope() Scope           { return assignment.scope }
 func (assignment ServiceAccountAssignment) State() AssignmentState { return assignment.state }
-func (assignment ServiceAccountAssignment) CreatedAt() time.Time { return assignment.createdAt }
-func (assignment ServiceAccountAssignment) UpdatedAt() time.Time { return assignment.updatedAt }
+func (assignment ServiceAccountAssignment) CreatedAt() time.Time   { return assignment.createdAt }
+func (assignment ServiceAccountAssignment) UpdatedAt() time.Time   { return assignment.updatedAt }
 
 // CheckServiceAccount evaluates one direct permission using the same accepted
 // P02.05 roles/permissions/assignment owner. There is no credential or role-name bypass.
