@@ -15,11 +15,11 @@ const (
 	codeServiceAccountConflict       failure.Code = "identity.service_account.conflict"
 	codeServiceAccountTransition     failure.Code = "identity.service_account.transition_invalid"
 	codeServiceAccountBindingInvalid failure.Code = "identity.service_account.binding_invalid"
-	codeAPICredentialInvalid         failure.Code = "identity.api_credential.invalid"
-	codeAPICredentialStoredInvalid   failure.Code = "identity.api_credential.stored_invalid"
-	codeAPICredentialAuthentication  failure.Code = "identity.api_credential.authentication_failed"
-	codeAPICredentialConflict        failure.Code = "identity.api_credential.conflict"
-	codeAPICredentialSecretFailed    failure.Code = "identity.api_credential.secret_failed"
+	codeAPIInvalid                   failure.Code = "identity.api_credential.invalid"
+	codeAPIStoredInvalid             failure.Code = "identity.api_credential.stored_invalid"
+	codeAPIAuthenticationFailed      failure.Code = "identity.api_credential.authentication_failed"
+	codeAPIConflict                  failure.Code = "identity.api_credential.conflict"
+	codeAPIGenerationFailed          failure.Code = "identity.api_credential.secret_failed"
 	codeServiceAccountRepository     failure.Code = "identity.service_account.repository_failure"
 )
 
@@ -48,23 +48,23 @@ func serviceAccountBindingFailure() error {
 }
 
 func apiCredentialInvalidFailure() error {
-	return classifiedFailure(codeAPICredentialInvalid, failure.CategoryValidation, "API credential is invalid", false)
+	return classifiedFailure(codeAPIInvalid, failure.CategoryValidation, "API credential is invalid", false)
 }
 
 func apiCredentialStoredInvalidFailure() error {
-	return classifiedFailure(codeAPICredentialStoredInvalid, failure.CategoryInvariant, "stored API credential is invalid", false)
+	return classifiedFailure(codeAPIStoredInvalid, failure.CategoryInvariant, "stored API credential is invalid", false)
 }
 
 func apiCredentialAuthenticationFailure() error {
-	return classifiedFailure(codeAPICredentialAuthentication, failure.CategoryAuthentication, "API credential authentication failed", false)
+	return classifiedFailure(codeAPIAuthenticationFailed, failure.CategoryAuthentication, "API credential authentication failed", false)
 }
 
 func apiCredentialConflictFailure() error {
-	return classifiedFailure(codeAPICredentialConflict, failure.CategoryConflict, "API credential conflicts with current state", false)
+	return classifiedFailure(codeAPIConflict, failure.CategoryConflict, "API credential conflicts with current state", false)
 }
 
 func apiCredentialSecretGenerationFailure(cause error) error {
-	return wrappedFailure(cause, codeAPICredentialSecretFailed, failure.CategoryInternal, "API credential generation failed", false)
+	return wrappedFailure(cause, codeAPIGenerationFailed, failure.CategoryInternal, "API credential generation failed", false)
 }
 
 func serviceAccountRepositoryFailure(cause error) error {
