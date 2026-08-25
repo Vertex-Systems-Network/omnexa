@@ -242,7 +242,9 @@ func (repository *PostgresRepository) getAssignment(ctx context.Context, scope S
 		        r.tenant_id, r.organization_id
 		 FROM omnexa_authorization.role_assignments AS a
 		 JOIN omnexa_authorization.roles AS r ON r.id = a.role_id
+		 JOIN omnexa_identity.principals AS p ON p.id = a.principal_id
 		 WHERE a.id = $1
+		   AND p.principal_type = 'human_user'
 		   AND r.tenant_id = $2
 		   AND r.organization_id IS NOT DISTINCT FROM $3::uuid`,
 		string(id), string(scope.TenantID()), organizationArgument(scope),
@@ -291,9 +293,11 @@ func (repository *PostgresRepository) revokeAssignment(
 		ctx,
 		`UPDATE omnexa_authorization.role_assignments AS a
 		 SET assignment_state = 'revoked', updated_at = $4
-		 FROM omnexa_authorization.roles AS r
+		 FROM omnexa_authorization.roles AS r, omnexa_identity.principals AS p
 		 WHERE a.id = $1
 		   AND a.role_id = r.id
+		   AND p.id = a.principal_id
+		   AND p.principal_type = 'human_user'
 		   AND r.tenant_id = $2
 		   AND r.organization_id IS NOT DISTINCT FROM $3::uuid
 		   AND a.assignment_state = 'active'
@@ -332,8 +336,13 @@ func (repository *PostgresRepository) hasPermission(ctx context.Context, subject
 		   FROM omnexa_authorization.role_assignments AS a
 		   JOIN omnexa_authorization.roles AS r ON r.id = a.role_id
 		   JOIN omnexa_authorization.role_permissions AS rp ON rp.role_id = r.id
+		   JOIN omnexa_identity.principals AS p ON p.id = a.principal_id
+		   JOIN omnexa_tenancy.tenants AS t ON t.id = r.tenant_id
 		   WHERE a.principal_id = $1
 		     AND a.assignment_state = 'active'
+		     AND p.principal_type = 'human_user'
+		     AND p.lifecycle_state = 'active'
+		     AND t.lifecycle_state = 'active'
 		     AND r.tenant_id = $2
 		     AND r.organization_id IS NOT DISTINCT FROM $3::uuid
 		     AND rp.permission_id = $4
