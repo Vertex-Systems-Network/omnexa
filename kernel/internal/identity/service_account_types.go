@@ -79,14 +79,14 @@ type ServiceAccount struct {
 
 // SafeServiceAccount is suitable for inventory/diagnostics and contains no credential material.
 type SafeServiceAccount struct {
-	ID            ServiceAccountID
-	PrincipalType PrincipalType
-	State         LifecycleState
-	Name          string
-	TenantID      string
+	ID             ServiceAccountID
+	PrincipalType  PrincipalType
+	State          LifecycleState
+	Name           string
+	TenantID       string
 	OrganizationID string
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
 
 // NewServiceAccount creates one provisioned non-human principal. It does not issue
@@ -280,7 +280,9 @@ func (credential APICredential) validate() error {
 func (credential APICredential) ID() APICredentialID { return credential.id }
 
 // ServiceAccountID returns the owning non-human principal identifier.
-func (credential APICredential) ServiceAccountID() ServiceAccountID { return credential.serviceAccountID }
+func (credential APICredential) ServiceAccountID() ServiceAccountID {
+	return credential.serviceAccountID
+}
 
 // CreatedAt returns the issuance instant.
 func (credential APICredential) CreatedAt() time.Time { return credential.createdAt }
@@ -314,10 +316,10 @@ type APICredentialSecret struct {
 	value        string
 }
 
-func (secret APICredentialSecret) String() string { return "[REDACTED]" }
-func (secret APICredentialSecret) GoString() string { return "[REDACTED]" }
-func (secret APICredentialSecret) MarshalJSON() ([]byte, error) { return json.Marshal("[REDACTED]") }
-func (secret APICredentialSecret) Reveal() string { return secret.value }
+func (secret APICredentialSecret) String() string                { return "[REDACTED]" }
+func (secret APICredentialSecret) GoString() string              { return "[REDACTED]" }
+func (secret APICredentialSecret) MarshalJSON() ([]byte, error)  { return json.Marshal("[REDACTED]") }
+func (secret APICredentialSecret) Reveal() string                { return secret.value }
 func (secret APICredentialSecret) CredentialID() APICredentialID { return secret.credentialID }
 
 func (secret APICredentialSecret) valid() bool {
@@ -362,7 +364,7 @@ type IssuedAPICredential struct {
 	secret     APICredentialSecret
 }
 
-func (issued IssuedAPICredential) Credential() APICredential { return issued.credential }
+func (issued IssuedAPICredential) Credential() APICredential   { return issued.credential }
 func (issued IssuedAPICredential) Secret() APICredentialSecret { return issued.secret }
 
 // AuthenticatedServiceAccount proves one current API credential and exact account
@@ -372,8 +374,12 @@ type AuthenticatedServiceAccount struct {
 	credential APICredential
 }
 
-func (authenticated AuthenticatedServiceAccount) ServiceAccount() ServiceAccount { return authenticated.account }
-func (authenticated AuthenticatedServiceAccount) Credential() APICredential { return authenticated.credential }
+func (authenticated AuthenticatedServiceAccount) ServiceAccount() ServiceAccount {
+	return authenticated.account
+}
+func (authenticated AuthenticatedServiceAccount) Credential() APICredential {
+	return authenticated.credential
+}
 func (authenticated AuthenticatedServiceAccount) Valid() bool {
 	return authenticated.account.validate() == nil &&
 		authenticated.account.state == LifecycleActive &&
