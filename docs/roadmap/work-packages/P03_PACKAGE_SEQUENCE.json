@@ -10,8 +10,8 @@
   "ai_native_alignment": "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md",
   "implementation_authorized": true,
   "packages": [
-    {"id":"P03.01","name":"Module manifest schema","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P03.01.md","owner":"kernel.modules"},
-    {"id":"P03.02","name":"Registry & deterministic discovery","state":"planned","depends_on":["P03.01"],"spec":"docs/roadmap/work-packages/P03.02.md","owner":"kernel.modules"},
+    {"id":"P03.01","name":"Module manifest schema","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P03.01.md","owner":"kernel.modules"},
+    {"id":"P03.02","name":"Registry & deterministic discovery","state":"active","depends_on":["P03.01"],"spec":"docs/roadmap/work-packages/P03.02.md","owner":"kernel.modules"},
     {"id":"P03.03","name":"Dependency graph resolver","state":"planned","depends_on":["P03.02"],"spec":"docs/roadmap/work-packages/P03.03.md","owner":"kernel.modules"},
     {"id":"P03.04","name":"Module lifecycle state machine","state":"planned","depends_on":["P03.03"],"spec":"docs/roadmap/work-packages/P03.04.md","owner":"kernel.modules"},
     {"id":"P03.05","name":"Module settings & feature flags","state":"planned","depends_on":["P03.04"],"spec":"docs/roadmap/work-packages/P03.05.md","owner":"kernel.modules"},
@@ -22,6 +22,6 @@
     {"id":"P03.10","name":"Module health reporting","state":"planned","depends_on":["P03.09"],"spec":"docs/roadmap/work-packages/P03.10.md","owner":"kernel.modules"},
     {"id":"P03.11","name":"Package trust hooks & P03 exit proof","state":"planned","depends_on":["P03.10"],"spec":"docs/roadmap/work-packages/P03.11.md","owner":"kernel.modules"}
   ],
-  "phase_exit": "NOT SATISFIED — P03.01 is the sole active package. Reference-module exit evidence is required after all 11 packages complete.",
-  "note": "P03 is active with implementation authority bounded to P03.01 only. P03.02-P03.11 remain planned; business_feature_code_authorized=false; strategic X-program runtime remains unauthorized."
+  "phase_exit": "NOT SATISFIED — P03.01 is complete and P03.02 is the sole active package. Reference-module exit evidence is required after all 11 packages complete.",
+  "note": "P03 is active with implementation authority bounded to P03.02 only after this closure transition merges. P03.01 is done and retained as a regression prerequisite; P03.03-P03.11 remain planned; business_feature_code_authorized=false; strategic X-program runtime remains unauthorized."
 }
