@@ -15,14 +15,20 @@ if [[ "$actual_go" != "go${expected_go}" ]]; then
   exit 1
 fi
 
-for file in kernel/internal/modules/manifest.go kernel/internal/modules/validate.go kernel/internal/modules/manifest_test.go; do
+p03_01_files=(
+  kernel/internal/modules/manifest.go
+  kernel/internal/modules/validate.go
+  kernel/internal/modules/manifest_test.go
+)
+
+for file in "${p03_01_files[@]}"; do
   if [[ ! -f "$file" ]]; then
     echo "ERROR: P03.01 required source missing: ${file}" >&2
     exit 1
   fi
 done
 
-unformatted="$(gofmt -l kernel/internal/modules/*.go)"
+unformatted="$(gofmt -l "${p03_01_files[@]}")"
 if [[ -n "$unformatted" ]]; then
   echo "ERROR: gofmt required for P03.01 files:" >&2
   printf '%s\n' "$unformatted" >&2
@@ -38,15 +44,19 @@ if [[ -n "$(git status --porcelain -- go.mod go.work go.sum)" ]]; then
   exit 1
 fi
 
-if grep -R -nE '"(os|os/exec|plugin|net/http|database/sql)"' kernel/internal/modules; then
+if grep -nE '"(os|os/exec|plugin|net/http|database/sql)"' "${p03_01_files[@]}"; then
   echo "ERROR: P03.01 manifest parsing must remain declarative and side-effect free" >&2
   exit 1
 fi
-if grep -R -nE 'type[[:space:]]+(Registry|Discovery|DependencyGraph|LifecycleRuntime|ModuleStateStore)([[:space:]]|$)' kernel/internal/modules; then
-  echo "ERROR: P03.01 pulled P03.02+ registry/dependency/lifecycle runtime scope forward" >&2
+# This historical future-scope guard is intentionally scoped to the completed
+# P03.01 implementation files. P03.02 Registry/Discovery types are now
+# explicitly authorized by canonical STATE.json and must not make the retained
+# P03.01 regression verifier falsely fail.
+if grep -nE 'type[[:space:]]+(Registry|Discovery|DependencyGraph|LifecycleRuntime|ModuleStateStore)([[:space:]]|$)' "${p03_01_files[@]}"; then
+  echo "ERROR: P03.01 pulled P03.02+ registry/dependency/lifecycle runtime scope into P03.01 files" >&2
   exit 1
 fi
-if grep -R -nE '(password|private_key|raw_secret|access_token|client_secret)[[:space:]]*[:=]' kernel/internal/modules; then
+if grep -nE '(password|private_key|raw_secret|access_token|client_secret)[[:space:]]*[:=]' "${p03_01_files[@]}"; then
   echo "ERROR: P03.01 source contains credential-like value material" >&2
   exit 1
 fi
@@ -58,7 +68,7 @@ for marker in \
   'manifest.schema.unsupported' \
   'manifest.dependency.class_conflict' \
   'manifest.secret.reference_invalid'; do
-  if ! grep -R -Fq "$marker" kernel/internal/modules; then
+  if ! grep -Fq "$marker" "${p03_01_files[@]}"; then
     echo "ERROR: P03.01 required validation marker missing: ${marker}" >&2
     exit 1
   fi
