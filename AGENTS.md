@@ -17,18 +17,19 @@ P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
 P02: DONE — 10 / 10
 P02 exit gate: SATISFIED
-P03: ACTIVE — 0 / 11 done
-Current work package: P03.01 — Module Manifest Schema
-P03.02-P03.11: PLANNED
-kernel_code_authorized: true — P03.01 only
+P03: ACTIVE — 1 / 11 done
+P03.01: DONE
+Current work package after this closure transition merges: P03.02 — Registry & Deterministic Discovery
+P03.03-P03.11: PLANNED
+kernel_code_authorized: true — P03.02 only after closure merge
 business_feature_code_authorized: false
 ```
 
-Implementation authority is bounded to P03.01 only. P03.02+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
+Implementation authority becomes bounded to P03.02 only after this closure/state-transition PR passes canonical governance and merges to protected `main`. Until then, protected `main` remains authoritative at the prior cursor. P03.03+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P03.01.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after activation is verified on protected `main`, `docs/ai/handoffs/P03.02.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
 ## Mandatory read order
 
@@ -37,7 +38,7 @@ Before material work read:
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/P02_EXIT_GATE.md`, `docs/governance/P03_ENTRY_GATE.md`, `docs/governance/P03_EXIT_GATE.md` and `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`;
-4. `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` and active `docs/roadmap/work-packages/P03.01.md`;
+4. `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, completed `docs/roadmap/work-packages/P03.01.md`, its completion evidence, and active `docs/roadmap/work-packages/P03.02.md`;
 5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
@@ -74,7 +75,7 @@ The permanent repository Go quality gate runs through `bash scripts/verify_go_qu
 
 Strict protection requires implementation/closure/activation PRs to be current with protected `main` before merge. Stale green runs are not merge permission.
 
-## Completed P01/P02 prerequisites retained
+## Completed P01/P02/P03.01 prerequisites retained
 
 P01.01-P01.12 remain `done`; P01 exit remains **SATISFIED**. Final P01 evidence remains PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
@@ -86,50 +87,59 @@ P02.01-P02.10 remain `done`; P02 exit remains **SATISFIED**. Terminal P02 eviden
 - implementation merge: `88799aa41da8ce8c22540146d157d488565e2ce9`
 - completion evidence: `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 
-Diagnostic run `32903969206 / 97983773781` remains explicit FAIL history and is not acceptance evidence. All completed P01/P02 regressions remain mandatory during P03.
+P03.01 — Module Manifest Schema is complete with canonical evidence:
 
-## P03 activation and sequencing
+- implementation PR: #92
+- final exact head: `87da3302605c852ae5bf43d473aaa01a9e1aaa74`
+- canonical run/job: `33009396644 / 98311433013` — PASS
+- implementation merge: `4229e2a28442bf475afed143bab359a770d48053`
+- completion evidence: `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
+- retained verifier: `scripts/verify_p03_01.sh`
 
-P03 readiness preparation merged through PR #90 as `712064870ce77d01902c2450c9eed240cda9c44e` after exact readiness head `411c61f161a589b813ea28458cd43ce97be49f01` passed run/job `32910704583 / 98004146744` on GitHub-hosted `ubuntu-24.04`.
+Diagnostic runs remain explicit FAIL history and are never acceptance evidence. All completed P01/P02/P03.01 regressions remain mandatory during P03.02.
 
-`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution. At this checkpoint:
+## P03 sequencing
 
-- P03.01 is `active`;
-- P03.02-P03.11 are `planned`;
-- P03 progress is `0 / 11 done`;
-- `kernel_code_authorized=true` only for P03.01;
+`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution. This closure candidate advances exactly one boundary:
+
+- P03.01 is `done`;
+- P03.02 becomes `active` only after the closure PR merges;
+- P03.03-P03.11 remain `planned`;
+- P03 progress becomes `1 / 11 done`;
+- `kernel_code_authorized=true` only for P03.02 after closure merge;
 - `business_feature_code_authorized=false`.
 
 The AI must not automatically advance to another package. Implementation and closure/state transition remain separate governed PRs.
 
-## Active P03.01 boundary
+## Active P03.02 boundary after closure merge
 
 Owner: `kernel.modules`.
 
-P03.01 may implement only the canonical machine-readable Module Manifest Schema described by `docs/roadmap/work-packages/P03.01.md`:
+P03.02 may implement only Registry & Deterministic Discovery described by `docs/roadmap/work-packages/P03.02.md`:
 
-- stable module identity, version/contract version, owner and machine-validatable metadata;
-- required/optional/platform dependency declarations;
-- declared contribution/security metadata needed by the frozen module standard;
-- bounded parsing and deterministic validation errors;
-- positive/negative fixtures and explicit P03.01 verifier evidence.
+- registry records derived from already validated P03.01 manifest metadata;
+- deterministic discovery from explicit approved repository/runtime sources;
+- stable lookup/list ordering and stable source/version identity;
+- duplicate/conflicting module identity/version rejection;
+- structural distinction between discovered/available metadata and installed/enabled lifecycle state;
+- operator-safe discovery diagnostics.
 
-P03.01 invariants:
+P03.02 invariants:
 
-- manifest/package metadata is untrusted data;
-- parsing cannot execute package hooks or arbitrary code;
-- no secret values/credentials in manifests;
-- declarations never create authorization grants;
-- one authoritative owner remains `kernel.modules` for manifest semantics;
-- existing P02 tenancy/authorization/audit rules remain binding.
+- discovery consumes validated metadata and cannot execute package/module code or lifecycle hooks;
+- arbitrary filesystem or network scanning is forbidden;
+- duplicate identity must fail closed rather than resolve through nondeterministic enumeration or last-write-wins behavior;
+- registry metadata cannot grant permissions/capability authority;
+- sensitive source/path detail must respect classification/redaction;
+- one authoritative owner remains `kernel.modules`;
+- existing P02 tenancy/authorization/audit rules and P03.01 manifest validation remain binding.
 
-Explicitly forbidden in P03.01:
+Explicitly forbidden in P03.02:
 
-- P03.02 registry/discovery;
-- P03.03 dependency graph resolver;
+- P03.03 dependency graph resolution;
 - P03.04 lifecycle runtime/persistence;
-- P03.05-P03.11 registries, health/runtime trust enforcement or exit implementation;
-- marketplace/package-download/signature/sandbox runtime;
+- P03.05-P03.11 settings/capability/permission/UI/migration/health/trust runtime;
+- remote marketplace/catalog download, signature/trust enforcement or sandbox runtime;
 - System Graph, product federation or performance-intelligence runtime;
 - P04 events/workflows;
 - business modules/features;
@@ -143,13 +153,15 @@ Protected audit remains separate from ordinary logs. P01.11 audit is immutable/t
 
 P02 retained invariants remain binding: User is not business Person; trusted tenant context comes from authoritative tenant/membership state; no global tenant fallback; organization hierarchy is tenant-contained; authentication and credential possession prove identity rather than authority; sessions are revocable and current context is reauthorized; authorization is deny-by-default with exact trusted scope; contextual policy narrows only; service accounts are distinct non-human principals; settings cannot create authority; audit is classification-safe and secret-free; required-audit protected mutations cannot silently claim success when audit delivery fails.
 
+P03.01 retained invariants remain binding: manifests are untrusted declarative metadata; parsing/validation executes no package code; secret values are prohibited; declared permissions/capabilities do not create authorization; stable schema/version/owner/dependency semantics remain the only valid manifest contract.
+
 ## Quality and release rules
 
 Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package and `G8` Supply Chain/Release.
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-Canonical completion evidence comes from GitHub-hosted `ubuntu-24.04`. All completed P01/P02 regressions remain mandatory until a future governed change explicitly replaces them.
+Canonical completion evidence comes from GitHub-hosted `ubuntu-24.04`. All completed P01/P02/P03.01 regressions remain mandatory until a future governed change explicitly replaces them.
 
 ## Repository/local-development rules
 
@@ -191,6 +203,6 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next action
 
-After the P03 activation PR merges, verify protected `main` and canonical `STATE.json`, confirm P03/P03.01 are active and implementation authority is bounded to P03.01, then **STOP this execution session**.
+After this P03.01 closure/P03.02 activation PR passes its exact-head canonical governance and merges, verify protected `main` and canonical `STATE.json`, confirm P03.01 is done and P03.02 is the sole active implementation-authorized package, then **STOP this closure execution session**.
 
-P03.01 implementation starts only in a later governed session from the then-current protected-main SHA. Never implement P03.02+ from this activation transition.
+P03.02 implementation starts only in a later governed session from the then-current exact protected-main SHA. Never implement P03.03+ from this transition.
