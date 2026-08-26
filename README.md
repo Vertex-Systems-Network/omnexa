@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P03 — Module Runtime is ACTIVE at 1 / 11 with P03.01 complete and P03.02 — Registry & Deterministic Discovery as the sole active package after this closure transition merges.** `kernel_code_authorized=true` only for P03.02 after activation; `business_feature_code_authorized=false`.
+> **Current execution state after this closure transition merges:** **P03 — Module Runtime is ACTIVE at 2 / 11 with P03.01-P03.02 complete and P03.03 — Dependency Graph Resolver as the sole active package.** `kernel_code_authorized=true` only for P03.03 after activation; `business_feature_code_authorized=false`. Until then, protected `main` remains authoritative at P03.02.
 
 ## Project progress
 
@@ -15,10 +15,11 @@ P00  Product Constitution & Architecture Freeze  [██████████
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
 P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
       └─ Exit: SATISFIED
-P03  Module Runtime                              [█░░░░░░░░░]  1/11  ACTIVE
+P03  Module Runtime                              [██░░░░░░░░]  2/11  ACTIVE AFTER CLOSURE MERGE
       ├─ P03.01 — Module Manifest Schema: DONE
-      └─ Current: P03.02 — Registry & Deterministic Discovery
-      └─ P03.03-P03.11: PLANNED / LOCKED
+      ├─ P03.02 — Registry & Deterministic Discovery: DONE
+      └─ Current after closure: P03.03 — Dependency Graph Resolver
+      └─ P03.04-P03.11: PLANNED / LOCKED
 P04+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
@@ -26,7 +27,7 @@ The bars report only comparable package completion **inside each governed phase*
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Durable AI continuation starts with `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after canonical activation is verified, `docs/ai/handoffs/P03.02.md`.
+Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Durable AI continuation starts with `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after canonical activation is verified, `docs/ai/handoffs/P03.03.md`.
 
 Key references:
 
@@ -39,7 +40,9 @@ Key references:
 - `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`
 - `docs/roadmap/work-packages/P03.01.md`
 - `docs/roadmap/work-packages/P03.02.md`
+- `docs/roadmap/work-packages/P03.03.md`
 - `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
+- `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
 - `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`
 - `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 - `docs/quality/GO_CODE_QUALITY.md`
@@ -73,23 +76,30 @@ P02.01-P02.10 are complete. Terminal P02.10 evidence: PR #88, exact head `975e49
 
 P03.01 — Module Manifest Schema is complete. Canonical completion identity: implementation PR #92, exact head `87da3302605c852ae5bf43d473aaa01a9e1aaa74`, run/job `33009396644 / 98311433013`, implementation merge `4229e2a28442bf475afed143bab359a770d48053`, evidence `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`.
 
-All completed P01/P02/P03.01 regression verifiers remain mandatory during P03.02.
+P03.02 — Registry & Deterministic Discovery is complete with implementation PR #94, final exact head `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`, canonical run/job `33022405704 / 98355747775`, implementation merge `2e38969dbbbcfcf4765a114f449dc3fa960061d7`, and evidence `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`. Its dedicated `scripts/verify_p03_02.sh` remains a mandatory regression.
 
-## P03.02 activation
+An earlier P03.02 implementation candidate exposed an `errorlint` wrapped-error inspection defect and was corrected with `errors.As` without gate, acceptance or scope weakening. Only the final exact successful head/run above is acceptance evidence.
 
-The P03.01 closure transition advances exactly one package and contains no P03.02 implementation. After the closure PR passes its own exact-head canonical governance and merges to protected `main`, the active package is **P03.02 — Registry & Deterministic Discovery**, owned by `kernel.modules`.
+All completed P01/P02/P03.01/P03.02 regression verifiers remain mandatory during P03.03.
 
-P03.02 may implement only the registry/discovery contract in `docs/roadmap/work-packages/P03.02.md`: deterministic registry records over validated P03.01 manifests, explicit approved discovery sources, stable ordering, duplicate/conflict fail-closed behavior, separation of discovered metadata from installed/enabled lifecycle state and safe diagnostics.
+## P03.03 activation
 
-Not authorized by P03.02: arbitrary filesystem/network scanning, dependency graph resolution, lifecycle execution/persistence, later settings/capability/permission/UI/migration/health/trust registries, remote marketplace/catalog download, package signature/trust enforcement, P04 events/workflows, business modules, or AI/model/agent runtime.
+The P03.02 closure transition advances exactly one package and contains no P03.03 implementation. After the closure PR passes its own exact-head canonical governance and merges to protected `main`, the active package is **P03.03 — Dependency Graph Resolver**, owned by `kernel.modules`.
+
+P03.03 may implement only the dependency-resolution contract in `docs/roadmap/work-packages/P03.03.md`: version-aware required/optional dependency resolution, platform dependency validation, deterministic topological order, cycle/incompatible-version rejection, undeclared/forbidden/private dependency detection hooks and selective optional-dependency degradation metadata.
+
+Required or incompatible dependencies and circular required graphs fail closed. Missing optional dependencies must not globally fail unrelated modules. Resolver output creates no permission/capability/tenant/database/private-schema authority, and identical validated registry/manifests must resolve deterministically.
+
+Not authorized by P03.03: lifecycle mutations/persistence, package installation/download, P03.04-P03.11 implementation, P04 event orchestration, full System Graph runtime, trust/advisory scanning, direct cross-module private imports/writes, business modules, or AI/model/agent runtime.
 
 The P03 AI-native compatibility mapping for XQ-100, XSG-100, XTRUST-100, XPF-200 and XPERF-100 remains planning-only; it does not activate those strategic runtimes.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` **only for P03.02 after the closure transition merges**.
+- `kernel_code_authorized=true` **only for P03.03 after the closure transition merges**.
+- Until that merge, protected `main` remains authoritative at P03.02.
 - `business_feature_code_authorized=false`.
-- P03.03-P03.11 remain planned/locked.
+- P03.04-P03.11 remain planned/locked.
 - P04-P27 remain planned/locked.
 - Strategic X programs remain non-authorizing until separately accepted/dependency-ready/activated.
 
@@ -107,7 +117,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Closure-candidate checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 1 / 11; P03.01 done; P03.02 activation target.** Protected `main` becomes authoritative for P03.02 only after this closure transition passes governance and merges.
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Closure-candidate checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 2 / 11 after closure; P03.01-P03.02 done; P03.03 activation target.** Protected `main` becomes authoritative for P03.03 only after this closure transition passes governance and merges.
 
 `docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
 
