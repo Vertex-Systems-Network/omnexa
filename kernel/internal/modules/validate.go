@@ -25,38 +25,38 @@ var (
 )
 
 var allowedStatuses = map[string]struct{}{
-	"stable": {},
-	"beta": {},
+	"stable":       {},
+	"beta":         {},
 	"experimental": {},
 }
 
 var allowedRuntimes = map[string]struct{}{
-	"go": {},
+	"go":         {},
 	"typescript": {},
-	"rust": {},
-	"python": {},
+	"rust":       {},
+	"python":     {},
 }
 
 var allowedDataClassifications = map[string]struct{}{
-	"PUBLIC": {},
-	"INTERNAL": {},
+	"PUBLIC":       {},
+	"INTERNAL":     {},
 	"CONFIDENTIAL": {},
-	"RESTRICTED": {},
+	"RESTRICTED":   {},
 }
 
 var allowedLifecycleHooks = map[string]struct{}{
-	"pre_install": {},
-	"install": {},
+	"pre_install":  {},
+	"install":      {},
 	"post_install": {},
-	"pre_enable": {},
-	"enable": {},
-	"disable": {},
-	"upgrade": {},
-	"rollback": {},
-	"archive": {},
-	"export": {},
-	"detach": {},
-	"purge": {},
+	"pre_enable":   {},
+	"enable":       {},
+	"disable":      {},
+	"upgrade":      {},
+	"rollback":     {},
+	"archive":      {},
+	"export":       {},
+	"detach":       {},
+	"purge":        {},
 	"health_check": {},
 }
 
@@ -159,7 +159,7 @@ func ValidateManifest(manifest Manifest) error {
 	validateSecurity(collector, manifest.Security)
 
 	for path, value := range map[string]string{
-		"publisher":       manifest.Publisher,
+		"publisher":      manifest.Publisher,
 		"provenance_ref": manifest.ProvenanceRef,
 		"sbom_ref":       manifest.SBOMRef,
 	} {
