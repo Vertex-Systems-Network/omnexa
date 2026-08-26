@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 )
@@ -187,15 +188,19 @@ func newDiscoveryErrors(diagnostics []DiscoveryDiagnostic) error {
 }
 
 func discoveryReason(err error) string {
-	switch typed := err.(type) {
-	case *ParseError:
-		return typed.Code
-	case *ValidationErrors:
-		issues := typed.Issues()
+	var parseErr *ParseError
+	if errors.As(err, &parseErr) {
+		return parseErr.Code
+	}
+
+	var validationErr *ValidationErrors
+	if errors.As(err, &validationErr) {
+		issues := validationErr.Issues()
 		if len(issues) > 0 {
 			return issues[0].Code
 		}
 	}
+
 	return "manifest.invalid"
 }
 
