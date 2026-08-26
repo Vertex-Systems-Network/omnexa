@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state:** **P03 — Module Runtime is ACTIVE at 0 / 11 with P03.01 — Module Manifest Schema as the sole active package.** `kernel_code_authorized=true` only for P03.01; `business_feature_code_authorized=false`.
+> **Current execution state:** **P03 — Module Runtime is ACTIVE at 1 / 11 with P03.01 complete and P03.02 — Registry & Deterministic Discovery as the sole active package after this closure transition merges.** `kernel_code_authorized=true` only for P03.02 after activation; `business_feature_code_authorized=false`.
 
 ## Project progress
 
@@ -15,9 +15,10 @@ P00  Product Constitution & Architecture Freeze  [██████████
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
 P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
       └─ Exit: SATISFIED
-P03  Module Runtime                              [░░░░░░░░░░]  0/11  ACTIVE
-      └─ Current: P03.01 — Module Manifest Schema
-      └─ P03.02-P03.11: PLANNED / LOCKED
+P03  Module Runtime                              [█░░░░░░░░░]  1/11  ACTIVE
+      ├─ P03.01 — Module Manifest Schema: DONE
+      └─ Current: P03.02 — Registry & Deterministic Discovery
+      └─ P03.03-P03.11: PLANNED / LOCKED
 P04+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
@@ -25,7 +26,7 @@ The bars report only comparable package completion **inside each governed phase*
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Durable AI continuation starts with `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and `docs/ai/handoffs/P03.01.md` after canonical state is verified.
+Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Durable AI continuation starts with `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after canonical activation is verified, `docs/ai/handoffs/P03.02.md`.
 
 Key references:
 
@@ -37,6 +38,8 @@ Key references:
 - `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`
 - `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`
 - `docs/roadmap/work-packages/P03.01.md`
+- `docs/roadmap/work-packages/P03.02.md`
+- `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
 - `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`
 - `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 - `docs/quality/GO_CODE_QUALITY.md`
@@ -68,23 +71,25 @@ P01.01-P01.12 are complete with canonical executable evidence. Final P01.12 evid
 
 P02.01-P02.10 are complete. Terminal P02.10 evidence: PR #88, exact head `975e4925060a035780ca13b68c5437634ed0f4ea`, canonical run/job `32904678957 / 97986011269`, merge `88799aa41da8ce8c22540146d157d488565e2ce9`. Diagnostic run `32903969206 / 97983773781` remains historical **FAIL** evidence and is not acceptance evidence.
 
-All P01/P02 regression verifiers remain mandatory during P03.
+P03.01 — Module Manifest Schema is complete. Canonical completion identity: implementation PR #92, exact head `87da3302605c852ae5bf43d473aaa01a9e1aaa74`, run/job `33009396644 / 98311433013`, implementation merge `4229e2a28442bf475afed143bab359a770d48053`, evidence `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`.
 
-## P03 activation
+All completed P01/P02/P03.01 regression verifiers remain mandatory during P03.02.
 
-P03 readiness preparation was accepted through PR #90. Exact readiness head `411c61f161a589b813ea28458cd43ce97be49f01` passed canonical GitHub-hosted run/job `32910704583 / 98004146744`; readiness merged as `712064870ce77d01902c2450c9eed240cda9c44e`.
+## P03.02 activation
 
-The active package is **P03.01 — Module Manifest Schema**, owned by `kernel.modules`. It may implement only the machine-readable module manifest schema/validation contract in `docs/roadmap/work-packages/P03.01.md`.
+The P03.01 closure transition advances exactly one package and contains no P03.02 implementation. After the closure PR passes its own exact-head canonical governance and merges to protected `main`, the active package is **P03.02 — Registry & Deterministic Discovery**, owned by `kernel.modules`.
 
-Not authorized by P03.01: registry/discovery, dependency graph resolution, module lifecycle runtime, later settings/capability/permission/UI/migration/health registries, package trust enforcement, marketplace/runtime federation, P04 events/workflows, business modules, or AI/model/agent runtime.
+P03.02 may implement only the registry/discovery contract in `docs/roadmap/work-packages/P03.02.md`: deterministic registry records over validated P03.01 manifests, explicit approved discovery sources, stable ordering, duplicate/conflict fail-closed behavior, separation of discovered metadata from installed/enabled lifecycle state and safe diagnostics.
+
+Not authorized by P03.02: arbitrary filesystem/network scanning, dependency graph resolution, lifecycle execution/persistence, later settings/capability/permission/UI/migration/health/trust registries, remote marketplace/catalog download, package signature/trust enforcement, P04 events/workflows, business modules, or AI/model/agent runtime.
 
 The P03 AI-native compatibility mapping for XQ-100, XSG-100, XTRUST-100, XPF-200 and XPERF-100 remains planning-only; it does not activate those strategic runtimes.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` **only for P03.01**.
+- `kernel_code_authorized=true` **only for P03.02 after the closure transition merges**.
 - `business_feature_code_authorized=false`.
-- P03.02-P03.11 remain planned/locked.
+- P03.03-P03.11 remain planned/locked.
 - P04-P27 remain planned/locked.
 - Strategic X programs remain non-authorizing until separately accepted/dependency-ready/activated.
 
@@ -102,7 +107,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 0 / 11; P03.01 sole active package.**
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Closure-candidate checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 1 / 11; P03.01 done; P03.02 activation target.** Protected `main` becomes authoritative for P03.02 only after this closure transition passes governance and merges.
 
 `docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
 
