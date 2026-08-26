@@ -279,3 +279,7 @@ jobs:
       - name: Verify P03.01 module manifest schema
         shell: bash
         run: bash scripts/verify_p03_01.sh
+
+      - name: Verify P03.02 registry and deterministic discovery
+        shell: bash
+        run: bash scripts/verify_p03_02.sh
