@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-26"
-  nature: "non-authoritative P02.10 completion / P02 terminal-exit continuity snapshot"
-  implementation_merge: "88799aa41da8ce8c22540146d157d488565e2ce9"
-  closure_branch: "governance/p02-10-p02-exit"
+  nature: "non-authoritative P03.01 activation continuity snapshot"
+  readiness_merge: "712064870ce77d01902c2450c9eed240cda9c44e"
+  activation_branch: "governance/p03-01-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -13,12 +13,11 @@ project:
   mode: "gated_evidence_based_architecture_first"
 
 phase:
-  current: "P02"
-  name: "Identity, Tenancy & Organization"
-  state_after_closure: "done"
-  progress_after_closure: "10 / 10 done"
-  current_work_package_after_closure: null
-  next_phase: "P03 planned / not activated"
+  current: "P03"
+  name: "Module Runtime"
+  state_after_activation: "active"
+  progress_after_activation: "0 / 11 done"
+  current_work_package_after_activation: "P03.01"
 
 p01_prerequisite:
   state: "done"
@@ -26,80 +25,74 @@ p01_prerequisite:
   exit_gate: "SATISFIED"
   regressions: "P01.01-P01.12 remain mandatory"
 
-p02_completion:
-  state_after_closure: "done"
-  packages: "P02.01-P02.10"
-  exit_gate_after_closure: "SATISFIED"
-  regressions: "P02.01-P02.10 remain mandatory until future governed architecture changes them"
-
-p02_10_completion:
+p02_prerequisite:
   state: "done"
-  implementation_pr: 88
-  final_exact_head: "975e4925060a035780ca13b68c5437634ed0f4ea"
-  canonical_run: 32904678957
-  canonical_job: 97986011269
-  result: "PASS"
-  implementation_merge: "88799aa41da8ce8c22540146d157d488565e2ce9"
-  runner: "GitHub Actions 1000023269"
-  environment: "github-hosted"
-  os: "Ubuntu 24.04.4 LTS"
-  arch: "X64"
-  runner_image: "ubuntu-24.04 / 20260816.277.1"
-  go: "1.26.7"
-  postgresql: "18.6"
-  valkey: "9.1.1"
-  s3mock: "5.1.0"
-  evidence: "docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md"
-  diagnostic_failures:
-    - "32903969206 / 97983773781 — corrected undefined invalidScopeFailure reference; retained as FAIL diagnostic evidence"
+  progress: "10 / 10 done"
+  exit_gate: "SATISFIED"
+  regressions: "P02.01-P02.10 remain mandatory"
+  terminal_implementation_pr: 88
+  terminal_exact_head: "975e4925060a035780ca13b68c5437634ed0f4ea"
+  terminal_run: 32904678957
+  terminal_job: 97986011269
+  terminal_merge: "88799aa41da8ce8c22540146d157d488565e2ce9"
 
-retained_p02_contract:
-  authorized_behavior:
-    - "trusted identity/tenancy/organization boundaries and deny-by-default authorization remain authoritative"
-    - "strong authentication and service-account credentials remain non-authorizing proof mechanisms"
-    - "tenant-scoped settings cannot create authority and have no global/user override"
-    - "classification-safe P02 audit integration remains separate from ordinary logging and excludes secrets"
-    - "required-audit protected mutations cannot silently claim success when audit delivery fails"
-  forbidden:
-    - "generic audit read/export/admin UI without later authorization"
-    - "support impersonation product surface"
-    - "P03 module runtime before separate activation"
-    - "business domains/features before canonical activation"
-    - "P04 events/workflows before activation"
-    - "AI/model/agent runtime before activation"
+p03_readiness:
+  state: "done"
+  readiness_pr: 90
+  exact_head: "411c61f161a589b813ea28458cd43ce97be49f01"
+  canonical_run: 32910704583
+  canonical_job: 98004146744
+  result: "PASS"
+  readiness_merge: "712064870ce77d01902c2450c9eed240cda9c44e"
+  prepared_specs: 11
+  runner: "github-hosted ubuntu-24.04"
+
+p03_01:
+  state_after_activation: "active"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.01.md"
+  objective: "canonical machine-readable module manifest schema and deterministic validation"
+  implementation_evidence: null
+  completion_evidence: null
 
 security:
-  kernel_code_authorized_after_closure: false
+  kernel_code_authorized_after_activation: true
+  kernel_code_scope: "P03.01 only"
   business_feature_code_authorized: false
-  p03_activated_after_closure: false
-  audit_is_ordinary_logging: false
-  audit_write_implies_read_export: false
-  secrets_or_authentication_material_allowed_in_audit: false
+  manifests_are_untrusted_input: true
+  manifest_parsing_may_execute_package_code: false
+  declarations_create_authorization: false
+  secrets_allowed_in_manifests: false
+  strategic_x_runtime_authorized: false
+  ai_model_agent_runtime_authorized: false
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
-next_action:
-  after_closure_merge: "Verify protected main and STATE.json: P02 DONE 10/10, P02 exit SATISFIED, current package NONE, P03 PLANNED, kernel/business implementation locks false; then STOP. A later governed session may prepare P03 specifications/readiness and explicit activation, but must not implement P03 before activation."
-
 blocked_actions:
-  - "activate or implement P03 in this P02 closure session"
-  - "treat P02 completion as implicit P03 authority"
-  - "implement business modules/features"
-  - "implement generic audit UI/export, support impersonation, workflow/event or AI runtime scope without later activation"
-  - "weaken governance, branch protection, P01/P02 regressions or terminal validators"
+  - "implement P03.02-P03.11 before governed activation"
+  - "implement P04+ or business modules/features"
+  - "implement System Graph, trust enforcement, product federation or performance intelligence from compatibility metadata alone"
+  - "implement AI/model/agent runtime"
+  - "treat activation evidence as P03.01 completion evidence"
+  - "weaken governance, branch protection or P01/P02 regressions"
+
+next_action:
+  after_activation_merge: "Verify protected main and STATE.json: P03/P03.01 ACTIVE, progress 0/11, kernel code authorized only for P03.01, business features locked; then STOP. A later governed session may implement only P03.01 from the exact protected-main SHA."
 
 source_authority:
   execution_contract: "AGENTS.md"
   canonical_state: "docs/roadmap/STATE.json"
   status: "docs/roadmap/STATUS.md"
   ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
-  entry_gate: "docs/governance/P02_ENTRY_GATE.md"
-  exit_gate: "docs/governance/P02_EXIT_GATE.md"
-  package_sequence: "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json"
-  terminal_spec: "docs/roadmap/work-packages/P02.10.md"
-  completion_evidence: "docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md"
+  p02_exit_gate: "docs/governance/P02_EXIT_GATE.md"
+  entry_gate: "docs/governance/P03_ENTRY_GATE.md"
+  exit_gate: "docs/governance/P03_EXIT_GATE.md"
+  transition_checklist: "docs/governance/P02_P03_TRANSITION_CHECKLIST.md"
+  package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
+  active_spec: "docs/roadmap/work-packages/P03.01.md"
+  ai_native_alignment: "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md"
 
 handoff:
-  terminal: "docs/ai/handoffs/P02.10.md"
+  active: "docs/ai/handoffs/P03.01.md"

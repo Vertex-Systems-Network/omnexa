@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate P02 readiness, bounded activation, and terminal completion."""
+"""Validate P02 readiness, bounded activation, terminal completion, and later-phase retention."""
 
 from __future__ import annotations
 
@@ -14,16 +14,7 @@ REQUIRED_FILES = [
     "docs/governance/P02_EXIT_GATE.md",
     "docs/governance/P01_P02_TRANSITION_CHECKLIST.md",
     "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
-    "docs/roadmap/work-packages/P02.01.md",
-    "docs/roadmap/work-packages/P02.02.md",
-    "docs/roadmap/work-packages/P02.03.md",
-    "docs/roadmap/work-packages/P02.04.md",
-    "docs/roadmap/work-packages/P02.05.md",
-    "docs/roadmap/work-packages/P02.06.md",
-    "docs/roadmap/work-packages/P02.07.md",
-    "docs/roadmap/work-packages/P02.08.md",
-    "docs/roadmap/work-packages/P02.09.md",
-    "docs/roadmap/work-packages/P02.10.md",
+    *[f"docs/roadmap/work-packages/P02.{i:02d}.md" for i in range(1, 11)],
     "scripts/validate_p02_package_specs.py",
     ".github/workflows/governance.yml",
 ]
@@ -63,8 +54,10 @@ phase = state.get("phase") or {}
 planning = current_phase == "P01" and current is None and phase.get("state") == "done"
 active = current_phase == "P02" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P02.")
 terminal = current_phase == "P02" and current is None and phase.get("state") == "done"
-if not (planning or active or terminal):
-    raise SystemExit("ERROR: invalid P02 readiness/activation/completion checkpoint")
+historical = current_phase == "P03" and (phase_rows.get("P02") or {}).get("state") == "done"
+completed = terminal or historical
+if not (planning or active or completed):
+    raise SystemExit("ERROR: invalid P02 readiness/activation/completion/later-phase checkpoint")
 
 entry = (ROOT / "docs/governance/P02_ENTRY_GATE.md").read_text(encoding="utf-8")
 for marker in ["P01 exit satisfied", "GitHub-hosted", "strict sequential", "kernel.identity", "kernel.tenancy", "kernel.authorization", "business_feature_code_authorized=false"]:
@@ -117,14 +110,11 @@ elif active:
     if prep.get("blocking_gate") is not None:
         raise SystemExit("ERROR: active P02 must have no unresolved entry blocker")
 else:
-    if (phase_rows.get("P02") or {}).get("state") != "done" or (phase_rows.get("P02") or {}).get("active_work_package") is not None:
-        raise SystemExit("ERROR: completed P02 must be done with no active package")
-    if (phase_rows.get("P03") or {}).get("state") != "planned":
-        raise SystemExit("ERROR: P03 must remain planned until a separate governed activation")
-    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: completed P02 must lock kernel and business implementation")
+    p02_row = phase_rows.get("P02") or {}
+    if p02_row.get("state") != "done" or p02_row.get("active_work_package") is not None:
+        raise SystemExit("ERROR: completed phases[] P02 must remain done with no active package")
     if manifest.get("state") != "done" or manifest.get("implementation_authorized") is not False:
-        raise SystemExit("ERROR: completed P02 manifest must be done/unauthorized")
+        raise SystemExit("ERROR: completed P02 manifest must remain done/unauthorized")
     if "Status: **SATISFIED**" not in exit_gate:
         raise SystemExit("ERROR: completed P02 requires SATISFIED exit gate")
     prep = state.get("p02_preparation") or {}
@@ -143,9 +133,16 @@ else:
     }
     for key, expected in expected_prep.items():
         if prep.get(key) != expected:
-            raise SystemExit(f"ERROR: terminal p02_preparation.{key} must be {expected}")
+            raise SystemExit(f"ERROR: completed p02_preparation.{key} must remain {expected}")
     if prep.get("blocking_gate") is not None:
-        raise SystemExit("ERROR: completed P02 must have no unresolved P02 blocker")
+        raise SystemExit("ERROR: completed P02 must retain no unresolved P02 blocker")
+    if terminal:
+        if (phase_rows.get("P03") or {}).get("state") != "planned":
+            raise SystemExit("ERROR: P03 must remain planned until a separate governed activation")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            raise SystemExit("ERROR: terminal P02 checkpoint must lock kernel and business implementation")
+    elif lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: business-feature implementation must remain locked during P03")
 
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 for marker in [
@@ -162,12 +159,12 @@ for marker in [
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
-mode = "PLANNING / NOT ACTIVATED" if planning else "ACTIVE" if active else "COMPLETED / NOT ADVANCED"
+mode = "PLANNING / NOT ACTIVATED" if planning else "ACTIVE" if active else "COMPLETED / HISTORICAL"
 print("Omnexa P02 preparation/readiness validation: PASS")
 print("P01 exit: SATISFIED")
 print("P02 specifications: 10 / 10")
 print(f"Mode: {mode}")
-print(f"Active package: {current if active else 'NONE'}")
+print(f"Active P02 package: {current if active else 'NONE'}")
 print("Governance runner: GITHUB-HOSTED ONLY / ubuntu-24.04")
-print(f"Kernel code: {'AUTHORIZED FOR ' + current if active else 'LOCKED'}")
+print(f"Kernel code: {'AUTHORIZED FOR ' + current if active else 'P02 LOCKED / HISTORICAL'}")
 print("Business feature code: LOCKED")
