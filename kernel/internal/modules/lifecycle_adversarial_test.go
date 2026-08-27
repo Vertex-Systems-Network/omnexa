@@ -272,3 +272,32 @@ func TestLifecycleFailedReinstallFromPurgedRecoversToPurged(t *testing.T) {
 		t.Fatalf("failed reinstall recovery must restore purged state: %#v", recovered.Record)
 	}
 }
+
+func TestLifecycleFailureFixturePreservesUnrelatedModuleIntegrity(t *testing.T) {
+	alpha := simpleManifestV2("omnexa.alpha", "1.0.0")
+	beta := simpleManifestV2("omnexa.beta", "1.0.0")
+	registry := discoverV2Registry(t, alpha, beta)
+	store := NewMemoryLifecycleStore()
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+	applyLifecycle(t, manager, alpha.ID, LifecycleInstall, "alpha-install")
+	applyLifecycle(t, manager, beta.ID, LifecycleInstall, "beta-install")
+
+	before, found, err := store.Load(context.Background(), beta.ID)
+	if err != nil || !found {
+		t.Fatalf("load unrelated module before failure: found=%v err=%v", found, err)
+	}
+	if _, err := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
+		ModuleID: alpha.ID, FailedAction: LifecycleEnable, OperationID: "alpha-enable-failed", FailureCode: "hook.timeout",
+	}); err != nil {
+		t.Fatalf("MarkRecoveryRequired(alpha) error = %v", err)
+	}
+	afterFailure, found, err := store.Load(context.Background(), beta.ID)
+	if err != nil || !found || afterFailure != before {
+		t.Fatalf("alpha failure mutated unrelated beta state: before=%#v after=%#v found=%v err=%v", before, afterFailure, found, err)
+	}
+	applyLifecycle(t, manager, alpha.ID, LifecycleRecover, "alpha-recover")
+	afterRecovery, found, err := store.Load(context.Background(), beta.ID)
+	if err != nil || !found || afterRecovery != before {
+		t.Fatalf("alpha recovery mutated unrelated beta state: before=%#v after=%#v found=%v err=%v", before, afterRecovery, found, err)
+	}
+}
