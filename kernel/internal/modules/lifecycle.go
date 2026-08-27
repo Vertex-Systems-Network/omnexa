@@ -203,9 +203,9 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 	if !ok {
 		return LifecycleResult{}, lifecycleErr("lifecycle.module.not_discovered", request.ModuleID, "")
 	}
-	current, found, err := m.loadRecord(ctx, request.ModuleID)
-	if err != nil {
-		return LifecycleResult{}, err
+	current, found, loadErr := m.loadRecord(ctx, request.ModuleID)
+	if loadErr != nil {
+		return LifecycleResult{}, loadErr
 	}
 	if !found {
 		current = LifecycleRecord{ModuleID: request.ModuleID, State: LifecycleAvailable}
