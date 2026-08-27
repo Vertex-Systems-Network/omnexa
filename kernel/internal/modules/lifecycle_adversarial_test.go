@@ -134,6 +134,60 @@ func TestLifecycleReverseDependencyReadFailureFailsClosed(t *testing.T) {
 	}
 }
 
+func TestLifecycleRecoveryTargetEnabledProtectsRequiredDependency(t *testing.T) {
+	provider := simpleManifestV2("omnexa.provider", "1.0.0")
+	consumer := simpleManifestV2("omnexa.consumer", "1.0.0")
+	consumer.Dependencies = []DependencyRequirement{{ID: provider.ID, Constraint: "=1.0.0"}}
+	registry := discoverV2Registry(t, consumer, provider)
+	store := NewMemoryLifecycleStore()
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+
+	applyLifecycle(t, manager, provider.ID, LifecycleInstall, "provider-install")
+	applyLifecycle(t, manager, provider.ID, LifecycleEnable, "provider-enable")
+	applyLifecycle(t, manager, consumer.ID, LifecycleInstall, "consumer-install")
+	applyLifecycle(t, manager, consumer.ID, LifecycleEnable, "consumer-enable")
+	failed, err := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
+		ModuleID: consumer.ID, FailedAction: LifecycleDisable, OperationID: "consumer-disable-failed", FailureCode: "hook.timeout",
+	})
+	if err != nil || failed.RecoveryState != LifecycleEnabled {
+		t.Fatalf("expected enabled recovery target, record=%#v err=%v", failed, err)
+	}
+
+	_, err = manager.Apply(context.Background(), LifecycleRequest{
+		ModuleID: provider.ID, Action: LifecycleDisable, OperationID: "provider-disable-during-recovery",
+	})
+	if lifecycleCode(t, err) != "lifecycle.reverse_dependency.active" {
+		t.Fatalf("enabled recovery target must protect required dependency, got %v", err)
+	}
+}
+
+func TestLifecycleRecoverToEnabledRechecksRequiredDependency(t *testing.T) {
+	provider := simpleManifestV2("omnexa.provider", "1.0.0")
+	consumer := simpleManifestV2("omnexa.consumer", "1.0.0")
+	consumer.Dependencies = []DependencyRequirement{{ID: provider.ID, Constraint: "=1.0.0"}}
+	registry := discoverV2Registry(t, consumer, provider)
+	store := NewMemoryLifecycleStore()
+	seedLifecycleRecord(t, store, LifecycleRecord{
+		ModuleID: provider.ID, Version: "1.0.0", State: LifecycleDisabled,
+	})
+	seedLifecycleRecord(t, store, LifecycleRecord{
+		ModuleID: consumer.ID, Version: "1.0.0", State: LifecycleRecoveryRequired,
+		RecoveryState: LifecycleEnabled, FailedAction: LifecycleDisable, FailureCode: "hook.timeout",
+	})
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+
+	_, err := manager.Apply(context.Background(), LifecycleRequest{
+		ModuleID: consumer.ID, Action: LifecycleRecover, OperationID: "recover-enabled",
+	})
+	if lifecycleCode(t, err) != "lifecycle.dependency.not_enabled" {
+		t.Fatalf("recover-to-enabled must recheck required dependency state, got %v", err)
+	}
+	record, _, _ := store.Load(context.Background(), consumer.ID)
+	if record.State != LifecycleRecoveryRequired {
+		t.Fatalf("failed recovery must preserve recovery-required state: %#v", record)
+	}
+}
+
 func TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired(t *testing.T) {
 	registry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "1.0.0"))
 	store := NewMemoryLifecycleStore()
