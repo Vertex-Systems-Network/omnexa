@@ -55,10 +55,12 @@ func (e *DiscoveryErrors) Diagnostics() []DiscoveryDiagnostic {
 }
 
 // Registry is an immutable-by-convention deterministic snapshot. Construction
-// is available only through Discover.
+// is available only through Discover. P03.03 adds package-private validated
+// manifest snapshots without changing the public P03.02 record contract.
 type Registry struct {
-	records []RegistryRecord
-	byID    map[string]RegistryRecord
+	records   []RegistryRecord
+	byID      map[string]RegistryRecord
+	snapshots map[string]validatedManifestSnapshot
 }
 
 // List returns a stable ID/version/source ordered copy.
@@ -77,12 +79,24 @@ func (r Registry) Lookup(id string) (RegistryRecord, bool) {
 	return record, ok
 }
 
+func (r Registry) manifestSnapshot(id string) (validatedManifestSnapshot, bool) {
+	if r.snapshots == nil {
+		return validatedManifestSnapshot{}, false
+	}
+	snapshot, ok := r.snapshots[id]
+	if !ok {
+		return validatedManifestSnapshot{}, false
+	}
+	return snapshot.clone(), true
+}
+
 // Discover builds one deterministic registry from the exact explicit source set.
-// Every manifest must pass the existing P03.01 ParseManifest validation contract.
-// Any malformed source, malformed manifest, duplicate module identity or
-// conflicting module version fails the entire discovery operation.
+// Every manifest must pass version-specific validated parsing. Any malformed
+// source, malformed manifest, duplicate module identity or conflicting module
+// version fails the entire discovery operation.
 func Discover(sources []DiscoverySource) (Registry, error) {
 	candidates := make([]RegistryRecord, 0)
+	candidateSnapshots := make(map[string]validatedManifestSnapshot)
 	diagnostics := make([]DiscoveryDiagnostic, 0)
 
 	for _, source := range sources {
@@ -96,7 +110,7 @@ func Discover(sources []DiscoverySource) (Registry, error) {
 		}
 
 		for _, payload := range source.Manifests {
-			manifest, err := ParseManifest(payload)
+			snapshot, err := parseValidatedManifest(payload)
 			if err != nil {
 				diagnostics = append(diagnostics, DiscoveryDiagnostic{
 					Code:     "discovery.manifest.invalid",
@@ -105,13 +119,15 @@ func Discover(sources []DiscoverySource) (Registry, error) {
 				})
 				continue
 			}
-			candidates = append(candidates, RegistryRecord{
-				ID:            manifest.ID,
-				Version:       manifest.Version,
-				Owner:         manifest.Owner,
+			record := RegistryRecord{
+				ID:            snapshot.ID,
+				Version:       snapshot.Version,
+				Owner:         snapshot.Owner,
 				SourceID:      source.ID,
 				SourceVersion: source.Version,
-			})
+			}
+			candidates = append(candidates, record)
+			candidateSnapshots[registrySnapshotKey(record)] = snapshot.clone()
 		}
 	}
 
@@ -150,10 +166,24 @@ func Discover(sources []DiscoverySource) (Registry, error) {
 	}
 
 	byID := make(map[string]RegistryRecord, len(candidates))
+	snapshots := make(map[string]validatedManifestSnapshot, len(candidates))
 	for _, record := range candidates {
 		byID[record.ID] = record
+		snapshot, ok := candidateSnapshots[registrySnapshotKey(record)]
+		if !ok || snapshot.ID != record.ID || snapshot.Version != record.Version || snapshot.Owner != record.Owner {
+			return Registry{}, newDiscoveryErrors([]DiscoveryDiagnostic{{
+				Code:     "discovery.snapshot.invalid",
+				SourceID: record.SourceID,
+				ModuleID: record.ID,
+			}})
+		}
+		snapshots[record.ID] = snapshot.clone()
 	}
-	return Registry{records: candidates, byID: byID}, nil
+	return Registry{records: candidates, byID: byID, snapshots: snapshots}, nil
+}
+
+func registrySnapshotKey(record RegistryRecord) string {
+	return record.ID + "\x00" + record.Version + "\x00" + record.Owner + "\x00" + record.SourceID + "\x00" + record.SourceVersion
 }
 
 func sortRegistryRecords(records []RegistryRecord) {

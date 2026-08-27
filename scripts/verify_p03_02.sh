@@ -62,7 +62,7 @@ for marker in \
   'discovery.manifest.invalid' \
   'discovery.module.duplicate' \
   'discovery.module.version_conflict' \
-  'ParseManifest(payload)' \
+  'parseValidatedManifest(payload)' \
   'TestDiscoverEmptySourcesReturnsEmptyRegistry' \
   'TestDiscoverIsDeterministicAcrossEnumerationOrder' \
   'TestDiscoverRejectsDuplicateModuleIdentity' \
@@ -76,8 +76,12 @@ for marker in \
   fi
 done
 
+# ADR-0012 authorizes P03.03 to add an explicit v1/v2 parser-dispatch boundary.
+# P03.02 still proves that discovery consumes validated metadata, remains
+# explicit-source only, preserves public RegistryRecord/List/Lookup semantics,
+# and executes no module code or unapproved filesystem/network work.
 # Retain the completed P03.01 parser/validation contract before exercising the
-# new registry/discovery layer.
+# registry/discovery layer.
 bash scripts/verify_p03_01.sh
 
 go vet ./kernel/internal/modules
