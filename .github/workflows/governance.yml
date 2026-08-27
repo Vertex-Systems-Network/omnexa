@@ -283,3 +283,7 @@ jobs:
       - name: Verify P03.02 registry and deterministic discovery
         shell: bash
         run: bash scripts/verify_p03_02.sh
+
+      - name: Verify P03.03 dependency graph resolver
+        shell: bash
+        run: bash scripts/verify_p03_03.sh
