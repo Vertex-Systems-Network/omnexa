@@ -1,11 +1,11 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-27"
-  nature: "non-authoritative P03.03 active continuity snapshot with ADR-0012 reconciliation pending merge"
-  protected_main: "77ca52b4041013d1785b00aac6655aad7f3fe91f"
-  p03_03_activation_pr: 95
-  stale_rule: "Re-verify protected main, STATE.json, branch/head, PR, ADR status and latest CI before every material action. This file never overrides canonical governance."
+  verified_at: "2026-08-28"
+  nature: "non-authoritative P03.03 closure / P03.04 activation-candidate continuity snapshot"
+  protected_main: "774fab8b0350ffb2776517e3f1361f76bc2c68f9"
+  closure_pr: 99
+  stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
   name: "Omnexa"
@@ -16,8 +16,9 @@ phase:
   current: "P03"
   name: "Module Runtime"
   state: "active"
-  progress: "2 / 11 done"
-  current_work_package: "P03.03"
+  progress: "3 / 11 done"
+  current_work_package: "P03.04"
+  activation_authoritative_only_after_closure_merge: true
 
 p01_prerequisite:
   state: "done"
@@ -36,21 +37,8 @@ p02_prerequisite:
   terminal_job: 97986011269
   terminal_merge: "88799aa41da8ce8c22540146d157d488565e2ce9"
 
-p03_readiness:
-  state: "done"
-  readiness_pr: 90
-  exact_head: "411c61f161a589b813ea28458cd43ce97be49f01"
-  canonical_run: 32910704583
-  canonical_job: 98004146744
-  result: "PASS"
-  readiness_merge: "712064870ce77d01902c2450c9eed240cda9c44e"
-  prepared_specs: 11
-  runner: "github-hosted ubuntu-24.04"
-
 p03_01:
   state: "done"
-  owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.01.md"
   implementation_pr: 92
   final_exact_head: "87da3302605c852ae5bf43d473aaa01a9e1aaa74"
   canonical_run: 33009396644
@@ -58,12 +46,9 @@ p03_01:
   implementation_merge: "4229e2a28442bf475afed143bab359a770d48053"
   completion_evidence: "docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md"
   regressions: "scripts/verify_p03_01.sh remains mandatory"
-  historical_evidence_rewritten_by_adr_0012: false
 
 p03_02:
   state: "done"
-  owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.02.md"
   implementation_pr: 94
   final_exact_head: "0c46db41b0d724a08ea1a78545b3c2debdd8cd05"
   canonical_run: 33022405704
@@ -71,62 +56,44 @@ p03_02:
   implementation_merge: "2e38969dbbbcfcf4765a114f449dc3fa960061d7"
   completion_evidence: "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"
   regressions: "scripts/verify_p03_02.sh remains mandatory"
-  public_registry_semantics_preserved_by_adr_0012: true
-  historical_evidence_rewritten_by_adr_0012: false
 
 p03_03:
-  state: "active"
+  state: "done"
   owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.03.md"
-  objective: "deterministic version-aware module dependency graph validation and resolution"
-  kernel_code_authorized: true
+  implementation_pr: 98
+  final_exact_head: "4dcaca22911fbb81b1d25af316fef146c4a71ff3"
+  canonical_run: 33112808869
+  canonical_job: 98659824107
+  implementation_merge: "774fab8b0350ffb2776517e3f1361f76bc2c68f9"
+  completion_evidence: "docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md"
+  regressions: "scripts/verify_p03_03.sh remains mandatory"
+  diagnostic_history: "#412 and #414 FAIL; #413 cancelled/stale; only #416 final exact-head PASS is acceptance evidence"
+
+p03_04:
+  state: "active_after_closure_merge"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.04.md"
+  objective: "explicit fail-closed module lifecycle state machine"
+  kernel_code_authorized_after_closure_merge: true
   business_feature_code_authorized: false
-  implementation_evidence: null
-  completion_evidence: null
   implementation_branch: null
   implementation_start_main: null
+  implementation_evidence: null
+  completion_evidence: null
 
 adr_0012:
   title: "Versioned Module Dependency Requirements"
-  decision: "schema v2 structured module dependency requirements"
-  status_in_reconciliation_pr: "accepted"
-  authoritative_on_protected_main: false
-  reconciliation_pr: 97
-  reconciliation_branch: "feat/p03-03-dependency-graph-resolver"
-  reconciliation_head_authority: "Read the current PR/Git head; do not pin a self-mutating branch head inside this continuity file."
-  prior_proposal_governance_run: 33081149100
-  prior_proposal_governance_result: "PASS_BUT_STALE_AFTER_RECONCILIATION_WRITES"
-  implementation_on_reconciliation_branch_authorized: false
-  separate_implementation_branch_required_after_merge: true
+  status: "accepted_on_protected_main"
   schema_v1_preserved: true
   schema_v2_dependency_record: "{id, constraint}"
-  max_constraint_bytes: 256
-  max_comparators: 16
-  allowed_comparator_operators:
-    - "="
-    - ">"
-    - ">="
-    - "<"
-    - "<="
-  parser_fallback_authorized: false
-  implicit_compatibility_authorized: false
-  multi_version_solver_authorized: false
-  external_compatibility_matrix_authorized: false
   resolver_second_raw_manifest_input_authorized: false
   registry_bound_validated_manifest_required: true
-  optional_edges_in_required_cycle_gate: false
+  multi_version_solver_authorized: false
 
 security:
-  kernel_code_authorized: true
-  kernel_code_scope: "P03.03 only"
+  kernel_code_scope_after_closure_merge: "P03.04 only"
   business_feature_code_authorized: false
-  resolver_output_creates_authorization: false
-  missing_required_dependency_fails_closed: true
-  incompatible_required_dependency_fails_closed: true
-  circular_required_dependency_fails_closed: true
-  optional_dependency_absence_global_failure_authorized: false
-  optional_dependency_incompatibility_global_failure_authorized: false
-  private_cross_module_access_authorized: false
+  p03_05_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   cross_tenant_failure_is_release_blocker: true
@@ -135,19 +102,16 @@ security:
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement schema-v2/parser/discovery-binding/resolver code on the ADR-0012 accepting/reconciliation branch"
-  - "treat ADR-0012 acceptance/reconciliation CI as P03.03 implementation completion evidence"
-  - "implement P03.04-P03.11 before later governed activation"
+  - "implement P03.04 before closure PR #99 merges and protected-main readback establishes the exact new SHA"
+  - "implement P03.05-P03.11 before later governed activation"
   - "implement P04+ or business modules/features"
-  - "implement lifecycle mutations, package installation/download, multi-version solving, System Graph runtime or trust/advisory scanning from P03.03"
-  - "implement AI/model/agent runtime"
-  - "weaken governance, branch protection or P01/P02/P03.01/P03.02 regressions"
-  - "reinterpret schema-v1 dependency strings as implicit version compatibility"
-  - "use a second independently reparsed raw-manifest set as resolver authority"
+  - "implement package acquisition, marketplace runtime or AI/model/agent runtime"
+  - "weaken governance, branch protection or retained P01/P02/P03.01/P03.02/P03.03 regressions"
+  - "rewrite historical completion evidence"
 
 next_action:
-  current: "Finish ADR-0012 accepting/reconciliation PR #97, run exact-final-head canonical governance, merge only if current and permitted, re-read protected main and STATE.json, then create a separate P03.03 implementation branch from the exact new main SHA."
-  after_reconciliation_merge: "Implement only the accepted P03.03 contract on the new implementation branch; keep P03.04+ locked and use a later separate closure PR for P03.03 completion/state transition."
+  current: "Finish atomic P03.03 closure/P03.04 activation reconciliation in PR #99, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and STATE.json."
+  after_closure_merge: "Create a new separate P03.04 implementation branch from the exact post-merge protected-main SHA; implement only P03.04 and keep P03.05+ locked."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -156,15 +120,12 @@ source_authority:
   ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   change_control: "docs/governance/CHANGE_CONTROL.md"
   accepted_dependency_adr: "docs/adr/ADR-0012-versioned-module-dependency-requirements.md"
-  p02_exit_gate: "docs/governance/P02_EXIT_GATE.md"
   entry_gate: "docs/governance/P03_ENTRY_GATE.md"
   exit_gate: "docs/governance/P03_EXIT_GATE.md"
-  transition_checklist: "docs/governance/P02_P03_TRANSITION_CHECKLIST.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P03.03.md"
-  p03_01_evidence: "docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md"
-  p03_02_evidence: "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"
-  ai_native_alignment: "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md"
+  active_spec: "docs/roadmap/work-packages/P03.04.md"
+  p03_03_evidence: "docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md"
 
 handoff:
-  active: "docs/ai/handoffs/P03.03.md"
+  completed: "docs/ai/handoffs/P03.03.md"
+  active_after_closure_merge: "docs/ai/handoffs/P03.04.md"
