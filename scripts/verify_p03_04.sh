@@ -90,6 +90,7 @@ for marker in \
   'TestLifecycleUpgradeUsesFutureCoordinatorWithoutExecutingMigrations' \
   'TestLifecycleGraphFailureDoesNotMutateExistingState' \
   'TestLifecycleReplayStillRequiresCurrentAuthorization' \
+  'TestLifecycleAuthorizationPrecedesUpgradeCoordinator' \
   'TestLifecycleEnableRejectsStaleInstalledModuleVersion' \
   'TestLifecycleDependencyRequiresInstalledVersionBoundToResolverRegistry' \
   'TestLifecycleReverseDependencyReadFailureFailsClosed' \
