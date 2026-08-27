@@ -287,3 +287,7 @@ jobs:
       - name: Verify P03.03 dependency graph resolver
         shell: bash
         run: bash scripts/verify_p03_03.sh
+
+      - name: Verify P03.04 module lifecycle state machine
+        shell: bash
+        run: bash scripts/verify_p03_04.sh
