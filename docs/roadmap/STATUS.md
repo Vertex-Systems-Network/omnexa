@@ -1,18 +1,19 @@
 # Omnexa Program Status
 
-Last reconciled: **2026-08-27**
+Last reconciled: **2026-08-28**
 
 ## Current position
 
 - Program: **Kernel Program**
 - Phase: **P03 — Module Runtime**
 - Phase state: **ACTIVE**
-- Current work package: **P03.03 — Dependency Graph Resolver**
-- P03 progress: **2 / 11 done**
+- Current work package: **P03.04 — Module Lifecycle State Machine**
+- P03 progress: **3 / 11 done**
 - P03.01: **DONE**
 - P03.02: **DONE**
-- P03.03: **ACTIVE**
-- P03.04-P03.11: **PLANNED / LOCKED**
+- P03.03: **DONE**
+- P03.04: **ACTIVE**
+- P03.05-P03.11: **PLANNED / LOCKED**
 - P03 entry gate: **SATISFIED**
 - P03 exit gate: **NOT SATISFIED**
 - P02: **DONE — 10 / 10**
@@ -25,112 +26,84 @@ Last reconciled: **2026-08-27**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation authority: **P03.03 ONLY**
+- Kernel implementation authority: **P03.04 ONLY after this closure transition merges**
 - Business-feature implementation: **NOT AUTHORIZED**
 
-`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This status file is explanatory and must not grant authority beyond that state.
+`docs/roadmap/STATE.json` is the canonical machine-readable cursor. This status file mirrors that transition candidate and grants no authority before the closure PR merges to protected `main`.
 
-## Protected-main activation identity
+## P03.03 canonical completion boundary
 
-P03.02 closure / P03.03 activation merged through PR #95 as protected-main commit:
+P03.03 — Dependency Graph Resolver completed through implementation PR #98 with exact final evidence:
 
-- activation merge: `77ca52b4041013d1785b00aac6655aad7f3fe91f`
-- P03.01-P03.02: `done`
-- P03.03: sole `active` package
-- `kernel_code_authorized=true` bounded to P03.03
-- `business_feature_code_authorized=false`
+- final exact implementation head: `4dcaca22911fbb81b1d25af316fef146c4a71ff3`
+- implementation merge / protected-main base for this closure: `774fab8b0350ffb2776517e3f1361f76bc2c68f9`
+- canonical Governance run/job: `33112808869 / 98659824107` — **PASS**
+- canonical environment: GitHub-hosted `ubuntu-24.04`
+- repository-pinned Go: `1.26.7`
+- completion evidence: `docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md`
+- retained verifier: `scripts/verify_p03_03.sh`
 
-The earlier closure-candidate wording is superseded by this merged protected-main state.
+The accepted exact-head run passed repository Go quality, all retained P01/P02/P03.01/P03.02 regressions and the dedicated P03.03 verifier. Diagnostic runs #412 and #414 remain FAIL history; #413 remains cancelled/stale. They are not acceptance evidence.
 
-## P03.01 retained completion boundary
+## Retained P03.01/P03.02 boundaries
 
-P03.01 — Module Manifest Schema remains complete with canonical evidence:
+P03.01 — Module Manifest Schema remains DONE:
 
-- implementation PR: #92
-- exact implementation head: `87da3302605c852ae5bf43d473aaa01a9e1aaa74`
-- canonical run/job: `33009396644 / 98311433013` — PASS
-- implementation merge: `4229e2a28442bf475afed143bab359a770d48053`
-- completion evidence: `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
-- retained verifier: `scripts/verify_p03_01.sh`
+- implementation PR #92
+- exact head `87da3302605c852ae5bf43d473aaa01a9e1aaa74`
+- run/job `33009396644 / 98311433013` — PASS
+- merge `4229e2a28442bf475afed143bab359a770d48053`
+- completion evidence `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
 
-P03.01 remains `done`. Accepted ADR-0012 adds forward schema-v2 compatibility work under active P03.03 without rewriting historical P03.01 evidence.
+P03.02 — Registry & Deterministic Discovery remains DONE:
 
-## P03.02 retained completion boundary
+- implementation PR #94
+- exact head `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`
+- run/job `33022405704 / 98355747775` — PASS
+- merge `2e38969dbbbcfcf4765a114f449dc3fa960061d7`
+- completion evidence `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
 
-P03.02 — Registry & Deterministic Discovery remains complete with canonical evidence:
+Their historical completion evidence is not rewritten by the P03.03 closure.
 
-- implementation PR: #94
-- exact implementation head: `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`
-- canonical run/job: `33022405704 / 98355747775` — PASS
-- implementation merge: `2e38969dbbbcfcf4765a114f449dc3fa960061d7`
-- completion evidence: `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
-- retained verifier: `scripts/verify_p03_02.sh`
+## Accepted ADR-0012 contract retained
 
-The accepted P03.02 public boundary remains deterministic, explicit-source, non-executing and fail-closed for duplicate/conflicting identities. Registry metadata remains distinct from installed/enabled lifecycle state and creates no authorization.
+ADR-0012 remains the accepted dependency-version contract. P03.03 implemented its bounded v1/v2 manifest dispatch, strict schema-v2 dependency requirements, strict SemVer comparison, registry-bound validated snapshots, deterministic required graph ordering/cycle rejection and selective optional degradation. Resolver metadata grants no lifecycle, permission, capability, tenant, database or private-package authority.
 
-Accepted ADR-0012 permits only additive package-private normalized validated-manifest binding needed by P03.03; public P03.02 lookup/list/cardinality and duplicate/version-conflict behavior remains unchanged.
+## P03.04 activation boundary
 
-## Accepted ADR-0012 architecture prerequisite
+After this separate closure/state-transition PR itself passes exact-head canonical governance and merges to protected `main`, P03.04 becomes the sole active implementation package.
 
-The ADR-0012 accepting/reconciliation PR establishes the governing version-aware dependency contract for P03.03 and becomes authoritative only when that PR merges to protected `main`.
+Authorized P03.04 scope is limited to the canonical `P03.04 — Module Lifecycle State Machine` specification:
 
-Accepted architecture:
+- explicit lifecycle states and transition validation;
+- dependency and reverse-dependency lifecycle preconditions;
+- non-destructive disable/re-enable semantics;
+- suspend/archive/detach/purge distinctions;
+- explicit audited destructive purge boundaries;
+- retry/idempotency/concurrency protection;
+- deterministic partial-failure recovery semantics;
+- upgrade lifecycle coordination without pulling P03.09 migration execution forward.
 
-- manifest schema v1 remains parseable under retained P03.01 semantics;
-- explicit bounded schema-version dispatch selects separate strict v1/v2 decoders;
-- schema v2 uses exact `{id, constraint}` required/optional module dependency records;
-- strict bounded SemVer comparator grammar applies;
-- self-dependencies, duplicates and cross-class conflicts fail deterministically;
-- discovery atomically binds each registry identity to its exact normalized validated manifest snapshot;
-- resolver policy may consume only that bound snapshot, not an independently reparsed raw-manifest set;
-- one discovered module ID maps to at most one discovered version;
-- required edges alone drive install/enable ordering and release-blocking cycle detection;
-- optional absence/incompatibility produces selective degradation and does not globally invalidate unrelated modules;
-- resolver output remains metadata/eligibility only and grants no authority;
-- multi-version/SAT solving, external compatibility matrix and package acquisition remain out of scope.
-
-## Active P03.03 boundary
-
-P03.03 is limited to deterministic dependency graph validation/resolution over the retained P03.01/P03.02 contracts plus accepted ADR-0012 forward evolution.
-
-Authorized P03.03 implementation surfaces after the ADR reconciliation merge include:
-
-- bounded v1/v2 manifest version dispatch;
-- strict schema-v2 dependency records and constraints;
-- package-private registry-bound normalized manifest snapshots;
-- version-aware required/optional dependency resolution;
-- platform dependency validation;
-- deterministic required-edge topological ordering;
-- required-cycle/incompatible-version/self-dependency rejection;
-- undeclared/forbidden/private dependency detection hooks;
-- explicit schema-v1 migration/degradation behavior;
-- selective optional-dependency degradation metadata;
-- dedicated `scripts/verify_p03_03.sh` and canonical governance wiring.
-
-Resolver output cannot grant permission/capability/tenant/database authority. P03.04 lifecycle runtime, P03.05-P03.11 later runtime, package install/download, multi-version solving, P04+, business features, full System Graph/trust-advisory runtime and AI/model/agent runtime remain unauthorized.
+P03.05-P03.11, P04+, business features, marketplace/package acquisition, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
 
 ## Retained prerequisite chain
 
 P01.01-P01.12 and P02.01-P02.10 remain complete with canonical package-specific evidence. Terminal P02.10 evidence remains:
 
-- implementation PR: #88
-- exact head: `975e4925060a035780ca13b68c5437634ed0f4ea`
-- canonical run/job: `32904678957 / 97986011269` — PASS
-- implementation merge: `88799aa41da8ce8c22540146d157d488565e2ce9`
-- canonical runner: GitHub-hosted `ubuntu-24.04`
-- completion evidence: `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
+- implementation PR #88
+- exact head `975e4925060a035780ca13b68c5437634ed0f4ea`
+- run/job `32904678957 / 97986011269` — PASS
+- implementation merge `88799aa41da8ce8c22540146d157d488565e2ce9`
 
-Diagnostic run `32903969206 / 97983773781` remains explicit **FAIL** history and is not acceptance evidence.
+Diagnostic run `32903969206 / 97983773781` remains FAIL history.
 
-All completed P01/P02/P03.01/P03.02 regression verifiers remain mandatory during P03.03.
+All completed P01/P02/P03.01/P03.02/P03.03 regression verifiers remain mandatory during P03.04.
 
 ## Protected integration / CI
 
 `main` remains the protected PR-only integration authority. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only; local/self-hosted governance evidence is prohibited.
 
-The ADR-0012 accepting/reconciliation PR must be current with protected `main` and pass its own exact-head canonical governance, repository Go quality, retained P01.01-P01.12 and P02.01-P02.10 regressions, completed P03.01/P03.02 regression verification and P03 package/state validators before merge.
-
-ADR acceptance/reconciliation evidence is **not** P03.03 implementation completion evidence.
+Closure PR #99 must remain current with protected `main` and its exact final head must pass canonical governance, including repository Go quality, all retained P01/P02/P03.01/P03.02/P03.03 regression verification, P03 preparation/package validators, and conversation-resolution requirements before merge.
 
 ## Issue #4 — external distribution gate
 
@@ -138,8 +111,9 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-1. Complete and merge the ADR-0012 accepting/reconciliation PR only after exact-head governance passes and current repository merge gates permit it.
-2. Re-read protected `main` and `STATE.json` after that merge and record the exact new SHA.
-3. Create a separate P03.03 implementation branch from that exact main SHA.
-4. Implement only the accepted P03.03 contract and obtain exact-head canonical evidence.
-5. Keep P03.04+ locked; package completion/state transition belongs to a later separate closure PR.
+1. Complete the atomic P03.03 closure / P03.04 activation continuity reconciliation in PR #99.
+2. Require a fresh exact-final-head canonical Governance PASS; stale or diagnostic runs are not merge authority.
+3. Merge PR #99 only if repository merge gates permit it and no unresolved review/conversation blocker exists.
+4. Re-read protected `main` and `STATE.json` after merge and record the exact new main SHA.
+5. Start P03.04 implementation only on a new separate branch from that exact post-merge main SHA.
+6. Keep P03.05+ locked; P03.04 completion and P03.05 activation require a later separate governed closure transition.
