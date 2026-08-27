@@ -108,6 +108,33 @@ func TestLifecycleDependencyRequiresInstalledVersionBoundToResolverRegistry(t *t
 	}
 }
 
+func TestLifecycleProviderUpgradeRejectsStaleInstalledReverseDependent(t *testing.T) {
+	provider := simpleManifestV2("omnexa.provider", "2.0.0")
+	consumer := simpleManifestV2("omnexa.consumer", "2.0.0")
+	consumer.Dependencies = []DependencyRequirement{{ID: provider.ID, Constraint: "=2.0.0"}}
+	registry := discoverV2Registry(t, consumer, provider)
+	store := NewMemoryLifecycleStore()
+	seedLifecycleRecord(t, store, LifecycleRecord{
+		ModuleID: provider.ID, Version: "1.0.0", State: LifecycleEnabled,
+	})
+	seedLifecycleRecord(t, store, LifecycleRecord{
+		ModuleID: consumer.ID, Version: "1.0.0", State: LifecycleEnabled,
+	})
+	coordinator := &lifecycleUpgradeAllow{}
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+	manager.UpgradeCoordinator = coordinator
+
+	_, err := manager.Apply(context.Background(), LifecycleRequest{
+		ModuleID: provider.ID, Action: LifecycleUpgrade, OperationID: "upgrade-provider",
+	})
+	if lifecycleCode(t, err) != "lifecycle.reverse_dependency.version_mismatch" {
+		t.Fatalf("provider upgrade must fail closed on stale installed reverse dependent, got %v", err)
+	}
+	if coordinator.called {
+		t.Fatal("reverse-dependent version mismatch must fail before upgrade coordinator")
+	}
+}
+
 func TestLifecycleReverseDependencyReadFailureFailsClosed(t *testing.T) {
 	provider := simpleManifestV2("omnexa.provider", "1.0.0")
 	consumer := simpleManifestV2("omnexa.consumer", "1.0.0")
@@ -188,6 +215,24 @@ func TestLifecycleRecoverToEnabledRechecksRequiredDependency(t *testing.T) {
 	}
 }
 
+func TestLifecycleFailureMarkerRejectsImpossibleSourceAction(t *testing.T) {
+	registry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "1.0.0"))
+	store := NewMemoryLifecycleStore()
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+	applyLifecycle(t, manager, "omnexa.alpha", LifecycleInstall, "install")
+
+	_, err := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
+		ModuleID: "omnexa.alpha", FailedAction: LifecyclePurge, OperationID: "impossible-purge-failure", FailureCode: "hook.timeout",
+	})
+	if lifecycleCode(t, err) != "lifecycle.failure.state_invalid" {
+		t.Fatalf("impossible failure source/action must be rejected, got %v", err)
+	}
+	record, _, _ := store.Load(context.Background(), "omnexa.alpha")
+	if record.State != LifecycleInstalled {
+		t.Fatalf("invalid failure marker mutated stable state: %#v", record)
+	}
+}
+
 func TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired(t *testing.T) {
 	registry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "1.0.0"))
 	store := NewMemoryLifecycleStore()
@@ -205,5 +250,25 @@ func TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired(t *testing
 	recovered := applyLifecycle(t, manager, "omnexa.alpha", LifecycleRecover, "recover-install")
 	if recovered.Record.State != LifecycleAvailable {
 		t.Fatalf("failed install recovery must restore available state: %#v", recovered.Record)
+	}
+}
+
+func TestLifecycleFailedReinstallFromPurgedRecoversToPurged(t *testing.T) {
+	registry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "1.0.0"))
+	store := NewMemoryLifecycleStore()
+	manager := lifecycleManagerFor(registry, store, &lifecycleAuditRecorder{})
+	applyLifecycle(t, manager, "omnexa.alpha", LifecycleInstall, "install")
+	applyLifecycle(t, manager, "omnexa.alpha", LifecycleDetach, "detach")
+	applyLifecycle(t, manager, "omnexa.alpha", LifecyclePurge, "purge")
+
+	failed, err := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
+		ModuleID: "omnexa.alpha", FailedAction: LifecycleInstall, OperationID: "reinstall-failed", FailureCode: "hook.timeout",
+	})
+	if err != nil || failed.RecoveryState != LifecyclePurged {
+		t.Fatalf("failed reinstall from purged must preserve purged recovery target: record=%#v err=%v", failed, err)
+	}
+	recovered := applyLifecycle(t, manager, "omnexa.alpha", LifecycleRecover, "recover-reinstall")
+	if recovered.Record.State != LifecyclePurged {
+		t.Fatalf("failed reinstall recovery must restore purged state: %#v", recovered.Record)
 	}
 }
