@@ -252,9 +252,8 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 }
 
 // MarkRecoveryRequired records a recoverable partial-failure state after an
-// external lifecycle hook/side effect fails. A failed initial install is
-// representable from the implicit available state without first committing an
-// installed record.
+// external lifecycle hook/side effect fails. The failed action must have been
+// legal from the stable source state; impossible action/state pairs fail closed.
 func (m LifecycleManager) MarkRecoveryRequired(ctx context.Context, request LifecycleFailureRequest) (LifecycleRecord, error) {
 	if !validLifecycleOperationID(request.OperationID) || !validLifecycleFailureCode(request.FailureCode) || !validLifecycleAction(request.FailedAction) {
 		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.invalid", request.ModuleID, "")
@@ -267,9 +266,6 @@ func (m LifecycleManager) MarkRecoveryRequired(ctx context.Context, request Life
 		return LifecycleRecord{}, err
 	}
 	if !found {
-		if request.FailedAction != LifecycleInstall {
-			return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
-		}
 		current = LifecycleRecord{ModuleID: request.ModuleID, State: LifecycleAvailable}
 	} else if current.ModuleID != request.ModuleID {
 		return LifecycleRecord{}, lifecycleErr("lifecycle.store.identity_mismatch", request.ModuleID, "")
@@ -284,10 +280,7 @@ func (m LifecycleManager) MarkRecoveryRequired(ctx context.Context, request Life
 		}
 		return current, nil
 	}
-	if current.State == LifecyclePurged || current.State == LifecycleRecoveryRequired {
-		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
-	}
-	if current.State == LifecycleAvailable && request.FailedAction != LifecycleInstall {
+	if current.State == LifecycleRecoveryRequired || !validFailureSourceState(current.State, request.FailedAction) {
 		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
 	}
 	if err := m.authorize(ctx, request.ModuleID, request.FailedAction); err != nil {
@@ -462,6 +455,9 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		if err := m.requireDependencies(ctx, request.ModuleID, current.State == LifecycleEnabled); err != nil {
 			return LifecycleRecord{}, err
 		}
+		if err := m.requireReverseDependencyVersions(ctx, request.ModuleID); err != nil {
+			return LifecycleRecord{}, err
+		}
 		if m.UpgradeCoordinator == nil {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.upgrade.coordinator_unavailable", request.ModuleID, "")
 		}
@@ -541,6 +537,39 @@ func (m LifecycleManager) requireDependencies(ctx context.Context, moduleID stri
 		}
 		if !installedDependencyState(state) {
 			return lifecycleErr("lifecycle.dependency.not_installed", moduleID, dependency.ID)
+		}
+	}
+	return nil
+}
+
+func (m LifecycleManager) requireReverseDependencyVersions(ctx context.Context, providerID string) error {
+	for _, candidate := range m.Registry.List() {
+		if candidate.ID == providerID {
+			continue
+		}
+		snapshot, ok := m.Registry.manifestSnapshot(candidate.ID)
+		if !ok {
+			return lifecycleErr("lifecycle.registry.snapshot_missing", providerID, candidate.ID)
+		}
+		if !requiredDependency(snapshot, providerID) {
+			continue
+		}
+		record, found, err := m.loadRecord(ctx, candidate.ID)
+		if err != nil {
+			return err
+		}
+		if !found {
+			continue
+		}
+		if record.ModuleID != candidate.ID {
+			return lifecycleErr("lifecycle.store.identity_mismatch", providerID, candidate.ID)
+		}
+		installed := installedDependencyState(record.State)
+		if record.State == LifecycleRecoveryRequired {
+			installed = installedDependencyState(record.RecoveryState)
+		}
+		if installed && record.Version != candidate.Version {
+			return lifecycleErr("lifecycle.reverse_dependency.version_mismatch", providerID, candidate.ID)
 		}
 	}
 	return nil
@@ -657,6 +686,31 @@ func validLifecycleAction(action LifecycleAction) bool {
 	}
 }
 
+func validFailureSourceState(state LifecycleState, action LifecycleAction) bool {
+	switch action {
+	case LifecycleInstall:
+		return state == LifecycleAvailable || state == LifecycleDetached || state == LifecyclePurged
+	case LifecycleEnable:
+		return state == LifecycleInstalled || state == LifecycleDisabled
+	case LifecycleDisable, LifecycleSuspend:
+		return state == LifecycleEnabled
+	case LifecycleResume:
+		return state == LifecycleSuspended
+	case LifecycleArchive:
+		return state == LifecycleInstalled || state == LifecycleDisabled
+	case LifecycleRestore:
+		return state == LifecycleArchived
+	case LifecycleDetach:
+		return state == LifecycleInstalled || state == LifecycleDisabled || state == LifecycleArchived
+	case LifecyclePurge:
+		return state == LifecycleDetached
+	case LifecycleUpgrade:
+		return upgradeableState(state)
+	default:
+		return false
+	}
+}
+
 func validLifecycleOperationID(value string) bool {
 	if value == "" || len(value) > 128 {
 		return false
@@ -689,5 +743,5 @@ func upgradeableState(state LifecycleState) bool {
 }
 
 func stableRecoveryState(state LifecycleState) bool {
-	return state == LifecycleAvailable || installedDependencyState(state) || state == LifecycleDetached
+	return state == LifecycleAvailable || installedDependencyState(state) || state == LifecycleDetached || state == LifecyclePurged
 }
