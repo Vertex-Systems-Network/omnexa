@@ -69,10 +69,10 @@ type LifecycleRequest struct {
 // a recoverable, explicit state. The state machine itself does not execute
 // module code, migrations, filesystem actions, network calls, or package hooks.
 type LifecycleFailureRequest struct {
-	ModuleID    string
+	ModuleID     string
 	FailedAction LifecycleAction
-	OperationID string
-	FailureCode string
+	OperationID  string
+	FailureCode  string
 }
 
 // LifecycleResult reports the committed record and whether the request was an
@@ -199,7 +199,7 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 	if !validLifecycleAction(request.Action) {
 		return LifecycleResult{}, lifecycleErr("lifecycle.action.invalid", request.ModuleID, "")
 	}
-	recordMeta, ok := m.Registry.Lookup(request.ModuleID)
+	meta, ok := m.Registry.Lookup(request.ModuleID)
 	if !ok {
 		return LifecycleResult{}, lifecycleErr("lifecycle.module.not_discovered", request.ModuleID, "")
 	}
@@ -213,30 +213,30 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 	if current.ModuleID != request.ModuleID {
 		return LifecycleResult{}, lifecycleErr("lifecycle.store.identity_mismatch", request.ModuleID, "")
 	}
+
+	// Retry/idempotency never bypasses current authorization. A replay is not a
+	// new mutation, so it does not emit another mutation audit event.
 	if current.LastOperationID == request.OperationID {
+		if err := m.authorize(ctx, request.ModuleID, request.Action); err != nil {
+			return LifecycleResult{}, err
+		}
 		if current.LastAction != request.Action {
 			return LifecycleResult{}, lifecycleErr("lifecycle.operation.reused", request.ModuleID, "")
 		}
 		return LifecycleResult{Record: current, Replayed: true}, nil
 	}
 
-	next, err := m.plan(ctx, current, recordMeta, request)
+	next, err := m.plan(ctx, current, meta, request)
 	if err != nil {
 		return LifecycleResult{}, err
 	}
 	if err := m.authorize(ctx, request.ModuleID, request.Action); err != nil {
 		return LifecycleResult{}, err
 	}
-	event := LifecycleAuditEvent{
-		ModuleID:    request.ModuleID,
-		Action:      request.Action,
-		OperationID: request.OperationID,
-		FromState:   current.State,
-		ToState:     next.State,
-		FromVersion: current.Version,
-		ToVersion:   next.Version,
-	}
-	if err := m.audit(ctx, event); err != nil {
+	if err := m.audit(ctx, LifecycleAuditEvent{
+		ModuleID: request.ModuleID, Action: request.Action, OperationID: request.OperationID,
+		FromState: current.State, ToState: next.State, FromVersion: current.Version, ToVersion: next.Version,
+	}); err != nil {
 		return LifecycleResult{}, err
 	}
 	next.Revision = current.Revision + 1
@@ -249,7 +249,9 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 }
 
 // MarkRecoveryRequired records a recoverable partial-failure state after an
-// external lifecycle hook/side effect fails. No unrelated module is mutated.
+// external lifecycle hook/side effect fails. A failed initial install is
+// representable from the implicit available state without first committing an
+// installed record.
 func (m LifecycleManager) MarkRecoveryRequired(ctx context.Context, request LifecycleFailureRequest) (LifecycleRecord, error) {
 	if !validLifecycleOperationID(request.OperationID) || !validLifecycleFailureCode(request.FailureCode) || !validLifecycleAction(request.FailedAction) {
 		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.invalid", request.ModuleID, "")
@@ -261,12 +263,34 @@ func (m LifecycleManager) MarkRecoveryRequired(ctx context.Context, request Life
 	if err != nil {
 		return LifecycleRecord{}, err
 	}
-	if !found || current.State == LifecycleAvailable || current.State == LifecyclePurged || current.State == LifecycleRecoveryRequired {
+	if !found {
+		if request.FailedAction != LifecycleInstall {
+			return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
+		}
+		current = LifecycleRecord{ModuleID: request.ModuleID, State: LifecycleAvailable}
+	} else if current.ModuleID != request.ModuleID {
+		return LifecycleRecord{}, lifecycleErr("lifecycle.store.identity_mismatch", request.ModuleID, "")
+	}
+
+	if current.LastOperationID == request.OperationID {
+		if err := m.authorize(ctx, request.ModuleID, request.FailedAction); err != nil {
+			return LifecycleRecord{}, err
+		}
+		if current.LastAction != request.FailedAction || current.State != LifecycleRecoveryRequired || current.FailureCode != request.FailureCode {
+			return LifecycleRecord{}, lifecycleErr("lifecycle.operation.reused", request.ModuleID, "")
+		}
+		return current, nil
+	}
+	if current.State == LifecyclePurged || current.State == LifecycleRecoveryRequired {
+		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
+	}
+	if current.State == LifecycleAvailable && request.FailedAction != LifecycleInstall {
 		return LifecycleRecord{}, lifecycleErr("lifecycle.failure.state_invalid", request.ModuleID, "")
 	}
 	if err := m.authorize(ctx, request.ModuleID, request.FailedAction); err != nil {
 		return LifecycleRecord{}, err
 	}
+
 	next := current
 	next.State = LifecycleRecoveryRequired
 	next.RecoveryState = current.State
@@ -309,9 +333,13 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		next.State = LifecycleInstalled
 		next.Version = meta.Version
 		next.PreviousState = ""
+
 	case LifecycleEnable:
 		if current.State != LifecycleInstalled && current.State != LifecycleDisabled {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
+		}
+		if current.Version != meta.Version {
+			return LifecycleRecord{}, lifecycleErr("lifecycle.version.mismatch", request.ModuleID, "")
 		}
 		if err := m.requireGraphEligibility(request.ModuleID); err != nil {
 			return LifecycleRecord{}, err
@@ -321,26 +349,40 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		}
 		next.State = LifecycleEnabled
 		next.PreviousState = ""
+
 	case LifecycleDisable:
 		if current.State != LifecycleEnabled {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
-		if blocker := m.reverseBlocker(ctx, request.ModuleID, true); blocker != "" {
+		blocker, err := m.reverseBlocker(ctx, request.ModuleID, true)
+		if err != nil {
+			return LifecycleRecord{}, err
+		}
+		if blocker != "" {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.reverse_dependency.active", request.ModuleID, blocker)
 		}
 		next.State = LifecycleDisabled
+
 	case LifecycleSuspend:
 		if current.State != LifecycleEnabled {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
-		if blocker := m.reverseBlocker(ctx, request.ModuleID, true); blocker != "" {
+		blocker, err := m.reverseBlocker(ctx, request.ModuleID, true)
+		if err != nil {
+			return LifecycleRecord{}, err
+		}
+		if blocker != "" {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.reverse_dependency.active", request.ModuleID, blocker)
 		}
 		next.PreviousState = current.State
 		next.State = LifecycleSuspended
+
 	case LifecycleResume:
 		if current.State != LifecycleSuspended || current.PreviousState != LifecycleEnabled {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
+		}
+		if current.Version != meta.Version {
+			return LifecycleRecord{}, lifecycleErr("lifecycle.version.mismatch", request.ModuleID, "")
 		}
 		if err := m.requireGraphEligibility(request.ModuleID); err != nil {
 			return LifecycleRecord{}, err
@@ -350,38 +392,55 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		}
 		next.State = current.PreviousState
 		next.PreviousState = ""
+
 	case LifecycleArchive:
 		if current.State != LifecycleInstalled && current.State != LifecycleDisabled {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
-		if blocker := m.reverseBlocker(ctx, request.ModuleID, false); blocker != "" {
+		blocker, err := m.reverseBlocker(ctx, request.ModuleID, false)
+		if err != nil {
+			return LifecycleRecord{}, err
+		}
+		if blocker != "" {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.reverse_dependency.present", request.ModuleID, blocker)
 		}
 		next.PreviousState = current.State
 		next.State = LifecycleArchived
+
 	case LifecycleRestore:
 		if current.State != LifecycleArchived || (current.PreviousState != LifecycleInstalled && current.PreviousState != LifecycleDisabled) {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
 		next.State = current.PreviousState
 		next.PreviousState = ""
+
 	case LifecycleDetach:
 		if current.State != LifecycleInstalled && current.State != LifecycleDisabled && current.State != LifecycleArchived {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
-		if blocker := m.reverseBlocker(ctx, request.ModuleID, false); blocker != "" {
+		blocker, err := m.reverseBlocker(ctx, request.ModuleID, false)
+		if err != nil {
+			return LifecycleRecord{}, err
+		}
+		if blocker != "" {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.reverse_dependency.present", request.ModuleID, blocker)
 		}
 		next.PreviousState = current.State
 		next.State = LifecycleDetached
+
 	case LifecyclePurge:
 		if current.State != LifecycleDetached {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
-		if blocker := m.reverseBlocker(ctx, request.ModuleID, false); blocker != "" {
+		blocker, err := m.reverseBlocker(ctx, request.ModuleID, false)
+		if err != nil {
+			return LifecycleRecord{}, err
+		}
+		if blocker != "" {
 			return LifecycleRecord{}, lifecycleErr("lifecycle.reverse_dependency.present", request.ModuleID, blocker)
 		}
 		next.State = LifecyclePurged
+
 	case LifecycleUpgrade:
 		if !upgradeableState(current.State) || current.Version == "" {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
@@ -407,6 +466,7 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 			return LifecycleRecord{}, lifecycleErr("lifecycle.upgrade.not_ready", request.ModuleID, "")
 		}
 		next.Version = meta.Version
+
 	case LifecycleRecover:
 		if current.State != LifecycleRecoveryRequired || !stableRecoveryState(current.RecoveryState) {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
@@ -415,6 +475,7 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		next.RecoveryState = ""
 		next.FailedAction = ""
 		next.FailureCode = ""
+
 	default:
 		return LifecycleRecord{}, lifecycleErr("lifecycle.action.invalid", request.ModuleID, "")
 	}
@@ -440,12 +501,22 @@ func (m LifecycleManager) requireDependencies(ctx context.Context, moduleID stri
 		return lifecycleErr("lifecycle.registry.snapshot_missing", moduleID, "")
 	}
 	for _, dependency := range snapshot.RequiredDependencies {
+		meta, ok := m.Registry.Lookup(dependency.ID)
+		if !ok {
+			return lifecycleErr("lifecycle.dependency.not_discovered", moduleID, dependency.ID)
+		}
 		record, found, err := m.loadRecord(ctx, dependency.ID)
 		if err != nil {
 			return err
 		}
 		state := LifecycleAvailable
 		if found {
+			if record.ModuleID != dependency.ID {
+				return lifecycleErr("lifecycle.store.identity_mismatch", moduleID, dependency.ID)
+			}
+			if record.Version != meta.Version {
+				return lifecycleErr("lifecycle.dependency.version_mismatch", moduleID, dependency.ID)
+			}
 			state = record.State
 		}
 		if requireEnabled {
@@ -461,19 +532,28 @@ func (m LifecycleManager) requireDependencies(ctx context.Context, moduleID stri
 	return nil
 }
 
-func (m LifecycleManager) reverseBlocker(ctx context.Context, providerID string, activeOnly bool) string {
+func (m LifecycleManager) reverseBlocker(ctx context.Context, providerID string, activeOnly bool) (string, error) {
 	blockers := make([]string, 0)
 	for _, candidate := range m.Registry.List() {
 		if candidate.ID == providerID {
 			continue
 		}
 		snapshot, ok := m.Registry.manifestSnapshot(candidate.ID)
-		if !ok || !requiredDependency(snapshot, providerID) {
+		if !ok {
+			return "", lifecycleErr("lifecycle.registry.snapshot_missing", providerID, candidate.ID)
+		}
+		if !requiredDependency(snapshot, providerID) {
 			continue
 		}
 		record, found, err := m.loadRecord(ctx, candidate.ID)
-		if err != nil || !found {
+		if err != nil {
+			return "", err
+		}
+		if !found {
 			continue
+		}
+		if record.ModuleID != candidate.ID {
+			return "", lifecycleErr("lifecycle.store.identity_mismatch", providerID, candidate.ID)
 		}
 		if activeOnly {
 			if record.State == LifecycleEnabled {
@@ -487,9 +567,9 @@ func (m LifecycleManager) reverseBlocker(ctx context.Context, providerID string,
 	}
 	sort.Strings(blockers)
 	if len(blockers) == 0 {
-		return ""
+		return "", nil
 	}
-	return blockers[0]
+	return blockers[0], nil
 }
 
 func requiredDependency(snapshot validatedManifestSnapshot, id string) bool {
@@ -595,5 +675,5 @@ func upgradeableState(state LifecycleState) bool {
 }
 
 func stableRecoveryState(state LifecycleState) bool {
-	return installedDependencyState(state) || state == LifecycleDetached
+	return state == LifecycleAvailable || installedDependencyState(state) || state == LifecycleDetached
 }
