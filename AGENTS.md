@@ -17,19 +17,19 @@ P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
 P02: DONE — 10 / 10
 P02 exit gate: SATISFIED
-P03: ACTIVE — 1 / 11 done
-P03.01: DONE
-Current work package after this closure transition merges: P03.02 — Registry & Deterministic Discovery
-P03.03-P03.11: PLANNED
-kernel_code_authorized: true — P03.02 only after closure merge
+P03: ACTIVE — 2 / 11 done after this closure transition merges
+P03.01-P03.02: DONE
+Current work package after this closure transition merges: P03.03 — Dependency Graph Resolver
+P03.04-P03.11: PLANNED
+kernel_code_authorized: true — P03.03 only after closure merge
 business_feature_code_authorized: false
 ```
 
-Implementation authority becomes bounded to P03.02 only after this closure/state-transition PR passes canonical governance and merges to protected `main`. Until then, protected `main` remains authoritative at the prior cursor. P03.03+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
+Implementation authority becomes bounded to P03.03 only after this P03.02 closure/state-transition PR passes canonical governance and merges to protected `main`. Until then, protected `main` remains authoritative at P03.02. P03.04+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after activation is verified on protected `main`, `docs/ai/handoffs/P03.02.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after activation is verified on protected `main`, `docs/ai/handoffs/P03.03.md` before material work. These files are subordinate snapshots/indexes and never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
 ## Mandatory read order
 
@@ -38,7 +38,7 @@ Before material work read:
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/P02_EXIT_GATE.md`, `docs/governance/P03_ENTRY_GATE.md`, `docs/governance/P03_EXIT_GATE.md` and `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`;
-4. `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, completed `docs/roadmap/work-packages/P03.01.md`, its completion evidence, and active `docs/roadmap/work-packages/P03.02.md`;
+4. `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, completed `docs/roadmap/work-packages/P03.01.md` and `P03.02.md` with their completion evidence, and active `docs/roadmap/work-packages/P03.03.md`;
 5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
@@ -75,7 +75,7 @@ The permanent repository Go quality gate runs through `bash scripts/verify_go_qu
 
 Strict protection requires implementation/closure/activation PRs to be current with protected `main` before merge. Stale green runs are not merge permission.
 
-## Completed P01/P02/P03.01 prerequisites retained
+## Completed P01/P02/P03.01/P03.02 prerequisites retained
 
 P01.01-P01.12 remain `done`; P01 exit remains **SATISFIED**. Final P01 evidence remains PR #65, exact head `2ee9a619f3bf828a4c38f8f3af7277fe8c7634f9`, run/job `32629072886 / 97168916985`, merge `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
@@ -96,52 +96,61 @@ P03.01 — Module Manifest Schema is complete with canonical evidence:
 - completion evidence: `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
 - retained verifier: `scripts/verify_p03_01.sh`
 
-Diagnostic runs remain explicit FAIL history and are never acceptance evidence. All completed P01/P02/P03.01 regressions remain mandatory during P03.02.
+P03.02 — Registry & Deterministic Discovery is complete with canonical implementation evidence:
+
+- implementation PR: #94
+- final exact head: `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`
+- canonical run/job: `33022405704 / 98355747775` — PASS
+- implementation merge: `2e38969dbbbcfcf4765a114f449dc3fa960061d7`
+- completion evidence: `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
+- retained verifier: `scripts/verify_p03_02.sh`
+
+Earlier failed candidates remain diagnostic history only and are never acceptance evidence. The P03.02 candidate `errorlint` defect was corrected with `errors.As` without gate, acceptance or scope weakening. All completed P01/P02/P03.01/P03.02 regressions remain mandatory during P03.03.
 
 ## P03 sequencing
 
 `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution. This closure candidate advances exactly one boundary:
 
-- P03.01 is `done`;
-- P03.02 becomes `active` only after the closure PR merges;
-- P03.03-P03.11 remain `planned`;
-- P03 progress becomes `1 / 11 done`;
-- `kernel_code_authorized=true` only for P03.02 after closure merge;
+- P03.01-P03.02 are `done`;
+- P03.03 becomes `active` only after the closure PR merges;
+- P03.04-P03.11 remain `planned`;
+- P03 progress becomes `2 / 11 done`;
+- `kernel_code_authorized=true` only for P03.03 after closure merge;
 - `business_feature_code_authorized=false`.
 
 The AI must not automatically advance to another package. Implementation and closure/state transition remain separate governed PRs.
 
-## Active P03.02 boundary after closure merge
+## Active P03.03 boundary after closure merge
 
 Owner: `kernel.modules`.
 
-P03.02 may implement only Registry & Deterministic Discovery described by `docs/roadmap/work-packages/P03.02.md`:
+P03.03 may implement only Dependency Graph Resolver described by `docs/roadmap/work-packages/P03.03.md`:
 
-- registry records derived from already validated P03.01 manifest metadata;
-- deterministic discovery from explicit approved repository/runtime sources;
-- stable lookup/list ordering and stable source/version identity;
-- duplicate/conflicting module identity/version rejection;
-- structural distinction between discovered/available metadata and installed/enabled lifecycle state;
-- operator-safe discovery diagnostics.
+- version-aware required and optional dependency resolution;
+- platform dependency validation;
+- deterministic topological order for valid required graphs;
+- cycle and incompatible-version detection;
+- undeclared/forbidden/private dependency detection hooks provable by reference fixtures;
+- selective optional-dependency degradation metadata for later lifecycle/capability availability decisions.
 
-P03.02 invariants:
+P03.03 invariants:
 
-- discovery consumes validated metadata and cannot execute package/module code or lifecycle hooks;
-- arbitrary filesystem or network scanning is forbidden;
-- duplicate identity must fail closed rather than resolve through nondeterministic enumeration or last-write-wins behavior;
-- registry metadata cannot grant permissions/capability authority;
-- sensitive source/path detail must respect classification/redaction;
-- one authoritative owner remains `kernel.modules`;
-- existing P02 tenancy/authorization/audit rules and P03.01 manifest validation remain binding.
+- missing or incompatible required dependencies fail closed before install/enable eligibility;
+- circular required dependencies are release-blocking invalid state;
+- missing optional dependencies cannot make unrelated modules fail globally;
+- resolver output is metadata/eligibility information only and cannot grant permissions, capabilities, tenant authority, database access or private-schema access;
+- kernel cannot depend on business modules and direct cross-module private imports/writes remain forbidden;
+- identical validated registry/manifests produce deterministic resolution output;
+- P02 tenancy/authorization/audit, P03.01 manifest validation and P03.02 deterministic non-executing discovery invariants remain binding.
 
-Explicitly forbidden in P03.02:
+Explicitly forbidden in P03.03:
 
-- P03.03 dependency graph resolution;
-- P03.04 lifecycle runtime/persistence;
-- P03.05-P03.11 settings/capability/permission/UI/migration/health/trust runtime;
-- remote marketplace/catalog download, signature/trust enforcement or sandbox runtime;
-- System Graph, product federation or performance-intelligence runtime;
-- P04 events/workflows;
+- P03.04 lifecycle state machine/runtime/persistence;
+- P03.05-P03.11 later settings/capability/permission/UI/migration/health/trust runtime;
+- package installation/download;
+- P04 event dependency orchestration;
+- full System Graph runtime or trust/advisory scanning;
+- remote marketplace/catalog runtime;
 - business modules/features;
 - AI/model/agent runtime.
 
@@ -155,13 +164,15 @@ P02 retained invariants remain binding: User is not business Person; trusted ten
 
 P03.01 retained invariants remain binding: manifests are untrusted declarative metadata; parsing/validation executes no package code; secret values are prohibited; declared permissions/capabilities do not create authorization; stable schema/version/owner/dependency semantics remain the only valid manifest contract.
 
+P03.02 retained invariants remain binding: discovery consumes validated manifests; sources are explicit; discovery executes no module code or lifecycle hooks; duplicate/conflicting identity fails closed; registry order is deterministic; discovered metadata remains distinct from installed/enabled lifecycle state; registry metadata creates no authority; sensitive diagnostics remain classification-safe.
+
 ## Quality and release rules
 
 Gate classes remain `G0` Governance, `G1` Static, `G2` Unit/Component, `G3` Contract/Integration, `G4` Data/Migration, `G5` Security/Tenancy, `G6` Lifecycle/Resilience, `G7` Build/Package and `G8` Supply Chain/Release.
 
 Evidence states are exactly `PASS`, `FAIL`, `BLOCKED`, `NOT RUN`, `N/A`. Never relabel blocked/unrun/N/A as PASS. Flaky tests are defects.
 
-Canonical completion evidence comes from GitHub-hosted `ubuntu-24.04`. All completed P01/P02/P03.01 regressions remain mandatory until a future governed change explicitly replaces them.
+Canonical completion evidence comes from GitHub-hosted `ubuntu-24.04`. All completed P01/P02/P03.01/P03.02 regressions remain mandatory until a future governed change explicitly replaces them.
 
 ## Repository/local-development rules
 
@@ -203,6 +214,6 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next action
 
-After this P03.01 closure/P03.02 activation PR passes its exact-head canonical governance and merges, verify protected `main` and canonical `STATE.json`, confirm P03.01 is done and P03.02 is the sole active implementation-authorized package, then **STOP this closure execution session**.
+After this P03.02 closure/P03.03 activation PR passes its exact-head canonical governance and merges, verify protected `main` and canonical `STATE.json`, confirm P03.01-P03.02 are done and P03.03 is the sole active implementation-authorized package, then **STOP this closure execution session**.
 
-P03.02 implementation starts only in a later governed session from the then-current exact protected-main SHA. Never implement P03.03+ from this transition.
+P03.03 implementation starts only in a later governed session from the then-current exact protected-main SHA. Never implement P03.04+ from this transition.

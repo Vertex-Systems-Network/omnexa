@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-26"
-  nature: "non-authoritative P03.01 closure / P03.02 activation continuity snapshot"
-  p03_01_implementation_merge: "4229e2a28442bf475afed143bab359a770d48053"
-  closure_branch: "governance/p03-01-close-p03-02-activate"
+  verified_at: "2026-08-27"
+  nature: "non-authoritative P03.02 closure / P03.03 activation continuity snapshot"
+  p03_02_implementation_merge: "2e38969dbbbcfcf4765a114f449dc3fa960061d7"
+  closure_branch: "governance/p03-02-close-p03-03-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,8 +16,8 @@ phase:
   current: "P03"
   name: "Module Runtime"
   state_after_closure: "active"
-  progress_after_closure: "1 / 11 done"
-  current_work_package_after_closure: "P03.02"
+  progress_after_closure: "2 / 11 done"
+  current_work_package_after_closure: "P03.03"
 
 p01_prerequisite:
   state: "done"
@@ -60,20 +60,34 @@ p03_01:
   regressions: "scripts/verify_p03_01.sh remains mandatory"
 
 p03_02:
-  state_after_closure: "active"
+  state_after_closure: "done"
   owner: "kernel.modules"
   spec: "docs/roadmap/work-packages/P03.02.md"
-  objective: "deterministic registry and discovery over validated P03.01 manifests"
+  implementation_pr: 94
+  final_exact_head: "0c46db41b0d724a08ea1a78545b3c2debdd8cd05"
+  canonical_run: 33022405704
+  canonical_job: 98355747775
+  implementation_merge: "2e38969dbbbcfcf4765a114f449dc3fa960061d7"
+  completion_evidence: "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"
+  regressions: "scripts/verify_p03_02.sh remains mandatory"
+
+p03_03:
+  state_after_closure: "active"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.03.md"
+  objective: "deterministic module dependency graph validation and resolution"
   implementation_evidence: null
   completion_evidence: null
 
 security:
   kernel_code_authorized_after_closure: true
-  kernel_code_scope: "P03.02 only"
+  kernel_code_scope: "P03.03 only"
   business_feature_code_authorized: false
-  discovery_may_execute_package_code: false
-  arbitrary_filesystem_or_network_scanning_authorized: false
-  registry_metadata_creates_authorization: false
+  resolver_output_creates_authorization: false
+  missing_required_dependency_fails_closed: true
+  circular_required_dependency_fails_closed: true
+  optional_dependency_absence_global_failure_authorized: false
+  private_cross_module_access_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   cross_tenant_failure_is_release_blocker: true
@@ -82,16 +96,16 @@ security:
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P03.02 before the closure PR merges and protected main confirms activation"
-  - "implement P03.03-P03.11 before later governed activation"
+  - "implement P03.03 before the closure PR merges and protected main confirms activation"
+  - "implement P03.04-P03.11 before later governed activation"
   - "implement P04+ or business modules/features"
-  - "implement System Graph, trust enforcement, product federation or performance intelligence from compatibility metadata alone"
+  - "implement lifecycle mutations, package installation/download, System Graph runtime or trust/advisory scanning from P03.03"
   - "implement AI/model/agent runtime"
-  - "treat activation evidence as P03.02 completion evidence"
-  - "weaken governance, branch protection or P01/P02/P03.01 regressions"
+  - "treat activation evidence as P03.03 completion evidence"
+  - "weaken governance, branch protection or P01/P02/P03.01/P03.02 regressions"
 
 next_action:
-  after_closure_merge: "Verify protected main and STATE.json: P03.01 DONE, P03.02 ACTIVE, progress 1/11, kernel code authorized only for P03.02, business features locked; then STOP. A later governed session may implement only P03.02 from the exact protected-main SHA."
+  after_closure_merge: "Verify protected main and STATE.json: P03.01-P03.02 DONE, P03.03 ACTIVE, progress 2/11, kernel code authorized only for P03.03, business features locked; then STOP. A later governed session may implement only P03.03 from the exact protected-main SHA."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -103,9 +117,10 @@ source_authority:
   exit_gate: "docs/governance/P03_EXIT_GATE.md"
   transition_checklist: "docs/governance/P02_P03_TRANSITION_CHECKLIST.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P03.02.md"
+  active_spec: "docs/roadmap/work-packages/P03.03.md"
   p03_01_evidence: "docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md"
+  p03_02_evidence: "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"
   ai_native_alignment: "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md"
 
 handoff:
-  active_after_closure: "docs/ai/handoffs/P03.02.md"
+  active_after_closure: "docs/ai/handoffs/P03.03.md"
