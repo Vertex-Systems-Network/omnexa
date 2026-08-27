@@ -75,6 +75,7 @@ for marker in \
   'func (m LifecycleManager) MarkRecoveryRequired(' \
   'lifecycle.reverse_dependency.active' \
   'lifecycle.reverse_dependency.present' \
+  'lifecycle.reverse_dependency.version_mismatch' \
   'lifecycle.version.mismatch' \
   'lifecycle.dependency.version_mismatch' \
   'lifecycle.store.read_failed' \
@@ -82,6 +83,7 @@ for marker in \
   'lifecycle.audit.failed' \
   'lifecycle.concurrent_conflict' \
   'lifecycle.upgrade.coordinator_unavailable' \
+  'lifecycle.failure.state_invalid' \
   'TestLifecycleStateMachineSupportsNonDestructiveDisableAndReenable' \
   'TestLifecycleDependencyPreconditionsAndReverseProtection' \
   'TestLifecyclePurgeRequiresAuthorizationAuditAndDetachedState' \
@@ -93,10 +95,13 @@ for marker in \
   'TestLifecycleAuthorizationPrecedesUpgradeCoordinator' \
   'TestLifecycleEnableRejectsStaleInstalledModuleVersion' \
   'TestLifecycleDependencyRequiresInstalledVersionBoundToResolverRegistry' \
+  'TestLifecycleProviderUpgradeRejectsStaleInstalledReverseDependent' \
   'TestLifecycleReverseDependencyReadFailureFailsClosed' \
   'TestLifecycleRecoveryTargetEnabledProtectsRequiredDependency' \
   'TestLifecycleRecoverToEnabledRechecksRequiredDependency' \
-  'TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired'; do
+  'TestLifecycleFailureMarkerRejectsImpossibleSourceAction' \
+  'TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired' \
+  'TestLifecycleFailedReinstallFromPurgedRecoversToPurged'; do
   if ! grep -R -Fq "$marker" kernel/internal/modules; then
     echo "ERROR: P03.04 required contract marker missing: ${marker}" >&2
     exit 1
