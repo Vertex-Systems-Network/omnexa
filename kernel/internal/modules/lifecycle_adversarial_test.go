@@ -47,6 +47,29 @@ func TestLifecycleReplayStillRequiresCurrentAuthorization(t *testing.T) {
 	}
 }
 
+func TestLifecycleAuthorizationPrecedesUpgradeCoordinator(t *testing.T) {
+	store := NewMemoryLifecycleStore()
+	oldRegistry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "1.0.0"))
+	oldManager := lifecycleManagerFor(oldRegistry, store, &lifecycleAuditRecorder{})
+	applyLifecycle(t, oldManager, "omnexa.alpha", LifecycleInstall, "install-before-upgrade")
+
+	newRegistry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "2.0.0"))
+	coordinator := &lifecycleUpgradeAllow{}
+	manager := lifecycleManagerFor(newRegistry, store, &lifecycleAuditRecorder{})
+	manager.Authorizer = lifecycleAllowAuthorizer{deny: LifecycleUpgrade}
+	manager.UpgradeCoordinator = coordinator
+
+	_, err := manager.Apply(context.Background(), LifecycleRequest{
+		ModuleID: "omnexa.alpha", Action: LifecycleUpgrade, OperationID: "unauthorized-upgrade",
+	})
+	if lifecycleCode(t, err) != "lifecycle.authorization.denied" {
+		t.Fatalf("unauthorized upgrade must fail at authorization boundary, got %v", err)
+	}
+	if coordinator.called {
+		t.Fatal("unauthorized upgrade must not invoke upgrade coordinator")
+	}
+}
+
 func TestLifecycleEnableRejectsStaleInstalledModuleVersion(t *testing.T) {
 	registry := discoverV2Registry(t, simpleManifestV2("omnexa.alpha", "2.0.0"))
 	store := NewMemoryLifecycleStore()
