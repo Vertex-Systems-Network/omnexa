@@ -93,7 +93,7 @@ adr_0012:
   authoritative_on_protected_main: false
   reconciliation_pr: 97
   reconciliation_branch: "feat/p03-03-dependency-graph-resolver"
-  reconciliation_exact_head: "4312786d221bbeed033ece4624c33b9e310534ff"
+  reconciliation_head_authority: "Read the current PR/Git head; do not pin a self-mutating branch head inside this continuity file."
   prior_proposal_governance_run: 33081149100
   prior_proposal_governance_result: "PASS_BUT_STALE_AFTER_RECONCILIATION_WRITES"
   implementation_on_reconciliation_branch_authorized: false
