@@ -96,8 +96,8 @@ for marker in \
   'TestResolveDependenciesRejectsRequiredCycleButIgnoresOptionalCycleForGlobalOrder' \
   'TestResolveDependenciesAppliesSchemaV1MigrationRules' \
   'TestRegistryBoundSnapshotIsIndependentFromSourcePayloadMutation' \
-  'TestRegistrySnapshotCloneCannotMutateBoundEvidence' \
-  'TestResolveDependenciesRejectsMismatchedRegistrySnapshot' \
+  'TestRegistryManifestSnapshotReturnsIndependentClone' \
+  'TestResolveDependenciesFailsClosedWhenRegistrySnapshotMismatchesRecord' \
   'TestResolveDependenciesRejectsUndeclaredPrivateAndKernelToBusinessObservations'; do
   if ! grep -R -Fq "$marker" kernel/internal/modules; then
     echo "ERROR: P03.03 required contract marker missing: ${marker}" >&2
