@@ -6,7 +6,9 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current execution state after this closure transition merges:** **P03 — Module Runtime is ACTIVE at 2 / 11 with P03.01-P03.02 complete and P03.03 — Dependency Graph Resolver as the sole active package.** `kernel_code_authorized=true` only for P03.03 after activation; `business_feature_code_authorized=false`. Until then, protected `main` remains authoritative at P03.02.
+> **Current execution state:** **P03 — Module Runtime is ACTIVE at 2 / 11 with P03.01-P03.02 complete and P03.03 — Dependency Graph Resolver as the sole active package.** `kernel_code_authorized=true` only for P03.03; `business_feature_code_authorized=false`.
+
+Protected-main activation identity is PR #95 / `77ca52b4041013d1785b00aac6655aad7f3fe91f`. `docs/roadmap/STATE.json` remains the canonical machine-readable execution cursor.
 
 ## Project progress
 
@@ -15,19 +17,19 @@ P00  Product Constitution & Architecture Freeze  [██████████
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
 P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
       └─ Exit: SATISFIED
-P03  Module Runtime                              [██░░░░░░░░]  2/11  ACTIVE AFTER CLOSURE MERGE
+P03  Module Runtime                              [██░░░░░░░░]  2/11  ACTIVE
       ├─ P03.01 — Module Manifest Schema: DONE
       ├─ P03.02 — Registry & Deterministic Discovery: DONE
-      └─ Current after closure: P03.03 — Dependency Graph Resolver
+      ├─ Current: P03.03 — Dependency Graph Resolver: ACTIVE
       └─ P03.04-P03.11: PLANNED / LOCKED
 P04+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
-The bars report only comparable package completion **inside each governed phase**. Omnexa does not publish a synthetic overall roadmap percentage across P00-P27 because later phases contain unequal scope and would make a single percentage misleading. The authoritative execution cursor remains `docs/roadmap/STATE.json`.
+The bars report only comparable package completion **inside each governed phase**. Omnexa does not publish a synthetic overall roadmap percentage across P00-P27 because later phases contain unequal scope and would make a single percentage misleading.
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Durable AI continuation starts with `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md` and, after canonical activation is verified, `docs/ai/handoffs/P03.03.md`.
+Read `AGENTS.md` first. Then read `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, active `docs/roadmap/work-packages/P03.03.md` and `docs/ai/handoffs/P03.03.md` before material work.
 
 Key references:
 
@@ -43,6 +45,7 @@ Key references:
 - `docs/roadmap/work-packages/P03.03.md`
 - `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
 - `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
+- `docs/adr/ADR-0012-versioned-module-dependency-requirements.md`
 - `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`
 - `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`
 - `docs/quality/GO_CODE_QUALITY.md`
@@ -82,13 +85,28 @@ An earlier P03.02 implementation candidate exposed an `errorlint` wrapped-error 
 
 All completed P01/P02/P03.01/P03.02 regression verifiers remain mandatory during P03.03.
 
-## P03.03 activation
+## P03.03 active boundary
 
-The P03.02 closure transition advances exactly one package and contains no P03.03 implementation. After the closure PR passes its own exact-head canonical governance and merges to protected `main`, the active package is **P03.03 — Dependency Graph Resolver**, owned by `kernel.modules`.
+P03.03 — Dependency Graph Resolver is the sole active package, owned by `kernel.modules`.
 
-P03.03 may implement only the dependency-resolution contract in `docs/roadmap/work-packages/P03.03.md`: version-aware required/optional dependency resolution, platform dependency validation, deterministic topological order, cycle/incompatible-version rejection, undeclared/forbidden/private dependency detection hooks and selective optional-dependency degradation metadata.
+The ADR-0012 accepting/reconciliation PR governs the Class C prerequisite needed for version-aware module dependencies. Its accepted decision becomes authoritative only after that PR passes exact-head canonical governance and merges to protected `main`; ADR acceptance evidence is not P03.03 implementation completion evidence.
 
-Required or incompatible dependencies and circular required graphs fail closed. Missing optional dependencies must not globally fail unrelated modules. Resolver output creates no permission/capability/tenant/database/private-schema authority, and identical validated registry/manifests must resolve deterministically.
+Accepted ADR-0012 direction:
+
+- preserve schema-v1 parsing/validation semantics;
+- add bounded explicit schema-version dispatch with separate strict v1/v2 decoders and no fallback;
+- schema v2 uses exact `{id, constraint}` required/optional module dependency records;
+- constraints use the bounded strict SemVer comparator grammar defined in ADR-0012;
+- preserve P03.02 one-record-per-module-ID public registry semantics;
+- atomically bind each registry identity to the exact normalized validated manifest snapshot used during discovery;
+- resolver dependency declarations come only from that bound snapshot, never a separately reparsed raw-manifest set;
+- required edges alone determine install/enable topological order and release-blocking cycle detection;
+- optional absence/incompatibility produces selective degradation and does not globally fail unrelated modules;
+- no multi-version/SAT solving, external compatibility matrix or package acquisition is introduced.
+
+After the ADR-0012 reconciliation merges, P03.03 implementation may proceed only on a **new separate implementation branch from the exact new protected-main SHA**. It may implement only the accepted dependency-resolution contract in `docs/roadmap/work-packages/P03.03.md`.
+
+Required or incompatible dependencies and circular required graphs fail closed. Resolver output creates no permission/capability/tenant/database/private-schema authority, and identical validated discovery state must resolve deterministically.
 
 Not authorized by P03.03: lifecycle mutations/persistence, package installation/download, P03.04-P03.11 implementation, P04 event orchestration, full System Graph runtime, trust/advisory scanning, direct cross-module private imports/writes, business modules, or AI/model/agent runtime.
 
@@ -96,8 +114,8 @@ The P03 AI-native compatibility mapping for XQ-100, XSG-100, XTRUST-100, XPF-200
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` **only for P03.03 after the closure transition merges**.
-- Until that merge, protected `main` remains authoritative at P03.02.
+- `kernel_code_authorized=true` only for the active P03.03 package.
+- The version-aware schema-v2/parser/discovery-binding/resolver implementation is gated until the ADR-0012 reconciliation PR merges and protected main is rehydrated.
 - `business_feature_code_authorized=false`.
 - P03.04-P03.11 remain planned/locked.
 - P04-P27 remain planned/locked.
@@ -117,9 +135,13 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Roadmap
 
-`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Closure-candidate checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 2 / 11 after closure; P03.01-P03.02 done; P03.03 activation target.** Protected `main` becomes authoritative for P03.03 only after this closure transition passes governance and merges.
+`docs/roadmap/MASTER_PLAN.md` governs P00-P27. Current checkpoint: **P00 done; P01 done 12 / 12; P02 done 10 / 10 with exit SATISFIED; P03 active 2 / 11; P03.01-P03.02 done; P03.03 active; P03.04+ locked.**
 
 `docs/roadmap/STRATEGIC_PROGRAMS.json` records proposed cross-cutting X-programs. It does not create a second execution cursor or override `STATE.json`.
+
+## Exact next action
+
+Finish the ADR-0012 accepting/reconciliation PR, require its exact final head to pass canonical GitHub-hosted governance, merge only if repository gates permit, then re-read protected `main` and create a separate P03.03 implementation branch from that exact SHA. Do not implement P03.03 on the architecture reconciliation carrier and do not auto-advance to P03.04.
 
 ## Product principle
 
