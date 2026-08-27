@@ -286,10 +286,11 @@ func TestLifecycleFailureFixturePreservesUnrelatedModuleIntegrity(t *testing.T) 
 	if err != nil || !found {
 		t.Fatalf("load unrelated module before failure: found=%v err=%v", found, err)
 	}
-	if _, err := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
+	_, recoveryErr := manager.MarkRecoveryRequired(context.Background(), LifecycleFailureRequest{
 		ModuleID: alpha.ID, FailedAction: LifecycleEnable, OperationID: "alpha-enable-failed", FailureCode: "hook.timeout",
-	}); err != nil {
-		t.Fatalf("MarkRecoveryRequired(alpha) error = %v", err)
+	})
+	if recoveryErr != nil {
+		t.Fatalf("MarkRecoveryRequired(alpha) error = %v", recoveryErr)
 	}
 	afterFailure, found, err := store.Load(context.Background(), beta.ID)
 	if err != nil || !found || afterFailure != before {
