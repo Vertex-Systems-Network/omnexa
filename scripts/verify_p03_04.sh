@@ -18,6 +18,7 @@ fi
 p03_04_files=(
   kernel/internal/modules/lifecycle.go
   kernel/internal/modules/lifecycle_test.go
+  kernel/internal/modules/lifecycle_adversarial_test.go
 )
 for file in "${p03_04_files[@]}"; do
   if [[ ! -f "$file" ]]; then
@@ -74,6 +75,9 @@ for marker in \
   'func (m LifecycleManager) MarkRecoveryRequired(' \
   'lifecycle.reverse_dependency.active' \
   'lifecycle.reverse_dependency.present' \
+  'lifecycle.version.mismatch' \
+  'lifecycle.dependency.version_mismatch' \
+  'lifecycle.store.read_failed' \
   'lifecycle.authorization.denied' \
   'lifecycle.audit.failed' \
   'lifecycle.concurrent_conflict' \
@@ -84,7 +88,12 @@ for marker in \
   'TestLifecycleOperationReplayAndConcurrentConflictAreExplicit' \
   'TestLifecycleFailureAndRecoveryPreserveStableState' \
   'TestLifecycleUpgradeUsesFutureCoordinatorWithoutExecutingMigrations' \
-  'TestLifecycleGraphFailureDoesNotMutateExistingState'; do
+  'TestLifecycleGraphFailureDoesNotMutateExistingState' \
+  'TestLifecycleReplayStillRequiresCurrentAuthorization' \
+  'TestLifecycleEnableRejectsStaleInstalledModuleVersion' \
+  'TestLifecycleDependencyRequiresInstalledVersionBoundToResolverRegistry' \
+  'TestLifecycleReverseDependencyReadFailureFailsClosed' \
+  'TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired'; do
   if ! grep -R -Fq "$marker" kernel/internal/modules; then
     echo "ERROR: P03.04 required contract marker missing: ${marker}" >&2
     exit 1
