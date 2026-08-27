@@ -101,7 +101,8 @@ for marker in \
   'TestLifecycleRecoverToEnabledRechecksRequiredDependency' \
   'TestLifecycleFailureMarkerRejectsImpossibleSourceAction' \
   'TestLifecycleFailedInstallCanEnterAndRecoverFromRecoveryRequired' \
-  'TestLifecycleFailedReinstallFromPurgedRecoversToPurged'; do
+  'TestLifecycleFailedReinstallFromPurgedRecoversToPurged' \
+  'TestLifecycleFailureFixturePreservesUnrelatedModuleIntegrity'; do
   if ! grep -R -Fq "$marker" kernel/internal/modules; then
     echo "ERROR: P03.04 required contract marker missing: ${marker}" >&2
     exit 1
