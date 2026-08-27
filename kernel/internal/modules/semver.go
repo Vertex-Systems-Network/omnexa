@@ -29,9 +29,9 @@ type versionComparator struct {
 type constraintParseFailure string
 
 const (
-	constraintInvalid             constraintParseFailure = "invalid"
-	constraintTooLong             constraintParseFailure = "too_long"
-	constraintTooManyComparators  constraintParseFailure = "too_many_comparators"
+	constraintInvalid            constraintParseFailure = "invalid"
+	constraintTooLong            constraintParseFailure = "too_long"
+	constraintTooManyComparators constraintParseFailure = "too_many_comparators"
 )
 
 func parseStrictSemVer(value string) (strictSemVer, bool) {
