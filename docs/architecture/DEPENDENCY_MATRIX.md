@@ -1,9 +1,9 @@
 # Omnexa Architecture Dependency Matrix
 
-Status: **Canonical dependency baseline v1**  
+Status: **Canonical dependency baseline v1 + ADR-0012 version-compatibility rules**  
 Work package: **P00.02**
 
-This document defines which dependency directions are allowed. It complements `DOMAIN_OWNERSHIP.md` and `MODULE_STANDARD.md`.
+This document defines which dependency directions are allowed. It complements `DOMAIN_OWNERSHIP.md`, `MODULE_STANDARD.md` and accepted ADR-0012.
 
 ## 1. Dependency symbols
 
@@ -50,6 +50,8 @@ The following are always forbidden unless an approved ADR changes the architectu
 - connectors encoding business rules that belong to a domain owner;
 - optional module absence causing unrelated module boot failure;
 - circular required module dependencies.
+
+Version compatibility never converts an `X` path into an allowed path. A version-compatible private or forbidden dependency remains forbidden.
 
 ## 4. Preferred integration order
 
@@ -100,11 +102,11 @@ AI Agent
 
 No raw SQL or unrestricted internal service access is permitted.
 
-## 6. Dependency declaration
+## 6. Dependency declaration and version compatibility
 
-Every module manifest must eventually declare:
+Every module manifest declares, as applicable:
 
-- required kernel capabilities;
+- required kernel/platform capabilities;
 - required module dependencies;
 - optional module dependencies;
 - capabilities consumed;
@@ -114,7 +116,46 @@ Every module manifest must eventually declare:
 - workflow actions/triggers provided;
 - UI extension points used/provided.
 
-P03 will make this machine-enforceable. Until then, this document is the canonical architecture rule.
+P03.01 made manifest declarations machine-validatable and P03.02 made discovery/registry deterministic. Accepted ADR-0012 defines the version-aware prerequisite used by P03.03.
+
+### 6.1 Schema-v2 module dependencies
+
+For manifest schema v2:
+
+- required and optional module dependencies use exact `{id, constraint}` records;
+- constraints use one to sixteen strict SemVer comparator expressions, maximum 256 bytes, separated by one ASCII space;
+- allowed operators are `=`, `>`, `>=`, `<`, `<=`;
+- no wildcard, caret, tilde, OR, comma-separated or implicit/package-manager range syntax is allowed;
+- module self-dependency is invalid;
+- duplicate IDs and cross-class conflicts are invalid;
+- `platform_dependencies` remain platform-capability identifiers;
+- `required_platform_version` remains separate from module dependency constraints.
+
+### 6.2 Graph authority
+
+- missing/incompatible required dependency fails closed;
+- required dependency edges alone determine install/enable topological order;
+- circular required edges are release-blocking invalid state;
+- optional absence/incompatibility creates selective degradation metadata;
+- optional edges do not participate in the required global ordering/cycle gate;
+- optional failure must not crash unrelated modules.
+
+### 6.3 Registry and provenance binding
+
+The current P03.02 registry supports at most one discovered record per module ID. P03.03 therefore resolves exactly one discovered version against the declaring module's explicit constraint; multi-version/SAT solving is out of scope.
+
+Dependency declarations used by the resolver must come from the same normalized validated manifest snapshot that discovery atomically associated with the registry record. The resolver must not independently reparse or pair a second raw-manifest set with an existing registry snapshot.
+
+Public P03.02 lookup/list/cardinality behavior remains unchanged by this binding.
+
+### 6.4 Schema-v1 compatibility
+
+Schema v1 remains parseable under its accepted historical contract.
+
+- v1 manifests with no module dependencies remain resolver-eligible subject to other gates;
+- v1 manifests with required module dependencies fail closed for install/enable eligibility until migrated to schema v2 because no per-module version contract exists;
+- v1 optional module dependencies produce explicit unresolved/degraded optional metadata until migrated;
+- v1 strings are never silently treated as unconstrained or same-major compatible dependencies.
 
 ## 7. Conflict rule
 
@@ -123,3 +164,5 @@ If an implementation appears to require an `X` path, do not create the dependenc
 1. expose a proper owner capability/event/projection;
 2. move misplaced responsibility to the correct owner; or
 3. raise an ADR when the ownership model itself is genuinely wrong.
+
+Version compatibility, manifest declarations and resolver output never grant authorization or direct private implementation access.
