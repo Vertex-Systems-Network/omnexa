@@ -226,11 +226,14 @@ func (m LifecycleManager) Apply(ctx context.Context, request LifecycleRequest) (
 		return LifecycleResult{Record: current, Replayed: true}, nil
 	}
 
-	next, err := m.plan(ctx, current, meta, request)
-	if err != nil {
+	// Authorization precedes transition planning because planning may invoke a
+	// caller-supplied upgrade coordinator. Unauthorized callers must not probe
+	// dependency/lifecycle eligibility or trigger coordinator behavior.
+	if err := m.authorize(ctx, request.ModuleID, request.Action); err != nil {
 		return LifecycleResult{}, err
 	}
-	if err := m.authorize(ctx, request.ModuleID, request.Action); err != nil {
+	next, err := m.plan(ctx, current, meta, request)
+	if err != nil {
 		return LifecycleResult{}, err
 	}
 	if err := m.audit(ctx, LifecycleAuditEvent{
