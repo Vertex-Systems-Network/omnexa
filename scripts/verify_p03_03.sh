@@ -22,6 +22,7 @@ p03_03_files=(
   kernel/internal/modules/manifest_versioned_test.go
   kernel/internal/modules/resolver.go
   kernel/internal/modules/resolver_test.go
+  kernel/internal/modules/resolver_provenance_test.go
   kernel/internal/modules/registry.go
 )
 
@@ -52,7 +53,10 @@ if grep -nE '"(os|os/exec|plugin|net/http|database/sql|path/filepath)"' "${p03_0
   echo "ERROR: P03.03 resolver must remain pure in-memory validation without filesystem/network/database/package execution" >&2
   exit 1
 fi
-if grep -nE '(ReadDir|WalkDir|Glob|exec\.Command|plugin\.Open|http\.(Get|Post|Client)|sql\.Open)' "${p03_03_files[@]}"; then
+# Match actual qualified execution/discovery APIs, not English substrings such as
+# "Global" in test names. Prohibited package imports are independently rejected
+# above, so aliases cannot bypass this primitive guard.
+if grep -nE '(os\.(ReadDir|ReadFile|Open)|filepath\.(Walk|WalkDir|Glob)|exec\.Command|plugin\.Open|http\.(Get|Post)|http\.Client|sql\.Open)[[:space:]]*[({]' "${p03_03_files[@]}"; then
   echo "ERROR: P03.03 source contains an unauthorized execution or discovery primitive" >&2
   exit 1
 fi
@@ -92,6 +96,8 @@ for marker in \
   'TestResolveDependenciesRejectsRequiredCycleButIgnoresOptionalCycleForGlobalOrder' \
   'TestResolveDependenciesAppliesSchemaV1MigrationRules' \
   'TestRegistryBoundSnapshotIsIndependentFromSourcePayloadMutation' \
+  'TestRegistrySnapshotCloneCannotMutateBoundEvidence' \
+  'TestResolveDependenciesRejectsMismatchedRegistrySnapshot' \
   'TestResolveDependenciesRejectsUndeclaredPrivateAndKernelToBusinessObservations'; do
   if ! grep -R -Fq "$marker" kernel/internal/modules; then
     echo "ERROR: P03.03 required contract marker missing: ${marker}" >&2
