@@ -474,6 +474,17 @@ func (m LifecycleManager) plan(ctx context.Context, current LifecycleRecord, met
 		if current.State != LifecycleRecoveryRequired || !stableRecoveryState(current.RecoveryState) {
 			return LifecycleRecord{}, invalidTransition(request.ModuleID)
 		}
+		if current.RecoveryState == LifecycleEnabled {
+			if current.Version != meta.Version {
+				return LifecycleRecord{}, lifecycleErr("lifecycle.version.mismatch", request.ModuleID, "")
+			}
+			if err := m.requireGraphEligibility(request.ModuleID); err != nil {
+				return LifecycleRecord{}, err
+			}
+			if err := m.requireDependencies(ctx, request.ModuleID, true); err != nil {
+				return LifecycleRecord{}, err
+			}
+		}
 		next.State = current.RecoveryState
 		next.RecoveryState = ""
 		next.FailedAction = ""
@@ -559,7 +570,7 @@ func (m LifecycleManager) reverseBlocker(ctx context.Context, providerID string,
 			return "", lifecycleErr("lifecycle.store.identity_mismatch", providerID, candidate.ID)
 		}
 		if activeOnly {
-			if record.State == LifecycleEnabled {
+			if record.State == LifecycleEnabled || (record.State == LifecycleRecoveryRequired && record.RecoveryState == LifecycleEnabled) {
 				blockers = append(blockers, candidate.ID)
 			}
 			continue
