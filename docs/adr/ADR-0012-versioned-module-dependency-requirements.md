@@ -13,17 +13,17 @@ P03.01 established manifest schema v1 and is complete. Schema v1 represents requ
 
 It separately represents the module's own SemVer version and a constrained `required_platform_version`.
 
-P03.02 then established deterministic discovery/registry semantics. The current registry accepts exactly one discovered record per module ID; duplicate identities or conflicting versions fail discovery before dependency resolution.
+P03.02 then established deterministic discovery/registry semantics. The current registry accepts exactly one discovered record per module ID; duplicate identities or conflicting versions fail discovery before dependency resolution. `Discover` parses each manifest once but the public `RegistryRecord` retains only module identity/version/owner/source metadata, not dependency declarations.
 
 P03.03 is now the sole active work package and requires version-aware required and optional module dependency resolution, required dependency presence/version enforcement, and deterministic incompatible-version / incompatible-constraint rejection.
 
-There is currently no canonical field in schema v1 that can express the version constraint a module requires from another module. Inferring compatibility (for example, same-major, any installed version, or an encoded `module@constraint` string) would create unapproved module-lifecycle semantics and conflict with mandatory change control.
+There is currently no canonical field in schema v1 that can express the version constraint a module requires from another module. There is also no current P03.02 registry surface that binds dependency declarations to the exact validated manifest snapshot from which a registry record was produced. Inferring compatibility or reparsing/pairing unrelated raw manifests later would create unapproved or drift-prone resolver semantics.
 
 GitHub issue #96 records this contract gap.
 
 ## Problem
 
-P03.03 cannot satisfy its acceptance criteria deterministically from the accepted P03.01 schema without changing a module contract or introducing a second compatibility authority.
+P03.03 cannot satisfy its acceptance criteria deterministically from the accepted P03.01 schema without changing a module contract or introducing a second compatibility authority. It also must not resolve dependency declarations from an independently supplied manifest set that can drift from the registry snapshot being resolved.
 
 The prerequisite manifest-contract change is therefore **Class C** under `docs/governance/CHANGE_CONTROL.md`: it changes module dependency/lifecycle semantics and requires an accepted ADR plus atomic reconciliation before implementation. P03.03 itself remains the active Class B implementation package; this ADR governs the Class C prerequisite needed before its version-aware resolver portion can proceed.
 
@@ -34,7 +34,8 @@ The prerequisite manifest-contract change is therefore **Class C** under `docs/g
 - explicit version constraints rather than inferred compatibility;
 - preserve exact P03.01 schema-v1 parsing/validation evidence;
 - preserve P03.02 one-record-per-module-ID registry semantics unless separately changed by a future ADR;
-- avoid ambiguous string overloading or parser fallthrough between schema versions;
+- bind resolver dependency declarations to the same validated discovery snapshot that produced the registry identity/version data;
+- avoid ambiguous string overloading, parser fallthrough, or independently re-paired manifest/registry inputs;
 - keep optional dependency failure selective rather than global;
 - minimize dependency-constraint grammar complexity in the first resolver contract;
 - bound all untrusted constraint input and parser work;
@@ -92,6 +93,7 @@ Benefits:
 Costs/risks:
 - requires schema-v2 parser/validator work and fixtures;
 - P03.01 contract documentation/evidence must be reconciled without rewriting historical evidence;
+- discovery must retain or atomically normalize enough validated manifest state for the resolver without weakening P03.02 public registry semantics;
 - consumers must migrate dependency-bearing manifests to schema v2 before they can be resolver-eligible.
 
 ### Option B — Keep schema v1 and create an external compatibility matrix
@@ -152,8 +154,9 @@ If accepted, the normative contract is:
 10. schema-v1 manifests with required module dependencies remain parseable but are not install/enable eligible under P03.03 because the required version contract is unavailable; the resolver returns a stable fail-closed compatibility error requiring migration to schema v2;
 11. schema-v1 optional module dependencies remain parseable; under P03.03 they produce explicit unresolved/degraded optional-dependency metadata until migrated to schema v2 rather than an inferred compatibility result;
 12. P03.02's one-record-per-module-ID registry invariant remains authoritative: P03.03 resolves one discovered version for an ID against one declared constraint; selecting among multiple installed/discovered versions is out of scope and requires separate architecture authority;
-13. no dependency declaration grants authorization, capability access, private package access or database access;
-14. deterministic ordering, diagnostics and degradation metadata remain stable independent of discovery enumeration order.
+13. resolver dependency declarations must come from the exact validated manifest snapshot atomically associated with the registry record during discovery/normalization; callers must not be able to pair a registry built from one manifest set with dependency declarations reparsed from another set;
+14. no dependency declaration grants authorization, capability access, private package access or database access;
+15. deterministic ordering, diagnostics and degradation metadata remain stable independent of discovery enumeration order.
 
 ## Parser/version-dispatch contract
 
@@ -171,21 +174,37 @@ If this ADR is accepted, parsing must use an explicit version-dispatch boundary:
 
 This avoids parser ambiguity, prevents a structured v2 manifest from surfacing as an accidental generic JSON/type error in the v1 path, and preserves historical v1 verification as a real compatibility contract.
 
+## Resolver input and discovery binding
+
+P03.02 currently parses manifests during `Discover`, then exposes a `Registry` whose public `RegistryRecord` contains only ID/version/owner/source metadata. P03.03 must not compensate by independently reparsing arbitrary raw manifests and joining them to registry records by ID after the fact: that creates a time-of-check/time-of-use style drift surface where resolver policy can be evaluated against declarations different from the validated discovery snapshot.
+
+If this ADR is accepted, P03.03 must preserve one atomic provenance path:
+
+1. version-specific parsing/validation produces a normalized, immutable-by-convention validated manifest snapshot containing schema version, module identity/version/owner and normalized dependency declarations;
+2. discovery atomically derives the existing public `RegistryRecord` and stores the corresponding validated snapshot in the same registry construction result, keyed by the same unique module ID;
+3. public P03.02 `List`/`Lookup` record semantics may remain unchanged; the dependency snapshot can remain internal to `kernel.modules` if no external consumer requires it;
+4. the resolver consumes dependency declarations only from this registry-bound validated snapshot, never from a second raw manifest input set;
+5. any missing internal snapshot, ID/version/owner mismatch, duplicate association or impossible schema/dependency state fails closed with stable diagnostics;
+6. snapshots returned or shared across resolver paths must be copied/read-only so callers cannot mutate registry evidence after discovery;
+7. no resolver path performs filesystem/network rediscovery or package execution.
+
+This is a provenance/evidence binding, not a new source of truth: the manifest remains canonical; the registry-bound snapshot is the validated normalized representation of that exact manifest used for deterministic resolution.
+
 ## Registry and graph semantics
 
 P03.02 discovery currently fails the whole registry when the same module ID appears more than once, whether as a duplicate or version conflict. This ADR does not introduce package-manager-style multi-version solving.
 
 For P03.03 under this decision:
 
-- one module ID resolves to at most one `RegistryRecord`;
-- required dependency compatibility compares that record's strict SemVer version to the declaring module's constraint;
+- one module ID resolves to at most one `RegistryRecord` and one bound validated manifest snapshot;
+- required dependency compatibility compares that record's strict SemVer version to the declaring module's constraint from the bound snapshot;
 - a module may not depend on itself in either required or optional dependency classes;
 - only required dependency edges participate in deterministic topological ordering;
 - a cycle of required edges is release-blocking invalid state;
 - optional relations are evaluated independently for availability/degradation and cannot turn an otherwise valid required graph into a global cycle failure;
 - forbidden/private dependency checks remain orthogonal and may still invalidate a module regardless of version compatibility.
 
-Multi-version selection, SAT solving, automatic upgrades/downgrades and remote package acquisition are explicitly out of scope.
+Multi-version selection, SAT solving, automatic upgrades/downgrades, remote package acquisition and a second manifest input channel are explicitly out of scope.
 
 ## Consequences
 
@@ -193,13 +212,15 @@ Multi-version selection, SAT solving, automatic upgrades/downgrades and remote p
 
 - P03.03 can enforce version compatibility from canonical machine-readable input.
 - Version compatibility is explicit, bounded and testable.
+- Resolver policy is cryptographically unnecessary to bind externally because it consumes the same in-memory validated discovery snapshot rather than a separately supplied manifest set.
 - Existing schema-v1 evidence remains meaningful instead of being silently reinterpreted.
-- P03.02 registry cardinality remains stable.
+- P03.02 public registry cardinality/lookup semantics remain stable.
 - Optional dependency behavior stays selectively degradable without corrupting required topological ordering.
 
 ### Negative / trade-offs
 
 - A schema-v2 compatibility path and explicit parser dispatch must be added before the resolver can complete.
+- P03.03 must extend registry internals (or an adjacent package-private discovery result) to retain normalized validated dependency state even if public `RegistryRecord` remains unchanged.
 - Dependency-bearing schema-v1 manifests require migration for full resolver eligibility.
 - The initial comparator grammar is intentionally less expressive than common package-manager grammars.
 - P03.03 cannot proceed directly to implementation until governance reconciliation is accepted.
@@ -210,7 +231,9 @@ Multi-version selection, SAT solving, automatic upgrades/downgrades and remote p
 - Reusing the existing permissive SemVer regex as if it were a full SemVer 2.0.0 parser could accept invalid prerelease identifiers or compare versions incorrectly; schema-v2 version/constraint comparison therefore requires one deterministic strict SemVer implementation path.
 - Treating v1 dependency strings as unconstrained would accidentally weaken fail-closed behavior.
 - Allowing parser fallback across schema versions could make malformed manifests ambiguous or bypass version-specific validation.
-- Changing existing P03.01 completion evidence instead of adding forward evidence could corrupt historical provenance.
+- Independently reparsing or pairing manifests after registry creation could resolve a different declaration set than the one discovery validated.
+- Exposing mutable internal manifest snapshots could let callers change resolver evidence after discovery.
+- Changing existing P03.01/P03.02 completion evidence instead of adding forward evidence could corrupt historical provenance.
 
 ## Architecture impact
 
@@ -220,7 +243,7 @@ Multi-version selection, SAT solving, automatic upgrades/downgrades and remote p
 - API/event impact: no HTTP/event contract change; module manifest contract gains schema v2;
 - deployment/operations impact: dependency-bearing manifests must migrate to v2 before install/enable eligibility under the resolver;
 - compatibility/migration impact: explicit version-dispatch with dual v1/v2 parsing during transition; no silent reinterpretation of v1 dependency strings;
-- P03.02 impact: retain single-record-per-module-ID discovery and duplicate/version-conflict behavior; add only forward evidence showing v2 manifests participate without weakening those invariants.
+- P03.02 impact: retain public single-record-per-module-ID discovery, lookup/list and duplicate/version-conflict behavior; add package-private normalized validated-manifest binding needed by P03.03 and forward evidence that this does not change historical P03.02 semantics.
 
 ## Implementation constraints
 
@@ -230,12 +253,14 @@ If this ADR is accepted:
 - do not infer same-major, latest, or any-version compatibility;
 - do not add an external compatibility matrix unless this ADR is superseded;
 - do not add multi-version solving or package selection to P03.03;
+- do not accept separately reparsed raw manifests as resolver authority when a registry snapshot already exists;
 - do not let optional edges affect required graph topological order;
 - keep comparison deterministic, strict and bounded;
 - use one strict SemVer 2.0.0 parser/comparator path for module versions and constraint operands rather than duplicating subtly different version rules;
 - retain the existing manifest byte/list bounds and add explicit dependency-record, constraint-byte and comparator-count bounds;
+- preserve public P03.02 record/list/lookup ordering and failure semantics while adding only internal immutable normalized manifest state necessary for resolution;
 - keep stable safe validation/resolution error codes and deterministic diagnostic ordering;
-- retain all P03.01/P03.02 regression fixtures and add explicit v1/v2 compatibility fixtures;
+- retain all P03.01/P03.02 regression fixtures and add explicit v1/v2 compatibility plus registry-binding fixtures;
 - do not weaken forbidden/private dependency checks;
 - do not let resolver results grant runtime authority;
 - justify any new external SemVer/constraint library separately under dependency-introduction policy; a library choice is not made by this ADR.
@@ -245,11 +270,12 @@ If this ADR is accepted:
 1. Review/accept this ADR or replace it with another explicit architectural decision.
 2. In the accepting/reconciliation PR, update all affected canonical sources of truth, including as applicable `MODULE_STANDARD.md`, P03.01/P03.02/P03.03 contract documentation, manifest specifications/fixtures, and roadmap/state references required by change control.
 3. Preserve the historical P03.01 completion evidence as evidence of schema-v1 completion; add forward compatibility evidence rather than rewriting the historical run.
-4. Preserve P03.02 single-version registry semantics and add forward tests proving schema-v2 discovery feeds the same deterministic registry model.
+4. Preserve P03.02 public single-version registry semantics and add forward tests proving schema-v2 discovery and bound normalized manifest snapshots feed the same deterministic registry model.
 5. Implement explicit schema-version dispatch plus separate strict v1/v2 parsing/validation with no fallback.
-6. Add migration fixtures/examples for dependency-bearing v1 manifests.
-7. Only after the contract is accepted and reconciled, implement P03.03 resolver semantics against the accepted model.
-8. Roll back by rejecting/superseding this proposal before implementation; after implementation, use a superseding ADR and forward-fix migration rather than silently changing constraint meaning.
+6. Extend discovery/registry internals atomically so every resolver-visible record is bound to the exact normalized validated manifest snapshot that produced it; do not introduce a second raw-manifest resolver input.
+7. Add migration fixtures/examples for dependency-bearing v1 manifests.
+8. Only after the contract is accepted and reconciled, implement P03.03 resolver semantics against the accepted model.
+9. Roll back by rejecting/superseding this proposal before implementation; after implementation, use a superseding ADR and forward-fix migration rather than silently changing constraint meaning.
 
 ## Verification
 
@@ -261,11 +287,12 @@ Acceptance/implementation evidence must include:
 - schema-v2 positive/negative parser and validation fixtures, including unknown dependency-record fields, self-dependencies and resource-bound failures;
 - strict SemVer conformance fixtures, including invalid numeric prerelease identifiers, prerelease ordering and build-metadata precedence equality;
 - deterministic constraint tests covering exact, lower/upper bound, conflict, comparator-count/length bounds and malformed whitespace;
+- registry-binding fixtures proving resolver dependencies come from the same validated discovery snapshot and mismatched/missing/mutable associations fail closed;
 - required dependency absent/incompatible fail-closed fixtures;
 - optional dependency absent/incompatible selective-degradation fixtures;
 - required-cycle fixtures plus optional-cycle fixtures proving optional edges do not globally invalidate required graph order;
 - duplicate and cross-class dependency rejection;
-- P03.02 duplicate/version-conflict registry behavior retained unchanged;
+- P03.02 duplicate/version-conflict, public lookup/list and deterministic ordering behavior retained unchanged;
 - deterministic results independent of registry/discovery ordering;
 - all retained P01/P02/P03.01/P03.02 regressions plus P03.03 dedicated verification on the exact implementation head.
 
@@ -274,10 +301,11 @@ Acceptance/implementation evidence must include:
 - `docs/architecture/MODULE_STANDARD.md`
 - `docs/architecture/DEPENDENCY_MATRIX.md` if it currently states compatibility semantics that need reconciliation
 - `docs/roadmap/work-packages/P03.01.md` (forward compatibility note only; historical completion evidence remains immutable)
-- `docs/roadmap/work-packages/P03.02.md` (forward compatibility note only if parser/registry evidence needs extension; historical completion evidence remains immutable)
+- `docs/roadmap/work-packages/P03.02.md` (forward compatibility note only; historical completion evidence remains immutable)
 - `docs/roadmap/work-packages/P03.03.md`
 - `docs/ai/handoffs/P03.03.md`
 - manifest schema/specification, parser/validator and fixtures
+- discovery/registry internal normalized-manifest binding and fixtures
 - GitHub issue #96
 
 ## Supersedes / superseded by
