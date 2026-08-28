@@ -74,7 +74,8 @@ for marker in \
   'available, availabilityErr := service.permissionAvailable(ctx, permission)' \
   'func (repository *PostgresRepository) ReconcileModulePermissions(' \
   "source_kind IN ('kernel', 'module')" \
-  'source_kind = '\''module'\'' AND module_id' \
+  "source_kind = 'module'" \
+  'AND module_id ~' \
   'TestPermissionRegistryRetainsV1AndV2ValidatedDeclarations' \
   'TestPermissionRegistryDeterministicRegistrationAndCapabilityAssociation' \
   'TestPermissionRegistryRejectsReservedNamespaceCollisionAndOwnershipMismatch' \
