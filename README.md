@@ -6,9 +6,9 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
 
-> **Current transition candidate:** **P03 — Module Runtime is ACTIVE at 7 / 11 with P03.01-P03.07 complete and P03.08 — UI Contribution Registry Contract as the sole active package after this closure merges.** `kernel_code_authorized=true` only for P03.08 after that merge; `business_feature_code_authorized=false`.
+> **Current transition candidate:** **P03 — Module Runtime is ACTIVE at 8 / 11 with P03.01-P03.08 complete and P03.09 — Migration Ownership Registry as the sole active package after this closure merges.** `kernel_code_authorized=true` only for P03.09 after that merge; `business_feature_code_authorized=false`.
 
-Protected main currently contains the completed P03.07 implementation at `66f8b4cc630f6cd865e440a62478df365e042a31`. `docs/roadmap/STATE.json` remains the canonical machine-readable execution cursor; this closure carrier does not grant P03.08 implementation authority before merge and protected-main readback.
+Protected main currently contains the completed P03.08 implementation at `55ec376146c4c43f24b079050a35f58eec13c479`. `docs/roadmap/STATE.json` remains the canonical machine-readable execution cursor; this closure carrier does not grant P03.09 implementation authority before merge and protected-main readback.
 
 ## Project progress
 
@@ -17,7 +17,7 @@ P00  Product Constitution & Architecture Freeze  [██████████
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
 P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
       └─ Exit: SATISFIED
-P03  Module Runtime                              [███████░░░]  7/11  ACTIVE after closure
+P03  Module Runtime                              [████████░░]  8/11  ACTIVE after closure
       ├─ P03.01 — Module Manifest Schema: DONE
       ├─ P03.02 — Registry & Deterministic Discovery: DONE
       ├─ P03.03 — Dependency Graph Resolver: DONE
@@ -25,14 +25,15 @@ P03  Module Runtime                              [███████░░░
       ├─ P03.05 — Module Settings & Feature Flags: DONE
       ├─ P03.06 — Capability Registry: DONE
       ├─ P03.07 — Permission Registration: DONE
-      ├─ Current after closure: P03.08 — UI Contribution Registry Contract: ACTIVE
-      └─ P03.09-P03.11: PLANNED / LOCKED
+      ├─ P03.08 — UI Contribution Registry Contract: DONE
+      ├─ Current after closure: P03.09 — Migration Ownership Registry: ACTIVE
+      └─ P03.10-P03.11: PLANNED / LOCKED
 P04+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. Then read `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, `docs/roadmap/work-packages/P03.08.md`, completed `docs/ai/handoffs/P03.07.md` and activation-candidate `docs/ai/handoffs/P03.08.md` before material P03.08 work. Until this closure merges and protected main is re-read, P03.08 runtime work remains locked.
+Read `AGENTS.md` first. Then read `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, `docs/roadmap/work-packages/P03.09.md`, completed `docs/ai/handoffs/P03.08.md` and activation-candidate `docs/ai/handoffs/P03.09.md` before material P03.09 work. Until this closure merges and protected main is re-read, P03.09 runtime work remains locked.
 
 Key references:
 
@@ -43,8 +44,8 @@ Key references:
 - `docs/governance/P03_EXIT_GATE.md`
 - `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`
 - `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P03.07.md`
 - `docs/roadmap/work-packages/P03.08.md`
+- `docs/roadmap/work-packages/P03.09.md`
 - `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
 - `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
 - `docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md`
@@ -52,6 +53,7 @@ Key references:
 - `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`
 - `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`
 - `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`
+- `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`
 - `docs/adr/ADR-0012-versioned-module-dependency-requirements.md`
 - `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`
 - `docs/quality/GO_CODE_QUALITY.md`
@@ -90,36 +92,38 @@ P03.05 — Module Settings & Feature Flags is complete through PR #103, exact he
 
 P03.06 — Capability Registry is complete through PR #107, exact head `c895f44a1383d1c1d9c5fd23c95d7864810353c3`, run/job `33181421854 / 98883286556`, merge `13dbe8a393c20cabeb8aac60d073a6c66775efd3`, evidence `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_06.sh`.
 
-P03.07 — Permission Registration is complete through PR #111:
+P03.07 — Permission Registration is complete through PR #111, exact head `28e36b3ac3183f28ec500f1e70b1fefe02c0c325`, run/job `33195104185 / 98930123416`, merge `66f8b4cc630f6cd865e440a62478df365e042a31`, evidence `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_07.sh`.
 
-- implementation issue #110 — completed
-- final exact head `28e36b3ac3183f28ec500f1e70b1fefe02c0c325`
-- canonical run/job `33195104185 / 98930123416` — PASS
-- implementation merge `66f8b4cc630f6cd865e440a62478df365e042a31`
-- evidence `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`
-- retained verifier `scripts/verify_p03_07.sh`
+P03.08 — UI Contribution Registry Contract is complete through PR #116:
 
-Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence only. Earlier failed/cancelled/stale candidates remain historical non-acceptance evidence. All completed P01/P02/P03.01-P03.07 regressions remain mandatory during later P03.08 implementation.
+- implementation issue #115 — completed
+- final exact head `65dc38c6d60d1535c97a5dda59fb49490df59ec6`
+- canonical run/job `33216021914 / 98999758150` — PASS
+- implementation merge `55ec376146c4c43f24b079050a35f58eec13c479`
+- evidence `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`
+- retained verifier `scripts/verify_p03_08.sh`
 
-## P03.07 retained boundary
+Earlier failed/cancelled/stale candidates remain historical non-acceptance evidence. All completed P01/P02/P03.01-P03.08 regressions remain mandatory during later P03.09 implementation.
 
-Permission registration remains declaration metadata, never a grant. `kernel.authorization` is the sole deny-by-default enforcement/policy authority. Invalid/reserved/colliding definitions fail closed; role names create no bypass; trusted P02 tenant/org scope remains binding; unknown/unavailable permissions deny; registration cannot mutate role grants implicitly or widen principal scope; lifecycle history is preserved; optional capability association is descriptive and non-invoking.
+## P03.08 retained boundary
 
-## P03.08 boundary
+UI contribution registration remains declarative metadata, never an authorization grant or execution shortcut. `kernel.authorization` remains deny-by-default authority; feature flags remain configuration inputs; lifecycle availability remains non-authorizing; optional dependency absence degrades only affected contributions; contribution metadata stays secret-free, non-executable and owner-bound; no raw tenant/org authority, private handler exposure or cross-module database-write authority is introduced.
 
-P03.08 — UI Contribution Registry Contract becomes the sole active package only after this closure passes exact-final-head governance and merges to protected `main`. Its implementation must begin on a new branch from the exact post-merge main SHA.
+## P03.09 boundary
 
-P03.08 may implement only declarative contribution metadata: stable module/contribution/slot identity, bounded navigation/page/widget/settings/builder-slot descriptions, permission requirement metadata, lifecycle/availability conditions, feature-flag conditions, optional-dependency conditions, selective fallback/degradation metadata, deterministic collision/slot validation and versioned contracts for later consumers.
+P03.09 — Migration Ownership Registry becomes the sole active package only after this closure passes exact-final-head governance and merges to protected `main`. Its implementation must begin on a new branch from the exact post-merge main SHA.
 
-UI visibility never substitutes for backend authorization. Permission/flag/availability metadata cannot grant authority. Contribution metadata cannot carry secrets, unrestricted executable code, raw tenant/org authority, private handlers or cross-module database-write shortcuts. Disabled modules cannot present contributions as operational.
+P03.09 may implement only deterministic migration identity/order/module/version/owner metadata, ownership checks, fresh-install and supported-upgrade planning/validation, destructive/backfill classification and lifecycle coordination, conflict detection, representative migration fixtures, focused adversarial tests and a dedicated P03.09 verifier around the retained P01 migration foundation.
 
-Not authorized: rendering framework/component implementation, CMS/Experience Builder runtime, portal runtime, product federation/unified work surfaces, frontend-only authorization, P03.09-P03.11, generic RPC/service mesh, workflow orchestration, P04+, business modules, package acquisition/marketplace runtime, strategic X-program runtime, AI/model/agent runtime, or weakening governance/security/regressions.
+A module may migrate only owned schema unless canonical governance explicitly approves a platform migration. Direct cross-module table mutation, arbitrary user-controlled migration path/SQL execution, hidden destructive/backfill behavior, double-apply on retry/concurrency and environment-specific manual SQL as accepted evidence remain forbidden.
+
+Not authorized: replacement of the P01 migration engine, cross-domain ownership changes without ADR, marketplace/plugin arbitrary SQL, P04 event/outbox migrations, P03.10-P03.11, generic RPC/service mesh, workflow orchestration, P04+, business modules, package acquisition/marketplace runtime, strategic X-program runtime, AI/model/agent runtime, or weakening governance/security/regressions.
 
 ## Current implementation lock
 
-- `kernel_code_authorized=true` only for P03.08 **after** this closure merges and protected main is re-read.
+- `kernel_code_authorized=true` only for P03.09 **after** this closure merges and protected main is re-read.
 - `business_feature_code_authorized=false`.
-- P03.09-P03.11 remain planned/locked.
+- P03.10-P03.11 remain planned/locked.
 - P04-P27 remain planned/locked.
 - Strategic X programs remain non-authorizing until separately governed.
 
@@ -129,7 +133,7 @@ The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remai
 
 ## Exact next action
 
-Finish the P03.07 closure / P03.08 activation reconciliation under issue #112. Require its exact final head to pass canonical GitHub-hosted governance, merge only if current and permitted, then re-read protected `main`, canonical state/status/package sequence and P03.08 handoff. Record the exact post-closure main SHA and stop the closure transaction; P03.08 implementation belongs to a new separate branch and must not be implemented on this carrier.
+Finish the P03.08 closure / P03.09 activation reconciliation under issue #117. Require its exact final head to pass canonical GitHub-hosted governance, merge only if current and permitted, then re-read protected `main`, canonical state/status/package sequence and P03.09 handoff. Record the exact post-closure main SHA and stop the closure transaction; P03.09 implementation belongs to a new separate branch and must not be implemented on this carrier.
 
 ## Product principle
 
