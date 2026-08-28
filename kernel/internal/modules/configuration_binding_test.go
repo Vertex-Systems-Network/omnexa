@@ -14,16 +14,16 @@ const (
 	p0305FlagKey    = configuration.Key("omnexa.inventory.batch_reservation")
 )
 
-func TestConfigurationBindingUsesValidatedManifestDeclarationsAndExistingRegistry(t *testing.T) {
+func TestConfigurationBindingUsesValidatedDeclarationsRegistryAndScopePolicies(t *testing.T) {
 	t.Parallel()
 
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305FlagKey)})
-	binding, err := BindConfigurationDefinitions(registry, NewMemoryLifecycleStore(), []configuration.Definition{
-		p0305FlagDefinition(),
-		p0305SettingDefinition(),
+	binding, err := BindConfigurationRegistrations(registry, NewMemoryLifecycleStore(), []ModuleConfigurationRegistration{
+		p0305GlobalRegistration(p0305FlagDefinition()),
+		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
 	})
 	if err != nil {
-		t.Fatalf("BindConfigurationDefinitions() error = %v", err)
+		t.Fatalf("BindConfigurationRegistrations() error = %v", err)
 	}
 
 	configRegistry, ok := binding.Registry()
@@ -34,8 +34,9 @@ func TestConfigurationBindingUsesValidatedManifestDeclarationsAndExistingRegistr
 	if len(definitions) != 2 || definitions[0].Key != p0305FlagKey || definitions[1].Key != p0305SettingKey {
 		t.Fatalf("Definitions() = %#v, want deterministic key order", definitions)
 	}
-	if definitions[0].Owner != "omnexa.inventory" || definitions[1].Owner != "omnexa.inventory" {
-		t.Fatalf("definition owners = %q/%q, want exact module owner", definitions[0].Owner, definitions[1].Owner)
+	policies := binding.ScopedPolicies()
+	if len(policies) != 1 || policies[0].Key != p0305SettingKey || !policies[0].AllowOrganizationOverride {
+		t.Fatalf("ScopedPolicies() = %#v, want one validated setting policy", policies)
 	}
 }
 
@@ -73,32 +74,85 @@ func TestConfigurationBindingRejectsOwnerClassMissingAndUndeclaredDefinitions(t 
 
 	wrongOwner := p0305SettingDefinition()
 	wrongOwner.Owner = "omnexa.catalog"
-	assertP0305BindingCode(t, BindConfigurationDefinitions(registry, store, []configuration.Definition{wrongOwner, p0305FlagDefinition()}), "module.configuration.owner_mismatch")
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(wrongOwner, p0305SettingPolicy()),
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.owner_mismatch")
 
 	wrongClass := p0305FlagDefinition()
-	wrongClass.Class = configuration.ClassRuntimeConfig
-	assertP0305BindingCode(t, BindConfigurationDefinitions(registry, store, []configuration.Definition{p0305SettingDefinition(), wrongClass}), "module.configuration.class_mismatch")
+	wrongClass.Class = configuration.ClassKillSwitch
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
+		p0305GlobalRegistration(wrongClass),
+	}), "module.configuration.class_mismatch")
 
-	assertP0305BindingCode(t, BindConfigurationDefinitions(registry, store, []configuration.Definition{p0305SettingDefinition()}), "module.configuration.definition_missing")
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
+	}), "module.configuration.definition_missing")
 
 	extra := p0305SettingDefinition()
 	extra.Key = "omnexa.inventory.undeclared_setting"
-	assertP0305BindingCode(t, BindConfigurationDefinitions(registry, store, []configuration.Definition{p0305SettingDefinition(), p0305FlagDefinition(), extra}), "module.configuration.definition_undeclared")
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
+		p0305GlobalRegistration(p0305FlagDefinition()),
+		p0305GlobalRegistration(extra),
+	}), "module.configuration.definition_undeclared")
+}
+
+func TestConfigurationBindingRejectsInvalidScopeContracts(t *testing.T) {
+	t.Parallel()
+
+	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305FlagKey)})
+	store := NewMemoryLifecycleStore()
+
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationScope("unknown")},
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.scope_invalid")
+
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationScoped},
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.scope_policy_missing")
+
+	policy := p0305SettingPolicy()
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationGlobal, Policy: &policy},
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.global_policy_forbidden")
+
+	keyMismatch := p0305SettingPolicy()
+	keyMismatch.Key = p0305FlagKey
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), keyMismatch),
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.scope_policy_key_mismatch")
+
+	invalidPolicy := p0305SettingPolicy()
+	invalidPolicy.Classification = configuration.DataInternal
+	invalidPolicy.ProtectedRead = false
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), invalidPolicy),
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	}), "module.configuration.scope_policy_invalid")
 }
 
 func TestConfigurationBindingRejectsCrossClassDeclarationCollision(t *testing.T) {
 	t.Parallel()
 
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305SettingKey)})
-	assertP0305BindingCode(t, BindConfigurationDefinitions(registry, NewMemoryLifecycleStore(), nil), "module.configuration.declaration_collision")
+	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, NewMemoryLifecycleStore(), nil), "module.configuration.declaration_collision")
 }
 
 func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRuntimeActive(t *testing.T) {
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305FlagKey)})
 	store := NewMemoryLifecycleStore()
-	binding, err := BindConfigurationDefinitions(registry, store, []configuration.Definition{p0305SettingDefinition(), p0305FlagDefinition()})
+	binding, err := BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
+		p0305GlobalRegistration(p0305FlagDefinition()),
+	})
 	if err != nil {
-		t.Fatalf("BindConfigurationDefinitions() error = %v", err)
+		t.Fatalf("BindConfigurationRegistrations() error = %v", err)
 	}
 
 	assertP0305ResolveCode(t, binding, p0305SettingKey, "module.configuration.unavailable")
@@ -110,7 +164,7 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 		t.Fatalf("seed installed state: %v", err)
 	}
 	installed, err := binding.Resolve(ctx, p0305SettingKey)
-	if err != nil || installed.RuntimeActive || installed.LifecycleState != LifecycleInstalled {
+	if err != nil || installed.RuntimeActive || installed.LifecycleState != LifecycleInstalled || installed.Scope != ModuleConfigurationScoped {
 		t.Fatalf("installed Resolve() = %#v, err=%v", installed, err)
 	}
 
@@ -120,7 +174,7 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 		t.Fatalf("seed enabled state: %v", err)
 	}
 	enabled, err := binding.Resolve(ctx, p0305FlagKey)
-	if err != nil || !enabled.RuntimeActive || enabled.LifecycleState != LifecycleEnabled {
+	if err != nil || !enabled.RuntimeActive || enabled.LifecycleState != LifecycleEnabled || enabled.Scope != ModuleConfigurationGlobal {
 		t.Fatalf("enabled Resolve() = %#v, err=%v", enabled, err)
 	}
 
@@ -159,12 +213,15 @@ func TestConfigurationBindingDoesNotRequireASecondRegistryForModulesWithoutDecla
 	t.Parallel()
 
 	registry := p0305RegistryV1(t, []string{}, []string{})
-	binding, err := BindConfigurationDefinitions(registry, NewMemoryLifecycleStore(), nil)
+	binding, err := BindConfigurationRegistrations(registry, NewMemoryLifecycleStore(), nil)
 	if err != nil {
-		t.Fatalf("BindConfigurationDefinitions(empty) error = %v", err)
+		t.Fatalf("BindConfigurationRegistrations(empty) error = %v", err)
 	}
 	if _, ok := binding.Registry(); ok {
 		t.Fatal("empty module declaration set unexpectedly created a configuration registry")
+	}
+	if policies := binding.ScopedPolicies(); len(policies) != 0 {
+		t.Fatalf("ScopedPolicies(empty) = %#v, want empty", policies)
 	}
 }
 
@@ -186,6 +243,14 @@ func p0305RegistryV1(t *testing.T, settings, flags []string) Registry {
 		t.Fatalf("Discover() error = %v", err)
 	}
 	return registry
+}
+
+func p0305GlobalRegistration(definition configuration.Definition) ModuleConfigurationRegistration {
+	return ModuleConfigurationRegistration{Definition: definition, Scope: ModuleConfigurationGlobal}
+}
+
+func p0305ScopedRegistration(definition configuration.Definition, policy configuration.SettingPolicy) ModuleConfigurationRegistration {
+	return ModuleConfigurationRegistration{Definition: definition, Scope: ModuleConfigurationScoped, Policy: &policy}
 }
 
 func p0305SettingDefinition() configuration.Definition {
@@ -211,6 +276,16 @@ func p0305FlagDefinition() configuration.Definition {
 		Version:     1,
 		Default:     configuration.BoolValue(false),
 		Fallback:    configuration.BoolValue(false),
+	}
+}
+
+func p0305SettingPolicy() configuration.SettingPolicy {
+	return configuration.SettingPolicy{
+		Key:                       p0305SettingKey,
+		Classification:            configuration.DataInternal,
+		AllowOrganizationOverride: true,
+		ProtectedRead:             true,
+		SecuritySignificant:       false,
 	}
 }
 
