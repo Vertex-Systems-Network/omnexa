@@ -17,21 +17,21 @@ P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
 P02: DONE — 10 / 10
 P02 exit gate: SATISFIED
-P03: ACTIVE — 5 / 11 done after this closure merges
-P03.01-P03.05: DONE
-Current work package after closure merge: P03.06 — Capability Registry
-P03.07-P03.11: PLANNED / LOCKED
-kernel_code_authorized: true — P03.06 only after closure merge
+P03: ACTIVE — 6 / 11 done after this closure merges
+P03.01-P03.06: DONE
+Current work package after closure merge: P03.07 — Permission Registration
+P03.08-P03.11: PLANNED / LOCKED
+kernel_code_authorized: true — P03.07 only after closure merge
 business_feature_code_authorized: false
 ```
 
-Protected main currently contains completed P03.05 implementation merge `0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce`. This P03.05 closure / P03.06 activation carrier is governance/state-transition only. P03.06 runtime implementation is **not authorized before this closure passes exact-final-head canonical governance, merges, and protected main is re-read**.
+Protected main currently contains completed P03.06 implementation merge `13dbe8a393c20cabeb8aac60d073a6c66775efd3`. This P03.06 closure / P03.07 activation carrier is governance/state-transition only. P03.07 runtime implementation is **not authorized before this closure passes exact-final-head canonical governance, merges, and protected main is re-read**.
 
-P03.07+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
+P03.08+, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, completed `docs/ai/handoffs/P03.05.md` and active-after-closure `docs/ai/handoffs/P03.06.md` before material P03.06 work.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, completed `docs/ai/handoffs/P03.06.md` and active-after-closure `docs/ai/handoffs/P03.07.md` before material P03.07 work.
 
 Continuity files are subordinate snapshots/indexes. They never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
@@ -131,9 +131,19 @@ P03.05 — Module Settings & Feature Flags is complete:
 - evidence `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`;
 - retained verifier `scripts/verify_p03_05.sh`.
 
-Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority.
+P03.06 — Capability Registry is complete:
 
-All completed P01/P02/P03.01/P03.02/P03.03/P03.04/P03.05 regressions remain mandatory during P03.06.
+- implementation issue #106 — completed;
+- implementation PR #107;
+- final exact head `c895f44a1383d1c1d9c5fd23c95d7864810353c3`;
+- canonical run/job `33181421854 / 98883286556` — PASS;
+- implementation merge `13dbe8a393c20cabeb8aac60d073a6c66775efd3`;
+- evidence `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_06.sh`.
+
+Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence for one corrected govet variable-shadow finding; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority.
+
+All completed P01/P02/P03.01/P03.02/P03.03/P03.04/P03.05/P03.06 regressions remain mandatory during P03.07.
 
 ## P03 sequencing
 
@@ -141,11 +151,11 @@ All completed P01/P02/P03.01/P03.02/P03.03/P03.04/P03.05 regressions remain mand
 
 Transition candidate after this closure merges:
 
-- P03.01-P03.05 are `done`;
-- P03.06 is the sole `active` package;
-- P03.07-P03.11 remain `planned`;
-- P03 progress is `5 / 11 done`;
-- `kernel_code_authorized=true` only for P03.06;
+- P03.01-P03.06 are `done`;
+- P03.07 is the sole `active` package;
+- P03.08-P03.11 remain `planned`;
+- P03 progress is `6 / 11 done`;
+- `kernel_code_authorized=true` only for P03.07;
 - `business_feature_code_authorized=false`.
 
 The AI must not automatically advance to another package. Implementation and closure/state transition remain separate governed PRs.
@@ -166,40 +176,44 @@ ADR-0012 is accepted and P03.03 implemented its contract. Retained invariants in
 - resolver/dependency metadata cannot grant permissions, capabilities, tenant authority, private access or database authority;
 - no implicit compatibility inference, multi-version/SAT solving, external compatibility matrix, automatic package selection or remote acquisition is authorized.
 
-## P03.06 implementation boundary
+## P03.07 implementation boundary
 
-Owner: `kernel.modules`.
+Owner: `kernel.modules` with `kernel.authorization` enforcement.
 
-P03.06 implementation begins only **after this closure merges and protected main is re-read**. Create a new separate implementation branch from that exact post-merge SHA.
+P03.07 implementation begins only **after this closure merges and protected main is re-read**. Create a new separate implementation branch from that exact post-merge SHA.
 
-Authorized P03.06 scope is limited to `docs/roadmap/work-packages/P03.06.md`:
+Authorized P03.07 scope is limited to `docs/roadmap/work-packages/P03.07.md`:
 
-- stable capability ID and bounded major-version metadata;
-- provider module/owner and consumer declarations;
-- lifecycle-derived availability state;
-- authorization/tenant-org scope requirement metadata and contract references;
-- collision/version compatibility validation;
-- lifecycle-aware registration/withdrawal availability;
-- deterministic lookup suitable for later attribution/graph consumers;
-- tests proving deterministic registration/lookup, collision/version fail-closed behavior, lifecycle availability, authority non-granting, trusted scope metadata and private implementation isolation;
-- a dedicated P03.06 verifier and canonical governance wiring after retained P03.05 verification.
+- stable permission name/owner/module metadata;
+- declaration collision/namespace validation;
+- optional capability association as descriptive metadata only;
+- lifecycle-derived permission availability;
+- preservation of policy/role references/history across non-destructive disable/re-enable;
+- fail-closed unknown/unavailable permission behavior;
+- auditability of material registration/lifecycle changes where required;
+- tests proving deterministic registration, collision/reserved-name rejection, deny-by-default unknown/unavailable behavior, no implicit grants, trusted tenant/scope enforcement, lifecycle history preservation and capability-association non-granting;
+- a dedicated P03.07 verifier and canonical governance wiring after retained P03.06 verification.
 
-P03.06 invariants:
+P03.07 invariants:
 
-- capability registration is metadata/availability only and never grants permission to invoke a capability;
-- the owning capability boundary remains responsible for validation, authorization, trusted tenant/org enforcement and audit;
-- registry lookup cannot bypass `kernel.authorization` or trusted P02 tenant/organization context;
-- registry metadata does not expose private handlers, implementation objects, raw database tables, credentials, secrets or restricted values;
-- duplicate/conflicting owner + capability + major-version definitions fail closed;
-- disabled/unhealthy/unavailable providers cannot be represented as active capability merely because a declaration exists;
-- lifecycle state is an availability input only and grants no capability or permission authority;
-- registry metadata cannot create cross-module database write authority;
-- P03.05 settings/feature flags cannot be used as hidden authorization or invocation authority.
+- permission registration is declaration metadata, never authorization grant;
+- `kernel.authorization` remains deny-by-default enforcement and policy authority;
+- role names including admin/owner/superuser create no implicit bypass authority;
+- tenant/org scope comes only from trusted P02 context and existing authorization contracts;
+- raw untrusted tenant/org identifiers cannot become permission-registration authority shortcuts;
+- unknown/unavailable module permissions deny rather than allow;
+- registration cannot mutate role grants implicitly or widen principal scope;
+- disabled/unavailable modules cannot continue authorizing behavior through stale registration;
+- non-destructive disable/re-enable preserves required policy/history semantics;
+- optional capability association does not grant capability invocation and cannot bypass P03.06 non-authorizing metadata rules;
+- no duplicate authorization engine or alternate enforcement path is introduced.
 
-Explicitly forbidden in P03.06:
+Explicitly forbidden in P03.07:
 
-- business capability implementations;
-- P03.07 permission registration;
+- role editor/admin UI;
+- new authorization engine or hidden super-admin/role-name bypass;
+- entitlements/licensing product runtime;
+- business-domain permission catalogs before their governed phases;
 - P03.08 UI contribution runtime;
 - P03.09 migration ownership/execution;
 - P03.10 health reporting runtime;
@@ -230,6 +244,8 @@ P03.03 retained invariants remain binding: required missing/incompatible depende
 P03.04 retained invariants remain binding: lifecycle transitions are explicit and fail closed; dependency/reverse-dependency protections remain enforced; disable/re-enable is non-destructive; destructive purge is authorization/audit/dependency guarded; replay/concurrency/recovery behavior remains deterministic; lifecycle state cannot grant permissions, capabilities, tenant or database authority; unrelated module state remains isolated across failure/recovery.
 
 P03.05 retained invariants remain binding: `kernel.configuration` remains authoritative for setting/flag state; validated discovery remains declaration provenance; global/scoped registration is explicit; scoped policy reuses existing P02.09 validation and trusted scope construction; settings/flags grant no permission/capability/tenant/database authority; disable/re-enable preserves required configuration history; collisions fail closed; no duplicate configuration subsystem exists.
+
+P03.06 retained invariants remain binding: validated discovery remains capability declaration provenance; stable capability + major-version identity is owner/module bound; duplicate/conflicting ownership and incompatible major resolution fail closed; only lifecycle-enabled providers are active while unavailable identity remains historical; auth/scope/contract references are descriptive only; registry lookup grants no permission/invocation/tenant/database authority and exposes no private handlers/tables/secrets; P03.05 settings/flags remain non-authorizing.
 
 ## Quality and release rules
 
@@ -291,7 +307,7 @@ Do not blindly loop on an equivalent failing strategy. Repeated equivalent failu
 
 Do not use local/self-hosted runners for canonical governance; silently add domains; duplicate ownership; invent conflicting contracts/security/quality semantics; bypass tenancy/authz/audit/classification; grant AI unrestricted write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; claim untested evidence; implement unactivated future-phase scope; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
-Do not implement P03.06 code on this closure carrier. Do not auto-advance to P03.07.
+Do not implement P03.07 code on this closure carrier. Do not auto-advance to P03.08.
 
 ## Issue #4
 
@@ -299,9 +315,9 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next action
 
-1. Complete the atomic P03.05 closure / P03.06 activation reconciliation without P03.06 runtime code.
-2. Require the exact final closure head to pass canonical GitHub-hosted governance and all retained P01/P02/P03.01/P03.02/P03.03/P03.04/P03.05 regressions.
+1. Complete the atomic P03.06 closure / P03.07 activation reconciliation without P03.07 runtime code.
+2. Require the exact final closure head to pass canonical GitHub-hosted governance and all retained P01/P02/P03.01/P03.02/P03.03/P03.04/P03.05/P03.06 regressions.
 3. Merge only if the PR remains current with protected `main` and repository review/conversation gates permit it.
-4. Re-read protected `main`, `STATE.json`, `STATUS.md` and active P03.06 docs and record the exact new main SHA.
-5. Create a **new separate P03.06 implementation branch** from that exact SHA and implement only the P03.06 contract.
-6. Keep P03.07+ locked; P03.06 completion/state transition belongs to a later separate governed closure PR.
+4. Re-read protected `main`, `STATE.json`, `STATUS.md` and active P03.07 docs and record the exact new main SHA.
+5. Create a **new separate P03.07 implementation branch** from that exact SHA and implement only the P03.07 contract.
+6. Keep P03.08+ locked; P03.07 completion/state transition belongs to a later separate governed closure PR.
