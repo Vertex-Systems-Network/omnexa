@@ -291,3 +291,7 @@ jobs:
       - name: Verify P03.04 module lifecycle state machine
         shell: bash
         run: bash scripts/verify_p03_04.sh
+
+      - name: Verify P03.05 module settings and feature flags
+        shell: bash
+        run: bash scripts/verify_p03_05.sh
