@@ -16,6 +16,26 @@ const (
 	ModuleConfigurationFeatureFlag ModuleConfigurationKind = "feature_flag"
 )
 
+// ModuleConfigurationScope makes registration scope explicit. Global entries use
+// the existing P01.10 evaluator contract. Scoped entries require an existing
+// P02.09 SettingPolicy and therefore tenant/organization values can only be
+// reached through TrustedSettingScope/ScopedService.
+type ModuleConfigurationScope string
+
+const (
+	ModuleConfigurationGlobal ModuleConfigurationScope = "global"
+	ModuleConfigurationScoped ModuleConfigurationScope = "scoped"
+)
+
+// ModuleConfigurationRegistration binds one manifest declaration to the existing
+// typed configuration contract. It does not carry runtime values or raw tenant/
+// organization identifiers.
+type ModuleConfigurationRegistration struct {
+	Definition configuration.Definition
+	Scope      ModuleConfigurationScope
+	Policy     *configuration.SettingPolicy
+}
+
 // ModuleConfigurationDiagnostic is a stable, value-free P03.05 failure record.
 // It never includes configuration values, tenant identifiers, raw manifests, or
 // authorization details.
@@ -44,6 +64,7 @@ type moduleConfigurationDeclaration struct {
 type BoundConfiguration struct {
 	ModuleID       string
 	Kind           ModuleConfigurationKind
+	Scope          ModuleConfigurationScope
 	Definition     configuration.Definition
 	LifecycleState LifecycleState
 	RuntimeActive  bool
@@ -53,19 +74,21 @@ type BoundConfiguration struct {
 // kernel.configuration registry. It does not store setting values, tenant scope,
 // permissions, or lifecycle state itself.
 type ConfigurationBinding struct {
-	registry      *configuration.Registry
-	declarations  map[configuration.Key]moduleConfigurationDeclaration
+	registry       *configuration.Registry
+	declarations   map[configuration.Key]moduleConfigurationDeclaration
+	scopes         map[configuration.Key]ModuleConfigurationScope
+	scopedPolicies []configuration.SettingPolicy
 	lifecycleStore LifecycleStore
 }
 
-// BindConfigurationDefinitions validates exact manifest declaration-to-definition
-// ownership and builds the existing governed configuration registry. Manifest
-// schema is not reinterpreted or reparsed here: declarations come only from the
-// validated snapshot retained by Discover.
-func BindConfigurationDefinitions(
+// BindConfigurationRegistrations validates exact manifest declaration,
+// definition, owner, class and scope contracts and builds the existing governed
+// configuration registry. Manifest schema is not reinterpreted or reparsed here:
+// declarations come only from the validated snapshot retained by Discover.
+func BindConfigurationRegistrations(
 	moduleRegistry Registry,
 	lifecycleStore LifecycleStore,
-	definitions []configuration.Definition,
+	registrations []ModuleConfigurationRegistration,
 ) (*ConfigurationBinding, error) {
 	if lifecycleStore == nil {
 		return nil, configurationBindingError("module.configuration.lifecycle_store_required", "", "")
@@ -76,10 +99,12 @@ func BindConfigurationDefinitions(
 		return nil, err
 	}
 
-	byKey := make(map[configuration.Key]configuration.Definition, len(definitions))
-	for _, definition := range definitions {
+	byKey := make(map[configuration.Key]ModuleConfigurationRegistration, len(registrations))
+	definitions := make([]configuration.Definition, 0, len(registrations))
+	for _, registration := range registrations {
+		definition := registration.Definition
 		if _, exists := byKey[definition.Key]; exists {
-			return nil, configurationBindingError("module.configuration.definition_duplicate", "", string(definition.Key))
+			return nil, configurationBindingError("module.configuration.registration_duplicate", "", string(definition.Key))
 		}
 		declaration, ok := declarations[definition.Key]
 		if !ok {
@@ -91,10 +116,11 @@ func BindConfigurationDefinitions(
 		if !configurationClassMatches(declaration.kind, definition.Class) {
 			return nil, configurationBindingError("module.configuration.class_mismatch", declaration.moduleID, string(definition.Key))
 		}
-		if _, validationErr := configuration.NewRegistry(definition); validationErr != nil {
-			return nil, configurationBindingError("module.configuration.definition_invalid", declaration.moduleID, string(definition.Key))
+		if err := validateRegistrationScope(registration, declaration); err != nil {
+			return nil, err
 		}
-		byKey[definition.Key] = definition
+		byKey[definition.Key] = registration
+		definitions = append(definitions, definition)
 	}
 
 	for key, declaration := range declarations {
@@ -104,24 +130,36 @@ func BindConfigurationDefinitions(
 	}
 
 	binding := &ConfigurationBinding{
-		declarations:  copyConfigurationDeclarations(declarations),
+		declarations:   copyConfigurationDeclarations(declarations),
+		scopes:         make(map[configuration.Key]ModuleConfigurationScope, len(byKey)),
 		lifecycleStore: lifecycleStore,
 	}
-	if len(byKey) == 0 {
+	if len(definitions) == 0 {
 		return binding, nil
 	}
 
-	ordered := make([]configuration.Definition, 0, len(byKey))
-	for _, definition := range byKey {
-		ordered = append(ordered, definition)
-	}
-	sort.Slice(ordered, func(left, right int) bool { return ordered[left].Key < ordered[right].Key })
-
-	registry, registryErr := configuration.NewRegistry(ordered...)
+	sort.Slice(definitions, func(left, right int) bool { return definitions[left].Key < definitions[right].Key })
+	registry, registryErr := configuration.NewRegistry(definitions...)
 	if registryErr != nil {
-		return nil, configurationBindingError("module.configuration.registry_invalid", "", "")
+		return nil, configurationBindingError("module.configuration.definition_invalid", "", "")
 	}
 	binding.registry = registry
+
+	policies := make([]configuration.SettingPolicy, 0, len(byKey))
+	for key, registration := range byKey {
+		binding.scopes[key] = registration.Scope
+		if registration.Scope != ModuleConfigurationScoped {
+			continue
+		}
+		policy := *registration.Policy
+		if err := configuration.ValidateSettingPolicy(registry, policy); err != nil {
+			declaration := declarations[key]
+			return nil, configurationBindingError("module.configuration.scope_policy_invalid", declaration.moduleID, string(key))
+		}
+		policies = append(policies, policy)
+	}
+	sort.Slice(policies, func(left, right int) bool { return policies[left].Key < policies[right].Key })
+	binding.scopedPolicies = append([]configuration.SettingPolicy(nil), policies...)
 	return binding, nil
 }
 
@@ -136,7 +174,16 @@ func (binding *ConfigurationBinding) Registry() (*configuration.Registry, bool) 
 	return binding.registry, true
 }
 
-// Resolve returns a typed definition only when the owning module has reached a
+// ScopedPolicies returns immutable-by-copy P02.09 policies for constructing the
+// existing ScopedService. It does not construct trusted scopes or grant access.
+func (binding *ConfigurationBinding) ScopedPolicies() []configuration.SettingPolicy {
+	if binding == nil || len(binding.scopedPolicies) == 0 {
+		return []configuration.SettingPolicy{}
+	}
+	return append([]configuration.SettingPolicy(nil), binding.scopedPolicies...)
+}
+
+// Resolve returns a typed registration only when the owning module has reached a
 // lifecycle state where retained configuration is meaningful. It never accepts
 // client-supplied tenant/org identifiers; scoped values remain owned by the
 // trusted kernel.configuration.ScopedService boundary.
@@ -151,6 +198,10 @@ func (binding *ConfigurationBinding) Resolve(ctx context.Context, key configurat
 	definition, ok := binding.registry.Definition(key)
 	if !ok {
 		return BoundConfiguration{}, configurationBindingError("module.configuration.registry_inconsistent", declaration.moduleID, string(key))
+	}
+	scope, ok := binding.scopes[key]
+	if !ok {
+		return BoundConfiguration{}, configurationBindingError("module.configuration.scope_missing", declaration.moduleID, string(key))
 	}
 
 	record, found, err := binding.lifecycleStore.Load(ctx, declaration.moduleID)
@@ -171,10 +222,31 @@ func (binding *ConfigurationBinding) Resolve(ctx context.Context, key configurat
 	return BoundConfiguration{
 		ModuleID:       declaration.moduleID,
 		Kind:           declaration.kind,
+		Scope:          scope,
 		Definition:     definition,
 		LifecycleState: state,
 		RuntimeActive:  state == LifecycleEnabled,
 	}, nil
+}
+
+func validateRegistrationScope(registration ModuleConfigurationRegistration, declaration moduleConfigurationDeclaration) error {
+	key := registration.Definition.Key
+	switch registration.Scope {
+	case ModuleConfigurationGlobal:
+		if registration.Policy != nil {
+			return configurationBindingError("module.configuration.global_policy_forbidden", declaration.moduleID, string(key))
+		}
+	case ModuleConfigurationScoped:
+		if registration.Policy == nil {
+			return configurationBindingError("module.configuration.scope_policy_missing", declaration.moduleID, string(key))
+		}
+		if registration.Policy.Key != key {
+			return configurationBindingError("module.configuration.scope_policy_key_mismatch", declaration.moduleID, string(key))
+		}
+	default:
+		return configurationBindingError("module.configuration.scope_invalid", declaration.moduleID, string(key))
+	}
+	return nil
 }
 
 func collectConfigurationDeclarations(registry Registry) (map[configuration.Key]moduleConfigurationDeclaration, error) {
