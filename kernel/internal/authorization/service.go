@@ -58,9 +58,9 @@ func newServiceWithClockAndModulePermissions(
 		return nil, serviceInvalidFailure()
 	}
 	return &Service{
-		repository: repository,
-		audit: auditWriter,
-		now: now,
+		repository:        repository,
+		audit:             auditWriter,
+		now:               now,
 		modulePermissions: availability,
 	}, nil
 }
