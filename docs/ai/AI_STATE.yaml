@@ -2,11 +2,11 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-28"
-  nature: "non-authoritative P03.06 closure / P03.07 activation-candidate continuity snapshot"
-  protected_main: "13dbe8a393c20cabeb8aac60d073a6c66775efd3"
-  implementation_pr: 107
-  closure_issue: 108
-  closure_branch: "chore/p03-06-closure-p03-07-open"
+  nature: "non-authoritative P03.07 closure / P03.08 activation-candidate continuity snapshot"
+  protected_main: "66f8b4cc630f6cd865e440a62478df365e042a31"
+  implementation_pr: 111
+  closure_issue: 112
+  closure_branch: "chore/p03-07-closure-p03-08-open"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -18,8 +18,8 @@ phase:
   current: "P03"
   name: "Module Runtime"
   state: "active"
-  progress_after_closure_merge: "6 / 11 done"
-  current_work_package_after_closure_merge: "P03.07"
+  progress_after_closure_merge: "7 / 11 done"
+  current_work_package_after_closure_merge: "P03.08"
   activation_authoritative_only_after_closure_merge: true
 
 p01_prerequisite:
@@ -61,7 +61,6 @@ p03_02:
 
 p03_03:
   state: "done"
-  owner: "kernel.modules"
   implementation_pr: 98
   final_exact_head: "4dcaca22911fbb81b1d25af316fef146c4a71ff3"
   canonical_run: 33112808869
@@ -72,7 +71,6 @@ p03_03:
 
 p03_04:
   state: "done"
-  owner: "kernel.modules"
   implementation_pr: 100
   final_exact_head: "cddb42d4466e7f97a7547c4cf5ea0812c768ff0b"
   canonical_run: 33125377739
@@ -80,12 +78,9 @@ p03_04:
   implementation_merge: "13701e7647c1e084dfe4288d4b27b3ddd75e72c2"
   completion_evidence: "docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md"
   regressions: "scripts/verify_p03_04.sh remains mandatory"
-  diagnostic_history: "Earlier failed/cancelled/stale candidates remain diagnostic only; final exact-head #447 PASS is acceptance evidence."
 
 p03_05:
   state: "done"
-  owner: "kernel.modules with kernel.configuration integration"
-  spec: "docs/roadmap/work-packages/P03.05.md"
   implementation_issue: 102
   implementation_pr: 103
   final_exact_head: "c52b48be1a82eb27670f03bdd4e1be4df6eb9f54"
@@ -94,28 +89,38 @@ p03_05:
   implementation_merge: "0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce"
   completion_evidence: "docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md"
   regressions: "scripts/verify_p03_05.sh remains mandatory"
-  diagnostic_history: "Earlier failed/stale candidates remain diagnostic only; final exact-head #460 PASS is acceptance evidence."
 
 p03_06:
-  state: "done_candidate_until_closure_merge"
-  owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.06.md"
+  state: "done"
   implementation_issue: 106
   implementation_pr: 107
-  initial_implementation_head: "28a6343ad10924869d02d666f7b625121f7ecb7d"
   final_exact_head: "c895f44a1383d1c1d9c5fd23c95d7864810353c3"
   canonical_run: 33181421854
   canonical_job: 98883286556
   implementation_merge: "13dbe8a393c20cabeb8aac60d073a6c66775efd3"
   completion_evidence: "docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md"
   regressions: "scripts/verify_p03_06.sh remains mandatory"
-  diagnostic_history: "Governance #467 / 33180840326 / 98881325283 failed repository Go quality on one corrected govet variable-shadow finding; final exact-head #468 PASS is acceptance evidence."
+  diagnostic_history: "Governance #467 / 33180840326 / 98881325283 remains FAIL diagnostic evidence only."
 
 p03_07:
-  state: "active_after_closure_merge"
+  state: "done_candidate_until_closure_merge"
   owner: "kernel.modules with kernel.authorization enforcement"
   spec: "docs/roadmap/work-packages/P03.07.md"
-  objective: "stable module-declared permission registration without implicit grants or alternate authorization authority"
+  implementation_issue: 110
+  implementation_pr: 111
+  final_exact_head: "28e36b3ac3183f28ec500f1e70b1fefe02c0c325"
+  canonical_run: 33195104185
+  canonical_job: 98930123416
+  implementation_merge: "66f8b4cc630f6cd865e440a62478df365e042a31"
+  completion_evidence: "docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md"
+  regressions: "scripts/verify_p03_07.sh remains mandatory"
+  diagnostic_history: "Governance #474 / 33192567020 / 98921494281 and #476 / 33194438411 / 98927852853 remain FAIL diagnostic evidence only; #477 is acceptance authority."
+
+p03_08:
+  state: "active_after_closure_merge"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.08.md"
+  objective: "deterministic declarative UI contribution registry metadata without frontend authorization or future Experience runtime"
   kernel_code_authorized_after_closure_merge: true
   business_feature_code_authorized: false
   implementation_branch: null
@@ -124,38 +129,39 @@ p03_07:
   completion_evidence: null
 
 security:
-  kernel_code_scope_after_closure_merge: "P03.07 only"
+  kernel_code_scope_after_closure_merge: "P03.08 only"
   business_feature_code_authorized: false
-  p03_08_plus_authorized: false
+  p03_09_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
-  permission_registration_creates_grants: false
-  role_name_creates_bypass_authority: false
-  raw_tenant_or_org_scope_allowed_in_permission_registration: false
-  capability_association_grants_invocation_permission: false
-  unavailable_permission_may_authorize_behavior: false
+  ui_visibility_is_authorization: false
+  contribution_metadata_creates_permission_grant: false
+  feature_flag_creates_authority: false
+  raw_tenant_or_org_scope_allowed_in_ui_contributions: false
+  unrestricted_executable_code_allowed_in_contribution_metadata: false
+  secrets_allowed_in_contribution_metadata: false
+  disabled_module_contribution_operational: false
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P03.07 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
-  - "implement P03.08-P03.11 before later governed activation"
-  - "treat permission registration as a role/principal grant or authorization bypass"
-  - "create role-name or super-admin bypass authority"
-  - "accept raw untrusted tenant/org identifiers as permission-scope authority"
-  - "treat optional capability association as capability invocation permission"
-  - "allow unknown/unavailable module permissions to authorize behavior"
-  - "implement a duplicate authorization engine under P03.07"
+  - "implement P03.08 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
+  - "implement P03.09-P03.11 before later governed activation"
+  - "treat UI visibility, permission metadata or feature flags as authorization grants"
+  - "accept raw untrusted tenant/org identifiers as UI-contribution authority"
+  - "embed secrets, credentials or unrestricted executable code in contribution metadata"
+  - "implement Experience Builder/CMS, portal or product-federation runtime under P03.08"
+  - "introduce direct cross-module database writes or private implementation execution through contribution metadata"
   - "implement P04+ or business modules/features"
   - "implement package acquisition, marketplace runtime or AI/model/agent runtime"
-  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.06 regressions"
+  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.07 regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Finish atomic P03.06 closure/P03.07 activation reconciliation under GitHub issue #108, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
-  after_closure_merge: "Create a new separate P03.07 implementation branch from the exact post-closure protected-main SHA; implement only P03.07 and keep P03.08+ locked."
+  current: "Finish atomic P03.07 closure/P03.08 activation reconciliation under GitHub issue #112, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
+  after_closure_merge: "Record the exact post-closure protected-main SHA and identify a new separate P03.08 implementation branch as the next authorized action; stop without implementing P03.08 in the closure transaction."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -166,9 +172,9 @@ source_authority:
   entry_gate: "docs/governance/P03_ENTRY_GATE.md"
   exit_gate: "docs/governance/P03_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.07.md"
-  p03_06_evidence: "docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md"
+  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.08.md"
+  p03_07_evidence: "docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P03.06.md"
-  active_after_closure_merge: "docs/ai/handoffs/P03.07.md"
+  completed: "docs/ai/handoffs/P03.07.md"
+  active_after_closure_merge: "docs/ai/handoffs/P03.08.md"
