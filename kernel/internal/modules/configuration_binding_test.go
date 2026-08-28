@@ -74,25 +74,25 @@ func TestConfigurationBindingRejectsOwnerClassMissingAndUndeclaredDefinitions(t 
 
 	wrongOwner := p0305SettingDefinition()
 	wrongOwner.Owner = "omnexa.catalog"
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(wrongOwner, p0305SettingPolicy()),
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.owner_mismatch")
 
 	wrongClass := p0305FlagDefinition()
 	wrongClass.Class = configuration.ClassKillSwitch
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
 		p0305GlobalRegistration(wrongClass),
 	}), "module.configuration.class_mismatch")
 
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
 	}), "module.configuration.definition_missing")
 
 	extra := p0305SettingDefinition()
 	extra.Key = "omnexa.inventory.undeclared_setting"
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
 		p0305GlobalRegistration(p0305FlagDefinition()),
 		p0305GlobalRegistration(extra),
@@ -105,25 +105,25 @@ func TestConfigurationBindingRejectsInvalidScopeContracts(t *testing.T) {
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305FlagKey)})
 	store := NewMemoryLifecycleStore()
 
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationScope("unknown")},
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.scope_invalid")
 
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationScoped},
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.scope_policy_missing")
 
 	policy := p0305SettingPolicy()
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		{Definition: p0305SettingDefinition(), Scope: ModuleConfigurationGlobal, Policy: &policy},
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.global_policy_forbidden")
 
 	keyMismatch := p0305SettingPolicy()
 	keyMismatch.Key = p0305FlagKey
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), keyMismatch),
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.scope_policy_key_mismatch")
@@ -131,7 +131,7 @@ func TestConfigurationBindingRejectsInvalidScopeContracts(t *testing.T) {
 	invalidPolicy := p0305SettingPolicy()
 	invalidPolicy.Classification = configuration.DataInternal
 	invalidPolicy.ProtectedRead = false
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	assertP0305BindingCode(t, p0305BindError(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), invalidPolicy),
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	}), "module.configuration.scope_policy_invalid")
@@ -141,7 +141,7 @@ func TestConfigurationBindingRejectsCrossClassDeclarationCollision(t *testing.T)
 	t.Parallel()
 
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305SettingKey)})
-	assertP0305BindingCode(t, BindConfigurationRegistrations(registry, NewMemoryLifecycleStore(), nil), "module.configuration.declaration_collision")
+	assertP0305BindingCode(t, p0305BindError(registry, NewMemoryLifecycleStore(), nil), "module.configuration.declaration_collision")
 }
 
 func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRuntimeActive(t *testing.T) {
@@ -251,6 +251,11 @@ func p0305GlobalRegistration(definition configuration.Definition) ModuleConfigur
 
 func p0305ScopedRegistration(definition configuration.Definition, policy configuration.SettingPolicy) ModuleConfigurationRegistration {
 	return ModuleConfigurationRegistration{Definition: definition, Scope: ModuleConfigurationScoped, Policy: &policy}
+}
+
+func p0305BindError(registry Registry, store LifecycleStore, registrations []ModuleConfigurationRegistration) error {
+	_, err := BindConfigurationRegistrations(registry, store, registrations)
+	return err
 }
 
 func p0305SettingDefinition() configuration.Definition {
