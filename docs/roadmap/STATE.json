@@ -10,7 +10,7 @@
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P03.08 UI Contribution Registry Contract implementation only after this closure transition merges",
+      "P03.08 UI contribution registry contract implementation only after this closure transition merges",
       "P03.08 verification and later closure governance",
       "narrow repository-maintenance fixes"
     ]
@@ -65,16 +65,199 @@
       "business_feature_code_authorized": false,
       "note": "Historical P02 entry authorization. P02 is complete; this entry evidence does not authorize P02 implementation after phase completion."
     },
-    "p02_01_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md","implementation_pr":69,"final_exact_head":"76919a9588f70aeea7e00f5214b82dcbf34cbee7","implementation_merge":"44882e91e49d0364d841b511edbfd0619d05de1f","workflow_run":32635243643,"job":97183883007,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p02_02_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md","implementation_pr":71,"final_exact_head":"a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7","implementation_merge":"2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d","workflow_run":32637760875,"job":97189971101,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p02_03_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md","implementation_pr":73,"final_exact_head":"20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c","implementation_merge":"03b3d42a67d98638129b7f9d2b2f49467ae1fcec","workflow_run":32640790333,"job":97197453122,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p02_04_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md","implementation_pr":75,"final_exact_head":"83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f","implementation_merge":"769423a94ec03a9f2d7b9e667b9d4527fb0660bf","workflow_run":32653747461,"job":97229198036,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_05_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md","implementation_pr":77,"final_exact_head":"2df8d2a8bef0cea60256a832986d6f8495c80378","implementation_merge":"7b6a59e83c9bd696e6e008385b4413d529254171","workflow_run":32660848145,"job":97246683239,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_06_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md","implementation_pr":79,"final_exact_head":"dbbd105fd5f2543ca7dd5df93375eaf1057928fc","implementation_merge":"083c2866f0cd0773b85201750c2196bfd2fcc167","workflow_run":32664834112,"job":97256520050,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_07_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md","implementation_pr":81,"final_exact_head":"51ccaa12c3534f74fba6eab9d4698ee483ef4ffd","implementation_merge":"5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c","workflow_run":32669167972,"job":97267175953,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_08_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md","implementation_pr":84,"final_exact_head":"43bdcf525ce5e0cfdb9dc0707fbafee7cd552543","implementation_merge":"32eb7187eb229327585551e4e28b0d596de78bd9","workflow_run":32885950897,"job":97926598423,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_09_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md","implementation_pr":86,"final_exact_head":"0618904a18f82231469dd173aeb3d9d51edb73ed","implementation_merge":"8ef86d2644b5ed455b3610192b8379d94204692f","workflow_run":32895186252,"job":97956097639,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6"},
-    "p02_10_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md","implementation_pr":88,"final_exact_head":"975e4925060a035780ca13b68c5437634ed0f4ea","implementation_merge":"88799aa41da8ce8c22540146d157d488565e2ce9","workflow_run":32904678957,"job":97986011269,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","postgres":"18.6","valkey":"9.1.1","s3mock":"5.1.0"},
+    "p02_01_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.01_COMPLETION_2026-08-23.md",
+      "implementation_pr": 69,
+      "final_exact_head": "76919a9588f70aeea7e00f5214b82dcbf34cbee7",
+      "implementation_merge": "44882e91e49d0364d841b511edbfd0619d05de1f",
+      "workflow_run": 32635243643,
+      "job": 97183883007,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "go": "1.26.7"
+    },
+    "p02_02_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.02_COMPLETION_2026-08-23.md",
+      "implementation_pr": 71,
+      "final_exact_head": "a63bd45523ed35c4b11d11c8abc0cb42ce9e11d7",
+      "implementation_merge": "2ed0d9a5855f84ac8b7265c23ff6b8b7799b779d",
+      "workflow_run": 32637760875,
+      "job": 97189971101,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "go": "1.26.7"
+    },
+    "p02_03_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.03_COMPLETION_2026-08-23.md",
+      "implementation_pr": 73,
+      "final_exact_head": "20bcafb9d2ccb5829e44f5b69130a4cd5b9e816c",
+      "implementation_merge": "03b3d42a67d98638129b7f9d2b2f49467ae1fcec",
+      "workflow_run": 32640790333,
+      "job": 97197453122,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000014421",
+      "go": "1.26.7"
+    },
+    "p02_04_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.04_COMPLETION_2026-08-23.md",
+      "implementation_pr": 75,
+      "final_exact_head": "83a1d9e9f47e05f2e6fa7e50874dd7bfce51437f",
+      "implementation_merge": "769423a94ec03a9f2d7b9e667b9d4527fb0660bf",
+      "workflow_run": 32653747461,
+      "job": 97229198036,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000014748",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32653382151 / 97228307755 — four corrected gosec G101 findings and one corrected staticcheck simplification"
+      ]
+    },
+    "p02_05_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.05_COMPLETION_2026-08-24.md",
+      "implementation_pr": 77,
+      "final_exact_head": "2df8d2a8bef0cea60256a832986d6f8495c80378",
+      "implementation_merge": "7b6a59e83c9bd696e6e008385b4413d529254171",
+      "workflow_run": 32660848145,
+      "job": 97246683239,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000015357",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32656689041 / 97236397635 — 29 corrected govet shadow findings and one corrected gosec G304 test-helper finding",
+        "32660398632 / 97245574862 — P02.05 verifier direct-dependency check incorrectly judged transitive prerequisite imports and was corrected without gate weakening"
+      ]
+    },
+    "p02_06_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.06_COMPLETION_2026-08-24.md",
+      "implementation_pr": 79,
+      "final_exact_head": "dbbd105fd5f2543ca7dd5df93375eaf1057928fc",
+      "implementation_merge": "083c2866f0cd0773b85201750c2196bfd2fcc167",
+      "workflow_run": 32664834112,
+      "job": 97256520050,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000015801",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "g4": "N/A for new P02.06 persistence; retained P02.05 migration regression PASS",
+      "diagnostic_failures": [
+        "32664671013 / 97256120056 — corrected one-space gofmt alignment issue in contextual_errors.go; no behavior, acceptance or gate change"
+      ]
+    },
+    "p02_07_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.07_COMPLETION_2026-08-24.md",
+      "implementation_pr": 81,
+      "final_exact_head": "51ccaa12c3534f74fba6eab9d4698ee483ef4ffd",
+      "implementation_merge": "5642f5da1eb24e70b67e5ec757d9f4584c4e3f5c",
+      "workflow_run": 32669167972,
+      "job": 97267175953,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000016379",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32668735841 / 97266149110 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
+      ]
+    },
+    "p02_08_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.08_COMPLETION_2026-08-25.md",
+      "implementation_pr": 84,
+      "final_exact_head": "43bdcf525ce5e0cfdb9dc0707fbafee7cd552543",
+      "implementation_merge": "32eb7187eb229327585551e4e28b0d596de78bd9",
+      "workflow_run": 32885950897,
+      "job": 97926598423,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260823.283.1",
+      "runner": "GitHub Actions 1000022204",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32882746486 / 97915911717 — corrected gofmt drift and one int/int64 migration-version test-helper mismatch",
+        "32884311341 / 97921359088 — corrected gosec G304 variable-path test helper and G101 credential-looking internal identifiers without public-code changes or broad suppression",
+        "32884939579 / 97923224921 — stale historical P02.04 future-scope guard rejected the newly authorized ServiceAccount type; narrowed without weakening P02.04 invariants"
+      ],
+      "superseded_run": "32885758158 — cancelled after the candidate head moved; not acceptance evidence"
+    },
+    "p02_09_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.09_COMPLETION_2026-08-26.md",
+      "implementation_pr": 86,
+      "final_exact_head": "0618904a18f82231469dd173aeb3d9d51edb73ed",
+      "implementation_merge": "8ef86d2644b5ed455b3610192b8379d94204692f",
+      "workflow_run": 32895186252,
+      "job": 97956097639,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000022922",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "diagnostic_failures": [
+        "32894368734 / 97953417878 — corrected gosec G304 variable-path integration migration helper using a fixed repository-fixture allow-list"
+      ]
+    },
+    "p02_10_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md",
+      "implementation_pr": 88,
+      "final_exact_head": "975e4925060a035780ca13b68c5437634ed0f4ea",
+      "implementation_merge": "88799aa41da8ce8c22540146d157d488565e2ce9",
+      "workflow_run": 32904678957,
+      "job": 97986011269,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000023269",
+      "go": "1.26.7",
+      "postgres": "18.6",
+      "valkey": "9.1.1",
+      "s3mock": "5.1.0",
+      "diagnostic_failures": [
+        "32903969206 / 97983773781 — repository-quality typecheck exposed the corrected undefined invalidScopeFailure reference; retained as FAIL diagnostic evidence"
+      ]
+    },
     "p02_exit_gate": {
       "state": "SATISFIED",
       "document": "docs/governance/P02_EXIT_GATE.md",
@@ -85,6 +268,8 @@
       "workflow_run": 32904678957,
       "job": 97986011269,
       "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
       "runner_image": "ubuntu-24.04",
       "go": "1.26.7",
       "p02_progress": "10 / 10 done",
@@ -102,12 +287,101 @@
       "business_feature_code_authorized": false,
       "note": "P03 entry remains satisfied. P03.01-P03.07 are complete; P03.08 is the single active package only after this governed closure transition merges. P03.09+ remain unauthorized until later governed transitions."
     },
-    "p03_01_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md","implementation_pr":92,"final_exact_head":"87da3302605c852ae5bf43d473aaa01a9e1aaa74","implementation_merge":"4229e2a28442bf475afed143bab359a770d48053","workflow_run":33009396644,"job":98311433013,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p03_02_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md","implementation_pr":94,"final_exact_head":"0c46db41b0d724a08ea1a78545b3c2debdd8cd05","implementation_merge":"2e38969dbbbcfcf4765a114f449dc3fa960061d7","workflow_run":33022405704,"job":98355747775,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p03_03_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md","implementation_pr":98,"final_exact_head":"4dcaca22911fbb81b1d25af316fef146c4a71ff3","implementation_merge":"774fab8b0350ffb2776517e3f1361f76bc2c68f9","workflow_run":33112808869,"job":98659824107,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p03_04_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md","implementation_pr":100,"final_exact_head":"cddb42d4466e7f97a7547c4cf5ea0812c768ff0b","implementation_merge":"13701e7647c1e084dfe4288d4b27b3ddd75e72c2","workflow_run":33125377739,"job":98702150001,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7"},
-    "p03_05_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md","implementation_issue":102,"implementation_pr":103,"final_exact_head":"c52b48be1a82eb27670f03bdd4e1be4df6eb9f54","implementation_merge":"0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce","workflow_run":33132237120,"job":98724184966,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","retained_verifier":"scripts/verify_p03_05.sh"},
-    "p03_06_completion": {"state":"PASS","completion_evidence":"docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md","implementation_issue":106,"implementation_pr":107,"initial_implementation_head":"28a6343ad10924869d02d666f7b625121f7ecb7d","final_exact_head":"c895f44a1383d1c1d9c5fd23c95d7864810353c3","implementation_merge":"13dbe8a393c20cabeb8aac60d073a6c66775efd3","workflow_run":33181421854,"job":98883286556,"evidence_environment":"github-hosted","runner_image":"ubuntu-24.04","go":"1.26.7","retained_verifier":"scripts/verify_p03_06.sh","diagnostic_failures":["33180840326 / 98881325283 — corrected one govet variable-shadow finding without behavioral or gate weakening"]},
+    "p03_01_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md",
+      "implementation_pr": 92,
+      "final_exact_head": "87da3302605c852ae5bf43d473aaa01a9e1aaa74",
+      "implementation_merge": "4229e2a28442bf475afed143bab359a770d48053",
+      "workflow_run": 33009396644,
+      "job": 98311433013,
+      "evidence_environment": "github-hosted",
+      "evidence_os": "Ubuntu 24.04.4 LTS",
+      "evidence_arch": "X64",
+      "runner_image": "ubuntu-24.04",
+      "runner_image_version": "20260816.277.1",
+      "runner": "GitHub Actions 1000026587",
+      "go": "1.26.7",
+      "diagnostic_failures": [
+        "33009067521 / 98310300730 — pinned Go 1.26.7 gofmt exposed formatting drift from earlier local-toolchain output; exact canonical formatter output was applied without gate or scope weakening"
+      ]
+    },
+    "p03_02_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md",
+      "implementation_pr": 94,
+      "final_exact_head": "0c46db41b0d724a08ea1a78545b3c2debdd8cd05",
+      "implementation_merge": "2e38969dbbbcfcf4765a114f449dc3fa960061d7",
+      "workflow_run": 33022405704,
+      "job": 98355747775,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "note": "Final exact implementation head passed canonical governance including the dedicated P03.02 verifier. Earlier candidate lint failure was diagnostic only and corrected without gate weakening."
+    },
+    "p03_03_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md",
+      "implementation_pr": 98,
+      "final_exact_head": "4dcaca22911fbb81b1d25af316fef146c4a71ff3",
+      "implementation_merge": "774fab8b0350ffb2776517e3f1361f76bc2c68f9",
+      "workflow_run": 33112808869,
+      "job": 98659824107,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "note": "Final exact implementation head passed canonical governance including repository Go quality, all retained P01/P02/P03.01/P03.02 regressions and the dedicated P03.03 verifier. Earlier #412/#414 failures and #413 cancellation remain diagnostic history."
+    },
+    "p03_04_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md",
+      "implementation_pr": 100,
+      "final_exact_head": "cddb42d4466e7f97a7547c4cf5ea0812c768ff0b",
+      "implementation_merge": "13701e7647c1e084dfe4288d4b27b3ddd75e72c2",
+      "workflow_run": 33125377739,
+      "job": 98702150001,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.03 regressions and the dedicated P03.04 verifier. Earlier failed/cancelled/stale candidates remain diagnostic history."
+    },
+    "p03_05_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md",
+      "implementation_issue": 102,
+      "implementation_pr": 103,
+      "final_exact_head": "c52b48be1a82eb27670f03bdd4e1be4df6eb9f54",
+      "implementation_merge": "0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce",
+      "workflow_run": 33132237120,
+      "job": 98724184966,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "retained_verifier": "scripts/verify_p03_05.sh",
+      "diagnostic_failures": [
+        "33130322466 — Governance #457 failed at repository Go typecheck because negative tests passed a two-value binder result directly to a single-error assertion helper; corrected without production-semantic or gate weakening"
+      ],
+      "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.04 regressions and the dedicated P03.05 verifier. Earlier failed/stale candidates remain diagnostic history."
+    },
+    "p03_06_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md",
+      "implementation_issue": 106,
+      "implementation_pr": 107,
+      "initial_implementation_head": "28a6343ad10924869d02d666f7b625121f7ecb7d",
+      "final_exact_head": "c895f44a1383d1c1d9c5fd23c95d7864810353c3",
+      "implementation_merge": "13dbe8a393c20cabeb8aac60d073a6c66775efd3",
+      "workflow_run": 33181421854,
+      "job": 98883286556,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "retained_verifier": "scripts/verify_p03_06.sh",
+      "diagnostic_failures": [
+        "33180840326 / 98881325283 — Governance #467 failed at repository Go quality because govet detected one corrected variable-shadow finding in ResolveConsumer; repaired without behavioral or gate weakening"
+      ],
+      "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.05 regressions and the dedicated P03.06 verifier. Earlier failed/stale candidates remain diagnostic history."
+    },
     "p03_07_completion": {
       "state": "PASS",
       "completion_evidence": "docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md",
@@ -122,8 +396,8 @@
       "go": "1.26.7",
       "retained_verifier": "scripts/verify_p03_07.sh",
       "diagnostic_failures": [
-        "33192567020 / 98921494281 — Governance #474 failed repository Go quality due to one gofmt drift and two unused constants; corrected without semantic or gate weakening",
-        "33194438411 / 98927852853 — Governance #476 passed repository Go quality and retained regressions, then failed only a brittle dedicated P03.07 verifier same-line source-marker assertion; corrected to independent line-safe predicates without weakening the invariant"
+        "33192567020 / 98921494281 — Governance #474 failed repository Go quality due to one gofmt alignment drift and two unused constants; corrected without semantic or gate weakening",
+        "33194438411 / 98927852853 — Governance #476 passed repository Go quality and all retained P01/P02/P03.01-P03.06 regressions, then the dedicated P03.07 verifier failed a same-line source-marker assertion; corrected to independent line-safe predicate assertions without weakening the invariant"
       ],
       "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.06 regressions and the dedicated P03.07 verifier. Earlier failed/stale candidates remain diagnostic history."
     },
@@ -222,7 +496,15 @@
     "blocking_gate": null,
     "note": "P03 is active at 7 / 11 done with P03.01-P03.07 complete and P03.08 as the sole implementation-authorized package only after this closure transition merges. Strategic X-program runtime remains planning-only."
   },
-  "state_vocabulary": ["planned","ready","active","blocked","verification","done","superseded"],
+  "state_vocabulary": [
+    "planned",
+    "ready",
+    "active",
+    "blocked",
+    "verification",
+    "done",
+    "superseded"
+  ],
   "phase": {
     "id": "P03",
     "name": "Module Runtime",
