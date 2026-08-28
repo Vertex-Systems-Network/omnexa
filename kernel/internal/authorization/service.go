@@ -12,27 +12,64 @@ const actorKindUser = "user"
 // Service is the P02.05 direct-RBAC capability boundary. It evaluates only
 // exact-scope direct role grants and owns all protected RBAC mutations.
 type Service struct {
-	repository repository
-	audit      *audit.Writer
-	now        func() time.Time
+	repository        repository
+	audit             *audit.Writer
+	now               func() time.Time
+	modulePermissions ModulePermissionAvailability
 }
 
 // NewService creates an authorization service with required protected audit
-// transport. A nil repository or audit writer fails closed.
+// transport. Kernel permissions keep their accepted P02 behavior. Module
+// permissions fail closed unless a P03.07 live availability provider is bound.
 func NewService(repository repository, auditWriter *audit.Writer) (*Service, error) {
 	return newServiceWithClock(repository, auditWriter, func() time.Time { return time.Now().UTC() })
 }
 
+// NewServiceWithModulePermissionAvailability binds the live P03.07 module
+// permission availability precondition while preserving this service as the
+// sole deny-by-default role/policy enforcement boundary.
+func NewServiceWithModulePermissionAvailability(
+	repository repository,
+	auditWriter *audit.Writer,
+	availability ModulePermissionAvailability,
+) (*Service, error) {
+	if availability == nil {
+		return nil, serviceInvalidFailure()
+	}
+	return newServiceWithClockAndModulePermissions(
+		repository,
+		auditWriter,
+		func() time.Time { return time.Now().UTC() },
+		availability,
+	)
+}
+
 func newServiceWithClock(repository repository, auditWriter *audit.Writer, now func() time.Time) (*Service, error) {
+	return newServiceWithClockAndModulePermissions(repository, auditWriter, now, nil)
+}
+
+func newServiceWithClockAndModulePermissions(
+	repository repository,
+	auditWriter *audit.Writer,
+	now func() time.Time,
+	availability ModulePermissionAvailability,
+) (*Service, error) {
 	if repository == nil || auditWriter == nil || now == nil {
 		return nil, serviceInvalidFailure()
 	}
-	return &Service{repository: repository, audit: auditWriter, now: now}, nil
+	return &Service{
+		repository: repository,
+		audit: auditWriter,
+		now: now,
+		modulePermissions: availability,
+	}, nil
 }
 
 // Check evaluates one direct permission at the subject's exact trusted scope.
 // No role-name shortcut, tenant-to-organization inheritance, relationship rule,
-// contextual condition or internal-caller bypass exists in P02.05.
+// contextual condition or internal-caller bypass exists. Module permission
+// availability is only a fail-closed precondition; an allow still requires the
+// existing repository-backed exact-scope role grant.
 func (service *Service) Check(ctx context.Context, subject Subject, permission PermissionID) (Decision, error) {
 	if service == nil || service.repository == nil || service.audit == nil {
 		return DecisionDeny, serviceInvalidFailure()
@@ -42,6 +79,13 @@ func (service *Service) Check(ctx context.Context, subject Subject, permission P
 	}
 	if !permission.Valid() {
 		return DecisionDeny, invalidPermissionFailure()
+	}
+	available, availabilityErr := service.permissionAvailable(ctx, permission)
+	if availabilityErr != nil {
+		return DecisionDeny, availabilityErr
+	}
+	if !available {
+		return DecisionDeny, nil
 	}
 	allowed, permissionErr := service.repository.hasPermission(ctx, subject, permission)
 	if permissionErr != nil {
