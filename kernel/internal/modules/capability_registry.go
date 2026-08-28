@@ -282,7 +282,7 @@ func (r *CapabilityRegistry) ResolveConsumer(
 			identity.Major,
 		)
 	}
-	if _, ok := moduleConsumers[capabilityKey(identity.ID, identity.Major)]; !ok {
+	if _, declared := moduleConsumers[capabilityKey(identity.ID, identity.Major)]; !declared {
 		return CapabilityRecord{}, capabilityError(
 			"module.capability.consumer_undeclared",
 			consumerModuleID,
