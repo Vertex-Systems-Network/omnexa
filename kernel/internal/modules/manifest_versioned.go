@@ -61,6 +61,8 @@ type validatedManifestSnapshot struct {
 	RequiredDependencies    []DependencyRequirement
 	OptionalDependencies    []DependencyRequirement
 	PlatformDependencies    []string
+	CapabilitiesProvided    []string
+	CapabilitiesConsumed    []string
 	Settings                []string
 	FeatureFlags            []string
 }
@@ -75,6 +77,8 @@ func (s validatedManifestSnapshot) clone() validatedManifestSnapshot {
 		RequiredDependencies:    copyDependencyRequirements(s.RequiredDependencies),
 		OptionalDependencies:    copyDependencyRequirements(s.OptionalDependencies),
 		PlatformDependencies:    append([]string(nil), s.PlatformDependencies...),
+		CapabilitiesProvided:    append([]string(nil), s.CapabilitiesProvided...),
+		CapabilitiesConsumed:    append([]string(nil), s.CapabilitiesConsumed...),
 		Settings:                append([]string(nil), s.Settings...),
 		FeatureFlags:            append([]string(nil), s.FeatureFlags...),
 	}
@@ -156,6 +160,8 @@ func snapshotFromV1(manifest Manifest) validatedManifestSnapshot {
 		RequiredDependencies:    required,
 		OptionalDependencies:    optional,
 		PlatformDependencies:    append([]string(nil), manifest.PlatformDependencies...),
+		CapabilitiesProvided:    append([]string(nil), manifest.CapabilitiesProvided...),
+		CapabilitiesConsumed:    append([]string(nil), manifest.CapabilitiesConsumed...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
 	}
@@ -222,6 +228,8 @@ func parseManifestV2(data []byte, raw map[string]json.RawMessage) (validatedMani
 		RequiredDependencies:    copyDependencyRequirements(manifest.Dependencies),
 		OptionalDependencies:    copyDependencyRequirements(manifest.OptionalDependencies),
 		PlatformDependencies:    append([]string(nil), manifest.PlatformDependencies...),
+		CapabilitiesProvided:    append([]string(nil), manifest.CapabilitiesProvided...),
+		CapabilitiesConsumed:    append([]string(nil), manifest.CapabilitiesConsumed...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
 	}, nil

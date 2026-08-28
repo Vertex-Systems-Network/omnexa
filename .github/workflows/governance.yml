@@ -295,3 +295,7 @@ jobs:
       - name: Verify P03.05 module settings and feature flags
         shell: bash
         run: bash scripts/verify_p03_05.sh
+
+      - name: Verify P03.06 capability registry
+        shell: bash
+        run: bash scripts/verify_p03_06.sh
