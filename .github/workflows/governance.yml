@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v21-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v22-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -299,3 +299,7 @@ jobs:
       - name: Verify P03.06 capability registry
         shell: bash
         run: bash scripts/verify_p03_06.sh
+
+      - name: Verify P03.07 permission registration
+        shell: bash
+        run: bash scripts/verify_p03_07.sh
