@@ -34,36 +34,36 @@ const (
 // owning discovered module and one validated manifest-declared slot. Permission,
 // feature flag and optional dependency values are descriptive references only.
 type UIContributionRegistration struct {
-	ModuleID           string               `json:"module_id"`
-	Owner              string               `json:"owner"`
-	ID                 string               `json:"id"`
-	Slot               string               `json:"slot"`
-	Kind               UIContributionKind   `json:"kind"`
-	ContractVersion    uint32               `json:"contract_version"`
-	Permission         string               `json:"permission,omitempty"`
-	FeatureFlag        string               `json:"feature_flag,omitempty"`
-	OptionalDependency string               `json:"optional_dependency,omitempty"`
-	Fallback           UIFallbackBehavior   `json:"fallback"`
+	ModuleID           string             `json:"module_id"`
+	Owner              string             `json:"owner"`
+	ID                 string             `json:"id"`
+	Slot               string             `json:"slot"`
+	Kind               UIContributionKind `json:"kind"`
+	ContractVersion    uint32             `json:"contract_version"`
+	Permission         string             `json:"permission,omitempty"`
+	FeatureFlag        string             `json:"feature_flag,omitempty"`
+	OptionalDependency string             `json:"optional_dependency,omitempty"`
+	Fallback           UIFallbackBehavior `json:"fallback"`
 }
 
 // UIContributionRecord is a lifecycle/dependency-aware metadata projection.
 // Available means only that the owning module is lifecycle-enabled. Degraded
 // reports an optional-dependency condition and never changes backend authority.
 type UIContributionRecord struct {
-	ModuleID           string               `json:"module_id"`
-	Owner              string               `json:"owner"`
-	ID                 string               `json:"id"`
-	Slot               string               `json:"slot"`
-	Kind               UIContributionKind   `json:"kind"`
-	ContractVersion    uint32               `json:"contract_version"`
-	Permission         string               `json:"permission,omitempty"`
-	FeatureFlag        string               `json:"feature_flag,omitempty"`
-	OptionalDependency string               `json:"optional_dependency,omitempty"`
-	Fallback           UIFallbackBehavior   `json:"fallback"`
-	LifecycleState     LifecycleState       `json:"lifecycle_state"`
-	Available          bool                 `json:"available"`
-	Degraded           bool                 `json:"degraded"`
-	DegradationReason  string               `json:"degradation_reason,omitempty"`
+	ModuleID           string             `json:"module_id"`
+	Owner              string             `json:"owner"`
+	ID                 string             `json:"id"`
+	Slot               string             `json:"slot"`
+	Kind               UIContributionKind `json:"kind"`
+	ContractVersion    uint32             `json:"contract_version"`
+	Permission         string             `json:"permission,omitempty"`
+	FeatureFlag        string             `json:"feature_flag,omitempty"`
+	OptionalDependency string             `json:"optional_dependency,omitempty"`
+	Fallback           UIFallbackBehavior `json:"fallback"`
+	LifecycleState     LifecycleState     `json:"lifecycle_state"`
+	Available          bool               `json:"available"`
+	Degraded           bool               `json:"degraded"`
+	DegradationReason  string             `json:"degradation_reason,omitempty"`
 }
 
 // UIContributionDiagnostic is stable and value-safe. It intentionally excludes
