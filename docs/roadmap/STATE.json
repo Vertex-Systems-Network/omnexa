@@ -190,7 +190,7 @@
       "go": "1.26.7",
       "postgres": "18.6",
       "diagnostic_failures": [
-        "32668735841 / 97266175953 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
+        "32668735841 / 97266149110 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
       ]
     },
     "p02_08_completion": {
