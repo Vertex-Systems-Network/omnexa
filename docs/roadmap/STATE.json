@@ -5,13 +5,13 @@
   "last_reconciled": "2026-08-28",
   "program": "kernel",
   "current_phase": "P03",
-  "current_work_package": "P03.06",
+  "current_work_package": "P03.07",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P03.06 capability registry implementation only after this closure transition merges",
-      "P03.06 verification and later closure governance",
+      "P03.07 permission registration implementation only after this closure transition merges",
+      "P03.07 verification and later closure governance",
       "narrow repository-maintenance fixes"
     ]
   },
@@ -190,7 +190,7 @@
       "go": "1.26.7",
       "postgres": "18.6",
       "diagnostic_failures": [
-        "32668735841 / 97266149110 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
+        "32668735841 / 97266175953 — P02.07 verifier matched explanatory authorization text in a comment via a redundant regex token; corrected without runtime, schema, test, acceptance, security or gate weakening"
       ]
     },
     "p02_08_completion": {
@@ -282,10 +282,10 @@
       "package_sequence": "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json",
       "readiness_pr": 90,
       "readiness_merge": "712064870ce77d01902c2450c9eed240cda9c44e",
-      "current_work_package": "P03.06",
+      "current_work_package": "P03.07",
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "P03 entry remains satisfied. P03.01-P03.05 are complete; P03.06 is the single active package only after this governed closure transition merges. P03.07+ remain unauthorized until later governed transitions."
+      "note": "P03 entry remains satisfied. P03.01-P03.06 are complete; P03.07 is the single active package only after this governed closure transition merges. P03.08+ remain unauthorized until later governed transitions."
     },
     "p03_01_completion": {
       "state": "PASS",
@@ -363,6 +363,25 @@
       ],
       "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.04 regressions and the dedicated P03.05 verifier. Earlier failed/stale candidates remain diagnostic history."
     },
+    "p03_06_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md",
+      "implementation_issue": 106,
+      "implementation_pr": 107,
+      "initial_implementation_head": "28a6343ad10924869d02d666f7b625121f7ecb7d",
+      "final_exact_head": "c895f44a1383d1c1d9c5fd23c95d7864810353c3",
+      "implementation_merge": "13dbe8a393c20cabeb8aac60d073a6c66775efd3",
+      "workflow_run": 33181421854,
+      "job": 98883286556,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "retained_verifier": "scripts/verify_p03_06.sh",
+      "diagnostic_failures": [
+        "33180840326 / 98881325283 — Governance #467 failed at repository Go quality because govet detected one corrected variable-shadow finding in ResolveConsumer; repaired without behavioral or gate weakening"
+      ],
+      "note": "Final exact implementation head passed repository Go quality, all retained P01/P02/P03.01-P03.05 regressions and the dedicated P03.06 verifier. Earlier failed/stale candidates remain diagnostic history."
+    },
     "main_branch_protection": {
       "state": "verified_protected",
       "issue": 3,
@@ -387,13 +406,13 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 33132237120,
-      "job": 98724184966,
+      "workflow_run": 33181421854,
+      "job": 98883286556,
       "evidence_environment": "github-hosted",
       "runner_image": "ubuntu-24.04",
       "go": "1.26.7",
       "final_check": "governance",
-      "note": "P03.05 final exact-head run 33132237120 / job 98724184966 passed repository Go quality, all retained P01/P02/P03.01-P03.04 regressions and the P03.05 verifier on GitHub-hosted ubuntu-24.04. This implementation evidence does not substitute for the closure PR's own required governance run."
+      "note": "P03.06 final exact-head run 33181421854 / job 98883286556 passed repository Go quality, all retained P01/P02/P03.01-P03.05 regressions and the P03.06 verifier on GitHub-hosted ubuntu-24.04. This implementation evidence does not substitute for the closure PR's own required governance run."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -442,10 +461,10 @@
   "p03_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P03.06",
-    "work_package_name": "Capability registry",
+    "next_work_package": "P03.07",
+    "work_package_name": "Permission registration",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P03.06.md",
+    "work_package_spec": "docs/roadmap/work-packages/P03.07.md",
     "package_sequence": "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 11,
     "mandatory_spec_count": 11,
@@ -456,7 +475,7 @@
     "validator": "scripts/validate_p03_preparation.py",
     "package_validator": "scripts/validate_p03_package_specs.py",
     "blocking_gate": null,
-    "note": "P03 is active at 5 / 11 done with P03.01-P03.05 complete and P03.06 as the sole implementation-authorized package only after this closure transition merges. Strategic X-program runtime remains planning-only."
+    "note": "P03 is active at 6 / 11 done with P03.01-P03.06 complete and P03.07 as the sole implementation-authorized package only after this closure transition merges. Strategic X-program runtime remains planning-only."
   },
   "state_vocabulary": [
     "planned",
@@ -472,15 +491,15 @@
     "name": "Module Runtime",
     "state": "active",
     "mandatory_work_packages": 11,
-    "done_work_packages": 5,
+    "done_work_packages": 6,
     "work_packages": [
       {"id":"P03.01","name":"Module manifest schema","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P03.01.md","evidence":["docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md"]},
       {"id":"P03.02","name":"Registry & deterministic discovery","state":"done","depends_on":["P03.01"],"spec":"docs/roadmap/work-packages/P03.02.md","evidence":["docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"]},
       {"id":"P03.03","name":"Dependency graph resolver","state":"done","depends_on":["P03.02"],"spec":"docs/roadmap/work-packages/P03.03.md","evidence":["docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md"]},
       {"id":"P03.04","name":"Module lifecycle state machine","state":"done","depends_on":["P03.03"],"spec":"docs/roadmap/work-packages/P03.04.md","evidence":["docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md"]},
       {"id":"P03.05","name":"Module settings & feature flags","state":"done","depends_on":["P03.04"],"spec":"docs/roadmap/work-packages/P03.05.md","evidence":["docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md"]},
-      {"id":"P03.06","name":"Capability registry","state":"active","depends_on":["P03.05"],"spec":"docs/roadmap/work-packages/P03.06.md","evidence":[]},
-      {"id":"P03.07","name":"Permission registration","state":"planned","depends_on":["P03.06"],"spec":"docs/roadmap/work-packages/P03.07.md","evidence":[]},
+      {"id":"P03.06","name":"Capability registry","state":"done","depends_on":["P03.05"],"spec":"docs/roadmap/work-packages/P03.06.md","evidence":["docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md"]},
+      {"id":"P03.07","name":"Permission registration","state":"active","depends_on":["P03.06"],"spec":"docs/roadmap/work-packages/P03.07.md","evidence":[]},
       {"id":"P03.08","name":"UI contribution registry contract","state":"planned","depends_on":["P03.07"],"spec":"docs/roadmap/work-packages/P03.08.md","evidence":[]},
       {"id":"P03.09","name":"Migration ownership registry","state":"planned","depends_on":["P03.08"],"spec":"docs/roadmap/work-packages/P03.09.md","evidence":[]},
       {"id":"P03.10","name":"Module health reporting","state":"planned","depends_on":["P03.09"],"spec":"docs/roadmap/work-packages/P03.10.md","evidence":[]},
@@ -491,7 +510,7 @@
     {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
     {"id":"P01","name":"Omnexa Kernel","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json","exit_gate":"docs/governance/P01_EXIT_GATE.md"},
     {"id":"P02","name":"Identity, Tenancy & Organization","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P02_ENTRY_GATE.md","exit_gate":"docs/governance/P02_EXIT_GATE.md"},
-    {"id":"P03","name":"Module Runtime","state":"active","active_work_package":"P03.06","package_sequence":"docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P03_ENTRY_GATE.md","exit_gate":"docs/governance/P03_EXIT_GATE.md"},
+    {"id":"P03","name":"Module Runtime","state":"active","active_work_package":"P03.07","package_sequence":"docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P03_ENTRY_GATE.md","exit_gate":"docs/governance/P03_EXIT_GATE.md"},
     {"id":"P04","name":"Data, Jobs & Event Fabric","state":"planned"},
     {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
     {"id":"P06","name":"Universal Business Foundation","state":"planned"},
@@ -517,5 +536,5 @@
     {"id":"P26","name":"Industry Packs","state":"planned"},
     {"id":"P27","name":"Autonomous Business OS","state":"planned"}
   ],
-  "next_transition_rule": "P03.01-P03.05 are done with canonical evidence and P03.06 is the sole active and implementation-authorized package only after this closure transition merges. Implement only Capability Registry in a separate governed session from the exact post-closure protected-main SHA; P03.07-P03.11, business-feature code, P04+, strategic X-program runtime and AI/model/agent behavior remain unauthorized. P03.06 implementation does not auto-advance state; completion and P03.07 activation require a later separate governed closure transition."
+  "next_transition_rule": "P03.01-P03.06 are done with canonical evidence and P03.07 is the sole active and implementation-authorized package only after this closure transition merges. Implement only Permission Registration in a separate governed session from the exact post-closure protected-main SHA; P03.08-P03.11, business-feature code, P04+, strategic X-program runtime and AI/model/agent behavior remain unauthorized. P03.07 implementation does not auto-advance state; completion and P03.08 activation require a later separate governed closure transition."
 }
