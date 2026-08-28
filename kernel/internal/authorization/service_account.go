@@ -132,7 +132,8 @@ func (assignment ServiceAccountAssignment) CreatedAt() time.Time   { return assi
 func (assignment ServiceAccountAssignment) UpdatedAt() time.Time   { return assignment.updatedAt }
 
 // CheckServiceAccount evaluates one direct permission using the same accepted
-// P02.05 roles/permissions/assignment owner. There is no credential or role-name bypass.
+// P02.05 roles/permissions/assignment owner. Module availability is a fail-closed
+// precondition and never substitutes for the existing exact-scope role grant.
 func (service *Service) CheckServiceAccount(ctx context.Context, subject ServiceAccountSubject, permission PermissionID) (Decision, error) {
 	if service == nil || service.repository == nil || service.audit == nil {
 		return DecisionDeny, serviceInvalidFailure()
@@ -142,6 +143,13 @@ func (service *Service) CheckServiceAccount(ctx context.Context, subject Service
 	}
 	if !permission.Valid() {
 		return DecisionDeny, invalidPermissionFailure()
+	}
+	available, availabilityErr := service.permissionAvailable(ctx, permission)
+	if availabilityErr != nil {
+		return DecisionDeny, availabilityErr
+	}
+	if !available {
+		return DecisionDeny, nil
 	}
 	allowed, err := service.repository.hasServiceAccountPermission(ctx, subject, permission)
 	if err != nil {
