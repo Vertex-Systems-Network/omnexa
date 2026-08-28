@@ -303,3 +303,7 @@ jobs:
       - name: Verify P03.07 permission registration
         shell: bash
         run: bash scripts/verify_p03_07.sh
+
+      - name: Verify P03.08 UI contribution registry contract
+        shell: bash
+        run: bash scripts/verify_p03_08.sh

@@ -64,6 +64,7 @@ type validatedManifestSnapshot struct {
 	CapabilitiesProvided    []string
 	CapabilitiesConsumed    []string
 	Permissions             []string
+	UISlots                 []string
 	Settings                []string
 	FeatureFlags            []string
 }
@@ -81,6 +82,7 @@ func (s validatedManifestSnapshot) clone() validatedManifestSnapshot {
 		CapabilitiesProvided:    append([]string(nil), s.CapabilitiesProvided...),
 		CapabilitiesConsumed:    append([]string(nil), s.CapabilitiesConsumed...),
 		Permissions:             append([]string(nil), s.Permissions...),
+		UISlots:                 append([]string(nil), s.UISlots...),
 		Settings:                append([]string(nil), s.Settings...),
 		FeatureFlags:            append([]string(nil), s.FeatureFlags...),
 	}
@@ -165,6 +167,7 @@ func snapshotFromV1(manifest Manifest) validatedManifestSnapshot {
 		CapabilitiesProvided:    append([]string(nil), manifest.CapabilitiesProvided...),
 		CapabilitiesConsumed:    append([]string(nil), manifest.CapabilitiesConsumed...),
 		Permissions:             append([]string(nil), manifest.Permissions...),
+		UISlots:                 append([]string(nil), manifest.UISlots...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
 	}
@@ -234,6 +237,7 @@ func parseManifestV2(data []byte, raw map[string]json.RawMessage) (validatedMani
 		CapabilitiesProvided:    append([]string(nil), manifest.CapabilitiesProvided...),
 		CapabilitiesConsumed:    append([]string(nil), manifest.CapabilitiesConsumed...),
 		Permissions:             append([]string(nil), manifest.Permissions...),
+		UISlots:                 append([]string(nil), manifest.UISlots...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
 	}, nil
