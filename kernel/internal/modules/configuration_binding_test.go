@@ -147,12 +147,12 @@ func TestConfigurationBindingRejectsCrossClassDeclarationCollision(t *testing.T)
 func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRuntimeActive(t *testing.T) {
 	registry := p0305RegistryV1(t, []string{string(p0305SettingKey)}, []string{string(p0305FlagKey)})
 	store := NewMemoryLifecycleStore()
-	binding, err := BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
+	binding, bindErr := BindConfigurationRegistrations(registry, store, []ModuleConfigurationRegistration{
 		p0305ScopedRegistration(p0305SettingDefinition(), p0305SettingPolicy()),
 		p0305GlobalRegistration(p0305FlagDefinition()),
 	})
-	if err != nil {
-		t.Fatalf("BindConfigurationRegistrations() error = %v", err)
+	if bindErr != nil {
+		t.Fatalf("BindConfigurationRegistrations() error = %v", bindErr)
 	}
 
 	assertP0305ResolveCode(t, binding, p0305SettingKey, "module.configuration.unavailable")
