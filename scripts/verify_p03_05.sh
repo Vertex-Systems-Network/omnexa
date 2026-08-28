@@ -16,6 +16,7 @@ if [[ "$actual_go" != "go${expected_go}" ]]; then
 fi
 
 p03_05_files=(
+  kernel/internal/configuration/policy_validation.go
   kernel/internal/modules/configuration_binding.go
   kernel/internal/modules/configuration_binding_test.go
   kernel/internal/modules/manifest_versioned.go
@@ -28,9 +29,9 @@ for file in "${p03_05_files[@]}"; do
   fi
 done
 
-unformatted="$(gofmt -l kernel/internal/modules/*.go)"
+unformatted="$(gofmt -l kernel/internal/configuration/policy_validation.go kernel/internal/modules/*.go)"
 if [[ -n "$unformatted" ]]; then
-  echo "ERROR: gofmt required for P03 module files:" >&2
+  echo "ERROR: gofmt required for P03.05 Go files:" >&2
   printf '%s\n' "$unformatted" >&2
   exit 1
 fi
@@ -58,26 +59,35 @@ if grep -nE 'ClassKillSwitch' kernel/internal/modules/configuration_binding.go; 
 fi
 
 for marker in \
+  'type ModuleConfigurationRegistration struct' \
   'type ConfigurationBinding struct' \
-  'func BindConfigurationDefinitions(' \
+  'func BindConfigurationRegistrations(' \
   'configuration.NewRegistry(' \
+  'configuration.ValidateSettingPolicy(' \
+  'ModuleConfigurationGlobal' \
+  'ModuleConfigurationScoped' \
   'module.configuration.definition_missing' \
   'module.configuration.definition_undeclared' \
   'module.configuration.owner_mismatch' \
   'module.configuration.class_mismatch' \
+  'module.configuration.scope_invalid' \
+  'module.configuration.scope_policy_missing' \
+  'module.configuration.scope_policy_invalid' \
+  'module.configuration.global_policy_forbidden' \
   'module.configuration.declaration_collision' \
   'module.configuration.unavailable' \
   'RuntimeActive:' \
   'LifecycleDisabled' \
   'LifecycleDetached' \
   'LifecyclePurged' \
-  'TestConfigurationBindingUsesValidatedManifestDeclarationsAndExistingRegistry' \
+  'TestConfigurationBindingUsesValidatedDeclarationsRegistryAndScopePolicies' \
   'TestConfigurationBindingRetainsV1AndV2DeclarationsInValidatedSnapshot' \
   'TestConfigurationBindingRejectsOwnerClassMissingAndUndeclaredDefinitions' \
+  'TestConfigurationBindingRejectsInvalidScopeContracts' \
   'TestConfigurationBindingRejectsCrossClassDeclarationCollision' \
   'TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRuntimeActive' \
   'TestConfigurationBindingDoesNotRequireASecondRegistryForModulesWithoutDeclarations'; do
-  if ! grep -R -Fq "$marker" kernel/internal/modules; then
+  if ! grep -R -Fq "$marker" kernel/internal/modules kernel/internal/configuration/policy_validation.go; then
     echo "ERROR: P03.05 required contract marker missing: ${marker}" >&2
     exit 1
   fi
@@ -85,7 +95,7 @@ done
 
 # P01.10/P02.09 and P03.01-P03.04 verifiers remain mandatory preceding workflow
 # steps. This focused verifier proves only the new P03.05 integration boundary.
-go vet ./kernel/internal/modules
+go vet ./kernel/internal/modules ./kernel/internal/configuration
 go test ./kernel/internal/modules -count=1
 go test -race ./kernel/internal/modules -count=1
 go build ./kernel/...
@@ -93,9 +103,10 @@ go build ./kernel/...
 echo "P03.05 G0 active-package governance boundary: PASS"
 echo "P03.05 G1 manifest declaration snapshot binding without schema evolution: PASS"
 echo "P03.05 G2 existing kernel.configuration registry reuse and collision/owner/class validation: PASS"
-echo "P03.05 G3 lifecycle retained-read and enabled-only runtime-active semantics: PASS"
-echo "P03.05 G4 tenant/org scope: existing trusted P02 configuration boundary only; no raw scope input: PASS"
-echo "P03.05 G5 security: flags grant no permission/authorization authority and kill-switch ownership is not absorbed: PASS"
-echo "P03.05 G6 persistence/migration: no new schema or data migration introduced: N/A"
-echo "P03.05 G7 build/race/package: PASS"
-echo "P03.05 G8 P03.06+ scope remains absent: PASS"
+echo "P03.05 G3 explicit global/scoped registration plus existing P02.09 policy validation: PASS"
+echo "P03.05 G4 lifecycle retained-read and enabled-only runtime-active semantics: PASS"
+echo "P03.05 G5 tenant/org scope: trusted P02 ScopedService boundary only; no raw scope input: PASS"
+echo "P03.05 G6 security: flags grant no permission/authorization authority and kill-switch ownership is not absorbed: PASS"
+echo "P03.05 G7 persistence/migration: no new schema or data migration introduced: N/A"
+echo "P03.05 G8 build/race/package: PASS"
+echo "P03.05 G9 P03.06+ scope remains absent: PASS"
