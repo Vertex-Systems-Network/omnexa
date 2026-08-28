@@ -2,10 +2,11 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-28"
-  nature: "non-authoritative P03.04 closure / P03.05 activation-candidate continuity snapshot"
-  protected_main: "13701e7647c1e084dfe4288d4b27b3ddd75e72c2"
-  implementation_pr: 100
-  closure_branch: "governance/p03-04-close-p03-05-activate"
+  nature: "non-authoritative P03.05 closure / P03.06 activation-candidate continuity snapshot"
+  protected_main: "0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce"
+  implementation_pr: 103
+  closure_issue: 104
+  closure_branch: "chore/p03-05-closure-p03-06-open"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -17,8 +18,8 @@ phase:
   current: "P03"
   name: "Module Runtime"
   state: "active"
-  progress: "4 / 11 done"
-  current_work_package: "P03.05"
+  progress_after_closure_merge: "5 / 11 done"
+  current_work_package_after_closure_merge: "P03.06"
   activation_authoritative_only_after_closure_merge: true
 
 p01_prerequisite:
@@ -82,10 +83,24 @@ p03_04:
   diagnostic_history: "Earlier failed/cancelled/stale candidates remain diagnostic only; final exact-head #447 PASS is acceptance evidence."
 
 p03_05:
-  state: "active_after_closure_merge"
+  state: "done_candidate_until_closure_merge"
   owner: "kernel.modules with kernel.configuration integration"
   spec: "docs/roadmap/work-packages/P03.05.md"
-  objective: "governed module settings and feature-flag registration through existing kernel.configuration authority"
+  implementation_issue: 102
+  implementation_pr: 103
+  final_exact_head: "c52b48be1a82eb27670f03bdd4e1be4df6eb9f54"
+  canonical_run: 33132237120
+  canonical_job: 98724184966
+  implementation_merge: "0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce"
+  completion_evidence: "docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md"
+  regressions: "scripts/verify_p03_05.sh remains mandatory"
+  diagnostic_history: "Earlier failed/stale candidates remain diagnostic only; final exact-head #460 PASS is acceptance evidence."
+
+p03_06:
+  state: "active_after_closure_merge"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.06.md"
+  objective: "versioned owner-aware capability metadata and availability registry without invocation authority"
   kernel_code_authorized_after_closure_merge: true
   business_feature_code_authorized: false
   implementation_branch: null
@@ -94,31 +109,34 @@ p03_05:
   completion_evidence: null
 
 security:
-  kernel_code_scope_after_closure_merge: "P03.05 only"
+  kernel_code_scope_after_closure_merge: "P03.06 only"
   business_feature_code_authorized: false
-  p03_06_plus_authorized: false
+  p03_07_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
-  configuration_authority: "kernel.configuration"
-  feature_flags_grant_permissions: false
+  capability_registration_grants_invocation_permission: false
+  capability_registry_exposes_private_handlers_or_tables: false
+  unavailable_provider_may_report_active_capability: false
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P03.05 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
-  - "implement P03.06-P03.11 before later governed activation"
-  - "create a duplicate configuration authority inside kernel.modules"
-  - "allow feature flags/settings to grant permissions or select untrusted tenant scope"
+  - "implement P03.06 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
+  - "implement P03.07-P03.11 before later governed activation"
+  - "treat capability metadata lookup as permission or invocation authority"
+  - "expose private handlers, private database tables, credentials or secrets through capability metadata"
+  - "represent disabled/unhealthy/unavailable providers as active capability"
+  - "implement generic RPC/service mesh, product federation, workflow orchestration or AI tool execution under P03.06"
   - "implement P04+ or business modules/features"
   - "implement package acquisition, marketplace runtime or AI/model/agent runtime"
-  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.04 regressions"
+  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.05 regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Finish atomic P03.04 closure/P03.05 activation reconciliation, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and STATE.json."
-  after_closure_merge: "Create a new separate P03.05 implementation branch from the exact post-closure protected-main SHA; implement only P03.05 and keep P03.06+ locked."
+  current: "Finish atomic P03.05 closure/P03.06 activation reconciliation under GitHub issue #104, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
+  after_closure_merge: "Create a new separate P03.06 implementation branch from the exact post-closure protected-main SHA; implement only P03.06 and keep P03.07+ locked."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -129,9 +147,9 @@ source_authority:
   entry_gate: "docs/governance/P03_ENTRY_GATE.md"
   exit_gate: "docs/governance/P03_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec: "docs/roadmap/work-packages/P03.05.md"
-  p03_04_evidence: "docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md"
+  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.06.md"
+  p03_05_evidence: "docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P03.04.md"
-  active_after_closure_merge: "docs/ai/handoffs/P03.05.md"
+  completed: "docs/ai/handoffs/P03.05.md"
+  active_after_closure_merge: "docs/ai/handoffs/P03.06.md"
