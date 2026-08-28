@@ -242,8 +242,8 @@ func TestUIContributionRegistryMetadataSurfaceHasNoExecutionOrAuthorityFields(t 
 			if _, ok := typ.FieldByName(forbidden); ok {
 				t.Fatalf("%s must not expose forbidden authority/execution field %s", typ.Name(), forbidden)
 			}
+		}
 	}
-}
 }
 
 func validUIContribution(id string, kind UIContributionKind, optionalDependency string) UIContributionRegistration {
