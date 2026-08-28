@@ -7,14 +7,15 @@ Last reconciled: **2026-08-28**
 - Program: **Kernel Program**
 - Phase: **P03 — Module Runtime**
 - Phase state: **ACTIVE**
-- Current work package: **P03.05 — Module Settings & Feature Flags**
-- P03 progress: **4 / 11 done**
+- Current work package after this closure merges: **P03.06 — Capability Registry**
+- P03 progress after this closure merges: **5 / 11 done**
 - P03.01: **DONE**
 - P03.02: **DONE**
 - P03.03: **DONE**
 - P03.04: **DONE**
-- P03.05: **ACTIVE after this closure transition merges**
-- P03.06-P03.11: **PLANNED / LOCKED**
+- P03.05: **DONE — canonical implementation accepted**
+- P03.06: **ACTIVE only after this closure transition merges**
+- P03.07-P03.11: **PLANNED / LOCKED**
 - P03 entry gate: **SATISFIED**
 - P03 exit gate: **NOT SATISFIED**
 - P02: **DONE — 10 / 10**
@@ -27,60 +28,62 @@ Last reconciled: **2026-08-28**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation authority: **P03.05 ONLY after this closure transition merges**
+- Kernel implementation authority after this closure merges: **P03.06 ONLY**
 - Business-feature implementation: **NOT AUTHORIZED**
 
-`docs/roadmap/STATE.json` is the canonical machine-readable cursor. This status file mirrors the closure transition candidate and grants no P03.05 implementation authority before the closure PR itself merges to protected `main` and protected-main state is re-read.
+`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This status file mirrors the P03.05 completion / P03.06 activation closure candidate and grants no P03.06 implementation authority before the closure carrier itself passes exact-final-head canonical governance, merges to protected `main`, and protected-main state is re-read.
 
-## P03.04 canonical completion boundary
+## P03.05 canonical completion boundary
 
-P03.04 — Module Lifecycle State Machine completed through implementation PR #100 with exact final evidence:
+P03.05 — Module Settings & Feature Flags completed through implementation PR #103 with exact final evidence:
 
-- activation/base main: `4804dd89e58c86ae0e6cdcf1983bb5d7a5565250`
-- final exact implementation head: `cddb42d4466e7f97a7547c4cf5ea0812c768ff0b`
-- canonical Governance run/job: `33125377739 / 98702150001` — **PASS**
-- implementation merge / protected-main base for this closure: `13701e7647c1e084dfe4288d4b27b3ddd75e72c2`
+- activation/base main: `f38daddf2a4b71290cadef02cbad8c1afaaca15f`
+- final exact implementation head: `c52b48be1a82eb27670f03bdd4e1be4df6eb9f54`
+- canonical Governance run/job: `33132237120 / 98724184966` — **PASS**
+- implementation merge / protected-main base for this closure: `0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce`
 - canonical environment: GitHub-hosted `ubuntu-24.04`
 - repository-pinned Go: `1.26.7`
-- completion evidence: `docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md`
-- retained verifier: `scripts/verify_p03_04.sh`
+- completion evidence: `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`
+- retained verifier: `scripts/verify_p03_05.sh`
 
-The accepted exact-head run passed repository Go quality, all retained P01/P02/P03.01/P03.02/P03.03 regressions and the dedicated P03.04 verifier.
+The accepted exact-head run passed repository Go quality, all retained P01/P02/P03.01/P03.02/P03.03/P03.04 regressions and the dedicated P03.05 verifier.
 
-Earlier failed/cancelled/stale candidates remain diagnostic history only. Governance #434 and #446 `govet shadow` failures were corrected without weakening gates and are not acceptance evidence.
+Earlier failed/cancelled/stale candidates remain diagnostic history only. Governance #457 failed a test-call typecheck shape and was corrected without weakening production semantics or governance; only the exact final head/run above is completion authority.
 
-## P03.04 delivered boundary retained
+## P03.05 delivered boundary retained
 
-P03.04 established explicit fail-closed lifecycle state/transition behavior, required dependency and reverse-dependency protection, non-destructive disable/re-enable, suspend/archive/detach/purge distinctions, authorization-before-planning, required audit guardrails, CAS concurrency semantics, retry/idempotency operation IDs, deterministic `recovery_required` handling, exact module/dependency version binding, stale reverse-dependent upgrade protection and unrelated-module failure isolation.
+P03.05 preserved manifest schema v1/v2 and bound exact manifest-declared setting/feature-flag keys to existing typed `kernel.configuration.Definition` registrations. It introduced explicit global/scoped registration scope, reused the existing P02.09 scoped policy validator, retained trusted tenant/organization scope construction, preserved non-destructive configuration history across lifecycle states, rejected ownership/class/scope/policy collisions, and kept `kernel.configuration.NewRegistry` as type/default/duplicate authority.
 
-Lifecycle state creates no permission, capability, tenant or database authority. P03.09 migration execution remains deferred.
+Settings and feature flags create no permission, capability, tenant or database authority. No duplicate configuration subsystem was introduced.
 
-## P03.05 activation boundary
+## P03.06 activation boundary
 
-After this separate closure/state-transition PR itself passes exact-final-head canonical governance and merges to protected `main`, P03.05 becomes the sole active implementation package.
+After this separate closure/state-transition carrier passes exact-final-head canonical governance and merges to protected `main`, P03.06 becomes the sole active implementation package.
 
-Authorized P03.05 scope is limited to `P03.05 — Module Settings & Feature Flags`:
+Authorized P03.06 scope is limited to `P03.06 — Capability Registry`:
 
-- deterministic registration of manifest-declared setting and feature-flag definitions;
-- stable module/owner keys, types, validation and defaults;
-- integration with existing `kernel.configuration` authority;
-- lifecycle-aware availability/read semantics;
-- trusted existing tenant/org configuration scope only;
-- safe disable/unregister/re-enable preservation behavior;
-- collision/ownership validation;
-- negative tests proving flags cannot grant permission or bypass authorization.
+- stable capability ID and major-version metadata;
+- provider module/owner and consumer declarations;
+- lifecycle-derived availability state;
+- authorization / tenant-org scope requirement metadata and contract references;
+- collision/version compatibility validation;
+- lifecycle-aware registration/withdrawal availability;
+- deterministic lookup suitable for later attribution/graph consumers;
+- focused positive/adversarial tests and a dedicated P03.06 verifier.
 
-P03.06-P03.11, P04+, business-feature configuration, entitlements/licensing product logic, environment ALM/config-as-code, package acquisition/marketplace runtime, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
+Capability registration is metadata/availability only. It never grants invocation permission. The owning capability boundary remains responsible for validation, authorization, trusted tenant/org enforcement and required audit. Registry metadata must not expose private handlers, implementation objects, raw database tables, credentials, secrets or restricted values. Disabled/unhealthy/unavailable providers cannot be represented as active merely because a declaration exists.
+
+P03.07-P03.11, P04+, business features, generic remote RPC/service mesh, workflow orchestration, product federation runtime, package acquisition/marketplace runtime, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
 
 ## Retained prerequisite chain
 
-P03.01-P03.03 remain DONE with their canonical completion evidence and verifiers. P01.01-P01.12 and P02.01-P02.10 remain complete historical prerequisites. All retained P01/P02/P03.01-P03.04 regression verifiers remain mandatory during P03.05.
+P03.01-P03.05 remain DONE with canonical completion evidence and retained verifiers. P01.01-P01.12 and P02.01-P02.10 remain complete historical prerequisites. All retained P01/P02/P03.01-P03.05 regression verifiers remain mandatory during later P03.06 implementation.
 
 ## Protected integration / CI
 
 `main` remains the protected PR-only integration authority. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only; local/self-hosted governance evidence is prohibited.
 
-This closure carrier must remain current with protected `main` and its exact final head must pass canonical governance, including repository Go quality, all retained P01/P02/P03.01-P03.04 regression verification, P03 preparation/package validators and conversation-resolution requirements before merge.
+This closure carrier must remain current with protected `main` and its exact final head must pass canonical governance, including repository Go quality, all retained P01/P02/P03.01-P03.05 regression verification, P03 preparation/package validators and conversation-resolution requirements before merge.
 
 ## Issue #4 — external distribution gate
 
@@ -88,9 +91,10 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Re
 
 ## Exact next work
 
-1. Complete this atomic P03.04 closure / P03.05 activation continuity reconciliation.
-2. Require a fresh exact-final-head canonical Governance PASS; stale or diagnostic runs are not merge authority.
-3. Merge the closure carrier only if repository merge gates permit it and no unresolved review/conversation blocker exists.
-4. Re-read protected `main` and `STATE.json` after closure merge and record the exact new main SHA.
-5. Create a new separate P03.05 implementation branch from that exact post-closure SHA.
-6. Implement only P03.05; keep P03.06+ locked and use a later separate governed closure for P03.05 completion/P03.06 activation.
+1. Complete the atomic P03.05 closure / P03.06 activation reconciliation under GitHub issue #104 without P03.06 runtime code.
+2. Keep the exact carrier within the approved governance/evidence/continuity boundary.
+3. Require a fresh exact-final-head canonical Governance PASS; stale or diagnostic runs are not merge authority.
+4. Merge the closure carrier only if it remains current with protected `main`, repository merge gates permit it and no unresolved review/conversation blocker exists.
+5. Re-read protected `main`, `STATE.json`, this status, the package sequence and P03.06 handoff after closure merge and record the exact new main SHA.
+6. Create a new separate P03.06 implementation branch from that exact post-closure SHA.
+7. Implement only P03.06; keep P03.07+ locked and use a later separate governed closure for P03.06 completion/P03.07 activation.
