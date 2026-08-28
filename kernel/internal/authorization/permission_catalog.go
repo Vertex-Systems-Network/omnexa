@@ -149,3 +149,11 @@ func (service *Service) permissionAvailable(ctx context.Context, permission Perm
 	}
 	return service.modulePermissions.PermissionAvailable(ctx, permission)
 }
+
+func permissionCatalogPersistenceFailure(cause error) error {
+	return repositoryFailure(cause)
+}
+
+func permissionCatalogConflictFailure() error {
+	return invalidPermissionFailure()
+}
