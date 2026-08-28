@@ -163,9 +163,9 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 	}); err != nil {
 		t.Fatalf("seed installed state: %v", err)
 	}
-	installed, err := binding.Resolve(ctx, p0305SettingKey)
-	if err != nil || installed.RuntimeActive || installed.LifecycleState != LifecycleInstalled || installed.Scope != ModuleConfigurationScoped {
-		t.Fatalf("installed Resolve() = %#v, err=%v", installed, err)
+	installed, installedErr := binding.Resolve(ctx, p0305SettingKey)
+	if installedErr != nil || installed.RuntimeActive || installed.LifecycleState != LifecycleInstalled || installed.Scope != ModuleConfigurationScoped {
+		t.Fatalf("installed Resolve() = %#v, err=%v", installed, installedErr)
 	}
 
 	if err := store.CompareAndSwap(ctx, "omnexa.inventory", 1, LifecycleRecord{
@@ -173,9 +173,9 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 	}); err != nil {
 		t.Fatalf("seed enabled state: %v", err)
 	}
-	enabled, err := binding.Resolve(ctx, p0305FlagKey)
-	if err != nil || !enabled.RuntimeActive || enabled.LifecycleState != LifecycleEnabled || enabled.Scope != ModuleConfigurationGlobal {
-		t.Fatalf("enabled Resolve() = %#v, err=%v", enabled, err)
+	enabled, enabledErr := binding.Resolve(ctx, p0305FlagKey)
+	if enabledErr != nil || !enabled.RuntimeActive || enabled.LifecycleState != LifecycleEnabled || enabled.Scope != ModuleConfigurationGlobal {
+		t.Fatalf("enabled Resolve() = %#v, err=%v", enabled, enabledErr)
 	}
 
 	if err := store.CompareAndSwap(ctx, "omnexa.inventory", 2, LifecycleRecord{
@@ -183,9 +183,9 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 	}); err != nil {
 		t.Fatalf("seed disabled state: %v", err)
 	}
-	disabled, err := binding.Resolve(ctx, p0305SettingKey)
-	if err != nil || disabled.RuntimeActive || disabled.LifecycleState != LifecycleDisabled {
-		t.Fatalf("disabled Resolve() = %#v, err=%v", disabled, err)
+	disabled, disabledErr := binding.Resolve(ctx, p0305SettingKey)
+	if disabledErr != nil || disabled.RuntimeActive || disabled.LifecycleState != LifecycleDisabled {
+		t.Fatalf("disabled Resolve() = %#v, err=%v", disabled, disabledErr)
 	}
 	if disabled.Definition.Key != p0305SettingKey {
 		t.Fatalf("disabled definition was not retained: %#v", disabled.Definition)
@@ -196,9 +196,9 @@ func TestConfigurationBindingLifecycleReadsAreNonDestructiveAndEnabledOnlyIsRunt
 	}); err != nil {
 		t.Fatalf("seed detached state: %v", err)
 	}
-	detached, err := binding.Resolve(ctx, p0305SettingKey)
-	if err != nil || detached.RuntimeActive || detached.LifecycleState != LifecycleDetached {
-		t.Fatalf("detached Resolve() = %#v, err=%v", detached, err)
+	detached, detachedErr := binding.Resolve(ctx, p0305SettingKey)
+	if detachedErr != nil || detached.RuntimeActive || detached.LifecycleState != LifecycleDetached {
+		t.Fatalf("detached Resolve() = %#v, err=%v", detached, detachedErr)
 	}
 
 	if err := store.CompareAndSwap(ctx, "omnexa.inventory", 4, LifecycleRecord{
