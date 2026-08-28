@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-const (
-	permissionSourceKernel = "kernel"
-	permissionSourceModule = "module"
-)
-
 var (
 	modulePermissionModuleIDPattern = regexp.MustCompile(`^omnexa\.[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$`)
 	modulePermissionOwnerPattern    = regexp.MustCompile(`^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$`)
