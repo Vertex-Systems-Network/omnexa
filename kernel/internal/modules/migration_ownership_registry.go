@@ -13,43 +13,43 @@ var migrationOwnershipNamePattern = regexp.MustCompile(`^[a-z][a-z0-9_]{0,63}$`)
 type MigrationChangeClass string
 
 const (
-	MigrationCompatible MigrationChangeClass = "compatible"
-	MigrationBackfill   MigrationChangeClass = "backfill"
+	MigrationCompatible  MigrationChangeClass = "compatible"
+	MigrationBackfill    MigrationChangeClass = "backfill"
 	MigrationDestructive MigrationChangeClass = "destructive"
 )
 
 // MigrationRegistration is declarative P03.09 metadata only. It contains no
 // SQL, filesystem path, callback, tenant scope or execution authority.
 type MigrationRegistration struct {
-	ModuleID             string               `json:"module_id"`
-	ModuleVersion        string               `json:"module_version"`
-	Owner                string               `json:"owner"`
-	Declaration          string               `json:"declaration"`
-	Version              int64                `json:"version"`
-	Name                 string               `json:"name"`
-	IntroducedInVersion  string               `json:"introduced_in_version"`
-	TargetOwner          string               `json:"target_owner"`
-	ChangeClass          MigrationChangeClass `json:"change_class"`
-	StrategyRef          string               `json:"strategy_ref,omitempty"`
-	RecoveryRef          string               `json:"recovery_ref,omitempty"`
+	ModuleID            string               `json:"module_id"`
+	ModuleVersion       string               `json:"module_version"`
+	Owner               string               `json:"owner"`
+	Declaration         string               `json:"declaration"`
+	Version             int64                `json:"version"`
+	Name                string               `json:"name"`
+	IntroducedInVersion string               `json:"introduced_in_version"`
+	TargetOwner         string               `json:"target_owner"`
+	ChangeClass         MigrationChangeClass `json:"change_class"`
+	StrategyRef         string               `json:"strategy_ref,omitempty"`
+	RecoveryRef         string               `json:"recovery_ref,omitempty"`
 }
 
 // MigrationRecord is the immutable-by-copy normalized identity used to plan
 // fresh installs and supported upgrades. Owner+Version maps directly to the P01
 // schema_migrations ledger key; P03.09 never applies the migration itself.
 type MigrationRecord struct {
-	ID                   string               `json:"id"`
-	ModuleID             string               `json:"module_id"`
-	ModuleVersion        string               `json:"module_version"`
-	Owner                string               `json:"owner"`
-	Declaration          string               `json:"declaration"`
-	Version              int64                `json:"version"`
-	Name                 string               `json:"name"`
-	IntroducedInVersion  string               `json:"introduced_in_version"`
-	TargetOwner          string               `json:"target_owner"`
-	ChangeClass          MigrationChangeClass `json:"change_class"`
-	StrategyRef          string               `json:"strategy_ref,omitempty"`
-	RecoveryRef          string               `json:"recovery_ref,omitempty"`
+	ID                  string               `json:"id"`
+	ModuleID            string               `json:"module_id"`
+	ModuleVersion       string               `json:"module_version"`
+	Owner               string               `json:"owner"`
+	Declaration         string               `json:"declaration"`
+	Version             int64                `json:"version"`
+	Name                string               `json:"name"`
+	IntroducedInVersion string               `json:"introduced_in_version"`
+	TargetOwner         string               `json:"target_owner"`
+	ChangeClass         MigrationChangeClass `json:"change_class"`
+	StrategyRef         string               `json:"strategy_ref,omitempty"`
+	RecoveryRef         string               `json:"recovery_ref,omitempty"`
 }
 
 // MigrationOwnershipDiagnostic is stable and value-bounded. It intentionally
