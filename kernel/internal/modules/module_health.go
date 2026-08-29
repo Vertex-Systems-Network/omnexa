@@ -85,7 +85,7 @@ type ModuleHealthRecord struct {
 // ModuleHealthReport reuses the retained P01.08 readiness vocabulary while
 // preserving richer P03.10 per-module diagnostic states.
 type ModuleHealthReport struct {
-	Readiness operations.State    `json:"readiness"`
+	Readiness operations.State     `json:"readiness"`
 	Modules   []ModuleHealthRecord `json:"modules"`
 }
 
