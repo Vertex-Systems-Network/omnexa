@@ -311,3 +311,7 @@ jobs:
       - name: Verify P03.09 migration ownership registry
         shell: bash
         run: bash scripts/verify_p03_09.sh
+
+      - name: Verify P03.10 module health reporting
+        shell: bash
+        run: bash scripts/verify_p03_10.sh
