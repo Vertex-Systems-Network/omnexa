@@ -17,21 +17,21 @@ P01: DONE — 12 / 12
 P01 exit gate: SATISFIED
 P02: DONE — 10 / 10
 P02 exit gate: SATISFIED
-P03: ACTIVE — 9 / 11 done after this closure merges
-P03.01-P03.09: DONE
-Current work package after closure merge: P03.10 — Module Health Reporting
-P03.11: PLANNED / LOCKED
-kernel_code_authorized: true — P03.10 only after closure merge
+P03: ACTIVE — 10 / 11 done after this closure merges
+P03.01-P03.10: DONE
+Current work package after closure merge: P03.11 — Package Trust Hooks & P03 Exit Proof
+P04+: PLANNED / LOCKED
+kernel_code_authorized: true — P03.11 only after closure merge
 business_feature_code_authorized: false
 ```
 
-Protected main currently contains completed P03.09 implementation merge `ea402964c45a630fd6723e0e4a6754555a6a4994`. This P03.09 closure / P03.10 activation carrier is governance/state-transition only. P03.10 runtime implementation is **not authorized before this closure passes exact-final-head canonical governance, merges, and protected main is re-read**.
+Protected main currently contains completed P03.10 implementation merge `e43b13922633525fd202d81a281792ec819b2d5a`. This P03.10 closure / P03.11 activation carrier is governance/state-transition only. P03.11 runtime implementation is **not authorized before this closure passes exact-final-head canonical governance, merges, and protected main is re-read**.
 
-P03.11, P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
+P04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, completed `docs/ai/handoffs/P03.09.md` and active-after-closure `docs/ai/handoffs/P03.10.md` before material P03.10 work.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, completed `docs/ai/handoffs/P03.10.md` and active-after-closure `docs/ai/handoffs/P03.11.md` before material P03.11 work.
 
 Continuity files are subordinate snapshots/indexes. They never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
@@ -161,7 +161,7 @@ P03.08 — UI Contribution Registry Contract remains complete:
 - evidence `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`;
 - retained verifier `scripts/verify_p03_08.sh`.
 
-P03.09 — Migration Ownership Registry is complete:
+P03.09 — Migration Ownership Registry remains complete:
 
 - implementation issue #120 — completed;
 - draft implementation carrier #121 — closed unmerged;
@@ -172,9 +172,20 @@ P03.09 — Migration Ownership Registry is complete:
 - evidence `docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md`;
 - retained verifier `scripts/verify_p03_09.sh`.
 
-Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence for one corrected govet variable-shadow finding; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority. P03.07 Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence; only exact-head Governance `33195104185 / 98930123416` is P03.07 completion authority. P03.08 completion authority is exact implementation head `65dc38c6d60d1535c97a5dda59fb49490df59ec6` with canonical Governance `33216021914 / 98999758150`. P03.09 Governance #493 / `33222404123` remains diagnostic FAIL evidence for formatter alignment only; #494 / `33222631307` is successful draft-carrier evidence and #495 / `33223035182` is promotion-specific completion authority. This separate closure carrier requires its own fresh exact-final-head governance.
+P03.10 — Module Health Reporting is complete:
 
-All completed P01/P02/P03.01-P03.09 regressions remain mandatory during P03.10.
+- implementation issue #126 — completed;
+- draft implementation carrier #127 — closed unmerged;
+- promotion implementation PR #128 — merged;
+- final exact head `172cebe78606f19c0718e7ae1cf74e9cff7d1b0b`;
+- promotion-specific canonical run/job `33228171863 / 99035856872` (#505) — PASS;
+- implementation merge `e43b13922633525fd202d81a281792ec819b2d5a`;
+- evidence `docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_10.sh`.
+
+Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence for one corrected govet variable-shadow finding; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority. P03.07 Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence; only exact-head Governance `33195104185 / 98930123416` is P03.07 completion authority. P03.08 completion authority is exact implementation head `65dc38c6d60d1535c97a5dda59fb49490df59ec6` with canonical Governance `33216021914 / 98999758150`. P03.09 Governance #493 / `33222404123` remains diagnostic FAIL evidence for formatter alignment only; #494 / `33222631307` is successful draft-carrier evidence and #495 / `33223035182` is promotion-specific completion authority. P03.10 Governance #501 and #503 remain diagnostic failure evidence from corrected formatting/test-boundary defects; #504 / `33227842490` is successful draft-carrier evidence and #505 / `33228171863` is promotion-specific completion authority. This separate closure carrier requires its own fresh exact-final-head governance.
+
+All completed P01/P02/P03.01-P03.10 regressions remain mandatory during P03.11.
 
 ## P03 sequencing
 
@@ -182,14 +193,13 @@ All completed P01/P02/P03.01-P03.09 regressions remain mandatory during P03.10.
 
 Transition candidate after this closure merges:
 
-- P03.01-P03.09 are `done`;
-- P03.10 is the sole `active` package;
-- P03.11 remains `planned`;
-- P03 progress is `9 / 11 done`;
-- `kernel_code_authorized=true` only for P03.10;
+- P03.01-P03.10 are `done`;
+- P03.11 is the sole `active` package;
+- P03 progress is `10 / 11 done`;
+- `kernel_code_authorized=true` only for P03.11;
 - `business_feature_code_authorized=false`.
 
-The AI must not automatically advance to another package. Implementation and closure/state transition remain separate governed PRs.
+The AI must not automatically advance to P04. P03.11 implementation and later P03 exit closure/state transition remain separate governed PRs.
 
 ## Accepted ADR-0012 dependency-version baseline retained
 
@@ -207,49 +217,44 @@ ADR-0012 is accepted and P03.03 implemented its contract. Retained invariants in
 - resolver/dependency metadata cannot grant permissions, capabilities, tenant authority, private access or database authority;
 - no implicit compatibility inference, multi-version/SAT solving, external compatibility matrix, automatic package selection or remote acquisition is authorized.
 
-## P03.10 implementation boundary
+## P03.11 implementation boundary
 
-Owner: `kernel.modules`, integrated with the retained P01 health/readiness/observability foundation.
+Owner: `kernel.modules`.
 
-P03.10 implementation begins only **after this closure merges and protected main is re-read**. Create a new separate implementation branch from that exact post-merge SHA.
+P03.11 implementation begins only **after this closure merges and protected main is re-read**. Create a new separate implementation branch from that exact post-merge SHA.
 
-Authorized P03.10 scope is limited to `docs/roadmap/work-packages/P03.10.md`:
+Authorized P03.11 scope is limited to `docs/roadmap/work-packages/P03.11.md`:
 
-- stable module ID/version/state health identity;
-- required versus optional dependency health/degradation;
-- migration compatibility/pending/failure status needed for safe operation;
-- capability/permission/UI registration availability summaries where applicable;
-- explicit healthy/degraded/unavailable/failed diagnostics and bounded reason categories;
-- deterministic reference-module health fixtures;
-- focused positive/adversarial tests;
-- a dedicated P03.10 verifier and canonical governance wiring after retained P03.09 verification.
+- typed optional hook/metadata interfaces for publisher identity, package signature/provenance, SBOM identity and declared capability/data/network/secret profile;
+- explicit distinction between metadata/hook presence and actual trust/certification decision;
+- reference test modules and aggregate P03 verification composing P03.01-P03.10 behavior;
+- P03 exit proof for dependency, lifecycle, upgrade/migration, forbidden-coupling, health/state and unrelated-module isolation;
+- focused positive/adversarial fixtures and exact-head evidence required for later P03 exit reconciliation;
+- canonical governance wiring after all retained P03.01-P03.10 verification.
 
-P03.10 invariants:
+P03.11 invariants:
 
-- P03.10 reuses the P01 health/readiness/observability foundation and does not replace it;
-- health is diagnostic evidence, not authorization or lifecycle command authority;
-- required dependency failure is explicit/fail-closed while optional absence degrades selectively;
-- migration ownership/compatibility/pending/failure inconsistency cannot be reported healthy;
-- capability/permission/UI availability summaries remain non-authorizing diagnostics;
-- health output cannot expose credentials, secret values, raw tenant/org authority, internal stack traces or unnecessary RESTRICTED data;
-- one module failure cannot corrupt or suppress unrelated healthy-module reporting where isolation is feasible;
-- stable identity/version fields may support later XSG/XPF/XPERF correlation without implementing those systems;
-- no hidden generic RPC/service-mesh, topology-collector, workflow or business-feature shortcut is introduced.
+- hook metadata never means a package is trusted/certified;
+- untrusted package code is not executed merely to discover/verify metadata;
+- first-party/reference packages remain subject to the same public-boundary and ownership rules;
+- required dependency failure and forbidden coupling fail closed;
+- disable is non-destructive; purge is explicit/authorized/audited/dependency-checked;
+- migration ownership and tenant boundaries remain enforced;
+- health and evidence are classification-safe;
+- completion cannot be claimed from AI-authored PASS text without canonical GitHub-hosted exact-head evidence;
+- P03 exit is reconciled only after implementation evidence exists and P04 remains planned until a later separate governed transition.
 
-Explicitly forbidden in P03.10:
+Explicitly forbidden in P03.11:
 
-- System Graph storage/collector runtime;
-- performance-budget analytics;
-- business KPI monitoring;
-- secrets/debug dumps or unrestricted topology disclosure;
-- lifecycle command/control authority through health reporting;
-- authorization or permission grants through health state;
-- P03.11 trust hooks/phase-exit runtime;
-- P04+ runtime;
-- business modules/features;
+- publisher onboarding or signature trust roots;
+- dependency advisory/license enforcement;
+- sandbox/network/secret/file brokers, resource quotas or kill-switch runtime;
+- marketplace/package distribution or acquisition runtime;
+- Product Federation/System Graph/Performance Intelligence runtime;
+- P04 events/jobs fabric;
+- business domains/features;
 - generic remote RPC/service mesh;
 - workflow orchestration;
-- package installation/download or remote marketplace/catalog runtime;
 - strategic X-program runtime;
 - AI/model/agent runtime.
 
@@ -278,6 +283,8 @@ P03.07 retained invariants remain binding: validated discovery remains permissio
 P03.08 retained invariants remain binding: validated discovery remains UI-contribution declaration provenance; stable contribution identity is module/owner/contribution/slot/kind/version bound; slot/permission/flag/optional-dependency references are validated against owning-module declarations; UI visibility never replaces backend authorization; permission and feature-flag metadata grant no authority; lifecycle availability is non-authorizing; optional dependency absence selectively degrades only affected contributions; metadata remains secret-free and non-executable and cannot expose raw tenant/org authority, private handlers/tables or cross-module database-write shortcuts.
 
 P03.09 retained invariants remain binding: migration ownership metadata remains execution-free; identity/order is module/version/authoritative-owner bound; duplicate declarations/identities and owner-version conflicts fail closed; cross-owner targets fail closed; compatible/backfill/destructive intent is explicit; backfill/destructive declarations require bounded strategy/recovery metadata; fresh-install/supported-upgrade plans are deterministic; raw SQL/arbitrary file paths/callbacks/secrets/raw tenant authority are not registry execution surfaces; P01 remains sole migration execution/checksum/advisory-lock/transactional retry authority.
+
+P03.10 retained invariants remain binding: health remains diagnostic and non-authorizing; required dependency failure is fail-closed while optional absence degrades selectively; migration inconsistency cannot report healthy; capability/permission/UI summaries remain non-granting; diagnostics remain classification-safe and secret-free; P01 health/readiness remains the platform foundation; module failure does not corrupt unrelated health reporting where isolation is feasible.
 
 ## Quality and release rules
 
@@ -339,7 +346,7 @@ Do not blindly loop on an equivalent failing strategy. Repeated equivalent failu
 
 Do not use local/self-hosted runners for canonical governance; silently add domains; duplicate ownership; invent conflicting contracts/security/quality semantics; bypass tenancy/authz/audit/classification; grant AI unrestricted write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; claim untested evidence; implement unactivated future-phase scope; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
-Do not implement P03.10 code on this closure carrier. Do not auto-advance to P03.11.
+Do not implement P03.11 code on this closure carrier. Do not auto-advance to P04.
 
 ## Issue #4
 
@@ -347,9 +354,9 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next action
 
-1. Complete the atomic P03.09 closure / P03.10 activation reconciliation under GitHub issue #123 / Linear ABD-187 without P03.10 runtime code.
-2. Require the exact final closure head to pass canonical GitHub-hosted governance and all retained P01/P02/P03.01-P03.09 regressions.
+1. Complete the atomic P03.10 closure / P03.11 activation reconciliation under GitHub issue #129 / Linear ABD-192 without P03.11 runtime code.
+2. Require the exact final closure head to pass canonical GitHub-hosted governance and all retained P01/P02/P03.01-P03.10 regressions.
 3. Merge only if the PR remains current with protected `main` and repository review/conversation gates permit it.
-4. Re-read protected `main`, `STATE.json`, `STATUS.md` and active P03.10 docs and record the exact new main SHA.
-5. Identify a **new separate P03.10 implementation branch** from that exact SHA as the next authorized action and stop the closure transaction without implementing P03.10.
-6. Keep P03.11 locked; P03.10 completion/state transition belongs to a later separate governed closure PR.
+4. Re-read protected `main`, `STATE.json`, `STATUS.md` and active P03.11 docs and record the exact new main SHA.
+5. Identify a **new separate P03.11 implementation branch** from that exact SHA as the next authorized action and stop the closure transaction without implementing P03.11.
+6. Keep P04 locked; P03.11 completion and P03 exit reconciliation belong to a later separate governed closure PR.  

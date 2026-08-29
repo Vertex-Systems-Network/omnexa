@@ -2,11 +2,11 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-29"
-  nature: "non-authoritative P03.09 closure / P03.10 activation-candidate continuity snapshot"
-  protected_main: "ea402964c45a630fd6723e0e4a6754555a6a4994"
-  implementation_pr: 122
-  closure_issue: 123
-  closure_branch: "chore/p03-09-closure-p03-10-open"
+  nature: "non-authoritative P03.10 closure / P03.11 activation-candidate continuity snapshot"
+  protected_main: "e43b13922633525fd202d81a281792ec819b2d5a"
+  implementation_pr: 128
+  closure_issue: 129
+  closure_branch: "chore/p03-10-closure-p03-11-open"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -18,8 +18,8 @@ phase:
   current: "P03"
   name: "Module Runtime"
   state: "active"
-  progress_after_closure_merge: "9 / 11 done"
-  current_work_package_after_closure_merge: "P03.10"
+  progress_after_closure_merge: "10 / 11 done"
+  current_work_package_after_closure_merge: "P03.11"
   activation_authoritative_only_after_closure_merge: true
 
 p01_prerequisite:
@@ -130,7 +130,7 @@ p03_08:
   regressions: "scripts/verify_p03_08.sh remains mandatory"
 
 p03_09:
-  state: "done_candidate_until_closure_merge"
+  state: "done"
   owner: "kernel.modules integrated with the P01 database/migration foundation"
   spec: "docs/roadmap/work-packages/P03.09.md"
   implementation_issue: 120
@@ -145,10 +145,25 @@ p03_09:
   diagnostic_history: "Governance #493 / 33222404123 remains FAIL diagnostic evidence for formatter alignment only; #494 / 33222631307 is successful draft-carrier evidence; #495 / 33223035182 is promotion acceptance authority."
 
 p03_10:
-  state: "active_after_closure_merge"
+  state: "done_candidate_until_closure_merge"
   owner: "kernel.modules integrated with P01 health/readiness/observability"
   spec: "docs/roadmap/work-packages/P03.10.md"
-  objective: "classification-safe module health diagnostics across lifecycle, dependency, migration and registration availability while preserving failure isolation"
+  implementation_issue: 126
+  implementation_pr: 128
+  draft_carrier_pr: 127
+  final_exact_head: "172cebe78606f19c0718e7ae1cf74e9cff7d1b0b"
+  canonical_run: 33228171863
+  canonical_job: 99035856872
+  implementation_merge: "e43b13922633525fd202d81a281792ec819b2d5a"
+  completion_evidence: "docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md"
+  regressions: "scripts/verify_p03_10.sh remains mandatory"
+  diagnostic_history: "Governance #501 / 33226530715 and #503 / 33226791837 remain FAIL diagnostic evidence only; #504 / 33227842490 is successful draft-carrier evidence; #505 / 33228171863 is promotion acceptance authority."
+
+p03_11:
+  state: "active_after_closure_merge"
+  owner: "kernel.modules"
+  spec: "docs/roadmap/work-packages/P03.11.md"
+  objective: "typed non-authoritative package trust/provenance/SBOM/scope hooks plus aggregate P03 exit proof using isolated reference modules"
   kernel_code_authorized_after_closure_merge: true
   business_feature_code_authorized: false
   implementation_branch: null
@@ -157,39 +172,39 @@ p03_10:
   completion_evidence: null
 
 security:
-  kernel_code_scope_after_closure_merge: "P03.10 only"
+  kernel_code_scope_after_closure_merge: "P03.11 only"
   business_feature_code_authorized: false
-  p03_11_plus_authorized: false
+  p04_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
-  health_is_authorization_or_lifecycle_authority: false
-  required_dependency_failure_may_report_healthy: false
-  migration_inconsistency_may_report_healthy: false
-  secrets_or_raw_tenant_scope_allowed_in_health_output: false
-  unrestricted_topology_or_stack_trace_disclosure_allowed: false
-  one_module_failure_may_corrupt_unrelated_health_reporting: false
-  p01_health_readiness_replacement_authorized: false
+  hook_metadata_means_trusted_or_certified: false
+  untrusted_package_code_may_execute_for_metadata_discovery: false
+  publisher_trust_roots_authorized: false
+  marketplace_distribution_authorized: false
+  p04_event_job_runtime_authorized: false
+  migration_ownership_and_tenant_boundaries_required: true
+  classification_safe_health_and_evidence_required: true
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P03.10 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
-  - "implement P03.11 before later governed activation"
-  - "treat health state as authorization, permission-grant or lifecycle command authority"
-  - "report required dependency failure or migration inconsistency as healthy"
-  - "expose credentials, secrets, raw tenant/org authority, internal stack traces or unnecessary RESTRICTED data in module health"
-  - "implement System Graph storage/collector runtime, performance analytics or business KPI monitoring under P03.10"
-  - "replace the P01 health/readiness/observability foundation"
+  - "implement P03.11 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
+  - "treat package trust/provenance/SBOM/scope hook presence as trusted or certified status"
+  - "execute untrusted package code merely to discover or verify hook metadata"
+  - "implement publisher onboarding, signature trust roots or dependency advisory/license enforcement under P03.11"
+  - "implement sandbox/network/secret/file brokers, resource quotas or kill-switch runtime under P03.11"
+  - "implement marketplace/package distribution or acquisition runtime"
+  - "implement Product Federation, System Graph, Performance Intelligence or P04 events/jobs fabric"
   - "implement P04+ or business modules/features"
-  - "implement package acquisition, marketplace runtime or AI/model/agent runtime"
-  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.09 regressions"
+  - "implement generic RPC/service mesh, workflow orchestration or AI/model/agent runtime"
+  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.10 regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Finish atomic P03.09 closure/P03.10 activation reconciliation under GitHub issue #123 / Linear ABD-187, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
-  after_closure_merge: "Record the exact post-closure protected-main SHA and identify a new separate P03.10 implementation branch as the next authorized action; stop without implementing P03.10 in the closure transaction."
+  current: "Finish atomic P03.10 closure/P03.11 activation reconciliation under GitHub issue #129 / Linear ABD-192, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
+  after_closure_merge: "Record the exact post-closure protected-main SHA and identify a new separate P03.11 implementation branch as the next authorized action; stop without implementing P03.11 in the closure transaction."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -200,9 +215,9 @@ source_authority:
   entry_gate: "docs/governance/P03_ENTRY_GATE.md"
   exit_gate: "docs/governance/P03_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.10.md"
-  p03_09_evidence: "docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md"
+  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.11.md"
+  p03_10_evidence: "docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P03.09.md"
-  active_after_closure_merge: "docs/ai/handoffs/P03.10.md"
+  completed: "docs/ai/handoffs/P03.10.md"
+  active_after_closure_merge: "docs/ai/handoffs/P03.11.md"
