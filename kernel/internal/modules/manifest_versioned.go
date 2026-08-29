@@ -67,6 +67,11 @@ type validatedManifestSnapshot struct {
 	UISlots                 []string
 	Settings                []string
 	FeatureFlags            []string
+	DataClassification      []string
+	Security                SecurityDeclaration
+	Publisher               string
+	ProvenanceRef           string
+	SBOMRef                 string
 }
 
 func (s validatedManifestSnapshot) clone() validatedManifestSnapshot {
@@ -85,6 +90,22 @@ func (s validatedManifestSnapshot) clone() validatedManifestSnapshot {
 		UISlots:                 append([]string(nil), s.UISlots...),
 		Settings:                append([]string(nil), s.Settings...),
 		FeatureFlags:            append([]string(nil), s.FeatureFlags...),
+		DataClassification:      append([]string(nil), s.DataClassification...),
+		Security:                cloneSecurityDeclaration(s.Security),
+		Publisher:               s.Publisher,
+		ProvenanceRef:           s.ProvenanceRef,
+		SBOMRef:                 s.SBOMRef,
+	}
+}
+
+func cloneSecurityDeclaration(security SecurityDeclaration) SecurityDeclaration {
+	return SecurityDeclaration{
+		SecretReferences:     append([]SecretReference(nil), security.SecretReferences...),
+		NetworkDestinations:  append([]string(nil), security.NetworkDestinations...),
+		ExposedEndpoints:     append([]string(nil), security.ExposedEndpoints...),
+		FileTypes:            append([]string(nil), security.FileTypes...),
+		PrivilegedOperations: append([]string(nil), security.PrivilegedOperations...),
+		AICapabilities:       append([]string(nil), security.AICapabilities...),
 	}
 }
 
@@ -170,6 +191,11 @@ func snapshotFromV1(manifest Manifest) validatedManifestSnapshot {
 		UISlots:                 append([]string(nil), manifest.UISlots...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
+		DataClassification:      append([]string(nil), manifest.DataClassification...),
+		Security:                cloneSecurityDeclaration(manifest.Security),
+		Publisher:               manifest.Publisher,
+		ProvenanceRef:           manifest.ProvenanceRef,
+		SBOMRef:                 manifest.SBOMRef,
 	}
 }
 
@@ -240,6 +266,11 @@ func parseManifestV2(data []byte, raw map[string]json.RawMessage) (validatedMani
 		UISlots:                 append([]string(nil), manifest.UISlots...),
 		Settings:                append([]string(nil), manifest.Settings...),
 		FeatureFlags:            append([]string(nil), manifest.FeatureFlags...),
+		DataClassification:      append([]string(nil), manifest.DataClassification...),
+		Security:                cloneSecurityDeclaration(manifest.Security),
+		Publisher:               manifest.Publisher,
+		ProvenanceRef:           manifest.ProvenanceRef,
+		SBOMRef:                 manifest.SBOMRef,
 	}, nil
 }
 
