@@ -12,12 +12,12 @@ import (
 )
 
 type moduleHealthFixture struct {
-	registry    Registry
-	store       *MemoryLifecycleStore
-	migrations  *MigrationOwnershipRegistry
+	registry     Registry
+	store        *MemoryLifecycleStore
+	migrations   *MigrationOwnershipRegistry
 	capabilities *CapabilityRegistry
-	permissions *PermissionRegistry
-	ui          *UIContributionRegistry
+	permissions  *PermissionRegistry
+	ui           *UIContributionRegistry
 }
 
 type fixtureMigrationHealthSource struct {
@@ -196,8 +196,8 @@ func TestModuleHealthReporterFailureIsolationAndLifecycleChanges(t *testing.T) {
 	next := current
 	next.State = LifecycleDisabled
 	next.Revision = current.Revision + 1
-	if err := fixture.store.CompareAndSwap(context.Background(), current.ModuleID, current.Revision, next); err != nil {
-		t.Fatalf("disable inventory fixture: %v", err)
+	if casErr := fixture.store.CompareAndSwap(context.Background(), current.ModuleID, current.Revision, next); casErr != nil {
+		t.Fatalf("disable inventory fixture: %v", casErr)
 	}
 	changed := fixture.reporter(t, fixture.store, fixtureMigrationHealthSource{}).Report(context.Background())
 	inventory := healthRecordByID(t, changed, "omnexa.inventory")
@@ -287,8 +287,8 @@ func newModuleHealthFixture(t *testing.T, includeCatalog, includeAnalytics bool)
 	store := NewMemoryLifecycleStore()
 	for _, module := range registry.List() {
 		record := LifecycleRecord{ModuleID: module.ID, Version: module.Version, State: LifecycleEnabled, Revision: 1}
-		if err := store.CompareAndSwap(context.Background(), module.ID, 0, record); err != nil {
-			t.Fatalf("seed lifecycle %s: %v", module.ID, err)
+		if casErr := store.CompareAndSwap(context.Background(), module.ID, 0, record); casErr != nil {
+			t.Fatalf("seed lifecycle %s: %v", module.ID, casErr)
 		}
 	}
 
