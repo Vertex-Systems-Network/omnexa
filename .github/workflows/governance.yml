@@ -307,3 +307,7 @@ jobs:
       - name: Verify P03.08 UI contribution registry contract
         shell: bash
         run: bash scripts/verify_p03_08.sh
+
+      - name: Verify P03.09 migration ownership registry
+        shell: bash
+        run: bash scripts/verify_p03_09.sh
