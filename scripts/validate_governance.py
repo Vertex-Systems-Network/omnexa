@@ -346,7 +346,7 @@ def validate_state(state: dict) -> None:
     lock = state.get("implementation_lock") or {}
 
     if terminal:
-        if current_phase not in {"P01", "P02"} or done_count != len(work_packages):
+        if current_phase not in {"P01", "P02", "P03"} or done_count != len(work_packages):
             fail("terminal checkpoint is valid only for a fully completed governed phase")
         if active_packages or current_package is not None:
             fail("completed phase must have no active/current work package")

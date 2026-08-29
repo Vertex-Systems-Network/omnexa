@@ -38,9 +38,9 @@ Foundation Architecture v1 is frozen. Contradictions are reopened through change
 
 **Authoritative source:** `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json`, `docs/governance/P01_EXIT_GATE.md`.
 
-Each P01 kernel primitive was verified before the next package activated. While P01 was executing, exactly one package was active. Final P01.12 implementation PR #65 passed canonical run/job `32629072886 / 97168916985` and merged as `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
+Each P01 kernel primitive was verified before the next package activated. Final P01.12 implementation PR #65 passed canonical run/job `32629072886 / 97168916985` and merged as `eeebaf5ae3817588b014ddf4c9911bca52c97ed7`.
 
-**Historical implication:** P01 completion created a terminal checkpoint with no active package and did not implicitly activate P02. P02 was later activated only through its separate governed readiness/activation transition.
+**Historical implication:** P01 completion created a terminal checkpoint with no active package and did not implicitly activate P02.
 
 ## D-007 — Repository continuity is subordinate, not authority
 
@@ -58,26 +58,30 @@ Model gateway, retrieval, planner, policy/approval, capability broker, verificat
 
 **Authoritative source:** P01.07 spec/evidence and `AGENTS.md`.
 
-Logs/traces/metrics explain runtime behavior but are not business-state, authorization or audit authority. P01.11 protected audit remains separate. P01.12 diagnostics preserve safe projections and must not expose protected payloads.
+Logs/traces/metrics explain runtime behavior but are not business-state, authorization or audit authority. P01.11 protected audit remains separate.
 
 ## D-010 — Health/readiness diagnostics are bounded operational signals
 
 **Authoritative source:** P01.08 spec/evidence and `AGENTS.md`.
 
-Liveness/readiness are distinct; dependency checks are classified and bounded; required/security-critical failures fail closed; optional failures may degrade; raw provider errors/secrets are not exposed. Diagnostics never create tenancy, authorization or business authority.
+Liveness/readiness are distinct; required/security-critical failures fail closed; optional failures may degrade; raw provider errors/secrets are not exposed. Diagnostics never create tenancy, authorization or business authority.
 
 ## D-011 — Completed phases do not auto-activate the next phase
 
 **Authoritative source:** `docs/governance/DEFINITION_OF_DONE.md`, `docs/roadmap/MASTER_PLAN.md`, phase exit gates and `docs/roadmap/STATE.json`.
 
-A completed phase can be truthfully represented at a terminal checkpoint with no active package/phase implementation scope while the next phase remains planned. This prevents evidence-based phase completion from silently granting next-phase authority.
+A completed phase can be represented at a terminal checkpoint with no active package/phase implementation scope while the next phase remains planned. Validators preserve one-active-package semantics during execution and allow zero active packages only for a fully completed phase with exit evidence reconciled and implementation locks false.
 
-Validators preserve strict one-active-package semantics during active execution and allow zero active packages only for a fully completed phase with its exit evidence reconciled and implementation locks false. This is a terminal-state representation, not a phase-order change or permission bypass.
+## D-012 — P02 is complete; P03 required separate readiness and activation
 
-## D-012 — P02 is complete; P03 requires separate readiness and activation
+**Authoritative source:** `docs/governance/P02_EXIT_GATE.md`, `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
 
-**Authoritative source:** `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/governance/P02_EXIT_GATE.md`, `docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json`, `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
+P02 completed at 10 / 10 through PR #88 and did not auto-activate P03. P03 began only through its separate governed readiness/activation transition.
 
-P02 executed strictly sequentially through P02.10. Terminal implementation PR #88 final exact head `975e4925060a035780ca13b68c5437634ed0f4ea` passed canonical GitHub-hosted run/job `32904678957 / 97986011269` and merged as `88799aa41da8ce8c22540146d157d488565e2ce9`.
+## D-013 — P03 is complete; P04 requires separate readiness and activation
 
-**Current implication after terminal closure:** P02 is `done` at 10 / 10, P02 exit is `SATISFIED`, there is no active work package, P03 remains `planned`, and both `kernel_code_authorized` and `business_feature_code_authorized` are false. P03 specification/readiness preparation and an explicit activation transition are separate governed work; P03 implementation cannot begin before that activation is accepted.
+**Authoritative source:** `docs/roadmap/STATE.json`, `docs/governance/P03_EXIT_GATE.md`, `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`.
+
+P03 executed strictly sequentially through P03.11. Terminal P03.11 implementation used final exact head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`, promotion PR #134 and promotion Governance `33258456851 / 99116152701`, then merged as `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`.
+
+**Terminal implication:** P03 is `done` at 11 / 11, P03 exit is `SATISFIED`, there is no active work package, both `kernel_code_authorized` and `business_feature_code_authorized` are false, and P04 remains `planned`. P04 readiness/preparation and explicit activation are separate governed work; P03 completion never grants P04 implementation authority.

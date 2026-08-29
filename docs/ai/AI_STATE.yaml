@@ -2,11 +2,11 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-29"
-  nature: "non-authoritative P03.10 closure / P03.11 activation-candidate continuity snapshot"
-  protected_main: "e43b13922633525fd202d81a281792ec819b2d5a"
-  implementation_pr: 128
-  closure_issue: 129
-  closure_branch: "chore/p03-10-closure-p03-11-open"
+  nature: "non-authoritative P03 terminal-closure continuity snapshot"
+  protected_main_base: "b3b9b61f963df6a05ea45cbd3c562e12974d92d0"
+  closure_issue: 135
+  closure_linear: "ABD-208"
+  closure_branch: "chore/p03-11-closure-p03-exit"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -17,171 +17,55 @@ project:
 phase:
   current: "P03"
   name: "Module Runtime"
-  state: "active"
-  progress_after_closure_merge: "10 / 11 done"
-  current_work_package_after_closure_merge: "P03.11"
-  activation_authoritative_only_after_closure_merge: true
+  state_after_terminal_closure: "done"
+  progress_after_terminal_closure: "11 / 11 done"
+  current_work_package_after_terminal_closure: null
+  p03_exit_after_terminal_closure: "SATISFIED"
+  p04_after_terminal_closure: "planned_not_activated"
 
-p01_prerequisite:
-  state: "done"
-  progress: "12 / 12 done"
-  exit_gate: "SATISFIED"
-  regressions: "P01.01-P01.12 remain mandatory"
-
-p02_prerequisite:
-  state: "done"
-  progress: "10 / 10 done"
-  exit_gate: "SATISFIED"
-  regressions: "P02.01-P02.10 remain mandatory"
-  terminal_implementation_pr: 88
-  terminal_exact_head: "975e4925060a035780ca13b68c5437634ed0f4ea"
-  terminal_run: 32904678957
-  terminal_job: 97986011269
-  terminal_merge: "88799aa41da8ce8c22540146d157d488565e2ce9"
-
-p03_01:
-  state: "done"
-  implementation_pr: 92
-  final_exact_head: "87da3302605c852ae5bf43d473aaa01a9e1aaa74"
-  canonical_run: 33009396644
-  canonical_job: 98311433013
-  implementation_merge: "4229e2a28442bf475afed143bab359a770d48053"
-  completion_evidence: "docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md"
-  regressions: "scripts/verify_p03_01.sh remains mandatory"
-
-p03_02:
-  state: "done"
-  implementation_pr: 94
-  final_exact_head: "0c46db41b0d724a08ea1a78545b3c2debdd8cd05"
-  canonical_run: 33022405704
-  canonical_job: 98355747775
-  implementation_merge: "2e38969dbbbcfcf4765a114f449dc3fa960061d7"
-  completion_evidence: "docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md"
-  regressions: "scripts/verify_p03_02.sh remains mandatory"
-
-p03_03:
-  state: "done"
-  implementation_pr: 98
-  final_exact_head: "4dcaca22911fbb81b1d25af316fef146c4a71ff3"
-  canonical_run: 33112808869
-  canonical_job: 98659824107
-  implementation_merge: "774fab8b0350ffb2776517e3f1361f76bc2c68f9"
-  completion_evidence: "docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md"
-  regressions: "scripts/verify_p03_03.sh remains mandatory"
-
-p03_04:
-  state: "done"
-  implementation_pr: 100
-  final_exact_head: "cddb42d4466e7f97a7547c4cf5ea0812c768ff0b"
-  canonical_run: 33125377739
-  canonical_job: 98702150001
-  implementation_merge: "13701e7647c1e084dfe4288d4b27b3ddd75e72c2"
-  completion_evidence: "docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md"
-  regressions: "scripts/verify_p03_04.sh remains mandatory"
-
-p03_05:
-  state: "done"
-  implementation_issue: 102
-  implementation_pr: 103
-  final_exact_head: "c52b48be1a82eb27670f03bdd4e1be4df6eb9f54"
-  canonical_run: 33132237120
-  canonical_job: 98724184966
-  implementation_merge: "0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce"
-  completion_evidence: "docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md"
-  regressions: "scripts/verify_p03_05.sh remains mandatory"
-
-p03_06:
-  state: "done"
-  implementation_issue: 106
-  implementation_pr: 107
-  final_exact_head: "c895f44a1383d1c1d9c5fd23c95d7864810353c3"
-  canonical_run: 33181421854
-  canonical_job: 98883286556
-  implementation_merge: "13dbe8a393c20cabeb8aac60d073a6c66775efd3"
-  completion_evidence: "docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md"
-  regressions: "scripts/verify_p03_06.sh remains mandatory"
-  diagnostic_history: "Governance #467 / 33180840326 / 98881325283 remains FAIL diagnostic evidence only."
-
-p03_07:
-  state: "done"
-  owner: "kernel.modules with kernel.authorization enforcement"
-  spec: "docs/roadmap/work-packages/P03.07.md"
-  implementation_issue: 110
-  implementation_pr: 111
-  final_exact_head: "28e36b3ac3183f28ec500f1e70b1fefe02c0c325"
-  canonical_run: 33195104185
-  canonical_job: 98930123416
-  implementation_merge: "66f8b4cc630f6cd865e440a62478df365e042a31"
-  completion_evidence: "docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md"
-  regressions: "scripts/verify_p03_07.sh remains mandatory"
-  diagnostic_history: "Governance #474 / 33192567020 / 98921494281 and #476 / 33194438411 / 98927852853 remain FAIL diagnostic evidence only; #477 is acceptance authority."
-
-p03_08:
-  state: "done"
-  owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.08.md"
-  implementation_issue: 115
-  implementation_pr: 116
-  final_exact_head: "65dc38c6d60d1535c97a5dda59fb49490df59ec6"
-  canonical_run: 33216021914
-  canonical_job: 98999758150
-  implementation_merge: "55ec376146c4c43f24b079050a35f58eec13c479"
-  completion_evidence: "docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md"
-  regressions: "scripts/verify_p03_08.sh remains mandatory"
-
-p03_09:
-  state: "done"
-  owner: "kernel.modules integrated with the P01 database/migration foundation"
-  spec: "docs/roadmap/work-packages/P03.09.md"
-  implementation_issue: 120
-  implementation_pr: 122
-  draft_carrier_pr: 121
-  final_exact_head: "8c4da1c1c9e11dfe2f1fa4b81b730140a9f24d56"
-  canonical_run: 33223035182
-  canonical_job: 99020954655
-  implementation_merge: "ea402964c45a630fd6723e0e4a6754555a6a4994"
-  completion_evidence: "docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md"
-  regressions: "scripts/verify_p03_09.sh remains mandatory"
-  diagnostic_history: "Governance #493 / 33222404123 remains FAIL diagnostic evidence for formatter alignment only; #494 / 33222631307 is successful draft-carrier evidence; #495 / 33223035182 is promotion acceptance authority."
-
-p03_10:
-  state: "done_candidate_until_closure_merge"
-  owner: "kernel.modules integrated with P01 health/readiness/observability"
-  spec: "docs/roadmap/work-packages/P03.10.md"
-  implementation_issue: 126
-  implementation_pr: 128
-  draft_carrier_pr: 127
-  final_exact_head: "172cebe78606f19c0718e7ae1cf74e9cff7d1b0b"
-  canonical_run: 33228171863
-  canonical_job: 99035856872
-  implementation_merge: "e43b13922633525fd202d81a281792ec819b2d5a"
-  completion_evidence: "docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md"
-  regressions: "scripts/verify_p03_10.sh remains mandatory"
-  diagnostic_history: "Governance #501 / 33226530715 and #503 / 33226791837 remain FAIL diagnostic evidence only; #504 / 33227842490 is successful draft-carrier evidence; #505 / 33228171863 is promotion acceptance authority."
+prerequisites:
+  p01: "done_12_of_12_exit_satisfied"
+  p02: "done_10_of_10_exit_satisfied"
+  p03_01_through_p03_10: "done_with_existing_immutable_evidence"
+  regressions: "P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 remain mandatory"
 
 p03_11:
-  state: "active_after_closure_merge"
+  state: "done_candidate_until_terminal_closure_merge"
   owner: "kernel.modules"
-  spec: "docs/roadmap/work-packages/P03.11.md"
-  objective: "typed non-authoritative package trust/provenance/SBOM/scope hooks plus aggregate P03 exit proof using isolated reference modules"
-  kernel_code_authorized_after_closure_merge: true
-  business_feature_code_authorized: false
-  implementation_branch: null
-  implementation_start_main: null
-  implementation_evidence: null
-  completion_evidence: null
+  implementation_issue: 132
+  draft_carrier_pr: 133
+  promotion_pr: 134
+  final_exact_head: "a083a8a86ec3a51309fa479ee49c79e1b6ec9f10"
+  draft_governance_run: 33258092323
+  draft_governance_job: 99115191521
+  promotion_governance_run: 33258456851
+  promotion_governance_job: 99116152701
+  implementation_merge: "b3b9b61f963df6a05ea45cbd3c562e12974d92d0"
+  completion_evidence: "docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md"
+  retained_verifier: "scripts/verify_p03_11.sh"
+  authority: "metadata_only"
+  secret_locators_or_values_exposed: false
+  package_execution_for_metadata_discovery: false
+
+p03_exit:
+  state_after_terminal_closure: "SATISFIED"
+  ex01_required_dependency_enforcement: "PASS"
+  ex02_optional_dependency_degradation: "PASS"
+  ex03_safe_disable_reenable: "PASS"
+  ex04_upgrade_migration_path: "PASS"
+  ex05_forbidden_dependency_detection: "PASS"
+  ex06_health_state_accuracy: "PASS"
+  ex07_unrelated_module_isolation: "PASS"
 
 security:
-  kernel_code_scope_after_closure_merge: "P03.11 only"
+  kernel_code_authorized_after_terminal_closure: false
   business_feature_code_authorized: false
   p04_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   hook_metadata_means_trusted_or_certified: false
-  untrusted_package_code_may_execute_for_metadata_discovery: false
   publisher_trust_roots_authorized: false
   marketplace_distribution_authorized: false
-  p04_event_job_runtime_authorized: false
   migration_ownership_and_tenant_boundaries_required: true
   classification_safe_health_and_evidence_required: true
   cross_tenant_failure_is_release_blocker: true
@@ -190,21 +74,16 @@ security:
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P03.11 before this closure carrier passes exact-head governance, merges and protected-main readback establishes the exact new SHA"
+  - "implement P04 before a later separate readiness/preparation and activation transition passes canonical governance and merges"
   - "treat package trust/provenance/SBOM/scope hook presence as trusted or certified status"
-  - "execute untrusted package code merely to discover or verify hook metadata"
-  - "implement publisher onboarding, signature trust roots or dependency advisory/license enforcement under P03.11"
-  - "implement sandbox/network/secret/file brokers, resource quotas or kill-switch runtime under P03.11"
-  - "implement marketplace/package distribution or acquisition runtime"
-  - "implement Product Federation, System Graph, Performance Intelligence or P04 events/jobs fabric"
-  - "implement P04+ or business modules/features"
-  - "implement generic RPC/service mesh, workflow orchestration or AI/model/agent runtime"
-  - "weaken governance, branch protection or retained P01/P02/P03.01-P03.10 regressions"
+  - "implement publisher onboarding, signature trust roots or marketplace runtime under completed P03"
+  - "implement business modules/features, strategic X-program runtime or AI/model/agent runtime"
+  - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Finish atomic P03.10 closure/P03.11 activation reconciliation under GitHub issue #129 / Linear ABD-192, obtain exact-final-head canonical Governance PASS, merge only if current and permitted, then re-read protected main and canonical state."
-  after_closure_merge: "Record the exact post-closure protected-main SHA and identify a new separate P03.11 implementation branch as the next authorized action; stop without implementing P03.11 in the closure transaction."
+  current: "Complete terminal P03 closure under GitHub #135 / Linear ABD-208 with exact-final-head canonical Governance and guarded merge."
+  after_closure_merge: "Re-read protected main and canonical state, confirm P03 DONE 11/11 / current NONE / both locks false / P04 PLANNED, then stop."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -212,12 +91,10 @@ source_authority:
   status: "docs/roadmap/STATUS.md"
   ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   change_control: "docs/governance/CHANGE_CONTROL.md"
-  entry_gate: "docs/governance/P03_ENTRY_GATE.md"
-  exit_gate: "docs/governance/P03_EXIT_GATE.md"
+  p03_exit_gate: "docs/governance/P03_EXIT_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  active_spec_after_closure_merge: "docs/roadmap/work-packages/P03.11.md"
-  p03_10_evidence: "docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md"
+  p03_11_spec: "docs/roadmap/work-packages/P03.11.md"
+  p03_11_evidence: "docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P03.10.md"
-  active_after_closure_merge: "docs/ai/handoffs/P03.11.md"
+  completed: "docs/ai/handoffs/P03.11.md"

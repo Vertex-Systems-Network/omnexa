@@ -6,100 +6,84 @@ Last reconciled: **2026-08-29**
 
 - Program: **Kernel Program**
 - Phase: **P03 — Module Runtime**
-- Phase state: **ACTIVE**
-- Current work package after this closure merges: **P03.11 — Package Trust Hooks & P03 Exit Proof**
-- P03 progress after this closure merges: **10 / 11 done**
-- P03.01: **DONE**
-- P03.02: **DONE**
-- P03.03: **DONE**
-- P03.04: **DONE**
-- P03.05: **DONE**
-- P03.06: **DONE**
-- P03.07: **DONE**
-- P03.08: **DONE**
-- P03.09: **DONE**
-- P03.10: **DONE — canonical implementation accepted**
-- P03.11: **ACTIVE only after this closure transition merges**
-- P03 entry gate: **SATISFIED**
-- P03 exit gate: **NOT SATISFIED**
-- P02: **DONE — 10 / 10**
-- P02 exit gate: **SATISFIED**
-- P01: **DONE — 12 / 12**
-- P01 exit gate: **SATISFIED**
+- Phase state: **DONE**
+- Current work package: **NONE**
+- P03 progress: **11 / 11 done**
+- P03.01-P03.11: **DONE**
+- P03 entry gate: **SATISFIED — historical entry authorization**
+- P03 exit gate: **SATISFIED**
+- P02: **DONE — 10 / 10**; exit **SATISFIED**
+- P01: **DONE — 12 / 12**; exit **SATISFIED**
 - Foundation Architecture v1: **FROZEN**
 - P00: **DONE — 10 / 10**
 - Repository visibility: **PUBLIC**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation authority after this closure merges: **P03.11 ONLY**
+- Kernel implementation authority: **NOT AUTHORIZED**
 - Business-feature implementation: **NOT AUTHORIZED**
+- P04: **PLANNED / NOT ACTIVATED**
 
-`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This status file mirrors the P03.10 completion / P03.11 activation closure candidate and grants no P03.11 implementation authority before the closure carrier itself passes exact-final-head canonical governance, merges to protected `main`, and protected-main state is re-read.
+`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This terminal P03 closure grants no P04 implementation authority.
 
-## P03.10 canonical completion boundary
+## P03.11 canonical completion boundary
 
-P03.10 — Module Health Reporting completed through promotion implementation PR #128 with exact final evidence:
+P03.11 — Package Trust Hooks & P03 Exit Proof is accepted through:
 
-- implementation issue: #126 — completed
-- draft implementation carrier: #127 — closed unmerged
-- promotion implementation PR: #128 — merged
-- final exact implementation head: `172cebe78606f19c0718e7ae1cf74e9cff7d1b0b`
-- promotion-specific canonical Governance run/job: `33228171863 / 99035856872` (#505) — **PASS**
-- implementation merge / protected-main base for this closure: `e43b13922633525fd202d81a281792ec819b2d5a`
-- canonical environment: GitHub-hosted `ubuntu-24.04`, Linux/X64
-- repository-pinned Go: `1.26.7`
-- completion evidence: `docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md`
-- retained verifier: `scripts/verify_p03_10.sh`
+- implementation issue #132 — completed;
+- draft carrier #133 — closed unmerged;
+- final exact implementation head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`;
+- draft Governance #511 / `33258092323 / 99115191521` — PASS;
+- promotion PR #134 — merged;
+- promotion Governance #512 / `33258456851 / 99116152701` — PASS;
+- implementation merge `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`;
+- evidence `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_11.sh`.
 
-The accepted promotion-specific exact-head run passed repository Go quality, all retained P01/P02/P03.01-P03.09 regressions and the dedicated P03.10 verifier.
+P03.11 retains validated publisher/provenance/SBOM/data/security manifest metadata in immutable registry-bound snapshots and exposes typed/versioned deterministic `metadata_only` profiles. Profile presence does not certify or trust a package. Secret locators/values are not surfaced and package code is not executed for metadata discovery/profile construction.
 
-Governance #501 / `33226530715` and #503 / `33226791837` remain diagnostic **FAIL** evidence from corrected candidate defects. Governance #504 / `33227842490` is successful draft-carrier exact-head evidence; #505 is the promotion-specific merge authority. Historical evidence states are not rewritten.
+## P03 exit proof
 
-## P03.10 delivered boundary retained
+The canonical aggregate proof covers:
 
-P03.10 added deterministic classification-safe module health reporting while preserving the P01 health/readiness foundation and all prior P03 ownership boundaries. Module state is reported as healthy/degraded/unavailable/failed; required dependency failure fails closed while optional dependency absence degrades selectively; migration pending/inconsistency/failure cannot report healthy; capability/permission/UI summaries remain diagnostic-only and non-granting; diagnostics expose no secrets/raw tenant authority/internal stack traces; unrelated module reporting remains isolated where feasible.
+1. required dependency enforcement;
+2. optional dependency degradation;
+3. safe disable/re-enable;
+4. upgrade/migration path;
+5. forbidden cross-module dependency detection;
+6. health/state accuracy;
+7. no unrelated module corruption.
 
-The health layer adds no lifecycle command authority, authorization grant, SQL execution, independent persistence, System Graph collector or business monitoring runtime.
+Promotion Governance #512 passed Go quality, P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 on GitHub-hosted `ubuntu-24.04`.
 
-## P03.11 activation boundary
+## Terminal authority boundary
 
-After this separate closure/state-transition carrier passes exact-final-head canonical governance and merges to protected `main`, P03.11 becomes the sole active implementation package.
+P03 completion creates a terminal checkpoint only:
 
-Authorized P03.11 scope is limited to `P03.11 — Package Trust Hooks & P03 Exit Proof`:
+- no active work package;
+- `kernel_code_authorized=false`;
+- `business_feature_code_authorized=false`;
+- P04 remains planned;
+- P04 runtime, business features, marketplace/trust-root runtime, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
 
-- typed optional hook/metadata interfaces for publisher identity, package signature/provenance, SBOM identity and declared capability/data/network/secret profile;
-- explicit distinction between hook/metadata presence and actual trust/certification decision;
-- isolated reference modules composing P03.01-P03.10 behavior;
-- P03 exit proof covering required dependency enforcement, optional degradation, safe disable/re-enable, supported upgrade/migration, forbidden coupling, health/state accuracy and unrelated-module isolation;
-- focused adversarial evidence plus exact-head canonical GitHub-hosted verification.
-
-Hook presence never means a package is trusted/certified, and untrusted package code must not execute merely to discover or verify metadata. Publisher onboarding/trust roots, advisory/license enforcement, sandbox/network/secret/file brokers, resource quotas/kill-switch runtime, marketplace/package distribution, Product Federation/System Graph/Performance Intelligence runtime and P04 events/jobs fabric remain outside P03.11.
-
-P04+, business features, generic RPC/service mesh, workflow orchestration, package acquisition/marketplace runtime, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
+P04 requires a later separate governed readiness/preparation and activation transition. Completed-phase evidence never auto-activates the next phase.
 
 ## Retained prerequisite chain
 
-P03.01-P03.10 remain DONE with canonical completion evidence and retained verifiers. P01.01-P01.12 and P02.01-P02.10 remain complete historical prerequisites. All retained P01/P02/P03.01-P03.10 regression verifiers remain mandatory during later P03.11 implementation.
+P01.01-P01.12, P02.01-P02.10 and P03.01-P03.10 remain completed historical prerequisites with immutable evidence and mandatory regression verifiers. Historical diagnostic failures retain their original evidence state.
 
 ## Protected integration / CI
 
-`main` remains the protected PR-only integration authority. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only; local/self-hosted governance evidence is prohibited.
-
-This closure carrier must remain current with protected `main` and its exact final head must pass canonical governance, including repository Go quality, all retained P01/P02/P03.01-P03.10 regression verification, P03 preparation/package validators and conversation-resolution requirements before merge.
-
-Any Governance PASS produced before the complete closure reconciliation is stale once the closure head moves. Only a fresh exact-final-head run is merge authority.
+`main` remains protected and PR-only. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only. This terminal closure must itself pass a fresh exact-final-head Governance run; P03.11 implementation PASS is not a substitute for closure-state validation.
 
 ## Issue #4 — external distribution gate
 
-Issue #4 remains open for licensing/IP/trademark and public-launch decisions. Repository visibility is public and current `LICENSE` remains GPLv3. It does not broaden P03 implementation authority.
+Issue #4 remains open for licensing/IP/trademark and public-launch decisions and grants no implementation authority.
 
 ## Exact next work
 
-1. Complete the atomic P03.10 closure / P03.11 activation reconciliation under GitHub issue #129 / Linear ABD-192 without P03.11 runtime code.
-2. Keep the exact carrier within the approved governance/evidence/continuity boundary.
-3. Require a fresh exact-final-head canonical Governance PASS; stale or diagnostic runs are not merge authority.
-4. Merge the closure carrier only if it remains current with protected `main`, repository merge gates permit it and no unresolved review/conversation blocker exists.
-5. Re-read protected `main`, `STATE.json`, this status, the package sequence and P03.11 handoff after closure merge and record the exact new main SHA.
-6. Identify a new separate P03.11 implementation branch from that exact post-closure SHA as the next authorized action and stop without implementing P03.11 in this closure transaction.
-7. Keep P04 locked and use a later separate governed P03-exit closure after P03.11 completion; do not auto-activate P04.
+1. Complete terminal P03 closure under GitHub #135 / Linear ABD-208.
+2. Require exact-final-head canonical Governance PASS and clean current-with-main/review/conversation preflight.
+3. Merge the closure only with an expected-head guard.
+4. Re-read protected `main`, STATE, STATUS and P03 exit gate; confirm P03 DONE 11/11, current NONE, locks false and P04 planned.
+5. Stop. P04 readiness/activation belongs to a later separate governed session.

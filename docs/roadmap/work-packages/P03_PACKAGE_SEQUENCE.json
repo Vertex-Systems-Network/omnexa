@@ -2,13 +2,13 @@
   "schema_version": 1,
   "phase": "P03",
   "name": "Module Runtime",
-  "state": "active",
+  "state": "done",
   "activation_policy": "strict_sequential_one_active_package",
   "entry_gate": "docs/governance/P03_ENTRY_GATE.md",
   "exit_gate": "docs/governance/P03_EXIT_GATE.md",
   "transition_checklist": "docs/governance/P02_P03_TRANSITION_CHECKLIST.md",
   "ai_native_alignment": "docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md",
-  "implementation_authorized": true,
+  "implementation_authorized": false,
   "packages": [
     {"id":"P03.01","name":"Module manifest schema","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P03.01.md","owner":"kernel.modules"},
     {"id":"P03.02","name":"Registry & deterministic discovery","state":"done","depends_on":["P03.01"],"spec":"docs/roadmap/work-packages/P03.02.md","owner":"kernel.modules"},
@@ -20,8 +20,8 @@
     {"id":"P03.08","name":"UI contribution registry contract","state":"done","depends_on":["P03.07"],"spec":"docs/roadmap/work-packages/P03.08.md","owner":"kernel.modules"},
     {"id":"P03.09","name":"Migration ownership registry","state":"done","depends_on":["P03.08"],"spec":"docs/roadmap/work-packages/P03.09.md","owner":"kernel.modules"},
     {"id":"P03.10","name":"Module health reporting","state":"done","depends_on":["P03.09"],"spec":"docs/roadmap/work-packages/P03.10.md","owner":"kernel.modules"},
-    {"id":"P03.11","name":"Package trust hooks & P03 exit proof","state":"active","depends_on":["P03.10"],"spec":"docs/roadmap/work-packages/P03.11.md","owner":"kernel.modules"}
+    {"id":"P03.11","name":"Package trust hooks & P03 exit proof","state":"done","depends_on":["P03.10"],"spec":"docs/roadmap/work-packages/P03.11.md","owner":"kernel.modules"}
   ],
-  "phase_exit": "NOT SATISFIED — P03.01-P03.10 are complete and P03.11 is the sole active package after this closure transition merges. P03 exit requires P03.11 exact-head implementation evidence and a later separate governed exit reconciliation; P04 remains planned.",
-  "note": "Closure candidate: P03 is active at 10 / 11 done with implementation authority bounded to P03.11 only after this closure transition passes exact-final-head canonical governance and merges. P03.01-P03.10 are done and retained as regression prerequisites; business_feature_code_authorized=false; P04+, strategic X-program runtime and AI/model/agent runtime remain unauthorized."
+  "phase_exit": "SATISFIED — P03.01-P03.11 are complete with retained exact-head GitHub-hosted evidence. P03.11 promotion Governance 33258456851 / job 99116152701 is terminal implementation authority; the separate P03 exit closure records the terminal checkpoint. P04 remains planned and implementation_authorized=false until a later separate governed readiness/activation transition.",
+  "note": "P03 terminal checkpoint: 11 / 11 done; no active work package; kernel_code_authorized=false; business_feature_code_authorized=false; P04 and strategic X/AI runtime remain unauthorized."
 }
