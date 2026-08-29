@@ -50,7 +50,9 @@ fi
 
 # P03.10 is a read-only diagnostic layer. It must not gain database, network,
 # lifecycle mutation, authorization-grant, execution callback, or raw-scope authority.
-if grep -nE 'database/sql|jackc/pgx|kernel/internal/database|net/http|(^|[[:space:]])(SQL|Path|TenantID|OrganizationID|Secret|Password|Token|Credentials)[[:space:]]+[A-Za-z]|(^|[[:space:]])(Handler|Callback)[[:space:]]+(func|any|interface)|func[[:space:]].*(Apply|Execute|RunMigration|Authorize|Grant|Reconcile|CompareAndSwap)' kernel/internal/modules/module_health.go; then
+# Scan executable source only; explanatory full-line comments are not authority surfaces.
+if grep -nE 'database/sql|jackc/pgx|kernel/internal/database|net/http|(^|[[:space:]])(SQL|Path|TenantID|OrganizationID|Secret|Password|Token|Credentials)[[:space:]]+[A-Za-z]|(^|[[:space:]])(Handler|Callback)[[:space:]]+(func|any|interface)|func[[:space:]].*(Apply|Execute|RunMigration|Authorize|Grant|Reconcile|CompareAndSwap)' kernel/internal/modules/module_health.go \
+  | grep -vE '^[0-9]+:[[:space:]]*//'; then
   echo "ERROR: P03.10 introduced execution, mutation, raw scope, secret, or transport authority" >&2
   exit 1
 fi
