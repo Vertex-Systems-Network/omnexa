@@ -1,125 +1,86 @@
 # Omnexa P03 Implementation Entry Gate
 
-Status: **SATISFIED**  
+Status: **SATISFIED — HISTORICAL ENTRY AUTHORIZATION**  
 Owner phase: **P03 — Module Runtime**
 
-This gate records the explicit transition from completed P02 into P03. It authorizes only the single canonical package identified by `docs/roadmap/STATE.json`; at this checkpoint that package is P03.01. It does not authorize P03.02+, business features, P04+, strategic X-program runtime, or AI/model/agent runtime.
+This gate records the governed transition from completed P02 into P03. P03 is now complete, so this document is historical entry evidence only and grants no current implementation authority. Canonical `docs/roadmap/STATE.json` is the current authority cursor.
 
 ## Entry controls
 
 ### EG-01 — P02 exit satisfied
 State: **SATISFIED**
 
-`docs/governance/P02_EXIT_GATE.md` records P02 as complete at 10 / 10 with canonical GitHub-hosted executable evidence.
+P02 remains complete at 10 / 10 and `docs/governance/P02_EXIT_GATE.md` remains SATISFIED.
 
 ### EG-02 — Foundation architecture remains frozen
 State: **SATISFIED**
 
-Foundation Architecture v1 remains `FROZEN`. P03 is the next foundation phase in `docs/roadmap/MASTER_PLAN.md`; this activation does not change phase order, the modular-monolith baseline, ownership rules, tenancy, authorization, audit, identifier, API or event standards.
+Foundation Architecture v1 remains `FROZEN`; P03 did not change the canonical phase order, modular-monolith baseline, ownership, tenancy, authorization, audit, identifier, API or event standards.
 
 ### EG-03 — Protected integration remains enforced
 State: **SATISFIED**
 
-Issue #3 remains closed. `main` remains the protected PR-only integration authority with required `governance`, strict up-to-date enforcement, conversation resolution and blocked direct/force updates.
+Issue #3 remains closed. `main` remains the protected PR-only integration authority with required `governance`, strict up-to-date enforcement and conversation resolution.
 
 ### EG-04 — Canonical verification lane remains executable
 State: **SATISFIED**
 
-Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence is prohibited. Repository Go quality and all completed P01/P02 regression verifiers remain mandatory.
+Canonical CI remains **GitHub-hosted** `ubuntu-24.04` Linux/X64 only. Local/self-hosted governance evidence remains prohibited. Repository Go quality and retained P01/P02/P03 regressions remain mandatory.
 
-### EG-05 — P03 package decomposition is complete
+### EG-05 — P03 package decomposition was complete
 State: **SATISFIED**
 
-`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines 11 strict sequential packages matching the 11 P03 work-package areas in `MASTER_PLAN.md`. `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py` fail closed on missing, reordered, ownership-mismatched or multiply-active packages.
+`docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json` defines 11 strict sequential packages. P03.01-P03.11 are now complete. Terminal validation remains enforced by `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py`.
 
-### EG-06 — Module ownership and dependency law are explicit
+### EG-06 — Module ownership and dependency law remain explicit
 State: **SATISFIED**
 
-`kernel.modules` owns module manifest and lifecycle metadata. P03 extends the mandatory `MODULE_STANDARD.md`, `DOMAIN_OWNERSHIP.md` and `DEPENDENCY_MATRIX.md` rather than creating a parallel module model.
+`kernel.modules` retains module metadata/lifecycle ownership. Required, optional, platform and forbidden dependency classes remain machine-enforced. No kernel dependency on business modules, direct cross-module database writes, private implementation imports or circular required dependency is authorized.
 
-P03 preserves:
-
-- one authoritative write owner per concept;
-- required, optional, platform and forbidden dependency classes;
-- no kernel dependency on business modules;
-- no direct cross-module database writes or private implementation imports;
-- no circular required module dependency;
-- optional-module absence cannot cause unrelated module boot failure;
-- capability, permission, settings, migration, UI and health registration do not transfer authority away from their owning kernel/domain contracts.
-
-### EG-07 — AI-native strategic overlays are mapped without activation
+### EG-07 — AI-native strategic overlays remain non-authorizing
 State: **SATISFIED**
 
-`docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md` records forward-compatibility requirements for `XQ-100`, `XSG-100`, `XTRUST-100`, `XPF-200` and `XPERF-100`.
+`XQ-100`, `XSG-100`, `XTRUST-100`, `XPF-200` and `XPERF-100` remain separately governed future programs. P03 trust-hook metadata does not implement trust roots, marketplace runtime, product federation, System Graph, performance intelligence or AI/model/agent runtime.
 
-Those strategic programs remain planning-only and `implementation_authorized=false`. P03 activation does not implement AI/model/agent runtime, System Graph runtime, package trust enforcement, product federation or performance intelligence.
-
-### EG-08 — Implementation lock is bounded to P03.01
+### EG-08 — Sequential P03 implementation authority is complete
 State: **SATISFIED**
 
-At the activated checkpoint:
+P03.01-P03.11 completed through separate governed implementation/closure transitions. The terminal package, P03.11, is accepted through promotion PR #134, exact head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`, promotion Governance `33258456851 / 99116152701`, and implementation merge `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`.
 
-- P02: `done`;
-- P02 exit: `SATISFIED`;
-- P03: `active`;
-- P03.01: `active`;
-- P03.02-P03.11: `planned`;
-- current work package: `P03.01`;
-- `kernel_code_authorized=true` only for P03.01;
+At the terminal checkpoint:
+
+- P03: `done` — 11 / 11;
+- P03 exit: `SATISFIED`;
+- current work package: `NONE`;
+- P04: `planned` / not activated;
+- `kernel_code_authorized=false`;
 - `business_feature_code_authorized=false`.
 
-No runtime/schema implementation is part of this activation transition. P03.01 implementation begins only in a later governed session from the protected-main activation merge.
+Historical P03 entry authorization cannot be reused to implement P04 or any future phase.
 
-## Phase security and architecture invariants
+## Phase security and architecture invariants retained
 
-P03 implementation must preserve:
-
-- manifests and package metadata are untrusted input and parsing/discovery cannot execute package code implicitly;
-- module identity/version/ownership are stable and machine-validatable;
-- dependency resolution is deterministic and fail-closed for required/forbidden/cyclic invalid graphs;
-- disable is non-destructive; purge is explicit, authorized, dependency-checked and audited;
-- settings/feature flags cannot grant authority or bypass authorization;
-- permission registration cannot create role-name/admin bypasses and server-side enforcement remains `kernel.authorization` authority;
-- capability registration does not create direct database/private-package access;
-- UI contributions never become authorization authority;
-- migration ownership never permits a module to mutate another owner's schema without an approved platform migration/ADR;
-- health output is accurate but classification-safe and does not leak secrets or sensitive topology;
-- signed-package fields/hooks are future trust integration points only; P03 does not claim marketplace/package certification;
-- tenant isolation, attributable audit and existing P02 security invariants remain mandatory;
-- P04 events/workflow fabric, business domains and AI/model/agent runtime remain out of scope.
+Manifests/package metadata remain untrusted; required/forbidden dependency failures remain fail-closed; disable remains non-destructive; purge remains explicit/authorized/dependency-checked; settings/capabilities/permissions/UI metadata do not transfer authorization authority; migration ownership remains owner-bound; health/profile output remains classification-safe; tenant isolation and attributable audit remain mandatory; package trust metadata remains non-authoritative.
 
 ## P03 phase exit
 
-P03 cannot be done until canonical GitHub-hosted evidence proves reference test modules demonstrate:
-
-1. required dependency enforcement;
-2. optional dependency degradation;
-3. safe disable/re-enable;
-4. upgrade/migration path;
-5. forbidden cross-module dependency detection;
-6. health/state accuracy;
-7. no unrelated module corruption after lifecycle operations.
-
-See `docs/governance/P03_EXIT_GATE.md`.
+`docs/governance/P03_EXIT_GATE.md` is **SATISFIED** from the complete P03.01-P03.11 evidence chain and the aggregate EX-01..EX-07 proof.
 
 ## External distribution gate
 
-Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It does not broaden P03 runtime authority.
+Issue #4 remains the separate external distribution/public-launch licensing/IP/trademark decision gate. It grants no implementation authority.
 
-## Activation decision
+## Current decision
 
 ```text
 P00: DONE
 P01: DONE — 12 / 12
 P02: DONE — 10 / 10
-P02 exit: SATISFIED
-P03 specs: PREPARED — 11 / 11
-P03: ACTIVE — 0 / 11 done
-P03.01: ACTIVE
-P03.02-P03.11: PLANNED
-kernel_code_authorized: true — P03.01 only
-business_feature_code_authorized: false
+P03: DONE — 11 / 11
+P03 exit: SATISFIED
+Current work package: NONE
+P04: PLANNED — NOT ACTIVATED
+kernel_code_authorized=false
+business_feature_code_authorized=false
 canonical CI: GitHub-hosted ubuntu-24.04 only
 ```
-
-After this activation transition merges, verify protected `main` and canonical `STATE.json`, identify P03.01 as the sole authorized implementation scope, then STOP. P03.01 implementation belongs to a later governed session.

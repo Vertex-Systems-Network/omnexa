@@ -4,20 +4,21 @@
 
 Omnexa is a governed modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are governed domain families on one platform foundation.
 
-> **Architecture state:** Omnexa Foundation Architecture v1 is **FROZEN** and P00 is **DONE**.
+> **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current transition candidate:** **P03 — Module Runtime is ACTIVE at 10 / 11 with P03.01-P03.10 complete and P03.11 — Package Trust Hooks & P03 Exit Proof as the sole active package after this closure merges.** `kernel_code_authorized=true` only for P03.11 after that merge; `business_feature_code_authorized=false`.
+> **Current governed checkpoint:** **P03 — Module Runtime: DONE 11 / 11; P03 exit SATISFIED; current work package NONE; P04 remains PLANNED / NOT ACTIVATED.** `kernel_code_authorized=false`; `business_feature_code_authorized=false`.
 
-Protected main currently contains the completed P03.10 implementation at `e43b13922633525fd202d81a281792ec819b2d5a`. `docs/roadmap/STATE.json` remains the canonical machine-readable execution cursor; this closure carrier does not grant P03.11 implementation authority before merge and protected-main readback.
+`docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. Completed P03 does not grant P04 implementation authority.
 
 ## Project progress
 
 ```text
 P00  Product Constitution & Architecture Freeze  [██████████] 10/10  DONE
 P01  Omnexa Kernel                               [██████████] 12/12  DONE
+      └─ Exit: SATISFIED
 P02  Identity, Tenancy & Organization            [██████████] 10/10  DONE
       └─ Exit: SATISFIED
-P03  Module Runtime                              [██████████] 10/11  ACTIVE after closure
+P03  Module Runtime                              [██████████] 11/11  DONE
       ├─ P03.01 — Module Manifest Schema: DONE
       ├─ P03.02 — Registry & Deterministic Discovery: DONE
       ├─ P03.03 — Dependency Graph Resolver: DONE
@@ -28,38 +29,24 @@ P03  Module Runtime                              [██████████
       ├─ P03.08 — UI Contribution Registry Contract: DONE
       ├─ P03.09 — Migration Ownership Registry: DONE
       ├─ P03.10 — Module Health Reporting: DONE
-      └─ Current after closure: P03.11 — Package Trust Hooks & P03 Exit Proof: ACTIVE
+      └─ P03.11 — Package Trust Hooks & P03 Exit Proof: DONE
+      └─ Exit: SATISFIED
 P04+ Future phases                               [░░░░░░░░░░]        PLANNED / LOCKED
 ```
 
+## P03.11 terminal evidence
+
+P03.11 is accepted through implementation issue #132, draft PR #133, promotion PR #134, exact head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`, draft Governance `33258092323 / 99115191521`, promotion Governance `33258456851 / 99116152701`, and implementation merge `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`.
+
+The package retains already-validated publisher/provenance/SBOM/data/security declarations in immutable registry-bound snapshots and exposes deterministic typed/versioned `metadata_only` profiles. Metadata presence never means trusted/certified, secret locators/values are not surfaced, and package code is not executed for metadata discovery.
+
+The aggregate P03 exit proof covers required dependency enforcement, optional dependency degradation, safe disable/re-enable, supported upgrade/migration path, forbidden cross-module dependency detection, health/state accuracy and no unrelated module corruption.
+
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md` first. Then read `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, `docs/roadmap/work-packages/P03.11.md`, completed `docs/ai/handoffs/P03.10.md` and activation-candidate `docs/ai/handoffs/P03.11.md` before material P03.11 work. Until this closure merges and protected main is re-read, P03.11 runtime work remains locked.
+Read `AGENTS.md` first, then `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, `docs/governance/P03_EXIT_GATE.md`, `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`, `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`, `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml` and `docs/ai/handoffs/P03.11.md`.
 
-Key references:
-
-- `docs/governance/FOUNDATION_FREEZE.json`
-- `docs/governance/P01_EXIT_GATE.md`
-- `docs/governance/P02_EXIT_GATE.md`
-- `docs/governance/P03_ENTRY_GATE.md`
-- `docs/governance/P03_EXIT_GATE.md`
-- `docs/governance/P02_P03_TRANSITION_CHECKLIST.md`
-- `docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json`
-- `docs/roadmap/work-packages/P03.10.md`
-- `docs/roadmap/work-packages/P03.11.md`
-- `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`
-- `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`
-- `docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md`
-- `docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md`
-- `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`
-- `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`
-- `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`
-- `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`
-- `docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md`
-- `docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md`
-- `docs/adr/ADR-0012-versioned-module-dependency-requirements.md`
-- `docs/roadmap/P03_AI_NATIVE_ALIGNMENT.md`
-- `docs/quality/GO_CODE_QUALITY.md`
+P04 must not be implemented until a later separate readiness/preparation and explicit activation transition passes canonical governance and merges to protected `main`.
 
 ## Core laws
 
@@ -75,73 +62,8 @@ Key references:
 
 ## Protected GitHub integration and executable CI
 
-Issue #3 is closed and `main` is protected with PR-only integration, strict required `governance`, blocked direct/force updates, failed-check merge rejection, required conversation resolution and up-to-date branch enforcement.
+Issue #3 is closed and `main` remains protected with PR-only integration, strict required `governance`, failed-check merge rejection, conversation resolution and up-to-date enforcement. Canonical CI uses GitHub-hosted `ubuntu-24.04` only. Local/self-hosted governance runners are prohibited.
 
-Canonical required CI uses GitHub-hosted `ubuntu-24.04` only. Local/self-hosted governance runners are prohibited. Repository-wide Go quality runs through `bash scripts/verify_go_quality.sh` using pinned tooling.
+## External distribution gate
 
-## Completed prerequisites and P03 evidence
-
-P01.01-P01.12 and P02.01-P02.10 are complete with canonical executable evidence.
-
-P03.01 — Module Manifest Schema is complete through PR #92, exact head `87da3302605c852ae5bf43d473aaa01a9e1aaa74`, run/job `33009396644 / 98311433013`, merge `4229e2a28442bf475afed143bab359a770d48053`.
-
-P03.02 — Registry & Deterministic Discovery is complete through PR #94, exact head `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`, run/job `33022405704 / 98355747775`, merge `2e38969dbbbcfcf4765a114f449dc3fa960061d7`.
-
-P03.03 — Dependency Graph Resolver is complete through PR #98, exact head `4dcaca22911fbb81b1d25af316fef146c4a71ff3`, run/job `33112808869 / 98659824107`, merge `774fab8b0350ffb2776517e3f1361f76bc2c68f9`.
-
-P03.04 — Module Lifecycle State Machine is complete through PR #100, exact head `cddb42d4466e7f97a7547c4cf5ea0812c768ff0b`, run/job `33125377739 / 98702150001`, merge `13701e7647c1e084dfe4288d4b27b3ddd75e72c2`, evidence `docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_04.sh`.
-
-P03.05 — Module Settings & Feature Flags is complete through PR #103, exact head `c52b48be1a82eb27670f03bdd4e1be4df6eb9f54`, run/job `33132237120 / 98724184966`, merge `0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce`, evidence `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_05.sh`.
-
-P03.06 — Capability Registry is complete through PR #107, exact head `c895f44a1383d1c1d9c5fd23c95d7864810353c3`, run/job `33181421854 / 98883286556`, merge `13dbe8a393c20cabeb8aac60d073a6c66775efd3`, evidence `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_06.sh`.
-
-P03.07 — Permission Registration is complete through PR #111, exact head `28e36b3ac3183f28ec500f1e70b1fefe02c0c325`, run/job `33195104185 / 98930123416`, merge `66f8b4cc630f6cd865e440a62478df365e042a31`, evidence `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`, retained verifier `scripts/verify_p03_07.sh`.
-
-P03.08 — UI Contribution Registry Contract is complete through PR #116, exact head `65dc38c6d60d1535c97a5dda59fb49490df59ec6`, run/job `33216021914 / 98999758150`, merge `55ec376146c4c43f24b079050a35f58eec13c479`, evidence `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`, retained verifier `scripts/verify_p03_08.sh`.
-
-P03.09 — Migration Ownership Registry is complete through promotion PR #122, exact head `8c4da1c1c9e11dfe2f1fa4b81b730140a9f24d56`, run/job `33223035182 / 99020954655`, merge `ea402964c45a630fd6723e0e4a6754555a6a4994`, evidence `docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md`, retained verifier `scripts/verify_p03_09.sh`.
-
-P03.10 — Module Health Reporting is complete through promotion PR #128:
-
-- implementation issue #126 — completed
-- draft carrier #127 — closed unmerged after exact-head Governance #504 / `33227842490` SUCCESS
-- final exact head `172cebe78606f19c0718e7ae1cf74e9cff7d1b0b`
-- promotion-specific canonical run/job `33228171863 / 99035856872` (#505) — PASS
-- implementation merge `e43b13922633525fd202d81a281792ec819b2d5a`
-- evidence `docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md`
-- retained verifier `scripts/verify_p03_10.sh`
-
-P03.10 earlier diagnostic failures remain historical non-acceptance evidence; #504 is successful draft-carrier evidence and #505 is promotion-specific completion authority. Historical failed/cancelled/stale candidates remain their original evidence states. All completed P01/P02/P03.01-P03.10 regressions remain mandatory during later P03.11 implementation.
-
-## P03.10 retained boundary
-
-Module health remains classification-safe diagnostic evidence only. Required dependency failure is fail-closed while optional absence degrades selectively; migration inconsistency cannot report healthy; capability/permission/UI summaries remain non-granting; lifecycle/authorization authority is not created; P01 health/readiness/observability remains the platform foundation; unrelated healthy-module reporting remains isolated where feasible.
-
-## P03.11 boundary
-
-P03.11 — Package Trust Hooks & P03 Exit Proof becomes the sole active package only after this closure passes exact-final-head governance and merges to protected `main`. Its implementation must begin on a new branch from the exact post-merge main SHA.
-
-P03.11 may implement only typed/versioned optional trust/provenance/SBOM/scope hook metadata, explicit non-authoritative trust semantics, isolated reference modules and the aggregate P03 exit proof covering dependency enforcement, optional degradation, lifecycle disable/re-enable, upgrade/migration, forbidden coupling, health/state accuracy and unrelated-module isolation.
-
-Hook presence or metadata never means trusted/certified, and untrusted package code must not execute merely to discover metadata. P03.11 cannot create publisher trust roots, advisory/license enforcement, sandbox/network/secret/file brokers, marketplace/package distribution, strategic X-program runtime or P04 events/jobs fabric.
-
-Not authorized: P04+, business modules, generic RPC/service mesh, workflow orchestration, package acquisition/marketplace runtime, strategic X-program runtime, AI/model/agent runtime, or weakening governance/security/regressions.
-
-## Current implementation lock
-
-- `kernel_code_authorized=true` only for P03.11 **after** this closure merges and protected main is re-read.
-- `business_feature_code_authorized=false`.
-- P04-P27 remain planned/locked.
-- Strategic X programs remain non-authorizing until separately governed.
-
-## Public visibility / Issue #4
-
-The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remains an external distribution/public-launch licensing, IP and trademark decision gate.
-
-## Exact next action
-
-Finish the P03.10 closure / P03.11 activation reconciliation under issue #129 / Linear ABD-192. Require its exact final head to pass canonical GitHub-hosted governance, merge only if current and permitted, then re-read protected `main`, canonical state/status/package sequence and P03.11 handoff. Record the exact post-closure main SHA and stop the closure transaction; P03.11 implementation belongs to a new separate branch and must not be implemented on this carrier.
-
-## Product principle
-
-**Universal Kernel + Extreme Modularity + Universal Workflow + Unified Business Graph + Governed AI Execution.**
+The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remains the external distribution/public-launch licensing, IP and trademark decision gate. It grants no implementation authority.
