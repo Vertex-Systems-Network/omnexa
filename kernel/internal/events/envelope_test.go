@@ -64,6 +64,28 @@ func TestEnvelopeRoundTripIsDeterministic(t *testing.T) {
 	}
 }
 
+func TestEnvelopeParseToleratesExtensionsAndRejectsTrailingJSON(t *testing.T) {
+	envelope := testEnvelope(t)
+	serialized, err := envelope.Marshal()
+	if err != nil {
+		t.Fatalf("Marshal() error = %v", err)
+	}
+
+	extended := append([]byte(nil), serialized[:len(serialized)-1]...)
+	extended = append(extended, []byte(`,"futureextension":"safe-metadata"}`)...)
+	parsed, parseErr := Parse(extended)
+	if parseErr != nil {
+		t.Fatalf("Parse() rejected safe unknown extension: %v", parseErr)
+	}
+	if parsed.ID != envelope.ID {
+		t.Fatalf("parsed event id = %q, want %q", parsed.ID, envelope.ID)
+	}
+
+	trailing := append(append([]byte(nil), serialized...), []byte(` {}`)...)
+	_, trailingErr := Parse(trailing)
+	assertFailureCode(t, trailingErr, codeEnvelopeInvalid)
+}
+
 func TestEnvelopeRejectsSelfCausationAndFutureEnvelopeVersion(t *testing.T) {
 	envelope := testEnvelope(t)
 	envelope.CausationID = CausationID(envelope.ID)
@@ -113,6 +135,11 @@ func TestEnvelopeRejectsSecretLikeAndUnboundedPayloads(t *testing.T) {
 		nested = map[string]any{"child": nested}
 	}
 	base.Data = map[string]any{"root": nested}
+	_, err = New(base)
+	assertFailureCode(t, err, codePayloadInvalid)
+
+	base = testParams(t)
+	base.Data = []byte(`{"order_id":"ord_123"}{"other":true}`)
 	_, err = New(base)
 	assertFailureCode(t, err, codePayloadInvalid)
 }
