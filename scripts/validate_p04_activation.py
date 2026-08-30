@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate P04 readiness and the bounded P04.01 activation boundary."""
+"""Validate P04 readiness and strict sequential package activation boundaries."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ SEQUENCE_PATH = ROOT / "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
 ENTRY_PATH = ROOT / "docs/governance/P04_ENTRY_GATE.md"
 READINESS_PATH = ROOT / "docs/governance/P03_P04_TRANSITION_READINESS.md"
 P04_01_PATH = ROOT / "docs/roadmap/work-packages/P04.01.md"
+P04_02_PATH = ROOT / "docs/roadmap/work-packages/P04.02.md"
 
 REQUIRED_FILES = [
     "docs/governance/P03_EXIT_GATE.md",
@@ -21,6 +22,7 @@ REQUIRED_FILES = [
     "docs/governance/P04_ENTRY_GATE.md",
     "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
     "docs/roadmap/work-packages/P04.01.md",
+    "docs/roadmap/work-packages/P04.02.md",
 ]
 
 for relative in REQUIRED_FILES:
@@ -32,6 +34,7 @@ sequence = json.loads(SEQUENCE_PATH.read_text(encoding="utf-8"))
 entry = ENTRY_PATH.read_text(encoding="utf-8")
 readiness = READINESS_PATH.read_text(encoding="utf-8")
 p04_01 = P04_01_PATH.read_text(encoding="utf-8")
+p04_02 = P04_02_PATH.read_text(encoding="utf-8")
 phase_rows = {row.get("id"): row for row in state.get("phases") or []}
 lock = state.get("implementation_lock") or {}
 
@@ -81,12 +84,6 @@ for package_id, dependencies in expected_dependencies.items():
     if by_id[package_id].get("depends_on") != dependencies:
         raise SystemExit(f"ERROR: {package_id} dependency contract drift")
 
-if by_id["P04.01"].get("spec") != "docs/roadmap/work-packages/P04.01.md":
-    raise SystemExit("ERROR: P04.01 must have the accepted bounded specification")
-for package_id in expected_ids[1:]:
-    if by_id[package_id].get("spec") is not None:
-        raise SystemExit(f"ERROR: {package_id} must not gain an implementation spec before predecessor acceptance")
-
 for marker in [
     "duplicate publish/delivery can occur",
     "no global ordering guarantee exists",
@@ -102,6 +99,19 @@ for marker in [
 for forbidden in ["kafka dependency", "rabbitmq dependency", "nats dependency", "redis streams dependency"]:
     if forbidden in p04_01.lower():
         raise SystemExit(f"ERROR: P04.01 prematurely selects transport technology: {forbidden}")
+
+for marker in [
+    "provider-neutral publish/subscribe boundary",
+    "duplicate publish/delivery can occur",
+    "no global ordering guarantee exists",
+    "receipt of an event is not an authorization credential",
+    "P04.02 owns no concrete broker/provider",
+    "does not implement a worker loop",
+    "database migration: `none`",
+    "`P04.03`",
+]:
+    if marker.lower() not in p04_02.lower():
+        raise SystemExit(f"ERROR: P04.02 specification missing marker: {marker}")
 
 for marker in [
     "P03 exit = SATISFIED",
@@ -124,7 +134,7 @@ planning = (
 )
 active = (
     current_phase == "P04"
-    and current_package == "P04.01"
+    and current_package in expected_ids
     and phase.get("id") == "P04"
     and phase.get("state") == "active"
 )
@@ -145,24 +155,79 @@ if planning:
         raise SystemExit("ERROR: P04.02-P04.10 must remain planned before activation")
     if "NOT YET SATISFIED" not in entry:
         raise SystemExit("ERROR: readiness mode P04 entry gate must remain NOT YET SATISFIED")
+    mode = "PLANNING / READY"
+    authority = "LOCKED"
 else:
+    active_index = expected_ids.index(current_package)
+    done_ids = expected_ids[:active_index]
+    future_ids = expected_ids[active_index + 1 :]
+
     if (phase_rows.get("P04") or {}).get("state") != "active":
         raise SystemExit("ERROR: active P04 requires phases[] P04 active")
-    if (phase_rows.get("P04") or {}).get("active_work_package") != "P04.01":
-        raise SystemExit("ERROR: phases[] P04 must identify P04.01 as the sole active package")
+    if (phase_rows.get("P04") or {}).get("active_work_package") != current_package:
+        raise SystemExit("ERROR: phases[] P04 active_work_package must match the canonical current package")
     if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: P04.01 activation must authorize bounded kernel code only")
+        raise SystemExit("ERROR: active P04 must authorize bounded kernel code only")
     if sequence.get("state") != "active" or sequence.get("implementation_authorized") is not True:
-        raise SystemExit("ERROR: active P04 sequence must authorize P04.01 implementation")
-    if by_id["P04.01"].get("state") != "active":
-        raise SystemExit("ERROR: P04.01 must be the sole active package")
-    if any(by_id[p].get("state") != "planned" for p in expected_ids[1:]):
-        raise SystemExit("ERROR: P04.02-P04.10 must remain planned while P04.01 is active")
+        raise SystemExit("ERROR: active P04 sequence must remain implementation-authorized")
+
+    for package_id in done_ids:
+        package = by_id[package_id]
+        if package.get("state") != "done":
+            raise SystemExit(f"ERROR: completed predecessor {package_id} must be done")
+        expected_spec = f"docs/roadmap/work-packages/{package_id}.md"
+        if package.get("spec") != expected_spec or not (ROOT / expected_spec).is_file():
+            raise SystemExit(f"ERROR: completed predecessor {package_id} must retain its accepted specification")
+        evidence = package.get("evidence") or []
+        if not evidence or any(not (ROOT / item).is_file() for item in evidence):
+            raise SystemExit(f"ERROR: completed predecessor {package_id} must retain completion evidence")
+
+    active_package = by_id[current_package]
+    if active_package.get("state") != "active":
+        raise SystemExit(f"ERROR: {current_package} must be the sole active package")
+    expected_active_spec = f"docs/roadmap/work-packages/{current_package}.md"
+    if active_package.get("spec") != expected_active_spec or not (ROOT / expected_active_spec).is_file():
+        raise SystemExit(f"ERROR: active package {current_package} must have its accepted specification")
+
+    if any(by_id[p].get("state") != "planned" for p in future_ids):
+        raise SystemExit("ERROR: future P04 packages must remain planned")
+    if any(by_id[p].get("spec") is not None for p in future_ids):
+        raise SystemExit("ERROR: future P04 package sequence entries must remain without accepted implementation specs")
+
+    phase_packages = {pkg.get("id"): pkg for pkg in phase.get("work_packages") or []}
+    if phase.get("done_work_packages") != len(done_ids):
+        raise SystemExit("ERROR: P04 done_work_packages must equal the strict completed predecessor count")
+    for package_id in done_ids:
+        if (phase_packages.get(package_id) or {}).get("state") != "done":
+            raise SystemExit(f"ERROR: STATE phase mirror must mark {package_id} done")
+    if (phase_packages.get(current_package) or {}).get("state") != "active":
+        raise SystemExit("ERROR: STATE phase mirror must mark the canonical current package active")
+    if any((phase_packages.get(p) or {}).get("state") != "planned" for p in future_ids):
+        raise SystemExit("ERROR: STATE phase mirror must keep future P04 packages planned")
+
+    preparation = state.get("p04_preparation") or {}
+    if preparation.get("next_work_package") != current_package:
+        raise SystemExit("ERROR: P04 preparation cursor must match the canonical current package")
+    if preparation.get("work_package_state") != "active":
+        raise SystemExit("ERROR: P04 preparation must identify the current package as active")
+    if preparation.get("work_package_spec") != expected_active_spec:
+        raise SystemExit("ERROR: P04 preparation spec must match the canonical current package")
+
+    if current_package != "P04.01":
+        completion = tracking.get("p04_01_completion") or {}
+        if completion.get("state") != "PASS":
+            raise SystemExit("ERROR: advancing beyond P04.01 requires retained PASS completion evidence")
+        if completion.get("completion_evidence") != "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md":
+            raise SystemExit("ERROR: P04.01 completion evidence reference drift")
+
     if "Status: **SATISFIED**" not in entry:
         raise SystemExit("ERROR: active P04 requires SATISFIED entry gate")
 
-print("Omnexa P04 activation validation: PASS")
-print(f"Mode: {'PLANNING / READY' if planning else 'ACTIVE / P04.01'}")
+    mode = f"ACTIVE / {current_package}"
+    authority = f"AUTHORIZED FOR {current_package} ONLY"
+
+print("Omnexa P04 sequential activation validation: PASS")
+print(f"Mode: {mode}")
 print(f"P04 sequence: {len(packages)} packages")
-print(f"Kernel code: {'LOCKED' if planning else 'AUTHORIZED FOR P04.01 ONLY'}")
+print(f"Kernel code: {authority}")
 print("Business feature code: LOCKED")

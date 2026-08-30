@@ -1,12 +1,11 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-30"
-  nature: "non-authoritative P04.01 activation continuity snapshot"
-  protected_main_base: "f97ee9a509f14247771626dc89b685e22ecd9457"
-  activation_pr: 144
-  activation_linear: "ABD-267"
-  activation_branch: "chore/p04-activation-state"
+  verified_at: "2026-08-31"
+  nature: "non-authoritative P04.01 closure / P04.02 activation continuity candidate"
+  transaction_base: "16dfca22cd0430b8b2727e55628cc6fba381b5ef"
+  transaction_linear: "ABD-267"
+  transaction_branch: "agent/20260831-omnexa-p04-01-close-p04-02-activate"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -18,41 +17,54 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state_candidate: "active"
-  progress_candidate: "0 / 10 done"
-  current_work_package_candidate: "P04.01"
+  progress_candidate: "1 / 10 done"
+  current_work_package_candidate: "P04.02"
   p03_exit: "SATISFIED / HISTORICAL"
-  p04_entry: "SATISFIED CANDIDATE — EFFECTIVE ONLY AFTER PR #144 MERGE AND READ-BACK"
+  p04_entry: "SATISFIED"
 
 prerequisites:
   p01: "done_12_of_12_exit_satisfied"
   p02: "done_10_of_10_exit_satisfied"
   p03: "done_11_of_11_exit_satisfied"
   regressions: "P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 remain mandatory"
-  readiness_merge: "384c82b6d5b8bd89b70eb94640ea3be7109bc537"
-  planning_merge: "73561ad68e453c2741dec82d0b6fb01a7dcea1be"
-  historical_validator_merge: "f97ee9a509f14247771626dc89b685e22ecd9457"
+  p04_activation_merge: "dc269932481a1e742926ac247f28f94bdf43937d"
+  p04_01_implementation_head: "3c4ee6e79b76a6f042f3ee77b518943f3d7064e4"
+  p04_01_implementation_merge: "6b1a01c009e9a08d45613a00e9b63c0c272bf020"
+  p04_01_promotion_governance_run: 33331934481
+  p04_01_completion_evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
+  p04_02_preparation_merge: "16dfca22cd0430b8b2727e55628cc6fba381b5ef"
+  p04_02_preparation_governance: 551
 
 p04_01:
-  state_candidate: "active"
+  state_candidate: "done"
   owner: "kernel.events"
-  activation_pr: 144
-  activation_base: "f97ee9a509f14247771626dc89b685e22ecd9457"
   spec: "docs/roadmap/work-packages/P04.01.md"
+  evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
+  implementation_pr: 147
+  final_exact_head: "3c4ee6e79b76a6f042f3ee77b518943f3d7064e4"
+  implementation_merge: "6b1a01c009e9a08d45613a00e9b63c0c272bf020"
+
+p04_02:
+  state_candidate: "active_after_transition_merge_and_main_readback"
+  owner: "kernel.events"
+  spec: "docs/roadmap/work-packages/P04.02.md"
   sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
-  entry_gate: "docs/governance/P04_ENTRY_GATE.md"
-  implementation_scope: "event envelope and identity contract only"
+  handoff: "docs/ai/handoffs/P04.02.md"
+  implementation_scope: "provider-neutral publish/subscribe abstraction and ownership boundaries only"
   broker_selected: false
   database_migration_authorized: false
   outbox_inbox_authorized: false
   durable_consumer_authorized: false
   retry_dlq_authorized: false
+  schema_registry_runtime_authorized: false
+  background_job_changes_authorized: false
   business_handler_authorized: false
 
 security:
-  kernel_code_authorized_after_activation_merge: true
-  kernel_authority_scope: "P04.01 only"
+  kernel_code_authorized_after_transition_merge: true
+  kernel_authority_scope: "P04.02 only after exact-final-head transition Governance, merge and protected-main read-back"
   business_feature_code_authorized: false
-  p04_02_plus_authorized: false
+  p04_03_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   tenant_context_fail_closed_required: true
@@ -65,17 +77,17 @@ security:
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P04.01 on the activation branch"
-  - "start P04.01 source implementation before PR #144 merges and protected main is re-read"
-  - "implement P04.02-P04.10"
-  - "select a broker or add outbox/inbox/database migration under P04.01"
+  - "implement P04.02 on this governance/state/continuity transition branch"
+  - "start P04.02 source implementation before this transition merges and protected main is re-read"
+  - "implement P04.03-P04.10"
+  - "select a broker/provider or add durable streams, migrations, outbox/inbox, retry/DLQ or schema-registry runtime under this transition"
   - "implement business modules/features, strategic X-program runtime or AI/model/agent runtime"
   - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Complete PR #144 governance/state/continuity activation transaction and require exact-final-head Omnexa Governance PASS."
-  after_activation_merge: "Re-read protected main and canonical state, then create a fresh separate P04.01 implementation branch from the exact post-activation main SHA."
+  current: "Complete atomic STATE/AGENTS/STATUS/package-sequence/AI-continuity reconciliation for P04.01 done and P04.02 sole-active candidate, then require exact-final-head Omnexa Governance."
+  after_transition_merge: "Re-read protected main and canonical state, then create a fresh separate P04.02 implementation branch from the exact post-transition main SHA."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -86,7 +98,9 @@ source_authority:
   p03_exit_gate: "docs/governance/P03_EXIT_GATE.md"
   p04_entry_gate: "docs/governance/P04_ENTRY_GATE.md"
   package_sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
-  p04_01_spec: "docs/roadmap/work-packages/P04.01.md"
+  p04_01_evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
+  p04_02_spec: "docs/roadmap/work-packages/P04.02.md"
+  transition_transaction: "docs/governance/P04_01_P04_02_TRANSITION_TRANSACTION.md"
 
 handoff:
-  active_candidate: "docs/ai/handoffs/P04.01.md"
+  active_candidate: "docs/ai/handoffs/P04.02.md"
