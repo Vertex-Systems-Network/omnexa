@@ -126,45 +126,45 @@ func (schema SchemaID) Valid() bool {
 
 // Params contains the authoritative inputs for constructing one canonical event.
 type Params struct {
-	Type           EventType
-	Producer       Producer
-	OccurredAt     time.Time
-	TenantID       tenancy.TenantID
-	OrganizationID organization.NodeID
-	CorrelationID  CorrelationID
-	CausationID    CausationID
-	Classification DataClass
-	DataSchema     SchemaID
-	Subject        string
-	TraceParent    string
-	ActorID        string
-	ActorType      ActorType
+	Type            EventType
+	Producer        Producer
+	OccurredAt      time.Time
+	TenantID        tenancy.TenantID
+	OrganizationID  organization.NodeID
+	CorrelationID   CorrelationID
+	CausationID     CausationID
+	Classification  DataClass
+	DataSchema      SchemaID
+	Subject         string
+	TraceParent     string
+	ActorID         string
+	ActorType       ActorType
 	SubjectSequence uint64
-	Data           any
+	Data            any
 }
 
 // Envelope is the canonical P04.01 CloudEvents-compatible transport-neutral envelope.
 // It carries identity and validated data only; it grants no authorization or delivery guarantee.
 type Envelope struct {
-	SpecVersion    string              `json:"specversion"`
-	ID             EventID             `json:"id"`
-	Source         Producer            `json:"source"`
-	Type           EventType           `json:"type"`
-	EventVersion   uint                `json:"eventversion"`
-	OccurredAt     time.Time           `json:"time"`
-	DataContentType string             `json:"datacontenttype"`
-	DataSchema     SchemaID            `json:"dataschema"`
-	TenantID       tenancy.TenantID    `json:"tenantid,omitempty"`
-	OrganizationID organization.NodeID `json:"organizationid,omitempty"`
-	CorrelationID  CorrelationID       `json:"correlationid"`
-	CausationID    CausationID         `json:"causationid,omitempty"`
-	Classification DataClass           `json:"classification"`
-	Subject        string              `json:"subject,omitempty"`
-	TraceParent    string              `json:"traceparent,omitempty"`
-	ActorID        string              `json:"actorid,omitempty"`
-	ActorType      ActorType           `json:"actortype,omitempty"`
-	SubjectSequence uint64             `json:"subjectsequence,omitempty"`
-	Data           json.RawMessage     `json:"data"`
+	SpecVersion     string              `json:"specversion"`
+	ID              EventID             `json:"id"`
+	Source          Producer            `json:"source"`
+	Type            EventType           `json:"type"`
+	EventVersion    uint                `json:"eventversion"`
+	OccurredAt      time.Time           `json:"time"`
+	DataContentType string              `json:"datacontenttype"`
+	DataSchema      SchemaID            `json:"dataschema"`
+	TenantID        tenancy.TenantID    `json:"tenantid,omitempty"`
+	OrganizationID  organization.NodeID `json:"organizationid,omitempty"`
+	CorrelationID   CorrelationID       `json:"correlationid"`
+	CausationID     CausationID         `json:"causationid,omitempty"`
+	Classification  DataClass           `json:"classification"`
+	Subject         string              `json:"subject,omitempty"`
+	TraceParent     string              `json:"traceparent,omitempty"`
+	ActorID         string              `json:"actorid,omitempty"`
+	ActorType       ActorType           `json:"actortype,omitempty"`
+	SubjectSequence uint64              `json:"subjectsequence,omitempty"`
+	Data            json.RawMessage     `json:"data"`
 }
 
 // New creates one validated canonical envelope and generates a UUIDv7 event identity.
