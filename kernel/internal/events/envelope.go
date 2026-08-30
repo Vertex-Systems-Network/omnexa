@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"regexp"
 	"strconv"
 	"strings"
@@ -205,17 +206,19 @@ func New(params Params) (Envelope, error) {
 }
 
 // Parse validates untrusted serialized input and returns a normalized v1 envelope.
+// Unknown top-level extension attributes are tolerated for forward-compatible consumers,
+// but only one complete JSON value is accepted.
 func Parse(serialized []byte) (Envelope, error) {
 	if len(serialized) == 0 || len(serialized) > maxPayloadBytes*2 {
 		return Envelope{}, invalidEnvelopeFailure()
 	}
 	decoder := json.NewDecoder(bytes.NewReader(serialized))
-	decoder.DisallowUnknownFields()
 	var envelope Envelope
 	if err := decoder.Decode(&envelope); err != nil {
 		return Envelope{}, invalidEnvelopeFailure()
 	}
-	if decoder.More() {
+	var trailing any
+	if err := decoder.Decode(&trailing); !errors.Is(err, io.EOF) {
 		return Envelope{}, invalidEnvelopeFailure()
 	}
 	payload, err := normalizePayload(envelope.Data)
@@ -316,6 +319,10 @@ func normalizePayload(value any) (json.RawMessage, error) {
 	decoder.UseNumber()
 	var decoded any
 	if err := decoder.Decode(&decoded); err != nil {
+		return nil, invalidPayloadFailure()
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); !errors.Is(err, io.EOF) {
 		return nil, invalidPayloadFailure()
 	}
 	root, ok := decoded.(map[string]any)
