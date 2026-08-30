@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: governance-v23-${{ github.workflow }}-${{ github.ref }}
+  group: governance-v24-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -136,6 +136,10 @@ jobs:
       - name: Validate complete P03 package specification set
         shell: bash
         run: python scripts/validate_p03_package_specs.py
+
+      - name: Validate P04 readiness and bounded activation boundary
+        shell: bash
+        run: python scripts/validate_p04_activation.py
 
       - name: Verify repository Go code quality
         shell: bash
