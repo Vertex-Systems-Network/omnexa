@@ -88,13 +88,13 @@ for package_id in expected_ids[1:]:
         raise SystemExit(f"ERROR: {package_id} must not gain an implementation spec before predecessor acceptance")
 
 for marker in [
-    "duplicates are possible",
-    "no global ordering assumption",
+    "duplicate publish/delivery can occur",
+    "no global ordering guarantee exists",
     "tenant context is explicit",
-    "no broker/vendor selection",
+    "must not select a broker",
     "database migration: none",
-    "business-feature code",
-    "P04.02 must remain locked",
+    "change business-feature authorization",
+    "`P04.02` must remain locked",
 ]:
     if marker.lower() not in p04_01.lower():
         raise SystemExit(f"ERROR: P04.01 specification missing marker: {marker}")
