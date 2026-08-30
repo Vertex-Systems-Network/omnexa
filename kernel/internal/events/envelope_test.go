@@ -17,7 +17,7 @@ func TestEnvelopeRoundTripIsDeterministic(t *testing.T) {
 	correlationID := CorrelationID(testUUIDv7(t))
 	occurredAt := time.Date(2026, time.August, 30, 12, 0, 0, 123456000, time.UTC)
 
-	envelope, err := New(Params{
+	envelope, createErr := New(Params{
 		Type:           EventType("commerce.order.created.v1"),
 		Producer:       Producer("urn:omnexa:module:commerce.orders"),
 		OccurredAt:     occurredAt,
@@ -31,8 +31,8 @@ func TestEnvelopeRoundTripIsDeterministic(t *testing.T) {
 			"total_minor": 12500,
 		},
 	})
-	if err != nil {
-		t.Fatalf("New() error = %v", err)
+	if createErr != nil {
+		t.Fatalf("New() error = %v", createErr)
 	}
 	if !envelope.ID.Valid() {
 		t.Fatalf("generated event id is not UUIDv7: %q", envelope.ID)
@@ -43,21 +43,21 @@ func TestEnvelopeRoundTripIsDeterministic(t *testing.T) {
 	if !envelope.OccurredAt.Equal(occurredAt) || envelope.OccurredAt.Location() != time.UTC {
 		t.Fatalf("occurred_at = %v, want canonical UTC %v", envelope.OccurredAt, occurredAt)
 	}
-	if err := envelope.ValidateForTenant(tenantID); err != nil {
-		t.Fatalf("ValidateForTenant() error = %v", err)
+	if tenantErr := envelope.ValidateForTenant(tenantID); tenantErr != nil {
+		t.Fatalf("ValidateForTenant() error = %v", tenantErr)
 	}
 
-	first, err := envelope.Marshal()
-	if err != nil {
-		t.Fatalf("Marshal() error = %v", err)
+	first, marshalErr := envelope.Marshal()
+	if marshalErr != nil {
+		t.Fatalf("Marshal() error = %v", marshalErr)
 	}
-	parsed, err := Parse(first)
-	if err != nil {
-		t.Fatalf("Parse() error = %v", err)
+	parsed, parseErr := Parse(first)
+	if parseErr != nil {
+		t.Fatalf("Parse() error = %v", parseErr)
 	}
-	second, err := parsed.Marshal()
-	if err != nil {
-		t.Fatalf("parsed Marshal() error = %v", err)
+	second, secondMarshalErr := parsed.Marshal()
+	if secondMarshalErr != nil {
+		t.Fatalf("parsed Marshal() error = %v", secondMarshalErr)
 	}
 	if !bytes.Equal(first, second) {
 		t.Fatalf("round-trip bytes differ\nfirst:  %s\nsecond: %s", first, second)
