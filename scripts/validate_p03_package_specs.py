@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate prepared, active, or terminal P03 strict sequential package state."""
+"""Validate prepared, active, terminal, or P04-era historical P03 package state."""
 
 from __future__ import annotations
 
@@ -49,16 +49,17 @@ phase = STATE.get("phase") or {}
 planning = current_phase == "P02" and current is None and phase.get("id") == "P02" and phase.get("state") == "done"
 active = current_phase == "P03" and phase.get("id") == "P03" and phase.get("state") == "active" and current in EXPECTED
 terminal = current_phase == "P03" and phase.get("id") == "P03" and phase.get("state") == "done" and current is None
-if not (planning or active or terminal):
-    raise SystemExit("ERROR: P03 specs may be validated only at completed-P02 planning, active P03, or completed-P03 terminal checkpoint")
+historical = current_phase == "P04" and phase.get("id") == "P04" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P04.")
+if not (planning or active or terminal or historical):
+    raise SystemExit("ERROR: P03 specs may be validated only at completed-P02 planning, active P03, completed-P03 terminal, or active-P04 historical checkpoint")
 
 if planning:
     if MANIFEST.get("state") != "planned" or MANIFEST.get("implementation_authorized") is not False:
         raise SystemExit("ERROR: P03 readiness manifest must remain planned with implementation_authorized=false")
     expected_states = ["planned"] * len(EXPECTED)
-elif terminal:
+elif terminal or historical:
     if MANIFEST.get("state") != "done" or MANIFEST.get("implementation_authorized") is not False:
-        raise SystemExit("ERROR: completed P03 manifest must be done with implementation_authorized=false")
+        raise SystemExit("ERROR: completed P03 manifest must remain done with implementation_authorized=false")
     expected_states = ["done"] * len(EXPECTED)
 else:
     if MANIFEST.get("state") != "active" or MANIFEST.get("implementation_authorized") is not True:
@@ -100,8 +101,8 @@ for index, item in enumerate(packages):
             raise SystemExit(f"ERROR: {pid} spec missing marker: {marker}")
 
 active_packages = [item.get("id") for item in packages if item.get("state") == "active"]
-if (planning or terminal) and active_packages:
-    raise SystemExit(f"ERROR: non-executing P03 checkpoint must have no active package, got {active_packages}")
+if (planning or terminal or historical) and active_packages:
+    raise SystemExit(f"ERROR: non-executing/historical P03 checkpoint must have no active P03 package, got {active_packages}")
 if active and active_packages != [current]:
     raise SystemExit(f"ERROR: active P03 must have exactly current package {current}, got {active_packages}")
 
@@ -111,14 +112,23 @@ if planning and p03_row.get("state") != "planned":
     raise SystemExit("ERROR: phases[] P03 must remain planned during readiness preparation")
 if active and (p03_row.get("state") != "active" or p03_row.get("active_work_package") != current):
     raise SystemExit("ERROR: phases[] P03 must be active and identify current package")
-if terminal:
+if terminal or historical:
     if p03_row.get("state") != "done" or p03_row.get("active_work_package") is not None:
-        raise SystemExit("ERROR: completed phases[] P03 must be done with no active package")
+        raise SystemExit("ERROR: completed phases[] P03 must remain done with no active P03 package")
+
+if terminal:
     if p04_row.get("state") != "planned":
         raise SystemExit("ERROR: P04 must remain planned until a separate governed activation")
     lock = STATE.get("implementation_lock") or {}
     if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: completed P03 checkpoint must lock kernel and business implementation")
+        raise SystemExit("ERROR: completed P03 terminal checkpoint must lock kernel and business implementation")
+
+if historical:
+    if p04_row.get("state") != "active" or p04_row.get("active_work_package") != current:
+        raise SystemExit("ERROR: active-P04 historical checkpoint must identify the current P04 package")
+    lock = STATE.get("implementation_lock") or {}
+    if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: active P04 must authorize bounded kernel code and keep business code locked")
 
 if active or terminal:
     phase_packages = phase.get("work_packages") or []
@@ -168,7 +178,7 @@ for marker in ["xq-100", "xsg-100", "xtrust-100", "xpf-200", "xperf-100", "plann
     if marker not in alignment:
         raise SystemExit(f"ERROR: P03 AI-native alignment missing marker: {marker}")
 
-if terminal:
+if terminal or historical:
     exit_gate = (ROOT / "docs/governance/P03_EXIT_GATE.md").read_text(encoding="utf-8")
     if "Status: **SATISFIED**" not in exit_gate:
         raise SystemExit("ERROR: completed P03 requires SATISFIED P03 exit gate")
@@ -176,9 +186,10 @@ if terminal:
     if not evidence:
         raise SystemExit("ERROR: completed P03 requires P03.11 completion evidence")
 
+mode = "PLANNING" if planning else "ACTIVE" if active else "COMPLETED / HISTORICAL" if historical else "COMPLETED"
 print("Omnexa P03 package specification validation: PASS")
 print("Prepared specs: 11 / 11")
 print("Activation policy: STRICT SEQUENTIAL / ONE ACTIVE PACKAGE WHILE EXECUTING")
-print(f"Mode: {'PLANNING' if planning else 'ACTIVE' if active else 'COMPLETED'}")
-print(f"Active package: {current or 'NONE'}")
+print(f"Mode: {mode}")
+print(f"Active P03 package: {current if active else 'NONE'}")
 print("Business feature code: LOCKED")
