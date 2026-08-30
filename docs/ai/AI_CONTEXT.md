@@ -6,64 +6,67 @@ This file never overrides `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`,
 
 ## Current governed checkpoint
 
-Terminal P03 closure is tracked by GitHub #135 / Linear ABD-208 from protected-main base `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`.
+P04 activation is tracked by GitHub PR #144 / Linear ABD-267 from exact protected-main base `f97ee9a509f14247771626dc89b685e22ecd9457`.
 
-Target terminal state after closure merge:
+Candidate state after accepted activation merge:
 
 - Foundation Architecture v1: FROZEN.
 - P00: DONE — 10 / 10.
 - P01: DONE — 12 / 12; exit SATISFIED.
 - P02: DONE — 10 / 10; exit SATISFIED.
-- P03: DONE — 11 / 11; exit SATISFIED.
-- P03.01-P03.11: DONE with canonical completion evidence.
-- current work package: NONE.
-- `kernel_code_authorized=false`.
+- P03: DONE — 11 / 11; exit SATISFIED / historical prerequisite.
+- P04: ACTIVE — 0 / 10 done.
+- P04.01: sole ACTIVE package.
+- P04.02-P04.10: PLANNED / LOCKED.
+- `kernel_code_authorized=true` only for P04.01 after activation merge/read-back.
 - `business_feature_code_authorized=false`.
-- P04+: PLANNED / LOCKED.
 
-P03 completion never auto-activates P04. P04 readiness/preparation and activation are a later separate governed flow.
+The activation branch is governance/state/continuity only. It must not contain P04.01 runtime source implementation.
 
-## P03.11 canonical implementation evidence
+## Accepted activation prerequisite chain
 
-- implementation issue #132 — completed;
-- draft implementation carrier #133 — closed unmerged;
-- exact implementation head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`;
-- draft Governance #511 / `33258092323 / 99115191521` — PASS;
-- promotion implementation PR #134 — merged;
-- promotion Governance #512 / `33258456851 / 99116152701` — PASS;
-- implementation merge / terminal closure base `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`;
-- completion evidence `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`;
-- retained verifier `scripts/verify_p03_11.sh`.
+- P03 terminal exit remains SATISFIED.
+- P04 readiness promotion merged as `384c82b6d5b8bd89b70eb94640ea3be7109bc537`.
+- Bounded P04 planning / P04.01 contract promotion merged as `73561ad68e453c2741dec82d0b6fb01a7dcea1be`.
+- Historical P03 validator compatibility prerequisite merged as `f97ee9a509f14247771626dc89b685e22ecd9457` after source Governance #528 and promotion Governance #529 PASS.
+- PR #144 is the separate canonical activation transaction.
 
-Promotion #512 passed canonical state/spec validators, repository Go quality, P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11.
+## P04.01 boundary
 
-## P03.11 delivered boundary
+Owner: `kernel.events`.
 
-P03.11 adds no trust/certification authority. It preserves already-validated v1/v2 publisher, provenance, SBOM, data classification and security declarations in immutable registry-bound snapshots and projects deterministic typed/versioned metadata-only profiles. Symbolic secret names may be exposed; secret locators/values may not. Untrusted package code is not executed for profile discovery.
+P04.01 may later implement only the provider-neutral event envelope and validation contract:
 
-The P03 exit aggregate maps EX-01..EX-07 to retained executable tests and adds explicit unrelated-module lifecycle isolation across install, failure/recovery, enable, suspend/resume, disable, archive/restore, detach and purge.
+- globally stable event identity/type/version/producer;
+- explicit tenant context;
+- occurred time, correlation and causation identity;
+- bounded/classification-safe payload contract;
+- deterministic safe validation errors;
+- duplicate/replay-aware semantics;
+- no global ordering assumption;
+- focused positive/negative tests and verifier evidence.
 
-## Retained P03 prerequisites
+P04.01 must not select Kafka/NATS/RabbitMQ/Redis Streams or another broker, add outbox/inbox persistence, add a database migration, implement durable consumers/checkpoints, retry/DLQ runtime, business-domain handlers, background-job execution changes, P04.02+, business features or AI/model/agent authority.
 
-P03.01-P03.10 retain their existing immutable completion files and verifier chain. P01.01-P01.12 and P02.01-P02.10 remain historical prerequisites. Diagnostic failures remain diagnostic and are never rewritten as PASS.
+## Historical prerequisites retained
 
-## Retained architecture/security baselines
+P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 retain immutable completion evidence and mandatory regression verifiers. Historical diagnostic failures remain diagnostic and are never rewritten as PASS.
 
-ADR-0012 dependency-version semantics remain accepted. `kernel.configuration`, `kernel.authorization`, P01 migration authority and P01 health/readiness authority remain authoritative at their existing boundaries. Capability/permission/UI/health/trust metadata remains non-granting. Tenant isolation, deny-by-default authorization, attributable audit and data classification remain mandatory.
+Retained foundation/P01/P02/P03 validators are extended only to recognize a valid active-P04 checkpoint while still requiring completed predecessor state, satisfied exits, locked predecessor manifests, protected-main evidence, GitHub-hosted canonical CI and `business_feature_code_authorized=false`.
 
-## Explicitly unauthorized at terminal P03
+## Review and merge rule
 
-- P04 events/jobs runtime;
-- business modules/features;
-- publisher onboarding/signature trust roots or package certification;
-- dependency advisory/license enforcement;
-- marketplace/package acquisition/distribution runtime;
-- Product Federation/System Graph/Performance Intelligence runtime;
-- generic service-mesh/workflow expansion;
-- strategic X-program runtime;
-- AI/model/agent runtime;
-- weakening governance/security/regression gates.
+PR #144 is not accepted merely because canonical files say `active`. Candidate activation becomes authoritative only after:
+
+1. exact-final-head Omnexa Governance PASS;
+2. changed-file review proves governance/state/continuity-only scope;
+3. review threads/conversations are clean;
+4. independent review is recorded when available, otherwise explicit `SELF REVIEW`;
+5. governed promotion/merge completes;
+6. protected `main` plus STATE/STATUS/P04 entry/sequence are re-read.
+
+Only then may a new P04.01 implementation branch be created from exact post-activation `main`.
 
 ## Exact next action
 
-Complete terminal P03 closure branch `chore/p03-11-closure-p03-exit` under GitHub #135 / Linear ABD-208, obtain a fresh exact-final-head GitHub-hosted Governance PASS, merge only after current-with-main/review/conversation preflight with an expected-head guard, then re-read protected main and stop at P03 DONE / P04 PLANNED.
+Finish PR #144 continuity reconciliation, run the full exact-head governance lane, review the candidate, promote/merge without changing accepted bytes, re-read protected main, then start P04.01 implementation on a fresh branch. Do not auto-advance to P04.02.
