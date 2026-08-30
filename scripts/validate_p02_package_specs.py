@@ -44,10 +44,10 @@ phases = {item.get("id"): item for item in STATE.get("phases") or []}
 planning = current_phase == "P01" and current is None and phase.get("state") == "done"
 active = current_phase == "P02" and phase.get("state") == "active" and current in EXPECTED
 terminal = current_phase == "P02" and phase.get("state") == "done" and current is None
-historical = current_phase == "P03" and (phases.get("P02") or {}).get("state") == "done"
+historical = current_phase in {"P03", "P04"} and (phases.get("P02") or {}).get("state") == "done"
 completed = terminal or historical
 if not (planning or active or completed):
-    raise SystemExit("ERROR: P02 specs may be validated only at completed-P01 planning, active P02, completed P02, or P03 historical checkpoint")
+    raise SystemExit("ERROR: P02 specs may be validated only at completed-P01 planning, active P02, completed P02, or later historical checkpoint")
 
 if planning:
     if MANIFEST.get("state") != "planned" or MANIFEST.get("implementation_authorized") is not False:
@@ -116,7 +116,7 @@ if completed:
         if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
             raise SystemExit("ERROR: terminal P02 checkpoint must lock kernel and business implementation")
     elif (STATE.get("implementation_lock") or {}).get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: business-feature implementation must remain locked during P03")
+        raise SystemExit("ERROR: business-feature implementation must remain locked during P03/P04")
 
 if active or terminal:
     phase_packages = phase.get("work_packages") or []
