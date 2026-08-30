@@ -2,14 +2,14 @@
   "schema_version": 1,
   "phase": "P04",
   "name": "Data, Jobs & Event Fabric",
-  "state": "ready",
+  "state": "active",
   "activation_policy": "strict_sequential_one_active_package",
   "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
   "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
   "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
-  "implementation_authorized": false,
+  "implementation_authorized": true,
   "packages": [
-    {"id":"P04.01","name":"Event envelope & identity contract","state":"ready","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","owner":"kernel.events"},
+    {"id":"P04.01","name":"Event envelope & identity contract","state":"active","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","owner":"kernel.events"},
     {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"planned","depends_on":["P04.01"],"spec":null,"owner":"kernel.events"},
     {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"planned","depends_on":["P04.01","P04.02"],"spec":null,"owner":"kernel.events"},
     {"id":"P04.04","name":"Transactional outbox reliability primitive","state":"planned","depends_on":["P04.01","P04.03"],"spec":null,"owner":"kernel.events"},
@@ -21,5 +21,5 @@
     {"id":"P04.10","name":"Replay/duplicate/failure/restart/poison-event acceptance","state":"planned","depends_on":["P04.01","P04.09"],"spec":null,"owner":"kernel.events"}
   ],
   "phase_exit": "LOCKED — terminal acceptance requires P04.01-P04.10 completion with replay/duplicate/crash/restart/poison-event proof and no double-applied protected mutation.",
-  "note": "Canonical state vocabulary is preserved: P04.01 is ready for a separate activation transaction; P04.02-P04.10 remain planned. implementation_authorized=false until canonical STATE.json activates P04.01."
+  "note": "P04 is active with P04.01 as the sole implementation-authorized package. P04.02-P04.10 remain planned/locked. Business-feature code remains unauthorized."
 }
