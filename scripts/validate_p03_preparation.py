@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate P03 readiness, bounded activation, and terminal completion."""
+"""Validate P03 readiness, bounded activation, terminal completion, and P04-era historical retention."""
 
 from __future__ import annotations
 
@@ -55,8 +55,9 @@ phase = state.get("phase") or {}
 planning = current_phase == "P02" and current is None and phase.get("id") == "P02" and phase.get("state") == "done"
 active = current_phase == "P03" and phase.get("id") == "P03" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P03.")
 terminal = current_phase == "P03" and current is None and phase.get("id") == "P03" and phase.get("state") == "done"
-if not (planning or active or terminal):
-    raise SystemExit("ERROR: invalid P03 readiness/activation/completion checkpoint")
+historical = current_phase == "P04" and phase.get("id") == "P04" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P04.")
+if not (planning or active or terminal or historical):
+    raise SystemExit("ERROR: invalid P03 readiness/activation/completion/historical checkpoint")
 
 entry = (ROOT / "docs/governance/P03_ENTRY_GATE.md").read_text(encoding="utf-8")
 for marker in [
@@ -131,15 +132,24 @@ elif active:
         raise SystemExit("ERROR: active P03 must have no unresolved entry blocker")
 else:
     if (phase_rows.get("P03") or {}).get("state") != "done" or (phase_rows.get("P03") or {}).get("active_work_package") is not None:
-        raise SystemExit("ERROR: completed P03 must be done with no active package")
-    if (phase_rows.get("P04") or {}).get("state") != "planned":
-        raise SystemExit("ERROR: P04 must remain planned until a separate governed activation")
-    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: completed P03 must lock kernel and business implementation")
+        raise SystemExit("ERROR: completed P03 must remain done with no active P03 package")
     if manifest.get("state") != "done" or manifest.get("implementation_authorized") is not False:
-        raise SystemExit("ERROR: completed P03 manifest must be done/unauthorized")
+        raise SystemExit("ERROR: completed P03 manifest must remain done/unauthorized")
     if "Status: **SATISFIED**" not in exit_gate:
         raise SystemExit("ERROR: completed P03 requires SATISFIED exit gate")
+
+    if terminal:
+        if (phase_rows.get("P04") or {}).get("state") != "planned":
+            raise SystemExit("ERROR: P04 must remain planned until a separate governed activation")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            raise SystemExit("ERROR: completed P03 terminal checkpoint must lock kernel and business implementation")
+    else:
+        p04_row = phase_rows.get("P04") or {}
+        if p04_row.get("state") != "active" or p04_row.get("active_work_package") != current:
+            raise SystemExit("ERROR: P04 historical checkpoint must identify the current P04 package")
+        if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
+            raise SystemExit("ERROR: active P04 must keep business code locked while P03 remains historical")
+
     prep = state.get("p03_preparation") or {}
     expected_prep = {
         "state": "completed",
@@ -157,7 +167,8 @@ else:
     }
     for key, expected in expected_prep.items():
         if prep.get(key) != expected:
-            raise SystemExit(f"ERROR: terminal p03_preparation.{key} must be {expected}")
+            label = "historical" if historical else "terminal"
+            raise SystemExit(f"ERROR: {label} p03_preparation.{key} must be {expected}")
     if prep.get("blocking_gate") is not None:
         raise SystemExit("ERROR: completed P03 must have no unresolved P03 blocker")
 
@@ -177,12 +188,27 @@ for marker in [
 if "self-hosted" in workflow or "LOCAL-WIN-" in workflow:
     raise SystemExit("ERROR: local/self-hosted governance runners are prohibited")
 
-mode = "PLANNING / NOT ACTIVATED" if planning else "ACTIVE" if active else "COMPLETED / NOT ADVANCED"
+mode = (
+    "PLANNING / NOT ACTIVATED"
+    if planning
+    else "ACTIVE"
+    if active
+    else "COMPLETED / HISTORICAL — P04 ACTIVE"
+    if historical
+    else "COMPLETED / NOT ADVANCED"
+)
+kernel_mode = (
+    f"AUTHORIZED FOR {current}"
+    if active
+    else "P03 LOCKED / HISTORICAL"
+    if historical
+    else "LOCKED"
+)
 print("Omnexa P03 preparation/readiness validation: PASS")
 print("P02 exit: SATISFIED")
 print("P03 specifications: 11 / 11")
 print(f"Mode: {mode}")
-print(f"Active package: {current if active else 'NONE'}")
+print(f"Active P03 package: {current if active else 'NONE'}")
 print("Governance runner: GITHUB-HOSTED ONLY / ubuntu-24.04")
-print(f"Kernel code: {'AUTHORIZED FOR ' + current if active else 'LOCKED'}")
+print(f"P03 kernel authority: {kernel_mode}")
 print("Business feature code: LOCKED")
