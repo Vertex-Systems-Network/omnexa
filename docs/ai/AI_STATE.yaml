@@ -1,12 +1,12 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-29"
-  nature: "non-authoritative P03 terminal-closure continuity snapshot"
-  protected_main_base: "b3b9b61f963df6a05ea45cbd3c562e12974d92d0"
-  closure_issue: 135
-  closure_linear: "ABD-208"
-  closure_branch: "chore/p03-11-closure-p03-exit"
+  verified_at: "2026-08-30"
+  nature: "non-authoritative P04.01 activation continuity snapshot"
+  protected_main_base: "f97ee9a509f14247771626dc89b685e22ecd9457"
+  activation_pr: 144
+  activation_linear: "ABD-267"
+  activation_branch: "chore/p04-activation-state"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -15,75 +15,67 @@ project:
   mode: "gated_evidence_based_architecture_first"
 
 phase:
-  current: "P03"
-  name: "Module Runtime"
-  state_after_terminal_closure: "done"
-  progress_after_terminal_closure: "11 / 11 done"
-  current_work_package_after_terminal_closure: null
-  p03_exit_after_terminal_closure: "SATISFIED"
-  p04_after_terminal_closure: "planned_not_activated"
+  current: "P04"
+  name: "Data, Jobs & Event Fabric"
+  state_candidate: "active"
+  progress_candidate: "0 / 10 done"
+  current_work_package_candidate: "P04.01"
+  p03_exit: "SATISFIED / HISTORICAL"
+  p04_entry: "SATISFIED CANDIDATE — EFFECTIVE ONLY AFTER PR #144 MERGE AND READ-BACK"
 
 prerequisites:
   p01: "done_12_of_12_exit_satisfied"
   p02: "done_10_of_10_exit_satisfied"
-  p03_01_through_p03_10: "done_with_existing_immutable_evidence"
+  p03: "done_11_of_11_exit_satisfied"
   regressions: "P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 remain mandatory"
+  readiness_merge: "384c82b6d5b8bd89b70eb94640ea3be7109bc537"
+  planning_merge: "73561ad68e453c2741dec82d0b6fb01a7dcea1be"
+  historical_validator_merge: "f97ee9a509f14247771626dc89b685e22ecd9457"
 
-p03_11:
-  state: "done_candidate_until_terminal_closure_merge"
-  owner: "kernel.modules"
-  implementation_issue: 132
-  draft_carrier_pr: 133
-  promotion_pr: 134
-  final_exact_head: "a083a8a86ec3a51309fa479ee49c79e1b6ec9f10"
-  draft_governance_run: 33258092323
-  draft_governance_job: 99115191521
-  promotion_governance_run: 33258456851
-  promotion_governance_job: 99116152701
-  implementation_merge: "b3b9b61f963df6a05ea45cbd3c562e12974d92d0"
-  completion_evidence: "docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md"
-  retained_verifier: "scripts/verify_p03_11.sh"
-  authority: "metadata_only"
-  secret_locators_or_values_exposed: false
-  package_execution_for_metadata_discovery: false
-
-p03_exit:
-  state_after_terminal_closure: "SATISFIED"
-  ex01_required_dependency_enforcement: "PASS"
-  ex02_optional_dependency_degradation: "PASS"
-  ex03_safe_disable_reenable: "PASS"
-  ex04_upgrade_migration_path: "PASS"
-  ex05_forbidden_dependency_detection: "PASS"
-  ex06_health_state_accuracy: "PASS"
-  ex07_unrelated_module_isolation: "PASS"
+p04_01:
+  state_candidate: "active"
+  owner: "kernel.events"
+  activation_pr: 144
+  activation_base: "f97ee9a509f14247771626dc89b685e22ecd9457"
+  spec: "docs/roadmap/work-packages/P04.01.md"
+  sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
+  entry_gate: "docs/governance/P04_ENTRY_GATE.md"
+  implementation_scope: "event envelope and identity contract only"
+  broker_selected: false
+  database_migration_authorized: false
+  outbox_inbox_authorized: false
+  durable_consumer_authorized: false
+  retry_dlq_authorized: false
+  business_handler_authorized: false
 
 security:
-  kernel_code_authorized_after_terminal_closure: false
+  kernel_code_authorized_after_activation_merge: true
+  kernel_authority_scope: "P04.01 only"
   business_feature_code_authorized: false
-  p04_plus_authorized: false
+  p04_02_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
-  hook_metadata_means_trusted_or_certified: false
-  publisher_trust_roots_authorized: false
-  marketplace_distribution_authorized: false
-  migration_ownership_and_tenant_boundaries_required: true
-  classification_safe_health_and_evidence_required: true
+  tenant_context_fail_closed_required: true
+  duplicate_safe_semantics_required: true
+  global_ordering_assumed: false
+  secret_payloads_authorized: false
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
   secrets_or_transcripts_allowed_in_continuity_files: false
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P04 before a later separate readiness/preparation and activation transition passes canonical governance and merges"
-  - "treat package trust/provenance/SBOM/scope hook presence as trusted or certified status"
-  - "implement publisher onboarding, signature trust roots or marketplace runtime under completed P03"
+  - "implement P04.01 on the activation branch"
+  - "start P04.01 source implementation before PR #144 merges and protected main is re-read"
+  - "implement P04.02-P04.10"
+  - "select a broker or add outbox/inbox/database migration under P04.01"
   - "implement business modules/features, strategic X-program runtime or AI/model/agent runtime"
   - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Complete terminal P03 closure under GitHub #135 / Linear ABD-208 with exact-final-head canonical Governance and guarded merge."
-  after_closure_merge: "Re-read protected main and canonical state, confirm P03 DONE 11/11 / current NONE / both locks false / P04 PLANNED, then stop."
+  current: "Complete PR #144 governance/state/continuity activation transaction and require exact-final-head Omnexa Governance PASS."
+  after_activation_merge: "Re-read protected main and canonical state, then create a fresh separate P04.01 implementation branch from the exact post-activation main SHA."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -92,9 +84,9 @@ source_authority:
   ai_execution_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   change_control: "docs/governance/CHANGE_CONTROL.md"
   p03_exit_gate: "docs/governance/P03_EXIT_GATE.md"
-  package_sequence: "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json"
-  p03_11_spec: "docs/roadmap/work-packages/P03.11.md"
-  p03_11_evidence: "docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md"
+  p04_entry_gate: "docs/governance/P04_ENTRY_GATE.md"
+  package_sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
+  p04_01_spec: "docs/roadmap/work-packages/P04.01.md"
 
 handoff:
-  completed: "docs/ai/handoffs/P03.11.md"
+  active_candidate: "docs/ai/handoffs/P04.01.md"
