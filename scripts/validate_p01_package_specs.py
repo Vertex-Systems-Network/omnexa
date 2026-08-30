@@ -11,8 +11,8 @@ STATE = json.loads((ROOT / "docs/roadmap/STATE.json").read_text(encoding="utf-8"
 MANIFEST = json.loads((ROOT / "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json").read_text(encoding="utf-8"))
 EXPECTED = [f"P01.{i:02d}" for i in range(1, 13)]
 
-if STATE.get("current_phase") not in {"P01", "P02", "P03"}:
-    raise SystemExit("ERROR: P01 historical validator must be reviewed before advancing beyond P03")
+if STATE.get("current_phase") not in {"P01", "P02", "P03", "P04"}:
+    raise SystemExit("ERROR: P01 historical validator must be reviewed before advancing beyond P04")
 if MANIFEST.get("phase") != "P01" or MANIFEST.get("name") != "Omnexa Kernel":
     raise SystemExit("ERROR: P01 package manifest identity mismatch")
 if MANIFEST.get("state") != "done" or MANIFEST.get("implementation_authorized") is not False:

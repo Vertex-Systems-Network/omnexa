@@ -1,17 +1,18 @@
 # Omnexa Program Status
 
-Last reconciled: **2026-08-29**
+Last reconciled: **2026-08-30**
 
 ## Current position
 
 - Program: **Kernel Program**
-- Phase: **P03 — Module Runtime**
-- Phase state: **DONE**
-- Current work package: **NONE**
-- P03 progress: **11 / 11 done**
-- P03.01-P03.11: **DONE**
-- P03 entry gate: **SATISFIED — historical entry authorization**
-- P03 exit gate: **SATISFIED**
+- Phase: **P04 — Data, Jobs & Event Fabric**
+- Phase state: **ACTIVE**
+- Current work package: **P04.01 — Event Envelope & Identity Contract**
+- P04 progress: **0 / 10 done**
+- P04.01: **ACTIVE**
+- P04.02-P04.10: **PLANNED / LOCKED**
+- P04 entry gate: **SATISFIED CANDIDATE — PR #144 exact-head Governance + merge/read-back still required**
+- P03: **DONE — 11 / 11**; exit **SATISFIED**
 - P02: **DONE — 10 / 10**; exit **SATISFIED**
 - P01: **DONE — 12 / 12**; exit **SATISFIED**
 - Foundation Architecture v1: **FROZEN**
@@ -20,61 +21,58 @@ Last reconciled: **2026-08-29**
 - Main integration protection / Issue #3: **SATISFIED / CLOSED**
 - Executable CI / Issue #14: **SATISFIED — GITHUB-HOSTED ONLY / ubuntu-24.04**
 - Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation authority: **NOT AUTHORIZED**
+- Kernel implementation authority: **AUTHORIZED FOR P04.01 ONLY AFTER ACTIVATION PR MERGE + PROTECTED-MAIN READ-BACK**
 - Business-feature implementation: **NOT AUTHORIZED**
-- P04: **PLANNED / NOT ACTIVATED**
 
-`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This terminal P03 closure grants no P04 implementation authority.
+`docs/roadmap/STATE.json` is the canonical machine-readable candidate cursor. This activation branch itself is governance/state/continuity only and must not contain P04.01 runtime implementation.
 
-## P03.11 canonical completion boundary
+## P04 activation chain
 
-P03.11 — Package Trust Hooks & P03 Exit Proof is accepted through:
+Accepted preparation/evidence chain:
 
-- implementation issue #132 — completed;
-- draft carrier #133 — closed unmerged;
-- final exact implementation head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`;
-- draft Governance #511 / `33258092323 / 99115191521` — PASS;
-- promotion PR #134 — merged;
-- promotion Governance #512 / `33258456851 / 99116152701` — PASS;
-- implementation merge `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`;
-- evidence `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`;
-- retained verifier `scripts/verify_p03_11.sh`.
+- P03 terminal exit: SATISFIED with P03.01-P03.11 complete;
+- P04 readiness promotion merge: `384c82b6d5b8bd89b70eb94640ea3be7109bc537`;
+- bounded P04 planning/contract promotion merge: `73561ad68e453c2741dec82d0b6fb01a7dcea1be`;
+- historical-validator compatibility prerequisite merge: `f97ee9a509f14247771626dc89b685e22ecd9457`;
+- activation carrier: GitHub PR #144 from exact base `f97ee9a509f14247771626dc89b685e22ecd9457`.
 
-P03.11 retains validated publisher/provenance/SBOM/data/security manifest metadata in immutable registry-bound snapshots and exposes typed/versioned deterministic `metadata_only` profiles. Profile presence does not certify or trust a package. Secret locators/values are not surfaced and package code is not executed for metadata discovery/profile construction.
+PR #144 proposes only the canonical transition to P04/P04.01. Its candidate state becomes effective only after exact-final-head Omnexa Governance PASS, review/conversation preflight, merge, and protected-main state read-back.
 
-## P03 exit proof
+## P04.01 authority boundary
 
-The canonical aggregate proof covers:
+P04.01 is contract-first and provider-neutral. After activation merge, its later separate implementation branch may implement only:
 
-1. required dependency enforcement;
-2. optional dependency degradation;
-3. safe disable/re-enable;
-4. upgrade/migration path;
-5. forbidden cross-module dependency detection;
-6. health/state accuracy;
-7. no unrelated module corruption.
+- stable event ID/type/version/producer identity;
+- explicit tenant context and fail-closed validation;
+- occurrence time, correlation and causation identity;
+- bounded/classification-safe payload contract;
+- deterministic safe validation errors;
+- duplicate/replay-aware semantics with no global ordering assumption;
+- focused positive/negative tests and package verification.
 
-Promotion Governance #512 passed Go quality, P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 on GitHub-hosted `ubuntu-24.04`.
+Explicitly unauthorized:
 
-## Terminal authority boundary
+- P04.02-P04.10 implementation;
+- Kafka/NATS/RabbitMQ/Redis Streams or another broker selection;
+- outbox/inbox schema or database migration;
+- durable consumers/checkpoints;
+- retry/DLQ/quarantine runtime;
+- business-domain event handlers;
+- background-job execution changes;
+- business-feature code;
+- AI/model/agent authority.
 
-P03 completion creates a terminal checkpoint only:
+## Historical prerequisite retention
 
-- no active work package;
-- `kernel_code_authorized=false`;
-- `business_feature_code_authorized=false`;
-- P04 remains planned;
-- P04 runtime, business features, marketplace/trust-root runtime, strategic X-program runtime and AI/model/agent runtime remain unauthorized.
+P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 remain completed historical prerequisites with immutable completion evidence and mandatory regression verifiers. P04 activation does not rewrite their acceptance history.
 
-P04 requires a later separate governed readiness/preparation and activation transition. Completed-phase evidence never auto-activates the next phase.
-
-## Retained prerequisite chain
-
-P01.01-P01.12, P02.01-P02.10 and P03.01-P03.10 remain completed historical prerequisites with immutable evidence and mandatory regression verifiers. Historical diagnostic failures retain their original evidence state.
+The retained P01/P02/P03/foundation validators are extended only enough to recognize valid active-P04 state while continuing to require completed predecessor phase state, satisfied exits, locked predecessor manifests and `business_feature_code_authorized=false`.
 
 ## Protected integration / CI
 
-`main` remains protected and PR-only. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only. This terminal closure must itself pass a fresh exact-final-head Governance run; P03.11 implementation PASS is not a substitute for closure-state validation.
+`main` remains protected and PR-only. Canonical governance evidence is GitHub-hosted `ubuntu-24.04` only. Earlier P03/P04-readiness passes are prerequisites, not merge permission for PR #144.
+
+The exact final head of PR #144 must pass the complete Omnexa Governance lane, including all retained P01/P02/P03 regressions and P04 activation validation.
 
 ## Issue #4 — external distribution gate
 
@@ -82,8 +80,10 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions and
 
 ## Exact next work
 
-1. Complete terminal P03 closure under GitHub #135 / Linear ABD-208.
-2. Require exact-final-head canonical Governance PASS and clean current-with-main/review/conversation preflight.
-3. Merge the closure only with an expected-head guard.
-4. Re-read protected `main`, STATE, STATUS and P03 exit gate; confirm P03 DONE 11/11, current NONE, locks false and P04 planned.
-5. Stop. P04 readiness/activation belongs to a later separate governed session.
+1. Finish PR #144 state/continuity reconciliation with no runtime source changes.
+2. Require exact-final-head Omnexa Governance PASS and clean review/thread/comment state.
+3. Record SELF REVIEW honestly if independent review is unavailable.
+4. Promote/merge the unchanged accepted activation head through the governed PR path.
+5. Re-read protected `main`, `STATE.json`, `STATUS.md`, P04 sequence and P04 entry gate.
+6. Only then create a **new separate P04.01 implementation branch** from the exact post-activation main SHA.
+7. Do not auto-advance to P04.02.

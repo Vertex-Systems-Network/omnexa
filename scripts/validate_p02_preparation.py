@@ -54,7 +54,7 @@ phase = state.get("phase") or {}
 planning = current_phase == "P01" and current is None and phase.get("state") == "done"
 active = current_phase == "P02" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P02.")
 terminal = current_phase == "P02" and current is None and phase.get("state") == "done"
-historical = current_phase == "P03" and (phase_rows.get("P02") or {}).get("state") == "done"
+historical = current_phase in {"P03", "P04"} and (phase_rows.get("P02") or {}).get("state") == "done"
 completed = terminal or historical
 if not (planning or active or completed):
     raise SystemExit("ERROR: invalid P02 readiness/activation/completion/later-phase checkpoint")
@@ -142,7 +142,7 @@ else:
         if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
             raise SystemExit("ERROR: terminal P02 checkpoint must lock kernel and business implementation")
     elif lock.get("business_feature_code_authorized") is not False:
-        raise SystemExit("ERROR: business-feature implementation must remain locked during P03")
+        raise SystemExit("ERROR: business-feature implementation must remain locked during P03/P04")
 
 workflow = (ROOT / ".github/workflows/governance.yml").read_text(encoding="utf-8")
 for marker in [
