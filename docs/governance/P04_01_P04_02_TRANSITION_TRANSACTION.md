@@ -1,14 +1,20 @@
 # P04.01 Closure / P04.02 Activation Transaction
 
-Status: **CANDIDATE ON ISOLATED GOVERNANCE BRANCH — NOT AUTHORITY UNTIL MERGED + MAIN READ-BACK**
+Status: **ACCEPTED — PROMOTED, MERGED, PROTECTED-MAIN READ-BACK COMPLETE**
 
-Exact transaction base: `16dfca22cd0430b8b2727e55628cc6fba381b5ef`
+Original transaction base: `16dfca22cd0430b8b2727e55628cc6fba381b5ef`
+Source carrier: PR `#150`
+Source exact head: `8f00090a2055a2283d61b30a66b0772ddf354648`
+Source Omnexa Governance: `#554` / run `33334373676`
+Promotion carrier: PR `#151`
+Promotion Omnexa Governance: `#555` / run `33335001265`
+Accepted merge / protected-main read-back: `226f5236d80c806a7b07d65e7870981de320c05c`
 
-This carrier is governance/state/continuity only. It must not contain P04.02 runtime implementation.
+This transaction was governance/state/continuity only and contained no P04.02 runtime implementation.
 
 ## Accepted prerequisite
 
-P04.01 implementation is already accepted on `main`:
+P04.01 implementation was already accepted before this transaction:
 
 - implementation exact head: `3c4ee6e79b76a6f042f3ee77b518943f3d7064e4`;
 - promotion implementation PR: `#147`;
@@ -16,27 +22,29 @@ P04.01 implementation is already accepted on `main`:
 - promotion Governance: `#548` / run `33331934481`;
 - completion evidence: `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`;
 - prepared P04.02 contract/handoff promotion: PR `#149`;
-- preparation merge / this transaction base: `16dfca22cd0430b8b2727e55628cc6fba381b5ef`.
+- preparation merge: `16dfca22cd0430b8b2727e55628cc6fba381b5ef`.
 
-## Atomic candidate result after this carrier merges
+## Accepted atomic result
 
-The merged transaction must make all authoritative/continuity surfaces agree that:
+Protected-main and canonical `STATE.json` read-back now establish:
 
 - `current_phase=P04`;
 - P04 progress is `1 / 10 done`;
-- P04.01 is `done` with its accepted completion evidence;
+- P04.01 is `done` with accepted completion evidence;
 - P04.02 is the **sole active** package;
 - P04.03-P04.10 remain `planned / locked`;
-- `kernel_code_authorized=true` only for P04.02 and only after this carrier passes exact-final-head Governance, merges, and protected `main` is re-read;
+- `kernel_code_authorized=true` for P04.02 only;
 - `business_feature_code_authorized=false`;
 - strategic X-program runtime remains unauthorized;
 - AI/model/agent runtime remains unauthorized.
 
+The source head passed exact Governance, received explicit SELF REVIEW, was promoted unchanged, passed promotion-specific Governance, merged with expected-head guard, and was re-read on protected `main`.
+
 ## P04.02 authority boundary
 
-The later implementation branch may implement only the accepted provider-neutral P04.02 contract in `docs/roadmap/work-packages/P04.02.md`.
+A later fresh implementation branch may implement only the accepted provider-neutral P04.02 contract in `docs/roadmap/work-packages/P04.02.md`.
 
-This transition does **not** authorize:
+This accepted transaction does **not** authorize:
 
 - Kafka, NATS, RabbitMQ, Redis Streams or another broker/provider selection;
 - durable stream/consumer/checkpoint runtime;
@@ -46,30 +54,24 @@ This transition does **not** authorize:
 - schema-registry runtime;
 - background-job execution changes;
 - business-domain event handlers;
+- P04.03+ implementation;
 - business-feature code;
 - AI/model/agent runtime.
 
-## Mandatory candidate files
+## Post-merge continuity correction
 
-Before this branch may open for governed review, the candidate must reconcile at least:
+The accepted merge correctly updated canonical `STATE.json`, but subordinate continuity snapshots retained branch-era words such as “candidate” and “after this transition merges.” Those stale phrases are a continuity defect, not a rollback of P04.02 authority.
 
-1. `docs/roadmap/STATE.json`;
-2. `docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json`;
-3. `AGENTS.md`;
-4. `docs/roadmap/STATUS.md`;
-5. `docs/ai/AI_STATE.yaml`;
-6. `docs/ai/AI_CONTEXT.md` only if its current cursor/authority language is stale.
+A fresh post-activation continuity-only carrier from `226f5236d80c806a7b07d65e7870981de320c05c` must reconcile `AGENTS.md`, `STATUS.md` and `docs/ai/` snapshots without changing runtime scope or rewriting historical acceptance evidence.
 
-No authoritative file may claim P04.01 is still active while another claims P04.02 is active.
+## Implementation start rule
 
-## Merge protocol
+Before writing P04.02 runtime source:
 
-1. Re-read the exact branch diff and current protected `main` before review.
-2. Require exact-final-head Omnexa Governance PASS for the complete candidate.
-3. Require zero unresolved review threads and honest review provenance.
-4. Promote unchanged state through a fresh promotion-specific carrier if the repository process requires it.
-5. Merge with expected-head guard.
-6. Re-read protected `main` and canonical state.
-7. Only then create a **new** P04.02 runtime implementation branch from the exact post-transition `main` SHA.
+1. land the bounded post-merge continuity correction through exact-head Governance and the governed promotion path;
+2. re-read protected `main`, `STATE.json`, package sequence, status and AI continuity;
+3. confirm P04.02 is still sole active and all P04.03+/business/AI locks remain intact;
+4. create a **new** P04.02 implementation branch from that exact corrected main SHA;
+5. implement only `docs/roadmap/work-packages/P04.02.md` and require its own exact-head evidence.
 
-A branch-only candidate, source CI PASS, this document, or the prepared P04.02 spec never grants runtime authority by itself.
+This receipt is historical acceptance evidence for the P04.01→P04.02 transition and must not be rewritten to imply later package completion.
