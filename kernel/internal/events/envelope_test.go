@@ -72,7 +72,7 @@ func TestEnvelopeParseToleratesExtensionsAndRejectsTrailingJSON(t *testing.T) {
 	}
 
 	extended := append([]byte(nil), serialized[:len(serialized)-1]...)
-	extended = append(extended, []byte(`,"futureextension":"safe-metadata"}`)...)
+	extended = append(extended, []byte(",\"futureextension\":\"safe-metadata\"}")...)
 	parsed, parseErr := Parse(extended)
 	if parseErr != nil {
 		t.Fatalf("Parse() rejected safe unknown extension: %v", parseErr)
@@ -81,7 +81,7 @@ func TestEnvelopeParseToleratesExtensionsAndRejectsTrailingJSON(t *testing.T) {
 		t.Fatalf("parsed event id = %q, want %q", parsed.ID, envelope.ID)
 	}
 
-	trailing := append(append([]byte(nil), serialized...), []byte(` {}`)...)
+	trailing := append(append([]byte(nil), serialized...), []byte(" {}")...)
 	_, trailingErr := Parse(trailing)
 	assertFailureCode(t, trailingErr, codeEnvelopeInvalid)
 }
@@ -139,7 +139,7 @@ func TestEnvelopeRejectsSecretLikeAndUnboundedPayloads(t *testing.T) {
 	assertFailureCode(t, err, codePayloadInvalid)
 
 	base = testParams(t)
-	base.Data = []byte(`{"order_id":"ord_123"}{"other":true}`)
+	base.Data = []byte("{\"order_id\":\"ord_123\"}{\"other\":true}")
 	_, err = New(base)
 	assertFailureCode(t, err, codePayloadInvalid)
 }
