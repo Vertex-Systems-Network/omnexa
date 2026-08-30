@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate frozen P00 evidence and completed P01 prerequisites across P02/P03."""
+"""Validate frozen P00 evidence and completed P01 prerequisites across P02/P03/P04."""
 
 from __future__ import annotations
 
@@ -44,8 +44,8 @@ controls = {item.get("tracker"): item.get("state") for item in entry.get("blocke
 if controls.get("issue:#3") != "SATISFIED" or controls.get("issue:#14") != "SATISFIED":
     raise SystemExit("ERROR: EG-02/Issue #3 and EG-03/Issue #14 must remain SATISFIED")
 
-if state.get("current_phase") not in {"P01", "P02", "P03"}:
-    raise SystemExit("ERROR: freeze validator must be reviewed before advancing beyond P03")
+if state.get("current_phase") not in {"P01", "P02", "P03", "P04"}:
+    raise SystemExit("ERROR: freeze validator must be reviewed before advancing beyond P04")
 phases = {item.get("id"): item for item in state.get("phases") or []}
 if (phases.get("P00") or {}).get("state") != "done":
     raise SystemExit("ERROR: phases[] P00 must remain done")
@@ -144,6 +144,23 @@ if current_phase == "P03":
             raise SystemExit("ERROR: completed P03 checkpoint must lock kernel implementation")
     else:
         raise SystemExit("ERROR: P03 current phase must be active or done")
+if current_phase == "P04":
+    p02 = phases.get("P02") or {}
+    p03 = phases.get("P03") or {}
+    p04 = phases.get("P04") or {}
+    if p02.get("state") != "done" or p02.get("active_work_package") is not None:
+        raise SystemExit("ERROR: P02 must remain completed during P04")
+    if p03.get("state") != "done" or p03.get("active_work_package") is not None:
+        raise SystemExit("ERROR: P03 must remain completed before/during P04")
+    if phase.get("id") != "P04" or phase.get("state") != "active" or p04.get("state") != "active":
+        raise SystemExit("ERROR: P04 current phase/state mismatch")
+    current = state.get("current_work_package")
+    if not isinstance(current, str) or not current.startswith("P04."):
+        raise SystemExit("ERROR: active P04 must identify one current P04 package")
+    if p04.get("active_work_package") != current:
+        raise SystemExit("ERROR: phases[] P04 active package mismatch")
+    if lock.get("kernel_code_authorized") is not True:
+        raise SystemExit("ERROR: active P04 must explicitly authorize bounded kernel implementation")
 
 print("Omnexa foundation freeze / completed P01 prerequisite validation: PASS")
 print("Architecture: FROZEN")
