@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "phase": "P04",
+  "name": "Data, Jobs & Event Fabric",
+  "state": "activation_candidate",
+  "activation_policy": "strict_sequential_one_active_package",
+  "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
+  "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
+  "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
+  "implementation_authorized": false,
+  "packages": [
+    {"id":"P04.01","name":"Event envelope & identity contract","state":"activation_candidate","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","owner":"kernel.events"},
+    {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"locked","depends_on":["P04.01"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"locked","depends_on":["P04.01","P04.02"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.04","name":"Transactional outbox reliability primitive","state":"locked","depends_on":["P04.01","P04.03"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.05","name":"Consumer inbox/deduplication & idempotency primitive","state":"locked","depends_on":["P04.01","P04.04"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.06","name":"Retry/backoff, terminal failure & dead-letter/quarantine policy","state":"locked","depends_on":["P04.03","P04.05"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.07","name":"Event schema registry, compatibility & validation","state":"locked","depends_on":["P04.01","P04.06"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.08","name":"Background-job ownership, tenant context & correlation","state":"locked","depends_on":["P04.01","P04.07"],"spec":null,"owner":"kernel.jobs"},
+    {"id":"P04.09","name":"Reliability observability, diagnostics & operator recovery","state":"locked","depends_on":["P04.03","P04.08"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.10","name":"Replay/duplicate/failure/restart/poison-event acceptance","state":"locked","depends_on":["P04.01","P04.09"],"spec":null,"owner":"kernel.events"}
+  ],
+  "phase_exit": "LOCKED — terminal acceptance requires P04.01-P04.10 completion with replay/duplicate/crash/restart/poison-event proof and no double-applied protected mutation.",
+  "note": "This sequence is an activation candidate until the separate P04 activation transaction updates canonical STATE.json and merges. Only P04.01 may become active at entry; P04.02-P04.10 remain locked."
+}
