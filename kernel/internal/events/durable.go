@@ -17,16 +17,16 @@ const maxDurableScopeLength = 128
 var durableScopePattern = regexp.MustCompile(`^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$`)
 
 const (
-	codeDurableInvalid          failure.Code = "events.durable.invalid"
-	codeDurableBindingConflict  failure.Code = "events.durable.binding_conflict"
-	codeDurableInterrupted      failure.Code = "events.durable.interrupted"
-	codeCheckpointBindFailed    failure.Code = "events.checkpoint.bind_failed"
-	codeCheckpointMalformed     failure.Code = "events.checkpoint.malformed"
-	codeCheckpointStale         failure.Code = "events.checkpoint.stale"
-	codeCheckpointConflict      failure.Code = "events.checkpoint.conflict"
-	codeCheckpointReadFailed    failure.Code = "events.checkpoint.read_failed"
-	codeCheckpointWriteFailed   failure.Code = "events.checkpoint.write_failed"
-	codeCheckpointExhausted     failure.Code = "events.checkpoint.exhausted"
+	codeDurableInvalid         failure.Code = "events.durable.invalid"
+	codeDurableBindingConflict failure.Code = "events.durable.binding_conflict"
+	codeDurableInterrupted     failure.Code = "events.durable.interrupted"
+	codeCheckpointBindFailed   failure.Code = "events.checkpoint.bind_failed"
+	codeCheckpointMalformed    failure.Code = "events.checkpoint.malformed"
+	codeCheckpointStale        failure.Code = "events.checkpoint.stale"
+	codeCheckpointConflict     failure.Code = "events.checkpoint.conflict"
+	codeCheckpointReadFailed   failure.Code = "events.checkpoint.read_failed"
+	codeCheckpointWriteFailed  failure.Code = "events.checkpoint.write_failed"
+	codeCheckpointExhausted    failure.Code = "events.checkpoint.exhausted"
 )
 
 // DurableScope is an explicit provider-neutral ordering/checkpoint scope. Stream
