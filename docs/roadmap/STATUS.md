@@ -1,99 +1,142 @@
 # Omnexa Program Status
 
-Last reconciled: **2026-08-31 post-activation read-back**
+Last reconciled: **2026-08-31 P04.02 closure / P04.03 activation candidate**
 
-## Current authoritative position
+## Current authoritative position vs candidate
 
-- Program: **Kernel Program**
-- Phase: **P04 — Data, Jobs & Event Fabric**
-- Phase state: **ACTIVE**
-- P04 progress: **1 / 10 done**
-- P04.01: **DONE — accepted implementation evidence recorded**
-- Current work package: **P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries**
-- P04.02: **SOLE ACTIVE PACKAGE**
-- P04.03-P04.10: **PLANNED / LOCKED**
-- P04 entry gate: **SATISFIED**
-- P03: **DONE — 11 / 11**; exit **SATISFIED / HISTORICAL**
-- P02: **DONE — 10 / 10**; exit **SATISFIED**
-- P01: **DONE — 12 / 12**; exit **SATISFIED**
-- Foundation Architecture v1: **FROZEN**
-- P00: **DONE — 10 / 10**
-- Repository visibility: **PUBLIC**
-- Main integration protection / Issue #3: **SATISFIED / CLOSED**
-- Canonical CI: **GITHUB-HOSTED ONLY / ubuntu-24.04**
-- Local/self-hosted governance runners: **PROHIBITED**
-- Kernel implementation authority: **P04.02 ONLY**
-- Business-feature implementation: **NOT AUTHORIZED**
+Protected `main@2d454a87e03f404f081b6a87f216d0cfa8c7608d` remains authoritative until this complete transaction passes exact-final-head Governance, is promoted unchanged, merges through the protected path, and protected main plus canonical state are re-read.
 
-Protected `main` read-back after the P04.01 closure / P04.02 activation transaction is `226f5236d80c806a7b07d65e7870981de320c05c`. Canonical `docs/roadmap/STATE.json` on that SHA confirms `current_phase=P04`, `current_work_package=P04.02`, `kernel_code_authorized=true` for the bounded P04.02 contract, and `business_feature_code_authorized=false`.
+Authoritative protected-main state before this transaction:
 
-## Accepted P04.01 / P04.02 transition evidence chain
+- P04: **ACTIVE — 1 / 10 done**;
+- P04.01: **DONE**;
+- P04.02: **SOLE ACTIVE PACKAGE** with accepted implementation/completion evidence;
+- P04.03: **PREPARED / PLANNED / LOCKED**;
+- P04.04-P04.10: **PLANNED / LOCKED**;
+- `kernel_code_authorized=true` for P04.02 only;
+- `business_feature_code_authorized=false`.
 
-P04.01 implementation is complete and accepted:
+Candidate atomic result on this isolated governance branch:
 
-- P04 activation / P04.01 authorization merge: `dc269932481a1e742926ac247f28f94bdf43937d`;
-- implementation exact head: `3c4ee6e79b76a6f042f3ee77b518943f3d7064e4`;
-- implementation promotion PR: `#147`;
-- promotion-specific Omnexa Governance: `#548` / run `33331934481`;
-- implementation merge: `6b1a01c009e9a08d45613a00e9b63c0c272bf020`;
-- completion evidence: `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`;
-- P04.02 contract/handoff preparation promotion PR: `#149`;
-- preparation promotion Governance: `#551`;
-- preparation merge: `16dfca22cd0430b8b2727e55628cc6fba381b5ef`;
-- P04.01 closure / P04.02 activation source PR: `#150`;
-- source exact head: `8f00090a2055a2283d61b30a66b0772ddf354648`;
-- source Governance: `#554` / run `33334373676`;
-- activation promotion PR: `#151`;
-- promotion Governance: `#555` / run `33335001265`;
-- accepted transition merge / authoritative main read-back: `226f5236d80c806a7b07d65e7870981de320c05c`.
+- Program: **Kernel Program**;
+- Phase: **P04 — Data, Jobs & Event Fabric**;
+- Phase state: **ACTIVE**;
+- P04 progress: **2 / 10 done**;
+- P04.01: **DONE — retained accepted evidence**;
+- P04.02: **DONE — accepted implementation/completion evidence retained**;
+- Current work package after governed merge/read-back: **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model**;
+- P04.03: **SOLE ACTIVE PACKAGE after governed merge/read-back**;
+- P04.04-P04.10: **PLANNED / LOCKED**;
+- P04 entry gate: **SATISFIED**;
+- P03: **DONE — 11 / 11**; exit **SATISFIED / HISTORICAL**;
+- P02: **DONE — 10 / 10**; exit **SATISFIED**;
+- P01: **DONE — 12 / 12**; exit **SATISFIED**;
+- Foundation Architecture v1: **FROZEN**;
+- Main integration protection / Issue #3: **SATISFIED / CLOSED**;
+- Canonical CI: **GITHUB-HOSTED ONLY / ubuntu-24.04**;
+- Local/self-hosted governance runners: **PROHIBITED**;
+- Kernel implementation authority after governed merge/read-back: **P04.03 ONLY**;
+- Business-feature implementation: **NOT AUTHORIZED**.
 
-Historical P01.01-P01.12, P02.01-P02.10 and P03.01-P03.11 completion evidence remains immutable and all retained regression verifiers remain mandatory.
+This carrier contains governance/state/continuity and validator hardening only. It contains no P04.03 runtime implementation.
 
-## P04.02 authoritative implementation boundary
+## Accepted P04.02 evidence chain
 
-P04.02 is provider-neutral and contract-first. A **new separate implementation branch from exact accepted main** may implement only the accepted `docs/roadmap/work-packages/P04.02.md` contract.
+P04.02 implementation/completion facts are already accepted on protected main and are not created by this transition:
 
-Authorized P04.02 scope is limited to:
+- P04.01 closure / P04.02 activation merge: `226f5236d80c806a7b07d65e7870981de320c05c`;
+- source implementation PR: `#155`;
+- promotion implementation PR: `#156`;
+- final exact implementation head: `5ec1de746eebc8734f86ec3aa2f311daae0dc18a`;
+- source Governance: `#563` / run `33350757489`;
+- promotion Governance: `#564` / run `33351220746` / job `99364850230`;
+- accepted implementation merge: `1b378a2f44c6e3cba87b936e39e05f1a18da94cc`;
+- completion evidence: `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`;
+- completion-evidence carrier PR: `#157`;
+- completion-evidence merge/read-back: `8334bed24e793e200540bf953f7249f11242badf`.
 
-- publish/subscribe abstraction and explicit ownership boundaries;
-- event publisher/subscriber interfaces and deterministic in-process/reference behavior where the accepted spec permits it;
-- explicit tenant/correlation propagation using the completed P04.01 envelope;
-- fail-closed module/owner identity and authorization boundaries;
+Historical P01.01-P01.12, P02.01-P02.10, P03.01-P03.11 and P04.01 evidence remains immutable and all retained regression verifiers remain mandatory.
+
+## Accepted P04.03 preparation chain
+
+P04.03 contract/handoff preparation is also already landed but remains non-authorizing before this transition:
+
+- preparation source PR: `#158`;
+- preparation exact head: `a20b37cbe0401626cd29e51a08efc399ee2d72e2`;
+- source Governance: `#568` / run `33364934121`;
+- unchanged preparation promotion PR: `#159`;
+- promotion Governance: `#569` / run `33368684906` / job `99414689966`;
+- preparation merge/read-back: `2d454a87e03f404f081b6a87f216d0cfa8c7608d`;
+- contract: `docs/roadmap/work-packages/P04.03.md`;
+- handoff: `docs/ai/handoffs/P04.03.md`.
+
+Preparation alone does not authorize durable consumer/checkpoint runtime.
+
+## P04.03 candidate implementation boundary
+
+Only after this closure/activation transaction itself passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read may a **new separate implementation branch** implement P04.03.
+
+Authorized P04.03 scope is limited to the accepted provider-neutral durability/checkpoint contract:
+
+- stable durable consumer identity compatible with P04.02 owner/consumer identity;
+- explicit stream/partition-equivalent checkpoint scope;
+- monotonic checkpoint advancement within one scope;
+- deterministic stale/regressive/conflicting checkpoint rejection;
+- restart/resume from the last accepted checkpoint;
+- cancellation/failure behavior that cannot advance past unacknowledged work;
+- fail-closed owner/tenant/scope collision handling;
+- explicit at-least-once-compatible duplicate delivery around crash/restart;
+- preservation of P04.01 envelope metadata and P04.02 ownership laws;
 - focused positive/adversarial tests and package verification.
 
-Explicitly unauthorized:
+Explicitly unauthorized under P04.03:
 
 - Kafka, NATS, RabbitMQ, Redis Streams or another broker/provider selection;
-- durable stream/consumer/checkpoint runtime;
-- database migrations;
-- outbox/inbox persistence;
-- retry/backoff/DLQ/quarantine runtime;
-- schema-registry runtime;
-- background-job execution changes;
-- business-domain event handlers;
-- P04.03+ implementation;
+- exactly-once delivery/business-mutation claims;
+- transactional outbox (`P04.04`);
+- inbox/deduplication persistence (`P04.05`);
+- retry/backoff/DLQ/quarantine runtime (`P04.06`);
+- schema-registry runtime (`P04.07`);
+- background-job execution changes (`P04.08`);
+- business-domain handlers or cross-module private writes;
+- P04.04+ implementation;
 - business-feature code;
 - strategic X-program runtime;
 - AI/model/agent runtime.
 
+## Sequential activation validator hardening
+
+`scripts/validate_p04_activation.py` is hardened in this transaction so advancement no longer relies on a P04.01-specific exception. For every completed predecessor it now requires:
+
+- `state=done` in the package sequence;
+- retained accepted spec and completion-evidence file;
+- matching canonical `governance_tracking.p04_NN_completion` entry with `state=PASS`;
+- matching evidence reference;
+- exact implementation head, implementation merge, workflow run and job tracking;
+- GitHub-hosted evidence on `ubuntu-24.04`;
+- state/sequence mirrors and prepared-spec count consistent with strict sequential activation.
+
+This makes P04.02 evidence a fail-closed prerequisite for P04.03 and generalizes the invariant for later P04 packages.
+
 ## State/continuity rule
 
-`docs/roadmap/STATE.json`, `docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json`, `AGENTS.md`, this status document and `docs/ai/` continuity snapshots must agree on:
+On this candidate branch `STATE.json`, `P04_PACKAGE_SEQUENCE.json`, `AGENTS.md`, this status file and `docs/ai/` must converge on the same proposed atomic state:
 
 ```text
-P04 ACTIVE — 1 / 10 done
+P04 ACTIVE — 2 / 10 done after governed merge/read-back
 P04.01 DONE
-P04.02 SOLE ACTIVE PACKAGE
-P04.03-P04.10 PLANNED / LOCKED
-kernel_code_authorized=true — P04.02 only
+P04.02 DONE
+P04.03 SOLE ACTIVE PACKAGE after governed merge/read-back
+P04.04-P04.10 PLANNED / LOCKED
+kernel_code_authorized=true — P04.03 only after governed merge/read-back
 business_feature_code_authorized=false
 ```
 
-Any future contradictory cursor/authority state is a stop-the-line reconciliation defect.
+Any contradictory cursor/authority state is a stop-the-line reconciliation defect.
 
 ## Protected integration / CI
 
-`main` remains governed through PR-only integration. Canonical acceptance evidence is GitHub-hosted `ubuntu-24.04` only. Source Governance #554 and promotion Governance #555 are the accepted P04.01→P04.02 transition evidence; future P04.02 implementation must obtain its own exact-head Governance and later separate completion transition.
+This source carrier is not merge authority. It must obtain fresh exact-final-head Omnexa Governance, substantive exact-head review, zero unresolved review threads, then be promoted unchanged through a fresh promotion-specific carrier with its own Governance pass. Merge must use the expected-head guard while current with protected main, followed by protected-main/state read-back.
 
 ## Issue #4 — external distribution gate
 
@@ -101,8 +144,9 @@ Issue #4 remains open for licensing/IP/trademark and public-launch decisions and
 
 ## Exact next work
 
-1. Complete this bounded post-merge continuity correction so subordinate snapshots stop describing an already-merged transaction as a candidate.
-2. Require exact-head Omnexa Governance and governed promotion/merge for the continuity-only correction.
-3. Re-read protected `main` and canonical `STATE.json`; confirm P04.02 remains sole active and all locks remain intact.
-4. Create a new isolated P04.02 implementation branch from that exact corrected `main` SHA.
-5. Implement only the accepted P04.02 contract; do not auto-advance to P04.03.
+1. Finish this P04.02 closure / P04.03 activation governance transaction without runtime source.
+2. Require exact-final-head Omnexa Governance and substantive review.
+3. Promote the unchanged reviewed head through a fresh promotion carrier and require promotion-specific Governance.
+4. Merge only while current with protected main and with zero unresolved conversations.
+5. Re-read protected main, canonical state, package sequence and continuity; confirm P04.03 is sole active and P04.04+ remain locked.
+6. Only then create a new P04.03 implementation branch from that exact protected-main SHA. Do not implement P04.03 on this activation carrier.
