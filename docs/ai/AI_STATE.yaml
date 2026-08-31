@@ -2,10 +2,10 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-08-31"
-  nature: "non-authoritative P04.01 closure / P04.02 activation continuity candidate"
-  transaction_base: "16dfca22cd0430b8b2727e55628cc6fba381b5ef"
+  nature: "non-authoritative post-activation continuity snapshot"
+  authoritative_main: "226f5236d80c806a7b07d65e7870981de320c05c"
   transaction_linear: "ABD-267"
-  transaction_branch: "agent/20260831-omnexa-p04-01-close-p04-02-activate"
+  reconciliation_branch: "agent/20260831-omnexa-p04-02-post-activation-reconcile"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -16,9 +16,9 @@ project:
 phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
-  state_candidate: "active"
-  progress_candidate: "1 / 10 done"
-  current_work_package_candidate: "P04.02"
+  state: "active"
+  progress: "1 / 10 done"
+  current_work_package: "P04.02"
   p03_exit: "SATISFIED / HISTORICAL"
   p04_entry: "SATISFIED"
 
@@ -34,9 +34,15 @@ prerequisites:
   p04_01_completion_evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
   p04_02_preparation_merge: "16dfca22cd0430b8b2727e55628cc6fba381b5ef"
   p04_02_preparation_governance: 551
+  p04_02_activation_source_pr: 150
+  p04_02_activation_source_head: "8f00090a2055a2283d61b30a66b0772ddf354648"
+  p04_02_activation_source_governance: 554
+  p04_02_activation_promotion_pr: 151
+  p04_02_activation_promotion_governance: 555
+  p04_02_activation_merge: "226f5236d80c806a7b07d65e7870981de320c05c"
 
 p04_01:
-  state_candidate: "done"
+  state: "done"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.01.md"
   evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
@@ -45,7 +51,7 @@ p04_01:
   implementation_merge: "6b1a01c009e9a08d45613a00e9b63c0c272bf020"
 
 p04_02:
-  state_candidate: "active_after_transition_merge_and_main_readback"
+  state: "active"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.02.md"
   sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
@@ -61,8 +67,8 @@ p04_02:
   business_handler_authorized: false
 
 security:
-  kernel_code_authorized_after_transition_merge: true
-  kernel_authority_scope: "P04.02 only after exact-final-head transition Governance, merge and protected-main read-back"
+  kernel_code_authorized: true
+  kernel_authority_scope: "P04.02 only"
   business_feature_code_authorized: false
   p04_03_plus_authorized: false
   strategic_x_runtime_authorized: false
@@ -77,17 +83,15 @@ security:
   chain_of_thought_allowed_in_continuity_files: false
 
 blocked_actions:
-  - "implement P04.02 on this governance/state/continuity transition branch"
-  - "start P04.02 source implementation before this transition merges and protected main is re-read"
   - "implement P04.03-P04.10"
-  - "select a broker/provider or add durable streams, migrations, outbox/inbox, retry/DLQ or schema-registry runtime under this transition"
+  - "select a broker/provider or add durable streams, migrations, outbox/inbox, retry/DLQ or schema-registry runtime under P04.02"
   - "implement business modules/features, strategic X-program runtime or AI/model/agent runtime"
   - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Complete atomic STATE/AGENTS/STATUS/package-sequence/AI-continuity reconciliation for P04.01 done and P04.02 sole-active candidate, then require exact-final-head Omnexa Governance."
-  after_transition_merge: "Re-read protected main and canonical state, then create a fresh separate P04.02 implementation branch from the exact post-transition main SHA."
+  current: "Complete bounded post-activation continuity reconciliation without changing canonical STATE.json or P04.02 runtime source."
+  after_reconciliation_merge: "Re-read protected main and canonical state, then create a fresh separate P04.02 implementation branch from the exact corrected main SHA."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -103,4 +107,4 @@ source_authority:
   transition_transaction: "docs/governance/P04_01_P04_02_TRANSITION_TRANSACTION.md"
 
 handoff:
-  active_candidate: "docs/ai/handoffs/P04.02.md"
+  active: "docs/ai/handoffs/P04.02.md"
