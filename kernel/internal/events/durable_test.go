@@ -29,8 +29,9 @@ func TestDurableConsumerResumesFromLastAcceptedCheckpoint(t *testing.T) {
 	}
 
 	first := testEnvelope(t)
-	if err := firstConsumer.Process(context.Background(), Delivery{Position: 1, Envelope: first}); err != nil {
-		t.Fatalf("first Process() error = %v", err)
+	processErr := firstConsumer.Process(context.Background(), Delivery{Position: 1, Envelope: first})
+	if processErr != nil {
+		t.Fatalf("first Process() error = %v", processErr)
 	}
 	checkpoint, exists, err := firstConsumer.LastCheckpoint(context.Background())
 	if err != nil {
