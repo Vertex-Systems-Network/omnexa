@@ -10,8 +10,8 @@
   "implementation_authorized": true,
   "packages": [
     {"id":"P04.01","name":"Event envelope & identity contract","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","owner":"kernel.events","evidence":["docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"]},
-    {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"active","depends_on":["P04.01"],"spec":"docs/roadmap/work-packages/P04.02.md","owner":"kernel.events"},
-    {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"planned","depends_on":["P04.01","P04.02"],"spec":null,"owner":"kernel.events"},
+    {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"done","depends_on":["P04.01"],"spec":"docs/roadmap/work-packages/P04.02.md","owner":"kernel.events","evidence":["docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"]},
+    {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"active","depends_on":["P04.01","P04.02"],"spec":"docs/roadmap/work-packages/P04.03.md","owner":"kernel.events"},
     {"id":"P04.04","name":"Transactional outbox reliability primitive","state":"planned","depends_on":["P04.01","P04.03"],"spec":null,"owner":"kernel.events"},
     {"id":"P04.05","name":"Consumer inbox/deduplication & idempotency primitive","state":"planned","depends_on":["P04.01","P04.04"],"spec":null,"owner":"kernel.events"},
     {"id":"P04.06","name":"Retry/backoff, terminal failure & dead-letter/quarantine policy","state":"planned","depends_on":["P04.03","P04.05"],"spec":null,"owner":"kernel.events"},
@@ -21,5 +21,5 @@
     {"id":"P04.10","name":"Replay/duplicate/failure/restart/poison-event acceptance","state":"planned","depends_on":["P04.01","P04.09"],"spec":null,"owner":"kernel.events"}
   ],
   "phase_exit": "LOCKED — terminal acceptance requires P04.01-P04.10 completion with replay/duplicate/crash/restart/poison-event proof and no double-applied protected mutation.",
-  "note": "Transition candidate only until this governance/state carrier passes exact-final-head Omnexa Governance, merges, and protected main is re-read. P04.01 is recorded done from accepted evidence; P04.02 is the sole candidate active package. P04.03-P04.10 and business-feature code remain locked."
+  "note": "Closure/activation candidate only until this exact governance/state transaction passes exact-final-head Omnexa Governance, is promoted unchanged, merges through the protected path, and protected main is re-read. P04.01-P04.02 are recorded done with accepted evidence; P04.03 is the sole candidate active package. P04.04-P04.10 and business-feature/AI runtime remain locked."
 }
