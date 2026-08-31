@@ -21,6 +21,7 @@ required_files=(
   kernel/internal/events/bus_test.go
   kernel/internal/events/durable.go
   kernel/internal/events/durable_test.go
+  kernel/internal/events/durable_concurrency_test.go
   docs/roadmap/work-packages/P04.03.md
 )
 for file in "${required_files[@]}"; do
@@ -48,8 +49,10 @@ fi
 
 # P04.03 remains provider-neutral and must not pull future reliability packages,
 # concrete brokers, database persistence or job runtime into the active package.
-if grep -nE '"(database/sql|github.com/(segmentio/kafka-go|IBM/sarama|nats-io|rabbitmq|redis|confluentinc)|go\.uber\.org/cadence|go\.temporal\.io)"' \
-  kernel/internal/events/durable.go kernel/internal/events/durable_test.go; then
+if grep -nE '"(database/sql|github.com/segmentio/kafka-go|github.com/IBM/sarama|github.com/nats-io/|github.com/rabbitmq/|github.com/redis/|github.com/confluentinc/|go\.uber\.org/cadence|go\.temporal\.io)' \
+  kernel/internal/events/durable.go \
+  kernel/internal/events/durable_test.go \
+  kernel/internal/events/durable_concurrency_test.go; then
   echo "ERROR: P04.03 introduced an unauthorized provider/database/workflow dependency" >&2
   exit 1
 fi
@@ -93,6 +96,10 @@ for marker in \
     exit 1
   fi
 done
+if ! grep -Fq 'TestDurableConsumerConcurrentSameScopeCheckpointRaceIsFailClosed' kernel/internal/events/durable_concurrency_test.go; then
+  echo "ERROR: P04.03 concurrent same-scope checkpoint race evidence is missing" >&2
+  exit 1
+fi
 
 # Checkpoint state must remain progress metadata only; raw event data does not
 # belong in the checkpoint record.
@@ -113,7 +120,7 @@ go build ./kernel/...
 
 echo "P04.03 G0 active-package governance + exact P04.03 contract boundary: PASS"
 echo "P04.03 G1 provider-neutral durable owner/consumer/route/scope binding: PASS"
-echo "P04.03 G2 contiguous monotonic checkpoint advancement and stale/conflict rejection: PASS"
+echo "P04.03 G2 contiguous monotonic checkpoint advancement, stale/conflict rejection and concurrent same-scope CAS race: PASS"
 echo "P04.03 G3 restart/resume from last accepted checkpoint with explicit position-1 convention: PASS"
 echo "P04.03 G4 handler failure/cancellation cannot advance unacknowledged work: PASS"
 echo "P04.03 G5 tenant/owner/scope isolation and malformed-state fail-closed behavior: PASS"
