@@ -93,16 +93,21 @@ func (registration Registration) validate() error {
 // Registry is an in-process contract registry only. It is not a worker loop,
 // checkpoint store, retry scheduler, durable consumer or broker adapter.
 type Registry struct {
-	mu     sync.RWMutex
-	routes map[EventType]Registration
+	mu        sync.RWMutex
+	routes    map[EventType]Registration
+	consumers map[string]Producer
 }
 
 func NewRegistry() *Registry {
-	return &Registry{routes: make(map[EventType]Registration)}
+	return &Registry{
+		routes:    make(map[EventType]Registration),
+		consumers: make(map[string]Producer),
+	}
 }
 
-// Register atomically rejects malformed, duplicate or conflicting routes. No
-// prior owner may be silently replaced by a later registration.
+// Register atomically rejects malformed, duplicate or conflicting routes and
+// consumer identities. No prior owner may be silently replaced by a later
+// registration.
 func (registry *Registry) Register(registration Registration) error {
 	if registry == nil {
 		return classifiedFailure(codeRegistrationInvalid, failure.CategoryValidation, "event subscription registration is invalid")
@@ -118,11 +123,18 @@ func (registry *Registry) Register(registration Registration) error {
 
 	registry.mu.Lock()
 	defer registry.mu.Unlock()
+	if registry.routes == nil || registry.consumers == nil {
+		return classifiedFailure(codeRegistrationInvalid, failure.CategoryValidation, "event subscription registry is not initialized")
+	}
+	if _, exists := registry.consumers[normalized.ConsumerID]; exists {
+		return classifiedFailure(codeRegistrationConflict, failure.CategoryConflict, "event subscription registration conflicts with an existing consumer identity")
+	}
 	for _, eventType := range normalized.EventTypes {
 		if _, exists := registry.routes[eventType]; exists {
 			return classifiedFailure(codeRegistrationConflict, failure.CategoryConflict, "event subscription registration conflicts with an existing route")
 		}
 	}
+	registry.consumers[normalized.ConsumerID] = normalized.Owner
 	for _, eventType := range normalized.EventTypes {
 		registry.routes[eventType] = normalized
 	}
