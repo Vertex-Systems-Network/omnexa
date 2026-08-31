@@ -16,6 +16,7 @@ var consumerPattern = regexp.MustCompile(`^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$`)
 const (
 	codePublishInvalid       failure.Code = "events.publish.invalid"
 	codePublishFailed        failure.Code = "events.publish.failed"
+	codeHandlerFailed        failure.Code = "events.handler.failed"
 	codeRegistrationInvalid  failure.Code = "events.registration.invalid"
 	codeRegistrationConflict failure.Code = "events.registration.conflict"
 	codeRouteUnknown         failure.Code = "events.route.unknown"
@@ -162,7 +163,7 @@ func (registry *Registry) Invoke(ctx context.Context, envelope Envelope, trusted
 		return err
 	}
 	if err := registration.Handler(ctx, envelope); err != nil {
-		return wrappedFailure(err, codePublishFailed, failure.CategoryInternal, "event handler invocation failed")
+		return wrappedFailure(err, codeHandlerFailed, failure.CategoryInternal, "event handler invocation failed")
 	}
 	return nil
 }
