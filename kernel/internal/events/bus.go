@@ -2,7 +2,6 @@ package events
 
 import (
 	"context"
-	"errors"
 	"regexp"
 	"sort"
 	"strings"
@@ -172,5 +171,3 @@ func validConsumerID(value string) bool {
 	trimmed := strings.TrimSpace(value)
 	return trimmed != "" && trimmed == value && len(value) <= 128 && consumerPattern.MatchString(value)
 }
-
-var _ = errors.Is
