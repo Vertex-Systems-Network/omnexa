@@ -135,6 +135,42 @@ func TestRegistryRejectsMalformedDuplicateAndConflictingRegistrations(t *testing
 	}
 }
 
+func TestRegistryRejectsConsumerIdentityReuseAcrossOwnersAndRoutes(t *testing.T) {
+	registry := NewRegistry()
+	handler := func(context.Context, Envelope) error { return nil }
+	if err := registry.Register(Registration{
+		Owner:      Producer("urn:omnexa:module:commerce.orders"),
+		ConsumerID: "shared.consumer",
+		EventTypes: []EventType{"commerce.order.created.v1"},
+		Handler:    handler,
+	}); err != nil {
+		t.Fatalf("first Register() error = %v", err)
+	}
+
+	assertFailureCode(t, registry.Register(Registration{
+		Owner:      Producer("urn:omnexa:module:analytics.orders"),
+		ConsumerID: "shared.consumer",
+		EventTypes: []EventType{"commerce.order.updated.v1"},
+		Handler:    handler,
+	}), codeRegistrationConflict)
+	if _, err := registry.Resolve("commerce.order.updated.v1"); err == nil {
+		t.Fatal("conflicting consumer identity left a partial hidden route")
+	}
+}
+
+func TestZeroValueRegistryFailsClosedWithoutPartialState(t *testing.T) {
+	var registry Registry
+	assertFailureCode(t, registry.Register(Registration{
+		Owner:      Producer("urn:omnexa:module:commerce.orders"),
+		ConsumerID: "orders.zero_value",
+		EventTypes: []EventType{"commerce.order.created.v1"},
+		Handler:    func(context.Context, Envelope) error { return nil },
+	}), codeRegistrationInvalid)
+	if _, err := registry.Resolve("commerce.order.created.v1"); err == nil {
+		t.Fatal("zero-value registry unexpectedly retained a route")
+	}
+}
+
 func TestTenantScopedInvocationFailsClosedBeforeHandler(t *testing.T) {
 	registry := NewRegistry()
 	called := false
