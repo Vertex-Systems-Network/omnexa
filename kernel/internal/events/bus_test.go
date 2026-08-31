@@ -3,6 +3,7 @@ package events
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/tenancy"
@@ -51,8 +52,9 @@ func TestPublisherRejectsInvalidEnvelopeBeforeTransport(t *testing.T) {
 }
 
 func TestPublisherFailureIsSafeAndDoesNotClaimAcceptance(t *testing.T) {
+	const privateCause = "restricted payload and provider topology must remain private"
 	publisher, err := NewPublisher(func(_ context.Context, _ Envelope) error {
-		return errors.New("restricted payload and provider topology must remain private")
+		return errors.New(privateCause)
 	})
 	if err != nil {
 		t.Fatalf("NewPublisher() error = %v", err)
@@ -62,7 +64,7 @@ func TestPublisherFailureIsSafeAndDoesNotClaimAcceptance(t *testing.T) {
 	if result.Accepted {
 		t.Fatal("failed publish claimed acceptance")
 	}
-	if publishErr != nil && containsSensitiveText(publishErr.Error()) {
+	if publishErr != nil && strings.Contains(publishErr.Error(), privateCause) {
 		t.Fatalf("public publish failure leaked internal cause: %v", publishErr)
 	}
 }
@@ -157,6 +159,27 @@ func TestTenantScopedInvocationFailsClosedBeforeHandler(t *testing.T) {
 	}
 }
 
+func TestHandlerFailureIsClassifiedSeparatelyAndCauseIsPrivate(t *testing.T) {
+	const privateCause = "private consumer diagnostic"
+	registry := NewRegistry()
+	if err := registry.Register(Registration{
+		Owner:      Producer("urn:omnexa:module:commerce.orders"),
+		ConsumerID: "orders.failure_projection",
+		EventTypes: []EventType{"commerce.order.created.v1"},
+		Handler: func(context.Context, Envelope) error {
+			return errors.New(privateCause)
+		},
+	}); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	invokeErr := registry.Invoke(context.Background(), testEnvelope(t), "")
+	assertFailureCode(t, invokeErr, codeHandlerFailed)
+	if invokeErr != nil && strings.Contains(invokeErr.Error(), privateCause) {
+		t.Fatalf("public handler failure leaked internal cause: %v", invokeErr)
+	}
+}
+
 func TestRegistryAllowsDuplicateDeliveryAndCreatesNoOrderingGuarantee(t *testing.T) {
 	registry := NewRegistry()
 	calls := 0
@@ -187,8 +210,4 @@ func TestUnknownRouteFailsClosed(t *testing.T) {
 	registry := NewRegistry()
 	_, err := registry.Resolve("commerce.order.created.v1")
 	assertFailureCode(t, err, codeRouteUnknown)
-}
-
-func containsSensitiveText(value string) bool {
-	return value == "restricted payload and provider topology must remain private"
 }
