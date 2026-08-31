@@ -323,3 +323,7 @@ jobs:
       - name: Verify P03.11 package trust hooks and P03 exit proof
         shell: bash
         run: bash scripts/verify_p03_11.sh
+
+      - name: Verify P04.03 durable consumer and checkpoint baseline
+        shell: bash
+        run: bash scripts/verify_p04_03.sh
