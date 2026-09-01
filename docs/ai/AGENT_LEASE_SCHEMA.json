@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omnexa.local/schemas/agent-lease-v1.json",
+  "title": "Omnexa Agent Scope Lease v1",
+  "description": "Planning/governance schema for path/logical-resource leases. A lease is bounded coordination metadata, not roadmap authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lease_id",
+    "task_id",
+    "agent_id",
+    "base_sha",
+    "resource_kind",
+    "resources",
+    "mode",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "lease_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "agent_id": {"type": "string", "minLength": 1},
+    "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "resource_kind": {"enum": ["path", "migration-namespace", "contract", "registry", "governance-surface"]},
+    "resources": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "mode": {"enum": ["shared-read", "exclusive-write"]},
+    "status": {"enum": ["planned", "active", "released", "expired", "cancelled"]},
+    "depends_on_leases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "handoff_to_task": {"type": ["string", "null"]},
+    "notes": {"type": "string"}
+  }
+}
