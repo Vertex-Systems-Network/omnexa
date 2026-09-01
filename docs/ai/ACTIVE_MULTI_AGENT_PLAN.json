@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "wave_id": "P04.04-WAVE-20260902-01",
+  "status": "branch-bootstrap-complete-planning-governance-pending",
+  "authority": {
+    "phase": "P04",
+    "work_package": "P04.04",
+    "owner": "kernel.events",
+    "canonical_state": "docs/roadmap/STATE.json",
+    "business_feature_code_authorized": false,
+    "kernel_code_authorized": true,
+    "note": "This plan coordinates already-authorized P04.04 development only and does not grant P04.05+ or future-module authority."
+  },
+  "bootstrap": {
+    "protected_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+    "required_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+    "branches_created_before_task_work": true,
+    "all_branches_verified_same_base": true,
+    "coordination_issue": 177
+  },
+  "supervisor": {
+    "agent_id": "Supervisor",
+    "task_id": "P04.04-T04",
+    "role": "supervisor-integration-verifier",
+    "branch": "supervisor/20260902-p04-04-integration",
+    "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+    "write_paths": [
+      "scripts/verify_p04_04.sh",
+      ".github/workflows/governance.yml"
+    ],
+    "forbidden_paths": [
+      "docs/roadmap/STATE.json",
+      "modules/**",
+      "kernel/migrations/**",
+      "kernel/internal/events/envelope.go",
+      "kernel/internal/events/bus.go",
+      "kernel/internal/events/durable.go"
+    ],
+    "depends_on": [
+      "P04.04-T01",
+      "P04.04-T02",
+      "P04.04-T03"
+    ],
+    "merge_order": 4,
+    "status": "ready"
+  },
+  "tasks": [
+    {
+      "task_id": "P04.04-T01",
+      "agent_id": "Agent-01",
+      "role": "outbox-core-writer",
+      "module": "kernel.events/outbox-core",
+      "branch": "agent/20260902-p04-04-outbox-core",
+      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "write_paths": [
+        "kernel/internal/events/outbox.go",
+        "kernel/internal/events/outbox_core_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "status": "ready"
+    },
+    {
+      "task_id": "P04.04-T02",
+      "agent_id": "Agent-02",
+      "role": "outbox-postgres-migration-writer",
+      "module": "kernel.events/outbox-persistence",
+      "branch": "agent/20260902-p04-04-persistence-migration",
+      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "write_paths": [
+        "kernel/internal/events/outbox_postgres.go",
+        "kernel/internal/events/outbox_postgres_integration_test.go",
+        "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "migration_reservation": {
+        "owner": "kernel.events",
+        "path": "kernel/migrations/kernel.events/1_create_transactional_outbox.sql",
+        "version": "1",
+        "data_budget": "new owner-scoped P04.04 outbox persistence only; no business-table mutation, no business-data backfill, no destructive data operation, no P04.05/P04.06 semantics",
+        "status": "provisional-until-wave-plan-governed"
+      },
+      "depends_on": [
+        "P04.04-T01"
+      ],
+      "parallel_note": "Migration/schema preparation may proceed within the frozen P04.04 record law, but the Go adapter must not guess an unaccepted T01 API and must synchronize after T01 before submission if its interface assumptions changed.",
+      "merge_order": 2,
+      "status": "ready-with-dependency"
+    },
+    {
+      "task_id": "P04.04-T03",
+      "agent_id": "Agent-03",
+      "role": "outbox-reliability-test-writer",
+      "module": "kernel.events/outbox-reliability-tests",
+      "branch": "agent/20260902-p04-04-reliability-tests",
+      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "write_paths": [
+        "kernel/internal/events/outbox_reliability_test.go",
+        "kernel/internal/events/outbox_concurrency_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": [
+        "P04.04-T01",
+        "P04.04-T02"
+      ],
+      "parallel_note": "Test design may proceed immediately; concrete API-bound test implementation must synchronize accepted T01/T02 contracts rather than guess them.",
+      "merge_order": 3,
+      "status": "ready-with-dependency"
+    }
+  ],
+  "signals": {
+    "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
+    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/177",
+    "completion": "Work Done and Submitted",
+    "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
+    "sync_ack": "Sync Complete — Resuming Work",
+    "review_changes": "Review Changes Required"
+  },
+  "merge_strategy": {
+    "supervisor_reviews_all_worker_submissions": true,
+    "direct_unverified_main_merge_forbidden": true,
+    "pipeline": [
+      "worker/source exact head",
+      "source PR review",
+      "exact-head Governance",
+      "unchanged promotion when required",
+      "promotion-specific Governance",
+      "zero unresolved review threads",
+      "protected-main freshness and expected-head check",
+      "guarded merge",
+      "protected-main readback",
+      "merge alert to all active agents",
+      "all active branches synchronize new main before resume"
+    ],
+    "deterministic_order": [
+      "P04.04-T01",
+      "P04.04-T02",
+      "P04.04-T03",
+      "P04.04-T04"
+    ]
+  },
+  "interrupt_policy": {
+    "on_valid_completion_signal": [
+      "Supervisor checkpoints and pauses its own task",
+      "Supervisor reviews submitted exact head and current protected main",
+      "Supervisor approves into governed merge pipeline or publishes Review Changes Required",
+      "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"
+    ],
+    "simultaneous_submission_priority": [
+      "security/correctness blocker",
+      "dependency-unblocking submission",
+      "migration/public-contract owner submission",
+      "oldest valid submitted signal"
+    ]
+  },
+  "instruction_sync": {
+    "task_start_required": true,
+    "pre_submission_required": true,
+    "readme_section": "Agent Working Instructions",
+    "if_materially_changed": "update README in the same governed PR",
+    "if_unchanged": "Agent instructions checked — README instruction delta: none"
+  }
+}
