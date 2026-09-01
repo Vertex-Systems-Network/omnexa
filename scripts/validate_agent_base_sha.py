@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import subprocess
 
-from agent_orchestration_common import ROOT, ensure_commit, fail, find_branch_record, load_plan, pr_context, remote_main_sha
+from agent_orchestration_common import ROOT, ensure_full_history, fail, find_branch_record, load_plan, pr_context, remote_main_sha
 
 
 def main() -> None:
@@ -26,8 +26,7 @@ def main() -> None:
     if base_sha != live_main:
         fail(f"stale worker PR base: PR base {base_sha} != live protected main {live_main}; sync main and resubmit")
 
-    ensure_commit(base_sha)
-    ensure_commit(head_sha)
+    ensure_full_history()
     proc = subprocess.run(
         ["git", "merge-base", "--is-ancestor", base_sha, head_sha],
         cwd=ROOT,
