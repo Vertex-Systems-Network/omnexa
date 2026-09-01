@@ -51,6 +51,7 @@ Every material concurrent task must record:
 - `task_id`;
 - `agent_id` or role identity;
 - exact `base_sha`;
+- branch/workspace identity;
 - phase/work-package;
 - owning module/domain/kernel capability;
 - task purpose;
