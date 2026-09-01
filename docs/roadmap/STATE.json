@@ -2,17 +2,17 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-08-31",
+  "last_reconciled": "2026-09-01",
   "program": "kernel",
   "current_phase": "P04",
-  "current_work_package": "P04.03",
+  "current_work_package": "P04.04",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P04.03 provider-neutral durable consumer/checkpoint implementation only after this closure/activation transition merges and protected main is re-read",
-      "focused P04.03 crash/restart, monotonicity, cancellation, duplicate-delivery, tenant/scope isolation tests, verifier and acceptance evidence",
-      "governance and continuity updates required for P04.03"
+      "P04.04 transactional outbox reliability implementation only after this closure/activation transaction passes exact-head Governance, is promoted unchanged, merges, and protected main is re-read",
+      "P04.04 provider-neutral local-transaction outbox source, focused crash/restart/concurrency/tenant isolation tests, verifier and acceptance evidence within the accepted P04.04 contract",
+      "governance and continuity updates required for P04.04"
     ]
   },
   "governance_tracking": {
@@ -30,7 +30,10 @@
       "document": "docs/governance/P01_ENTRY_GATE.md",
       "transition_checklist": "docs/governance/P00_P01_TRANSITION_CHECKLIST.md",
       "blockers": [],
-      "satisfied": [3, 14],
+      "satisfied": [
+        3,
+        14
+      ],
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
       "note": "Historical P01 entry authorization only."
@@ -500,10 +503,10 @@
       "readiness_merge": "384c82b6d5b8bd89b70eb94640ea3be7109bc537",
       "planning_merge": "73561ad68e453c2741dec82d0b6fb01a7dcea1be",
       "validator_prerequisite_merge": "f97ee9a509f14247771626dc89b685e22ecd9457",
-      "current_work_package": "P04.03",
+      "current_work_package": "P04.04",
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "Historical P04 entry remains satisfied. P04.01 and P04.02 have accepted completion evidence; P04.03 becomes the sole implementation-authorized package only after this separate closure/activation transition passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read."
+      "note": "Historical P04 entry remains satisfied. P04.01-P04.03 have accepted completion evidence; P04.04 becomes the sole implementation-authorized package only after this separate P04.03 closure/P04.04 activation transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read."
     },
     "p04_01_completion": {
       "state": "PASS",
@@ -540,7 +543,7 @@
       "preparation_workflow_run": 33368684906,
       "preparation_job": 99414689966,
       "preparation_merge": "2d454a87e03f404f081b6a87f216d0cfa8c7608d",
-      "note": "P04.02 implementation is accepted from promotion-specific Governance #564 and expected-head merge/read-back. Completion evidence landed through PR #157; the prepared/locked P04.03 contract/handoff landed unchanged through promotion PR #159 after Governance #569. This closure/activation transition requires its own exact-final-head Governance and protected merge/read-back before P04.03 authority becomes effective."
+      "note": "P04.02 remains immutable accepted predecessor evidence from promotion-specific Governance #564 and expected-head merge/read-back. Later P04.03 implementation/completion and P04.04 preparation do not rewrite it."
     },
     "main_branch_protection": {
       "state": "verified_protected",
@@ -566,13 +569,13 @@
       "runner_label": "ubuntu-24.04",
       "routing_mode": "github_hosted_only",
       "self_hosted_allowed": false,
-      "workflow_run": 33368684906,
-      "job": 99414689966,
+      "workflow_run": 33410873382,
+      "job": 99549818529,
       "evidence_environment": "github-hosted",
       "runner_image": "ubuntu-24.04",
       "go": "1.26.7",
       "final_check": "governance",
-      "note": "P04.02 promotion Governance #564 remains implementation acceptance evidence; completion evidence carrier #157 and P04.03 preparation promotion #159 retained their own governed evidence. This P04.02 closure/P04.03 activation transaction must obtain a fresh exact-final-head Governance PASS before merge."
+      "note": "P04.03 promotion Governance #582 remains implementation acceptance evidence; completion evidence carrier #167 and P04.04 preparation promotion #169 retained their own governed evidence. This P04.03 closure/P04.04 activation transaction must obtain a fresh exact-final-head Governance PASS before merge."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -581,6 +584,30 @@
       "owner_decision_brief": "docs/governance/LICENSING_DECISION_BRIEF.md",
       "repository_visibility": "public",
       "note": "Issue #4 remains an external distribution/public-launch licensing, IP and trademark decision gate and does not grant implementation authority."
+    },
+    "p04_03_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md",
+      "source_carrier_pr": 165,
+      "implementation_pr": 166,
+      "final_exact_head": "ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe",
+      "implementation_merge": "b94189873bef11f4870935205398f1ef44f160bf",
+      "workflow_run": 33405463251,
+      "job": 99531835998,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "evidence_carrier_pr": 167,
+      "evidence_merge": "ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd",
+      "preparation_source_pr": 168,
+      "preparation_promotion_pr": 169,
+      "preparation_head": "658fbb4074f76c7960680c7e04bfd7cbc07a59a9",
+      "preparation_source_workflow_run": 33409859631,
+      "preparation_source_job": 99546416425,
+      "preparation_workflow_run": 33410873382,
+      "preparation_job": 99549818529,
+      "preparation_merge": "962a62c7c111079ca6f2047fa748deea97c84534",
+      "note": "P04.03 implementation is accepted from promotion-specific Governance #582 and expected-head merge/read-back. Completion evidence landed through PR #167; the prepared/locked P04.04 contract/handoff landed unchanged through promotion PR #169 after Governance #588. This closure/activation transaction requires its own exact-final-head Governance and protected merge/read-back before P04.04 authority becomes effective."
     }
   },
   "p01_preparation": {
@@ -640,19 +667,19 @@
   "p04_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P04.03",
-    "work_package_name": "Durable stream/consumer baseline & checkpoint model",
+    "next_work_package": "P04.04",
+    "work_package_name": "Transactional outbox reliability primitive",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P04.03.md",
+    "work_package_spec": "docs/roadmap/work-packages/P04.04.md",
     "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-    "prepared_spec_count": 3,
+    "prepared_spec_count": 4,
     "mandatory_spec_count": 10,
     "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
     "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
     "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
     "validator": "scripts/validate_p04_activation.py",
     "blocking_gate": null,
-    "note": "Closure/activation candidate: P04.01-P04.02 are done with accepted evidence and P04.03 is the sole active kernel package only after this transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.04-P04.10 and business-feature/AI runtime remain locked."
+    "note": "Closure/activation candidate: P04.01-P04.03 are done with accepted evidence and P04.04 is the sole active kernel package only after this transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.05-P04.10 and business-feature/AI runtime remain locked."
   },
   "state_vocabulary": [
     "planned",
@@ -668,49 +695,270 @@
     "name": "Data, Jobs & Event Fabric",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 2,
+    "done_work_packages": 3,
     "work_packages": [
-      {"id":"P04.01","name":"Event envelope & identity contract","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","evidence":["docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"]},
-      {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"done","depends_on":["P04.01"],"spec":"docs/roadmap/work-packages/P04.02.md","evidence":["docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"]},
-      {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"active","depends_on":["P04.01","P04.02"],"spec":"docs/roadmap/work-packages/P04.03.md"},
-      {"id":"P04.04","name":"Transactional outbox reliability primitive","state":"planned","depends_on":["P04.01","P04.03"],"spec":null},
-      {"id":"P04.05","name":"Consumer inbox/deduplication & idempotency primitive","state":"planned","depends_on":["P04.01","P04.04"],"spec":null},
-      {"id":"P04.06","name":"Retry/backoff, terminal failure & dead-letter/quarantine policy","state":"planned","depends_on":["P04.03","P04.05"],"spec":null},
-      {"id":"P04.07","name":"Event schema registry, compatibility & validation","state":"planned","depends_on":["P04.01","P04.06"],"spec":null},
-      {"id":"P04.08","name":"Background-job ownership, tenant context & correlation","state":"planned","depends_on":["P04.01","P04.07"],"spec":null},
-      {"id":"P04.09","name":"Reliability observability, diagnostics & operator recovery","state":"planned","depends_on":["P04.03","P04.08"],"spec":null},
-      {"id":"P04.10","name":"Replay/duplicate/failure/restart/poison-event acceptance","state":"planned","depends_on":["P04.01","P04.09"],"spec":null}
+      {
+        "id": "P04.01",
+        "name": "Event envelope & identity contract",
+        "state": "done",
+        "depends_on": [],
+        "spec": "docs/roadmap/work-packages/P04.01.md",
+        "evidence": [
+          "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
+        ]
+      },
+      {
+        "id": "P04.02",
+        "name": "Publish/subscribe abstraction & ownership boundaries",
+        "state": "done",
+        "depends_on": [
+          "P04.01"
+        ],
+        "spec": "docs/roadmap/work-packages/P04.02.md",
+        "evidence": [
+          "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
+        ]
+      },
+      {
+        "id": "P04.03",
+        "name": "Durable stream/consumer baseline & checkpoint model",
+        "state": "done",
+        "depends_on": [
+          "P04.01",
+          "P04.02"
+        ],
+        "spec": "docs/roadmap/work-packages/P04.03.md",
+        "evidence": [
+          "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
+        ]
+      },
+      {
+        "id": "P04.04",
+        "name": "Transactional outbox reliability primitive",
+        "state": "active",
+        "depends_on": [
+          "P04.01",
+          "P04.03"
+        ],
+        "spec": "docs/roadmap/work-packages/P04.04.md"
+      },
+      {
+        "id": "P04.05",
+        "name": "Consumer inbox/deduplication & idempotency primitive",
+        "state": "planned",
+        "depends_on": [
+          "P04.01",
+          "P04.04"
+        ],
+        "spec": null
+      },
+      {
+        "id": "P04.06",
+        "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
+        "state": "planned",
+        "depends_on": [
+          "P04.03",
+          "P04.05"
+        ],
+        "spec": null
+      },
+      {
+        "id": "P04.07",
+        "name": "Event schema registry, compatibility & validation",
+        "state": "planned",
+        "depends_on": [
+          "P04.01",
+          "P04.06"
+        ],
+        "spec": null
+      },
+      {
+        "id": "P04.08",
+        "name": "Background-job ownership, tenant context & correlation",
+        "state": "planned",
+        "depends_on": [
+          "P04.01",
+          "P04.07"
+        ],
+        "spec": null
+      },
+      {
+        "id": "P04.09",
+        "name": "Reliability observability, diagnostics & operator recovery",
+        "state": "planned",
+        "depends_on": [
+          "P04.03",
+          "P04.08"
+        ],
+        "spec": null
+      },
+      {
+        "id": "P04.10",
+        "name": "Replay/duplicate/failure/restart/poison-event acceptance",
+        "state": "planned",
+        "depends_on": [
+          "P04.01",
+          "P04.09"
+        ],
+        "spec": null
+      }
     ]
   },
   "phases": [
-    {"id":"P00","name":"Product Constitution & Architecture Freeze","state":"done"},
-    {"id":"P01","name":"Omnexa Kernel","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json","exit_gate":"docs/governance/P01_EXIT_GATE.md"},
-    {"id":"P02","name":"Identity, Tenancy & Organization","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P02_ENTRY_GATE.md","exit_gate":"docs/governance/P02_EXIT_GATE.md"},
-    {"id":"P03","name":"Module Runtime","state":"done","active_work_package":null,"package_sequence":"docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P03_ENTRY_GATE.md","exit_gate":"docs/governance/P03_EXIT_GATE.md"},
-    {"id":"P04","name":"Data, Jobs & Event Fabric","state":"active","active_work_package":"P04.03","package_sequence":"docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json","entry_gate":"docs/governance/P04_ENTRY_GATE.md"},
-    {"id":"P05","name":"Omnexa Flow / Workflow OS","state":"planned"},
-    {"id":"P06","name":"Universal Business Foundation","state":"planned"},
-    {"id":"P07","name":"CRM, Sales & Customer 360","state":"planned"},
-    {"id":"P08","name":"Finance & ERP Core","state":"planned"},
-    {"id":"P09","name":"Commerce OS","state":"planned"},
-    {"id":"P10","name":"Payment Fabric","state":"planned"},
-    {"id":"P11","name":"POS & Edge","state":"planned"},
-    {"id":"P12","name":"Experience Builder & CMS","state":"planned"},
-    {"id":"P13","name":"Portal Platform","state":"planned"},
-    {"id":"P14","name":"HR, Projects & Service Operations","state":"planned"},
-    {"id":"P15","name":"Supply Chain, Warehouse & Manufacturing","state":"planned"},
-    {"id":"P16","name":"Omnexa Connect / Integration Fabric","state":"planned"},
-    {"id":"P17","name":"Low-code App Builder","state":"planned"},
-    {"id":"P18","name":"Data, Reporting & BI","state":"planned"},
-    {"id":"P19","name":"Omnexa Intelligence Platform","state":"planned"},
-    {"id":"P20","name":"Governed AI Agents","state":"planned"},
-    {"id":"P21","name":"Developer Platform","state":"planned"},
-    {"id":"P22","name":"Omnexa Exchange / Marketplace","state":"planned"},
-    {"id":"P23","name":"Globalization & Country Packs","state":"planned"},
-    {"id":"P24","name":"Enterprise Governance, Security & Compliance","state":"planned"},
-    {"id":"P25","name":"Scale Fabric","state":"planned"},
-    {"id":"P26","name":"Industry Packs","state":"planned"},
-    {"id":"P27","name":"Autonomous Business OS","state":"planned"}
+    {
+      "id": "P00",
+      "name": "Product Constitution & Architecture Freeze",
+      "state": "done"
+    },
+    {
+      "id": "P01",
+      "name": "Omnexa Kernel",
+      "state": "done",
+      "active_work_package": null,
+      "package_sequence": "docs/roadmap/work-packages/P01_PACKAGE_SEQUENCE.json",
+      "exit_gate": "docs/governance/P01_EXIT_GATE.md"
+    },
+    {
+      "id": "P02",
+      "name": "Identity, Tenancy & Organization",
+      "state": "done",
+      "active_work_package": null,
+      "package_sequence": "docs/roadmap/work-packages/P02_PACKAGE_SEQUENCE.json",
+      "entry_gate": "docs/governance/P02_ENTRY_GATE.md",
+      "exit_gate": "docs/governance/P02_EXIT_GATE.md"
+    },
+    {
+      "id": "P03",
+      "name": "Module Runtime",
+      "state": "done",
+      "active_work_package": null,
+      "package_sequence": "docs/roadmap/work-packages/P03_PACKAGE_SEQUENCE.json",
+      "entry_gate": "docs/governance/P03_ENTRY_GATE.md",
+      "exit_gate": "docs/governance/P03_EXIT_GATE.md"
+    },
+    {
+      "id": "P04",
+      "name": "Data, Jobs & Event Fabric",
+      "state": "active",
+      "active_work_package": "P04.04",
+      "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "entry_gate": "docs/governance/P04_ENTRY_GATE.md"
+    },
+    {
+      "id": "P05",
+      "name": "Omnexa Flow / Workflow OS",
+      "state": "planned"
+    },
+    {
+      "id": "P06",
+      "name": "Universal Business Foundation",
+      "state": "planned"
+    },
+    {
+      "id": "P07",
+      "name": "CRM, Sales & Customer 360",
+      "state": "planned"
+    },
+    {
+      "id": "P08",
+      "name": "Finance & ERP Core",
+      "state": "planned"
+    },
+    {
+      "id": "P09",
+      "name": "Commerce OS",
+      "state": "planned"
+    },
+    {
+      "id": "P10",
+      "name": "Payment Fabric",
+      "state": "planned"
+    },
+    {
+      "id": "P11",
+      "name": "POS & Edge",
+      "state": "planned"
+    },
+    {
+      "id": "P12",
+      "name": "Experience Builder & CMS",
+      "state": "planned"
+    },
+    {
+      "id": "P13",
+      "name": "Portal Platform",
+      "state": "planned"
+    },
+    {
+      "id": "P14",
+      "name": "HR, Projects & Service Operations",
+      "state": "planned"
+    },
+    {
+      "id": "P15",
+      "name": "Supply Chain, Warehouse & Manufacturing",
+      "state": "planned"
+    },
+    {
+      "id": "P16",
+      "name": "Omnexa Connect / Integration Fabric",
+      "state": "planned"
+    },
+    {
+      "id": "P17",
+      "name": "Low-code App Builder",
+      "state": "planned"
+    },
+    {
+      "id": "P18",
+      "name": "Data, Reporting & BI",
+      "state": "planned"
+    },
+    {
+      "id": "P19",
+      "name": "Omnexa Intelligence Platform",
+      "state": "planned"
+    },
+    {
+      "id": "P20",
+      "name": "Governed AI Agents",
+      "state": "planned"
+    },
+    {
+      "id": "P21",
+      "name": "Developer Platform",
+      "state": "planned"
+    },
+    {
+      "id": "P22",
+      "name": "Omnexa Exchange / Marketplace",
+      "state": "planned"
+    },
+    {
+      "id": "P23",
+      "name": "Globalization & Country Packs",
+      "state": "planned"
+    },
+    {
+      "id": "P24",
+      "name": "Enterprise Governance, Security & Compliance",
+      "state": "planned"
+    },
+    {
+      "id": "P25",
+      "name": "Scale Fabric",
+      "state": "planned"
+    },
+    {
+      "id": "P26",
+      "name": "Industry Packs",
+      "state": "planned"
+    },
+    {
+      "id": "P27",
+      "name": "Autonomous Business OS",
+      "state": "planned"
+    }
   ],
-  "next_transition_rule": "Closure/activation candidate: P04.01-P04.02 are complete and P04.03 is the sole next authorized kernel package only after this exact transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.04-P04.10 remain planned/locked and no package may auto-advance."
+  "next_transition_rule": "Closure/activation candidate: P04.01-P04.03 are complete with accepted evidence and P04.04 becomes the sole authorized kernel package only after this exact transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.05-P04.10 remain planned/locked and no package may auto-advance."
 }
