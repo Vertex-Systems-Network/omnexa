@@ -3,17 +3,16 @@
 
 from __future__ import annotations
 
-import os
-
-from agent_orchestration_common import allowed_path, changed_paths, fail, find_branch_record, load_plan, require_sha
+from agent_orchestration_common import allowed_path, changed_paths, fail, find_branch_record, load_plan, pr_context
 
 
 def main() -> None:
-    if os.environ.get("GITHUB_EVENT_NAME") != "pull_request":
+    context = pr_context()
+    if context is None:
         print("PASS: agent PR scope check not applicable to non-PR event")
         return
 
-    branch = os.environ.get("OMNEXA_PR_HEAD_REF") or os.environ.get("GITHUB_HEAD_REF") or ""
+    branch, base_sha, head_sha = context
     plan = load_plan()
     record = find_branch_record(plan, branch)
     if record is None:
@@ -22,8 +21,6 @@ def main() -> None:
         print(f"PASS: control/non-agent branch is outside active worker scope enforcement: {branch}")
         return
 
-    base_sha = require_sha(os.environ.get("OMNEXA_PR_BASE_SHA", ""), "PR base SHA")
-    head_sha = require_sha(os.environ.get("OMNEXA_PR_HEAD_SHA", ""), "PR head SHA")
     paths = changed_paths(base_sha, head_sha)
     write_paths = list(record.get("write_paths") or [])
     shared_paths = list(record.get("shared_paths") or [])
