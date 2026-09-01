@@ -38,6 +38,14 @@
       "type": "string",
       "minLength": 1
     },
+    "slot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assigned_from_main_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
     "role": {
       "type": "string",
       "minLength": 1

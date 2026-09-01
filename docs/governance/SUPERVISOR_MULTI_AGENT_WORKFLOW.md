@@ -66,7 +66,7 @@ At minimum it records:
 - wave ID;
 - phase/work package;
 - protected-main bootstrap SHA;
-- current required main SHA;
+- current required main ref plus audit SHA snapshot;
 - coordination channel;
 - Supervisor identity and branch;
 - every worker agent/task/module branch;
@@ -76,7 +76,7 @@ At minimum it records:
 - dependencies;
 - merge order;
 - task state;
-- last synchronized main SHA;
+- last recorded synchronized main SHA;
 - completion signal requirements;
 - merge-alert requirements.
 
@@ -157,23 +157,23 @@ The alert must include:
 - which active tasks are definitely stale;
 - whether any lease changed/released.
 
-The alert is published to the active coordination channel and recorded in the active plan's required-main SHA.
+The alert is published to the active coordination channel. The active plan keeps an audit SHA snapshot, while the live protected `main` ref and any newer merge alert control freshness.
 
 ## 9. Worker response to merge alert
 
-Every active worker receiving or discovering a newer required-main SHA must, **before any further material mutation**:
+Every active worker receiving or discovering a newer protected-main SHA must, **before any further material mutation**:
 
 1. stop/hold its current write path;
-2. fetch/read the new protected main;
+2. fetch/read the current protected `main` ref;
 3. merge/pull the accepted main changes into its own branch using a non-destructive repository-approved method;
 4. resolve conflicts without discarding another task's accepted behavior;
 5. re-read effective instructions, leases, dependencies, migrations/contracts and path budget;
-6. update `last_synced_main_sha` to the new protected-main SHA;
+6. record the synchronized protected-main SHA in its task/coordination evidence;
 7. invalidate stale tests/review/CI evidence and rerun what is required;
 8. announce `Sync Complete — Resuming Work` with task/branch/synced SHA;
 9. only then continue/resume its assigned task.
 
-An agent that missed the alert is still protected by the mandatory SHA check: the active plan's `required_main_sha` is authoritative coordination state for the wave.
+An agent that missed the alert is still protected by the mandatory live-main check: resolve the active plan's `required_main_ref` (currently `main`) before every material mutation. A stored SHA snapshot is audit history only and never overrides a newer protected main.
 
 ## 10. Supervisor's own module/task
 
@@ -245,3 +245,52 @@ A future external orchestrator may replace polling with webhooks/messages, but i
 At the current canonical checkpoint only P04.04 is active. Therefore this workflow may split P04.04 into bounded parallel tasks, but it may not activate P04.05+, P05+, CRM, Finance, Inventory, HR, Commerce or other future business modules.
 
 Broad independent module branching becomes legal only when canonical roadmap gates explicitly open those streams.
+
+## 17. New agent onboarding and slot admission
+
+A newly arriving development agent has **no task authority on arrival**.
+
+Required sequence:
+
+1. the new agent must start from protected `main`, read the current protected-main SHA and canonical `docs/roadmap/STATE.json`, and must not start from another worker's branch, a stale local branch, or an old task checkpoint;
+2. before the new agent makes any material mutation, the Supervisor reads `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` and checks the machine-readable worker-slot ledger defined by `docs/ai/AGENT_SLOT_SCHEMA.json`;
+3. only a slot whose state is exactly `open`, whose branch/task is already inside the currently authorized canonical phase/work-package, and whose lease/dependencies remain valid can be assigned;
+4. if more than one slot is open, the Supervisor assigns the highest-priority open slot according to the active plan's merge/dependency order; the Supervisor does not invent an extra module solely because an agent arrived;
+5. before assignment, the Supervisor resolves the live protected `main` ref and synchronizes the slot branch to that exact current SHA;
+6. on assignment the Supervisor immediately changes the slot to `occupied`, records the arriving `agent_id`, records `assigned_from_main_sha`, records the start status, and reconciles the corresponding task/branch entry in the AI-Native plan;
+7. only after that plan assignment may the agent switch from `main` to the assigned branch and begin its bounded task;
+8. the assigned agent must then perform the normal instruction/lease/dependency checks before its first write.
+
+If **no authorized slot is open**, the Supervisor must stop onboarding immediately and respond exactly:
+
+`Go Home Come Back Next Time`
+
+When that response applies:
+
+- no task is assigned;
+- no branch is assigned or created for the arriving agent;
+- no lease is granted;
+- no coding, migration, test mutation, documentation mutation or speculative future-module work may start;
+- the Supervisor must not raise the concurrency cap or activate a locked module to make room;
+- the arriving agent may return only when a later governed plan exposes a valid `open` slot.
+
+A `completed` or `retired` slot does not automatically become reusable. Reopening or repurposing a slot must still be valid under canonical state and must be recorded in the active plan before a new assignment.
+
+For the current P04.04 wave, all three worker slots are occupied. Therefore until a governed plan explicitly opens a slot, any additional arriving worker receives `Go Home Come Back Next Time` and starts no work.
+
+## 18. Live protected-main resolution law
+
+Static SHA values inside repository planning files are **audit snapshots**, not a self-updating lock on future protected-main commits.
+
+This rule prevents a recursive coordination loop where updating a stored SHA creates a new merge SHA that immediately makes the stored value stale again.
+
+Therefore:
+
+- `required_main_ref` is the live freshness authority and currently resolves to protected `main`;
+- `required_main_sha_snapshot`, `last_synced_main_sha` and similar fields record the last plan/evidence snapshot only;
+- before onboarding, material mutation, submission review or merge, resolve the current protected `main` SHA directly;
+- a newer merge alert in the coordination channel supersedes older stored SHA snapshots;
+- after a coordination/governance-only merge, agents synchronize to the new protected main and record the receipt in the coordination channel; a recursive SHA-only plan commit is not required;
+- when the plan is next materially edited for another reason, its audit snapshots should be reconciled to the latest accepted evidence.
+
+No snapshot may be used to justify working from a branch that is stale relative to live protected main when the new main can affect the task.
