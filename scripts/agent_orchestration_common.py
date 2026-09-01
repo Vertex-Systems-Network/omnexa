@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -44,6 +45,24 @@ def require_sha(value: str, label: str) -> str:
     if not SHA_RE.fullmatch(value or ""):
         fail(f"{label} must be a 40-character lowercase Git SHA")
     return value
+
+
+def pr_context() -> tuple[str, str, str] | None:
+    if os.environ.get("GITHUB_EVENT_NAME") != "pull_request":
+        return None
+    branch = os.environ.get("OMNEXA_PR_HEAD_REF") or os.environ.get("GITHUB_HEAD_REF") or ""
+    base_sha = os.environ.get("OMNEXA_PR_BASE_SHA") or ""
+    head_sha = os.environ.get("OMNEXA_PR_HEAD_SHA") or ""
+    event_path = os.environ.get("GITHUB_EVENT_PATH")
+    if event_path and (not branch or not base_sha or not head_sha):
+        event = load_json(pathlib.Path(event_path), "GitHub event payload")
+        pr = event.get("pull_request") or {}
+        branch = branch or ((pr.get("head") or {}).get("ref") or "")
+        base_sha = base_sha or ((pr.get("base") or {}).get("sha") or "")
+        head_sha = head_sha or ((pr.get("head") or {}).get("sha") or "")
+    if not branch:
+        fail("pull_request event is missing head branch identity")
+    return branch, require_sha(base_sha, "PR base SHA"), require_sha(head_sha, "PR head SHA")
 
 
 def normalize_path(value: str) -> str:
