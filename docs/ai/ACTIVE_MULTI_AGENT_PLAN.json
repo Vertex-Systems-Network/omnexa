@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.04-WAVE-20260902-01",
-  "status": "branch-bootstrap-complete-planning-governance-pending",
+  "status": "governed-ready-to-start",
   "authority": {
     "phase": "P04",
     "work_package": "P04.04",
@@ -13,17 +13,101 @@
   },
   "bootstrap": {
     "protected_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
-    "required_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+    "required_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 177
+    "coordination_issue": 177,
+    "latest_governed_workflow_merge": "6556023c3f07fffa6a81776dd25188a685d2033c",
+    "all_active_branches_synced_to_required_main": true
   },
+  "onboarding": {
+    "slot_schema": "docs/ai/AGENT_SLOT_SCHEMA.json",
+    "new_agent_start_ref": "main",
+    "new_agent_must_read_protected_main_first": true,
+    "assignment_requires_open_authorized_slot": true,
+    "open_slot_state": "open",
+    "occupied_slot_state": "occupied",
+    "current_worker_slot_capacity": 3,
+    "current_open_worker_slots": 0,
+    "no_free_slot_action": "stop-without-assignment",
+    "no_free_slot_response": "Go Home Come Back Next Time",
+    "no_auto_branch_or_module_creation_on_arrival": true,
+    "assignment_rule": "Supervisor assigns the highest-priority authorized open slot after synchronizing its branch to required_main_sha, then records agent_id, assigned_from_main_sha and start_status before work begins."
+  },
+  "worker_slots": [
+    {
+      "schema_version": 1,
+      "slot_id": "P04.04-S01",
+      "phase": "P04",
+      "work_package": "P04.04",
+      "module": "kernel.events/outbox-core",
+      "branch": "agent/20260902-p04-04-outbox-core",
+      "status": "occupied",
+      "agent_id": "Agent-01",
+      "start_status": "ready",
+      "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "write_paths": [
+        "kernel/internal/events/outbox.go",
+        "kernel/internal/events/outbox_core_test.go"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "notes": "Occupied by Agent-01. Not available for new-agent onboarding while status remains occupied."
+    },
+    {
+      "schema_version": 1,
+      "slot_id": "P04.04-S02",
+      "phase": "P04",
+      "work_package": "P04.04",
+      "module": "kernel.events/outbox-persistence",
+      "branch": "agent/20260902-p04-04-persistence-migration",
+      "status": "occupied",
+      "agent_id": "Agent-02",
+      "start_status": "ready",
+      "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "write_paths": [
+        "kernel/internal/events/outbox_postgres.go",
+        "kernel/internal/events/outbox_postgres_integration_test.go",
+        "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"
+      ],
+      "depends_on": [
+        "P04.04-T01"
+      ],
+      "merge_order": 2,
+      "notes": "Occupied by Agent-02. Go adapter must not guess an unaccepted T01 API."
+    },
+    {
+      "schema_version": 1,
+      "slot_id": "P04.04-S03",
+      "phase": "P04",
+      "work_package": "P04.04",
+      "module": "kernel.events/outbox-reliability-tests",
+      "branch": "agent/20260902-p04-04-reliability-tests",
+      "status": "occupied",
+      "agent_id": "Agent-03",
+      "start_status": "ready",
+      "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+      "write_paths": [
+        "kernel/internal/events/outbox_reliability_test.go",
+        "kernel/internal/events/outbox_concurrency_test.go"
+      ],
+      "depends_on": [
+        "P04.04-T01",
+        "P04.04-T02"
+      ],
+      "merge_order": 3,
+      "notes": "Occupied by Agent-03. Concrete API-bound tests wait for accepted T01/T02 contracts."
+    }
+  ],
   "supervisor": {
     "agent_id": "Supervisor",
     "task_id": "P04.04-T04",
     "role": "supervisor-integration-verifier",
     "branch": "supervisor/20260902-p04-04-integration",
-    "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+    "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
     "write_paths": [
       "scripts/verify_p04_04.sh",
       ".github/workflows/governance.yml"
@@ -48,10 +132,11 @@
     {
       "task_id": "P04.04-T01",
       "agent_id": "Agent-01",
+      "slot_id": "P04.04-S01",
       "role": "outbox-core-writer",
       "module": "kernel.events/outbox-core",
       "branch": "agent/20260902-p04-04-outbox-core",
-      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "write_paths": [
         "kernel/internal/events/outbox.go",
         "kernel/internal/events/outbox_core_test.go"
@@ -72,10 +157,11 @@
     {
       "task_id": "P04.04-T02",
       "agent_id": "Agent-02",
+      "slot_id": "P04.04-S02",
       "role": "outbox-postgres-migration-writer",
       "module": "kernel.events/outbox-persistence",
       "branch": "agent/20260902-p04-04-persistence-migration",
-      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "write_paths": [
         "kernel/internal/events/outbox_postgres.go",
         "kernel/internal/events/outbox_postgres_integration_test.go",
@@ -94,7 +180,7 @@
         "path": "kernel/migrations/kernel.events/1_create_transactional_outbox.sql",
         "version": "1",
         "data_budget": "new owner-scoped P04.04 outbox persistence only; no business-table mutation, no business-data backfill, no destructive data operation, no P04.05/P04.06 semantics",
-        "status": "provisional-until-wave-plan-governed"
+        "status": "reserved-after-wave-governance"
       },
       "depends_on": [
         "P04.04-T01"
@@ -106,10 +192,11 @@
     {
       "task_id": "P04.04-T03",
       "agent_id": "Agent-03",
+      "slot_id": "P04.04-S03",
       "role": "outbox-reliability-test-writer",
       "module": "kernel.events/outbox-reliability-tests",
       "branch": "agent/20260902-p04-04-reliability-tests",
-      "last_synced_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
+      "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "write_paths": [
         "kernel/internal/events/outbox_reliability_test.go",
         "kernel/internal/events/outbox_concurrency_test.go"
