@@ -73,7 +73,7 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P
 
 - **P04.01 — Event Envelope & Identity Contract:** accepted completion evidence is retained in `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`.
 - **P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries:** accepted completion evidence is retained in `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`.
-- **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model:** DONE from source PR #165 / promotion PR #166, exact implementation head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`, promotion Governance run/job `33405463251 / 99531835998`, implementation merge `b94189873bef11f4870935205398f1ef44f160bf`, and completion evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`.
+- **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model:** DONE from source PR #165 / promotion PR #166, exact implementation head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`, promotion Governance run/job `33405463251 / 99443112098`, implementation merge `b94189873bef11f4870935205398f1ef44f160bf`, and completion evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`.
 - **P04.04 — Transactional Outbox Reliability Primitive:** contract/handoff preparation accepted through source PR #168 and promotion PR #169; preparation promotion Governance run/job `33410873382 / 99549818529`; preparation merge/read-back `962a62c7c111079ca6f2047fa748deea97c84534`. P04.03 closure / P04.04 activation then passed source PR #171 / Governance `33546204586 / 99984199589`, unchanged promotion PR #172 / Governance `33547080086 / 99987132610`, and merged/read back as `50edeae03ad52e435d142b2f22c803f08a5c7f1a`.
 - **Post-activation continuity:** source PR #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` passed Governance `33549921833 / 99996561115`; unchanged promotion PR #174 passed Governance `33550803632 / 99999473766` and merged as protected-main checkpoint `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence and is not acceptance authority.
 - **Multi-agent development foundation:** source PR #175 final head `c74e9d116880a9fde69d9220c1907a67e2cf86eb` passed Governance `33553700739 / 100009408168`; unchanged promotion PR #176 passed promotion Governance run `33554787584` and merged/read back as protected-main checkpoint `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`.
@@ -113,7 +113,8 @@ Mandatory concurrency rules are in `docs/governance/MULTI_AGENT_ORCHESTRATION.md
 Wave: `P04.04-WAVE-20260902-01`  
 Coordination channel: GitHub issue `#177`  
 Historical branch-bootstrap base: `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`  
-Current required protected main: `6556023c3f07fffa6a81776dd25188a685d2033c`
+Last recorded protected-main sync snapshot before this onboarding carrier: `6556023c3f07fffa6a81776dd25188a685d2033c`  
+**Live required main:** resolve protected `main` before every material mutation, onboarding assignment, submission review and merge.
 
 | Merge order | Agent / Task | Module / responsibility | Branch | Current dependency |
 |---:|---|---|---|---|
@@ -122,7 +123,7 @@ Current required protected main: `6556023c3f07fffa6a81776dd25188a685d2033c`
 | 3 | Agent-03 / P04.04-T03 | crash/restart/concurrency/tenant-isolation tests | `agent/20260902-p04-04-reliability-tests` | T01 + T02 accepted contracts |
 | 4 | Supervisor / P04.04-T04 | integration verifier + Governance hook | `supervisor/20260902-p04-04-integration` | T01 + T02 + T03 |
 
-All four branches were created before task work and are synchronized to current required protected main `6556023c3f07fffa6a81776dd25188a685d2033c`. The machine-readable assignments, slot occupancy, write budgets, dependencies and merge order are in `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
+All four branches were synchronized to the recorded snapshot `6556023c3f07fffa6a81776dd25188a685d2033c` before this onboarding governance carrier. After any later merge, workers re-resolve protected `main`, synchronize before further mutation, and record the live receipt in issue `#177`; a recursive SHA-only plan commit is not required. The machine-readable assignments, slot occupancy, write budgets, dependencies and merge order are in `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
 
 Current worker-slot state: **3 / 3 occupied, 0 open**.
 
@@ -146,11 +147,11 @@ After protected-main merge/readback the Supervisor announces exactly:
 
 `New changes have been merged — please merge these changes into your branch first, then resume your own work.`
 
-Every active worker must synchronize that new protected-main SHA, re-check instructions/leases/dependencies, invalidate stale CI when its head changes, and only then resume. Recommended acknowledgement:
+Every active worker must resolve and synchronize the new protected `main` SHA, re-check instructions/leases/dependencies, invalidate stale CI when its head changes, and only then resume. Recommended acknowledgement:
 
 `Sync Complete — Resuming Work`
 
-The current persistent signal channel is issue `#177`. Missing the message is not an excuse to continue stale work: every material mutation must compare the branch against the active plan's `required_main_sha`.
+The current persistent signal channel is issue `#177`. Missing the message is not an excuse to continue stale work: every material mutation must resolve the live protected `main` ref. SHA values stored in the active plan are audit snapshots and never override a newer protected main or merge alert.
 
 ### New Agent Onboarding
 
@@ -158,7 +159,7 @@ A newly arriving development agent always starts from protected `main`. Arrival 
 
 The Supervisor immediately checks the AI-Native plan's worker-slot ledger:
 
-- if an authorized slot is `open`, the Supervisor synchronizes that slot branch to `required_main_sha`, assigns the new agent to that existing module/branch, changes the slot to `occupied`, records the agent identity and `assigned_from_main_sha`, records the start status, and only then allows work to begin;
+- if an authorized slot is `open`, the Supervisor resolves live protected `main`, synchronizes that slot branch to the current SHA, assigns the new agent to that existing module/branch, changes the slot to `occupied`, records the agent identity and `assigned_from_main_sha`, records the start status, and only then allows work to begin;
 - if multiple slots are open, the active merge/dependency order decides priority;
 - the Supervisor may not invent a new module, exceed the concurrency cap, or activate a locked phase just because an agent arrived;
 - if **no slot is open**, the Supervisor stops onboarding immediately and tells the new agent exactly: `Go Home Come Back Next Time`.
@@ -166,6 +167,10 @@ The Supervisor immediately checks the AI-Native plan's worker-slot ledger:
 When `Go Home Come Back Next Time` applies, the agent receives no branch/task/lease and starts no code, migration, tests, docs or speculative future-module work.
 
 Current P04.04 worker slots are all occupied, so any additional arriving worker currently receives `Go Home Come Back Next Time` until a later governed plan explicitly opens a valid slot.
+
+### Live protected-main freshness rule
+
+The active plan uses `required_main_ref = main` as the live freshness authority. Stored SHA fields such as `required_main_sha_snapshot` and `last_synced_main_sha` are audit snapshots only. This avoids an infinite loop where updating a SHA in the repository creates another merge SHA that immediately makes the stored value stale.
 
 This developer orchestration is not P20 product-agent runtime and does not activate a future business phase.
 
@@ -177,14 +182,14 @@ Every material agent task must check these instructions **at task start and agai
 2. confirm active phase/work package and owning module/domain/kernel capability;
 3. read `AGENTS.md`, applicable work-package spec/handoff, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, and when a Supervisor wave is active, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md` plus `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`;
 4. if you are a **newly arriving agent**, start from protected `main` only and do not switch to a task branch until the Supervisor assigns an authorized `open` slot;
-5. the Supervisor must check the active slot ledger immediately: if a slot is open, synchronize/assign/record it before work; if no slot is open, respond exactly `Go Home Come Back Next Time` and grant no work authority;
+5. the Supervisor must check the active slot ledger immediately: if a slot is open, resolve live main, synchronize/assign/record it before work; if no slot is open, respond exactly `Go Home Come Back Next Time` and grant no work authority;
 6. for a **new** parallel wave, after mandatory canonical readback the Supervisor's first repository mutation is creation of all worker branches and its own isolated task branch from the recorded base SHA; planning/coding starts only after branch verification;
-7. record task/agent identity, slot, branch and exact base/last-synced/required-main SHAs;
+7. record task/agent identity, slot, branch, live-main ref and exact base/last-recorded sync snapshot;
 8. declare read paths, write paths, forbidden paths and shared/exclusive paths;
 9. check concurrent tasks/leases for path, migration, registry and public-contract overlap;
 10. resolve dependency ordering; do not code against guessed future contracts;
 11. for schema changes, reserve exact owner/path/version/data budget before mutation;
-12. check issue `#177` or the active wave's recorded coordination channel and compare against `required_main_sha` before each material mutation;
+12. check issue `#177` or the active wave's recorded coordination channel and resolve current protected `main` before each material mutation;
 13. when another accepted task moves protected main, **sync the new main into the branch before resuming**, then re-run stale tests/CI as required;
 14. when task work is ready for Supervisor review, announce `Work Done and Submitted` with the required exact-head metadata;
 15. keep cross-module private writes/imports forbidden;
