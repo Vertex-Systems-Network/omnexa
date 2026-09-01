@@ -1,9 +1,9 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-08-31"
-  nature: "non-authoritative post-P04.03-activation continuity snapshot"
-  authoritative_activation_merge: "d74375cd0a2952ab8622117089e5eb43043e6e78"
+  verified_at: "2026-09-01"
+  nature: "non-authoritative P04.03-closure/P04.04-activation candidate snapshot"
+  authoritative_pre_transaction_main: "962a62c7c111079ca6f2047fa748deea97c84534"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -15,8 +15,10 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state: "active"
-  progress: "2 / 10 done"
-  current_work_package: "P04.03"
+  candidate_progress: "3 / 10 done"
+  candidate_current_work_package: "P04.04"
+  protected_main_progress_before_transaction: "2 / 10 done"
+  protected_main_current_work_package_before_transaction: "P04.03"
   p03_exit: "SATISFIED / HISTORICAL"
   p04_entry: "SATISFIED"
 
@@ -24,67 +26,69 @@ prerequisites:
   p01: "done_12_of_12_exit_satisfied"
   p02: "done_10_of_10_exit_satisfied"
   p03: "done_11_of_11_exit_satisfied"
-  regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11, P04.01 and P04.02 accepted evidence remain mandatory"
+  regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11, P04.01-P04.03 accepted evidence remain mandatory"
   p04_activation_merge: "dc269932481a1e742926ac247f28f94bdf43937d"
   p04_01_implementation_head: "3c4ee6e79b76a6f042f3ee77b518943f3d7064e4"
   p04_01_implementation_merge: "6b1a01c009e9a08d45613a00e9b63c0c272bf020"
-  p04_01_promotion_governance_run: 33331934481
-  p04_01_completion_evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
-  p04_02_activation_merge: "226f5236d80c806a7b07d65e7870981de320c05c"
   p04_02_implementation_head: "5ec1de746eebc8734f86ec3aa2f311daae0dc18a"
   p04_02_implementation_merge: "1b378a2f44c6e3cba87b936e39e05f1a18da94cc"
-  p04_02_promotion_governance_run: 33351220746
-  p04_02_promotion_governance_job: 99364850230
-  p04_02_completion_evidence: "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
-  p04_02_completion_evidence_merge: "8334bed24e793e200540bf953f7249f11242badf"
-  p04_03_preparation_source_pr: 158
-  p04_03_preparation_promotion_pr: 159
-  p04_03_preparation_head: "a20b37cbe0401626cd29e51a08efc399ee2d72e2"
-  p04_03_preparation_governance_run: 33368684906
-  p04_03_preparation_governance_job: 99414689966
-  p04_03_preparation_merge: "2d454a87e03f404f081b6a87f216d0cfa8c7608d"
-  p04_03_activation_source_pr: 160
-  p04_03_activation_exact_head: "452858a3ab9bfa827697105bd5168cf660bd62ba"
-  p04_03_activation_source_governance_run: 33370681216
-  p04_03_activation_source_governance_job: 99420856278
-  p04_03_activation_promotion_pr: 161
-  p04_03_activation_promotion_governance_run: 33371203708
-  p04_03_activation_promotion_governance_job: 99422521576
   p04_03_activation_merge: "d74375cd0a2952ab8622117089e5eb43043e6e78"
+  p04_03_implementation_source_pr: 165
+  p04_03_implementation_promotion_pr: 166
+  p04_03_implementation_head: "ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe"
+  p04_03_source_governance_run: 33377793927
+  p04_03_source_governance_job: 99443112098
+  p04_03_promotion_governance_run: 33405463251
+  p04_03_promotion_governance_job: 99531835998
+  p04_03_implementation_merge: "b94189873bef11f4870935205398f1ef44f160bf"
+  p04_03_completion_evidence: "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
+  p04_03_completion_evidence_pr: 167
+  p04_03_completion_evidence_merge: "ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd"
+  p04_04_preparation_source_pr: 168
+  p04_04_preparation_promotion_pr: 169
+  p04_04_preparation_head: "658fbb4074f76c7960680c7e04bfd7cbc07a59a9"
+  p04_04_preparation_source_governance_run: 33409859631
+  p04_04_preparation_source_governance_job: 99546416425
+  p04_04_preparation_governance_run: 33410873382
+  p04_04_preparation_governance_job: 99549818529
+  p04_04_preparation_merge: "962a62c7c111079ca6f2047fa748deea97c84534"
 
 p04_01:
   state: "done"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.01.md"
   evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
-  implementation_pr: 147
-  final_exact_head: "3c4ee6e79b76a6f042f3ee77b518943f3d7064e4"
-  implementation_merge: "6b1a01c009e9a08d45613a00e9b63c0c272bf020"
 
 p04_02:
   state: "done"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.02.md"
   evidence: "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
-  source_pr: 155
-  promotion_pr: 156
-  final_exact_head: "5ec1de746eebc8734f86ec3aa2f311daae0dc18a"
-  implementation_merge: "1b378a2f44c6e3cba87b936e39e05f1a18da94cc"
-  completion_evidence_carrier_pr: 157
-  completion_evidence_merge: "8334bed24e793e200540bf953f7249f11242badf"
 
 p04_03:
-  state: "active"
+  candidate_state: "done"
+  protected_main_state_before_transaction: "active"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.03.md"
-  sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
-  handoff: "docs/ai/handoffs/P04.03.md"
-  activation_merge: "d74375cd0a2952ab8622117089e5eb43043e6e78"
-  implementation_scope: "provider-neutral durable consumer/checkpoint baseline only"
+  evidence: "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
+  final_exact_head: "ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe"
+  implementation_merge: "b94189873bef11f4870935205398f1ef44f160bf"
+  completion_evidence_merge: "ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd"
+
+p04_04:
+  candidate_state: "active_after_governed_promotion_merge_readback"
+  protected_main_state_before_transaction: "planned_locked"
+  owner: "kernel.events"
+  spec: "docs/roadmap/work-packages/P04.04.md"
+  handoff: "docs/ai/handoffs/P04.04.md"
+  preparation_merge: "962a62c7c111079ca6f2047fa748deea97c84534"
+  implementation_scope: "provider-neutral transactional outbox reliability primitive only"
+  production_persistence_expected: true
+  activation_carrier_adds_migration: false
+  blanket_migration_authority: false
+  migration_preflight_required: true
   broker_selected: false
   exactly_once_claim_authorized: false
-  database_migration_automatically_authorized: false
-  outbox_authorized: false
   inbox_dedup_authorized: false
   retry_dlq_authorized: false
   schema_registry_runtime_authorized: false
@@ -92,17 +96,17 @@ p04_03:
   business_handler_authorized: false
 
 security:
-  kernel_code_authorized: true
-  kernel_authority_scope: "P04.03 only"
+  kernel_code_authorized_candidate: true
+  kernel_authority_scope_candidate: "P04.04 only after governed promotion/merge/read-back"
   business_feature_code_authorized: false
-  p04_04_plus_authorized: false
+  p04_05_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   tenant_context_fail_closed_required: true
   duplicate_safe_semantics_required: true
   global_ordering_assumed: false
   exactly_once_business_mutation_assumed: false
-  checkpoint_is_authorization: false
+  outbox_identity_is_authorization: false
   secret_payloads_authorized: false
   cross_tenant_failure_is_release_blocker: true
   privilege_escalation_failure_is_release_blocker: true
@@ -111,23 +115,26 @@ security:
 
 validator_hardening:
   file: "scripts/validate_p04_activation.py"
-  rule: "Every completed P04 predecessor must have matching PASS governance_tracking, accepted spec/evidence, exact head/merge/run/job and GitHub-hosted ubuntu-24.04 evidence."
-  p04_02_fail_closed_prerequisite_for_p04_03: true
+  rule: "Every completed P04 predecessor must retain matching PASS completion evidence, exact head/merge/run/job and GitHub-hosted ubuntu-24.04 evidence; the active package must have its accepted specification."
+  p04_03_fail_closed_prerequisite_for_p04_04: true
+  p04_04_contract_markers_required: true
   future_package_specific_hardcoding_required: false
 
 blocked_actions:
-  - "implement P04.04-P04.10"
+  - "implement P04.04 runtime on the closure/activation carrier"
+  - "implement P04.05-P04.10"
   - "select a broker/provider or claim exactly-once delivery/business mutation"
-  - "treat P04.03 activation as blanket database-migration authority"
-  - "implement outbox/inbox/retry/DLQ/schema-registry/background-job future-package runtime under P04.03"
+  - "treat P04.04 activation as blanket database-migration authority"
+  - "implement inbox/retry/DLQ/schema-registry/background-job future-package runtime under P04.04"
   - "implement business modules/features, strategic X-program runtime or AI/model/agent runtime"
   - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Ensure post-activation continuity is present on protected main, then create a fresh separate P04.03 implementation branch from the exact verified main SHA."
-  implementation: "Implement only the accepted P04.03 durable consumer/checkpoint contract with focused adversarial evidence and exact-head Governance."
-  completion_rule: "Do not auto-advance to P04.04; P04.03 completion and any P04.04 preparation/activation require later separate governed transactions."
+  current: "Pass exact-head source Governance for the P04.03 closure/P04.04 activation carrier, review it, promote the unchanged source state, pass fresh promotion Governance, merge with expected-head guard and re-read protected main."
+  post_merge: "Confirm P04.04 is sole active at 3 / 10, identify creation of a fresh separate P04.04 implementation branch as the next authorized action, then stop."
+  implementation: "Only on that later fresh branch, implement the accepted P04.04 transactional outbox contract after recording an exact owner/path/version/data migration budget before any schema mutation."
+  completion_rule: "Do not auto-advance to P04.05."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -140,9 +147,10 @@ source_authority:
   package_sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
   p04_01_evidence: "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
   p04_02_evidence: "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
-  p04_03_spec: "docs/roadmap/work-packages/P04.03.md"
-  prior_transition_transaction: "docs/governance/P04_01_P04_02_TRANSITION_TRANSACTION.md"
-  p04_03_activation_transaction: "docs/governance/P04_02_P04_03_TRANSITION_TRANSACTION.md"
+  p04_03_evidence: "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
+  p04_04_spec: "docs/roadmap/work-packages/P04.04.md"
+  prior_transition_transaction: "docs/governance/P04_02_P04_03_TRANSITION_TRANSACTION.md"
+  candidate_transition_transaction: "docs/governance/P04_03_P04_04_TRANSITION_TRANSACTION.md"
 
 handoff:
-  active: "docs/ai/handoffs/P04.03.md"
+  candidate_active_after_acceptance: "docs/ai/handoffs/P04.04.md"
