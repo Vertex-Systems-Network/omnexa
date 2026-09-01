@@ -16,9 +16,15 @@
 
 ## AI / concurrent-work coordination
 
+- Wave ID:
+- Coordination channel / issue:
+- Supervisor identity:
 - Task / run ID:
 - Agent / role:
-- Exact base SHA:
+- Branch:
+- Exact branch-bootstrap base SHA:
+- Last synchronized protected-main SHA:
+- Current required protected-main SHA:
 - Declared read paths:
 - Declared write paths:
 - Forbidden paths:
@@ -30,13 +36,27 @@
 - Conflict / overlap check result:
 - Protected-main freshness checked:
 
+### Supervisor-led submission protocol
+
+- Completion signal posted: `Work Done and Submitted` — Yes / No / N/A
+- Completion signal exact submitted head SHA:
+- Submitted PR / reference:
+- Submission CI state: PASS / FAIL / BLOCKED / NOT RUN / N/A
+- Supervisor review state: pending / changes-required / approved-for-governed-merge / N/A
+- If protected main moved after task start, branch synchronization completed: Yes / No / N/A
+- Synchronized protected-main SHA after latest merge alert:
+- Sync acknowledgement posted: `Sync Complete — Resuming Work` — Yes / No / N/A
+
 - [ ] Effective agent working instructions were re-evaluated at task start and before PR submission.
 - [ ] `README.md` **Agent Working Instructions** was updated in this PR if the effective instructions changed.
 - [ ] If no instruction changed, the PR states: `Agent instructions checked — README instruction delta: none`.
 - [ ] No undeclared overlapping writer path, migration namespace, public contract or shared authoritative surface is being modified.
 - [ ] Child/sub-agent authority stayed within this task's declared scope.
+- [ ] The branch is synchronized to the active wave's required protected-main SHA, or a documented reason proves the older base remains valid.
+- [ ] A valid worker submission will be reviewed by the Supervisor before protected integration.
+- [ ] Supervisor approval will use required exact-head Governance/promotion/protected-main rules; no direct unverified main merge is requested.
 
-See `docs/governance/MULTI_AGENT_ORCHESTRATION.md`.
+See `docs/governance/MULTI_AGENT_ORCHESTRATION.md` and `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`.
 
 ## Architecture impact
 
@@ -103,6 +123,7 @@ Use only PASS / FAIL / BLOCKED / NOT RUN / N/A.
 - [ ] `STATUS.md` updated if progress changes
 - [ ] `STATE.json` updated only if evidence supports transition
 - [ ] README agent instructions re-checked and synchronized when materially changed
+- [ ] Active multi-agent plan / required-main SHA updated when the wave changed materially
 - [ ] ADR added/updated if architecture changed
 - [ ] No unrelated files or scope added
 
