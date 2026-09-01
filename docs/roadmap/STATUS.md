@@ -13,7 +13,7 @@ Canonical state:
 - P01 is DONE — 12 / 12; exit SATISFIED.
 - P02 is DONE — 10 / 10; exit SATISFIED.
 - P03 is DONE — 11 / 11; exit SATISFIED.
-- P04 is ACTIVE — **3 / 10 canonically done**.
+- P04 is ACTIVE — **3 / 10 done** (canonical).
 - P04.01-P04.03 are DONE with retained accepted evidence.
 - P04.04 is the **sole ACTIVE package**.
 - P04.05-P04.10 remain planned/locked.
