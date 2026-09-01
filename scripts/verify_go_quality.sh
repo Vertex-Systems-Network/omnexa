@@ -12,6 +12,24 @@ if [[ "$(go env GOVERSION)" != "${EXPECTED_GO}" ]]; then
   exit 1
 fi
 
+# XQ-100 M2 multi-agent enforcement is intentionally executed inside the
+# already-required `governance` job. These checks are dependency-free and
+# fail before expensive Go tooling when active task/lease/scope state is bad.
+python -m py_compile \
+  scripts/agent_orchestration_common.py \
+  scripts/validate_agent_task.py \
+  scripts/validate_agent_leases.py \
+  scripts/detect_path_overlap.py \
+  scripts/validate_agent_pr_scope.py \
+  scripts/validate_agent_base_sha.py \
+  scripts/validate_task_dependencies.py
+python scripts/validate_agent_task.py
+python scripts/validate_agent_leases.py
+python scripts/detect_path_overlap.py
+python scripts/validate_task_dependencies.py
+python scripts/validate_agent_pr_scope.py
+python scripts/validate_agent_base_sha.py
+
 mkdir -p "${TOOL_ROOT}"
 
 GOBIN="${TOOL_ROOT}" GOTOOLCHAIN=local go install "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}"
