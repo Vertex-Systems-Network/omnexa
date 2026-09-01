@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import unittest
 
-from agent_orchestration_common import allowed_path, path_matches, patterns_overlap
+from agent_orchestration_common import allowed_path, normalize_path, path_matches, patterns_overlap
 
 
 class AgentOrchestrationPathTests(unittest.TestCase):
@@ -16,6 +16,10 @@ class AgentOrchestrationPathTests(unittest.TestCase):
     def test_recursive_prefix_match(self) -> None:
         self.assertTrue(path_matches("modules/crm/**", "modules/crm/internal/service.go"))
         self.assertFalse(path_matches("modules/crm/**", "modules/finance/ledger.go"))
+
+    def test_hidden_github_path_is_preserved(self) -> None:
+        self.assertEqual(normalize_path("./.github/workflows/governance.yml"), ".github/workflows/governance.yml")
+        self.assertTrue(path_matches(".github/workflows/**", ".github/workflows/governance.yml"))
 
     def test_exact_overlap(self) -> None:
         self.assertTrue(patterns_overlap("README.md", "README.md"))
