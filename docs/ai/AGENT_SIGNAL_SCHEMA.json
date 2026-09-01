@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omnexa.local/schemas/agent-signal-v1.json",
+  "title": "Omnexa Multi-Agent Coordination Signal v1",
+  "description": "Machine-readable coordination signal for Supervisor-led development waves. Signals never grant authority beyond canonical repository governance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "wave_id",
+    "signal",
+    "sender_id",
+    "task_id",
+    "branch",
+    "head_sha",
+    "required_main_sha",
+    "instruction_check"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "wave_id": {"type": "string", "minLength": 1},
+    "signal": {
+      "enum": [
+        "Work Done and Submitted",
+        "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
+        "Sync Complete — Resuming Work",
+        "Review Changes Required"
+      ]
+    },
+    "sender_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "branch": {"type": "string", "minLength": 1},
+    "head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "required_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "pr_number": {"type": ["integer", "null"], "minimum": 1},
+    "ci_state": {"enum": ["PASS", "FAIL", "BLOCKED", "NOT RUN", "N/A"]},
+    "ci_reference": {"type": ["string", "null"]},
+    "merge_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "synced_main_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "lease_notes": {"type": "string"},
+    "dependency_notes": {"type": "string"},
+    "review_findings": {"type": "array", "items": {"type": "string"}},
+    "instruction_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checked", "readme_delta"],
+      "properties": {
+        "checked": {"const": true},
+        "readme_delta": {"enum": ["none", "updated-required"]}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"signal": {"const": "Work Done and Submitted"}}, "required": ["signal"]},
+      "then": {"required": ["pr_number", "ci_state", "ci_reference"]}
+    },
+    {
+      "if": {"properties": {"signal": {"const": "New changes have been merged — please merge these changes into your branch first, then resume your own work."}}, "required": ["signal"]},
+      "then": {"required": ["merge_sha"]}
+    },
+    {
+      "if": {"properties": {"signal": {"const": "Sync Complete — Resuming Work"}}, "required": ["signal"]},
+      "then": {"required": ["synced_main_sha"]}
+    },
+    {
+      "if": {"properties": {"signal": {"const": "Review Changes Required"}}, "required": ["signal"]},
+      "then": {"required": ["review_findings"]}
+    }
+  ]
+}
