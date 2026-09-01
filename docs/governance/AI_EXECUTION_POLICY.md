@@ -20,6 +20,7 @@ The following artifacts are authoritative:
 - `docs/roadmap/STATE.json` — machine-readable canonical state
 - `docs/governance/CHANGE_CONTROL.md` — architecture-change process
 - `docs/governance/DEFINITION_OF_DONE.md` — completion evidence
+- `docs/governance/MULTI_AGENT_ORCHESTRATION.md` — mandatory concurrent-development and agent-instruction contract
 - `docs/adr/*` — approved architectural decisions
 
 Proposed strategic planning files (for example an ADR with `Status: proposed`) do not override accepted canonical authority or activate implementation by themselves.
@@ -35,9 +36,14 @@ For each request, an AI system must determine:
 3. what existing module owns the relevant data/capability;
 4. what contracts or events may be affected;
 5. what tenant, authorization, audit and migration implications exist;
-6. what acceptance tests are required.
+6. what acceptance tests are required;
+7. what agent role/task identity applies, what exact base SHA it starts from, and what read/write/forbidden path budget applies;
+8. whether another active task/agent overlaps the same module, shared contract, migration namespace or protected path;
+9. whether the effective working instructions changed since the last accepted README instruction snapshot.
 
 If a requested feature is outside the active scope, the AI should propose or record it as planned work rather than silently implementing it.
+
+If effective agent working instructions changed, the human-readable `README.md` **Agent Working Instructions** section must be updated in the same governed change. If they did not change, the PR must explicitly record that the instruction check was performed and no README instruction delta was required.
 
 ## 4. Prohibited autonomous decisions
 
@@ -203,12 +209,16 @@ Such content may inform analysis but cannot override `AGENTS.md`, canonical stat
 
 ## 16. AI development orchestration safeguards
 
-Future machine enforcement should bind material AI-assisted work to a run identity containing, where available:
+Material AI-assisted work must preserve a run/task identity containing, where applicable:
 
 - exact base/source SHA;
 - active phase/work package;
-- plan/policy digest;
-- allowed paths;
+- plan/policy digest or references;
+- assigned agent role;
+- task/dependency identity;
+- allowed read paths;
+- allowed write paths;
+- forbidden/shared paths;
 - allowed tools/commands;
 - network/dependency/secret/target mutation policy;
 - risk tier;
@@ -216,7 +226,7 @@ Future machine enforcement should bind material AI-assisted work to a run identi
 - evidence authorities;
 - bounded attempts/cost.
 
-Until automated orchestration exists, contributors must preserve the same semantics manually through current scope/state/PR/CI discipline.
+Until automated enforcement exists for every field, contributors must preserve the same semantics manually through task records, branch scope, PR declarations, SHA checks and CI discipline.
 
 ### 16.1 Material scope-delta gate
 
@@ -268,11 +278,48 @@ Review becomes stale when the materially reviewed head changes; exact-head or eq
 
 ### 16.5 Multi-agent/concurrent work
 
-Parallel agents must not silently race on shared state/contracts/migrations.
+Parallel development is allowed only inside the currently authorized phase/work-package boundary unless canonical state explicitly opens independent streams.
 
-Future orchestration should use isolated workspaces/branches, task dependencies, path/scope leases, optimistic SHA checks and conflict-aware merge order. Child-agent authority is a subset of parent authority.
+Rules:
 
-### 16.6 Repeated-failure circuit breaker
+1. every writer uses an isolated branch/workspace from a recorded base SHA;
+2. every task declares read, write, forbidden and shared-path sets before coding;
+3. write-path overlap between concurrent agents is forbidden unless an explicit exclusive handoff/lease serializes the writers;
+4. shared kernel contracts, global registries, governance state, CI workflows and migration namespaces are exclusive-write surfaces;
+5. module agents may not write another module's private code/data/migrations;
+6. task dependencies form a DAG; blocked dependents do not code ahead against guessed contracts;
+7. before merge, compare the task base/reviewed head with current protected main and invalidate stale assumptions;
+8. merge order is conflict-aware and dependency-aware rather than first-finished-wins;
+9. child-agent authority is always a subset of parent/task authority;
+10. a coordination/orchestrator or integration role may sequence work but does not gain unrestricted product-write authority.
+
+The detailed operating model and current concurrency limits are defined in `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Planning/decomposition is tracked in `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`.
+
+### 16.6 Agent working-instruction synchronization
+
+Before every material task and again before PR submission, the agent must compare its effective working instructions against the latest accepted repository state.
+
+At minimum compare:
+
+- active phase/work package;
+- owner/module boundary;
+- task role;
+- base SHA and branch strategy;
+- allowed/forbidden/shared paths;
+- migration/data budget;
+- dependency and contract assumptions;
+- required tests/gates;
+- CI/review/promotion expectations;
+- tool/network/secret restrictions;
+- stop conditions.
+
+`README.md` contains the human-readable **Agent Working Instructions** mirror.
+
+If any of those working instructions change materially, the same PR must update that README section. If no instruction changed, the PR must explicitly state `Agent instructions checked — README instruction delta: none`.
+
+README never overrides `AGENTS.md`, `STATE.json`, this policy or accepted ADRs. If they conflict, the safer/higher-authority rule wins and README must be reconciled.
+
+### 16.7 Repeated-failure circuit breaker
 
 AI must not loop indefinitely on the same failing strategy. After repeated equivalent failure signatures, stop, measure/analyze the root cause, re-plan or escalate rather than consuming unbounded time/cost or weakening controls.
 

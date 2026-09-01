@@ -14,6 +14,30 @@
 ### Out of scope
 - 
 
+## AI / concurrent-work coordination
+
+- Task / run ID:
+- Agent / role:
+- Exact base SHA:
+- Declared read paths:
+- Declared write paths:
+- Forbidden paths:
+- Shared / exclusive paths or leases:
+- Task dependencies / required merge order:
+- Concurrent related tasks / agents:
+- Migration reservation (owner/path/version/data budget), if any:
+- Public contract/event reservation, if any:
+- Conflict / overlap check result:
+- Protected-main freshness checked:
+
+- [ ] Effective agent working instructions were re-evaluated at task start and before PR submission.
+- [ ] `README.md` **Agent Working Instructions** was updated in this PR if the effective instructions changed.
+- [ ] If no instruction changed, the PR states: `Agent instructions checked — README instruction delta: none`.
+- [ ] No undeclared overlapping writer path, migration namespace, public contract or shared authoritative surface is being modified.
+- [ ] Child/sub-agent authority stayed within this task's declared scope.
+
+See `docs/governance/MULTI_AGENT_ORCHESTRATION.md`.
+
 ## Architecture impact
 
 - Owning module/domain:
@@ -78,6 +102,7 @@ Use only PASS / FAIL / BLOCKED / NOT RUN / N/A.
 - [ ] Relevant architecture/docs updated
 - [ ] `STATUS.md` updated if progress changes
 - [ ] `STATE.json` updated only if evidence supports transition
+- [ ] README agent instructions re-checked and synchronized when materially changed
 - [ ] ADR added/updated if architecture changed
 - [ ] No unrelated files or scope added
 
