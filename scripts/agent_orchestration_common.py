@@ -66,7 +66,10 @@ def pr_context() -> tuple[str, str, str] | None:
 
 
 def normalize_path(value: str) -> str:
-    return value.strip().replace("\\", "/").lstrip("./")
+    value = value.strip().replace("\\", "/")
+    while value.startswith("./"):
+        value = value[2:]
+    return value.lstrip("/")
 
 
 def _prefix_pattern(pattern: str) -> str | None:
@@ -168,6 +171,14 @@ def ensure_commit(sha: str) -> None:
     git("fetch", "--no-tags", "--depth=1", "origin", sha)
 
 
+def ensure_full_history() -> None:
+    shallow = (ROOT / ".git" / "shallow").exists()
+    if shallow:
+        git("fetch", "--no-tags", "--unshallow", "origin")
+    else:
+        git("fetch", "--no-tags", "origin")
+
+
 def remote_main_sha() -> str:
     output = git("ls-remote", "origin", "refs/heads/main")
     if not output:
@@ -179,7 +190,7 @@ def remote_main_sha() -> str:
 def changed_paths(base_sha: str, head_sha: str) -> list[str]:
     ensure_commit(base_sha)
     ensure_commit(head_sha)
-    output = git("diff", "--name-only", f"{base_sha}...{head_sha}")
+    output = git("diff", "--name-only", base_sha, head_sha)
     return [normalize_path(line) for line in output.splitlines() if line.strip()]
 
 
