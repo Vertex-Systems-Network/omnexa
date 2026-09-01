@@ -14,6 +14,7 @@ READINESS_PATH = ROOT / "docs/governance/P03_P04_TRANSITION_READINESS.md"
 P04_01_PATH = ROOT / "docs/roadmap/work-packages/P04.01.md"
 P04_02_PATH = ROOT / "docs/roadmap/work-packages/P04.02.md"
 P04_03_PATH = ROOT / "docs/roadmap/work-packages/P04.03.md"
+P04_04_PATH = ROOT / "docs/roadmap/work-packages/P04.04.md"
 
 REQUIRED_FILES = [
     "docs/governance/P03_EXIT_GATE.md",
@@ -25,6 +26,7 @@ REQUIRED_FILES = [
     "docs/roadmap/work-packages/P04.01.md",
     "docs/roadmap/work-packages/P04.02.md",
     "docs/roadmap/work-packages/P04.03.md",
+    "docs/roadmap/work-packages/P04.04.md",
 ]
 
 for relative in REQUIRED_FILES:
@@ -38,6 +40,7 @@ readiness = READINESS_PATH.read_text(encoding="utf-8")
 p04_01 = P04_01_PATH.read_text(encoding="utf-8")
 p04_02 = P04_02_PATH.read_text(encoding="utf-8")
 p04_03 = P04_03_PATH.read_text(encoding="utf-8")
+p04_04 = P04_04_PATH.read_text(encoding="utf-8")
 phase_rows = {row.get("id"): row for row in state.get("phases") or []}
 lock = state.get("implementation_lock") or {}
 
@@ -126,6 +129,17 @@ for marker in [
 ]:
     if marker.lower() not in p04_03.lower():
         raise SystemExit(f"ERROR: P04.03 specification missing marker: {marker}")
+
+for marker in [
+    "same local PostgreSQL transaction",
+    "duplicate publication remains explicitly possible",
+    "no global event ordering guarantee",
+    "does not mean a downstream protected mutation happened exactly once",
+    "preparation carrier adds no migration",
+    "P04.05",
+]:
+    if marker.lower() not in p04_04.lower():
+        raise SystemExit(f"ERROR: P04.04 specification missing marker: {marker}")
 
 for marker in [
     "P03 exit = SATISFIED",

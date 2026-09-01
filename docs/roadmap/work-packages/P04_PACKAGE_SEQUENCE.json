@@ -4,22 +4,114 @@
   "name": "Data, Jobs & Event Fabric",
   "state": "active",
   "activation_policy": "strict_sequential_one_active_package",
-  "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
-  "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
-  "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
   "implementation_authorized": true,
+  "business_feature_code_authorized": false,
   "packages": [
-    {"id":"P04.01","name":"Event envelope & identity contract","state":"done","depends_on":[],"spec":"docs/roadmap/work-packages/P04.01.md","owner":"kernel.events","evidence":["docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"]},
-    {"id":"P04.02","name":"Publish/subscribe abstraction & ownership boundaries","state":"done","depends_on":["P04.01"],"spec":"docs/roadmap/work-packages/P04.02.md","owner":"kernel.events","evidence":["docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"]},
-    {"id":"P04.03","name":"Durable stream/consumer baseline & checkpoint model","state":"active","depends_on":["P04.01","P04.02"],"spec":"docs/roadmap/work-packages/P04.03.md","owner":"kernel.events"},
-    {"id":"P04.04","name":"Transactional outbox reliability primitive","state":"planned","depends_on":["P04.01","P04.03"],"spec":null,"owner":"kernel.events"},
-    {"id":"P04.05","name":"Consumer inbox/deduplication & idempotency primitive","state":"planned","depends_on":["P04.01","P04.04"],"spec":null,"owner":"kernel.events"},
-    {"id":"P04.06","name":"Retry/backoff, terminal failure & dead-letter/quarantine policy","state":"planned","depends_on":["P04.03","P04.05"],"spec":null,"owner":"kernel.events"},
-    {"id":"P04.07","name":"Event schema registry, compatibility & validation","state":"planned","depends_on":["P04.01","P04.06"],"spec":null,"owner":"kernel.events"},
-    {"id":"P04.08","name":"Background-job ownership, tenant context & correlation","state":"planned","depends_on":["P04.01","P04.07"],"spec":null,"owner":"kernel.jobs"},
-    {"id":"P04.09","name":"Reliability observability, diagnostics & operator recovery","state":"planned","depends_on":["P04.03","P04.08"],"spec":null,"owner":"kernel.events"},
-    {"id":"P04.10","name":"Replay/duplicate/failure/restart/poison-event acceptance","state":"planned","depends_on":["P04.01","P04.09"],"spec":null,"owner":"kernel.events"}
+    {
+      "id": "P04.01",
+      "name": "Event envelope & identity contract",
+      "state": "done",
+      "depends_on": [],
+      "spec": "docs/roadmap/work-packages/P04.01.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md"
+      ]
+    },
+    {
+      "id": "P04.02",
+      "name": "Publish/subscribe abstraction & ownership boundaries",
+      "state": "done",
+      "depends_on": [
+        "P04.01"
+      ],
+      "spec": "docs/roadmap/work-packages/P04.02.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
+      ]
+    },
+    {
+      "id": "P04.03",
+      "name": "Durable stream/consumer baseline & checkpoint model",
+      "state": "done",
+      "depends_on": [
+        "P04.01",
+        "P04.02"
+      ],
+      "spec": "docs/roadmap/work-packages/P04.03.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
+      ]
+    },
+    {
+      "id": "P04.04",
+      "name": "Transactional outbox reliability primitive",
+      "state": "active",
+      "depends_on": [
+        "P04.01",
+        "P04.03"
+      ],
+      "spec": "docs/roadmap/work-packages/P04.04.md"
+    },
+    {
+      "id": "P04.05",
+      "name": "Consumer inbox/deduplication & idempotency primitive",
+      "state": "planned",
+      "depends_on": [
+        "P04.01",
+        "P04.04"
+      ],
+      "spec": null
+    },
+    {
+      "id": "P04.06",
+      "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
+      "state": "planned",
+      "depends_on": [
+        "P04.03",
+        "P04.05"
+      ],
+      "spec": null
+    },
+    {
+      "id": "P04.07",
+      "name": "Event schema registry, compatibility & validation",
+      "state": "planned",
+      "depends_on": [
+        "P04.01",
+        "P04.06"
+      ],
+      "spec": null
+    },
+    {
+      "id": "P04.08",
+      "name": "Background-job ownership, tenant context & correlation",
+      "state": "planned",
+      "depends_on": [
+        "P04.01",
+        "P04.07"
+      ],
+      "spec": null
+    },
+    {
+      "id": "P04.09",
+      "name": "Reliability observability, diagnostics & operator recovery",
+      "state": "planned",
+      "depends_on": [
+        "P04.03",
+        "P04.08"
+      ],
+      "spec": null
+    },
+    {
+      "id": "P04.10",
+      "name": "Replay/duplicate/failure/restart/poison-event acceptance",
+      "state": "planned",
+      "depends_on": [
+        "P04.01",
+        "P04.09"
+      ],
+      "spec": null
+    }
   ],
-  "phase_exit": "LOCKED — terminal acceptance requires P04.01-P04.10 completion with replay/duplicate/crash/restart/poison-event proof and no double-applied protected mutation.",
-  "note": "Closure/activation candidate only until this exact governance/state transaction passes exact-final-head Omnexa Governance, is promoted unchanged, merges through the protected path, and protected main is re-read. P04.01-P04.02 are recorded done with accepted evidence; P04.03 is the sole candidate active package. P04.04-P04.10 and business-feature/AI runtime remain locked."
+  "note": "P04.01-P04.03 are done with accepted evidence. P04.04 is the sole active package only after the governed P04.03 closure/P04.04 activation transaction merges and protected main is re-read. P04.05-P04.10 remain planned/locked; business-feature and AI/model/agent runtime remain unauthorized."
 }

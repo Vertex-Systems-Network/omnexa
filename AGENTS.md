@@ -2,11 +2,11 @@
 
 This is the highest-priority repository instruction for human contributors and AI coding systems. It applies to the entire repository.
 
-## Current canonical state
+## Current canonical state candidate
 
 `docs/roadmap/STATE.json` is the machine-readable execution source of truth. Live protected-main/PR/CI state must be re-verified before every material mutation.
 
-The accepted P04.02 closure / P04.03 activation transaction passed source Governance #571, unchanged promotion Governance #572, merged through PR #161, and was read back on protected `main` at `d74375cd0a2952ab8622117089e5eb43043e6e78`. This post-activation reconciliation carrier is continuity/governance only and must not contain P04.03 runtime implementation.
+Protected `main@6b8cf73bbb8d6c9bc977b69d9a110f01e706b221` is the authoritative pre-transaction base. It contains accepted P04.03 implementation/completion evidence and the separately prepared/locked P04.04 contract/handoff. This branch is the bounded P04.03 closure / P04.04 activation candidate; it is not authority until exact-head source Governance, unchanged promotion Governance, protected merge and protected-main read-back succeed.
 
 ```text
 Foundation Architecture v1: FROZEN
@@ -22,22 +22,25 @@ P02 exit gate: SATISFIED
 P03: DONE — 11 / 11
 P03.01-P03.11: DONE
 P03 exit gate: SATISFIED
-P04: ACTIVE — 2 / 10 done
-P04.01: DONE
-P04.02: DONE with accepted implementation/completion evidence
-Current work package: P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model
-P04.04-P04.10: PLANNED / LOCKED
-kernel_code_authorized: true — P04.03 only
+P04 candidate: ACTIVE — 3 / 10 done
+P04.01-P04.03: DONE with accepted evidence
+Candidate current work package: P04.04 — Transactional Outbox Reliability Primitive
+P04.05-P04.10: PLANNED / LOCKED
+kernel_code_authorized: true — P04.04 only after governed promotion/merge/read-back
 business_feature_code_authorized: false
 ```
 
-Protected `main` activation read-back `d74375cd0a2952ab8622117089e5eb43043e6e78` contains the accepted P04.02 completion state, P04.03 contract and the accepted P04.02→P04.03 state transition. P04.03 runtime source must be created later on a new implementation branch from exact current protected `main` after this post-activation continuity correction is itself governed, merged and read back; never write runtime code on the activation, promotion or continuity carrier.
+P04.03 implementation acceptance is immutable predecessor evidence: source PR #165 exact head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe` passed Governance #581; unchanged promotion PR #166 passed Governance #582 / `33405463251 / 99531835998` and merged/read back as `b94189873bef11f4870935205398f1ef44f160bf`; completion evidence landed through PR #167 / merge `ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd`.
 
-P04.04+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
+The prepared/locked P04.04 contract/handoff then passed source Governance #587 / `33409859631 / 99546416425`, unchanged promotion Governance #588 / `33410873382 / 99549818529`, and merged/read back as `962a62c7c111079ca6f2047fa748deea97c84534`.
+
+This activation carrier contains no P04.04 runtime source, no migration, no broker/provider selection, no business handler, no P04.05+ behavior and no AI/model/agent runtime. If accepted, P04.04 runtime must start later on a new implementation branch from exact post-transition protected main.
+
+P04.05+, business features, strategic X-program runtime, deployment administration and AI/model/agent runtime remain unauthorized.
 
 ## Persistent AI continuity
 
-A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, retained P04.01/P04.02 completion evidence, `docs/roadmap/work-packages/P04.03.md` and the active `docs/ai/handoffs/P04.03.md` before material P04.03 work.
+A new AI session must use `docs/ai/` as the durable continuity/handoff index only after verifying canonical state. Read `docs/ai/AI_CONTEXT.md`, `docs/ai/AI_STATE.yaml`, `docs/ai/AI_EXECUTION_PROTOCOL.md`, retained P04.01-P04.03 completion evidence, `docs/roadmap/work-packages/P04.04.md`, `docs/ai/handoffs/P04.04.md` and the accepted P04.03→P04.04 transition receipt before material P04.04 work.
 
 Continuity files are subordinate snapshots/indexes. They never override this contract, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs or canonical GitHub evidence.
 
@@ -47,8 +50,8 @@ Before material work read:
 
 1. `AGENTS.md`;
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
-3. `docs/governance/P03_EXIT_GATE.md`, `docs/governance/P04_ENTRY_GATE.md`, `docs/governance/P04_02_P04_03_TRANSITION_TRANSACTION.md` and applicable prior transition/readiness records;
-4. `docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json`, `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`, `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`, `docs/roadmap/work-packages/P04.03.md` and the P04.03 handoff;
+3. `docs/governance/P03_EXIT_GATE.md`, `docs/governance/P04_ENTRY_GATE.md`, `docs/governance/P04_03_P04_04_TRANSITION_TRANSACTION.md` and applicable prior transition/readiness records;
+4. `docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json`, retained P04.01-P04.03 completion evidence, `docs/roadmap/work-packages/P04.04.md` and the P04.04 handoff;
 5. Product Constitution, architecture, glossary, naming, ownership and dependency matrix;
 6. identifier/money/time/locale/error/API/event standards;
 7. security/data-classification/threat model;
@@ -177,7 +180,6 @@ P03.09 — Migration Ownership Registry remains complete:
 - implementation merge `ea402964c45a630fd6723e0e4a6754555a6a4994`;
 - evidence `docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md`;
 - retained verifier `scripts/verify_p03_09.sh`.
-
 P03.10 — Module Health Reporting is complete:
 
 - implementation issue #126 — completed;
@@ -227,27 +229,39 @@ P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries has accepted imp
 - P04.02 closure / P04.03 activation source #160 exact head `452858a3ab9bfa827697105bd5168cf660bd62ba` passed Governance #571 / `33370681216 / 99420856278`;
 - unchanged activation promotion #161 passed Governance #572 / `33371203708 / 99422521576` and merged/read back as `d74375cd0a2952ab8622117089e5eb43043e6e78`.
 
-P04.03 is now the sole active package. This post-activation continuity correction does not rewrite accepted predecessor evidence or grant any additional authority.
+P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model has accepted implementation/completion evidence:
 
-Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority. P03.07 Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence; only exact-head Governance `33195104185 / 98930123416` is P03.07 completion authority. P03.08 completion authority is exact implementation head `65dc38c6d60d1535c97a5dda59fb49490df59ec6` with canonical Governance `33216021914 / 98999758150`. P03.09 Governance #493 / `33222404123` remains diagnostic FAIL evidence; #494 / `33222631307` is successful draft-carrier evidence and #495 / `33223035182` is promotion-specific completion authority. P03.10 Governance #501/#503 remain diagnostic failure evidence; #504 / `33227842490` is successful draft-carrier evidence and #505 / `33228171863` is promotion-specific completion authority. P03.11 #511 is successful draft-carrier evidence and #512 / `33258456851` is promotion-specific implementation authority. P04.01 source Governance #547 is successful source-carrier evidence and promotion Governance #548 is implementation merge authority; P04.02 implementation source Governance #563 and promotion Governance #564 are retained implementation evidence; #566 is completion-evidence carrier governance; P04.03 preparation source #568/#569 is preparation evidence; P04.03 activation source #571 and promotion #572 are accepted transition evidence.
+- source implementation PR #165;
+- promotion implementation PR #166;
+- final exact head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`;
+- source Governance #581 / `33377793927 / 99443112098` — PASS;
+- promotion-specific Governance #582 / `33405463251 / 99531835998` — PASS;
+- accepted implementation merge/read-back `b94189873bef11f4870935205398f1ef44f160bf`;
+- completion evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`;
+- completion-evidence carrier #167 merged/read back as `ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd`;
+- prepared/locked P04.04 contract/handoff source #168 passed Governance #587 / `33409859631 / 99546416425`;
+- unchanged P04.04 preparation promotion #169 passed Governance #588 / `33410873382 / 99549818529` and merged/read back as `962a62c7c111079ca6f2047fa748deea97c84534`.
 
-All completed P01/P02/P03.01-P03.11/P04.01/P04.02 regressions/evidence invariants remain mandatory.
+P04.04 remains prepared/locked on protected main until this separate closure/activation transaction is governed, promoted unchanged, merged and read back.
+
+Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority. P03.07 Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence; only exact-head Governance `33195104185 / 98930123416` is P03.07 completion authority. P03.08 completion authority is exact implementation head `65dc38c6d60d1535c97a5dda59fb49490df59ec6` with canonical Governance `33216021914 / 98999758150`. P03.09 Governance #493 remains diagnostic FAIL evidence; #494 is successful draft-carrier evidence and #495 is promotion-specific completion authority. P03.10 Governance #501/#503 remain diagnostic failure evidence; #504 is successful draft-carrier evidence and #505 is promotion-specific completion authority. P03.11 #511 is successful draft-carrier evidence and #512 is promotion-specific implementation authority. P04.01 source/promotion Governance #547/#548 and P04.02 source/promotion Governance #563/#564 remain accepted predecessor evidence; P04.03 implementation source/promotion Governance #581/#582 and P04.04 preparation source/promotion Governance #587/#588 are retained exact-head evidence.
+
+All completed P01/P02/P03.01-P03.11/P04.01/P04.02/P04.03 regressions/evidence invariants remain mandatory.
 
 ## P04 sequencing
 
 `docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json` defines strict sequential one-active-package execution.
 
-Current accepted state:
+Candidate state after governed promotion/merge/read-back:
 
-- P04.01 is `done` with accepted evidence;
-- P04.02 is `done` with accepted evidence;
-- P04.03 is the sole `active` package;
-- P04.04-P04.10 remain `planned / locked`;
-- P04 progress is `2 / 10 done`;
-- `kernel_code_authorized=true` only for P04.03;
+- P04.01-P04.03 are `done` with accepted evidence;
+- P04.04 is the sole `active` package;
+- P04.05-P04.10 remain `planned / locked`;
+- P04 progress is `3 / 10 done`;
+- `kernel_code_authorized=true` only for P04.04;
 - `business_feature_code_authorized=false`.
 
-Do not implement P04.03 on this post-activation continuity correction branch and do not auto-advance to P04.04. P04.03 runtime implementation requires a new separate branch from exact protected `main` after this continuity correction merges and protected main is re-read.
+Protected main remains authoritative until this transition is accepted. Do not implement P04.04 on this closure/activation carrier and do not auto-advance to P04.05. P04.04 runtime implementation requires a new separate branch from exact post-transition protected `main`.
 
 ## Accepted ADR-0012 dependency-version baseline retained
 
@@ -295,8 +309,8 @@ Still explicitly unauthorized under the current P04 state:
 - sandbox/network/secret/file brokers, resource quotas or kill-switch runtime;
 - marketplace/package distribution or acquisition runtime;
 - Product Federation/System Graph/Performance Intelligence runtime;
-- P04.04+ event/jobs fabric scope before later package activation;
-- concrete broker/provider selection, transactional outbox, inbox/deduplication persistence, retry/DLQ, schema-registry runtime or background-job execution changes under P04.03;
+- P04.05+ event/jobs fabric scope before later package activation;
+- concrete broker/provider selection, inbox/deduplication persistence, retry/DLQ, schema-registry runtime or background-job execution changes under P04.04;
 - business domains/features;
 - generic remote RPC/service mesh;
 - workflow orchestration expansion;
@@ -337,26 +351,46 @@ P04.01 retained invariants remain binding: event envelopes remain provider-neutr
 
 P04.02 retained invariants remain binding: publication accepts only validated P04.01 envelopes; acceptance-only publish semantics do not claim downstream/business completion; stable owner/module and consumer identities are explicit; malformed/duplicate/conflicting registration and cross-owner consumer identity rebinding fail deterministically; trusted tenant mismatch fails closed; publish and handler failure classes remain safely distinct; duplicate delivery remains possible and no global ordering is assumed; no concrete broker/provider, persistence, durable checkpoint, outbox/inbox, retry/DLQ, business handler or AI authority was introduced.
 
-## P04.03 implementation boundary after activation
+## P04.03 completed boundary retained
 
 Owner: `kernel.events`.
 
-P04.03 is active. Runtime implementation may begin only **after this post-activation continuity correction passes exact-head Governance, merges through the governed path, and protected `main` is re-read**. Create a new separate implementation branch from that exact current protected-main SHA.
+P04.03 is accepted predecessor implementation/completion evidence. Retained invariants include:
 
-Authorized P04.03 scope is limited to `docs/roadmap/work-packages/P04.03.md`:
+- stable durable consumer identity remains compatible with P04.02 owner/consumer identity;
+- checkpoint scope is explicit and owner/tenant/stream-partition equivalent bound;
+- checkpoint advancement is contiguous/monotonic and stale/regressive/gapped/conflicting advancement fails deterministically;
+- failed/cancelled handling cannot advance progress;
+- restart resumes from the last accepted checkpoint;
+- handler-success/checkpoint-write-failure preserves duplicate replay possibility;
+- same-scope concurrent checkpoint races cannot corrupt progress;
+- checkpoint state remains consumption progress only and is never authorization;
+- P04.01 envelope metadata and P04.02 ownership laws remain unchanged;
+- no concrete broker/provider, production checkpoint persistence, migration, outbox/inbox, retry/DLQ or exactly-once business-mutation claim was introduced.
 
-- stable durable consumer identity compatible with P04.02 owner/consumer identity;
-- explicit durable stream/partition-equivalent checkpoint scope;
-- monotonic checkpoint advancement within one scope;
-- deterministic stale/regressive/conflicting checkpoint rejection;
-- restart/resume from the last accepted checkpoint;
-- failed/cancelled unacknowledged work cannot be skipped by checkpoint advancement;
-- fail-closed owner/tenant/scope collision handling;
-- explicit at-least-once-compatible duplicate delivery around crash/restart;
-- P04.01 metadata and P04.02 ownership laws remain preserved;
-- focused positive/adversarial tests and a dedicated package verifier/evidence path.
+## P04.04 implementation boundary after accepted activation
 
-P04.03 explicitly does not authorize concrete broker/provider selection, exactly-once delivery/business-mutation claims, transactional outbox, inbox/deduplication persistence, retry/DLQ/quarantine runtime, schema-registry runtime, background-job execution changes, business handlers, business-feature authority, P04.04+, strategic X-program runtime or AI/model/agent runtime. A persistence migration is not automatically authorized by activation; any later P04.03 implementation requiring one must separately prove that exact persistence path and rollback/isolation budget under the accepted contract.
+Owner: `kernel.events`.
+
+P04.04 may become active only after this closure/activation transaction passes exact-head source Governance, is promoted unchanged through a fresh promotion-specific carrier, that promotion passes fresh Governance, merges with expected-head protection, and protected `main` is re-read. Runtime implementation must then start on a **new separate branch** from that exact main SHA.
+
+Authorized P04.04 scope is limited to `docs/roadmap/work-packages/P04.04.md`:
+
+- a provider-neutral transactional outbox reliability primitive;
+- authoritative owner mutation and canonical P04.01 envelope are committed/rolled back together in the same local PostgreSQL transaction;
+- P01 `database.InTransaction` remains the transaction foundation;
+- committed pending outbox state is recoverable after restart;
+- relay uses the accepted P04.02 publication abstraction rather than choosing a broker;
+- publish failure keeps work pending/recoverable;
+- publish-success/crash-before-published-mark may duplicate the same canonical event;
+- published state means producer-side publication progress only, not consumer/business exactly-once completion;
+- concurrent relay attempts cannot corrupt/rebind owner/event/tenant state;
+- no global ordering guarantee is inferred from rows, sequence values, timestamps or relay scheduling;
+- P04.05 inbox/deduplication and P04.06 retry/DLQ policy remain locked.
+
+Persistence decision for the later runtime branch: the accepted P04.04 contract requires durable local PostgreSQL outbox persistence for production semantics, so persistence is expected. This activation carrier itself adds **no migration and no schema change**. Before the first schema mutation on the separate implementation branch, fresh protected main must be re-read and the exact owner/path/version/data budget must be recorded under the retained P01 migration rules; no blanket or cross-owner migration authority is granted by activation.
+
+P04.04 does not authorize Kafka/NATS/RabbitMQ/Redis Streams or another broker choice, end-to-end exactly-once claims, P04.05 inbox/deduplication persistence, P04.06 retry/backoff/DLQ/quarantine, P04.07 schema-registry runtime, P04.08 background-job execution changes, business-domain handlers, P04.05+, business-feature authority, strategic X-program runtime or AI/model/agent runtime.
 
 ## Quality and release rules
 
@@ -420,7 +454,7 @@ Do not blindly loop on an equivalent failing strategy. Repeated equivalent failu
 
 Do not use local/self-hosted runners for canonical governance; silently add domains; duplicate ownership; invent conflicting contracts/security/quality semantics; bypass tenancy/authz/audit/classification; grant AI unrestricted write authority; commit secrets; use production sensitive data locally; create hidden super-admin bypasses; weaken gates to get green; claim untested evidence; implement unactivated future-phase scope; change `LICENSE` by inference; claim trademark clearance without evidence; or mix unrelated project code.
 
-Do not implement P04.03 runtime code on this post-activation continuity correction carrier. Do not auto-advance to P04.04.
+Do not implement P04.04 runtime code on this P04.03 closure / P04.04 activation carrier. Do not auto-advance to P04.05.
 
 ## Issue #4
 
@@ -428,10 +462,10 @@ Issue #4 remains the external distribution/public-launch licensing/IP/trademark 
 
 ## Exact next action
 
-1. Complete this bounded post-P04.03-activation continuity reconciliation without P04.03 runtime code or canonical `STATE.json` mutation.
-2. Require the exact final continuity head to pass canonical GitHub-hosted Omnexa Governance and all retained P01/P02/P03/P04.01/P04.02 regressions/evidence invariants.
+1. Complete this bounded P04.03 closure / P04.04 activation source carrier from exact protected `main@6b8cf73bbb8d6c9bc977b69d9a110f01e706b221` without P04.04 runtime source or migration.
+2. Require the exact final source head to pass canonical GitHub-hosted Omnexa Governance and all retained P01/P02/P03/P04.01-P04.03 regressions/evidence invariants.
 3. Inspect exact diff, changed-path budget, review threads and current protected-main base; record honest SELF REVIEW if independent review is unavailable.
-4. Promote the unchanged reviewed continuity state through a fresh promotion-specific carrier and require fresh promotion Governance.
-5. Merge only with expected-head guard while current with protected `main`, then re-read protected main, `STATE.json`, `STATUS.md`, AI continuity, the accepted transition receipt and active P04.03 handoff.
-6. Confirm P04 is ACTIVE at 2 / 10, P04.01-P04.02 DONE, P04.03 sole ACTIVE, P04.04-P04.10 locked, `kernel_code_authorized=true` only for P04.03 and `business_feature_code_authorized=false`.
-7. Only then create a **new separate P04.03 implementation branch** from the exact corrected main SHA. Do not implement P04.03 on this continuity carrier and do not auto-activate P04.04.
+4. Promote the **unchanged reviewed source state** through a fresh promotion-specific carrier and require fresh promotion Governance.
+5. Merge only with expected-head guard while current with protected `main`, then re-read protected main, `STATE.json`, `STATUS.md`, P04 sequence, AI continuity, this transition receipt and the P04.04 handoff.
+6. Confirm P04 is ACTIVE at `3 / 10`, P04.01-P04.03 DONE, P04.04 sole ACTIVE, P04.05-P04.10 locked, `kernel_code_authorized=true` only for P04.04 and `business_feature_code_authorized=false`.
+7. Identify the next authorized action as creation of a **new separate P04.04 implementation branch** from exact post-transition protected main, then **STOP**. Do not implement P04.04 on this activation carrier and do not auto-activate P04.05.
