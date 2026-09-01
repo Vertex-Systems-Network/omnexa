@@ -13,12 +13,14 @@
   },
   "bootstrap": {
     "protected_main_sha": "8fd737b318947c9d0f3cc0e5c5a0931636c2c40c",
-    "required_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
+    "required_main_ref": "main",
+    "required_main_sha_snapshot": "6556023c3f07fffa6a81776dd25188a685d2033c",
+    "required_main_resolution": "Resolve the current protected main ref before every material mutation, onboarding assignment, submission review and merge. The SHA snapshot is audit history only and must never be treated as fresher than the live protected main ref or a newer merge alert.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 177,
-    "latest_governed_workflow_merge": "6556023c3f07fffa6a81776dd25188a685d2033c",
-    "all_active_branches_synced_to_required_main": true
+    "latest_governed_workflow_merge_snapshot": "6556023c3f07fffa6a81776dd25188a685d2033c",
+    "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
     "slot_schema": "docs/ai/AGENT_SLOT_SCHEMA.json",
@@ -32,7 +34,7 @@
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "Supervisor assigns the highest-priority authorized open slot after synchronizing its branch to required_main_sha, then records agent_id, assigned_from_main_sha and start_status before work begins."
+    "assignment_rule": "Supervisor resolves current protected main, selects the highest-priority authorized open slot, synchronizes its branch to that live main, then records agent_id, assigned_from_main_sha and start_status before work begins."
   },
   "worker_slots": [
     {
@@ -47,13 +49,10 @@
       "start_status": "ready",
       "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox.go",
-        "kernel/internal/events/outbox_core_test.go"
-      ],
+      "write_paths": ["kernel/internal/events/outbox.go", "kernel/internal/events/outbox_core_test.go"],
       "depends_on": [],
       "merge_order": 1,
-      "notes": "Occupied by Agent-01. Not available for new-agent onboarding while status remains occupied."
+      "notes": "Occupied by Agent-01. SHA fields are the last recorded plan snapshot; live freshness always resolves protected main."
     },
     {
       "schema_version": 1,
@@ -67,16 +66,10 @@
       "start_status": "ready",
       "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox_postgres.go",
-        "kernel/internal/events/outbox_postgres_integration_test.go",
-        "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"
-      ],
-      "depends_on": [
-        "P04.04-T01"
-      ],
+      "write_paths": ["kernel/internal/events/outbox_postgres.go", "kernel/internal/events/outbox_postgres_integration_test.go", "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"],
+      "depends_on": ["P04.04-T01"],
       "merge_order": 2,
-      "notes": "Occupied by Agent-02. Go adapter must not guess an unaccepted T01 API."
+      "notes": "Occupied by Agent-02. Go adapter must not guess an unaccepted T01 API. SHA fields are snapshots; live freshness resolves protected main."
     },
     {
       "schema_version": 1,
@@ -90,16 +83,10 @@
       "start_status": "ready",
       "assigned_from_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox_reliability_test.go",
-        "kernel/internal/events/outbox_concurrency_test.go"
-      ],
-      "depends_on": [
-        "P04.04-T01",
-        "P04.04-T02"
-      ],
+      "write_paths": ["kernel/internal/events/outbox_reliability_test.go", "kernel/internal/events/outbox_concurrency_test.go"],
+      "depends_on": ["P04.04-T01", "P04.04-T02"],
       "merge_order": 3,
-      "notes": "Occupied by Agent-03. Concrete API-bound tests wait for accepted T01/T02 contracts."
+      "notes": "Occupied by Agent-03. Concrete API-bound tests wait for accepted T01/T02 contracts. SHA fields are snapshots; live freshness resolves protected main."
     }
   ],
   "supervisor": {
@@ -108,25 +95,12 @@
     "role": "supervisor-integration-verifier",
     "branch": "supervisor/20260902-p04-04-integration",
     "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-    "write_paths": [
-      "scripts/verify_p04_04.sh",
-      ".github/workflows/governance.yml"
-    ],
-    "forbidden_paths": [
-      "docs/roadmap/STATE.json",
-      "modules/**",
-      "kernel/migrations/**",
-      "kernel/internal/events/envelope.go",
-      "kernel/internal/events/bus.go",
-      "kernel/internal/events/durable.go"
-    ],
-    "depends_on": [
-      "P04.04-T01",
-      "P04.04-T02",
-      "P04.04-T03"
-    ],
+    "write_paths": ["scripts/verify_p04_04.sh", ".github/workflows/governance.yml"],
+    "forbidden_paths": ["docs/roadmap/STATE.json", "modules/**", "kernel/migrations/**", "kernel/internal/events/envelope.go", "kernel/internal/events/bus.go", "kernel/internal/events/durable.go"],
+    "depends_on": ["P04.04-T01", "P04.04-T02", "P04.04-T03"],
     "merge_order": 4,
-    "status": "ready"
+    "status": "ready",
+    "sha_note": "last_synced_main_sha is the last recorded plan snapshot; resolve live protected main before work/review."
   },
   "tasks": [
     {
@@ -137,19 +111,8 @@
       "module": "kernel.events/outbox-core",
       "branch": "agent/20260902-p04-04-outbox-core",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox.go",
-        "kernel/internal/events/outbox_core_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
+      "write_paths": ["kernel/internal/events/outbox.go", "kernel/internal/events/outbox_core_test.go"],
+      "forbidden_paths": ["kernel/internal/events/envelope.go", "kernel/internal/events/bus.go", "kernel/internal/events/durable.go", "kernel/migrations/**", ".github/workflows/**", "docs/roadmap/STATE.json", "modules/**"],
       "depends_on": [],
       "merge_order": 1,
       "status": "ready"
@@ -162,19 +125,8 @@
       "module": "kernel.events/outbox-persistence",
       "branch": "agent/20260902-p04-04-persistence-migration",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox_postgres.go",
-        "kernel/internal/events/outbox_postgres_integration_test.go",
-        "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
+      "write_paths": ["kernel/internal/events/outbox_postgres.go", "kernel/internal/events/outbox_postgres_integration_test.go", "kernel/migrations/kernel.events/1_create_transactional_outbox.sql"],
+      "forbidden_paths": ["kernel/internal/events/envelope.go", "kernel/internal/events/bus.go", "kernel/internal/events/durable.go", ".github/workflows/**", "docs/roadmap/STATE.json", "modules/**"],
       "migration_reservation": {
         "owner": "kernel.events",
         "path": "kernel/migrations/kernel.events/1_create_transactional_outbox.sql",
@@ -182,9 +134,7 @@
         "data_budget": "new owner-scoped P04.04 outbox persistence only; no business-table mutation, no business-data backfill, no destructive data operation, no P04.05/P04.06 semantics",
         "status": "reserved-after-wave-governance"
       },
-      "depends_on": [
-        "P04.04-T01"
-      ],
+      "depends_on": ["P04.04-T01"],
       "parallel_note": "Migration/schema preparation may proceed within the frozen P04.04 record law, but the Go adapter must not guess an unaccepted T01 API and must synchronize after T01 before submission if its interface assumptions changed.",
       "merge_order": 2,
       "status": "ready-with-dependency"
@@ -197,23 +147,9 @@
       "module": "kernel.events/outbox-reliability-tests",
       "branch": "agent/20260902-p04-04-reliability-tests",
       "last_synced_main_sha": "6556023c3f07fffa6a81776dd25188a685d2033c",
-      "write_paths": [
-        "kernel/internal/events/outbox_reliability_test.go",
-        "kernel/internal/events/outbox_concurrency_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
-      "depends_on": [
-        "P04.04-T01",
-        "P04.04-T02"
-      ],
+      "write_paths": ["kernel/internal/events/outbox_reliability_test.go", "kernel/internal/events/outbox_concurrency_test.go"],
+      "forbidden_paths": ["kernel/internal/events/envelope.go", "kernel/internal/events/bus.go", "kernel/internal/events/durable.go", "kernel/migrations/**", ".github/workflows/**", "docs/roadmap/STATE.json", "modules/**"],
+      "depends_on": ["P04.04-T01", "P04.04-T02"],
       "parallel_note": "Test design may proceed immediately; concrete API-bound test implementation must synchronize accepted T01/T02 contracts rather than guess them.",
       "merge_order": 3,
       "status": "ready-with-dependency"
@@ -230,39 +166,12 @@
   "merge_strategy": {
     "supervisor_reviews_all_worker_submissions": true,
     "direct_unverified_main_merge_forbidden": true,
-    "pipeline": [
-      "worker/source exact head",
-      "source PR review",
-      "exact-head Governance",
-      "unchanged promotion when required",
-      "promotion-specific Governance",
-      "zero unresolved review threads",
-      "protected-main freshness and expected-head check",
-      "guarded merge",
-      "protected-main readback",
-      "merge alert to all active agents",
-      "all active branches synchronize new main before resume"
-    ],
-    "deterministic_order": [
-      "P04.04-T01",
-      "P04.04-T02",
-      "P04.04-T03",
-      "P04.04-T04"
-    ]
+    "pipeline": ["worker/source exact head", "source PR review", "exact-head Governance", "unchanged promotion when required", "promotion-specific Governance", "zero unresolved review threads", "protected-main freshness and expected-head check", "guarded merge", "protected-main readback", "merge alert to all active agents", "all active branches synchronize new main before resume"],
+    "deterministic_order": ["P04.04-T01", "P04.04-T02", "P04.04-T03", "P04.04-T04"]
   },
   "interrupt_policy": {
-    "on_valid_completion_signal": [
-      "Supervisor checkpoints and pauses its own task",
-      "Supervisor reviews submitted exact head and current protected main",
-      "Supervisor approves into governed merge pipeline or publishes Review Changes Required",
-      "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"
-    ],
-    "simultaneous_submission_priority": [
-      "security/correctness blocker",
-      "dependency-unblocking submission",
-      "migration/public-contract owner submission",
-      "oldest valid submitted signal"
-    ]
+    "on_valid_completion_signal": ["Supervisor checkpoints and pauses its own task", "Supervisor reviews submitted exact head and current protected main", "Supervisor approves into governed merge pipeline or publishes Review Changes Required", "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"],
+    "simultaneous_submission_priority": ["security/correctness blocker", "dependency-unblocking submission", "migration/public-contract owner submission", "oldest valid submitted signal"]
   },
   "instruction_sync": {
     "task_start_required": true,
