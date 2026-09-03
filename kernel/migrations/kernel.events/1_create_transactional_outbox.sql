@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS omnexa_events.transactional_outbox (
 
     CONSTRAINT events_outbox_owner_valid CHECK (
         owner ~ '^urn:omnexa:module:[a-z0-9.-]+$'
-        AND char_length(owner) BETWEEN 20 AND 512
+        AND char_length(owner) <= 512
     ),
     CONSTRAINT events_outbox_envelope_object CHECK (jsonb_typeof(envelope) = 'object'),
     CONSTRAINT events_outbox_envelope_size CHECK (octet_length(envelope::text) <= 131072),
