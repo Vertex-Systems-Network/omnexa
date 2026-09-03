@@ -131,6 +131,14 @@ func TestPostgresOutboxStoreIntegration(t *testing.T) {
 
 	conflicting := envelope
 	conflicting.Data = json.RawMessage(`{"value":"conflicting-content"}`)
+	if err = conflicting.Validate(); err == nil {
+		t.Fatal("escaped invalid JSON fixture unexpectedly validated")
+	}
+	conflicting.Data = json.RawMessage(`{"value":"conflicting-content"}`[1:])
+	if err = conflicting.Validate(); err == nil {
+		t.Fatal("malformed conflict fixture unexpectedly validated")
+	}
+	conflicting.Data = json.RawMessage([]byte{'{', '"', 'v', 'a', 'l', 'u', 'e', '"', ':', '"', 'c', 'o', 'n', 'f', 'l', 'i', 'c', 't', 'i', 'n', 'g', '-', 'c', 'o', 'n', 't', 'e', 'n', 't', '"', '}'})
 	if err = conflicting.Validate(); err != nil {
 		t.Fatalf("conflicting test envelope validation error = %v", err)
 	}
