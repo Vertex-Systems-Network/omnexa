@@ -130,9 +130,9 @@ func TestPostgresOutboxStoreIntegration(t *testing.T) {
 	}
 
 	conflicting := envelope
-	conflicting.Data = json.RawMessage(`{"value":"conflicting-content"}`)
+	conflicting.Data = json.RawMessage(`{"value":}`)
 	if err = conflicting.Validate(); err == nil {
-		t.Fatal("escaped invalid JSON fixture unexpectedly validated")
+		t.Fatal("invalid JSON fixture unexpectedly validated")
 	}
 	conflicting.Data = json.RawMessage(`{"value":"conflicting-content"}`[1:])
 	if err = conflicting.Validate(); err == nil {
