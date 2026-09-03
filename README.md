@@ -6,13 +6,13 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current governed checkpoint:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 3 / 10 completed packages; P04.04 Transactional Outbox Reliability Primitive is the sole ACTIVE work package.** `kernel_code_authorized=true` for P04.04 only; `business_feature_code_authorized=false`.
+> **Current transition candidate:** **P04 — Data, Jobs & Event Fabric at 4 / 10 completed packages; P04.05 Consumer Inbox/Deduplication & Idempotency Primitive becomes sole ACTIVE only after exact-head Governance, unchanged promotion, protected merge and read-back.** Protected `main@fa53b01cd92c8e0dd59026abff06f5f95f642d2d` remains authoritative until then. `business_feature_code_authorized=false`.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status mirror only and never grants implementation authority by itself.
 
 ## Project progress dashboard
 
-Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P04 package completion is **3 / 10 (30%)**; P04.04 is the sole active package and its runtime implementation is not yet complete.
+Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closure candidate advances P04 package completion to **4 / 10 (40%)** and activates P04.05 only through the governed source/promotion/read-back path.
 
 | Phase | Program / Module Family | Status | Work-package progress | Progress | Start date | End date |
 |---|---|---:|---:|---|---|---|
@@ -20,7 +20,7 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P
 | P01 | Omnexa Kernel | ✅ DONE | 12/12 (100%) | `██████████` | 2026-08-22 | 2026-08-23 |
 | P02 | Identity, Tenancy & Organization | ✅ DONE | 10/10 (100%) | `██████████` | 2026-08-23 | 2026-08-26 |
 | P03 | Module Runtime | ✅ DONE | 11/11 (100%) | `██████████` | 2026-08-26 | 2026-08-29 |
-| P04 | Data, Jobs & Event Fabric | 🟡 ACTIVE | 3/10 canonical done (30%) | `███░░░░░░░` | 2026-08-30 | TBD (active) |
+| P04 | Data, Jobs & Event Fabric | 🟡 ACTIVE | 4/10 candidate done (40%) | `████░░░░░░` | 2026-08-30 | TBD (active) |
 | P05 | Omnexa Flow / Workflow OS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P06 | Universal Business Foundation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P07 | CRM, Sales & Customer 360 | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
@@ -54,8 +54,8 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P
 | P04.01 | Event envelope & identity contract | ✅ DONE | 100% | `██████████` | 2026-08-30 | 2026-08-31 |
 | P04.02 | Publish/subscribe abstraction & ownership boundaries | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
 | P04.03 | Durable stream/consumer baseline & checkpoint model | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
-| P04.04 | Transactional outbox reliability primitive | 🟡 ACTIVE | 0% runtime implementation | `░░░░░░░░░░` | 2026-09-01 | TBD |
-| P04.05 | Consumer inbox/deduplication & idempotency primitive | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
+| P04.04 | Transactional outbox reliability primitive | ✅ DONE CANDIDATE | 100% accepted implementation | `██████████` | 2026-09-01 | 2026-09-04 |
+| P04.05 | Consumer inbox/deduplication & idempotency primitive | 🟡 ACTIVE CANDIDATE | 0% runtime implementation | `░░░░░░░░░░` | 2026-09-04 | TBD |
 | P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.07 | Event schema registry, compatibility & validation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.08 | Background-job ownership, tenant context & correlation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
@@ -64,10 +64,10 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P
 
 ### P04 status interpretation
 
-- **P04.01-P04.03** are canonically complete.
-- **P04.04** is the sole active package, but runtime implementation remains at 0%.
-- **P04.05-P04.10** remain planned/locked.
-- P04.04 runtime work must use isolated task branches from the latest protected-main state after re-reading canonical authority and active multi-agent instructions.
+- **P04.01-P04.04** have accepted completion evidence in this transition candidate.
+- **P04.05** becomes sole active only after source/promotion Governance, protected merge and read-back.
+- **P04.06-P04.10** remain planned/locked.
+- No P04.05 runtime branch/task/lease exists in this closure carrier.
 
 ## Accepted P04 / development-governance evidence chain
 
@@ -75,18 +75,20 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Canonical P
 - **P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries:** `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`.
 - **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model:** source PR #165 / promotion PR #166, exact implementation head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`, promotion Governance `33405463251 / 99531835998`, implementation merge `b94189873bef11f4870935205398f1ef44f160bf`, evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`.
 - **P04.04 preparation/activation:** preparation source PR #168 / promotion #169, promotion Governance `33410873382 / 99549818529`, preparation merge `962a62c7c111079ca6f2047fa748deea97c84534`; activation source #171 Governance `33546204586 / 99984199589`, promotion #172 Governance `33547080086 / 99549818529`, activation merge/readback `50edeae03ad52e435d142b2f22c803f08a5c7f1a`.
+- **P04.04 implementation/completion:** final Supervisor head `ef09b878577d25a4a1186cb8fe84205b08a24851`, promotion #193 Governance `33810095507 / 100829646792`, implementation merge `66c072b5caf42ceecb88d30cd1a1ee4e910322e6`, evidence PR #194 merge `4445c21f1e6b03e84859d31ce7b32169b9c4cccc`.
+- **P04.05 preparation:** source #195 / unchanged promotion #196, exact preparation head `211fea2077d7a1bf94be48f32f047b27273a4515`, merge/read-back `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`.
 - **Post-activation continuity:** source #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` Governance `33549921833 / 99996561115`; promotion #174 Governance `33550803632 / 99999473766`; merge `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence.
 - **Multi-agent foundation:** source #175 head `c74e9d116880a9fde69d9220c1907a67e2cf86eb` Governance `33553700739 / 100009408168`; promotion #176 Governance run `33554787584`; merge/readback `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`.
 - **Supervisor-led multi-agent workflow:** source #178 head `5bb2e2d83bb5b6d64117a8784a9b38ef326a6a84` Governance `33560130753 / 100030373290`; promotion #179 Governance `33560753173 / 100032373974`; merge/readback `6556023c3f07fffa6a81776dd25188a685d2033c`.
 - **New-agent slot onboarding:** source #180 head `16cf3c0325ce1fdd43cb2d9afcf5124806110eb7` Governance `33562800663 / 100039010267`; promotion #181 Governance `33563512576 / 100041307298`; merge/readback `34b9989825e85573aa6d38e782f841132e25f041`.
 
-## P04.04 bounded implementation scope
+## P04.05 bounded implementation scope after activation
 
-P04.04 may implement only the accepted provider-neutral transactional outbox boundary: local PostgreSQL atomic mutation + canonical event persistence, recoverable pending state, relay through P04.02, duplicate-safe crash/restart behavior, concurrency safety, and tenant/owner isolation.
+P04.05 may later implement only the accepted provider-neutral consumer inbox/deduplication boundary: stable processing identity, same-transaction local mutation + inbox completion, explicit already-applied duplicate outcome, restart/checkpoint-gap safety, concurrency safety and tenant/owner/consumer isolation.
 
-The activation/continuity carriers added no migration and grant no blanket schema authority. Durable outbox persistence uses only the recorded `kernel.events` migration reservation and must prove fresh install, upgrade, rollback/forward recovery, and tenant/owner isolation under retained P01 rules.
+This activation carrier adds no migration or runtime branch and grants no blanket schema authority. A later post-activation wave must record exact `kernel.events` migration/path/data budget before any schema mutation.
 
-Still unauthorized: concrete broker selection, end-to-end exactly-once claims, P04.05 inbox/deduplication, P04.06 retry/DLQ, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
+Still unauthorized: concrete broker selection, external-side-effect/end-to-end exactly-once claims, P04.06 retry/DLQ, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
 
 ## Multi-agent development operating model
 
@@ -109,13 +111,13 @@ Business-domain agents such as CRM, Finance, Inventory, HR and Commerce may beco
 
 Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor interruption/merge/sync/onboarding: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Final readiness audit: `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
 
-### Active P04.04 multi-agent wave
+### Completed P04.04 multi-agent wave
 
-Wave: `P04.04-WAVE-20260902-01`  
+Historical wave: `P04.04-WAVE-20260902-01` — **COMPLETED; all leases released**
 Coordination channel: GitHub issue `#177`  
 Historical branch-bootstrap base: `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`  
 Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85573aa6d38e782f841132e25f041`  
-**Live required main:** resolve protected `main` before every material mutation, onboarding assignment, submission review and merge.
+**Live required main:** resolve protected `main` before every material mutation, new-wave creation, onboarding assignment, submission review and merge.
 
 | Merge order | Agent / Task | Module / responsibility | Branch | Current dependency |
 |---:|---|---|---|---|
@@ -124,9 +126,9 @@ Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85
 | 3 | Agent-03 / P04.04-T03 | crash/restart/concurrency/tenant-isolation tests | `agent/20260902-p04-04-reliability-tests` | T01 + T02 accepted contracts |
 | 4 | Supervisor / P04.04-T04 | integration verifier + Governance hook | `supervisor/20260902-p04-04-integration` | T01 + T02 + T03 |
 
-The four branches were synchronized to `34b9989825e85573aa6d38e782f841132e25f041` after onboarding promotion #181. After any later merge, workers resolve protected `main`, synchronize before further mutation and record the receipt in issue #177. Stored plan SHAs remain audit snapshots only.
+The historical branches and their accepted merges are recorded in `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`. They grant no current write authority.
 
-Current worker-slot state: **3 / 3 occupied, 0 open**.
+Current worker-slot state: **0 active, 0 open**. A fresh P04.05 wave may be created only after activation and post-activation read-back.
 
 Reserved T02 migration:
 
@@ -185,7 +187,7 @@ The Supervisor immediately checks the AI-Native worker-slot ledger:
 - never invent a new module, exceed the concurrency cap or activate a locked phase because an agent arrived;
 - if no slot is open, stop onboarding and say exactly: `Go Home Come Back Next Time`.
 
-Current P04.04 slots are all occupied, so an additional worker currently receives `Go Home Come Back Next Time` until a governed plan explicitly opens a valid slot.
+No P04.05 slot is currently authorized, so an arriving worker receives `Go Home Come Back Next Time` until a later governed plan explicitly opens a valid slot.
 
 ### Live protected-main freshness rule
 
@@ -224,7 +226,7 @@ README is only the human-readable mirror. `AGENTS.md`, `STATE.json`, mandatory g
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry/transition/package surfaces, `docs/roadmap/work-packages/P04.04.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`, `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, task/lease/signal/slot schemas, AI context/state and `docs/ai/handoffs/P04.04.md` before material work.
+Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry/transition/package surfaces, `docs/roadmap/work-packages/P04.05.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`, `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, task/lease/signal/slot schemas, AI context/state and `docs/ai/handoffs/P04.05.md` before material work.
 
 ## Core laws
 
