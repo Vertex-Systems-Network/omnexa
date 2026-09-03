@@ -138,7 +138,7 @@ done
 migration="kernel/migrations/kernel.events/1_create_transactional_outbox.sql"
 for marker in \
   'CREATE SCHEMA IF NOT EXISTS omnexa_events' \
-  'CREATE TABLE omnexa_events.transactional_outbox' \
+  'CREATE TABLE IF NOT EXISTS omnexa_events.transactional_outbox' \
   'event_id uuid PRIMARY KEY' \
   'publication_state' \
   'revision bigint' \
