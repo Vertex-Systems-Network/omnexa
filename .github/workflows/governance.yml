@@ -327,3 +327,9 @@ jobs:
       - name: Verify P04.03 durable consumer and checkpoint baseline
         shell: bash
         run: bash scripts/verify_p04_03.sh
+
+      - name: Verify P04.04 transactional outbox reliability primitive
+        shell: bash
+        env:
+          P04_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p04_04.sh
