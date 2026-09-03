@@ -3,7 +3,6 @@ package events
 import (
 	"context"
 	"errors"
-	"math"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/tenancy"
@@ -222,11 +221,14 @@ func (relay *OutboxRelay) RelayPending(ctx context.Context, scope OutboxScope, l
 	if err != nil {
 		return RelayReport{}, wrappedFailure(err, codeOutboxStoreFailed, failure.CategoryUnavailable, "event outbox pending state could not be read")
 	}
-	if uint64(len(records)) > uint64(limit) || uint64(len(records)) > uint64(math.MaxUint32) {
+	if uint64(len(records)) > uint64(limit) {
 		return RelayReport{}, classifiedFailure(codeOutboxStateMalformed, failure.CategoryInvariant, "event outbox store returned an invalid pending batch")
 	}
 
-	report := RelayReport{PendingObserved: uint32(len(records))}
+	report := RelayReport{}
+	for range records {
+		report.PendingObserved++
+	}
 	for _, record := range records {
 		if err := outboxContextError(ctx); err != nil {
 			return report, err
