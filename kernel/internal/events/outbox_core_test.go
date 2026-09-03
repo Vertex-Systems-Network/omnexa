@@ -9,6 +9,8 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
+var errOutboxTestQueryUnsupported = errors.New("outbox test transaction query unsupported")
+
 type outboxTestTx struct{}
 
 func (*outboxTestTx) Exec(context.Context, string, ...any) (pgconn.CommandTag, error) {
@@ -16,7 +18,7 @@ func (*outboxTestTx) Exec(context.Context, string, ...any) (pgconn.CommandTag, e
 }
 
 func (*outboxTestTx) Query(context.Context, string, ...any) (pgx.Rows, error) {
-	return nil, nil
+	return nil, errOutboxTestQueryUnsupported
 }
 
 func (*outboxTestTx) QueryRow(context.Context, string, ...any) pgx.Row {
