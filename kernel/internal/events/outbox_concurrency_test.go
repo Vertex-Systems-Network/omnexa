@@ -102,11 +102,14 @@ func TestPostgresOutboxConcurrentTenantRelaysRemainIsolated(t *testing.T) {
 	envelopeA := mustP0404Envelope(t, scopeA, "tenant-a")
 	envelopeB := mustP0404Envelope(t, scopeB, "tenant-b")
 
-	for _, fixture := range []struct {
+	fixtures := []struct {
 		scope    OutboxScope
 		envelope Envelope
-	}{{scopeA, envelopeA}, {scopeB, envelopeB}} {
-		fixture := fixture
+	}{
+		{scope: scopeA, envelope: envelopeA},
+		{scope: scopeB, envelope: envelopeB},
+	}
+	for _, fixture := range fixtures {
 		if err := database.InTransaction(ctx, pool, pgx.TxOptions{}, func(tx pgx.Tx) error {
 			result, enqueueErr := EnqueueOutbox(ctx, tx, store, fixture.scope, fixture.envelope)
 			if enqueueErr != nil {
@@ -140,15 +143,14 @@ func TestPostgresOutboxConcurrentTenantRelaysRemainIsolated(t *testing.T) {
 	}
 	outcomes := make(chan tenantOutcome, 2)
 	for _, scope := range []OutboxScope{scopeA, scopeB} {
-		scope := scope
 		relay, relayErr := NewOutboxRelay(store, publisher)
 		if relayErr != nil {
 			t.Fatalf("NewOutboxRelay() error = %v", relayErr)
 		}
-		go func() {
-			report, runErr := relay.RelayPending(ctx, scope, 8)
-			outcomes <- tenantOutcome{scope: scope, report: report, err: runErr}
-		}()
+		go func(relayScope OutboxScope, scopedRelay *OutboxRelay) {
+			report, runErr := scopedRelay.RelayPending(ctx, relayScope, 8)
+			outcomes <- tenantOutcome{scope: relayScope, report: report, err: runErr}
+		}(scope, relay)
 	}
 
 	for range 2 {
