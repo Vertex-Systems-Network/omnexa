@@ -140,7 +140,6 @@ func TestPostgresInboxSameEventDifferentConsumersRemainIndependentConcurrently(t
 	attempts := make(chan p0405ConcurrentAttempt, len(bindings))
 
 	for _, binding := range bindings {
-		binding := binding
 		go func() {
 			ready.Done()
 			<-start
