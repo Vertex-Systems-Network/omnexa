@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/database"
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -217,15 +216,6 @@ func applyP0405OwnerMutation(
 		return applyErr
 	})
 	return result, err
-}
-
-func mustP0405UUIDv7(t *testing.T) string {
-	t.Helper()
-	identifier, err := uuid.NewV7()
-	if err != nil {
-		t.Fatalf("uuid.NewV7() error = %v", err)
-	}
-	return identifier.String()
 }
 
 func assertP0405Count(
