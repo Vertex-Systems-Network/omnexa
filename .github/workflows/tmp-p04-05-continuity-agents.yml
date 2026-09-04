@@ -1,0 +1,91 @@
+name: Temporary P04.05 continuity AGENTS reconciliation
+
+on:
+  push:
+    branches:
+      - governance/20260905-p04-05-post-activation-continuity
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout continuity branch
+        uses: actions/checkout@v7
+        with:
+          ref: governance/20260905-p04-05-post-activation-continuity
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Apply exact fail-closed continuity substitutions
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('AGENTS.md')
+          text = path.read_text(encoding='utf-8')
+          replacements = [
+              (
+                  '## Current canonical state candidate',
+                  '## Current canonical state',
+              ),
+              (
+                  'Protected `main@fa53b01cd92c8e0dd59026abff06f5f95f642d2d` is the authoritative pre-transaction checkpoint. It contains accepted P04.04 implementation/completion evidence and the separately accepted, prepared/locked P04.05 contract/handoff. This branch is the bounded P04.04 closure / P04.05 activation candidate and grants no authority until exact-head source Governance, unchanged promotion Governance, protected merge and protected-main read-back succeed.',
+                  'P04.05 activation was accepted through source PR #197 / unchanged promotion PR #198 at exact head `6907253d375125a7ff096fb434c3433dbc17b331`, source Governance `33819597433 / 100859169990`, promotion Governance `33820312475 / 100861375770`, and expected-head guarded merge/read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`. Current protected `main@35b438a77838518400758e8b877170918cc3278f` additionally contains only checkout-v7 workflow maintenance #199 and does not widen P04.05 authority. This branch is the required separate post-activation continuity reconciliation; runtime implementation remains forbidden on it.',
+              ),
+              (
+                  'P04 candidate: ACTIVE — 4 / 10 done\nP04.01-P04.04: DONE with accepted evidence\nCandidate current work package: P04.05 — Consumer Inbox/Deduplication & Idempotency Primitive\nP04.06-P04.10: PLANNED / LOCKED\nkernel_code_authorized: true — P04.05 only after governed promotion/merge/read-back',
+                  'P04: ACTIVE — 4 / 10 done\nP04.01-P04.04: DONE with accepted evidence\nCurrent work package: P04.05 — Consumer Inbox/Deduplication & Idempotency Primitive\nP04.06-P04.10: PLANNED / LOCKED\nkernel_code_authorized: true — P04.05 only',
+              ),
+              (
+                  'The prepared/locked P04.05 contract/handoff passed source PR #195 and unchanged promotion PR #196 at exact head `211fea2077d7a1bf94be48f32f047b27273a4515`, then merged/read back as `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`.\n\nThis activation carrier contains no P04.05 runtime source, migration, retry/DLQ, schema-registry, background-job, business or AI/model/agent runtime. P04.06+ remains locked.',
+                  'The P04.05 preparation passed source PR #195 and unchanged promotion PR #196 at exact head `211fea2077d7a1bf94be48f32f047b27273a4515`, then merged/read back as `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`. The separate activation then passed source #197 / promotion #198 at exact head `6907253d375125a7ff096fb434c3433dbc17b331` and merged/read back as `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`. Both reviews were honest SELF REVIEW only; independent approval was not claimed; unresolved review threads were zero.\n\nActivation contained no P04.05 runtime source or migration. This post-activation continuity carrier also contains no runtime/migration change. P04.06+ remains locked.',
+              ),
+              (
+                  'and this P04.04→P04.05 transition candidate before material work.',
+                  'and the accepted P04.04→P04.05 transition receipt before material work.',
+              ),
+              (
+                  'P04.04 has accepted implementation/completion evidence. P04.05 is prepared/locked on protected main until this separate closure/activation transaction completes.',
+                  'P04.04 has accepted implementation/completion evidence. P04.05 is the sole active package after the separately accepted closure/activation transaction; runtime still waits for this required post-activation continuity read-back.',
+              ),
+              (
+                  'Candidate state after governed promotion/merge/read-back:\n\n- P04.01-P04.04 are `done` with accepted evidence;\n- P04.05 is the sole `active` package;\n- P04.06-P04.10 remain `planned / locked`;\n- P04 progress is `4 / 10 done`;\n- `kernel_code_authorized=true` only for P04.05;\n- `business_feature_code_authorized=false`.\n\nProtected main remains authoritative until this candidate is accepted. Do not reuse closure, promotion or continuity carriers for runtime code. A fresh P04.05 implementation wave may be created only after activation and post-activation read-back.',
+                  'Canonical accepted state:\n\n- P04.01-P04.04 are `done` with accepted evidence;\n- P04.05 is the sole `active` package;\n- P04.06-P04.10 remain `planned / locked`;\n- P04 progress is `4 / 10 done`;\n- `kernel_code_authorized=true` only for P04.05;\n- `business_feature_code_authorized=false`.\n\nProtected main and canonical `STATE.json` remain authoritative. Do not reuse closure, promotion or continuity carriers for runtime code. A fresh P04.05 implementation wave may be created only after this post-activation continuity source is governed, promoted unchanged, merged and read back.',
+              ),
+              (
+                  'P04.05 becomes active only after this exact closure/activation source passes Governance, is promoted unchanged, passes fresh promotion Governance, merges through protected main and is read back. Runtime implementation must then start in a fresh separately governed wave from that exact protected-main state.',
+                  'P04.05 is active after accepted source #197 / promotion #198 and protected-main read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`. Runtime implementation must start only after this separate post-activation continuity source is governed, promoted unchanged, merged and read back, and then only from a fresh separately governed branch at the resulting exact protected-main state.',
+              ),
+              (
+                  'Activation adds no runtime branch, task lease or migration. Post-activation continuity and exact migration/path/data preflight must occur separately before source mutation.',
+                  'Activation added no runtime branch, task lease or migration. This continuity carrier also adds none. After its accepted read-back, the fresh implementation wave must perform exact migration/path/data preflight before any schema mutation.',
+              ),
+              (
+                  '1. Require exact-head GitHub-hosted Governance for this P04.04 closure / P04.05 activation source.\n2. Inspect the exact diff, review provenance and unresolved-thread state.\n3. Promote the exact unchanged source head through a fresh promotion branch/PR and require fresh promotion Governance.\n4. Merge only with expected-head protection while current with protected main, then read back protected main and all authority surfaces.\n5. Confirm P04 is `4 / 10`, P04.05 is sole ACTIVE, P04.06-P04.10 remain locked and no runtime/migration authority expanded.\n6. Reconcile post-activation continuity separately.\n7. Only then create a fresh P04.05 implementation wave/branches/leases from exact current protected main.\n8. Before schema mutation, record the exact `kernel.events` migration path/version/data budget. Do not auto-activate P04.06.',
+                  '1. Require exact-head GitHub-hosted Governance for this P04.05 post-activation continuity source.\n2. Inspect the exact six-file continuity diff, review provenance and unresolved-thread state.\n3. Promote the exact unchanged continuity source head through a fresh promotion branch/PR and require fresh promotion Governance.\n4. Merge only with expected-head protection while current with protected main, then read back protected main, canonical state and all continuity surfaces.\n5. Confirm P04 is `4 / 10`, P04.05 is sole ACTIVE, P04.06-P04.10 remain locked and no authority expanded.\n6. Only then create a fresh P04.05 implementation wave/branches/leases from exact current protected main.\n7. Before schema mutation, record the exact `kernel.events` migration path/version/data budget.\n8. Implement only P04.05 and do not auto-activate P04.06.',
+              ),
+          ]
+
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'expected exactly one occurrence, found {count}: {old[:100]!r}')
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Commit AGENTS correction and self-remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/tmp-p04-05-continuity-agents.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AGENTS.md .github/workflows/tmp-p04-05-continuity-agents.yml
+          git diff --cached --quiet && { echo 'No changes produced'; exit 1; }
+          git commit -m "docs(p04.05): reconcile repository execution continuity"
+          git push origin HEAD:governance/20260905-p04-05-post-activation-continuity
