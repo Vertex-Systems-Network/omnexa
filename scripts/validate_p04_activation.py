@@ -15,6 +15,7 @@ P04_01_PATH = ROOT / "docs/roadmap/work-packages/P04.01.md"
 P04_02_PATH = ROOT / "docs/roadmap/work-packages/P04.02.md"
 P04_03_PATH = ROOT / "docs/roadmap/work-packages/P04.03.md"
 P04_04_PATH = ROOT / "docs/roadmap/work-packages/P04.04.md"
+P04_05_PATH = ROOT / "docs/roadmap/work-packages/P04.05.md"
 
 REQUIRED_FILES = [
     "docs/governance/P03_EXIT_GATE.md",
@@ -27,6 +28,7 @@ REQUIRED_FILES = [
     "docs/roadmap/work-packages/P04.02.md",
     "docs/roadmap/work-packages/P04.03.md",
     "docs/roadmap/work-packages/P04.04.md",
+    "docs/roadmap/work-packages/P04.05.md",
 ]
 
 for relative in REQUIRED_FILES:
@@ -41,6 +43,7 @@ p04_01 = P04_01_PATH.read_text(encoding="utf-8")
 p04_02 = P04_02_PATH.read_text(encoding="utf-8")
 p04_03 = P04_03_PATH.read_text(encoding="utf-8")
 p04_04 = P04_04_PATH.read_text(encoding="utf-8")
+p04_05 = P04_05_PATH.read_text(encoding="utf-8")
 phase_rows = {row.get("id"): row for row in state.get("phases") or []}
 lock = state.get("implementation_lock") or {}
 
@@ -140,6 +143,16 @@ for marker in [
 ]:
     if marker.lower() not in p04_04.lower():
         raise SystemExit(f"ERROR: P04.04 specification missing marker: {marker}")
+
+for marker in [
+    "same local PostgreSQL transaction",
+    "EventID alone must not become a global cross-consumer lock",
+    "P04.03 checkpoints and P04.05 inbox completion represent different facts",
+    "external/non-transactional side effects are not made exactly-once",
+    "P04.06",
+]:
+    if marker.lower() not in p04_05.lower():
+        raise SystemExit(f"ERROR: P04.05 specification missing marker: {marker}")
 
 for marker in [
     "P03 exit = SATISFIED",

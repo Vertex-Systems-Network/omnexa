@@ -45,22 +45,25 @@
     {
       "id": "P04.04",
       "name": "Transactional outbox reliability primitive",
-      "state": "active",
+      "state": "done",
       "depends_on": [
         "P04.01",
         "P04.03"
       ],
-      "spec": "docs/roadmap/work-packages/P04.04.md"
+      "spec": "docs/roadmap/work-packages/P04.04.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md"
+      ]
     },
     {
       "id": "P04.05",
       "name": "Consumer inbox/deduplication & idempotency primitive",
-      "state": "planned",
+      "state": "active",
       "depends_on": [
         "P04.01",
         "P04.04"
       ],
-      "spec": null
+      "spec": "docs/roadmap/work-packages/P04.05.md"
     },
     {
       "id": "P04.06",
@@ -113,5 +116,5 @@
       "spec": null
     }
   ],
-  "note": "P04.01-P04.03 are done with accepted evidence. P04.04 is the sole active package only after the governed P04.03 closure/P04.04 activation transaction merges and protected main is re-read. P04.05-P04.10 remain planned/locked; business-feature and AI/model/agent runtime remain unauthorized."
+  "note": "Closure/activation candidate: P04.01-P04.04 are done with accepted evidence and P04.05 becomes the sole active package only after exact-head source Governance, unchanged promotion Governance, protected merge and protected-main read-back. P04.06-P04.10 remain planned/locked; business-feature and AI/model/agent runtime remain unauthorized."
 }
