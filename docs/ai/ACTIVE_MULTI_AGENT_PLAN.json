@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.04-WAVE-20260902-01",
-  "status": "completed-awaiting-p04-05-post-activation-wave",
+  "wave_id": "P04.05-WAVE-20260905-01",
+  "status": "candidate-awaiting-governance-no-runtime",
   "authority": {
     "phase": "P04",
     "work_package": "P04.05",
@@ -9,18 +9,18 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "P04.04 wave leases are released. This closure candidate records P04.05 as active only after governed promotion, merge and read-back; it creates no P04.05 runtime task or lease."
+    "note": "P04.05 is the sole active package after accepted activation and post-activation continuity. This wave control carrier only records bounded runtime/migration leases; worker source mutation must not begin until this exact plan passes Governance, promotion, protected merge and read-back."
   },
   "bootstrap": {
-    "protected_main_sha": "fa53b01cd92c8e0dd59026abff06f5f95f642d2d",
+    "protected_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "fa53b01cd92c8e0dd59026abff06f5f95f642d2d",
-    "required_main_resolution": "Resolve protected main before every material mutation, wave creation, assignment, review and merge. Stored SHAs are audit snapshots only.",
-    "branches_created_before_task_work": false,
-    "all_branches_verified_same_base": false,
+    "required_main_sha_snapshot": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "required_main_resolution": "Resolve protected main before every material mutation, assignment, review and merge. Stored SHAs are audit snapshots only.",
+    "branches_created_before_task_work": true,
+    "all_branches_verified_same_base": true,
     "coordination_issue": 177,
-    "latest_governed_workflow_merge_snapshot": "fa53b01cd92c8e0dd59026abff06f5f95f642d2d",
-    "all_active_branches_synced_to_snapshot": false
+    "latest_governed_workflow_merge_snapshot": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
     "slot_schema": "docs/ai/AGENT_SLOT_SCHEMA.json",
@@ -29,22 +29,209 @@
     "assignment_requires_open_authorized_slot": true,
     "open_slot_state": "open",
     "occupied_slot_state": "occupied",
-    "current_worker_slot_capacity": 0,
+    "current_worker_slot_capacity": 3,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "No P04.05 runtime assignment exists until this activation is merged/read back and a later separately governed wave creates branches, tasks and non-overlapping leases from fresh protected main."
+    "assignment_rule": "These three logical worker slots are reserved by the wave plan, but no runtime mutation is authorized before wave Governance/promotion/merge/read-back. After acceptance, each worker must resolve live protected main and synchronize its branch before source mutation."
   },
   "enforcement": {
     "m2_ci_enabled": true,
     "required_check": "governance",
     "hook": "scripts/verify_go_quality.sh",
+    "shared_helper": "scripts/agent_orchestration_common.py",
+    "validators": [
+      "scripts/validate_agent_task.py",
+      "scripts/validate_agent_leases.py",
+      "scripts/detect_path_overlap.py",
+      "scripts/validate_task_dependencies.py",
+      "scripts/validate_agent_pr_scope.py",
+      "scripts/validate_agent_base_sha.py"
+    ],
+    "unknown_agent_branch_fails": true,
+    "active_plan_authority_alignment_fails_closed": true,
+    "write_path_overlap_fails_closed": true,
+    "migration_reservation_collision_fails_closed": true,
+    "dependency_cycle_or_order_violation_fails_closed": true,
+    "registered_worker_pr_scope_violation_fails_closed": true,
+    "registered_worker_stale_main_pr_fails_closed": true,
     "worker_writer_cap": 3,
-    "closed_wave_note": "The completed P04.04 implementation wave is retained in completion evidence; no write leases remain active in this machine plan."
+    "scale_gate": "Do not exceed three concurrent worker writers until repository validators and accepted real-worker evidence explicitly permit scaling."
   },
-  "worker_slots": [],
-  "tasks": [],
+  "worker_slots": [
+    {
+      "schema_version": 1,
+      "slot_id": "P04.05-S01",
+      "phase": "P04",
+      "work_package": "P04.05",
+      "module": "kernel.events/inbox-core",
+      "branch": "agent/20260905-p04-05-inbox-core",
+      "status": "occupied",
+      "agent_id": "Agent-01",
+      "start_status": "ready",
+      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox.go",
+        "kernel/internal/events/inbox_core_test.go"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "notes": "Logical Agent-01 reservation only until wave acceptance. Owns provider-neutral processing identity/result/transaction seam; no persistence/provider/retry policy."
+    },
+    {
+      "schema_version": 1,
+      "slot_id": "P04.05-S02",
+      "phase": "P04",
+      "work_package": "P04.05",
+      "module": "kernel.events/inbox-persistence",
+      "branch": "agent/20260905-p04-05-inbox-persistence",
+      "status": "occupied",
+      "agent_id": "Agent-02",
+      "start_status": "ready",
+      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox_postgres.go",
+        "kernel/internal/events/inbox_postgres_integration_test.go",
+        "kernel/migrations/kernel.events/2_create_consumer_inbox.sql"
+      ],
+      "depends_on": ["P04.05-T01"],
+      "merge_order": 2,
+      "notes": "Logical Agent-02 reservation only until wave acceptance. Migration version 2 is exclusively reserved here; adapter must synchronize accepted T01 API rather than guess it."
+    },
+    {
+      "schema_version": 1,
+      "slot_id": "P04.05-S03",
+      "phase": "P04",
+      "work_package": "P04.05",
+      "module": "kernel.events/inbox-reliability-tests",
+      "branch": "agent/20260905-p04-05-inbox-reliability",
+      "status": "occupied",
+      "agent_id": "Agent-03",
+      "start_status": "ready",
+      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox_reliability_test.go",
+        "kernel/internal/events/inbox_concurrency_test.go"
+      ],
+      "depends_on": ["P04.05-T01", "P04.05-T02"],
+      "merge_order": 3,
+      "notes": "Logical Agent-03 reservation only until wave acceptance. Test design may proceed after acceptance, but concrete API-bound assertions must synchronize accepted T01/T02 contracts."
+    }
+  ],
+  "supervisor": {
+    "agent_id": "Supervisor",
+    "task_id": "P04.05-T04",
+    "role": "supervisor-integration-verifier",
+    "branch": "supervisor/20260905-p04-05-integration",
+    "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "write_paths": [
+      "scripts/verify_p04_05.sh",
+      ".github/workflows/governance.yml"
+    ],
+    "forbidden_paths": [
+      "docs/roadmap/STATE.json",
+      "modules/**",
+      "kernel/migrations/**",
+      "kernel/internal/events/**"
+    ],
+    "depends_on": ["P04.05-T01", "P04.05-T02", "P04.05-T03"],
+    "merge_order": 4,
+    "status": "ready-after-wave-acceptance",
+    "sha_note": "Resolve live protected main before verifier work/review; stored SHA is the wave-creation snapshot."
+  },
+  "tasks": [
+    {
+      "task_id": "P04.05-T01",
+      "agent_id": "Agent-01",
+      "slot_id": "P04.05-S01",
+      "role": "inbox-core-writer",
+      "module": "kernel.events/inbox-core",
+      "branch": "agent/20260905-p04-05-inbox-core",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox.go",
+        "kernel/internal/events/inbox_core_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        "kernel/internal/events/outbox*.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "status": "ready-after-wave-acceptance"
+    },
+    {
+      "task_id": "P04.05-T02",
+      "agent_id": "Agent-02",
+      "slot_id": "P04.05-S02",
+      "role": "inbox-postgres-migration-writer",
+      "module": "kernel.events/inbox-persistence",
+      "branch": "agent/20260905-p04-05-inbox-persistence",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox_postgres.go",
+        "kernel/internal/events/inbox_postgres_integration_test.go",
+        "kernel/migrations/kernel.events/2_create_consumer_inbox.sql"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        "kernel/internal/events/outbox*.go",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "migration_reservation": {
+        "owner": "kernel.events",
+        "path": "kernel/migrations/kernel.events/2_create_consumer_inbox.sql",
+        "version": "2",
+        "data_budget": "new owner-scoped P04.05 consumer inbox/dedup persistence only; stable EventID+consumer+owner+tenant+route identity, bounded canonical fingerprint/completion evidence, uniqueness/index/constraint support; no business-table mutation/backfill, no destructive business data operation, no P04.06 retry/DLQ, P04.07 schema-registry or provider semantics",
+        "status": "reserved-after-wave-governance"
+      },
+      "depends_on": ["P04.05-T01"],
+      "parallel_note": "Schema preparation may use the accepted P04.05 identity/atomicity contract after wave acceptance, but Go persistence must synchronize accepted T01 API before submission.",
+      "merge_order": 2,
+      "status": "ready-with-dependency-after-wave-acceptance"
+    },
+    {
+      "task_id": "P04.05-T03",
+      "agent_id": "Agent-03",
+      "slot_id": "P04.05-S03",
+      "role": "inbox-reliability-test-writer",
+      "module": "kernel.events/inbox-reliability-tests",
+      "branch": "agent/20260905-p04-05-inbox-reliability",
+      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+      "write_paths": [
+        "kernel/internal/events/inbox_reliability_test.go",
+        "kernel/internal/events/inbox_concurrency_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/envelope.go",
+        "kernel/internal/events/bus.go",
+        "kernel/internal/events/durable.go",
+        "kernel/internal/events/outbox*.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": ["P04.05-T01", "P04.05-T02"],
+      "parallel_note": "Reliability/concurrency case design may proceed after wave acceptance; concrete API-bound tests must synchronize accepted T01/T02 contracts rather than guess interfaces.",
+      "merge_order": 3,
+      "status": "ready-with-dependency-after-wave-acceptance"
+    }
+  ],
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
     "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/177",
@@ -57,17 +244,45 @@
     "supervisor_reviews_all_worker_submissions": true,
     "direct_unverified_main_merge_forbidden": true,
     "pipeline": [
-      "source exact head",
+      "worker/source exact head",
       "source PR review",
       "exact-head Governance",
-      "unchanged promotion",
+      "unchanged promotion when required",
       "promotion-specific Governance",
       "zero unresolved review threads",
       "protected-main freshness and expected-head check",
       "guarded merge",
-      "protected-main readback"
+      "protected-main readback",
+      "merge alert to all active logical slots",
+      "all active branches synchronize new main before resume"
     ],
-    "deterministic_order": []
+    "deterministic_order": [
+      "P04.05-T01",
+      "P04.05-T02",
+      "P04.05-T03",
+      "P04.05-T04"
+    ]
+  },
+  "interrupt_policy": {
+    "on_valid_completion_signal": [
+      "Supervisor checkpoints and pauses its own task",
+      "Supervisor reviews submitted exact head and current protected main",
+      "Supervisor approves into governed merge pipeline or publishes Review Changes Required",
+      "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"
+    ],
+    "simultaneous_submission_priority": [
+      "security/correctness blocker",
+      "dependency-unblocking submission",
+      "migration/public-contract owner submission",
+      "oldest valid submitted signal"
+    ]
+  },
+  "instruction_sync": {
+    "task_start_required": true,
+    "pre_submission_required": true,
+    "readme_section": "Agent Working Instructions",
+    "if_materially_changed": "update README in the same governed PR",
+    "if_unchanged": "Agent instructions checked — README instruction delta: none"
   },
   "historical_completion": {
     "package": "P04.04",
@@ -76,5 +291,5 @@
     "evidence_merge": "4445c21f1e6b03e84859d31ce7b32169b9c4cccc",
     "released_tasks": ["P04.04-T01", "P04.04-T02", "P04.04-T03", "P04.04-T04"]
   },
-  "next_action": "Accept this P04.04 closure/P04.05 activation through exact-head source and unchanged-promotion Governance, merge/read back, reconcile continuity, then create a fresh P04.05 wave before runtime mutation."
+  "next_action": "Pass exact-head Governance for this wave control plan, promote it unchanged, merge/read back, then synchronize all four branches to the accepted main and begin only the assigned P04.05 leases. Do not auto-advance P04.06."
 }
