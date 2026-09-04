@@ -1,21 +1,32 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-04 — **P04.04 closure / P04.05 activation candidate; protected main remains authoritative until governed promotion, merge and read-back**
+Last reconciled: 2026-09-05 — **P04.05 ACTIVE after accepted P04.04 closure / P04.05 activation merge/read-back**
 
-## Authoritative pre-transaction checkpoint
+## Authoritative checkpoint
 
-Protected main: `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`.
+Current protected main at continuity start: `35b438a77838518400758e8b877170918cc3278f`.
+
+Accepted P04.05 activation read-back: `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
+
+The later `35b438a77838518400758e8b877170918cc3278f` checkpoint contains only the separately governed checkout-v7 maintenance merge #199 after activation; it does not change the P04.05 runtime/state boundary.
+
+Canonical state:
 
 - Foundation Architecture v1 is FROZEN.
 - P00 is DONE — 10 / 10.
 - P01 is DONE — 12 / 12; exit SATISFIED.
 - P02 is DONE — 10 / 10; exit SATISFIED.
 - P03 is DONE — 11 / 11; exit SATISFIED.
-- P04 is canonically ACTIVE — 3 / 10 done.
-- P04.04 is still the canonical active package, with accepted implementation/completion evidence.
-- P04.05 contract/handoff preparation is accepted but locked.
-- P04.06-P04.10 and business/AI runtime remain locked.
+- P04 is ACTIVE — **4 / 10 done**.
+- P04.01-P04.04 are DONE with retained accepted evidence.
+- P04.05 is the **sole ACTIVE package**.
+- P04.06-P04.10 remain planned/locked.
+- `kernel_code_authorized=true` only for P04.05.
+- `business_feature_code_authorized=false`.
+- strategic X-program and AI/model/agent runtime remain unauthorized.
 - canonical CI is GitHub-hosted `ubuntu-24.04` only.
+
+`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This continuity file is subordinate and grants no authority beyond that state.
 
 ## Accepted P04.04 implementation/completion
 
@@ -43,33 +54,36 @@ The accepted implementation preserves provider-neutral, at-least-once-compatible
 - contract `docs/roadmap/work-packages/P04.05.md`;
 - handoff `docs/ai/handoffs/P04.05.md`.
 
-Preparation adds no runtime or migration and grants no authority before the separate activation transaction completes.
+## Accepted P04.04 closure / P04.05 activation
 
-## Candidate atomic result
+- source PR #197;
+- exact source/promotion head `6907253d375125a7ff096fb434c3433dbc17b331`;
+- source Governance `33819597433 / 100859169990` — PASS;
+- source review: SELF REVIEW only; independent approval not claimed;
+- source unresolved review threads: 0;
+- unchanged promotion PR #198;
+- promotion Governance `33820312475 / 100861375770` — PASS;
+- promotion review: SELF REVIEW only; independent approval not claimed;
+- promotion unresolved review threads: 0;
+- expected-head guarded merge/read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
 
-Only after exact-head source Governance, unchanged promotion Governance, protected merge and protected-main read-back:
+The accepted activation transaction changed governance/state/continuity only. It introduced no P04.05 runtime source, migration, retry/DLQ, schema-registry, background-job, provider, business or AI/model/agent runtime.
 
-- P04 ACTIVE — 4 / 10 done;
-- P04.01-P04.04 DONE with retained evidence;
-- P04.05 sole ACTIVE package;
-- P04.06-P04.10 planned/locked;
-- `kernel_code_authorized=true` only for P04.05;
-- `business_feature_code_authorized=false`;
-- strategic X and AI/model/agent runtime unauthorized.
-
-## P04.05 runtime boundary after activation
+## P04.05 runtime boundary
 
 Owner: `kernel.events`.
 
-Authorized later runtime scope is limited to:
+After this post-activation continuity correction is itself governed, promoted unchanged, merged and read back, a fresh implementation wave may implement only:
 
-- stable consumer-processing identity bound to canonical EventID, consumer/owner/tenant/route scope;
-- same-transaction local PostgreSQL protected mutation and inbox completion;
-- deterministic already-applied handling after commit;
-- restart and checkpoint-gap duplicate safety;
-- concurrency, conflict and tenant/owner/consumer isolation;
-- payload-safe failure behavior;
-- focused verifier and retained regressions.
+- stable processing identity bound to canonical EventID plus consumer/owner/tenant/route scope;
+- no global cross-consumer EventID lock;
+- inbox completion and the protected local PostgreSQL mutation in the same local transaction;
+- no completion before the protected mutation commits;
+- deterministic already-applied outcome for committed redelivery;
+- restart/checkpoint-gap duplicate safety;
+- concurrency, conflicting identity/content reuse and tenant/owner/consumer rebinding that fail closed;
+- checkpoint progress and inbox completion as separate facts;
+- payload-safe failures and focused verification.
 
 Still unauthorized:
 
@@ -79,14 +93,17 @@ Still unauthorized:
 - broad P04.09 operator recovery;
 - concrete broker/provider selection;
 - external-side-effect or end-to-end exactly-once claims;
-- business features, strategic X runtime, or AI/model/agent runtime.
+- business features, strategic X runtime or AI/model/agent runtime.
+
+## Persistence / migration preflight
+
+Production P04.05 semantics require durable local PostgreSQL inbox persistence, but activation added no migration and grants no blanket schema authority. Before the first schema mutation on the later fresh implementation branch, record the exact `kernel.events` owner/path/version/table/index/constraint/data budget and prove retained P01 fresh-install, upgrade, ledger identity, forward-recovery and owner/tenant-isolation rules. Do not pull P04.06+ schema semantics forward.
 
 ## Exact next work
 
-1. Pass exact-head source Governance for this state/continuity-only transaction.
-2. Review the exact diff and promote the unchanged source head.
-3. Pass promotion Governance, merge with expected-head protection and re-read protected main.
-4. Confirm P04.05 is sole active at 4 / 10 and P04.06+ remains locked.
-5. Reconcile post-activation continuity in a separate carrier.
-6. Only then create a fresh P04.05 wave/branches/leases and record the exact runtime/migration budget.
-7. Do not auto-advance to P04.06.
+1. Govern this **post-activation continuity-only** source carrier without changing canonical `STATE.json`, package sequence, validators or runtime source.
+2. Inspect exact diff/review state, promote the unchanged source head and require fresh promotion Governance.
+3. Merge with expected-head protection while current with protected main and re-read all continuity surfaces.
+4. Confirm P04 remains 4 / 10, P04.05 sole ACTIVE, P04.06+ locked and business/AI runtime unauthorized.
+5. Only then create a fresh P04.05 implementation wave from exact protected main and record the runtime/migration budget before source mutation.
+6. Do not auto-advance to P04.06.
