@@ -333,3 +333,9 @@ jobs:
         env:
           P04_04_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
         run: bash scripts/verify_p04_04.sh
+
+      - name: Verify P04.05 consumer inbox and local idempotency primitive
+        shell: bash
+        env:
+          P04_05_TEST_DATABASE_URL: postgres://omnexa:synthetic-p01-04@127.0.0.1:5432/omnexa_p01_04?sslmode=disable
+        run: bash scripts/verify_p04_05.sh
