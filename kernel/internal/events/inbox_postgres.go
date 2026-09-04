@@ -188,7 +188,10 @@ func (store *PostgresInboxStore) Complete(
 	if len(storedFingerprint) != len(record.Fingerprint) || !bytes.Equal(storedFingerprint, record.Fingerprint[:]) {
 		return classifiedFailure(codeInboxStateMalformed, failure.CategoryInvariant, "event inbox postgres completion evidence conflicts with stored identity")
 	}
-	return classifiedFailure(codeInboxStateMalformed, failure.CategoryInvariant, "event inbox postgres completion state is not claimable: "+state)
+	if state != "claimed" && state != "completed" {
+		return classifiedFailure(codeInboxStateMalformed, failure.CategoryInvariant, "stored event inbox completion state is malformed")
+	}
+	return classifiedFailure(codeInboxStateMalformed, failure.CategoryInvariant, "event inbox postgres completion state is not claimable")
 }
 
 func postgresInboxTenant(identity InboxIdentity) any {
