@@ -1,9 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-04"
-  nature: "non-authoritative P04.04 closure / P04.05 activation candidate"
-  authoritative_main: "fa53b01cd92c8e0dd59026abff06f5f95f642d2d"
+  verified_at: "2026-09-05"
+  nature: "non-authoritative P04.05 post-activation continuity snapshot"
+  activation_readback: "3402cf7a8b2b1370aca99543d47a33dee3dc0c5a"
+  authoritative_main_at_continuity_start: "35b438a77838518400758e8b877170918cc3278f"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -15,8 +16,8 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state: "active"
-  progress_candidate: "4 / 10 done"
-  current_work_package_candidate: "P04.05"
+  progress: "4 / 10 done"
+  current_work_package: "P04.05"
   p03_exit: "SATISFIED / HISTORICAL"
   p04_entry: "SATISFIED"
 
@@ -35,22 +36,33 @@ prerequisites:
   p04_05_preparation_promotion_pr: 196
   p04_05_preparation_head: "211fea2077d7a1bf94be48f32f047b27273a4515"
   p04_05_preparation_merge: "fa53b01cd92c8e0dd59026abff06f5f95f642d2d"
+  p04_05_activation_source_pr: 197
+  p04_05_activation_promotion_pr: 198
+  p04_05_activation_head: "6907253d375125a7ff096fb434c3433dbc17b331"
+  p04_05_activation_source_governance_run: 33819597433
+  p04_05_activation_source_governance_job: 100859169990
+  p04_05_activation_promotion_governance_run: 33820312475
+  p04_05_activation_promotion_governance_job: 100861375770
+  p04_05_activation_merge: "3402cf7a8b2b1370aca99543d47a33dee3dc0c5a"
+  post_activation_maintenance_merge: "35b438a77838518400758e8b877170918cc3278f"
+  post_activation_maintenance_scope: "workflow checkout-v7 references only; no runtime/state expansion"
 
 p04_04:
-  state_candidate: "done"
+  state: "done"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.04.md"
   evidence: "docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md"
 
 p04_05:
-  state_candidate: "active_after_governed_merge_readback"
+  state: "active"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.05.md"
   handoff: "docs/ai/handoffs/P04.05.md"
   implementation_scope: "provider-neutral consumer inbox/deduplication and local application-idempotency primitive only"
   runtime_implemented: false
-  production_persistence_expected: true
+  production_persistence_required: true
   activation_added_migration: false
+  continuity_adds_migration: false
   migration_preflight_required: true
   checkpoint_separate: true
   external_side_effect_exactly_once_claim_authorized: false
@@ -60,8 +72,8 @@ p04_05:
   business_handler_authorized: false
 
 security:
-  kernel_code_authorized_candidate: true
-  kernel_authority_scope_candidate: "P04.05 only"
+  kernel_code_authorized: true
+  kernel_authority_scope: "P04.05 only"
   business_feature_code_authorized: false
   p04_06_plus_authorized: false
   strategic_x_runtime_authorized: false
@@ -74,7 +86,7 @@ security:
   secret_payloads_authorized: false
 
 blocked_actions:
-  - "implement P04.05 runtime on closure, promotion or continuity carriers"
+  - "implement P04.05 runtime on activation, promotion or continuity carriers"
   - "implement P04.06-P04.10"
   - "select a broker/provider or claim end-to-end exactly-once semantics"
   - "treat activation as blanket database-migration authority"
@@ -84,9 +96,9 @@ blocked_actions:
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Govern and promote this P04.04 closure / P04.05 activation candidate without runtime or schema mutation."
-  post_merge: "Re-read protected main and reconcile P04.05 post-activation continuity."
-  implementation: "Only after that read-back, create a fresh P04.05 wave and record exact runtime/migration budgets before source mutation."
+  current: "Govern and promote the P04.05 post-activation continuity-only correction without changing canonical STATE, package sequence, validator or runtime source."
+  post_merge: "Re-read protected main and confirm P04.05 remains sole active at 4 / 10."
+  implementation: "Only then create a fresh isolated P04.05 implementation wave, record exact kernel.events runtime/migration path/version/data budgets before schema mutation, and implement the accepted inbox/idempotency contract."
   completion_rule: "Do not auto-advance to P04.06."
 
 source_authority:
@@ -94,7 +106,7 @@ source_authority:
   canonical_state: "docs/roadmap/STATE.json"
   status: "docs/roadmap/STATUS.md"
   p04_05_spec: "docs/roadmap/work-packages/P04.05.md"
-  transition_candidate: "docs/governance/P04_04_P04_05_TRANSITION_TRANSACTION.md"
+  transition_receipt: "docs/governance/P04_04_P04_05_TRANSITION_TRANSACTION.md"
 
 handoff:
-  active_candidate: "docs/ai/handoffs/P04.05.md"
+  active: "docs/ai/handoffs/P04.05.md"
