@@ -11,12 +11,12 @@ type inboxTestStore struct {
 	claimErr    error
 	completeErr error
 
-	claimCalls    int
-	completeCalls int
-	lastClaimTx   OutboxTransaction
+	claimCalls     int
+	completeCalls  int
+	lastClaimTx    OutboxTransaction
 	lastCompleteTx OutboxTransaction
-	lastClaim     InboxRecord
-	lastComplete  InboxRecord
+	lastClaim      InboxRecord
+	lastComplete   InboxRecord
 }
 
 func (store *inboxTestStore) Claim(_ context.Context, tx OutboxTransaction, record InboxRecord) (InboxClaimResult, error) {
