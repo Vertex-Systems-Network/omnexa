@@ -1,95 +1,139 @@
 # Omnexa AI Project Context
 
-Status: **P04.05 ACTIVE — post-activation continuity; subordinate to canonical governance**
+Status: **P04.05 CLOSURE / P04.06 ACTIVATION CANDIDATE — subordinate to canonical governance**
 
 This file never overrides `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/roadmap/STATE.json`, accepted ADRs, architecture/security standards or live GitHub evidence.
 
-## Authoritative checkpoint
+## Authoritative candidate base
 
-P04.05 activation merged/read back as `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
+Fresh protected main at this activation candidate start is:
 
-Fresh protected main at this continuity carrier start is `35b438a77838518400758e8b877170918cc3278f`. The intervening #199 merge only updates two GitHub Actions checkout references and does not change P04.05 state or runtime authority.
+`3f547180eb5e839439834eb2ce7977324803df18`
 
-At this checkpoint:
+That protected-main state contains:
 
-- P00-P03 are complete and their exit gates remain satisfied;
-- P04 is ACTIVE at 4 / 10;
-- P04.01-P04.04 are DONE with retained evidence;
-- P04.05 is the sole ACTIVE package;
-- P04.06-P04.10 remain planned/locked;
-- `kernel_code_authorized=true` only for P04.05;
-- `business_feature_code_authorized=false`;
-- strategic X-program and AI/model/agent runtime remain unauthorized.
+- P04.05 implementation acceptance through its governed T01-T04 chain;
+- P04.05 completion evidence merged/read back as `e44ece77ddf7b821c03997266ca0c68c07162910`;
+- the separately governed P04.06 preparation source/promotion at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`;
+- P04.06 preparation source Governance `#674 / 33987003924` — PASS;
+- P04.06 preparation promotion Governance `#675 / 33987472967` — PASS;
+- P04.06 preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`.
 
-## Accepted P04.04 evidence
+Preparation alone did not activate P04.06. This separate transaction is the explicit sequential package transition.
 
-- final Supervisor integration/promotion head `ef09b878577d25a4a1186cb8fe84205b08a24851`;
-- promotion Governance `33810095507 / 100829646792` — PASS;
-- implementation merge/read-back `66c072b5caf42ceecb88d30cd1a1ee4e910322e6`;
-- completion evidence `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`;
-- evidence carrier #194 merge/read-back `4445c21f1e6b03e84859d31ce7b32169b9c4cccc`.
+## Candidate canonical result
 
-The accepted implementation is provider-neutral, preserves duplicate-publication truth and grants no P04.05+ or business/AI authority beyond the later explicit activation transaction.
+Only after this exact activation source passes fresh Governance, is reviewed, promoted byte-for-byte unchanged through fresh promotion Governance, merged with expected-head protection and protected main is re-read may the candidate result be treated as accepted:
 
-## Accepted P04.05 preparation
+- P04 ACTIVE — `5 / 10 done`;
+- P04.01-P04.05 DONE with retained evidence;
+- P04.06 sole ACTIVE package;
+- P04.07-P04.10 planned/locked;
+- bounded kernel authority only for P04.06;
+- business-feature authority remains false;
+- strategic X and AI/model/agent product runtime remain unauthorized.
 
-- source preparation PR #195;
-- unchanged preparation promotion PR #196;
-- exact preparation head `211fea2077d7a1bf94be48f32f047b27273a4515`;
-- merge/read-back `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`;
-- contract `docs/roadmap/work-packages/P04.05.md`;
-- handoff `docs/ai/handoffs/P04.05.md`.
+## Accepted P04.05 completion evidence
 
-## Accepted P04.05 activation chain
+The final P04.05 Supervisor verifier/promotion head is `dd713fe3217a0d092ab3ff31115ac031ae8c0303`.
 
-P04.04 closure / P04.05 activation is accepted evidence:
+- source Governance `#669 / 33927932705` — PASS;
+- promotion Governance `#670 / 33985111334`, job `101357077040` — PASS;
+- implementation merge/read-back `0c66a3371dbf2fa942a95b7d0475b06235392474`;
+- completion evidence `docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md`;
+- completion evidence merge/read-back `e44ece77ddf7b821c03997266ca0c68c07162910`.
 
-- source PR #197;
-- exact source/promotion head `6907253d375125a7ff096fb434c3433dbc17b331`;
-- source Governance `33819597433 / 100859169990` — PASS;
-- source SELF REVIEW only; independent approval not claimed; zero unresolved threads;
-- unchanged promotion PR #198;
-- promotion Governance `33820312475 / 100861375770` — PASS;
-- promotion SELF REVIEW only; independent approval not claimed; zero unresolved threads;
-- guarded merge/read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
+The accepted P04.05 guarantee is local duplicate-safe application inside the retained PostgreSQL boundary. Checkpoint and inbox completion remain separate facts; no external/end-to-end exactly-once claim exists.
 
-No P04.05 runtime source or migration was part of activation.
+## Accepted P04.06 preparation
 
-## P04.05 implementation law
+- source preparation PR `#215`;
+- unchanged promotion PR `#216`;
+- exact source/promotion head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`;
+- source Governance `#674 / 33987003924` — PASS;
+- promotion Governance `#675 / 33987472967` — PASS;
+- preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`;
+- contract `docs/roadmap/work-packages/P04.06.md`;
+- handoff `docs/ai/handoffs/P04.06.md`.
+
+The prepared contract selects no provider, grants no migration and creates no runtime wave.
+
+## P04.06 activation boundary
 
 Owner: `kernel.events`.
 
-After this separate post-activation continuity correction is governed, promoted unchanged, merged and read back, a fresh implementation wave may implement only the provider-neutral consumer inbox/deduplication and local application-idempotency primitive:
+After activation **and a later separate post-activation continuity source/promotion/read-back**, a fresh implementation wave may implement only the accepted provider-neutral P04.06 contract:
 
-- bind canonical EventID to stable consumer/owner/tenant/route processing scope;
-- do not create a global cross-consumer EventID lock;
-- commit protected local mutation and inbox completion in the same retained local PostgreSQL transaction;
-- never persist completion before the protected mutation commits;
-- committed redelivery returns explicit already-applied without rerunning the protected mutation;
-- concurrent same-scope attempts cannot both commit;
-- conflicting canonical content or tenant/owner/consumer rebinding fails closed;
-- checkpoint progress and inbox completion remain separate facts;
-- external/non-transactional side effects are not made exactly once;
-- no retry/backoff/DLQ, schema-registry, job-runtime, provider selection, business feature or AI runtime is introduced.
+- structured deterministic failure disposition rather than raw error-string matching;
+- finite attempt budget and capped deterministic backoff;
+- authoritative UTC retry eligibility;
+- one-at-a-time retry claim/CAS/lease semantics;
+- checkpoint, inbox and retry/quarantine evidence as distinct facts;
+- P04.05 already-applied completion suppressing stale retry mutation;
+- fail-closed owner/consumer/route/tenant rebinding;
+- terminal/retry-exhausted logical quarantine;
+- quarantine persistence before checkpoint may advance past a poison delivery;
+- crash-gap recovery where committed quarantine suppresses handler reinvocation while checkpoint catches up;
+- bounded safe quarantine evidence without raw payload/secrets/provider/database diagnostics.
+
+P01.09's in-memory bounded job retry is precedent only. It is not durable event-fabric retry persistence/timing authority.
+
+## Zero-runtime activation law
+
+This activation carrier intentionally has:
+
+- zero P04.06 runtime worker slots;
+- zero P04.06 runtime tasks;
+- zero P04.06 runtime branches;
+- zero P04.06 migration reservations;
+- no retry worker/scheduler source;
+- no quarantine persistence source;
+- no workflow/provider dependency change.
+
+Completed P04.05 T01-T04 leases are historical/released. Accepted `kernel.events` migration v2 remains immutable inbox history, not a live P04.06 lease.
 
 ## Persistence / migration gate
 
-Durable local PostgreSQL inbox persistence is required for production semantics, but activation and continuity grant no blanket migration authority. Before the first schema mutation on the later fresh runtime branch:
+Before any later P04.06 schema mutation, after post-activation continuity is accepted, fresh protected main must be re-read and the runtime wave must record:
 
-1. re-read exact protected main and current `kernel.events` migration history;
-2. choose the exact next immutable owner-scoped migration path/version;
-3. record exact tables/columns/indexes/constraints/data budget;
-4. preserve retained P01 fresh-install/upgrade ledger behavior and P03.09 ownership;
-5. define forward-recovery/rollback that cannot reopen an already-applied duplicate mutation;
-6. prove tenant/owner/consumer isolation;
-7. exclude P04.06+ and business-domain schema semantics.
+1. exact current `kernel.events` migration history;
+2. exact next immutable owner-scoped migration version/path/name;
+3. exact retry/quarantine tables/indexes/constraints/data budget;
+4. processing identity + state-transition/CAS law;
+5. due-scan and eligibility index bounds;
+6. owner/consumer/tenant isolation;
+7. rollback/forward recovery that cannot resurrect quarantined or P04.05-completed mutations;
+8. explicit exclusion of P04.07+, provider/business schema and AI/model runtime.
+
+No migration version 3 is reserved by activation.
 
 ## Locked scope
 
-Do not implement concrete broker/provider selection, retry/backoff/DLQ/quarantine, schema-registry runtime, background-job runtime changes, broad operator recovery, business handlers/features, strategic X runtime, AI/model/agent runtime, global ordering or external/end-to-end exactly-once claims.
+Do not implement on this activation source/promotion:
+
+- P04.06 runtime or schema;
+- retry worker/scheduler;
+- provider/broker-native retry or DLQ integration;
+- broad operator requeue/replay/release UX;
+- P04.07 schema-registry runtime;
+- P04.08 background-job changes;
+- P04.09/P04.10 recovery/replay runtime;
+- business handlers/features;
+- strategic X runtime;
+- AI/model/agent product runtime;
+- global ordering or end-to-end exactly-once claims.
 
 ## Exact next action
 
-Govern and land this post-activation continuity correction first, using exact-head source Governance, exact diff/review/thread verification, unchanged promotion Governance, expected-head protected merge and protected-main read-back. Then create a **fresh separate P04.05 implementation wave** from that exact main SHA, record exact runtime/migration budgets and implement only `docs/roadmap/work-packages/P04.05.md`.
+1. Finish canonical state/continuity reconciliation on this source branch.
+2. Require fresh exact-head Omnexa Governance.
+3. Record honest SELF REVIEW and require zero unresolved threads.
+4. Verify protected main freshness.
+5. Promote the exact unchanged source head through a separate promotion PR.
+6. Require fresh promotion-specific Governance and zero threads.
+7. Merge with expected-head protection and re-read protected main.
+8. Confirm P04.06 sole ACTIVE at `5 / 10` with zero runtime leases.
+9. Govern/promote/read back a separate P04.06 post-activation continuity carrier.
+10. Only then create a fresh isolated P04.06 runtime wave and perform migration preflight.
 
-Do not reuse activation/promotion/continuity branches and do not auto-advance to P04.06.
+Do not auto-advance P04.07.
