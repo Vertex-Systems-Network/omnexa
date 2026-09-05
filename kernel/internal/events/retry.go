@@ -125,16 +125,16 @@ func DecideRetry(
 	policy RetryPolicy,
 	attempt uint32,
 	failureTime time.Time,
-	err error,
+	failureErr error,
 	operationRetrySafe bool,
 ) (RetryDecision, error) {
-	if err := policy.Validate(); err != nil {
-		return RetryDecision{}, err
+	if validationErr := policy.Validate(); validationErr != nil {
+		return RetryDecision{}, validationErr
 	}
 	if attempt == 0 || attempt > policy.MaxAttempts {
 		return RetryDecision{}, classifiedFailure(codeRetryAttemptInvalid, failure.CategoryValidation, "event retry attempt is outside the policy snapshot")
 	}
-	if err == nil {
+	if failureErr == nil {
 		return RetryDecision{}, classifiedFailure(codeRetryFailureInvalid, failure.CategoryValidation, "event retry decision requires a failed delivery")
 	}
 
@@ -144,14 +144,14 @@ func DecideRetry(
 		PolicyVersion: policy.Version,
 	}
 
-	if errors.Is(err, context.Canceled) {
+	if errors.Is(failureErr, context.Canceled) {
 		base.Disposition = RetryDispositionInterrupted
 		base.ConsumeAttempt = false
 		return base, nil
 	}
 
 	var structured *failure.Error
-	if !errors.As(err, &structured) {
+	if !errors.As(failureErr, &structured) {
 		base.Disposition = RetryDispositionTerminal
 		base.TerminalReason = RetryTerminalReasonUnknownFailure
 		base.ConsumeAttempt = true
