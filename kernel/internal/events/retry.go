@@ -15,7 +15,7 @@ const (
 	MaxRetryAttempts uint32 = 100
 	// MaxRetryBackoff prevents caller-controlled policies from creating
 	// operationally unbounded eligibility windows.
-	MaxRetryBackoff = 24 * time.Hour
+	MaxRetryBackoff       = 24 * time.Hour
 	maxRetryPolicyIDBytes = 128
 )
 
