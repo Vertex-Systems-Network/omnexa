@@ -110,7 +110,7 @@ P03.02 — Registry & Deterministic Discovery remains complete:
 - PR #94;
 - final exact head `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`;
 - canonical run/job `33022405704 / 98355747775` — PASS;
-- merge `2d454a87e03f404f081b6a87f216d0cfa8c7608d` is not P03.02 authority; accepted implementation merge remains `2d454a87e03f404f081b6a87f216d0cfa8c7608d` only where separately recorded. Historical evidence files remain authoritative for their exact package receipts;
+- merge `2e38969dbbbcfcf4765a114f449dc3fa960061d7`;
 - evidence `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`;
 - retained verifier `scripts/verify_p03_02.sh`.
 
