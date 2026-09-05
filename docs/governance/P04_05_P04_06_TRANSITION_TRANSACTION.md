@@ -1,24 +1,33 @@
 # P04.05 Closure / P04.06 Activation Transaction
 
-Status: **CANDIDATE — EXACT-HEAD GOVERNANCE / UNCHANGED PROMOTION / PROTECTED READ-BACK REQUIRED**
+Status: **ACCEPTED / PROTECTED-MAIN READ-BACK COMPLETE — POST-ACTIVATION CONTINUITY REQUIRED BEFORE RUNTIME**
 
-- Coordination issue: `#217`
-- Transaction base: protected `main@3f547180eb5e839439834eb2ce7977324803df18`
-- Candidate package result: `P04.01-P04.05 DONE`, `P04.06 sole ACTIVE`, `P04.07-P04.10 PLANNED / LOCKED`
-- Runtime/schema/provider mutation in this transaction: `none`
+- Original coordination issue: `#217`
+- Transition source base: protected `main@3f547180eb5e839439834eb2ce7977324803df18`
+- Source PR: `#218`
+- Unchanged promotion PR: `#219`
+- Exact source/promotion head: `b718ad7316dba6fca0cafccb514df6da653abe13`
+- Source Governance: `#677 / 33990309561` — PASS
+- Promotion Governance: `#678` — PASS
+- Accepted protected-main merge/read-back: `4c9f60843f2612bc4c9a10b4efca7b6a20826be3`
+- Accepted package result: `P04.01-P04.05 DONE`, `P04.06 sole ACTIVE`, `P04.07-P04.10 PLANNED / LOCKED`
+- Runtime/schema/provider mutation in the transaction: `none`
 - Business-feature authority: `false`
 - AI/model/agent product-runtime authority: `false`
+- Post-activation continuity issue: `#220`
 
-This transaction changes governance/state/continuity only. It does not implement retry/backoff runtime, create a retry worker, reserve a migration, create a quarantine table, select a broker/provider, add a provider-native DLQ, implement P04.07+, add a business feature, or authorize AI/model/agent product runtime.
+The transition is accepted canonical history. It changed governance/state/continuity only. It did not implement retry/backoff runtime, create a retry worker, reserve a migration, create a quarantine table, select a broker/provider, add a provider-native DLQ, implement P04.07+, add a business feature, or authorize AI/model/agent product runtime.
 
-## Preconditions
+The separate issue `#220` continuity carrier now reconciles subordinate stale pre-activation wording. No P04.06 runtime or schema mutation may occur on that continuity source or its unchanged promotion.
 
-Protected main already contains both required predecessor facts:
+## Preconditions satisfied
+
+Protected main at the transition base contained both required predecessor facts:
 
 1. accepted P04.05 implementation and completion evidence;
 2. separately prepared and governed P04.06 contract/handoff.
 
-No package is allowed to auto-advance merely because those files exist. This transaction is the explicit sequential closure/activation decision.
+The package did not auto-advance merely because those files existed. Source `#218` and unchanged promotion `#219` were the explicit sequential closure/activation decision.
 
 ## Accepted P04.05 implementation/completion evidence
 
@@ -35,11 +44,11 @@ The accepted P04.05 implementation chain culminates in:
 - evidence Governance `#672` — PASS;
 - completion evidence merge/read-back `e44ece77ddf7b821c03997266ca0c68c07162910`.
 
-P04.05 accepted only the local PostgreSQL consumer inbox/idempotency boundary. It retained the explicit limits that checkpoint progress and inbox completion are separate facts and external/non-transactional side effects are not made end-to-end exactly once.
+P04.05 accepted only the local PostgreSQL consumer inbox/idempotency boundary. Checkpoint progress and inbox completion remain separate facts and external/non-transactional side effects are not made end-to-end exactly once.
 
 ## Accepted P04.06 preparation evidence
 
-P04.06 preparation is accepted but not runtime-active at the transaction base:
+P04.06 preparation was accepted before activation:
 
 - source preparation PR `#215`;
 - unchanged preparation promotion PR `#216`;
@@ -52,23 +61,24 @@ P04.06 preparation is accepted but not runtime-active at the transaction base:
 
 Preparation selected no provider and reserved no schema/migration.
 
-## Candidate canonical result
+## Accepted canonical result
 
-Only after this exact source head passes fresh Governance, is promoted byte-for-byte unchanged through a second fresh Governance run, merges with expected-head protection and protected main is re-read, canonical state may be interpreted as:
+Protected `main@4c9f60843f2612bc4c9a10b4efca7b6a20826be3` establishes:
 
 - P04 remains ACTIVE;
-- P04 progress becomes `5 / 10 done`;
+- P04 progress is `5 / 10 done`;
 - P04.01-P04.05 are DONE with retained evidence;
 - P04.06 is the sole ACTIVE package;
-- P04.07-P04.10 remain PLANNED / LOCKED with no accepted runtime spec;
+- P04.07-P04.10 remain PLANNED / LOCKED;
 - `kernel_code_authorized=true` is bounded to P04.06 only;
+- P04.06 runtime implementation remains gated by required post-activation continuity acceptance/read-back;
 - `business_feature_code_authorized=false`;
 - strategic X runtime remains unauthorized;
 - AI/model/agent product runtime remains unauthorized.
 
 ## P04.05 wave release
 
-The completed P04.05 wave is historical after this transition:
+The completed P04.05 wave is historical after the accepted transition:
 
 - `P04.05-T01` inbox core — released;
 - `P04.05-T02` PostgreSQL inbox persistence / migration v2 — released;
@@ -77,7 +87,7 @@ The completed P04.05 wave is historical after this transition:
 
 The accepted `kernel.events` migration version 2 remains immutable historical ownership evidence. It is **not** a live migration reservation for P04.06.
 
-This transaction intentionally creates:
+The accepted transition created:
 
 - zero P04.06 worker slots;
 - zero P04.06 runtime tasks;
@@ -86,9 +96,9 @@ This transaction intentionally creates:
 
 The repository writer cap remains three worker writers maximum when a later governed implementation wave exists.
 
-## Activated P04.06 boundary
+## Active P04.06 boundary
 
-Activation authorizes only the prepared provider-neutral P04.06 package after the required post-activation continuity gate. The prepared contract includes:
+P04.06 is active, but implementation is permitted only after the required post-activation continuity gate. The prepared provider-neutral contract includes:
 
 - stable failure disposition rather than raw error-string policy;
 - finite deterministic retry attempts and capped backoff;
@@ -102,11 +112,11 @@ Activation authorizes only the prepared provider-neutral P04.06 package after th
 - bounded safe quarantine metadata with no raw payload/secrets/provider/database diagnostics;
 - logical local quarantine only, with no broker-native DLQ/provider selection.
 
-Activation itself does not implement those semantics.
+The accepted activation itself did not implement those semantics, and the post-activation continuity carrier must not implement them either.
 
 ## Persistence / migration gate remains closed
 
-No P04.06 schema is reserved here. Before a later runtime wave can mutate schema it must, from fresh protected main after post-activation continuity acceptance:
+No P04.06 schema is reserved by activation or continuity. Before a later runtime wave can mutate schema it must, from fresh protected main after post-activation continuity acceptance:
 
 1. re-read `kernel.events` migration history;
 2. identify the exact next immutable migration version/path/name;
@@ -116,21 +126,50 @@ No P04.06 schema is reserved here. Before a later runtime wave can mutate schema
 6. define forward recovery that cannot resurrect quarantined or already-completed protected mutations;
 7. confirm P04.07+, provider/business and AI runtime are absent.
 
-No `kernel.events` version 3 is reserved by this transaction.
+No `kernel.events` version 3 is reserved.
 
-## Required integration path
+## Post-activation continuity transaction
 
-1. Source activation PR on the exact candidate head.
-2. Fresh exact-head Omnexa Governance.
-3. Substantive SELF REVIEW with honest non-independent provenance; zero unresolved threads.
-4. Verify protected main still equals the expected base.
-5. Create a separate promotion branch at the exact unchanged source head.
-6. Fresh promotion-specific Omnexa Governance.
-7. Promotion SELF REVIEW, zero unresolved threads and exact unchanged-head verification.
-8. Expected-head guarded merge.
-9. Re-read protected main, canonical STATE, package sequence and active-plan authority.
-10. Confirm P04.06 is sole ACTIVE at `5 / 10`, with zero runtime leases.
-11. Govern a separate P04.06 post-activation continuity carrier.
-12. Only after that continuity source + unchanged promotion are accepted/read back may a fresh P04.06 implementation wave or migration preflight/reservation be created.
+Issue `#220` is the sole current coordination carrier for subordinate post-activation wording reconciliation.
+
+Exact allowed changed-path budget:
+
+1. `AGENTS.md`
+2. `README.md`
+3. `docs/roadmap/STATUS.md`
+4. `docs/ai/AI_STATE.yaml`
+5. `docs/ai/AI_CONTEXT.md`
+6. `docs/ai/handoffs/P04.06.md`
+7. `docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md`
+
+Hard non-scope:
+
+- `docs/roadmap/STATE.json`;
+- package sequence;
+- activation validator;
+- active worker plan;
+- kernel Go runtime;
+- migration/schema reservation;
+- retry worker/scheduler;
+- provider/broker-native DLQ;
+- P04.07+ runtime;
+- business features;
+- strategic X runtime;
+- AI/model/agent product runtime.
+
+## Required continuity integration path
+
+1. Create the continuity source from exact accepted protected `main@4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
+2. Reconcile only the exact seven allowed subordinate files.
+3. Require fresh exact-head Omnexa Governance.
+4. Record substantive SELF REVIEW with honest non-independent provenance and zero unresolved threads.
+5. Verify protected main still equals the expected base before promotion.
+6. Create a separate promotion branch at the exact unchanged continuity source head.
+7. Require fresh promotion-specific Omnexa Governance.
+8. Record promotion SELF REVIEW, zero unresolved threads and exact unchanged-head verification.
+9. Merge with expected-head protection.
+10. Re-read protected main, canonical `STATE.json`, package sequence and active-plan authority.
+11. Confirm P04.01-P04.05 remain DONE, P04.06 remains sole ACTIVE at `5 / 10`, P04.07-P04.10 remain locked and P04.06 runtime leases/reservations remain zero.
+12. Only then create a fresh P04.06 implementation wave and conduct fresh migration preflight before any schema reservation.
 
 Do not auto-advance P04.07.
