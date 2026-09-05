@@ -1,37 +1,42 @@
 # Omnexa AI Project Context
 
-Status: **P04.05 CLOSURE / P04.06 ACTIVATION CANDIDATE — subordinate to canonical governance**
+Status: **P04.06 POST-ACTIVATION CONTINUITY — subordinate to canonical governance**
 
 This file never overrides `AGENTS.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/roadmap/STATE.json`, accepted ADRs, architecture/security standards or live GitHub evidence.
 
-## Authoritative candidate base
+## Authoritative protected-main base
 
-Fresh protected main at this activation candidate start is:
+Fresh protected main at this continuity start is:
 
-`3f547180eb5e839439834eb2ce7977324803df18`
+`4c9f60843f2612bc4c9a10b4efca7b6a20826be3`
 
-That protected-main state contains:
+That protected-main state contains the accepted P04.05 closure / P04.06 activation transaction:
 
 - P04.05 implementation acceptance through its governed T01-T04 chain;
 - P04.05 completion evidence merged/read back as `e44ece77ddf7b821c03997266ca0c68c07162910`;
-- the separately governed P04.06 preparation source/promotion at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`;
-- P04.06 preparation source Governance `#674 / 33987003924` — PASS;
-- P04.06 preparation promotion Governance `#675 / 33987472967` — PASS;
-- P04.06 preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`.
+- separately governed P04.06 preparation source/promotion at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`;
+- activation source PR `#218` at exact head `b718ad7316dba6fca0cafccb514df6da653abe13`;
+- source Governance `#677 / 33990309561` — PASS;
+- unchanged activation promotion PR `#219` at the same exact head;
+- promotion Governance `#678` — PASS;
+- accepted protected-main merge/read-back `4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
 
-Preparation alone did not activate P04.06. This separate transaction is the explicit sequential package transition.
+Activation is accepted. This separate continuity carrier exists only to reconcile stale subordinate pre-activation wording before runtime implementation begins.
 
-## Candidate canonical result
+## Accepted canonical result
 
-Only after this exact activation source passes fresh Governance, is reviewed, promoted byte-for-byte unchanged through fresh promotion Governance, merged with expected-head protection and protected main is re-read may the candidate result be treated as accepted:
+Current protected-main truth is:
 
 - P04 ACTIVE — `5 / 10 done`;
 - P04.01-P04.05 DONE with retained evidence;
 - P04.06 sole ACTIVE package;
-- P04.07-P04.10 planned/locked;
+- P04.07-P04.10 PLANNED / LOCKED;
 - bounded kernel authority only for P04.06;
 - business-feature authority remains false;
-- strategic X and AI/model/agent product runtime remain unauthorized.
+- strategic X and AI/model/agent product runtime remain unauthorized;
+- P04.06 runtime worker slots/tasks/branches/migration reservations remain zero.
+
+P04.06 being ACTIVE does not authorize runtime mutation on this continuity carrier or its unchanged promotion. Runtime work starts only after this continuity sequence is accepted and protected main is re-read.
 
 ## Accepted P04.05 completion evidence
 
@@ -58,11 +63,26 @@ The accepted P04.05 guarantee is local duplicate-safe application inside the ret
 
 The prepared contract selects no provider, grants no migration and creates no runtime wave.
 
-## P04.06 activation boundary
+## Accepted P04.05 closure / P04.06 activation
+
+The explicit sequential transition was accepted through source `#218` and unchanged promotion `#219` at exact head `b718ad7316dba6fca0cafccb514df6da653abe13`.
+
+The activation only changed governance/state/continuity:
+
+- P04.05 moved from ACTIVE to DONE;
+- P04.06 moved from PLANNED to sole ACTIVE;
+- P04 progress moved from 4 / 10 to 5 / 10 done;
+- bounded kernel authority moved from P04.05 to P04.06;
+- completed P04.05 leases became historical/released;
+- P04.06 runtime worker slots/tasks/branches/migration reservations remained zero.
+
+No retry runtime, migration/schema reservation, provider, broker-native DLQ, P04.07+, business feature or AI/model runtime was introduced.
+
+## P04.06 active boundary
 
 Owner: `kernel.events`.
 
-After activation **and a later separate post-activation continuity source/promotion/read-back**, a fresh implementation wave may implement only the accepted provider-neutral P04.06 contract:
+After this separate post-activation continuity source/promotion/read-back is accepted, a fresh implementation wave may implement only the accepted provider-neutral P04.06 contract:
 
 - structured deterministic failure disposition rather than raw error-string matching;
 - finite attempt budget and capped deterministic backoff;
@@ -78,9 +98,9 @@ After activation **and a later separate post-activation continuity source/promot
 
 P01.09's in-memory bounded job retry is precedent only. It is not durable event-fabric retry persistence/timing authority.
 
-## Zero-runtime activation law
+## Zero-runtime continuity law
 
-This activation carrier intentionally has:
+This continuity carrier intentionally has:
 
 - zero P04.06 runtime worker slots;
 - zero P04.06 runtime tasks;
@@ -105,11 +125,25 @@ Before any later P04.06 schema mutation, after post-activation continuity is acc
 7. rollback/forward recovery that cannot resurrect quarantined or P04.05-completed mutations;
 8. explicit exclusion of P04.07+, provider/business schema and AI/model runtime.
 
-No migration version 3 is reserved by activation.
+No migration version 3 is reserved by activation or this continuity carrier.
 
-## Locked scope
+## Exact continuity budget
 
-Do not implement on this activation source/promotion:
+Issue `#220` authorizes reconciliation only in:
+
+1. `AGENTS.md`
+2. `README.md`
+3. `docs/roadmap/STATUS.md`
+4. `docs/ai/AI_STATE.yaml`
+5. `docs/ai/AI_CONTEXT.md`
+6. `docs/ai/handoffs/P04.06.md`
+7. `docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md`
+
+Do not mutate `docs/roadmap/STATE.json`, package sequence, activation validator, active worker plan, kernel Go runtime, schema/migrations, retry runtime, provider/broker integration, P04.07+, business features, strategic X runtime or AI/model/agent runtime.
+
+## Locked scope on this carrier
+
+Do not implement:
 
 - P04.06 runtime or schema;
 - retry worker/scheduler;
@@ -125,15 +159,15 @@ Do not implement on this activation source/promotion:
 
 ## Exact next action
 
-1. Finish canonical state/continuity reconciliation on this source branch.
-2. Require fresh exact-head Omnexa Governance.
-3. Record honest SELF REVIEW and require zero unresolved threads.
-4. Verify protected main freshness.
-5. Promote the exact unchanged source head through a separate promotion PR.
-6. Require fresh promotion-specific Governance and zero threads.
-7. Merge with expected-head protection and re-read protected main.
-8. Confirm P04.06 sole ACTIVE at `5 / 10` with zero runtime leases.
-9. Govern/promote/read back a separate P04.06 post-activation continuity carrier.
+1. Keep this continuity source rooted at accepted protected `main@4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
+2. Verify the exact seven-file changed-path budget and absence of runtime/schema changes.
+3. Require fresh exact-head Omnexa Governance.
+4. Record honest SELF REVIEW and require zero unresolved threads.
+5. Verify protected-main freshness.
+6. Promote the exact unchanged continuity source head through a separate promotion PR.
+7. Require fresh promotion-specific Governance and promotion SELF REVIEW with zero unresolved threads.
+8. Merge with expected-head protection and re-read protected main.
+9. Confirm P04.06 sole ACTIVE at `5 / 10` with zero runtime leases.
 10. Only then create a fresh isolated P04.06 runtime wave and perform migration preflight.
 
 Do not auto-advance P04.07.
