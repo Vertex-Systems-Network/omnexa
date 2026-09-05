@@ -2,8 +2,10 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-06"
-  nature: "P04.05 closure / P04.06 activation candidate; subordinate to canonical governance"
-  authoritative_main_at_candidate_start: "3f547180eb5e839439834eb2ce7977324803df18"
+  nature: "P04.06 post-activation continuity reconciliation; subordinate to canonical governance"
+  authoritative_main_at_continuity_start: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
+  accepted_activation_head: "b718ad7316dba6fca0cafccb514df6da653abe13"
+  accepted_activation_merge: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -15,8 +17,8 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state: "active"
-  candidate_progress: "5 / 10 done"
-  candidate_current_work_package: "P04.06"
+  progress: "5 / 10 done"
+  current_work_package: "P04.06"
   p03_exit: "SATISFIED / HISTORICAL"
   p04_entry: "SATISFIED"
 
@@ -37,9 +39,16 @@ prerequisites:
   p04_06_preparation_source_governance_run: 33987003924
   p04_06_preparation_promotion_governance_run: 33987472967
   p04_06_preparation_merge: "3f547180eb5e839439834eb2ce7977324803df18"
+  p04_05_p04_06_activation_source_pr: 218
+  p04_05_p04_06_activation_promotion_pr: 219
+  p04_05_p04_06_activation_head: "b718ad7316dba6fca0cafccb514df6da653abe13"
+  p04_05_p04_06_activation_source_governance_run: 33990309561
+  p04_05_p04_06_activation_source_governance_workflow: 677
+  p04_05_p04_06_activation_promotion_governance_workflow: 678
+  p04_05_p04_06_activation_merge: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
 
 p04_05:
-  state: "done_candidate_after_activation_acceptance"
+  state: "done"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.05.md"
   evidence: "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
@@ -47,7 +56,7 @@ p04_05:
   accepted_migration_v2_is_historical_not_live_reservation: true
 
 p04_06:
-  state: "active_candidate_only_after_governed_activation_readback"
+  state: "active"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.06.md"
   handoff: "docs/ai/handoffs/P04.06.md"
@@ -55,6 +64,7 @@ p04_06:
   runtime_implemented: false
   runtime_worker_slots: 0
   runtime_tasks: 0
+  runtime_branches: 0
   migration_reserved: false
   provider_selected: false
   broker_native_dlq_authorized: false
@@ -62,7 +72,7 @@ p04_06:
 
 security:
   kernel_code_authorized: true
-  candidate_kernel_authority_scope: "P04.06 only after activation + post-activation continuity acceptance"
+  kernel_authority_scope: "P04.06 only; runtime implementation may begin only after this separate continuity source + unchanged promotion are accepted and protected main is read back"
   business_feature_code_authorized: false
   p04_07_plus_authorized: false
   strategic_x_runtime_authorized: false
@@ -75,8 +85,8 @@ security:
   secret_payloads_authorized: false
 
 blocked_actions:
-  - "implement P04.06 runtime on this activation source, its unchanged promotion, or pre-continuity main"
-  - "reserve a P04.06 migration or create a runtime worker branch before post-activation continuity acceptance"
+  - "implement P04.06 runtime on this post-activation continuity source or its unchanged promotion"
+  - "reserve a P04.06 migration or create a runtime worker branch before post-activation continuity acceptance/read-back"
   - "implement P04.07-P04.10"
   - "select a broker/provider or provider-native DLQ"
   - "claim global ordering or end-to-end exactly-once semantics"
@@ -85,9 +95,9 @@ blocked_actions:
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Pass exact-head Governance for the P04.05-closure/P04.06-activation source, review it, promote the exact unchanged head and require fresh promotion Governance."
-  post_merge: "Re-read protected main and confirm P04.01-P04.05 done, P04.06 sole active at 5 / 10, P04.07+ locked and zero runtime leases."
-  continuity: "Govern and promote a separate P04.06 post-activation continuity carrier."
+  current: "Pass exact-head Governance for the P04.06 post-activation continuity source, record honest exact-head SELF REVIEW, verify zero unresolved threads and fresh protected main."
+  promotion: "Promote the exact unchanged continuity source head through a separate promotion PR and require fresh promotion Governance and self-review."
+  post_merge: "Re-read protected main and confirm P04.01-P04.05 DONE, P04.06 sole ACTIVE at 5 / 10, P04.07+ locked and zero runtime leases."
   implementation: "Only after continuity read-back create a fresh isolated P04.06 implementation wave and perform fresh migration preflight before any schema reservation."
   completion_rule: "Do not auto-advance to P04.07."
 
@@ -96,7 +106,7 @@ source_authority:
   canonical_state: "docs/roadmap/STATE.json"
   status: "docs/roadmap/STATUS.md"
   p04_06_spec: "docs/roadmap/work-packages/P04.06.md"
-  transition_candidate: "docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md"
+  activation_transaction: "docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md"
 
 handoff:
-  candidate_active: "docs/ai/handoffs/P04.06.md"
+  active: "docs/ai/handoffs/P04.06.md"
