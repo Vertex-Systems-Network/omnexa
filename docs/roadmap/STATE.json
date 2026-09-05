@@ -2,17 +2,17 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-09-01",
+  "last_reconciled": "2026-09-06",
   "program": "kernel",
   "current_phase": "P04",
-  "current_work_package": "P04.05",
+  "current_work_package": "P04.06",
   "implementation_lock": {
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
     "allowed_work": [
-      "P04.05 consumer inbox/deduplication and local application-idempotency implementation only after this closure/activation transaction passes exact-head Governance, is promoted unchanged, merges, and protected main is re-read",
-      "P04.05 provider-neutral same-transaction inbox source, focused duplicate/restart/concurrency/tenant isolation tests, verifier and acceptance evidence within the accepted P04.05 contract",
-      "governance and continuity updates required for P04.05"
+      "P04.06 retry/backoff, terminal-failure and logical quarantine implementation only after this closure/activation transaction passes exact-head Governance, is promoted unchanged, merges, protected main is re-read, and separate post-activation continuity is accepted",
+      "P04.06 provider-neutral failure-disposition/backoff/claim/quarantine source plus focused eligibility/concurrency/checkpoint-gap/tenant-isolation tests within the accepted P04.06 contract after the post-activation continuity gate",
+      "governance and continuity updates required for P04.06"
     ]
   },
   "governance_tracking": {
@@ -503,10 +503,10 @@
       "readiness_merge": "384c82b6d5b8bd89b70eb94640ea3be7109bc537",
       "planning_merge": "73561ad68e453c2741dec82d0b6fb01a7dcea1be",
       "validator_prerequisite_merge": "f97ee9a509f14247771626dc89b685e22ecd9457",
-      "current_work_package": "P04.05",
+      "current_work_package": "P04.06",
       "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "Historical P04 entry remains satisfied. P04.01-P04.04 have accepted completion evidence; P04.05 becomes the sole implementation-authorized package only after this separate P04.04 closure/P04.05 activation transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read."
+      "note": "Historical P04 entry remains satisfied. P04.01-P04.05 have accepted completion evidence; P04.06 becomes the sole implementation-authorized package only after this separate P04.05 closure/P04.06 activation transaction passes exact-final-head Governance, is promoted unchanged, merges, protected main is re-read, and post-activation continuity is separately accepted."
     },
     "p04_01_completion": {
       "state": "PASS",
@@ -575,7 +575,7 @@
       "runner_image": "ubuntu-24.04",
       "go": "1.26.7",
       "final_check": "governance",
-      "note": "P04.03 promotion Governance #582 remains implementation acceptance evidence; completion evidence carrier #167 and P04.04 preparation promotion #169 retained their own governed evidence. This P04.03 closure/P04.04 activation transaction must obtain a fresh exact-final-head Governance PASS before merge."
+      "note": "Canonical GitHub-hosted Governance remains required for every P04 package transition. This P04.05 closure/P04.06 activation transaction requires its own exact-final-head source and unchanged-promotion PASS before protected merge/read-back."
     },
     "licensing_ip_trademark": {
       "state": "external_distribution_blocker",
@@ -607,7 +607,7 @@
       "preparation_workflow_run": 33410873382,
       "preparation_job": 99549818529,
       "preparation_merge": "962a62c7c111079ca6f2047fa748deea97c84534",
-      "note": "P04.03 implementation is accepted from promotion-specific Governance #582 and expected-head merge/read-back. Completion evidence landed through PR #167; the prepared/locked P04.04 contract/handoff landed unchanged through promotion PR #169 after Governance #588. This closure/activation transaction requires its own exact-final-head Governance and protected merge/read-back before P04.04 authority becomes effective."
+      "note": "P04.03 implementation is accepted from promotion-specific Governance #582 and expected-head merge/read-back. Completion evidence landed through PR #167; the prepared/locked P04.04 contract/handoff landed unchanged through promotion PR #169 after Governance #588."
     },
     "p04_04_completion": {
       "state": "PASS",
@@ -627,7 +627,29 @@
       "preparation_promotion_pr": 196,
       "preparation_head": "211fea2077d7a1bf94be48f32f047b27273a4515",
       "preparation_merge": "fa53b01cd92c8e0dd59026abff06f5f95f642d2d",
-      "note": "P04.04 implementation was accepted through the multi-agent source/promotion chain and final Supervisor verifier promotion #193. Completion evidence landed through #194; the prepared/locked P04.05 contract/handoff landed unchanged through #195/#196. This closure/activation transaction requires its own exact-final-head Governance and protected merge/read-back before P04.05 authority becomes effective."
+      "note": "P04.04 implementation was accepted through the multi-agent source/promotion chain and final Supervisor verifier promotion #193. Completion evidence landed through #194; the prepared/locked P04.05 contract/handoff landed unchanged through #195/#196."
+    },
+    "p04_05_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md",
+      "source_carrier_pr": 210,
+      "implementation_pr": 211,
+      "final_exact_head": "dd713fe3217a0d092ab3ff31115ac031ae8c0303",
+      "implementation_merge": "0c66a3371dbf2fa942a95b7d0475b06235392474",
+      "workflow_run": 33985111334,
+      "job": 101357077040,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "evidence_carrier_pr": 213,
+      "evidence_merge": "e44ece77ddf7b821c03997266ca0c68c07162910",
+      "preparation_source_pr": 215,
+      "preparation_promotion_pr": 216,
+      "preparation_head": "7babb9c39185636b3af5184d5a7bd31cedbc37a0",
+      "preparation_source_workflow_run": 33987003924,
+      "preparation_promotion_workflow_run": 33987472967,
+      "preparation_merge": "3f547180eb5e839439834eb2ce7977324803df18",
+      "note": "P04.05 implementation/completion is accepted through the governed T01-T04 chain and completion evidence carrier #213. The separately prepared/locked P04.06 contract landed unchanged through #215/#216. This closure/activation transaction requires its own exact-final-head source Governance, unchanged promotion Governance and protected merge/read-back before P04.06 authority becomes effective."
     }
   },
   "p01_preparation": {
@@ -687,19 +709,19 @@
   "p04_preparation": {
     "state": "activated",
     "phase_state": "active",
-    "next_work_package": "P04.05",
-    "work_package_name": "Consumer inbox/deduplication & idempotency primitive",
+    "next_work_package": "P04.06",
+    "work_package_name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
     "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P04.05.md",
+    "work_package_spec": "docs/roadmap/work-packages/P04.06.md",
     "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-    "prepared_spec_count": 5,
+    "prepared_spec_count": 6,
     "mandatory_spec_count": 10,
     "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
     "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
     "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
     "validator": "scripts/validate_p04_activation.py",
     "blocking_gate": null,
-    "note": "Closure/activation candidate: P04.01-P04.04 are done with accepted evidence and P04.05 is the sole active kernel package only after this transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.06-P04.10 and business-feature/AI runtime remain locked."
+    "note": "Closure/activation candidate: P04.01-P04.05 are done with accepted evidence and P04.06 becomes the sole active kernel package only after this transaction passes exact-final-head Governance, is promoted unchanged, merges and protected main is re-read. Runtime branches/tasks/migration reservations remain zero until separate post-activation continuity is accepted. P04.07-P04.10 and business-feature/AI runtime remain locked."
   },
   "state_vocabulary": [
     "planned",
@@ -715,7 +737,7 @@
     "name": "Data, Jobs & Event Fabric",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 4,
+    "done_work_packages": 5,
     "work_packages": [
       {
         "id": "P04.01",
@@ -768,22 +790,25 @@
       {
         "id": "P04.05",
         "name": "Consumer inbox/deduplication & idempotency primitive",
-        "state": "active",
+        "state": "done",
         "depends_on": [
           "P04.01",
           "P04.04"
         ],
-        "spec": "docs/roadmap/work-packages/P04.05.md"
+        "spec": "docs/roadmap/work-packages/P04.05.md",
+        "evidence": [
+          "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
+        ]
       },
       {
         "id": "P04.06",
         "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
-        "state": "planned",
+        "state": "active",
         "depends_on": [
           "P04.03",
           "P04.05"
         ],
-        "spec": null
+        "spec": "docs/roadmap/work-packages/P04.06.md"
       },
       {
         "id": "P04.07",
@@ -863,7 +888,7 @@
       "id": "P04",
       "name": "Data, Jobs & Event Fabric",
       "state": "active",
-      "active_work_package": "P04.05",
+      "active_work_package": "P04.06",
       "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "entry_gate": "docs/governance/P04_ENTRY_GATE.md"
     },
@@ -983,5 +1008,5 @@
       "state": "planned"
     }
   ],
-  "next_transition_rule": "Closure/activation candidate: P04.01-P04.04 are complete with accepted evidence and P04.05 becomes the sole authorized kernel package only after this exact transaction passes exact-final-head Governance, is promoted unchanged, merges, and protected main is re-read. P04.06-P04.10 remain planned/locked and no package may auto-advance."
+  "next_transition_rule": "P04.01-P04.05 are complete with accepted evidence and P04.06 becomes the sole authorized kernel package only after this exact closure/activation source passes exact-final-head Governance, is promoted unchanged through fresh Governance, merges, protected main is re-read, and separate post-activation continuity is accepted. P04.07-P04.10 remain planned/locked and no package may auto-advance."
 }

@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.05-WAVE-20260905-01",
-  "status": "candidate-awaiting-governance-no-runtime",
+  "wave_id": "P04.06-ACTIVATION-20260906",
+  "status": "activation-candidate-no-runtime-leases",
   "authority": {
     "phase": "P04",
-    "work_package": "P04.05",
+    "work_package": "P04.06",
     "owner": "kernel.events",
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "P04.05 is the sole active package after accepted activation and post-activation continuity. This wave control carrier only records bounded runtime/migration leases; worker source mutation must not begin until this exact plan passes Governance, promotion, protected merge and read-back."
+    "note": "P04.06 becomes the sole active package only after this closure/activation source passes exact-head Governance, is promoted unchanged, merges and protected main is re-read. This activation plan contains no P04.06 runtime task, worker branch, write lease or migration reservation."
   },
   "bootstrap": {
-    "protected_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "protected_main_sha": "3f547180eb5e839439834eb2ce7977324803df18",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "required_main_sha_snapshot": "3f547180eb5e839439834eb2ce7977324803df18",
     "required_main_resolution": "Resolve protected main before every material mutation, assignment, review and merge. Stored SHAs are audit snapshots only.",
-    "branches_created_before_task_work": true,
+    "branches_created_before_task_work": false,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 177,
-    "latest_governed_workflow_merge_snapshot": "9878b554d6f8f93de91b9d164177ef5213da66b8",
+    "coordination_issue": 217,
+    "latest_governed_workflow_merge_snapshot": "3f547180eb5e839439834eb2ce7977324803df18",
     "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
@@ -29,12 +29,12 @@
     "assignment_requires_open_authorized_slot": true,
     "open_slot_state": "open",
     "occupied_slot_state": "occupied",
-    "current_worker_slot_capacity": 3,
+    "current_worker_slot_capacity": 0,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "These three logical worker slots are reserved by the wave plan, but no runtime mutation is authorized before wave Governance/promotion/merge/read-back. After acceptance, each worker must resolve live protected main and synchronize its branch before source mutation."
+    "assignment_rule": "No P04.06 runtime assignment exists during activation. After activation and separate post-activation continuity acceptance, create a fresh governed implementation wave from the then-current protected main with explicit non-overlapping leases."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -59,182 +59,12 @@
     "worker_writer_cap": 3,
     "scale_gate": "Do not exceed three concurrent worker writers until repository validators and accepted real-worker evidence explicitly permit scaling."
   },
-  "worker_slots": [
-    {
-      "schema_version": 1,
-      "slot_id": "P04.05-S01",
-      "phase": "P04",
-      "work_package": "P04.05",
-      "module": "kernel.events/inbox-core",
-      "branch": "agent/20260905-p04-05-inbox-core",
-      "status": "occupied",
-      "agent_id": "Agent-01",
-      "start_status": "ready",
-      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox.go",
-        "kernel/internal/events/inbox_core_test.go"
-      ],
-      "depends_on": [],
-      "merge_order": 1,
-      "notes": "Logical Agent-01 reservation only until wave acceptance. Owns provider-neutral processing identity/result/transaction seam; no persistence/provider/retry policy."
-    },
-    {
-      "schema_version": 1,
-      "slot_id": "P04.05-S02",
-      "phase": "P04",
-      "work_package": "P04.05",
-      "module": "kernel.events/inbox-persistence",
-      "branch": "agent/20260905-p04-05-inbox-persistence",
-      "status": "occupied",
-      "agent_id": "Agent-02",
-      "start_status": "ready",
-      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox_postgres.go",
-        "kernel/internal/events/inbox_postgres_integration_test.go",
-        "kernel/migrations/kernel.events/2_create_consumer_inbox.sql"
-      ],
-      "depends_on": ["P04.05-T01"],
-      "merge_order": 2,
-      "notes": "Logical Agent-02 reservation only until wave acceptance. Migration version 2 is exclusively reserved here; adapter must synchronize accepted T01 API rather than guess it."
-    },
-    {
-      "schema_version": 1,
-      "slot_id": "P04.05-S03",
-      "phase": "P04",
-      "work_package": "P04.05",
-      "module": "kernel.events/inbox-reliability-tests",
-      "branch": "agent/20260905-p04-05-inbox-reliability",
-      "status": "occupied",
-      "agent_id": "Agent-03",
-      "start_status": "ready",
-      "assigned_from_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox_reliability_test.go",
-        "kernel/internal/events/inbox_concurrency_test.go"
-      ],
-      "depends_on": ["P04.05-T01", "P04.05-T02"],
-      "merge_order": 3,
-      "notes": "Logical Agent-03 reservation only until wave acceptance. Test design may proceed after acceptance, but concrete API-bound assertions must synchronize accepted T01/T02 contracts."
-    }
-  ],
-  "supervisor": {
-    "agent_id": "Supervisor",
-    "task_id": "P04.05-T04",
-    "role": "supervisor-integration-verifier",
-    "branch": "supervisor/20260905-p04-05-integration",
-    "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-    "write_paths": [
-      "scripts/verify_p04_05.sh",
-      ".github/workflows/governance.yml"
-    ],
-    "forbidden_paths": [
-      "docs/roadmap/STATE.json",
-      "modules/**",
-      "kernel/migrations/**",
-      "kernel/internal/events/**"
-    ],
-    "depends_on": ["P04.05-T01", "P04.05-T02", "P04.05-T03"],
-    "merge_order": 4,
-    "status": "ready-after-wave-acceptance",
-    "sha_note": "Resolve live protected main before verifier work/review; stored SHA is the wave-creation snapshot."
-  },
-  "tasks": [
-    {
-      "task_id": "P04.05-T01",
-      "agent_id": "Agent-01",
-      "slot_id": "P04.05-S01",
-      "role": "inbox-core-writer",
-      "module": "kernel.events/inbox-core",
-      "branch": "agent/20260905-p04-05-inbox-core",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox.go",
-        "kernel/internal/events/inbox_core_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        "kernel/internal/events/outbox*.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
-      "depends_on": [],
-      "merge_order": 1,
-      "status": "ready-after-wave-acceptance"
-    },
-    {
-      "task_id": "P04.05-T02",
-      "agent_id": "Agent-02",
-      "slot_id": "P04.05-S02",
-      "role": "inbox-postgres-migration-writer",
-      "module": "kernel.events/inbox-persistence",
-      "branch": "agent/20260905-p04-05-inbox-persistence",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox_postgres.go",
-        "kernel/internal/events/inbox_postgres_integration_test.go",
-        "kernel/migrations/kernel.events/2_create_consumer_inbox.sql"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        "kernel/internal/events/outbox*.go",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
-      "migration_reservation": {
-        "owner": "kernel.events",
-        "path": "kernel/migrations/kernel.events/2_create_consumer_inbox.sql",
-        "version": "2",
-        "data_budget": "new owner-scoped P04.05 consumer inbox/dedup persistence only; stable EventID+consumer+owner+tenant+route identity, bounded canonical fingerprint/completion evidence, uniqueness/index/constraint support; no business-table mutation/backfill, no destructive business data operation, no P04.06 retry/DLQ, P04.07 schema-registry or provider semantics",
-        "status": "reserved-after-wave-governance"
-      },
-      "depends_on": ["P04.05-T01"],
-      "parallel_note": "Schema preparation may use the accepted P04.05 identity/atomicity contract after wave acceptance, but Go persistence must synchronize accepted T01 API before submission.",
-      "merge_order": 2,
-      "status": "ready-with-dependency-after-wave-acceptance"
-    },
-    {
-      "task_id": "P04.05-T03",
-      "agent_id": "Agent-03",
-      "slot_id": "P04.05-S03",
-      "role": "inbox-reliability-test-writer",
-      "module": "kernel.events/inbox-reliability-tests",
-      "branch": "agent/20260905-p04-05-inbox-reliability",
-      "last_synced_main_sha": "9878b554d6f8f93de91b9d164177ef5213da66b8",
-      "write_paths": [
-        "kernel/internal/events/inbox_reliability_test.go",
-        "kernel/internal/events/inbox_concurrency_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/envelope.go",
-        "kernel/internal/events/bus.go",
-        "kernel/internal/events/durable.go",
-        "kernel/internal/events/outbox*.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "modules/**"
-      ],
-      "depends_on": ["P04.05-T01", "P04.05-T02"],
-      "parallel_note": "Reliability/concurrency case design may proceed after wave acceptance; concrete API-bound tests must synchronize accepted T01/T02 contracts rather than guess interfaces.",
-      "merge_order": 3,
-      "status": "ready-with-dependency-after-wave-acceptance"
-    }
-  ],
+  "worker_slots": [],
+  "supervisor": null,
+  "tasks": [],
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/177",
+    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/217",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
@@ -244,31 +74,21 @@
     "supervisor_reviews_all_worker_submissions": true,
     "direct_unverified_main_merge_forbidden": true,
     "pipeline": [
-      "worker/source exact head",
+      "source exact head",
       "source PR review",
       "exact-head Governance",
-      "unchanged promotion when required",
+      "unchanged promotion",
       "promotion-specific Governance",
       "zero unresolved review threads",
       "protected-main freshness and expected-head check",
       "guarded merge",
-      "protected-main readback",
-      "merge alert to all active logical slots",
-      "all active branches synchronize new main before resume"
+      "protected-main readback"
     ],
-    "deterministic_order": [
-      "P04.05-T01",
-      "P04.05-T02",
-      "P04.05-T03",
-      "P04.05-T04"
-    ]
+    "deterministic_order": []
   },
   "interrupt_policy": {
     "on_valid_completion_signal": [
-      "Supervisor checkpoints and pauses its own task",
-      "Supervisor reviews submitted exact head and current protected main",
-      "Supervisor approves into governed merge pipeline or publishes Review Changes Required",
-      "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"
+      "No runtime worker signal is valid until a later P04.06 implementation wave is separately governed and accepted"
     ],
     "simultaneous_submission_priority": [
       "security/correctness blocker",
@@ -285,11 +105,18 @@
     "if_unchanged": "Agent instructions checked — README instruction delta: none"
   },
   "historical_completion": {
-    "package": "P04.04",
-    "evidence": "docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md",
-    "implementation_merge": "66c072b5caf42ceecb88d30cd1a1ee4e910322e6",
-    "evidence_merge": "4445c21f1e6b03e84859d31ce7b32169b9c4cccc",
-    "released_tasks": ["P04.04-T01", "P04.04-T02", "P04.04-T03", "P04.04-T04"]
+    "package": "P04.05",
+    "evidence": "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md",
+    "implementation_merge": "0c66a3371dbf2fa942a95b7d0475b06235392474",
+    "evidence_merge": "e44ece77ddf7b821c03997266ca0c68c07162910",
+    "released_tasks": ["P04.05-T01", "P04.05-T02", "P04.05-T03", "P04.05-T04"],
+    "released_worker_branches": [
+      "agent/20260905-p04-05-inbox-core",
+      "agent/20260905-p04-05-inbox-persistence",
+      "agent/20260905-p04-05-inbox-reliability",
+      "supervisor/20260905-p04-05-integration"
+    ],
+    "migration_reservation_released": "kernel.events version 2 is accepted historical inbox migration ownership; it is not a live lease"
   },
-  "next_action": "Pass exact-head Governance for this wave control plan, promote it unchanged, merge/read back, then synchronize all four branches to the accepted main and begin only the assigned P04.05 leases. Do not auto-advance P04.06."
+  "next_action": "Pass exact-head Governance for the P04.05-closure/P04.06-activation source, promote it unchanged with fresh Governance, merge/read back, then govern a separate P04.06 post-activation continuity carrier. Only after that continuity is accepted may a fresh P04.06 runtime wave and any migration preflight/reservation be created. Do not auto-advance P04.07."
 }
