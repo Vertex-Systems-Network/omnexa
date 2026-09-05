@@ -21,9 +21,7 @@
       "id": "P04.02",
       "name": "Publish/subscribe abstraction & ownership boundaries",
       "state": "done",
-      "depends_on": [
-        "P04.01"
-      ],
+      "depends_on": ["P04.01"],
       "spec": "docs/roadmap/work-packages/P04.02.md",
       "evidence": [
         "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
@@ -33,10 +31,7 @@
       "id": "P04.03",
       "name": "Durable stream/consumer baseline & checkpoint model",
       "state": "done",
-      "depends_on": [
-        "P04.01",
-        "P04.02"
-      ],
+      "depends_on": ["P04.01", "P04.02"],
       "spec": "docs/roadmap/work-packages/P04.03.md",
       "evidence": [
         "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
@@ -46,10 +41,7 @@
       "id": "P04.04",
       "name": "Transactional outbox reliability primitive",
       "state": "done",
-      "depends_on": [
-        "P04.01",
-        "P04.03"
-      ],
+      "depends_on": ["P04.01", "P04.03"],
       "spec": "docs/roadmap/work-packages/P04.04.md",
       "evidence": [
         "docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md"
@@ -58,63 +50,48 @@
     {
       "id": "P04.05",
       "name": "Consumer inbox/deduplication & idempotency primitive",
-      "state": "active",
-      "depends_on": [
-        "P04.01",
-        "P04.04"
-      ],
-      "spec": "docs/roadmap/work-packages/P04.05.md"
+      "state": "done",
+      "depends_on": ["P04.01", "P04.04"],
+      "spec": "docs/roadmap/work-packages/P04.05.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
+      ]
     },
     {
       "id": "P04.06",
       "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
-      "state": "planned",
-      "depends_on": [
-        "P04.03",
-        "P04.05"
-      ],
-      "spec": null
+      "state": "active",
+      "depends_on": ["P04.03", "P04.05"],
+      "spec": "docs/roadmap/work-packages/P04.06.md"
     },
     {
       "id": "P04.07",
       "name": "Event schema registry, compatibility & validation",
       "state": "planned",
-      "depends_on": [
-        "P04.01",
-        "P04.06"
-      ],
+      "depends_on": ["P04.01", "P04.06"],
       "spec": null
     },
     {
       "id": "P04.08",
       "name": "Background-job ownership, tenant context & correlation",
       "state": "planned",
-      "depends_on": [
-        "P04.01",
-        "P04.07"
-      ],
+      "depends_on": ["P04.01", "P04.07"],
       "spec": null
     },
     {
       "id": "P04.09",
       "name": "Reliability observability, diagnostics & operator recovery",
       "state": "planned",
-      "depends_on": [
-        "P04.03",
-        "P04.08"
-      ],
+      "depends_on": ["P04.03", "P04.08"],
       "spec": null
     },
     {
       "id": "P04.10",
       "name": "Replay/duplicate/failure/restart/poison-event acceptance",
       "state": "planned",
-      "depends_on": [
-        "P04.01",
-        "P04.09"
-      ],
+      "depends_on": ["P04.01", "P04.09"],
       "spec": null
     }
   ],
-  "note": "Closure/activation candidate: P04.01-P04.04 are done with accepted evidence and P04.05 becomes the sole active package only after exact-head source Governance, unchanged promotion Governance, protected merge and protected-main read-back. P04.06-P04.10 remain planned/locked; business-feature and AI/model/agent runtime remain unauthorized."
+  "note": "P04.01-P04.05 are done with accepted completion evidence. P04.06 becomes the sole active package only after this P04.05-closure/P04.06-activation source passes exact-head Governance, is promoted unchanged through fresh Governance, merges through the protected path and protected main is re-read. P04.07-P04.10 remain planned/locked; no P04.06 runtime branch/lease or migration reservation is created by this transaction; business-feature and AI/model/agent runtime remain unauthorized."
 }
