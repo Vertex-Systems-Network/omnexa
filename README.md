@@ -6,13 +6,13 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current transition candidate:** **P04 — Data, Jobs & Event Fabric at 4 / 10 completed packages; P04.05 Consumer Inbox/Deduplication & Idempotency Primitive becomes sole ACTIVE only after exact-head Governance, unchanged promotion, protected merge and read-back.** Protected `main@fa53b01cd92c8e0dd59026abff06f5f95f642d2d` remains authoritative until then. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** Accepted activation is protected `main@4c9f60843f2612bc4c9a10b4efca7b6a20826be3`. P04.06 runtime work remains blocked until the separate post-activation continuity carrier is governed, promoted unchanged, merged and read back. `business_feature_code_authorized=false`.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status mirror only and never grants implementation authority by itself.
 
 ## Project progress dashboard
 
-Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closure candidate advances P04 package completion to **4 / 10 (40%)** and activates P04.05 only through the governed source/promotion/read-back path.
+Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04 package completion is **5 / 10 (50%)**; P04.06 is active under the required post-activation continuity gate.
 
 | Phase | Program / Module Family | Status | Work-package progress | Progress | Start date | End date |
 |---|---|---:|---:|---|---|---|
@@ -20,7 +20,7 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closur
 | P01 | Omnexa Kernel | ✅ DONE | 12/12 (100%) | `██████████` | 2026-08-22 | 2026-08-23 |
 | P02 | Identity, Tenancy & Organization | ✅ DONE | 10/10 (100%) | `██████████` | 2026-08-23 | 2026-08-26 |
 | P03 | Module Runtime | ✅ DONE | 11/11 (100%) | `██████████` | 2026-08-26 | 2026-08-29 |
-| P04 | Data, Jobs & Event Fabric | 🟡 ACTIVE | 4/10 candidate done (40%) | `████░░░░░░` | 2026-08-30 | TBD (active) |
+| P04 | Data, Jobs & Event Fabric | 🟡 ACTIVE | 5/10 done (50%) | `█████░░░░░` | 2026-08-30 | TBD (active) |
 | P05 | Omnexa Flow / Workflow OS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P06 | Universal Business Foundation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P07 | CRM, Sales & Customer 360 | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
@@ -54,9 +54,9 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closur
 | P04.01 | Event envelope & identity contract | ✅ DONE | 100% | `██████████` | 2026-08-30 | 2026-08-31 |
 | P04.02 | Publish/subscribe abstraction & ownership boundaries | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
 | P04.03 | Durable stream/consumer baseline & checkpoint model | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
-| P04.04 | Transactional outbox reliability primitive | ✅ DONE CANDIDATE | 100% accepted implementation | `██████████` | 2026-09-01 | 2026-09-04 |
-| P04.05 | Consumer inbox/deduplication & idempotency primitive | 🟡 ACTIVE CANDIDATE | 0% runtime implementation | `░░░░░░░░░░` | 2026-09-04 | TBD |
-| P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
+| P04.04 | Transactional outbox reliability primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-01 | 2026-09-04 |
+| P04.05 | Consumer inbox/deduplication & idempotency primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-04 | 2026-09-05 |
+| P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🟡 ACTIVE / CONTINUITY GATED | 0% runtime implementation | `░░░░░░░░░░` | 2026-09-06 | TBD |
 | P04.07 | Event schema registry, compatibility & validation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.08 | Background-job ownership, tenant context & correlation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.09 | Reliability observability, diagnostics & operator recovery | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
@@ -64,10 +64,11 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closur
 
 ### P04 status interpretation
 
-- **P04.01-P04.04** have accepted completion evidence in this transition candidate.
-- **P04.05** becomes sole active only after source/promotion Governance, protected merge and read-back.
-- **P04.06-P04.10** remain planned/locked.
-- No P04.05 runtime branch/task/lease exists in this closure carrier.
+- **P04.01-P04.05** have accepted completion evidence.
+- **P04.06** is the sole active package on protected main.
+- **P04.07-P04.10** remain planned/locked.
+- No P04.06 runtime branch/task/lease/migration reservation exists in the post-activation continuity carrier.
+- Runtime implementation may begin only from a fresh branch after the continuity source + unchanged promotion are accepted/read back.
 
 ## Accepted P04 / development-governance evidence chain
 
@@ -76,19 +77,22 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. This closur
 - **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model:** source PR #165 / promotion PR #166, exact implementation head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`, promotion Governance `33405463251 / 99531835998`, implementation merge `b94189873bef11f4870935205398f1ef44f160bf`, evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`.
 - **P04.04 preparation/activation:** preparation source PR #168 / promotion #169, promotion Governance `33410873382 / 99549818529`, preparation merge `962a62c7c111079ca6f2047fa748deea97c84534`; activation source #171 Governance `33546204586 / 99984199589`, promotion #172 Governance `33547080086 / 99549818529`, activation merge/readback `50edeae03ad52e435d142b2f22c803f08a5c7f1a`.
 - **P04.04 implementation/completion:** final Supervisor head `ef09b878577d25a4a1186cb8fe84205b08a24851`, promotion #193 Governance `33810095507 / 100829646792`, implementation merge `66c072b5caf42ceecb88d30cd1a1ee4e910322e6`, evidence PR #194 merge `4445c21f1e6b03e84859d31ce7b32169b9c4cccc`.
-- **P04.05 preparation:** source #195 / unchanged promotion #196, exact preparation head `211fea2077d7a1bf94be48f32f047b27273a4515`, merge/read-back `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`.
-- **Post-activation continuity:** source #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` Governance `33549921833 / 99996561115`; promotion #174 Governance `33550803632 / 99999473766`; merge `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence.
+- **P04.05 preparation/activation:** preparation source #195 / unchanged promotion #196 at exact head `211fea2077d7a1bf94be48f32f047b27273a4515`, preparation merge/read-back `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`; activation source #197 / promotion #198 at exact head `6907253d375125a7ff096fb434c3433dbc17b331`, activation merge/read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
+- **P04.05 implementation/completion:** final Supervisor head `dd713fe3217a0d092ab3ff31115ac031ae8c0303`, source #210 Governance `33927932705`, promotion #211 Governance `33985111334 / 101357077040`, implementation merge/read-back `0c66a3371dbf2fa942a95b7d0475b06235392474`, completion evidence PR #213 merge/read-back `e44ece77ddf7b821c03997266ca0c68c07162910`.
+- **P04.06 preparation:** source #215 / unchanged promotion #216 at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`, source Governance `33987003924`, promotion Governance `33987472967`, preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`.
+- **P04.05 closure / P04.06 activation:** source #218 / unchanged promotion #219 at exact head `b718ad7316dba6fca0cafccb514df6da653abe13`; source Governance #677 / `33990309561`; promotion Governance #678; protected merge/read-back `4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
+- **P04.05 post-activation continuity:** source #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` Governance `33549921833 / 99996561115`; promotion #174 Governance `33550803632 / 99999473766`; merge `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence.
 - **Multi-agent foundation:** source #175 head `c74e9d116880a9fde69d9220c1907a67e2cf86eb` Governance `33553700739 / 100009408168`; promotion #176 Governance run `33554787584`; merge/readback `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`.
 - **Supervisor-led multi-agent workflow:** source #178 head `5bb2e2d83bb5b6d64117a8784a9b38ef326a6a84` Governance `33560130753 / 100030373290`; promotion #179 Governance `33560753173 / 100032373974`; merge/readback `6556023c3f07fffa6a81776dd25188a685d2033c`.
 - **New-agent slot onboarding:** source #180 head `16cf3c0325ce1fdd43cb2d9afcf5124806110eb7` Governance `33562800663 / 100039010267`; promotion #181 Governance `33563512576 / 100041307298`; merge/readback `34b9989825e85573aa6d38e782f841132e25f041`.
 
-## P04.05 bounded implementation scope after activation
+## P04.06 bounded implementation scope after continuity acceptance
 
-P04.05 may later implement only the accepted provider-neutral consumer inbox/deduplication boundary: stable processing identity, same-transaction local mutation + inbox completion, explicit already-applied duplicate outcome, restart/checkpoint-gap safety, concurrency safety and tenant/owner/consumer isolation.
+P04.06 may later implement only the accepted provider-neutral retry/backoff/failure-disposition/quarantine boundary: stable structured failure classification, finite deterministic attempts/backoff, authoritative UTC eligibility, one-at-a-time claim/CAS/lease semantics, stale-retry suppression after P04.05 completion, terminal quarantine-before-checkpoint progress, crash-gap recovery and bounded classification-safe evidence.
 
-This activation carrier adds no migration or runtime branch and grants no blanket schema authority. A later post-activation wave must record exact `kernel.events` migration/path/data budget before any schema mutation.
+This continuity carrier adds no migration or runtime branch and grants no schema authority. A later fresh implementation wave must record exact `kernel.events` migration/path/data budget before any schema mutation.
 
-Still unauthorized: concrete broker selection, external-side-effect/end-to-end exactly-once claims, P04.06 retry/DLQ, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
+Still unauthorized: concrete broker selection, provider-native DLQ, external-side-effect/end-to-end exactly-once claims, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
 
 ## Multi-agent development operating model
 
@@ -113,7 +117,7 @@ Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Sup
 
 ### Completed P04.04 multi-agent wave
 
-Historical wave: `P04.04-WAVE-20260902-01` — **COMPLETED; all leases released**
+Historical wave: `P04.04-WAVE-20260902-01` — **COMPLETED; all leases released**  
 Coordination channel: GitHub issue `#177`  
 Historical branch-bootstrap base: `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`  
 Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85573aa6d38e782f841132e25f041`  
@@ -128,13 +132,14 @@ Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85
 
 The historical branches and their accepted merges are recorded in `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`. They grant no current write authority.
 
-Current worker-slot state: **0 active, 0 open**. A fresh P04.05 wave may be created only after activation and post-activation read-back.
+Current worker-slot state: **0 active, 0 open**. A fresh P04.06 implementation wave may be created only after this post-activation continuity source + unchanged promotion are accepted and protected main is read back.
 
-Reserved T02 migration:
+Historical accepted migrations include:
 
-`kernel/migrations/kernel.events/1_create_transactional_outbox.sql`
+- `kernel/migrations/kernel.events/1_create_transactional_outbox.sql` — P04.04 outbox ownership;
+- accepted `kernel.events` migration version 2 — P04.05 inbox ownership.
 
-Owner/version: `kernel.events / 1`; only P04.04 owner-scoped outbox persistence is allowed. No business-table mutation/backfill/destructive data operation or P04.05/P04.06 semantics.
+Both are immutable history, not live P04.06 reservations. No version 3 path is reserved by activation or continuity.
 
 ### M2 required CI enforcement
 
@@ -174,7 +179,7 @@ Every active worker resolves and synchronizes the new protected `main`, re-check
 
 `Sync Complete — Resuming Work`
 
-Issue #177 is the current persistent signal channel. Missing the message is not an excuse to continue stale work.
+Issue #177 is the persistent multi-agent signal channel. Missing the message is not an excuse to continue stale work.
 
 ### New Agent Onboarding
 
@@ -187,7 +192,7 @@ The Supervisor immediately checks the AI-Native worker-slot ledger:
 - never invent a new module, exceed the concurrency cap or activate a locked phase because an agent arrived;
 - if no slot is open, stop onboarding and say exactly: `Go Home Come Back Next Time`.
 
-No P04.05 slot is currently authorized, so an arriving worker receives `Go Home Come Back Next Time` until a later governed plan explicitly opens a valid slot.
+No P04.06 runtime slot is currently authorized on the continuity carrier, so an arriving runtime worker receives `Go Home Come Back Next Time` until continuity acceptance/read-back and a later governed plan explicitly opens a valid slot.
 
 ### Live protected-main freshness rule
 
@@ -208,7 +213,7 @@ Every material agent task checks these instructions **at task start and again be
 7. declare read/write/forbidden/shared paths and check active overlap;
 8. resolve dependencies; do not code against guessed future contracts;
 9. reserve exact owner/path/version/data budget before schema mutation;
-10. resolve current protected `main` and issue #177 before each material mutation;
+10. resolve current protected `main` and the active coordination issue before each material mutation;
 11. after another accepted merge, sync new main before resuming and rerun stale tests/CI;
 12. registered worker branches must remain registered in the active plan; renaming/creating an `agent/*` branch does not bypass M2 — unknown `agent/*` PRs fail required Governance;
 13. do not write outside the declared task budget; registered worker PR scope is machine-enforced by M2;
@@ -226,7 +231,7 @@ README is only the human-readable mirror. `AGENTS.md`, `STATE.json`, mandatory g
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry/transition/package surfaces, `docs/roadmap/work-packages/P04.05.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`, `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, task/lease/signal/slot schemas, AI context/state and `docs/ai/handoffs/P04.05.md` before material work.
+Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry/transition/package surfaces, `docs/roadmap/work-packages/P04.06.md`, `docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`, `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, task/lease/signal/slot schemas, AI context/state and `docs/ai/handoffs/P04.06.md` before material work.
 
 ## Core laws
 
