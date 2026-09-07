@@ -33,7 +33,9 @@ func TestRetryStateScheduledRejectsMalformedBudgetEligibilityAndClaimEvidence(t 
 		{"attempts above policy", func(record *RetryStateRecord) { record.AttemptsConsumed = record.Policy.MaxAttempts + 1 }},
 		{"exhausted scheduled state", func(record *RetryStateRecord) { record.AttemptsConsumed = record.Policy.MaxAttempts }},
 		{"missing eligibility", func(record *RetryStateRecord) { record.NextEligibleAt = time.Time{} }},
-		{"non utc eligibility", func(record *RetryStateRecord) { record.NextEligibleAt = time.Date(2026, 9, 7, 13, 0, 0, 0, time.FixedZone("local", 5*60*60)) }},
+		{"non utc eligibility", func(record *RetryStateRecord) {
+			record.NextEligibleAt = time.Date(2026, 9, 7, 13, 0, 0, 0, time.FixedZone("local", 5*60*60))
+		}},
 		{"terminal reason on scheduled state", func(record *RetryStateRecord) { record.TerminalReason = RetryTerminalReasonNonRetryable }},
 		{"claim token without expiry", func(record *RetryStateRecord) { record.ClaimToken = "01990f6e-1f30-4000-8000-000000000901" }},
 		{"claim expiry without token", func(record *RetryStateRecord) { record.ClaimExpiresAt = record.NextEligibleAt.Add(time.Minute) }},
@@ -66,8 +68,12 @@ func TestRetryStateQuarantineRequiresFiniteTerminalEvidenceAndNoActiveClaim(t *t
 
 	for _, mutate := range []func(*RetryStateRecord){
 		func(candidate *RetryStateRecord) { candidate.TerminalReason = RetryTerminalReasonNone },
-		func(candidate *RetryStateRecord) { candidate.TerminalReason = RetryTerminalReason("future_unaccepted_reason") },
-		func(candidate *RetryStateRecord) { candidate.NextEligibleAt = time.Date(2026, 9, 7, 8, 0, 0, 0, time.UTC) },
+		func(candidate *RetryStateRecord) {
+			candidate.TerminalReason = RetryTerminalReason("future_unaccepted_reason")
+		},
+		func(candidate *RetryStateRecord) {
+			candidate.NextEligibleAt = time.Date(2026, 9, 7, 8, 0, 0, 0, time.UTC)
+		},
 		func(candidate *RetryStateRecord) {
 			candidate.ClaimToken = "01990f6e-1f30-4000-8000-000000000901"
 			candidate.ClaimExpiresAt = time.Date(2026, 9, 7, 8, 1, 0, 0, time.UTC)
