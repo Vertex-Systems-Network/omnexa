@@ -2,6 +2,7 @@ package events
 
 import (
 	"context"
+	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/database"
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -30,6 +32,10 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	record.NextEligibleAt = time.Now().UTC().Add(-time.Minute).Truncate(time.Microsecond)
 	created, err := store.Create(ctx, record)
 	if err != nil {
+		var postgresError *pgconn.PgError
+		if errors.As(err, &postgresError) {
+			t.Fatalf("Create() failed with SQLSTATE=%s constraint=%s", postgresError.Code, postgresError.ConstraintName)
+		}
 		t.Fatalf("Create() error = %v", err)
 	}
 	if !retryPostgresRecordsEqual(created, record) {
