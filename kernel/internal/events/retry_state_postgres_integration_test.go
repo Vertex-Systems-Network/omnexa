@@ -3,6 +3,7 @@ package events
 import (
 	"context"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -55,7 +56,7 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	assertFailureCode(t, err, codeRetryPostgresInvalid)
 
 	preclaimed := record
-	preclaimed.ClaimToken = "01990f6e-1f30-4000-8000-000000000900"
+	preclaimed.ClaimToken = testUUIDv7(t)
 	preclaimed.ClaimExpiresAt = preclaimed.NextEligibleAt.Add(2 * time.Minute)
 	_, err = store.Create(ctx, preclaimed)
 	assertFailureCode(t, err, codeRetryPostgresInvalid)
@@ -64,8 +65,8 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	_, err = store.Load(ctx, missing.Identity, missing.Position)
 	assertFailureCode(t, err, codeRetryPostgresNotFound)
 
-	const firstToken = "01990f6e-1f30-4000-8000-000000000901"
-	const competingToken = "01990f6e-1f30-4000-8000-000000000902"
+	firstToken := testUUIDv7(t)
+	competingToken := testUUIDv7(t)
 	attempts := make(chan retryClaimAttempt, 2)
 	for _, token := range []string{firstToken, competingToken} {
 		go func(candidate string) {
@@ -101,15 +102,15 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 		ctx,
 		`UPDATE omnexa_events.consumer_retry_state
 		 SET claim_expires_at = CURRENT_TIMESTAMP - INTERVAL '1 second'
-		 WHERE event_id = $1::uuid AND consumer_id = $2 AND delivery_position = $3`,
+		 WHERE event_id = $1::uuid AND consumer_id = $2 AND delivery_position = $3::bigint`,
 		string(record.Identity.EventID),
 		record.Identity.ConsumerID,
-		int64(record.Position),
+		strconv.FormatUint(record.Position, 10),
 	); err != nil {
 		t.Fatalf("expire winning lease error = %v", err)
 	}
 
-	const takeoverToken = "01990f6e-1f30-4000-8000-000000000903"
+	takeoverToken := testUUIDv7(t)
 	takeover, err := store.ClaimDue(ctx, record.Identity, record.Position, winner.record.Revision, takeoverToken, 2*time.Minute)
 	if err != nil {
 		t.Fatalf("expired-lease ClaimDue() error = %v", err)
@@ -146,7 +147,7 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	if _, err = store.Create(ctx, quarantine); err != nil {
 		t.Fatalf("create quarantine candidate error = %v", err)
 	}
-	const quarantineToken = "01990f6e-1f30-4000-8000-000000000904"
+	quarantineToken := testUUIDv7(t)
 	quarantineClaim, err := store.ClaimDue(ctx, quarantine.Identity, quarantine.Position, 1, quarantineToken, 2*time.Minute)
 	if err != nil {
 		t.Fatalf("quarantine ClaimDue() error = %v", err)
@@ -164,7 +165,7 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	if err != nil || !retryPostgresRecordsEqual(quarantined, quarantinedNext) {
 		t.Fatalf("quarantine transition record/error = %+v/%v", quarantined, err)
 	}
-	_, err = store.ClaimDue(ctx, quarantine.Identity, quarantine.Position, quarantined.Revision, "01990f6e-1f30-4000-8000-000000000905", time.Minute)
+	_, err = store.ClaimDue(ctx, quarantine.Identity, quarantine.Position, quarantined.Revision, testUUIDv7(t), time.Minute)
 	assertFailureCode(t, err, codeRetryPostgresConflict)
 
 	resolution := testRetryStateRecord(t, RetryStateScheduled)
@@ -173,7 +174,7 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	if _, err = store.Create(ctx, resolution); err != nil {
 		t.Fatalf("create resolution candidate error = %v", err)
 	}
-	const resolutionToken = "01990f6e-1f30-4000-8000-000000000906"
+	resolutionToken := testUUIDv7(t)
 	resolutionClaim, err := store.ClaimDue(ctx, resolution.Identity, resolution.Position, 1, resolutionToken, 2*time.Minute)
 	if err != nil {
 		t.Fatalf("resolution ClaimDue() error = %v", err)
@@ -240,23 +241,22 @@ func setupP0406RetryDatabase(t *testing.T) (context.Context, *pgxpool.Pool) {
 		resetP0406RetryDatabase(t, context.Background(), pool)
 	})
 
-	migrationPaths := []string{
-		"../../migrations/kernel.events/1_create_transactional_outbox.sql",
-		"../../migrations/kernel.events/2_create_consumer_inbox.sql",
-		"../../migrations/kernel.events/3_create_retry_quarantine_state.sql",
+	outboxSQL, readErr := os.ReadFile("../../migrations/kernel.events/1_create_transactional_outbox.sql")
+	if readErr != nil {
+		t.Fatalf("read kernel.events migration 1 error = %v", readErr)
 	}
-	migrationNames := []string{
-		"create_transactional_outbox",
-		"create_consumer_inbox",
-		"create_retry_quarantine_state",
+	inboxSQL, readErr := os.ReadFile("../../migrations/kernel.events/2_create_consumer_inbox.sql")
+	if readErr != nil {
+		t.Fatalf("read kernel.events migration 2 error = %v", readErr)
 	}
-	migrations := make([]database.Migration, 0, len(migrationPaths))
-	for index, path := range migrationPaths {
-		contents, readErr := os.ReadFile(path)
-		if readErr != nil {
-			t.Fatalf("read kernel.events migration %d error = %v", index+1, readErr)
-		}
-		migrations = append(migrations, database.Migration{Version: int64(index + 1), Name: migrationNames[index], SQL: string(contents)})
+	retrySQL, readErr := os.ReadFile("../../migrations/kernel.events/3_create_retry_quarantine_state.sql")
+	if readErr != nil {
+		t.Fatalf("read kernel.events migration 3 error = %v", readErr)
+	}
+	migrations := []database.Migration{
+		{Version: 1, Name: "create_transactional_outbox", SQL: string(outboxSQL)},
+		{Version: 2, Name: "create_consumer_inbox", SQL: string(inboxSQL)},
+		{Version: 3, Name: "create_retry_quarantine_state", SQL: string(retrySQL)},
 	}
 	migrator, err := database.NewMigrator(pool, "kernel.events", migrations, 5*time.Second)
 	if err != nil {
