@@ -60,18 +60,18 @@ func (evidence RetryFailureEvidence) validate() error {
 // kernel.events migration 3. Identity reuses the accepted P04.05 consumer scope;
 // Position additionally binds the exact ordered P04.03 delivery.
 type RetryStateRecord struct {
-	Identity          InboxIdentity
-	Fingerprint       InboxFingerprint
-	Position          uint64
-	Policy            RetryPolicy
-	AttemptsConsumed  uint32
-	State             RetryState
-	NextEligibleAt    time.Time
-	TerminalReason    RetryTerminalReason
-	Failure           RetryFailureEvidence
-	ClaimToken        string
-	ClaimExpiresAt    time.Time
-	Revision          uint64
+	Identity         InboxIdentity
+	Fingerprint      InboxFingerprint
+	Position         uint64
+	Policy           RetryPolicy
+	AttemptsConsumed uint32
+	State            RetryState
+	NextEligibleAt   time.Time
+	TerminalReason   RetryTerminalReason
+	Failure          RetryFailureEvidence
+	ClaimToken       string
+	ClaimExpiresAt   time.Time
+	Revision         uint64
 }
 
 // Validate rejects inconsistent scheduling/quarantine/claim evidence before a
