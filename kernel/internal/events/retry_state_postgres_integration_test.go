@@ -256,7 +256,7 @@ func setupP0406RetryDatabase(t *testing.T) (context.Context, *pgxpool.Pool) {
 		if readErr != nil {
 			t.Fatalf("read kernel.events migration %d error = %v", index+1, readErr)
 		}
-		migrations = append(migrations, database.Migration{Version: index + 1, Name: migrationNames[index], SQL: string(contents)})
+		migrations = append(migrations, database.Migration{Version: int64(index + 1), Name: migrationNames[index], SQL: string(contents)})
 	}
 	migrator, err := database.NewMigrator(pool, "kernel.events", migrations, 5*time.Second)
 	if err != nil {
