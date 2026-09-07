@@ -3,6 +3,7 @@ package events
 import (
 	"context"
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
@@ -90,7 +91,7 @@ func (store *PostgresRetryStateStore) Create(ctx context.Context, record RetrySt
 			claim_token, claim_expires_at, revision, quarantined_at, resolved_at
 		) VALUES (
 			$1::uuid, $2, $3, $4, $5, $6, $7::uuid,
-			$8, $9,
+			$8::bigint, $9,
 			$10, $11, $12, $13, $14,
 			$15, $16, $17, $18,
 			$19, $20, $21,
@@ -106,7 +107,7 @@ func (store *PostgresRetryStateStore) Create(ctx context.Context, record RetrySt
 		identity.Stream,
 		identity.Partition,
 		retryPostgresTenant(identity),
-		int64(record.Position),
+		strconv.FormatUint(record.Position, 10),
 		record.Fingerprint[:],
 		record.Policy.ID,
 		int64(record.Policy.Version),
@@ -310,7 +311,7 @@ func (store *PostgresRetryStateStore) TransitionClaimed(
 		   AND stream = $5
 		   AND partition_key = $6
 		   AND tenant_id IS NOT DISTINCT FROM $7::uuid
-		   AND delivery_position = $8
+		   AND delivery_position = $8::bigint
 		   AND canonical_fingerprint = $9
 		   AND policy_id = $10
 		   AND policy_version = $11
@@ -330,7 +331,7 @@ func (store *PostgresRetryStateStore) TransitionClaimed(
 		identity.Stream,
 		identity.Partition,
 		retryPostgresTenant(identity),
-		int64(next.Position),
+		strconv.FormatUint(next.Position, 10),
 		next.Fingerprint[:],
 		next.Policy.ID,
 		int64(next.Policy.Version),
