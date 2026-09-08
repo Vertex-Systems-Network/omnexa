@@ -12,7 +12,7 @@ const (
 	codeRetryStateMalformed failure.Code = "events.retry.state_malformed"
 )
 
-var retryClaimTokenPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
+var retryClaimTokenPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[1-57][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`)
 
 // RetryState is the finite durable P04.06 state of one exact processing
 // identity. It is failure/scheduling evidence only and is never authorization,
