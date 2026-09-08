@@ -6,13 +6,13 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** Accepted activation is protected `main@4c9f60843f2612bc4c9a10b4efca7b6a20826be3`. P04.06 runtime work remains blocked until the separate post-activation continuity carrier is governed, promoted unchanged, merged and read back. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** P04.06 Wave 2A durable retry/quarantine state and immutable `kernel.events` migration 3 are accepted, and Wave 2B PostgreSQL retry-state CAS/lease persistence is accepted on protected `main@3e6bccf8164a105f92c0b576a99f20a498ec9025`. P04.06 is **not complete**; scheduler/checkpoint composition and remaining package acceptance remain separately governed. `business_feature_code_authorized=false`.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status mirror only and never grants implementation authority by itself.
 
 ## Project progress dashboard
 
-Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04 package completion is **5 / 10 (50%)**; P04.06 is active under the required post-activation continuity gate.
+Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04 package completion is **5 / 10 (50%)**; P04.06 is active with Wave 2A and Wave 2B accepted, but package completion has not been claimed.
 
 | Phase | Program / Module Family | Status | Work-package progress | Progress | Start date | End date |
 |---|---|---:|---:|---|---|---|
@@ -56,7 +56,7 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 | P04.03 | Durable stream/consumer baseline & checkpoint model | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
 | P04.04 | Transactional outbox reliability primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-01 | 2026-09-04 |
 | P04.05 | Consumer inbox/deduplication & idempotency primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-04 | 2026-09-05 |
-| P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🟡 ACTIVE / CONTINUITY GATED | 0% runtime implementation | `░░░░░░░░░░` | 2026-09-06 | TBD |
+| P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🟡 ACTIVE | Wave 2A + Wave 2B accepted; package not complete | `ACTIVE` | 2026-09-06 | TBD |
 | P04.07 | Event schema registry, compatibility & validation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.08 | Background-job ownership, tenant context & correlation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
 | P04.09 | Reliability observability, diagnostics & operator recovery | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
@@ -65,10 +65,11 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 ### P04 status interpretation
 
 - **P04.01-P04.05** have accepted completion evidence.
-- **P04.06** is the sole active package on protected main.
+- **P04.06** is the sole active package on protected main and remains incomplete.
+- **P04.06 Wave 2A** accepted the durable retry/quarantine state contract and immutable `kernel.events` migration 3.
+- **P04.06 Wave 2B** accepted the PostgreSQL retry-state CAS/lease persistence boundary, including exactly-one concurrent lease winner evidence and canonical UUIDv7 claim-token compatibility.
 - **P04.07-P04.10** remain planned/locked.
-- No P04.06 runtime branch/task/lease/migration reservation exists in the post-activation continuity carrier.
-- Runtime implementation may begin only from a fresh branch after the continuity source + unchanged promotion are accepted/read back.
+- The current AI-Native worker-slot ledger still authorizes **0 active / 0 open runtime worker slots**. A Wave 2C worker/task/lease may be created only by a fresh governed plan from current protected main; it is not implicitly opened by Wave 2B acceptance.
 
 ## Accepted P04 / development-governance evidence chain
 
@@ -82,15 +83,17 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 - **P04.06 preparation:** source #215 / unchanged promotion #216 at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`, source Governance `33987003924`, promotion Governance `33987472967`, preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`.
 - **P04.05 closure / P04.06 activation:** source #218 / unchanged promotion #219 at exact head `b718ad7316dba6fca0cafccb514df6da653abe13`; source Governance #677 / `33990309561`; promotion Governance #678; protected merge/read-back `4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
 - **P04.05 post-activation continuity:** source #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` Governance `33549921833 / 99996561115`; promotion #174 Governance `33550803632 / 99999473766`; merge `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence.
+- **P04.06 Wave 2A — durable retry/quarantine state:** source #227 / unchanged promotion #228 at exact head `76442b4f022313726394c79bf06ab1d97e19bafe`; promotion merge/read-back `c0311bd79b4d60e9a71fcf0934d9a58f561e1c88`; immutable `kernel.events` migration 3 accepted.
+- **P04.06 Wave 2B — PostgreSQL retry-state CAS/lease persistence:** source #230 final head `9207d83b7f754464642c4f5f20dd295673b66fa5`; source Governance #698 / `34280676765` SUCCESS; unchanged promotion #231 Governance #699 / `34281532295` SUCCESS; protected merge/read-back `3e6bccf8164a105f92c0b576a99f20a498ec9025`. The prior red source run remains diagnostic evidence; its root cause was canonical UUIDv7 claim-token rejection and was fixed without weakening the concurrency/lease tests.
 - **Multi-agent foundation:** source #175 head `c74e9d116880a9fde69d9220c1907a67e2cf86eb` Governance `33553700739 / 100009408168`; promotion #176 Governance run `33554787584`; merge/readback `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`.
 - **Supervisor-led multi-agent workflow:** source #178 head `5bb2e2d83bb5b6d64117a8784a9b38ef326a6a84` Governance `33560130753 / 100030373290`; promotion #179 Governance `33560753173 / 100032373974`; merge/readback `6556023c3f07fffa6a81776dd25188a685d2033c`.
 - **New-agent slot onboarding:** source #180 head `16cf3c0325ce1fdd43cb2d9afcf5124806110eb7` Governance `33562800663 / 100039010267`; promotion #181 Governance `33563512576 / 100041307298`; merge/readback `34b9989825e85573aa6d38e782f841132e25f041`.
 
-## P04.06 bounded implementation scope after continuity acceptance
+## P04.06 bounded implementation scope after Wave 2B acceptance
 
-P04.06 may later implement only the accepted provider-neutral retry/backoff/failure-disposition/quarantine boundary: stable structured failure classification, finite deterministic attempts/backoff, authoritative UTC eligibility, one-at-a-time claim/CAS/lease semantics, stale-retry suppression after P04.05 completion, terminal quarantine-before-checkpoint progress, crash-gap recovery and bounded classification-safe evidence.
+Protected main now contains the accepted provider-neutral retry/quarantine state contract, immutable migration 3 and PostgreSQL retry-state CAS/lease persistence. P04.06 still has remaining work. A later governed Wave 2C may compose the accepted retry persistence with scheduling/eligibility execution and P04.03 checkpoint behavior only within the already-accepted P04.06 laws.
 
-This continuity carrier adds no migration or runtime branch and grants no schema authority. A later fresh implementation wave must record exact `kernel.events` migration/path/data budget before any schema mutation.
+Any next implementation must start from fresh protected main, pass the mandatory Issues + PR/MR intake gate, declare exact paths/tasks/leases, preserve tenant/owner/consumer isolation and prove retryable/deferred/quarantine/checkpoint crash-gap behavior without merging checkpoint, inbox and retry-state meanings.
 
 Still unauthorized: concrete broker selection, provider-native DLQ, external-side-effect/end-to-end exactly-once claims, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
 
@@ -98,7 +101,7 @@ Still unauthorized: concrete broker selection, provider-native DLQ, external-sid
 
 Omnexa development may use parallel AI/human agents to accelerate delivery, but parallelism stays subordinate to the single canonical phase/work-package cursor.
 
-**Current safe envelope:** **4-6 active agents with no more than 3 concurrent write agents.** The XQ-100 M2 carrier wires machine enforcement into the already-required `governance` job, but the writer cap remains 3 until at least one real registered worker PR proves worker-specific scope and live-main freshness enforcement in canonical CI.
+**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** when the governed active plan actually opens those slots. **Current live worker-slot ledger: 0 active, 0 open.** The numerical framework cap is not permission to invent workers or branches.
 
 Safe pattern:
 
@@ -132,14 +135,15 @@ Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85
 
 The historical branches and their accepted merges are recorded in `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`. They grant no current write authority.
 
-Current worker-slot state: **0 active, 0 open**. A fresh P04.06 implementation wave may be created only after this post-activation continuity source + unchanged promotion are accepted and protected main is read back.
+Current worker-slot state: **0 active, 0 open**. Wave 2B is accepted, but no Wave 2C worker branch/task/lease is currently authorized. A fresh Wave 2C implementation wave may be created only by a governed plan from current protected main with explicit non-overlapping leases.
 
 Historical accepted migrations include:
 
 - `kernel/migrations/kernel.events/1_create_transactional_outbox.sql` — P04.04 outbox ownership;
-- accepted `kernel.events` migration version 2 — P04.05 inbox ownership.
+- accepted `kernel.events` migration version 2 — P04.05 inbox ownership;
+- accepted `kernel.events` migration version 3 — P04.06 retry/quarantine state ownership.
 
-Both are immutable history, not live P04.06 reservations. No version 3 path is reserved by activation or continuity.
+All are immutable history, not live Wave 2C reservations. No later migration path/version is implicitly reserved.
 
 ### M2 required CI enforcement
 
@@ -192,7 +196,7 @@ The Supervisor immediately checks the AI-Native worker-slot ledger:
 - never invent a new module, exceed the concurrency cap or activate a locked phase because an agent arrived;
 - if no slot is open, stop onboarding and say exactly: `Go Home Come Back Next Time`.
 
-No P04.06 runtime slot is currently authorized on the continuity carrier, so an arriving runtime worker receives `Go Home Come Back Next Time` until continuity acceptance/read-back and a later governed plan explicitly opens a valid slot.
+No Wave 2C runtime slot is currently authorized, so an arriving runtime worker receives `Go Home Come Back Next Time` until a fresh governed Wave 2C plan explicitly opens a valid slot from current protected main.
 
 ### Live protected-main freshness rule
 
@@ -204,28 +208,29 @@ This developer orchestration is not P20 product-agent runtime and does not activ
 
 Every material agent task checks these instructions **at task start and again before PR submission**:
 
-1. re-read protected `main` and canonical `docs/roadmap/STATE.json`;
-2. confirm active phase/work package and owning module/domain/kernel capability;
-3. read `AGENTS.md`, applicable work-package spec/handoff, AI execution policy, multi-agent orchestration contract, Supervisor workflow and active plan;
-4. newly arriving agents start from protected `main` and require an authorized `open` slot before switching to a task branch;
-5. if no slot is open, Supervisor responds exactly `Go Home Come Back Next Time` and grants no work authority;
-6. record task/agent identity, slot, branch and current live-main/base/sync evidence;
-7. declare read/write/forbidden/shared paths and check active overlap;
-8. resolve dependencies; do not code against guessed future contracts;
-9. reserve exact owner/path/version/data budget before schema mutation;
-10. resolve current protected `main` and the active coordination issue before each material mutation;
-11. after another accepted merge, sync new main before resuming and rerun stale tests/CI;
-12. registered worker branches must remain registered in the active plan; renaming/creating an `agent/*` branch does not bypass M2 — unknown `agent/*` PRs fail required Governance;
-13. do not write outside the declared task budget; registered worker PR scope is machine-enforced by M2;
-14. registered worker PRs must be based on current protected `main`; stale worker PRs fail M2 and must synchronize/resubmit;
-15. when ready for review, announce `Work Done and Submitted` with exact-head metadata;
-16. keep cross-module private writes/imports forbidden;
-17. require exact-final-head tests/CI/review and re-check protected-main freshness before merge;
-18. compare effective working instructions with this README;
-19. **if instructions changed materially, update this section in the same PR**;
-20. if unchanged, record: `Agent instructions checked — README instruction delta: none`.
+1. inspect live open Issues and all open PRs/MRs before new implementation; verify exact heads, draft/mergeability, required reviews and CI, merge every safe approved green ready PR/MR first, and resolve or explicitly document blocked/draft/red/stale items rather than bypassing them;
+2. re-read protected `main` and canonical `docs/roadmap/STATE.json` after any accepted merge;
+3. confirm active phase/work package and owning module/domain/kernel capability;
+4. read `AGENTS.md`, applicable work-package spec/handoff, AI execution policy, multi-agent orchestration contract, Supervisor workflow and active plan;
+5. newly arriving agents start from protected `main` and require an authorized `open` slot before switching to a task branch;
+6. if no slot is open, Supervisor responds exactly `Go Home Come Back Next Time` and grants no work authority;
+7. record task/agent identity, slot, branch and current live-main/base/sync evidence;
+8. declare read/write/forbidden/shared paths and check active overlap;
+9. resolve dependencies; do not code against guessed future contracts;
+10. reserve exact owner/path/version/data budget before schema mutation;
+11. resolve current protected `main` and the active coordination issue before each material mutation;
+12. after another accepted merge, sync new main before resuming and rerun stale tests/CI;
+13. registered worker branches must remain registered in the active plan; renaming/creating an `agent/*` branch does not bypass M2 — unknown `agent/*` PRs fail required Governance;
+14. do not write outside the declared task budget; registered worker PR scope is machine-enforced by M2;
+15. registered worker PRs must be based on current protected `main`; stale worker PRs fail M2 and must synchronize/resubmit;
+16. when ready for review, announce `Work Done and Submitted` with exact-head metadata;
+17. keep cross-module private writes/imports forbidden;
+18. require exact-final-head tests/CI/review and re-check protected-main freshness before merge;
+19. compare effective working instructions with this README;
+20. **if instructions changed materially, update this section in the same PR**;
+21. if unchanged, record: `Agent instructions checked — README instruction delta: none`.
 
-Material instruction changes include phase/package, role, owner, slot availability/assignment, branch/base/sync strategy, path leases, migration budget, dependency/contract assumptions, required M2/tests/gates, Supervisor/merge/onboarding process, coordination channel, tool/network/secret restrictions or stop conditions.
+Material instruction changes include phase/package, role, owner, slot availability/assignment, branch/base/sync strategy, path leases, migration budget, dependency/contract assumptions, required Issues/PR intake, M2/tests/gates, Supervisor/merge/onboarding process, coordination channel, tool/network/secret restrictions or stop conditions.
 
 README is only the human-readable mirror. `AGENTS.md`, `STATE.json`, mandatory governance policy and accepted ADRs remain higher authority.
 
