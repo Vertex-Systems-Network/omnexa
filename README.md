@@ -6,173 +6,85 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** P04.06 Wave 2A durable retry/quarantine state and immutable `kernel.events` migration 3, Wave 2B PostgreSQL retry-state CAS/lease persistence, and Wave 2C T01-T04 retry execution, bounded due discovery, quarantine-before-checkpoint crash-gap recovery and canonical P04.06 verification are accepted through protected `main@a049164ca3264eff4b71a97dca8e1dbba0c276ae`. P04.06 is **not complete**; package completion evidence/closure remains separately governed. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** Wave 2A, Wave 2B and Wave 2C T01-T04 are accepted through protected `main@afc1bb6d47cc988e2731bd16da3467d72d55af77`. P04.06 is **not complete**. Fresh-main audit Issue #248 identifies two explicit remaining acceptance-evidence gaps: P04.05 `already_applied` retry-resolution composition and real-PostgreSQL restart preservation of scheduled/quarantined/resolved retry state. `business_feature_code_authorized=false`.
 
-`docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status mirror only and never grants implementation authority by itself.
+`docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status and working-instruction mirror only; it never grants implementation authority by itself.
 
 ## Project progress dashboard
 
-Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04 package completion is **5 / 10 (50%)**; P04.06 is active with Wave 2A, Wave 2B and Wave 2C T01-T04 accepted, but package completion has not been claimed.
+Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04 package completion is **5 / 10 (50%)**.
 
-| Phase | Program / Module Family | Status | Work-package progress | Progress | Start date | End date |
-|---|---|---:|---:|---|---|---|
-| P00 | Product Constitution & Architecture Freeze | ✅ DONE | 10/10 (100%) | `██████████` | 2026-08-21 | 2026-08-22 |
-| P01 | Omnexa Kernel | ✅ DONE | 12/12 (100%) | `██████████` | 2026-08-22 | 2026-08-23 |
-| P02 | Identity, Tenancy & Organization | ✅ DONE | 10/10 (100%) | `██████████` | 2026-08-23 | 2026-08-26 |
-| P03 | Module Runtime | ✅ DONE | 11/11 (100%) | `██████████` | 2026-08-26 | 2026-08-29 |
-| P04 | Data, Jobs & Event Fabric | 🟡 ACTIVE | 5/10 done (50%) | `█████░░░░░` | 2026-08-30 | TBD (active) |
-| P05 | Omnexa Flow / Workflow OS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P06 | Universal Business Foundation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P07 | CRM, Sales & Customer 360 | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P08 | Finance & ERP Core | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P09 | Commerce OS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P10 | Payment Fabric | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P11 | POS & Edge | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P12 | Experience Builder & CMS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P13 | Portal Platform | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P14 | HR, Projects & Service Operations | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P15 | Supply Chain, Warehouse & Manufacturing | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P16 | Omnexa Connect / Integration Fabric | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P17 | Low-code App Builder | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P18 | Data, Reporting & BI | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P19 | Omnexa Intelligence Platform | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P20 | Governed AI Agents | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P21 | Developer Platform | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P22 | Omnexa Exchange / Marketplace | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P23 | Globalization & Country Packs | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P24 | Enterprise Governance, Security & Compliance | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P25 | Scale Fabric | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P26 | Industry Packs | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P27 | Autonomous Business OS | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
+| Phase | Status | Current package state |
+|---|---|---|
+| P00 | DONE | Product Constitution & Architecture Freeze |
+| P01 | DONE | Omnexa Kernel |
+| P02 | DONE | Identity, Tenancy & Organization |
+| P03 | DONE | Module Runtime |
+| P04 | ACTIVE | 5/10 packages done; P04.06 sole ACTIVE package |
+| P05-P27 | PLANNED / LOCKED | Not started unless a later governed transition activates them |
 
-**Date semantics:** completed/current dates are governance-history dates. Future dates remain `TBD` until governed planning or activation establishes them; the roadmap does not invent delivery deadlines.
+## Current P04 package status
 
-## Current P04 package / module status
+| Package | Status | Current truth |
+|---|---|---|
+| P04.01 | DONE | Event envelope & identity contract accepted |
+| P04.02 | DONE | Publish/subscribe abstraction & ownership accepted |
+| P04.03 | DONE | Durable consumer/checkpoint baseline accepted |
+| P04.04 | DONE | Transactional outbox accepted |
+| P04.05 | DONE | Consumer inbox/idempotency accepted |
+| P04.06 | ACTIVE | Wave 2A + Wave 2B + Wave 2C T01-T04 accepted; Issue #248 closure gaps remain |
+| P04.07-P04.10 | PLANNED / LOCKED | Not started |
 
-| Package | Module / Contract | Status | Progress | Progress bar | Start date | End date |
-|---|---|---:|---:|---|---|---|
-| P04.01 | Event envelope & identity contract | ✅ DONE | 100% | `██████████` | 2026-08-30 | 2026-08-31 |
-| P04.02 | Publish/subscribe abstraction & ownership boundaries | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
-| P04.03 | Durable stream/consumer baseline & checkpoint model | ✅ DONE | 100% | `██████████` | 2026-08-31 | 2026-08-31 |
-| P04.04 | Transactional outbox reliability primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-01 | 2026-09-04 |
-| P04.05 | Consumer inbox/deduplication & idempotency primitive | ✅ DONE | 100% accepted implementation | `██████████` | 2026-09-04 | 2026-09-05 |
-| P04.06 | Retry/backoff, terminal failure & dead-letter/quarantine policy | 🟡 ACTIVE | Wave 2A + Wave 2B + Wave 2C T01-T04 accepted; package not complete | `ACTIVE` | 2026-09-06 | TBD |
-| P04.07 | Event schema registry, compatibility & validation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P04.08 | Background-job ownership, tenant context & correlation | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P04.09 | Reliability observability, diagnostics & operator recovery | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
-| P04.10 | Replay/duplicate/failure/restart/poison-event acceptance | 🔒 PLANNED / LOCKED | Not started | `░░░░░░░░░░` | TBD | TBD |
+### Accepted P04.06 evidence chain
 
-### P04 status interpretation
+- **Wave 2A — durable retry/quarantine state:** source #227 / promotion #228; protected merge/read-back `c0311bd79b4d60e9a71fcf0934d9a58f561e1c88`; immutable `kernel.events` migration 3 accepted.
+- **Wave 2B — PostgreSQL retry-state CAS/lease persistence:** source #230 / promotion #231; protected merge/read-back `3e6bccf8164a105f92c0b576a99f20a498ec9025`.
+- **Wave 2C T01 — retry execution composition:** source #238 / promotion #239; protected merge/read-back `920048584ba039d7c29bd25398c11a2138b2c0b3`.
+- **Wave 2C T02 — bounded PostgreSQL due discovery:** source #240 / promotion #241; protected merge/read-back `75cc0f0f590a049639ef0ea5c19a56b22ffab7d1`.
+- **Wave 2C T03 — quarantine/checkpoint crash-gap recovery:** source #242 / promotion #243; protected merge/read-back `66e1a330c42a37d252e1f32221020d1460aec48f`.
+- **Wave 2C T04 — canonical P04.06 verifier:** source #244 / promotion #245; protected merge/read-back `a049164ca3264eff4b71a97dca8e1dbba0c276ae`.
+- **Wave 2C lease/status closure:** source #246 / promotion #247; protected merge/read-back `afc1bb6d47cc988e2731bd16da3467d72d55af77`; all Wave 2C worker/Supervisor leases released.
+- **Wave 2D closure-gap control candidate:** Issue #248. The candidate plan reserves T05/T06 and isolated Supervisor T07 only. Until this control source, unchanged promotion and protected-main read-back are accepted, those reservations grant **no runtime write authority**.
 
-- **P04.01-P04.05** have accepted completion evidence.
-- **P04.06** is the sole active package on protected main and remains incomplete.
-- **P04.06 Wave 2A** accepted the durable retry/quarantine state contract and immutable `kernel.events` migration 3.
-- **P04.06 Wave 2B** accepted the PostgreSQL retry-state CAS/lease persistence boundary, including exactly-one concurrent lease winner evidence and canonical UUIDv7 claim-token compatibility.
-- **P04.06 Wave 2C T01** accepted provider-neutral retry execution/eligibility composition over the retained policy/state/CAS boundaries.
-- **P04.06 Wave 2C T02** accepted bounded PostgreSQL-authoritative due-candidate discovery with exact route isolation and retained claim CAS authority.
-- **P04.06 Wave 2C T03** accepted terminal quarantine-before-checkpoint composition and quarantine-commit/checkpoint-failure crash-gap recovery without handler replay.
-- **P04.06 Wave 2C T04** accepted the canonical PostgreSQL-backed P04.06 verifier and additive required Governance hook.
-- **P04.07-P04.10** remain planned/locked.
-- The current AI-Native worker ledger authorizes **0 active / 0 open runtime worker slots**. All Wave 2C worker/Supervisor leases are released. Any later implementation worker requires a fresh governed plan from current protected main.
+P04.07-P04.10 remain locked. No broker/provider-specific DLQ, migration 4, business feature, exactly-once/global-ordering claim or AI/model/agent product runtime is authorized by P04.06 closure work.
 
-## Accepted P04 / development-governance evidence chain
+## P04.06 Wave 2D candidate leases
 
-- **P04.01 — Event Envelope & Identity Contract:** `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`.
-- **P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries:** `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`.
-- **P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model:** source PR #165 / promotion PR #166, exact implementation head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`, promotion Governance `33405463251 / 99531835998`, implementation merge `b94189873bef11f4870935205398f1ef44f160bf`, evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`.
-- **P04.04 preparation/activation:** preparation source PR #168 / promotion #169, promotion Governance `33410873382 / 99549818529`, preparation merge `962a62c7c111079ca6f2047fa748deea97c84534`; activation source #171 Governance `33546204586 / 99984199589`, promotion #172 Governance `33547080086 / 99549818529`, activation merge/readback `50edeae03ad52e435d142b2f22c803f08a5c7f1a`.
-- **P04.04 implementation/completion:** final Supervisor head `ef09b878577d25a4a1186cb8fe84205b08a24851`, promotion #193 Governance `33810095507 / 100829646792`, implementation merge `66c072b5caf42ceecb88d30cd1a1ee4e910322e6`, evidence PR #194 merge `4445c21f1e6b03e84859d31ce7b32169b9c4cccc`.
-- **P04.05 preparation/activation:** preparation source #195 / unchanged promotion #196 at exact head `211fea2077d7a1bf94be48f32f047b27273a4515`, preparation merge/read-back `fa53b01cd92c8e0dd59026abff06f5f95f642d2d`; activation source #197 / promotion #198 at exact head `6907253d375125a7ff096fb434c3433dbc17b331`, activation merge/read-back `3402cf7a8b2b1370aca99543d47a33dee3dc0c5a`.
-- **P04.05 implementation/completion:** final Supervisor head `dd713fe3217a0d092ab3ff31115ac031ae8c0303`, source #210 Governance `33927932705`, promotion #211 Governance `33985111334 / 101357077040`, implementation merge/read-back `0c66a3371dbf2fa942a95b7d0475b06235392474`, completion evidence PR #213 merge/read-back `e44ece77ddf7b821c03997266ca0c68c07162910`.
-- **P04.06 preparation:** source #215 / unchanged promotion #216 at exact head `7babb9c39185636b3af5184d5a7bd31cedbc37a0`, source Governance `33987003924`, promotion Governance `33987472967`, preparation merge/read-back `3f547180eb5e839439834eb2ce7977324803df18`.
-- **P04.05 closure / P04.06 activation:** source #218 / unchanged promotion #219 at exact head `b718ad7316dba6fca0cafccb514df6da653abe13`; source Governance #677 / `33990309561`; promotion Governance #678; protected merge/read-back `4c9f60843f2612bc4c9a10b4efca7b6a20826be3`.
-- **P04.05 post-activation continuity:** source #173 final head `3a9ccc6ce165022279c52bfd4f7bedf2d739950d` Governance `33549921833 / 99996561115`; promotion #174 Governance `33550803632 / 99999473766`; merge `6c7937b3d94177604b03c4872a48504ac60034ce`. Earlier source run `33549594705 / 99995490009` remains diagnostic FAIL evidence.
-- **P04.06 Wave 2A — durable retry/quarantine state:** source #227 / unchanged promotion #228 at exact head `76442b4f022313726394c79bf06ab1d97e19bafe`; promotion merge/read-back `c0311bd79b4d60e9a71fcf0934d9a58f561e1c88`; immutable `kernel.events` migration 3 accepted.
-- **P04.06 Wave 2B — PostgreSQL retry-state CAS/lease persistence:** source #230 final head `9207d83b7f754464642c4f5f20dd295673b66fa5`; source Governance #698 / `34280676765` SUCCESS; unchanged promotion #231 Governance #699 / `34281532295` SUCCESS; protected merge/read-back `3e6bccf8164a105f92c0b576a99f20a498ec9025`. The prior red source run remains diagnostic evidence; its root cause was canonical UUIDv7 claim-token rejection and was fixed without weakening the concurrency/lease tests.
-- **P04.06 Wave 2C startup gate:** accepted governed wave-control bootstrap on protected main `b896b0ca41279a3ad59f4b103d1d374a33704e2e`, coordination issue #234, with T01→T04 non-overlapping leases and deterministic dependency order.
-- **P04.06 Wave 2C T01 — retry execution composition:** source #238 / unchanged promotion #239 at exact head `3f92decfdb83d14826b1284c9bfe65c9bbfce0e4`; source Governance #711 / `34325454793` SUCCESS; protected merge/read-back `920048584ba039d7c29bd25398c11a2138b2c0b3`.
-- **P04.06 Wave 2C T02 — bounded PostgreSQL due discovery:** source #240 / unchanged promotion #241 at exact head `223b24bce397033d53343a4b70dae35b6f31e511`; source Governance #715 / `34336317280` SUCCESS; protected merge/read-back `75cc0f0f590a049639ef0ea5c19a56b22ffab7d1`.
-- **P04.06 Wave 2C T03 — quarantine/checkpoint crash-gap recovery:** source #242 / unchanged promotion #243 at exact head `b2d18be229f5fd8162618b6aae82d77eada1a630`; source Governance #718 / `34342039483` SUCCESS; protected merge/read-back `66e1a330c42a37d252e1f32221020d1460aec48f`.
-- **P04.06 Wave 2C T04 — canonical P04.06 verifier:** source #244 / unchanged promotion #245 at exact head `ef1ea766ea8fd98130d6b9336f0615bc26de456f`; source Governance #721 / `34346361985` SUCCESS; promotion Governance #722 / `34347216207` SUCCESS; protected merge/read-back `a049164ca3264eff4b71a97dca8e1dbba0c276ae`.
-- **Multi-agent foundation:** source #175 head `c74e9d116880a9fde69d9220c1907a67e2cf86eb` Governance `33553700739 / 100009408168`; promotion #176 Governance run `33554787584`; merge/readback `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`.
-- **Supervisor-led multi-agent workflow:** source #178 head `5bb2e2d83bb5b6d64117a8784a9b38ef326a6a84` Governance `33560130753 / 100030373290`; promotion #179 Governance `33560753173 / 100032373974`; merge/readback `6556023c3f07fffa6a81776dd25188a685d2033c`.
-- **New-agent slot onboarding:** source #180 head `16cf3c0325ce1fdd43cb2d9afcf5124806110eb7` Governance `33562800663 / 100039010267`; promotion #181 Governance `33563512576 / 100041307298`; merge/readback `34b9989825e85573aa6d38e782f841132e25f041`.
+Control branch base: protected `main@afc1bb6d47cc988e2731bd16da3467d72d55af77`  
+Coordination: GitHub Issue #248  
+Current control state: **candidate awaiting Governance — no runtime mutation yet**
 
-## P04.06 bounded state after Wave 2C acceptance
+| Merge order | Task | Branch | Exact write lease | Dependency |
+|---:|---|---|---|---|
+| 1 | P04.06-T05 / Agent-01 — inbox/retry composition | `agent/20260909-p04-06-inbox-retry-closure` | `kernel/internal/events/retry_inbox.go`, `kernel/internal/events/retry_inbox_test.go` | none |
+| 2 | P04.06-T06 / Agent-02 — PostgreSQL restart evidence | `agent/20260909-p04-06-restart-persistence` | `kernel/internal/events/retry_state_postgres_restart_integration_test.go` | none |
+| 3 | P04.06-T07 / Supervisor — closure verifier/evidence | `supervisor/20260909-p04-06-closure-verifier` | `scripts/verify_p04_06.sh`, P04.06 handoff/completion evidence, README mirror | accepted T05 + T06 |
 
-Protected main now contains the accepted provider-neutral retry/quarantine state contract, immutable migration 3, PostgreSQL retry-state CAS/lease persistence, provider-neutral retry execution composition, bounded PostgreSQL-authoritative due discovery, terminal quarantine-before-checkpoint/checkpoint-crash-gap recovery and a canonical PostgreSQL-backed P04.06 verifier wired into required Governance.
-
-P04.06 still remains ACTIVE/incomplete because implementation acceptance is not itself package-completion evidence. The next governed decision must start from fresh protected main and either record P04.06 completion evidence/closure readiness or identify a concrete remaining P04.06 gap and open a fresh bounded plan for only that gap.
-
-Still unauthorized: concrete broker selection, provider-native DLQ, external-side-effect/end-to-end exactly-once claims, P04.07 schema registry, P04.08 background-job changes, business features, strategic X-program product runtime, and AI/model/agent product runtime.
+The logical worker-slot ledger contains **2 reserved/occupied candidate slots and 0 open slots**. These are not executable runtime authority until the Wave 2D control plan is accepted through source Governance, unchanged promotion Governance, guarded protected merge and protected-main read-back. No additional worker slot may be invented.
 
 ## Multi-agent development operating model
 
 Omnexa development may use parallel AI/human agents to accelerate delivery, but parallelism stays subordinate to the single canonical phase/work-package cursor.
 
-**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** when the governed active plan actually opens those slots. **Current live worker-slot ledger: 0 active, 0 open.** The numerical framework cap is not permission to invent workers or branches.
+**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** when the governed active plan actually opens those slots. The numerical framework cap is not permission to invent workers, branches, packages or authority.
 
-Safe pattern:
-
-```text
-Supervisor / Integration     review + governed merge + own isolated verifier task
-Runtime Source Agent          bounded source lease
-Persistence/Migration Agent   exact reserved migration/data lease
-Test Agent                    non-overlapping test lease
-Security/Architecture Agent   read-only
-CI/Evidence Agent             verifier/docs/evidence only
-```
-
-Business-domain agents such as CRM, Finance, Inventory, HR and Commerce may become broadly parallel only after canonical roadmap gates open those independent streams.
-
-Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor interruption/merge/sync/onboarding: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Final readiness audit: `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
-
-### Completed P04.04 multi-agent wave
-
-Historical wave: `P04.04-WAVE-20260902-01` — **COMPLETED; all leases released**  
-Coordination channel: GitHub issue `#177`  
-Historical branch-bootstrap base: `8fd737b318947c9d0f3cc0e5c5a0931636c2c40c`  
-Last recorded protected-main sync receipt before this M2 carrier: `34b9989825e85573aa6d38e782f841132e25f041`  
-**Live required main:** resolve protected `main` before every material mutation, new-wave creation, onboarding assignment, submission review and merge.
-
-| Merge order | Agent / Task | Module / responsibility | Branch | Current dependency |
-|---:|---|---|---|---|
-| 1 | Agent-01 / P04.04-T01 | Outbox core | `agent/20260902-p04-04-outbox-core` | none |
-| 2 | Agent-02 / P04.04-T02 | PostgreSQL persistence + migration | `agent/20260902-p04-04-persistence-migration` | T01 contract before final adapter submission |
-| 3 | Agent-03 / P04.04-T03 | crash/restart/concurrency/tenant-isolation tests | `agent/20260902-p04-04-reliability-tests` | T01 + T02 accepted contracts |
-| 4 | Supervisor / P04.04-T04 | integration verifier + Governance hook | `supervisor/20260902-p04-04-integration` | T01 + T02 + T03 |
-
-The historical branches and their accepted merges are recorded in `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`. They grant no current write authority.
-
-Current worker-slot state: **0 active, 0 open**. Wave 2C T01-T04 is accepted and all Wave 2C worker/Supervisor leases are released. A later implementation wave may be created only by a fresh governed plan from current protected main with explicit non-overlapping leases and a concrete remaining active-package gap.
-
-Historical accepted migrations include:
-
-- `kernel/migrations/kernel.events/1_create_transactional_outbox.sql` — P04.04 outbox ownership;
-- accepted `kernel.events` migration version 2 — P04.05 inbox ownership;
-- accepted `kernel.events` migration version 3 — P04.06 retry/quarantine state ownership.
-
-All are immutable history, not live reservations. No later migration path/version is implicitly reserved.
+Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor interruption/merge/sync/onboarding: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
 
 ### M2 required CI enforcement
 
-The M2 gate is executed inside the existing required `governance` job through `scripts/verify_go_quality.sh`, before expensive Go tooling.
+The M2 gate executes inside the required `governance` job through `scripts/verify_go_quality.sh` before expensive Go tooling. It validates:
 
-It validates:
-
-- active plan authority vs canonical `STATE.json`;
-- worker-slot/task identity and current capacity;
-- active write vs forbidden paths;
-- pairwise active write-path overlap;
+- active-plan authority vs canonical `STATE.json`;
+- worker-slot/task identity and capacity;
+- active write paths vs forbidden paths;
+- pairwise write-path overlap;
 - migration owner/version/path reservation collisions;
 - dependency DAG and deterministic merge order;
 - registered worker PR changed paths vs declared budget;
 - registered worker PR base/ancestry vs live protected `main`;
 - helper behavior through focused dependency-free unit tests.
 
-Fail-closed behavior includes unknown `agent/*` PR branches, scope violations, stale worker PR bases, active authority mismatches, path overlaps, migration collisions and dependency-order/cycle violations.
-
-A governance/control branch is not falsely treated as a worker task; it still runs plan/slot/lease/DAG validation and must pass the normal protected Governance/promotion flow.
+Unknown `agent/*` branches, scope violations, stale worker PR bases, authority mismatches, path overlaps, migration collisions and dependency-order/cycle violations fail closed. A governance/control branch is not falsely treated as a worker task; it still must pass the normal protected Governance/promotion flow.
 
 ### Supervisor submission / interrupt protocol
 
@@ -192,7 +104,7 @@ Every active worker resolves and synchronizes the new protected `main`, re-check
 
 `Sync Complete — Resuming Work`
 
-The active plan's coordination issue is the authoritative signal channel for any live wave. Current P04.06 coordination/history is GitHub issue #234; historical issue #177 grants no current worker authority.
+The active plan's coordination issue is the authoritative signal channel. For Wave 2D it is Issue #248.
 
 ### New Agent Onboarding
 
@@ -205,13 +117,11 @@ The Supervisor immediately checks the AI-Native worker-slot ledger:
 - never invent a new module, exceed the concurrency cap or activate a locked phase because an agent arrived;
 - if no slot is open, stop onboarding and say exactly: `Go Home Come Back Next Time`.
 
-No runtime worker slot is currently authorized, so an arriving runtime worker receives `Go Home Come Back Next Time` until a fresh governed plan explicitly opens a valid slot from current protected main.
+Wave 2D has no open slot. Its two candidate slots are already logically reserved for T05/T06 and remain non-executable until control acceptance. An unrelated arriving worker therefore receives `Go Home Come Back Next Time`.
 
 ### Live protected-main freshness rule
 
-`required_main_ref = main` is live freshness authority. Stored SHA fields are audit snapshots only; this avoids recursive SHA-only coordination commits.
-
-This developer orchestration is not P20 product-agent runtime and does not activate a future business phase.
+`required_main_ref = main` is live freshness authority. Stored SHA fields are audit snapshots only. This developer orchestration is not P20 product-agent runtime and does not activate a future business phase.
 
 ## Agent Working Instructions
 
