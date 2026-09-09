@@ -123,11 +123,158 @@ P01.01-P01.12 remain `done`; P01 exit remains **SATISFIED**. Final P01 evidence 
 
 P02.01-P02.10 remain `done`; P02 exit remains **SATISFIED**. Terminal P02 evidence remains PR #88, final exact head `975e4925060a035780ca13b68c5437634ed0f4ea`, canonical run/job `32904678957 / 97986011269`, implementation merge `88799aa41da8ce8c22540146d157d488565e2ce9`, evidence `docs/roadmap/evidence/P02.10_COMPLETION_2026-08-26.md`.
 
-P03.01-P03.11 remain `done`; P03 exit remains **SATISFIED**. Their accepted per-package exact-head evidence and retained verifiers remain immutable under `docs/roadmap/evidence/` and `scripts/verify_p03_*.sh`. Current P04 work must not rewrite or weaken that historical authority.
+P03.01 — Module Manifest Schema remains complete:
 
-All completed P01/P02/P03/P04.01-P04.06 regressions/evidence invariants remain mandatory.
+- PR #92;
+- final exact head `87da3302605c852ae5bf43d473aaa01a9e1aaa74`;
+- canonical run/job `33009396644 / 98311433013` — PASS;
+- merge `4229e2a28442bf475afed143bab359a770d48053`;
+- evidence `docs/roadmap/evidence/P03.01_COMPLETION_2026-08-26.md`;
+- retained verifier `scripts/verify_p03_01.sh`.
 
-Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. A later successful run does not relabel a historical FAIL/CANCELLED/BLOCKED result as PASS.
+P03.02 — Registry & Deterministic Discovery remains complete:
+
+- PR #94;
+- final exact head `0c46db41b0d724a08ea1a78545b3c2debdd8cd05`;
+- canonical run/job `33022405704 / 98355747775` — PASS;
+- merge `2e38969dbbbcfcf4765a114f449dc3fa960061d7`;
+- evidence `docs/roadmap/evidence/P03.02_COMPLETION_2026-08-27.md`;
+- retained verifier `scripts/verify_p03_02.sh`.
+
+P03.03 — Dependency Graph Resolver remains complete:
+
+- implementation PR #98;
+- final exact head `4dcaca22911fbb81b1d25af316fef146c4a71ff3`;
+- canonical run/job `33112808869 / 98659824107` — PASS;
+- implementation merge `774fab8b0350ffb2776517e3f1361f76bc2c68f9`;
+- evidence `docs/roadmap/evidence/P03.03_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_03.sh`.
+
+P03.04 — Module Lifecycle State Machine is complete:
+
+- implementation PR #100;
+- final exact head `cddb42d4466e7f97a7547c4cf5ea0812c768ff0b`;
+- canonical run/job `33125377739 / 98702150001` — PASS;
+- implementation merge `13701e7647c1e084dfe4288d4b27b3ddd75e72c2`;
+- evidence `docs/roadmap/evidence/P03.04_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_04.sh`.
+
+P03.05 — Module Settings & Feature Flags is complete:
+
+- implementation issue #102 — completed;
+- implementation PR #103;
+- final exact head `c52b48be1a82eb27670f03bdd4e1be4df6eb9f54`;
+- canonical run/job `33132237120 / 98724184966` — PASS;
+- implementation merge `0c6b075c272aeac5a6e5f9d4210b1c5a30a040ce`;
+- evidence `docs/roadmap/evidence/P03.05_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_05.sh`.
+
+P03.06 — Capability Registry is complete:
+
+- implementation issue #106 — completed;
+- implementation PR #107;
+- final exact head `c895f44a1383d1c1d9c5fd23c95d7864810353c3`;
+- canonical run/job `33181421854 / 98883286556` — PASS;
+- implementation merge `13dbe8a393c20cabeb8aac60d073a6c66775efd3`;
+- evidence `docs/roadmap/evidence/P03.06_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_06.sh`.
+
+P03.07 — Permission Registration remains complete:
+
+- implementation issue #110 — completed;
+- implementation PR #111;
+- final exact head `28e36b3ac3183f28ec500f1e70b1fefe02c0c325`;
+- canonical run/job `33195104185 / 98930123416` — PASS;
+- implementation merge `66f8b4cc630f6cd865e440a62478df365e042a31`;
+- evidence `docs/roadmap/evidence/P03.07_COMPLETION_2026-08-28.md`;
+- retained verifier `scripts/verify_p03_07.sh`.
+
+P03.08 — UI Contribution Registry Contract remains complete:
+
+- implementation issue #115 — completed;
+- implementation PR #116 — merged;
+- final exact head `65dc38c6d60d1535c97a5dda59fb49490df59ec6`;
+- canonical run/job `33216021914 / 98999758150` — PASS;
+- implementation merge `55ec376146c4c43f24b079050a35f58eec13c479`;
+- evidence `docs/roadmap/evidence/P03.08_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_08.sh`.
+
+P03.09 — Migration Ownership Registry remains complete:
+
+- implementation issue #120 — completed;
+- draft implementation carrier #121 — closed unmerged;
+- promotion implementation PR #122 — merged;
+- final exact head `8c4da1c1c9e11dfe2f1fa4b81b730140a9f24d56`;
+- promotion-specific canonical run/job `33223035182 / 99020954655` (#495) — PASS;
+- implementation merge `ea402964c45a630fd6723e0e4a6754555a6a4994`;
+- evidence `docs/roadmap/evidence/P03.09_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_09.sh`.
+
+P03.10 — Module Health Reporting is complete:
+
+- implementation issue #126 — completed;
+- draft implementation carrier #127 — closed unmerged;
+- promotion implementation PR #128 — merged;
+- final exact head `172cebe78606f19c0718e7ae1cf74e9cff7d1b0b`;
+- promotion-specific canonical run/job `33228171863 / 99035856872` (#505) — PASS;
+- implementation merge `e43b13922633525fd202d81a281792ec819b2d5a`;
+- evidence `docs/roadmap/evidence/P03.10_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_10.sh`.
+
+P03.11 — Package Trust Hooks & P03 Exit Proof is complete:
+
+- implementation issue #132 — completed;
+- draft implementation carrier #133 — closed unmerged;
+- promotion implementation PR #134 — merged;
+- final exact head `a083a8a86ec3a51309fa479ee49c79e1b6ec9f10`;
+- draft canonical run/job `33258092323 / 99115191521` (#511) — PASS;
+- promotion-specific canonical run/job `33258456851 / 99116152701` (#512) — PASS;
+- implementation merge `b3b9b61f963df6a05ea45cbd3c562e12974d92d0`;
+- evidence `docs/roadmap/evidence/P03.11_COMPLETION_2026-08-29.md`;
+- retained verifier `scripts/verify_p03_11.sh`.
+
+P04.01 — Event Envelope & Identity Contract is complete:
+
+- source implementation PR #146;
+- promotion implementation PR #147;
+- final exact head `3c4ee6e79b76a6f042f3ee77b518943f3d7064e4`;
+- promotion-specific canonical run/job `33331934481 / 99311855091` (#548) — PASS;
+- implementation merge `6b1a01c009e9a08d45613a00e9b63c0c272bf020`;
+- completion evidence `docs/roadmap/evidence/P04.01_COMPLETION_2026-08-31.md`;
+- P04.02 contract/handoff preparation promotion #149 passed Governance #551 and merged as `16dfca22cd0430b8b2727e55628cc6fba381b5ef`;
+- P04.01 closure / P04.02 activation source #150 passed Governance #554;
+- unchanged activation promotion #151 passed Governance #555 and merged as `226f5236d80c806a7b07d65e7870981de320c05c`.
+
+P04.02 — Publish/Subscribe Abstraction & Ownership Boundaries has accepted implementation/completion evidence:
+
+- source implementation PR #155;
+- promotion implementation PR #156;
+- final exact head `5ec1de746eebc8734f86ec3aa2f311daae0dc18a`;
+- promotion-specific canonical run/job `33351220746 / 99364850230` (#564) — PASS;
+- implementation merge `1b378a2f44c6e3cba87b936e39e05f1a18da94cc`;
+- completion evidence `docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md`;
+- completion-evidence carrier #157 merged/read back as `8334bed24e793e200540bf953f7249f11242badf`;
+- prepared/locked P04.03 contract/handoff source #158 passed Governance #568;
+- unchanged P04.03 preparation promotion #159 passed Governance #569 / `33368684906 / 99414689966` and merged/read back as `2d454a87e03f404f081b6a87f216d0cfa8c7608d`;
+- P04.02 closure / P04.03 activation source #160 exact head `452858a3ab9bfa827697105bd5168cf660bd62ba` passed Governance #571 / `33370681216 / 99420856278`;
+- unchanged activation promotion #161 passed Governance #572 / `33371203708 / 99422521576` and merged read back as `d74375cd0a2952ab8622117089e5eb43043e6e78`.
+
+P04.03 — Durable Stream/Consumer Baseline & Checkpoint Model has accepted implementation/completion evidence:
+
+- source implementation PR #165;
+- promotion implementation PR #166;
+- final exact head `ea13d171290fc580cfa8b8ff59cd3ea0f8e26cfe`;
+- source Governance #581 / `33377793927 / 99443112098` — PASS;
+- promotion-specific Governance #582 / `33405463251 / 99531835998` — PASS;
+- accepted implementation merge/read-back `b94189873bef11f4870935205398f1ef44f160bf`;
+- completion evidence `docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md`;
+- completion-evidence carrier #167 merged/read back as `ed9c9b067c2725e9ddef4c3a2b03c4aa0b29dbcd`;
+- prepared/locked P04.04 contract/handoff source #168 passed Governance #587 / `33409859631 / 99546416425`;
+- unchanged P04.04 preparation promotion #169 passed Governance #588 / `33410873382 / 99549818529` and merged/read back as `962a62c7c111079ca6f2047fa748deea97c84534`.
+
+Earlier failed/cancelled candidates remain diagnostic history only and are never acceptance evidence. Accepted ADR-0012 forward evolution does not rewrite P03.01/P03.02 historical completion evidence. P03.03 diagnostic #412/#414 failures and #413 cancellation remain their original evidence states. P03.04 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33125377739 / 98702150001` is P03.04 completion authority. P03.05 earlier failed/stale candidates remain diagnostic history; only exact-head Governance run `33132237120 / 98724184966` is P03.05 completion authority. P03.06 Governance #467 / `33180840326 / 98881325283` remains diagnostic FAIL evidence; only exact-head Governance `33181421854 / 98883286556` is P03.06 completion authority. P03.07 Governance #474 / `33192567020 / 98921494281` and #476 / `33194438411 / 98927852853` remain diagnostic FAIL evidence; only exact-head Governance `33195104185 / 98930123416` is P03.07 completion authority. P03.08 completion authority is exact implementation head `65dc38c6d60d1535c97a5dda59fb49490df59ec6` with canonical Governance `33216021914 / 98999758150`. P03.09 Governance #493 remains diagnostic FAIL evidence; #494 is successful draft-carrier evidence and #495 is promotion-specific completion authority. P03.10 Governance #501/#503 remain diagnostic failure evidence; #504 is successful draft-carrier evidence and #505 is promotion-specific completion authority. P03.11 #511 is successful draft-carrier evidence and #512 is promotion-specific implementation authority. P04.01 source/promotion Governance #547/#548 and P04.02 source/promotion Governance #563/#564 remain accepted predecessor evidence; P04.03 implementation source/promotion Governance #581/#582 and P04.04 preparation source/promotion Governance #587/#588 are retained exact-head evidence.
+
+All completed P01/P02/P03.01-P03.11/P04.01-P04.06 regressions/evidence invariants remain mandatory.
 
 ## Accepted ADR-0012 dependency-version baseline retained
 
@@ -145,23 +292,133 @@ ADR-0012 is accepted and P03.03 implemented its contract. Retained invariants in
 - resolver/dependency metadata cannot grant permissions, capabilities, tenant authority, private access or database authority;
 - no implicit compatibility inference, multi-version/SAT solving, external compatibility matrix, automatic package selection or remote acquisition is authorized.
 
+## P03.11 completed boundary retained
+
+Owner: `kernel.modules`.
+
+P03.11 delivered only the scope in `docs/roadmap/work-packages/P03.11.md`:
+
+- typed optional hook/metadata interfaces for publisher identity, package signature/provenance, SBOM identity and declared capability/data/network/secret profile;
+- explicit distinction between metadata/hook presence and actual trust/certification decision;
+- reference test modules and aggregate P03 verification composing P03.01-P03.10 behavior;
+- P03 exit proof for dependency, lifecycle, upgrade/migration, forbidden-coupling, health/state and unrelated-module isolation;
+- focused positive/adversarial fixtures and exact-head evidence.
+
+P03.11 invariants remain binding:
+
+- hook metadata never means a package is trusted/certified;
+- untrusted package code is not executed merely to discover/verify metadata;
+- first-party/reference packages remain subject to the same public-boundary and ownership rules;
+- required dependency failure and forbidden coupling fail closed;
+- disable is non-destructive; purge is explicit/authorized/audited/dependency-checked;
+- migration ownership and tenant boundaries remain enforced;
+- health and evidence are classification-safe;
+- P03 exit remains historical SATISFIED evidence and later P04 work must not rewrite it.
+
+Still explicitly unauthorized under the current P04.07 state:
+
+- publisher onboarding or signature trust roots;
+- dependency advisory/license enforcement;
+- sandbox/network/secret/file brokers, resource quotas or kill-switch runtime;
+- marketplace/package distribution or acquisition runtime;
+- Product Federation/System Graph/Performance Intelligence runtime;
+- P04.07 runtime until Issue #267 continuity and a later separate implementation-plan/worker-plan are accepted/read back;
+- P04.08+ event/jobs fabric scope before later package activation;
+- concrete broker/provider selection or provider/vendor schema-registry selection;
+- business domains/features;
+- generic remote RPC/service mesh;
+- workflow orchestration expansion;
+- strategic X-program runtime;
+- AI/model/agent runtime.
+
+The P03 AI-native compatibility matrix for `XQ-100`, `XSG-100`, `XTRUST-100`, `XPF-200` and `XPERF-100` remains planning-only and does not authorize strategic runtime.
+
 ## Completed kernel capability rules retained
 
 Protected audit remains separate from ordinary logs. P01.11 audit is immutable/tamper-evident, classification-aware and append-oriented; required-audit failure cannot silently claim success and audit write does not imply read/export authority. P01.10 configuration flags cannot grant authority. P01.09 jobs remain non-authoritative. P01.08 diagnostics remain operational evidence rather than authority. Cache/storage/observability remain infrastructure primitives without tenancy/authorization authority. The developer CLI remains convenience tooling only.
 
 P02 retained invariants remain binding: User is not business Person; trusted tenant context comes from authoritative tenant/membership state; no global tenant fallback; organization hierarchy is tenant-contained; authentication and credential possession prove identity rather than authority; sessions are revocable and current context is reauthorized; authorization is deny-by-default with exact trusted scope; contextual policy narrows only; service accounts are distinct non-human principals; settings cannot create authority; audit is classification-safe and secret-free; required-audit protected mutations cannot silently claim success when audit delivery fails.
 
-P03 retained invariants remain binding: manifests and package metadata are untrusted declarative inputs; discovery and metadata validation execute no module code; dependency resolution is deterministic and fail-closed for required failures; lifecycle is explicit; settings/flags, capability and permission registration do not grant authority; UI visibility never replaces backend authorization; migration ownership metadata does not execute migrations; health is diagnostic/non-authorizing; package trust hooks are metadata-only until separately evaluated. Cross-module private writes/imports remain forbidden.
+P03.01 retained invariants remain binding: manifests are untrusted declarative metadata; parsing/validation executes no package code; secret values are prohibited; declared permissions/capabilities do not create authorization.
 
-P04.01 retained invariants remain binding: event envelopes remain provider-neutral, CloudEvents-compatible, UUIDv7 identified, tenant-explicit, correlation/causation-aware, versioned, classification-safe and duplicate/replay-aware without a global-ordering guarantee; secret-like payload/metadata is rejected; parser extensions do not create authority.
+P03.02 retained invariants remain binding: discovery consumes validated manifests; sources are explicit; discovery executes no module code or lifecycle hooks; duplicate/conflicting identity fails closed; registry order is deterministic; discovered metadata remains distinct from installed/enabled lifecycle state; registry metadata creates no authority; sensitive diagnostics remain classification-safe.
 
-P04.02 retained invariants remain binding: publication accepts only validated P04.01 envelopes; acceptance-only publish semantics do not claim downstream/business completion; stable owner/module and consumer identities are explicit; malformed/duplicate/conflicting registration and cross-owner consumer identity rebinding fail deterministically; trusted tenant mismatch fails closed; duplicate delivery remains possible and no global ordering is assumed.
+P03.03 retained invariants remain binding: required missing/incompatible dependencies and required cycles fail closed; optional degradation is selective; required order is deterministic; resolver data remains bound to validated discovery snapshots and creates no authority.
 
-P04.03 retained invariants remain binding: checkpoint scope is explicit and owner/tenant/stream-partition equivalent bound; checkpoint advancement is contiguous/monotonic; failed/cancelled handling cannot advance progress; restart resumes from accepted checkpoint; handler-success/checkpoint-write-failure preserves duplicate replay possibility; checkpoint state is progress only and never authorization.
+P03.04 retained invariants remain binding: lifecycle transitions are explicit and fail closed; dependency/reverse-dependency protections remain enforced; disable/re-enable is non-destructive; destructive purge is authorization/audit/dependency guarded; replay/concurrency/recovery behavior remains deterministic; lifecycle state cannot grant permissions, capabilities, tenant or database authority; unrelated module state remains isolated across failure/recovery.
 
-P04.04 retained invariants remain binding: owner mutation and canonical event envelope commit/roll back in one local PostgreSQL transaction; pending outbox state survives restart; relay uses P04.02 publication; publish failure remains recoverable; publish-success/crash-before-mark may duplicate the same event; published state is producer-side progress only; no global ordering or end-to-end exactly-once claim exists.
+P03.05 retained invariants remain binding: `kernel.configuration` remains authoritative for setting/flag state; validated discovery remains declaration provenance; global/scoped registration is explicit; scoped policy reuses existing P02.09 validation and trusted scope construction; settings/flags grant no permission/capability/tenant/database authority; disable/re-enable preserves required configuration history; collisions fail closed; no duplicate configuration subsystem exists.
 
-P04.05 retained invariants remain binding: canonical EventID plus stable consumer/owner/tenant/route processing identity; protected local mutation and inbox completion share the same local transaction; failure rolls back; duplicate redelivery does not rerun protected mutation; concurrent same-scope deliveries cannot both commit; checkpoint and inbox remain separate facts; external side effects are not made exactly once.
+P03.06 retained invariants remain binding: validated discovery remains capability declaration provenance; stable capability + major-version identity is owner/module bound; duplicate/conflicting ownership and incompatible major resolution fail closed; only lifecycle-enabled providers are active while unavailable identity remains historical; auth/scope/contract references are descriptive only; registry lookup grants no permission/invocation/tenant/database authority and exposes no private handlers/tables/secrets; P03.05 settings/flags remain non-authorizing.
+
+P03.07 retained invariants remain binding: validated discovery remains permission declaration provenance; stable permission identity is owner/module bound; invalid/reserved/duplicate/conflicting definitions fail closed; `kernel.authorization` remains deny-by-default enforcement/policy authority; unknown/unavailable permissions deny; registration creates no role/principal grant, role-name bypass or tenant authority; lifecycle disable/re-enable preserves required role/policy/history references; optional capability association remains descriptive and non-invoking.
+
+P03.08 retained invariants remain binding: validated discovery remains UI-contribution declaration provenance; stable contribution identity is module/owner/contribution/slot/kind/version bound; slot/permission/flag/optional-dependency references are validated against owning-module declarations; UI visibility never replaces backend authorization; permission and feature-flag metadata grant no authority; lifecycle availability is non-authorizing; optional dependency absence selectively degrades only affected contributions; metadata remains secret-free and non-executable and cannot expose raw tenant/org authority, private handlers/tables or cross-module database-write shortcuts.
+
+P03.09 retained invariants remain binding: migration ownership metadata remains execution-free; identity/order is module/version/authoritative-owner bound; duplicate declarations/identities and owner-version conflicts fail closed; cross-owner targets fail closed; compatible/backfill/destructive intent is explicit; backfill/destructive declarations require bounded strategy/recovery metadata; fresh-install/supported-upgrade plans are deterministic; raw SQL/arbitrary file paths/callbacks/secrets/raw tenant authority are not registry execution surfaces; P01 remains sole migration execution/checksum/advisory-lock/transactional retry authority.
+
+P03.10 retained invariants remain binding: health remains diagnostic and non-authorizing; required dependency failure is fail-closed while optional absence degrades selectively; migration inconsistency cannot report healthy; capability/permission/UI summaries remain non-granting; diagnostics remain classification-safe and secret-free; P01 health/readiness remains the platform foundation; module failure does not corrupt unrelated health reporting where isolation is feasible.
+
+P03.11 retained invariants remain binding: validated publisher/provenance/SBOM/data/security metadata is registry-bound; profiles remain typed/versioned/deterministic and `metadata_only`; secret locators/values are not exposed; package code is not executed for metadata discovery; aggregate EX-01..EX-07 evidence remains mandatory regression coverage.
+
+P04.01 retained invariants remain binding: event envelopes remain provider-neutral, CloudEvents-compatible, UUIDv7 identified, tenant-explicit, correlation/causation-aware, versioned, classification-safe and duplicate/replay-aware without a global-ordering guarantee; secret-like payload/metadata is rejected; parser extensions do not create authority; trailing/concatenated JSON fails closed; P04.01 introduced no broker, durable consumer, migration, outbox/inbox, retry/DLQ, business-handler, background-job or AI authority.
+
+P04.02 retained invariants remain binding: publication accepts only validated P04.01 envelopes; acceptance-only publish semantics do not claim downstream/business completion; stable owner/module and consumer identities are explicit; malformed/duplicate/conflicting registration and cross-owner consumer identity rebinding fail deterministically; trusted tenant mismatch fails closed; publish and handler failure classes remain safely distinct; duplicate delivery remains possible and no global ordering is assumed; no concrete broker/provider, persistence, durable checkpoint, outbox/inbox, retry/DLQ, business handler or AI authority was introduced.
+
+## P04.03 completed boundary retained
+
+Owner: `kernel.events`.
+
+P04.03 is accepted predecessor implementation/completion evidence. Retained invariants include:
+
+- stable durable consumer identity remains compatible with P04.02 owner/consumer identity;
+- checkpoint scope is explicit and owner/tenant/stream-partition equivalent bound;
+- checkpoint advancement is contiguous/monotonic and stale/regressive/gapped/conflicting advancement fails deterministically;
+- failed/cancelled handling cannot advance progress;
+- restart resumes from the last accepted checkpoint;
+- handler-success/checkpoint-write-failure preserves duplicate replay possibility;
+- same-scope concurrent checkpoint races cannot corrupt progress;
+- checkpoint state remains consumption progress only and is never authorization;
+- P04.01 envelope metadata and P04.02 ownership laws remain unchanged;
+- no concrete broker/provider, production checkpoint persistence, migration, outbox/inbox, retry/DLQ or exactly-once business-mutation claim was introduced.
+
+## P04.04 completed boundary retained
+
+Owner: `kernel.events`.
+
+P04.04 accepted implementation/completion invariants remain binding:
+
+- a provider-neutral transactional outbox reliability primitive;
+- authoritative owner mutation and canonical P04.01 envelope commit/roll back in the same local PostgreSQL transaction;
+- P01 `database.InTransaction` remains the transaction foundation;
+- committed pending outbox state is recoverable after restart;
+- relay uses the accepted P04.02 publication abstraction;
+- publish failure keeps work pending/recoverable;
+- publish-success/crash-before-published-mark may duplicate the same canonical event;
+- published state means producer-side progress only;
+- concurrent relay attempts cannot corrupt/rebind owner/event/tenant state;
+- no global ordering or end-to-end exactly-once claim exists.
+
+Accepted P04.04 evidence is `docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md`. It does not authorize later packages by itself.
+
+## P04.05 completed boundary retained
+
+Owner: `kernel.events`.
+
+P04.05 is DONE with accepted implementation/completion evidence. Retained invariants include:
+
+- canonical EventID plus stable consumer/owner/tenant/route processing identity;
+- EventID is not a global cross-consumer lock;
+- protected local mutation and inbox completion share the same local PostgreSQL transaction;
+- mutation/inbox failure rolls back the transaction and cannot create false completion;
+- committed duplicate redelivery resolves explicitly without rerunning the protected mutation;
+- concurrent same-scope deliveries cannot both commit;
+- conflicting content/identity or owner/tenant/consumer rebinding fails closed;
+- checkpoint progress and inbox completion remain separate facts;
+- external side effects are not made exactly once;
+- no global ordering or end-to-end exactly-once claim exists.
+
+Accepted `kernel.events` migration version 2 remains historical P04.05 inbox ownership and is not a live P04.07 reservation.
 
 ## P04.06 completed boundary retained
 
