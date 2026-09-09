@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.06-WAVE2D-20260909-01",
-  "status": "completed-all-leases-released",
+  "wave_id": "P04.07-ACTIVATION-20260910",
+  "status": "activation-candidate-no-runtime-leases",
   "authority": {
     "phase": "P04",
-    "work_package": "P04.06",
+    "work_package": "P04.07",
     "owner": "kernel.events",
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Wave 2D T05, T06 and T07 are accepted on protected main through bdb96bb7f0dabf5b103acd78335599cc59e92b69. P04.06 remains the sole ACTIVE package; canonical package completion is not claimed and P04.07+ remain locked."
+    "note": "P04.07 becomes the sole canonical ACTIVE package only after Issue #264 source Governance, unchanged promotion Governance, protected merge and read-back. This activation plan grants no runtime worker/task/branch or migration reservation; implementation remains blocked until a separate post-activation continuity/worker plan is accepted."
   },
   "bootstrap": {
-    "protected_main_sha": "43943c91c7491248d3ba1573b72d800da5825f96",
+    "protected_main_sha": "23f3dca090338b5debbf1af02b6db49b2f03f30b",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "bdb96bb7f0dabf5b103acd78335599cc59e92b69",
+    "required_main_sha_snapshot": "23f3dca090338b5debbf1af02b6db49b2f03f30b",
     "required_main_resolution": "Resolve protected main before every material mutation, assignment, review and merge. Stored SHAs are audit snapshots only.",
-    "branches_created_before_task_work": true,
+    "branches_created_before_task_work": false,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 248,
-    "latest_governed_workflow_merge_snapshot": "bdb96bb7f0dabf5b103acd78335599cc59e92b69",
+    "coordination_issue": 264,
+    "latest_governed_workflow_merge_snapshot": "23f3dca090338b5debbf1af02b6db49b2f03f30b",
     "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
@@ -34,7 +34,7 @@
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "Wave 2D is complete and all worker/Supervisor leases are released. No runtime worker slot is currently authorized. Any later implementation worker requires a fresh governed plan from current protected main."
+    "assignment_rule": "No P04.07 runtime assignment exists during activation. After protected read-back and a separate governed post-activation continuity/worker plan, fresh protected main must be resolved before any worker slot, implementation path or migration decision is authorized."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -57,13 +57,14 @@
     "registered_worker_pr_scope_violation_fails_closed": true,
     "registered_worker_stale_main_pr_fails_closed": true,
     "worker_writer_cap": 3,
-    "scale_gate": "Do not create a runtime worker slot until a fresh governed plan from current protected main explicitly opens one."
+    "scale_gate": "Do not create a P04.07 runtime worker slot until a fresh governed post-activation plan from current protected main explicitly opens one."
   },
   "worker_slots": [],
+  "supervisor": null,
   "tasks": [],
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/248",
+    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/264",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
@@ -73,10 +74,10 @@
     "supervisor_reviews_all_worker_submissions": true,
     "direct_unverified_main_merge_forbidden": true,
     "pipeline": [
-      "worker/source exact head",
+      "source exact head",
       "source PR review",
       "exact-head Governance",
-      "unchanged promotion when required",
+      "unchanged promotion",
       "promotion-specific Governance",
       "zero unresolved review threads",
       "protected-main freshness and expected-head check",
@@ -87,10 +88,7 @@
   },
   "interrupt_policy": {
     "on_valid_completion_signal": [
-      "Supervisor checkpoints and pauses its own task",
-      "Supervisor reviews submitted exact head and current protected main",
-      "Supervisor approves into governed merge pipeline or publishes Review Changes Required",
-      "after stable merge/reject outcome Supervisor synchronizes main if moved and resumes own task"
+      "No P04.07 runtime worker signal is valid until a later post-activation continuity/worker plan is separately governed and accepted"
     ],
     "simultaneous_submission_priority": [
       "security/correctness blocker",
@@ -103,11 +101,12 @@
     "task_start_required": true,
     "pre_submission_required": true,
     "readme_section": "Agent Working Instructions",
-    "if_materially_changed": "update README in the same governed PR",
+    "if_materially_changed": "update README in the same separately authorized governed continuity PR",
     "if_unchanged": "Agent instructions checked — README instruction delta: none"
   },
   "historical_completion": {
     "package": "P04.06 accepted prerequisites plus Wave 2A, Wave 2B, Wave 2C and Wave 2D implementation/verifier evidence",
+    "completion_evidence": "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md",
     "wave_2a_source_pr": 227,
     "wave_2a_promotion_pr": 228,
     "wave_2a_merge": "c0311bd79b4d60e9a71fcf0934d9a58f561e1c88",
@@ -149,12 +148,21 @@
     "wave_2d_t06_merge": "df60c3f406dfbc03e4156c60b8103a23ef257e32",
     "wave_2d_t07_source_pr": 257,
     "wave_2d_t07_promotion_pr": 258,
+    "wave_2d_t07_final_exact_head": "b0d047c93e8c53e9da62a96e36c4a1a8a7ce634f",
     "wave_2d_t07_source_governance": 738,
     "wave_2d_t07_source_workflow_run": 34400644888,
     "wave_2d_t07_promotion_governance": 739,
     "wave_2d_t07_promotion_workflow_run": 34401644140,
+    "wave_2d_t07_promotion_job": 102634706533,
     "wave_2d_t07_merge": "bdb96bb7f0dabf5b103acd78335599cc59e92b69",
-    "accepted_migration": "kernel.events version 3 remains immutable accepted retry/quarantine persistence; Wave 2D added no migration"
+    "wave_2d_ledger_closure_source_pr": 259,
+    "wave_2d_ledger_closure_promotion_pr": 260,
+    "wave_2d_ledger_closure_merge": "6050bc2d970b5cf83118115557e952e3e91e0f96",
+    "p04_07_preparation_source_pr": 262,
+    "p04_07_preparation_promotion_pr": 263,
+    "p04_07_preparation_head": "94789264824a34e3f2608283cb6b1c2f158e0b81",
+    "p04_07_preparation_merge": "23f3dca090338b5debbf1af02b6db49b2f03f30b",
+    "accepted_migration": "kernel.events version 3 remains immutable accepted retry/quarantine persistence; P04.07 activation reserves no migration 4"
   },
-  "next_action": "P04.06 remains ACTIVE/incomplete and P04.07 remains locked. From fresh protected main, separately govern canonical P04.06 completion/P04.07 activation only after re-reading STATE.json, P04.06 work-package/transition surfaces and accepted evidence and confirming no concrete P04.06 gap remains. Do not auto-advance P04.07. No runtime worker slots are currently authorized."
+  "next_action": "Pass exact-head Governance for Issue #264 P04.06-closure/P04.07-activation source, promote the exact unchanged head through fresh Governance, merge/read back protected main, then govern a separate P04.07 post-activation continuity/worker plan. Do not start runtime or reserve migration 4 automatically."
 }
