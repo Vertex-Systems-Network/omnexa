@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.06-WAVE2C-20260909-01",
-  "status": "completed-all-leases-released",
+  "wave_id": "P04.06-WAVE2D-20260909-01",
+  "status": "candidate-awaiting-governance-no-runtime",
   "authority": {
     "phase": "P04",
     "work_package": "P04.06",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "P04.06 remains the sole active package. Wave 2A, Wave 2B and Wave 2C T01-T04 implementation/verifier work are accepted on protected main, but P04.06 package completion has not been claimed and P04.07+ remain locked."
+    "note": "P04.06 remains the sole active package. Wave 2D is limited to explicit P04.05 already-applied retry-resolution composition and real-PostgreSQL restart-state acceptance evidence identified by issue #248. No runtime mutation is authorized until this control carrier passes exact-head Governance, unchanged promotion Governance, protected merge and read-back. P04.07+ remain locked."
   },
   "bootstrap": {
-    "protected_main_sha": "b896b0ca41279a3ad59f4b103d1d374a33704e2e",
+    "protected_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "a049164ca3264eff4b71a97dca8e1dbba0c276ae",
+    "required_main_sha_snapshot": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
     "required_main_resolution": "Resolve protected main before every material mutation, assignment, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 234,
-    "latest_governed_workflow_merge_snapshot": "a049164ca3264eff4b71a97dca8e1dbba0c276ae",
+    "coordination_issue": 248,
+    "latest_governed_workflow_merge_snapshot": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
     "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
@@ -29,12 +29,12 @@
     "assignment_requires_open_authorized_slot": true,
     "open_slot_state": "open",
     "occupied_slot_state": "occupied",
-    "current_worker_slot_capacity": 0,
+    "current_worker_slot_capacity": 2,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "Wave 2C is complete and all worker leases are released. No runtime worker slot is currently authorized. Any later implementation worker requires a fresh governed plan from current protected main."
+    "assignment_rule": "Two logical P04.06 closure-gap worker slots are reserved by this candidate plan. They grant no runtime authority until source Governance, unchanged promotion Governance, protected merge and read-back are accepted. After acceptance each branch must synchronize live protected main before source mutation."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -57,13 +57,136 @@
     "registered_worker_pr_scope_violation_fails_closed": true,
     "registered_worker_stale_main_pr_fails_closed": true,
     "worker_writer_cap": 3,
-    "scale_gate": "Do not exceed three concurrent worker writers until repository validators and accepted real-worker evidence explicitly permit scaling."
+    "scale_gate": "Wave 2D opens only two bounded worker writers. Do not create another worker slot or package stream without a fresh governed plan."
   },
-  "worker_slots": [],
-  "tasks": [],
+  "worker_slots": [
+    {
+      "schema_version": 1,
+      "slot_id": "P04.06-S05",
+      "phase": "P04",
+      "work_package": "P04.06",
+      "module": "kernel.events/retry-inbox-composition",
+      "branch": "agent/20260909-p04-06-inbox-retry-closure",
+      "status": "occupied",
+      "agent_id": "Agent-01",
+      "start_status": "ready-after-wave-acceptance",
+      "assigned_from_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "last_synced_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "write_paths": [
+        "kernel/internal/events/retry_inbox.go",
+        "kernel/internal/events/retry_inbox_test.go"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "notes": "Logical reservation only until Wave 2D control acceptance. Owns explicit mapping of accepted P04.05 InboxApplied/InboxAlreadyApplied outcomes into the claimed-retry success/resolution path. No inbox core, retry policy/state/PostgreSQL/checkpoint, migration, provider or business mutation."
+    },
+    {
+      "schema_version": 1,
+      "slot_id": "P04.06-S06",
+      "phase": "P04",
+      "work_package": "P04.06",
+      "module": "kernel.events/retry-restart-evidence",
+      "branch": "agent/20260909-p04-06-restart-persistence",
+      "status": "occupied",
+      "agent_id": "Agent-02",
+      "start_status": "ready-after-wave-acceptance",
+      "assigned_from_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "last_synced_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "write_paths": [
+        "kernel/internal/events/retry_state_postgres_restart_integration_test.go"
+      ],
+      "depends_on": [],
+      "merge_order": 2,
+      "notes": "Logical reservation only until Wave 2D control acceptance. Test-only real-PostgreSQL restart evidence for scheduled/quarantined/resolved states. No production adapter, migration/schema, provider or future-package mutation."
+    }
+  ],
+  "supervisor": {
+    "agent_id": "Supervisor",
+    "task_id": "P04.06-T07",
+    "role": "closure-verifier-and-evidence",
+    "branch": "supervisor/20260909-p04-06-closure-verifier",
+    "last_synced_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+    "write_paths": [
+      "scripts/verify_p04_06.sh",
+      "docs/ai/handoffs/P04.06.md",
+      "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "kernel/internal/events/**",
+      "kernel/migrations/**",
+      "modules/**"
+    ],
+    "depends_on": ["P04.06-T05", "P04.06-T06"],
+    "merge_order": 3,
+    "status": "ready-after-worker-acceptance",
+    "sha_note": "Resolve live protected main and synchronize accepted T05/T06 before verifier/evidence mutation. Completion evidence is not a package-transition transaction; P04.07 remains locked."
+  },
+  "tasks": [
+    {
+      "task_id": "P04.06-T05",
+      "agent_id": "Agent-01",
+      "slot_id": "P04.06-S05",
+      "role": "retry-inbox-composition-writer",
+      "module": "kernel.events/retry-inbox-composition",
+      "branch": "agent/20260909-p04-06-inbox-retry-closure",
+      "last_synced_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "write_paths": [
+        "kernel/internal/events/retry_inbox.go",
+        "kernel/internal/events/retry_inbox_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/inbox.go",
+        "kernel/internal/events/inbox_*",
+        "kernel/internal/events/retry.go",
+        "kernel/internal/events/retry_state*.go",
+        "kernel/internal/events/retry_runtime.go",
+        "kernel/internal/events/retry_runtime_test.go",
+        "kernel/internal/events/retry_checkpoint*.go",
+        "kernel/internal/events/durable.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": [],
+      "merge_order": 1,
+      "status": "ready-after-wave-acceptance"
+    },
+    {
+      "task_id": "P04.06-T06",
+      "agent_id": "Agent-02",
+      "slot_id": "P04.06-S06",
+      "role": "retry-restart-evidence-writer",
+      "module": "kernel.events/retry-restart-evidence",
+      "branch": "agent/20260909-p04-06-restart-persistence",
+      "last_synced_main_sha": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+      "write_paths": [
+        "kernel/internal/events/retry_state_postgres_restart_integration_test.go"
+      ],
+      "forbidden_paths": [
+        "kernel/internal/events/retry_state_postgres.go",
+        "kernel/internal/events/retry_state_postgres_integration_test.go",
+        "kernel/internal/events/retry.go",
+        "kernel/internal/events/retry_runtime*.go",
+        "kernel/internal/events/retry_checkpoint*.go",
+        "kernel/internal/events/inbox*.go",
+        "kernel/internal/events/durable.go",
+        "kernel/migrations/**",
+        ".github/workflows/**",
+        "docs/roadmap/STATE.json",
+        "modules/**"
+      ],
+      "depends_on": [],
+      "merge_order": 2,
+      "status": "ready-after-wave-acceptance"
+    }
+  ],
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/234",
+    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/248",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
@@ -81,9 +204,14 @@
       "zero unresolved review threads",
       "protected-main freshness and expected-head check",
       "guarded merge",
-      "protected-main readback"
+      "protected-main readback",
+      "merge alert and branch resynchronization"
     ],
-    "deterministic_order": []
+    "deterministic_order": [
+      "P04.06-T05",
+      "P04.06-T06",
+      "P04.06-T07"
+    ]
   },
   "interrupt_policy": {
     "on_valid_completion_signal": [
@@ -127,7 +255,9 @@
     "wave_2c_t04_source_pr": 244,
     "wave_2c_t04_promotion_pr": 245,
     "wave_2c_t04_merge": "a049164ca3264eff4b71a97dca8e1dbba0c276ae",
-    "accepted_migration": "kernel.events version 3 is immutable accepted retry/quarantine persistence; Wave 2C added no migration"
+    "wave_2c_status_closure_promotion_pr": 247,
+    "wave_2c_status_closure_merge": "afc1bb6d47cc988e2731bd16da3467d72d55af77",
+    "accepted_migration": "kernel.events version 3 is immutable accepted retry/quarantine persistence; Wave 2D reserves no migration"
   },
-  "next_action": "P04.06 remains ACTIVE/incomplete and P04.07 remains locked. From fresh protected main, separately govern P04.06 completion evidence/closure readiness or open a new bounded implementation plan only if a concrete accepted P04.06 gap remains. Do not auto-advance P04.07."
+  "next_action": "Pass exact-head Governance for this Wave 2D control plan, review it honestly, promote it byte-for-byte unchanged, require fresh promotion Governance, merge/read back, then synchronize T05/T06/Supervisor branches to accepted main before any leased source mutation. Do not auto-advance P04.07."
 }
