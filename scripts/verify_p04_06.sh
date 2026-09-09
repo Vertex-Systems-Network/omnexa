@@ -23,8 +23,11 @@ required_files=(
   kernel/internal/events/retry_runtime_test.go
   kernel/internal/events/retry_state_postgres.go
   kernel/internal/events/retry_state_postgres_integration_test.go
+  kernel/internal/events/retry_state_postgres_restart_integration_test.go
   kernel/internal/events/retry_checkpoint.go
   kernel/internal/events/retry_checkpoint_integration_test.go
+  kernel/internal/events/retry_inbox.go
+  kernel/internal/events/retry_inbox_test.go
   kernel/internal/events/durable.go
   kernel/internal/events/inbox.go
   kernel/migrations/kernel.events/3_create_retry_quarantine_state.sql
@@ -73,10 +76,7 @@ for marker in \
   'RetryDispositionRetryable' \
   'RetryDispositionTerminal' \
   'RetryDispositionInterrupted'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry.go; then
-    echo "ERROR: P04.06 retry-policy/disposition marker missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry.go || { echo "ERROR: P04.06 retry marker missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
@@ -86,10 +86,7 @@ for marker in \
   'RetryStateResolved' \
   'ClaimToken' \
   'Revision'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_state.go; then
-    echo "ERROR: P04.06 durable-state marker missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_state.go || { echo "ERROR: P04.06 durable-state marker missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
@@ -98,10 +95,16 @@ for marker in \
   'func ComposeClaimedRetryResult(' \
   'RetryExecutionAwaitingClaim' \
   'RetryExecutionClaimed'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_runtime.go; then
-    echo "ERROR: P04.06 runtime-composition marker missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_runtime.go || { echo "ERROR: P04.06 runtime marker missing: ${marker}" >&2; exit 1; }
+done
+
+# Wave 2D T05: accepted P04.05 applied/already-applied outcomes must resolve an
+# authoritative claimed retry without gaining authority to re-run the mutation.
+for marker in \
+  'func ComposeClaimedRetryInboxResult(' \
+  'InboxApplied, InboxAlreadyApplied' \
+  'RetryExecutionClaimed'; do
+  grep -Fq "$marker" kernel/internal/events/retry_inbox.go || { echo "ERROR: P04.06 retry/inbox composition marker missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
@@ -110,10 +113,7 @@ for marker in \
   'func (store *PostgresRetryStateStore) ListDueCandidates(' \
   'func (store *PostgresRetryStateStore) ClaimDue(' \
   'func (store *PostgresRetryStateStore) TransitionClaimed('; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_state_postgres.go; then
-    echo "ERROR: P04.06 PostgreSQL retry-state marker missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_state_postgres.go || { echo "ERROR: P04.06 PostgreSQL marker missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
@@ -122,10 +122,7 @@ for marker in \
   'QuarantineCommitted bool' \
   'func CommitRetryQuarantineBeforeCheckpoint(' \
   'func RecoverRetryQuarantineCheckpoint('; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_checkpoint.go; then
-    echo "ERROR: P04.06 quarantine/checkpoint marker missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_checkpoint.go || { echo "ERROR: P04.06 checkpoint marker missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
@@ -135,29 +132,33 @@ for marker in \
   'TestRetryExecutionDirectiveRequiresAuthoritativeClaimBeforeExecution' \
   'TestComposeClaimedRetryResultInterruptionReleasesClaimWithoutConsumingBudget' \
   'TestComposeClaimedRetryResultExhaustionQuarantines'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_runtime_test.go; then
-    echo "ERROR: P04.06 required runtime acceptance test missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_runtime_test.go || { echo "ERROR: P04.06 runtime acceptance test missing: ${marker}" >&2; exit 1; }
+done
+
+for marker in \
+  'TestComposeClaimedRetryInboxResultAppliedAndAlreadyAppliedResolve' \
+  'TestComposeClaimedRetryInboxResultFailsClosedForNonSuccessOutcomes' \
+  'TestComposeClaimedRetryInboxResultRequiresAuthoritativeClaim'; do
+  grep -Fq "$marker" kernel/internal/events/retry_inbox_test.go || { echo "ERROR: P04.06 retry/inbox acceptance test missing: ${marker}" >&2; exit 1; }
 done
 
 for marker in \
   'TestPostgresRetryStateStoreCASLeaseIntegration' \
   'TestPostgresRetryStateStoreDueCandidatesIntegration'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_state_postgres_integration_test.go; then
-    echo "ERROR: P04.06 PostgreSQL claim/due acceptance test missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_state_postgres_integration_test.go || { echo "ERROR: P04.06 PostgreSQL acceptance test missing: ${marker}" >&2; exit 1; }
 done
+
+grep -Fq 'TestPostgresRetryStateStorePersistsLifecycleAcrossFreshPool' \
+  kernel/internal/events/retry_state_postgres_restart_integration_test.go || {
+    echo "ERROR: P04.06 restart persistence acceptance test missing" >&2
+    exit 1
+  }
 
 for marker in \
   'TestRetryQuarantineCommitsBeforeCheckpointAndRecoversCrashGap' \
   'TestRetryQuarantineDoesNotCheckpointWhenTerminalCommitFails' \
   'TestRetryQuarantineCheckpointRecoveryIsIdempotentForExactAcceptedProgress'; do
-  if ! grep -Fq "$marker" kernel/internal/events/retry_checkpoint_integration_test.go; then
-    echo "ERROR: P04.06 quarantine/checkpoint acceptance test missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" kernel/internal/events/retry_checkpoint_integration_test.go || { echo "ERROR: P04.06 checkpoint acceptance test missing: ${marker}" >&2; exit 1; }
 done
 
 migration="kernel/migrations/kernel.events/3_create_retry_quarantine_state.sql"
@@ -171,22 +172,18 @@ for marker in \
   'CREATE INDEX IF NOT EXISTS consumer_retry_due_idx' \
   'CREATE INDEX IF NOT EXISTS consumer_retry_claim_expiry_idx' \
   'CREATE INDEX IF NOT EXISTS consumer_retry_quarantine_idx'; do
-  if ! grep -Fq "$marker" "$migration"; then
-    echo "ERROR: P04.06 migration-3 invariant missing: ${marker}" >&2
-    exit 1
-  fi
+  grep -Fq "$marker" "$migration" || { echo "ERROR: P04.06 migration-3 invariant missing: ${marker}" >&2; exit 1; }
 done
 
-# Run the exact P04.06 family against real PostgreSQL first, then retain the
-# complete event-package regression boundary. Race evidence focuses on retry
-# execution/claim/quarantine paths while the normal full run retains P04.01-.05.
+# Exact P04.06 family runs against real PostgreSQL first. The normal event-package
+# run retains P04.01-P04.05 regression coverage; race evidence remains retry-focused.
 go test ./kernel/internal/events -run 'Retry' -count=1
 go vet ./kernel/internal/events
 go test ./kernel/internal/events -count=1
 go test -race ./kernel/internal/events -run 'Retry' -count=1
 go build ./kernel/...
 
-echo "P04.06 G0 active-package governance + exact P04.06 bounded path authority: PASS"
+echo "P04.06 G0 active-package governance + exact bounded path authority: PASS"
 echo "P04.06 G1 structured failure classification + unknown-error fail-closed + interruption law: PASS"
 echo "P04.06 G2 finite attempt/backoff policy + UTC deterministic eligibility + hard ceilings: PASS"
 echo "P04.06 G3 durable scheduled/quarantined/resolved state + bounded safe failure evidence: PASS"
@@ -194,8 +191,10 @@ echo "P04.06 G4 authoritative PostgreSQL due discovery + bounded batch + one-at-
 echo "P04.06 G5 lease expiry/takeover + stale transition conflict + monotonic revision/attempt evidence: PASS"
 echo "P04.06 G6 retry execution requires authoritative claim and clears/releases claim deterministically: PASS"
 echo "P04.06 G7 terminal/exhausted retry commits quarantine before checkpoint advancement: PASS"
-echo "P04.06 G8 quarantine-commit/checkpoint-failure crash gap recovers checkpoint without handler/terminal mutation replay: PASS"
+echo "P04.06 G8 quarantine-commit/checkpoint-failure crash gap recovers without handler/terminal mutation replay: PASS"
 echo "P04.06 G9 exact owner/consumer/route/stream/partition/tenant processing scope remains isolated: PASS"
 echo "P04.06 G10 immutable kernel.events migration 3 identity/state/due/claim/quarantine constraints retained: PASS"
 echo "P04.06 G11 retained P04.01-P04.05 event-package regression + race + build boundary: PASS"
 echo "P04.06 G12 no broker/provider DLQ, P04.07+ runtime, business feature, AI runtime, or exactly-once/global-ordering expansion: PASS"
+echo "P04.06 G13 P04.05 applied/already-applied outcomes resolve only an authoritative claimed retry and do not replay protected mutation: PASS"
+echo "P04.06 G14 scheduled/quarantined/resolved retry state survives a fresh PostgreSQL pool/store boundary and execution remains claim-gated: PASS"
