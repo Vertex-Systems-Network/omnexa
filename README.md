@@ -2,13 +2,13 @@
 
 **Composable Enterprise Business Operating System**
 
-Omnexa is a governed modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI are governed domain families on one platform foundation.
+Omnexa is a governed modular platform above the scope of a conventional ERP. ERP, CRM, finance, commerce, POS, payments, website/CMS, portals, workflow, integrations, analytics, low-code and AI remain governed domain families on one platform foundation.
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 Retry/Backoff, Terminal Failure & Dead-Letter/Quarantine Policy is the sole ACTIVE package.** Wave 2A, Wave 2B and Wave 2C T01-T04 are accepted through protected `main@afc1bb6d47cc988e2731bd16da3467d72d55af77`. P04.06 is **not complete**. Fresh-main audit Issue #248 identifies two explicit remaining acceptance-evidence gaps: P04.05 `already_applied` retry-resolution composition and real-PostgreSQL restart preservation of scheduled/quarantined/resolved retry state. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 is the sole ACTIVE package.** Wave 2A, Wave 2B, Wave 2C T01-T04, Wave 2D T05 and Wave 2D T06 are accepted on protected main through `df60c3f406dfbc03e4156c60b8103a23ef257e32`. The T07 Supervisor verifier/evidence carrier is the current bounded candidate. P04.06 is **not canonically complete** and P04.07-P04.10 remain locked. `business_feature_code_authorized=false`.
 
-`docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status and working-instruction mirror only; it never grants implementation authority by itself.
+`docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status/instruction mirror only and never grants package authority by itself.
 
 ## Project progress dashboard
 
@@ -32,59 +32,63 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 | P04.03 | DONE | Durable consumer/checkpoint baseline accepted |
 | P04.04 | DONE | Transactional outbox accepted |
 | P04.05 | DONE | Consumer inbox/idempotency accepted |
-| P04.06 | ACTIVE | Wave 2A + Wave 2B + Wave 2C T01-T04 accepted; Issue #248 closure gaps remain |
+| P04.06 | ACTIVE | Implementation accepted through Wave 2D T05/T06; T07 verifier/evidence candidate; package closure pending |
 | P04.07-P04.10 | PLANNED / LOCKED | Not started |
 
-### Accepted P04.06 evidence chain
+## Accepted P04.06 implementation chain
 
-- **Wave 2A — durable retry/quarantine state:** source #227 / promotion #228; protected merge/read-back `c0311bd79b4d60e9a71fcf0934d9a58f561e1c88`; immutable `kernel.events` migration 3 accepted.
-- **Wave 2B — PostgreSQL retry-state CAS/lease persistence:** source #230 / promotion #231; protected merge/read-back `3e6bccf8164a105f92c0b576a99f20a498ec9025`.
-- **Wave 2C T01 — retry execution composition:** source #238 / promotion #239; protected merge/read-back `920048584ba039d7c29bd25398c11a2138b2c0b3`.
-- **Wave 2C T02 — bounded PostgreSQL due discovery:** source #240 / promotion #241; protected merge/read-back `75cc0f0f590a049639ef0ea5c19a56b22ffab7d1`.
-- **Wave 2C T03 — quarantine/checkpoint crash-gap recovery:** source #242 / promotion #243; protected merge/read-back `66e1a330c42a37d252e1f32221020d1460aec48f`.
-- **Wave 2C T04 — canonical P04.06 verifier:** source #244 / promotion #245; protected merge/read-back `a049164ca3264eff4b71a97dca8e1dbba0c276ae`.
-- **Wave 2C lease/status closure:** source #246 / promotion #247; protected merge/read-back `afc1bb6d47cc988e2731bd16da3467d72d55af77`; all Wave 2C worker/Supervisor leases released.
-- **Wave 2D closure-gap control candidate:** Issue #248. The candidate plan reserves T05/T06 and isolated Supervisor T07 only. Until this control source, unchanged promotion and protected-main read-back are accepted, those reservations grant **no runtime write authority**.
+- **Wave 2A — durable retry/quarantine state:** source #227 / promotion #228 -> `c0311bd79b4d60e9a71fcf0934d9a58f561e1c88`; immutable `kernel.events` migration 3 accepted.
+- **Wave 2B — PostgreSQL CAS/lease persistence:** source #230 / promotion #231 -> `3e6bccf8164a105f92c0b576a99f20a498ec9025`.
+- **Wave 2C T01 — retry execution composition:** source #238 / promotion #239 -> `920048584ba039d7c29bd25398c11a2138b2c0b3`.
+- **Wave 2C T02 — bounded PostgreSQL due discovery:** source #240 / promotion #241 -> `75cc0f0f590a049639ef0ea5c19a56b22ffab7d1`.
+- **Wave 2C T03 — quarantine/checkpoint crash-gap recovery:** source #242 / promotion #243 -> `66e1a330c42a37d252e1f32221020d1460aec48f`.
+- **Wave 2C T04 — canonical verifier:** source #244 / promotion #245 -> `a049164ca3264eff4b71a97dca8e1dbba0c276ae`.
+- **Wave 2C status closure:** source #246 / promotion #247 -> `afc1bb6d47cc988e2731bd16da3467d72d55af77`.
+- **Wave 2D control:** source #249 / promotion #250 -> `43943c91c7491248d3ba1573b72d800da5825f96`.
+- **Wave 2D T05 — P04.05 applied/already-applied → claimed retry resolution:** source #251 / promotion #253; source Governance #730, promotion Governance #732; protected merge/read-back `180d741ef81a1c5e7d33c6bafbc9805d1c801757`.
+- **Wave 2D T06 — real PostgreSQL restart persistence:** final source #254 / promotion #255, exact synchronized head `0c290bc260f63b67c0d0ab75a47fd9a444aa9674`; source Governance #735 / `34396694586`, promotion Governance #736 / `34397580962`; protected merge/read-back `df60c3f406dfbc03e4156c60b8103a23ef257e32`.
 
-P04.07-P04.10 remain locked. No broker/provider-specific DLQ, migration 4, business feature, exactly-once/global-ordering claim or AI/model/agent product runtime is authorized by P04.06 closure work.
+The earlier T06 PR #252 / Governance #734 is diagnostic only: its stale PR-event base correctly triggered M2 scope rejection after T05 moved main. #252 was closed unmerged; no validator bypass or code weakening was used.
 
-## P04.06 Wave 2D candidate leases
+## Current P04.06 acceptance boundary
 
-Control branch base: protected `main@afc1bb6d47cc988e2731bd16da3467d72d55af77`  
-Coordination: GitHub Issue #248  
-Current control state: **candidate awaiting Governance — no runtime mutation yet**
+Accepted implementation now proves:
 
-| Merge order | Task | Branch | Exact write lease | Dependency |
-|---:|---|---|---|---|
-| 1 | P04.06-T05 / Agent-01 — inbox/retry composition | `agent/20260909-p04-06-inbox-retry-closure` | `kernel/internal/events/retry_inbox.go`, `kernel/internal/events/retry_inbox_test.go` | none |
-| 2 | P04.06-T06 / Agent-02 — PostgreSQL restart evidence | `agent/20260909-p04-06-restart-persistence` | `kernel/internal/events/retry_state_postgres_restart_integration_test.go` | none |
-| 3 | P04.06-T07 / Supervisor — closure verifier/evidence | `supervisor/20260909-p04-06-closure-verifier` | `scripts/verify_p04_06.sh`, P04.06 handoff/completion evidence, README mirror | accepted T05 + T06 |
+- finite deterministic retry/backoff and safe terminal/interruption classification;
+- durable scheduled/quarantined/resolved state with immutable migration 3;
+- PostgreSQL due discovery, revision CAS, bounded lease claim and stale-transition protection;
+- explicit quarantine-before-checkpoint ordering and restart-safe checkpoint crash-gap recovery;
+- P04.05 `InboxApplied` / `InboxAlreadyApplied` resolves stale retry scheduling only through an authoritative retry claim and cannot re-run the protected mutation;
+- scheduled/quarantined/resolved retry evidence survives a complete writer-pool close + fresh reader-pool/store boundary on real PostgreSQL;
+- post-restart scheduled work is still non-executable until authoritative due discovery + `ClaimDue` succeeds.
 
-The logical worker-slot ledger contains **2 reserved/occupied candidate slots and 0 open slots**. These are not executable runtime authority until the Wave 2D control plan is accepted through source Governance, unchanged promotion Governance, guarded protected merge and protected-main read-back. No additional worker slot may be invented.
+Checkpoint, inbox completion and retry/quarantine are distinct facts. No retry record, quarantine row, checkpoint, inbox row, EventID, attempt number, claim or provider receipt grants authorization or proves exactly-once processing.
+
+## Current Wave 2D execution state
+
+Coordination: GitHub Issue #248.
+
+| Merge order | Task | Current state |
+|---:|---|---|
+| 1 | P04.06-T05 / Agent-01 | ACCEPTED on protected main through #253 |
+| 2 | P04.06-T06 / Agent-02 | ACCEPTED on protected main through #255 |
+| 3 | P04.06-T07 / Supervisor | CURRENT verifier/evidence candidate; exact four-file lease only |
+
+T07 may write only `scripts/verify_p04_06.sh`, `docs/ai/handoffs/P04.06.md`, `docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md`, and this README. It must not edit `STATE.json`, package sequence, kernel event source, migrations or modules. After T07 acceptance, Wave 2D ledger/status reconciliation belongs in a separate governed control carrier. P04.07 activation requires another separate canonical package-transition transaction.
+
+No broker/provider-specific DLQ, migration 4, business feature, exactly-once/global-ordering claim or AI/model/agent product runtime is authorized by P04.06 work.
 
 ## Multi-agent development operating model
 
-Omnexa development may use parallel AI/human agents to accelerate delivery, but parallelism stays subordinate to the single canonical phase/work-package cursor.
+Parallel AI/human development remains subordinate to the single canonical phase/work-package cursor.
 
-**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** when the governed active plan actually opens those slots. The numerical framework cap is not permission to invent workers, branches, packages or authority.
+**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** only when the governed active plan actually opens those slots. The framework cap is not permission to invent workers, branches, packages or authority.
 
-Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor interruption/merge/sync/onboarding: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
+Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor workflow: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
 
 ### M2 required CI enforcement
 
-The M2 gate executes inside the required `governance` job through `scripts/verify_go_quality.sh` before expensive Go tooling. It validates:
-
-- active-plan authority vs canonical `STATE.json`;
-- worker-slot/task identity and capacity;
-- active write paths vs forbidden paths;
-- pairwise write-path overlap;
-- migration owner/version/path reservation collisions;
-- dependency DAG and deterministic merge order;
-- registered worker PR changed paths vs declared budget;
-- registered worker PR base/ancestry vs live protected `main`;
-- helper behavior through focused dependency-free unit tests.
-
-Unknown `agent/*` branches, scope violations, stale worker PR bases, authority mismatches, path overlaps, migration collisions and dependency-order/cycle violations fail closed. A governance/control branch is not falsely treated as a worker task; it still must pass the normal protected Governance/promotion flow.
+The required `governance` job validates active-plan/canonical-state alignment, task/slot identity, path leases, overlaps, migration reservations, dependency order, registered worker PR scope and registered worker base/ancestry against live protected main. Unknown `agent/*` branches, stale worker PR bases and out-of-budget paths fail closed.
 
 ### Supervisor submission / interrupt protocol
 
@@ -92,42 +96,33 @@ A completed task announces exactly:
 
 `Work Done and Submitted`
 
-with task, branch, exact head SHA, PR, CI/evidence and instruction-check metadata.
-
-When a valid submission arrives, the Supervisor checkpoints/pauses its own task, reviews the submitted exact head, and either requests changes or routes the approved head through required source/Governance/unchanged-promotion/protected-main integration. Supervisor approval never bypasses protected integration.
-
 After protected-main merge/readback the Supervisor announces exactly:
 
 `New changes have been merged — please merge these changes into your branch first, then resume your own work.`
 
-Every active worker resolves and synchronizes the new protected `main`, re-checks instructions/leases/dependencies, invalidates stale CI when its head changes, and only then resumes. Recommended acknowledgement:
+Workers synchronize new protected main, invalidate stale CI and acknowledge:
 
 `Sync Complete — Resuming Work`
 
-The active plan's coordination issue is the authoritative signal channel. For Wave 2D it is Issue #248.
+The active plan's coordination issue is the authoritative signal channel.
 
 ### New Agent Onboarding
 
-A newly arriving development agent always starts from protected `main`. Arrival alone grants no branch, module, task or lease.
+A newly arriving agent starts from protected main and receives no authority merely by arriving. Supervisor checks the machine worker-slot ledger first. If an authorized slot is open, assignment follows dependency/merge order. If no slot is open, Supervisor says exactly:
 
-The Supervisor immediately checks the AI-Native worker-slot ledger:
+`Go Home Come Back Next Time`
 
-- if an authorized slot is `open`, resolve live main, synchronize the slot branch, assign the agent, mark `occupied`, record identity/SHA/start status, then allow work;
-- if multiple slots are open, dependency/merge order decides priority;
-- never invent a new module, exceed the concurrency cap or activate a locked phase because an agent arrived;
-- if no slot is open, stop onboarding and say exactly: `Go Home Come Back Next Time`.
-
-Wave 2D has no open slot. Its two candidate slots are already logically reserved for T05/T06 and remain non-executable until control acceptance. An unrelated arriving worker therefore receives `Go Home Come Back Next Time`.
+No new package, migration, module or write lease may be invented to accommodate an arriving worker.
 
 ### Live protected-main freshness rule
 
-`required_main_ref = main` is live freshness authority. Stored SHA fields are audit snapshots only. This developer orchestration is not P20 product-agent runtime and does not activate a future business phase.
+`required_main_ref = main` is live freshness authority. Stored SHA fields in plans are audit snapshots only. Developer orchestration is not P20 product-agent runtime.
 
 ## Agent Working Instructions
 
 Every material agent task checks these instructions **at task start and again before PR submission**:
 
-1. inspect live open Issues and all open PRs/MRs before new implementation; verify exact heads, draft/mergeability, required reviews and CI, merge every safe approved green ready PR/MR first, and resolve or explicitly document blocked/draft/red/stale items rather than bypassing them;
+1. inspect live open Issues and all open PRs/MRs before new implementation; verify exact heads, draft/mergeability, required reviews, unresolved threads and CI, merge every safe approved green ready PR/MR first, and resolve or explicitly document blocked/draft/red/stale items rather than bypassing them;
 2. re-read protected `main` and canonical `docs/roadmap/STATE.json` after any accepted merge;
 3. confirm active phase/work package and owning module/domain/kernel capability;
 4. read `AGENTS.md`, applicable work-package spec/handoff, AI execution policy, multi-agent orchestration contract, Supervisor workflow and active plan;
@@ -155,7 +150,7 @@ README is only the human-readable mirror. `AGENTS.md`, `STATE.json`, mandatory g
 
 ## Mandatory contributor / AI start here
 
-Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry/transition/package surfaces, `docs/roadmap/work-packages/P04.06.md`, `docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/governance/MULTI_AGENT_READINESS_AUDIT_2026-09-02.md`, `docs/roadmap/XQ_100_MULTI_AGENT_DEVELOPMENT_PLAN.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, task/lease/signal/slot schemas, AI context/state and `docs/ai/handoffs/P04.06.md` before material work.
+Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 transition/package surfaces, `docs/roadmap/work-packages/P04.06.md`, `docs/governance/AI_EXECUTION_POLICY.md`, `docs/governance/MULTI_AGENT_ORCHESTRATION.md`, `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` and `docs/ai/handoffs/P04.06.md` before material work.
 
 ## Core laws
 
@@ -171,8 +166,8 @@ Read `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/roadmap/STATUS.md`, P04 entry
 
 ## Protected GitHub integration and executable CI
 
-Repository ruleset `21174858` for `main` is active. Protected integration requires PRs, strict required `governance`, conversation resolution, rejects non-fast-forward/deletion and has no bypass actor. Canonical CI uses GitHub-hosted `ubuntu-24.04` only; local/self-hosted governance runners are prohibited.
+Protected integration requires PRs, strict required `governance`, conversation resolution, fresh-main checks and guarded merge. Canonical CI uses GitHub-hosted `ubuntu-24.04`; local/self-hosted governance evidence is not substituted.
 
 ## External distribution gate
 
-The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remains the external distribution/public-launch licensing, IP and trademark decision gate. It grants no implementation authority.
+The repository is public and the current `LICENSE` remains GPLv3. Issue #4 remains the external distribution/public-launch licensing, IP and trademark decision gate. It grants no implementation authority and is not changed by P04.06 work.
