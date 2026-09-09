@@ -1,11 +1,11 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-06"
-  nature: "P04.06 post-activation continuity reconciliation; subordinate to canonical governance"
-  authoritative_main_at_continuity_start: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
-  accepted_activation_head: "b718ad7316dba6fca0cafccb514df6da653abe13"
-  accepted_activation_merge: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
+  verified_at: "2026-09-10"
+  nature: "P04.06 closure / P04.07 activation candidate; subordinate to canonical governance"
+  authoritative_main_at_candidate_start: "23f3dca090338b5debbf1af02b6db49b2f03f30b"
+  p04_07_preparation_head: "94789264824a34e3f2608283cb6b1c2f158e0b81"
+  p04_07_preparation_merge: "23f3dca090338b5debbf1af02b6db49b2f03f30b"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
 
 project:
@@ -17,8 +17,8 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state: "active"
-  progress: "5 / 10 done"
-  current_work_package: "P04.06"
+  candidate_progress: "6 / 10 done"
+  candidate_current_work_package: "P04.07"
   p03_exit: "SATISFIED / HISTORICAL"
   p04_entry: "SATISFIED"
 
@@ -26,87 +26,91 @@ prerequisites:
   p01: "done_12_of_12_exit_satisfied"
   p02: "done_10_of_10_exit_satisfied"
   p03: "done_11_of_11_exit_satisfied"
-  regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11 and accepted P04.01-P04.05 evidence remain mandatory"
-  p04_05_final_head: "dd713fe3217a0d092ab3ff31115ac031ae8c0303"
-  p04_05_promotion_governance_run: 33985111334
-  p04_05_promotion_governance_job: 101357077040
-  p04_05_implementation_merge: "0c66a3371dbf2fa942a95b7d0475b06235392474"
-  p04_05_completion_evidence: "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
-  p04_05_completion_evidence_merge: "e44ece77ddf7b821c03997266ca0c68c07162910"
-  p04_06_preparation_source_pr: 215
-  p04_06_preparation_promotion_pr: 216
-  p04_06_preparation_head: "7babb9c39185636b3af5184d5a7bd31cedbc37a0"
-  p04_06_preparation_source_governance_run: 33987003924
-  p04_06_preparation_promotion_governance_run: 33987472967
-  p04_06_preparation_merge: "3f547180eb5e839439834eb2ce7977324803df18"
-  p04_05_p04_06_activation_source_pr: 218
-  p04_05_p04_06_activation_promotion_pr: 219
-  p04_05_p04_06_activation_head: "b718ad7316dba6fca0cafccb514df6da653abe13"
-  p04_05_p04_06_activation_source_governance_run: 33990309561
-  p04_05_p04_06_activation_source_governance_workflow: 677
-  p04_05_p04_06_activation_promotion_governance_workflow: 678
-  p04_05_p04_06_activation_merge: "4c9f60843f2612bc4c9a10b4efca7b6a20826be3"
-
-p04_05:
-  state: "done"
-  owner: "kernel.events"
-  spec: "docs/roadmap/work-packages/P04.05.md"
-  evidence: "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
-  completed_wave_leases_live: false
-  accepted_migration_v2_is_historical_not_live_reservation: true
+  regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11 and accepted P04.01-P04.06 evidence remain mandatory"
+  p04_06_completion_evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
+  p04_06_t07_source_pr: 257
+  p04_06_t07_promotion_pr: 258
+  p04_06_t07_final_exact_head: "b0d047c93e8c53e9da62a96e36c4a1a8a7ce634f"
+  p04_06_t07_source_governance_run: 34400644888
+  p04_06_t07_promotion_governance_run: 34401644140
+  p04_06_t07_promotion_job: 102634706533
+  p04_06_t07_merge: "bdb96bb7f0dabf5b103acd78335599cc59e92b69"
+  p04_06_wave_ledger_closure_source_pr: 259
+  p04_06_wave_ledger_closure_promotion_pr: 260
+  p04_06_wave_ledger_closure_merge: "6050bc2d970b5cf83118115557e952e3e91e0f96"
+  p04_07_preparation_source_pr: 262
+  p04_07_preparation_promotion_pr: 263
+  p04_07_preparation_source_governance_run: 34407394506
+  p04_07_preparation_promotion_governance_run: 34408137084
+  p04_07_preparation_head: "94789264824a34e3f2608283cb6b1c2f158e0b81"
+  p04_07_preparation_merge: "23f3dca090338b5debbf1af02b6db49b2f03f30b"
 
 p04_06:
-  state: "active"
+  state: "done_candidate_only_after_transition_acceptance"
   owner: "kernel.events"
   spec: "docs/roadmap/work-packages/P04.06.md"
-  handoff: "docs/ai/handoffs/P04.06.md"
-  implementation_scope: "provider-neutral retry/backoff, failure disposition and logical local quarantine policy only"
+  evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
+  runtime_implemented: true
+  accepted_migration_v3_is_historical_not_live_reservation: true
+  completed_wave_leases_live: false
+
+p04_07:
+  state: "active_candidate_only_after_governed_transition_readback"
+  owner: "kernel.events"
+  spec: "docs/roadmap/work-packages/P04.07.md"
+  handoff: "docs/ai/handoffs/P04.07.md"
+  implementation_scope: "provider-neutral payload-schema identity, immutable registry history, deterministic compatibility and bounded local-only validation"
   runtime_implemented: false
   runtime_worker_slots: 0
   runtime_tasks: 0
   runtime_branches: 0
   migration_reserved: false
-  provider_selected: false
-  broker_native_dlq_authorized: false
-  p04_07_plus_authorized: false
+  migration_4_authorized: false
+  provider_registry_selected: false
+  p04_08_plus_authorized: false
 
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P04.06 only; runtime implementation may begin only after this separate continuity source + unchanged promotion are accepted and protected main is read back"
+  candidate_kernel_authority_scope: "P04.07 only after Issue #264 accepted transition plus a separate post-activation continuity/worker-plan read-back"
   business_feature_code_authorized: false
-  p04_07_plus_authorized: false
+  p04_08_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   tenant_context_fail_closed_required: true
-  duplicate_safe_composition_with_p04_05_required: true
+  schema_validation_is_authorization: false
+  remote_schema_fetch_authorized: false
+  dynamic_schema_execution_authorized: false
   global_ordering_assumed: false
   exactly_once_business_mutation_assumed: false
-  quarantine_identity_is_authorization: false
   secret_payloads_authorized: false
 
 blocked_actions:
-  - "implement P04.06 runtime on this post-activation continuity source or its unchanged promotion"
-  - "reserve a P04.06 migration or create a runtime worker branch before post-activation continuity acceptance/read-back"
-  - "implement P04.07-P04.10"
-  - "select a broker/provider or provider-native DLQ"
-  - "claim global ordering or end-to-end exactly-once semantics"
+  - "implement P04.07 runtime on this closure/activation source or its unchanged promotion"
+  - "reserve migration 4 or create a P04.07 runtime worker/task/branch before post-activation continuity/worker-plan acceptance"
+  - "select a provider/vendor schema registry"
+  - "implement P04.08-P04.10"
+  - "claim schema validation grants authorization, global ordering or end-to-end exactly-once semantics"
   - "implement business modules/features, strategic X runtime or AI/model/agent product runtime"
   - "weaken governance, branch protection or retained regressions"
   - "rewrite historical completion evidence"
 
 next_action:
-  current: "Pass exact-head Governance for the P04.06 post-activation continuity source, record honest exact-head SELF REVIEW, verify zero unresolved threads and fresh protected main."
-  promotion: "Promote the exact unchanged continuity source head through a separate promotion PR and require fresh promotion Governance and self-review."
-  post_merge: "Re-read protected main and confirm P04.01-P04.05 DONE, P04.06 sole ACTIVE at 5 / 10, P04.07+ locked and zero runtime leases."
-  implementation: "Only after continuity read-back create a fresh isolated P04.06 implementation wave and perform fresh migration preflight before any schema reservation."
-  completion_rule: "Do not auto-advance to P04.07."
+  current: "Complete Issue #264 canonical P04.06 closure / P04.07 activation source on exact protected main 23f3dca090338b5debbf1af02b6db49b2f03f30b."
+  source_gate: "Require exact-head Governance, honest SELF/Supervisor review and zero unresolved threads."
+  promotion: "Promote the exact unchanged transition head through a separate promotion PR and require fresh promotion Governance and self-review."
+  post_merge: "Re-read protected main and confirm P04.01-P04.06 DONE, P04.07 sole ACTIVE at 6 / 10, P04.08+ locked and zero runtime leases/reservations."
+  continuity: "Only then govern a separate P04.07 post-activation continuity/worker plan."
+  completion_rule: "Do not start P04.07 runtime or reserve migration 4 automatically."
 
 source_authority:
   execution_contract: "AGENTS.md"
   canonical_state: "docs/roadmap/STATE.json"
   status: "docs/roadmap/STATUS.md"
+  package_sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
   p04_06_spec: "docs/roadmap/work-packages/P04.06.md"
-  activation_transaction: "docs/governance/P04_05_P04_06_TRANSITION_TRANSACTION.md"
+  p04_06_evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
+  p04_07_spec: "docs/roadmap/work-packages/P04.07.md"
+  transition_candidate: "docs/governance/P04_06_P04_07_TRANSITION_TRANSACTION.md"
 
 handoff:
-  active: "docs/ai/handoffs/P04.06.md"
+  candidate_active: "docs/ai/handoffs/P04.07.md"

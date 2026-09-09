@@ -60,16 +60,19 @@
     {
       "id": "P04.06",
       "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
-      "state": "active",
+      "state": "done",
       "depends_on": ["P04.03", "P04.05"],
-      "spec": "docs/roadmap/work-packages/P04.06.md"
+      "spec": "docs/roadmap/work-packages/P04.06.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
+      ]
     },
     {
       "id": "P04.07",
       "name": "Event schema registry, compatibility & validation",
-      "state": "planned",
+      "state": "active",
       "depends_on": ["P04.01", "P04.06"],
-      "spec": null
+      "spec": "docs/roadmap/work-packages/P04.07.md"
     },
     {
       "id": "P04.08",
@@ -93,5 +96,5 @@
       "spec": null
     }
   ],
-  "note": "P04.01-P04.05 are done with accepted completion evidence. P04.06 becomes the sole active package only after this P04.05-closure/P04.06-activation source passes exact-head Governance, is promoted unchanged through fresh Governance, merges through the protected path and protected main is re-read. P04.07-P04.10 remain planned/locked; no P04.06 runtime branch/lease or migration reservation is created by this transaction; business-feature and AI/model/agent runtime remain unauthorized."
+  "note": "P04.01-P04.06 are done with accepted completion evidence. This P04.06-closure/P04.07-activation candidate makes P04.07 the sole active package only after exact-head source Governance, unchanged promotion Governance, expected-head protected merge and protected-main read-back. P04.08-P04.10 remain planned/locked; the transition creates no P04.07 runtime worker/task/branch, reserves no migration 4, selects no provider/vendor registry, and grants no business-feature or AI/model/agent product-runtime authority."
 }
