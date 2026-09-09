@@ -6,7 +6,7 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 is the sole ACTIVE package.** Wave 2A, Wave 2B, Wave 2C T01-T04, Wave 2D T05 and Wave 2D T06 are accepted on protected main through `df60c3f406dfbc03e4156c60b8103a23ef257e32`. The T07 Supervisor verifier/evidence carrier is the current bounded candidate. P04.06 is **not canonically complete** and P04.07-P04.10 remain locked. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 5 / 10 completed packages. P04.01-P04.05 are DONE and P04.06 is the sole ACTIVE package.** Wave 2A, Wave 2B, Wave 2C T01-T04 and Wave 2D T05-T07 are accepted on protected main through `bdb96bb7f0dabf5b103acd78335599cc59e92b69`. P04.06 is **not canonically complete** and P04.07-P04.10 remain locked. `business_feature_code_authorized=false`.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable status/instruction mirror only and never grants package authority by itself.
 
@@ -32,7 +32,7 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 | P04.03 | DONE | Durable consumer/checkpoint baseline accepted |
 | P04.04 | DONE | Transactional outbox accepted |
 | P04.05 | DONE | Consumer inbox/idempotency accepted |
-| P04.06 | ACTIVE | Implementation accepted through Wave 2D T05/T06; T07 verifier/evidence candidate; package closure pending |
+| P04.06 | ACTIVE | Wave 2D T05/T06/T07 accepted; implementation/verifier evidence complete; separate canonical package closure/transition still pending |
 | P04.07-P04.10 | PLANNED / LOCKED | Not started |
 
 ## Accepted P04.06 implementation chain
@@ -46,13 +46,14 @@ Phase-count view: **4 of 28 phases completed**, with **P04 active**. Current P04
 - **Wave 2C status closure:** source #246 / promotion #247 -> `afc1bb6d47cc988e2731bd16da3467d72d55af77`.
 - **Wave 2D control:** source #249 / promotion #250 -> `43943c91c7491248d3ba1573b72d800da5825f96`.
 - **Wave 2D T05 — P04.05 applied/already-applied → claimed retry resolution:** source #251 / promotion #253; source Governance #730, promotion Governance #732; protected merge/read-back `180d741ef81a1c5e7d33c6bafbc9805d1c801757`.
-- **Wave 2D T06 — real PostgreSQL restart persistence:** final source #254 / promotion #255, exact synchronized head `0c290bc260f63b67c0d0ab75a47fd9a444aa9674`; source Governance #735 / `34396694586`, promotion Governance #736 / `34397580962`; protected merge/read-back `df60c3f406dfbc03e4156c60b8103a23ef257e32`.
+- **Wave 2D T06 — real PostgreSQL restart persistence:** final source #254 / promotion #255; source Governance #735 / `34396694586`, promotion Governance #736 / `34397580962`; protected merge/read-back `df60c3f406dfbc03e4156c60b8103a23ef257e32`.
+- **Wave 2D T07 — closure verifier / implementation evidence:** source #257 / promotion #258, exact head `b0d047c93e8c53e9da62a96e36c4a1a8a7ce634f`; source Governance #738 / `34400644888`, promotion Governance #739 / `34401644140`; protected merge/read-back `bdb96bb7f0dabf5b103acd78335599cc59e92b69`.
 
 The earlier T06 PR #252 / Governance #734 is diagnostic only: its stale PR-event base correctly triggered M2 scope rejection after T05 moved main. #252 was closed unmerged; no validator bypass or code weakening was used.
 
 ## Current P04.06 acceptance boundary
 
-Accepted implementation now proves:
+Accepted implementation/verifier evidence now proves:
 
 - finite deterministic retry/backoff and safe terminal/interruption classification;
 - durable scheduled/quarantined/resolved state with immutable migration 3;
@@ -60,21 +61,24 @@ Accepted implementation now proves:
 - explicit quarantine-before-checkpoint ordering and restart-safe checkpoint crash-gap recovery;
 - P04.05 `InboxApplied` / `InboxAlreadyApplied` resolves stale retry scheduling only through an authoritative retry claim and cannot re-run the protected mutation;
 - scheduled/quarantined/resolved retry evidence survives a complete writer-pool close + fresh reader-pool/store boundary on real PostgreSQL;
-- post-restart scheduled work is still non-executable until authoritative due discovery + `ClaimDue` succeeds.
+- post-restart scheduled work is still non-executable until authoritative due discovery + `ClaimDue` succeeds;
+- the canonical P04.06 verifier explicitly checks the Wave 2D T05/T06 closure evidence while retaining P04.01-P04.05 regression, race and build boundaries.
 
 Checkpoint, inbox completion and retry/quarantine are distinct facts. No retry record, quarantine row, checkpoint, inbox row, EventID, attempt number, claim or provider receipt grants authorization or proves exactly-once processing.
 
-## Current Wave 2D execution state
+## Wave 2D ledger state
 
 Coordination: GitHub Issue #248.
 
-| Merge order | Task | Current state |
+| Merge order | Task | Accepted result |
 |---:|---|---|
 | 1 | P04.06-T05 / Agent-01 | ACCEPTED on protected main through #253 |
 | 2 | P04.06-T06 / Agent-02 | ACCEPTED on protected main through #255 |
-| 3 | P04.06-T07 / Supervisor | CURRENT verifier/evidence candidate; exact four-file lease only |
+| 3 | P04.06-T07 / Supervisor | ACCEPTED on protected main through #258 |
 
-T07 may write only `scripts/verify_p04_06.sh`, `docs/ai/handoffs/P04.06.md`, `docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md`, and this README. It must not edit `STATE.json`, package sequence, kernel event source, migrations or modules. After T07 acceptance, Wave 2D ledger/status reconciliation belongs in a separate governed control carrier. P04.07 activation requires another separate canonical package-transition transaction.
+The Wave 2D machine ledger is reconciled to **0 worker slots, 0 open slots, 0 active tasks and no active Supervisor write lease** in `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`. All T05/T06/T07 leases are historical and released. No new runtime worker is authorized. A later worker requires a fresh governed plan from current protected main.
+
+This ledger closure is not a package-transition transaction. `docs/roadmap/STATE.json` remains authoritative at `P04 / P04.06`; P04.06 remains ACTIVE/incomplete and P04.07 remains locked. Any P04.06 DONE / P04.07 ACTIVE transition must be a separate governed canonical transaction after fresh-main review of state, work-package/transition policy and accepted evidence.
 
 No broker/provider-specific DLQ, migration 4, business feature, exactly-once/global-ordering claim or AI/model/agent product runtime is authorized by P04.06 work.
 
@@ -82,7 +86,7 @@ No broker/provider-specific DLQ, migration 4, business feature, exactly-once/glo
 
 Parallel AI/human development remains subordinate to the single canonical phase/work-package cursor.
 
-**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** only when the governed active plan actually opens those slots. The framework cap is not permission to invent workers, branches, packages or authority.
+**Framework safe envelope:** up to **4-6 active agents with no more than 3 concurrent write agents** only when a governed active plan actually opens those slots. The framework cap is not permission to invent workers, branches, packages or authority.
 
 Mandatory concurrency rules: `docs/governance/MULTI_AGENT_ORCHESTRATION.md`. Supervisor workflow: `docs/governance/SUPERVISOR_MULTI_AGENT_WORKFLOW.md`. Active machine plan: `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`.
 
@@ -112,7 +116,7 @@ A newly arriving agent starts from protected main and receives no authority mere
 
 `Go Home Come Back Next Time`
 
-No new package, migration, module or write lease may be invented to accommodate an arriving worker.
+The current ledger has **0 open slots**. No new package, migration, module or write lease may be invented to accommodate an arriving worker.
 
 ### Live protected-main freshness rule
 
