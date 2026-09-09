@@ -210,6 +210,140 @@ func TestPostgresRetryStateStoreCASLeaseIntegration(t *testing.T) {
 	}
 }
 
+func TestPostgresRetryStateStoreDueCandidatesIntegration(t *testing.T) {
+	ctx, pool := setupP0406RetryDatabase(t)
+	store, err := NewPostgresRetryStateStore(pool)
+	if err != nil {
+		t.Fatalf("NewPostgresRetryStateStore() error = %v", err)
+	}
+
+	now := time.Now().UTC().Truncate(time.Microsecond)
+	first := testRetryStateRecord(t, RetryStateScheduled)
+	first.Position = 21
+	first.NextEligibleAt = now.Add(-3 * time.Minute)
+	second := testRetryStateRecord(t, RetryStateScheduled)
+	second.Position = 22
+	second.NextEligibleAt = now.Add(-2 * time.Minute)
+	future := testRetryStateRecord(t, RetryStateScheduled)
+	future.Position = 23
+	future.NextEligibleAt = now.Add(time.Hour)
+	active := testRetryStateRecord(t, RetryStateScheduled)
+	active.Position = 24
+	active.NextEligibleAt = now.Add(-time.Minute)
+	expired := testRetryStateRecord(t, RetryStateScheduled)
+	expired.Position = 25
+	expired.NextEligibleAt = now.Add(-30 * time.Second)
+	otherConsumer := testRetryStateRecord(t, RetryStateScheduled)
+	otherConsumer.Position = 26
+	otherConsumer.NextEligibleAt = now.Add(-4 * time.Minute)
+	otherConsumer.Identity.ConsumerID = "other.projection"
+
+	for _, candidate := range []RetryStateRecord{first, second, future, active, expired, otherConsumer} {
+		if _, err = store.Create(ctx, candidate); err != nil {
+			t.Fatalf("Create(position=%d) error = %v", candidate.Position, err)
+		}
+	}
+
+	activeClaim, err := store.ClaimDue(ctx, active.Identity, active.Position, active.Revision, testUUIDv7(t), 2*time.Minute)
+	if err != nil {
+		t.Fatalf("active ClaimDue() error = %v", err)
+	}
+	if activeClaim.ClaimToken == "" {
+		t.Fatal("active claim did not obtain a lease")
+	}
+
+	expiredToken := testUUIDv7(t)
+	expiredClaim, err := store.ClaimDue(ctx, expired.Identity, expired.Position, expired.Revision, expiredToken, 2*time.Minute)
+	if err != nil {
+		t.Fatalf("expired candidate ClaimDue() error = %v", err)
+	}
+	if _, err = pool.Exec(
+		ctx,
+		`UPDATE omnexa_events.consumer_retry_state
+		 SET claim_expires_at = CURRENT_TIMESTAMP - INTERVAL '1 second'
+		 WHERE event_id = $1::uuid AND consumer_id = $2 AND delivery_position = $3::bigint`,
+		string(expired.Identity.EventID),
+		expired.Identity.ConsumerID,
+		strconv.FormatUint(expired.Position, 10),
+	); err != nil {
+		t.Fatalf("expire due-scan lease error = %v", err)
+	}
+
+	binding := retryDueBinding(first.Identity)
+	if _, err = store.ListDueCandidates(ctx, binding, 0); !hasFailureCode(err, codeRetryPostgresInvalid) {
+		t.Fatalf("zero due-scan limit error = %v", err)
+	}
+	if _, err = store.ListDueCandidates(ctx, binding, maxPostgresRetryDueBatch+1); !hasFailureCode(err, codeRetryPostgresInvalid) {
+		t.Fatalf("oversized due-scan limit error = %v", err)
+	}
+
+	limited, err := store.ListDueCandidates(ctx, binding, 2)
+	if err != nil {
+		t.Fatalf("ListDueCandidates(limit=2) error = %v", err)
+	}
+	if len(limited) != 2 || limited[0].Position != first.Position || limited[1].Position != second.Position {
+		t.Fatalf("limited due candidates = %+v", limited)
+	}
+
+	candidates, err := store.ListDueCandidates(ctx, binding, maxPostgresRetryDueBatch)
+	if err != nil {
+		t.Fatalf("ListDueCandidates() error = %v", err)
+	}
+	if len(candidates) != 3 {
+		t.Fatalf("due candidate count = %d, want 3: %+v", len(candidates), candidates)
+	}
+	wantPositions := []uint64{first.Position, second.Position, expired.Position}
+	for index, candidate := range candidates {
+		if candidate.Position != wantPositions[index] {
+			t.Fatalf("candidate[%d].Position = %d, want %d", index, candidate.Position, wantPositions[index])
+		}
+		if candidate.Identity.ConsumerID != binding.ConsumerID || candidate.NextEligibleAt.IsZero() {
+			t.Fatalf("candidate[%d] escaped binding or eligibility evidence: %+v", index, candidate)
+		}
+	}
+	if candidates[2].Revision != expiredClaim.Revision {
+		t.Fatalf("expired lease candidate revision = %d, want %d", candidates[2].Revision, expiredClaim.Revision)
+	}
+
+	claimToken := testUUIDv7(t)
+	claimed, err := store.ClaimDue(
+		ctx,
+		candidates[0].Identity,
+		candidates[0].Position,
+		candidates[0].Revision,
+		claimToken,
+		time.Minute,
+	)
+	if err != nil {
+		t.Fatalf("ClaimDue(scanned candidate) error = %v", err)
+	}
+	if claimed.ClaimToken != claimToken || claimed.Revision != candidates[0].Revision+1 {
+		t.Fatalf("claimed scanned candidate = %+v", claimed)
+	}
+	_, err = store.ClaimDue(
+		ctx,
+		candidates[0].Identity,
+		candidates[0].Position,
+		candidates[0].Revision,
+		testUUIDv7(t),
+		time.Minute,
+	)
+	assertFailureCode(t, err, codeRetryPostgresConflict)
+}
+
+func retryDueBinding(identity InboxIdentity) DurableBinding {
+	return DurableBinding{
+		Owner:      identity.Owner,
+		ConsumerID: identity.ConsumerID,
+		EventType:  identity.EventType,
+		Scope: DurableScope{
+			Stream:    identity.Stream,
+			Partition: identity.Partition,
+			TenantID:  identity.TenantID,
+		},
+	}
+}
+
 func hasFailureCode(err error, code failure.Code) bool {
 	return failure.IsCode(err, code)
 }

@@ -16,6 +16,7 @@ import (
 const (
 	maxPostgresRetryRevision   uint64        = 1<<63 - 1
 	maxPostgresRetryClaimLease time.Duration = 15 * time.Minute
+	maxPostgresRetryDueBatch   uint32        = 100
 
 	codeRetryPostgresInvalid   failure.Code = "events.retry.postgres_invalid"
 	codeRetryPostgresNotFound  failure.Code = "events.retry.postgres_not_found"
@@ -50,6 +51,17 @@ const retryPostgresSelectColumns = `
 	claim_token::text,
 	claim_expires_at,
 	revision`
+
+// RetryPostgresDueCandidate is bounded discovery evidence for one row that was
+// claimable according to PostgreSQL authoritative time when the scan ran. It is
+// not an execution lease. The exact Identity/Position/Revision must still pass
+// ClaimDue before a handler may treat the retry as executable.
+type RetryPostgresDueCandidate struct {
+	Identity       InboxIdentity
+	Position       uint64
+	Revision       uint64
+	NextEligibleAt time.Time
+}
 
 // PostgresRetryStateStore persists the already-accepted P04.06 retry/quarantine
 // contract in kernel.events. It reuses an existing pool and does not create a
@@ -188,6 +200,80 @@ func (store *PostgresRetryStateStore) Load(ctx context.Context, identity InboxId
 		return RetryStateRecord{}, wrappedFailure(err, codeRetryPostgresFailed, failure.CategoryUnavailable, "event retry postgres state could not be loaded")
 	}
 	return record, nil
+}
+
+// ListDueCandidates discovers a bounded deterministic batch in one exact
+// durable-consumer route using PostgreSQL authoritative time. It does not claim
+// rows, generate claim tokens, increment attempts, or grant execution authority.
+// A returned candidate may lose a race immediately after this query; ClaimDue is
+// therefore required for the candidate's exact revision before handler execution.
+func (store *PostgresRetryStateStore) ListDueCandidates(
+	ctx context.Context,
+	binding DurableBinding,
+	limit uint32,
+) ([]RetryPostgresDueCandidate, error) {
+	if store == nil || store.pool == nil {
+		return nil, classifiedFailure(codeRetryPostgresInvalid, failure.CategoryValidation, "event retry postgres store is invalid")
+	}
+	if err := retryPostgresContextError(ctx); err != nil {
+		return nil, err
+	}
+	if err := binding.validateBasic(); err != nil || limit == 0 || limit > maxPostgresRetryDueBatch {
+		return nil, classifiedFailure(codeRetryPostgresInvalid, failure.CategoryValidation, "event retry postgres due-scan boundary is invalid")
+	}
+
+	rows, err := store.pool.Query(
+		ctx,
+		`SELECT `+retryPostgresSelectColumns+`
+		 FROM omnexa_events.consumer_retry_state
+		 WHERE owner = $1
+		   AND consumer_id = $2
+		   AND event_type = $3
+		   AND stream = $4
+		   AND partition_key = $5
+		   AND tenant_id IS NOT DISTINCT FROM $6::uuid
+		   AND retry_state = 'retry_scheduled'
+		   AND next_eligible_at <= CURRENT_TIMESTAMP
+		   AND (claim_token IS NULL OR claim_expires_at <= CURRENT_TIMESTAMP)
+		 ORDER BY next_eligible_at ASC, delivery_position ASC, event_id ASC
+		 LIMIT $7`,
+		string(binding.Owner),
+		binding.ConsumerID,
+		string(binding.EventType),
+		binding.Scope.Stream,
+		binding.Scope.Partition,
+		retryPostgresTenantID(binding.Scope.TenantID),
+		int64(limit),
+	)
+	if err != nil {
+		return nil, wrappedFailure(err, codeRetryPostgresFailed, failure.CategoryUnavailable, "event retry postgres due candidates could not be read")
+	}
+	defer rows.Close()
+
+	candidates := make([]RetryPostgresDueCandidate, 0, limit)
+	for rows.Next() {
+		record, scanErr := scanPostgresRetryRecord(rows)
+		if scanErr != nil {
+			var structured *failure.Error
+			if errors.As(scanErr, &structured) {
+				return nil, scanErr
+			}
+			return nil, wrappedFailure(scanErr, codeRetryPostgresFailed, failure.CategoryUnavailable, "event retry postgres due candidate could not be read")
+		}
+		if record.State != RetryStateScheduled || !retryPostgresBindingMatches(record.Identity, binding) {
+			return nil, classifiedFailure(codeRetryPostgresMalformed, failure.CategoryInvariant, "event retry postgres due candidate violated its requested scope")
+		}
+		candidates = append(candidates, RetryPostgresDueCandidate{
+			Identity:       record.Identity,
+			Position:       record.Position,
+			Revision:       record.Revision,
+			NextEligibleAt: record.NextEligibleAt,
+		})
+	}
+	if err := rows.Err(); err != nil {
+		return nil, wrappedFailure(err, codeRetryPostgresFailed, failure.CategoryUnavailable, "event retry postgres due candidates could not be completed")
+	}
+	return candidates, nil
 }
 
 // ClaimDue obtains one bounded active lease using PostgreSQL authoritative time.
@@ -545,11 +631,24 @@ func retryPostgresTimesEqual(left, right time.Time) bool {
 	return (left.IsZero() && right.IsZero()) || (!left.IsZero() && !right.IsZero() && left.Equal(right))
 }
 
+func retryPostgresBindingMatches(identity InboxIdentity, binding DurableBinding) bool {
+	return identity.Owner == binding.Owner &&
+		identity.ConsumerID == binding.ConsumerID &&
+		identity.EventType == binding.EventType &&
+		identity.Stream == binding.Scope.Stream &&
+		identity.Partition == binding.Scope.Partition &&
+		identity.TenantID == binding.Scope.TenantID
+}
+
 func retryPostgresTenant(identity InboxIdentity) any {
-	if identity.TenantID == "" {
+	return retryPostgresTenantID(identity.TenantID)
+}
+
+func retryPostgresTenantID(tenantID tenancy.TenantID) any {
+	if tenantID == "" {
 		return nil
 	}
-	return string(identity.TenantID)
+	return string(tenantID)
 }
 
 func retryPostgresTime(value time.Time) any {
