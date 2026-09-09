@@ -54,8 +54,8 @@ const (
 // is populated only for scheduled records and counts the authoritative handler
 // attempt that a successful durable claim would permit.
 type RetryExecutionDirective struct {
-	Eligibility   RetryExecutionEligibility
-	NextAttempt   uint32
+	Eligibility    RetryExecutionEligibility
+	NextAttempt    uint32
 	NextEligibleAt time.Time
 }
 
@@ -103,8 +103,8 @@ func ComposeInitialRetryFailure(
 	if err != nil {
 		return RetryRuntimeTransition{}, err
 	}
-	if err := record.Validate(); err != nil {
-		return RetryRuntimeTransition{}, err
+	if validationErr := record.Validate(); validationErr != nil {
+		return RetryRuntimeTransition{}, validationErr
 	}
 	return RetryRuntimeTransition{Outcome: outcome, Persist: true, Record: record}, nil
 }
@@ -172,8 +172,8 @@ func ComposeClaimedRetryResult(
 		next.ClaimToken = ""
 		next.ClaimExpiresAt = time.Time{}
 		next.Revision++
-		if err := next.Validate(); err != nil {
-			return RetryRuntimeTransition{}, err
+		if validationErr := next.Validate(); validationErr != nil {
+			return RetryRuntimeTransition{}, validationErr
 		}
 		return RetryRuntimeTransition{Outcome: RetryRuntimeResolved, Persist: true, Record: next}, nil
 	}
@@ -197,8 +197,8 @@ func ComposeClaimedRetryResult(
 		next.ClaimToken = ""
 		next.ClaimExpiresAt = time.Time{}
 		next.Revision++
-		if err := next.Validate(); err != nil {
-			return RetryRuntimeTransition{}, err
+		if validationErr := next.Validate(); validationErr != nil {
+			return RetryRuntimeTransition{}, validationErr
 		}
 		return RetryRuntimeTransition{Outcome: RetryRuntimeInterrupted, Persist: true, Record: next}, nil
 	}
@@ -216,8 +216,8 @@ func ComposeClaimedRetryResult(
 	if err != nil {
 		return RetryRuntimeTransition{}, err
 	}
-	if err := next.Validate(); err != nil {
-		return RetryRuntimeTransition{}, err
+	if validationErr := next.Validate(); validationErr != nil {
+		return RetryRuntimeTransition{}, validationErr
 	}
 	return RetryRuntimeTransition{Outcome: outcome, Persist: true, Record: next}, nil
 }
