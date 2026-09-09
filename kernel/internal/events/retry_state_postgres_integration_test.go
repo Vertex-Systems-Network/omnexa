@@ -236,6 +236,15 @@ func TestPostgresRetryStateStoreDueCandidatesIntegration(t *testing.T) {
 	otherConsumer := testRetryStateRecord(t, RetryStateScheduled)
 	otherConsumer.Position = 26
 	otherConsumer.NextEligibleAt = now.Add(-4 * time.Minute)
+
+	for _, candidate := range []*RetryStateRecord{&second, &future, &active, &expired, &otherConsumer} {
+		candidate.Identity.Owner = first.Identity.Owner
+		candidate.Identity.ConsumerID = first.Identity.ConsumerID
+		candidate.Identity.EventType = first.Identity.EventType
+		candidate.Identity.Stream = first.Identity.Stream
+		candidate.Identity.Partition = first.Identity.Partition
+		candidate.Identity.TenantID = first.Identity.TenantID
+	}
 	otherConsumer.Identity.ConsumerID = "other.projection"
 
 	for _, candidate := range []RetryStateRecord{first, second, future, active, expired, otherConsumer} {
