@@ -45,7 +45,7 @@ func TestValidatePayloadRejectsUnknownMissingAndWrongTypes(t *testing.T) {
 		[]byte(`{"id":"ok","active":"true"}`),
 	}
 	for _, payload := range cases {
-		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codePayloadInvalid)
+		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codeSchemaPayloadInvalid)
 	}
 }
 
@@ -57,7 +57,7 @@ func TestValidatePayloadIntegerIsStrictSubsetOfNumber(t *testing.T) {
 		t.Fatalf("integer token rejected: %v", err)
 	}
 	for _, payload := range [][]byte{[]byte(`{"value":1.0}`), []byte(`{"value":1e0}`)} {
-		assertSchemaFailureCode(t, ValidatePayload(integerSchema, payload), codePayloadInvalid)
+		assertSchemaFailureCode(t, ValidatePayload(integerSchema, payload), codeSchemaPayloadInvalid)
 	}
 	for _, payload := range [][]byte{[]byte(`{"value":12}`), []byte(`{"value":1.25}`), []byte(`{"value":1e2}`)} {
 		if err := ValidatePayload(numberSchema, payload); err != nil {
@@ -78,39 +78,39 @@ func TestValidatePayloadRejectsMalformedDuplicateNullRootAndTrailingValues(t *te
 		nil,
 	}
 	for _, payload := range cases {
-		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codePayloadInvalid)
+		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codeSchemaPayloadInvalid)
 	}
 }
 
 func TestValidatePayloadEnforcesByteStringCollectionAndDepthLimits(t *testing.T) {
 	stringSchema := Schema{Fields: []Field{{Name: "value", Kind: ValueString}}}
-	oversizedPayload := []byte(strings.Repeat(" ", maxPayloadBytes+1))
-	assertSchemaFailureCode(t, ValidatePayload(stringSchema, oversizedPayload), codePayloadLimit)
+	oversizedPayload := []byte(strings.Repeat(" ", maxSchemaPayloadBytes+1))
+	assertSchemaFailureCode(t, ValidatePayload(stringSchema, oversizedPayload), codeSchemaPayloadLimit)
 
-	longString := []byte(`{"value":"` + strings.Repeat("x", maxPayloadStringRunes+1) + `"}`)
-	assertSchemaFailureCode(t, ValidatePayload(stringSchema, longString), codePayloadLimit)
+	longString := []byte(`{"value":"` + strings.Repeat("x", maxSchemaPayloadStringRunes+1) + `"}`)
+	assertSchemaFailureCode(t, ValidatePayload(stringSchema, longString), codeSchemaPayloadLimit)
 
 	arraySchema := Schema{Fields: []Field{{Name: "value", Kind: ValueArray, Items: &Field{Kind: ValueInteger}}}}
-	items := make([]string, maxPayloadCollectionEntries+1)
+	items := make([]string, maxSchemaPayloadCollectionEntries+1)
 	for index := range items {
 		items[index] = "1"
 	}
 	largeArray := []byte(`{"value":[` + strings.Join(items, ",") + `]}`)
-	assertSchemaFailureCode(t, ValidatePayload(arraySchema, largeArray), codePayloadLimit)
+	assertSchemaFailureCode(t, ValidatePayload(arraySchema, largeArray), codeSchemaPayloadLimit)
 
 	var object strings.Builder
 	object.WriteByte('{')
-	for index := 0; index <= maxPayloadCollectionEntries; index++ {
+	for index := 0; index <= maxSchemaPayloadCollectionEntries; index++ {
 		if index > 0 {
 			object.WriteByte(',')
 		}
 		fmt.Fprintf(&object, `"k%d":true`, index)
 	}
 	object.WriteByte('}')
-	assertSchemaFailureCode(t, ValidatePayload(Schema{}, []byte(object.String())), codePayloadLimit)
+	assertSchemaFailureCode(t, ValidatePayload(Schema{}, []byte(object.String())), codeSchemaPayloadLimit)
 
-	tooDeep := []byte(`{"value":` + strings.Repeat("[", maxPayloadDepth) + `0` + strings.Repeat("]", maxPayloadDepth) + `}`)
-	assertSchemaFailureCode(t, ValidatePayload(arraySchema, tooDeep), codePayloadLimit)
+	tooDeep := []byte(`{"value":` + strings.Repeat("[", maxSchemaPayloadDepth) + `0` + strings.Repeat("]", maxSchemaPayloadDepth) + `}`)
+	assertSchemaFailureCode(t, ValidatePayload(arraySchema, tooDeep), codeSchemaPayloadLimit)
 }
 
 func TestValidatePayloadRejectsInvalidSchemaBeforePayloadUse(t *testing.T) {
@@ -156,5 +156,5 @@ func TestValidatePayloadArrayItemsRemainHomogeneous(t *testing.T) {
 	if err := ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":false}]}`)); err != nil {
 		t.Fatalf("homogeneous object array rejected: %v", err)
 	}
-	assertSchemaFailureCode(t, ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":"false"}]}`)), codePayloadInvalid)
+	assertSchemaFailureCode(t, ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":"false"}]}`)), codeSchemaPayloadInvalid)
 }
