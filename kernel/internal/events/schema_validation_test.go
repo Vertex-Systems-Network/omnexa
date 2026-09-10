@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"testing"
-
-	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
 )
 
 func TestValidatePayloadAcceptsClosedNestedContract(t *testing.T) {
@@ -47,10 +45,7 @@ func TestValidatePayloadRejectsUnknownMissingAndWrongTypes(t *testing.T) {
 		[]byte(`{"id":"ok","active":"true"}`),
 	}
 	for _, payload := range cases {
-		err := ValidatePayload(schema, payload)
-		if got := failure.CodeOf(err); got != codePayloadInvalid {
-			t.Fatalf("payload %q code = %q, want %q", payload, got, codePayloadInvalid)
-		}
+		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codePayloadInvalid)
 	}
 }
 
@@ -62,9 +57,7 @@ func TestValidatePayloadIntegerIsStrictSubsetOfNumber(t *testing.T) {
 		t.Fatalf("integer token rejected: %v", err)
 	}
 	for _, payload := range [][]byte{[]byte(`{"value":1.0}`), []byte(`{"value":1e0}`)} {
-		if got := failure.CodeOf(ValidatePayload(integerSchema, payload)); got != codePayloadInvalid {
-			t.Fatalf("non-integer token %q code = %q, want %q", payload, got, codePayloadInvalid)
-		}
+		assertSchemaFailureCode(t, ValidatePayload(integerSchema, payload), codePayloadInvalid)
 	}
 	for _, payload := range [][]byte{[]byte(`{"value":12}`), []byte(`{"value":1.25}`), []byte(`{"value":1e2}`)} {
 		if err := ValidatePayload(numberSchema, payload); err != nil {
@@ -85,23 +78,17 @@ func TestValidatePayloadRejectsMalformedDuplicateNullRootAndTrailingValues(t *te
 		nil,
 	}
 	for _, payload := range cases {
-		if got := failure.CodeOf(ValidatePayload(schema, payload)); got != codePayloadInvalid {
-			t.Fatalf("payload %q code = %q, want %q", payload, got, codePayloadInvalid)
-		}
+		assertSchemaFailureCode(t, ValidatePayload(schema, payload), codePayloadInvalid)
 	}
 }
 
 func TestValidatePayloadEnforcesByteStringCollectionAndDepthLimits(t *testing.T) {
 	stringSchema := Schema{Fields: []Field{{Name: "value", Kind: ValueString}}}
 	oversizedPayload := []byte(strings.Repeat(" ", maxPayloadBytes+1))
-	if got := failure.CodeOf(ValidatePayload(stringSchema, oversizedPayload)); got != codePayloadLimit {
-		t.Fatalf("oversized bytes code = %q, want %q", got, codePayloadLimit)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(stringSchema, oversizedPayload), codePayloadLimit)
 
 	longString := []byte(`{"value":"` + strings.Repeat("x", maxPayloadStringRunes+1) + `"}`)
-	if got := failure.CodeOf(ValidatePayload(stringSchema, longString)); got != codePayloadLimit {
-		t.Fatalf("long string code = %q, want %q", got, codePayloadLimit)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(stringSchema, longString), codePayloadLimit)
 
 	arraySchema := Schema{Fields: []Field{{Name: "value", Kind: ValueArray, Items: &Field{Kind: ValueInteger}}}}
 	items := make([]string, maxPayloadCollectionEntries+1)
@@ -109,9 +96,7 @@ func TestValidatePayloadEnforcesByteStringCollectionAndDepthLimits(t *testing.T)
 		items[index] = "1"
 	}
 	largeArray := []byte(`{"value":[` + strings.Join(items, ",") + `]}`)
-	if got := failure.CodeOf(ValidatePayload(arraySchema, largeArray)); got != codePayloadLimit {
-		t.Fatalf("large array code = %q, want %q", got, codePayloadLimit)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(arraySchema, largeArray), codePayloadLimit)
 
 	var object strings.Builder
 	object.WriteByte('{')
@@ -122,22 +107,15 @@ func TestValidatePayloadEnforcesByteStringCollectionAndDepthLimits(t *testing.T)
 		fmt.Fprintf(&object, `"k%d":true`, index)
 	}
 	object.WriteByte('}')
-	if got := failure.CodeOf(ValidatePayload(Schema{}, []byte(object.String()))); got != codePayloadLimit {
-		t.Fatalf("large object code = %q, want %q", got, codePayloadLimit)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(Schema{}, []byte(object.String())), codePayloadLimit)
 
 	tooDeep := []byte(`{"value":` + strings.Repeat("[", maxPayloadDepth) + `0` + strings.Repeat("]", maxPayloadDepth) + `}`)
-	if got := failure.CodeOf(ValidatePayload(arraySchema, tooDeep)); got != codePayloadLimit {
-		t.Fatalf("deep payload code = %q, want %q", got, codePayloadLimit)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(arraySchema, tooDeep), codePayloadLimit)
 }
 
 func TestValidatePayloadRejectsInvalidSchemaBeforePayloadUse(t *testing.T) {
 	invalid := Schema{Fields: []Field{{Name: " value", Kind: ValueString}}}
-	err := ValidatePayload(invalid, []byte(`{"value":"secret"}`))
-	if got := failure.CodeOf(err); got != codeSchemaInvalid {
-		t.Fatalf("invalid schema code = %q, want %q", got, codeSchemaInvalid)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(invalid, []byte(`{"value":"secret"}`)), codeSchemaInvalid)
 }
 
 func TestValidateRegisteredPayloadRequiresExactLocalRegistration(t *testing.T) {
@@ -158,13 +136,8 @@ func TestValidateRegisteredPayloadRequiresExactLocalRegistration(t *testing.T) {
 
 	unknown := identity
 	unknown.Version = 2
-	if got := failure.CodeOf(ValidateRegisteredPayload(registry, unknown, []byte(`{"id":"evt-1"}`))); got != codeSchemaNotFound {
-		t.Fatalf("unknown schema code = %q, want %q", got, codeSchemaNotFound)
-	}
-
-	if got := failure.CodeOf(ValidateRegisteredPayload(nil, identity, []byte(`{"id":"evt-1"}`))); got != codeSchemaInvalid {
-		t.Fatalf("nil registry code = %q, want %q", got, codeSchemaInvalid)
-	}
+	assertSchemaFailureCode(t, ValidateRegisteredPayload(registry, unknown, []byte(`{"id":"evt-1"}`)), codeSchemaNotFound)
+	assertSchemaFailureCode(t, ValidateRegisteredPayload(nil, identity, []byte(`{"id":"evt-1"}`)), codeSchemaInvalid)
 }
 
 func TestValidatePayloadArrayItemsRemainHomogeneous(t *testing.T) {
@@ -183,7 +156,5 @@ func TestValidatePayloadArrayItemsRemainHomogeneous(t *testing.T) {
 	if err := ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":false}]}`)); err != nil {
 		t.Fatalf("homogeneous object array rejected: %v", err)
 	}
-	if got := failure.CodeOf(ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":"false"}]}`))); got != codePayloadInvalid {
-		t.Fatalf("heterogeneous item code = %q, want %q", got, codePayloadInvalid)
-	}
+	assertSchemaFailureCode(t, ValidatePayload(schema, []byte(`{"items":[{"enabled":true},{"enabled":"false"}]}`)), codePayloadInvalid)
 }
