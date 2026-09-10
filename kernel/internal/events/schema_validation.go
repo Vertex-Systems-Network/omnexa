@@ -11,15 +11,15 @@ import (
 )
 
 const (
-	maxPayloadBytes             = 64 * 1024
-	maxPayloadDepth             = 16
-	maxPayloadCollectionEntries = 256
-	maxPayloadStringRunes       = 4096
+	maxSchemaPayloadBytes             = 64 * 1024
+	maxSchemaPayloadDepth             = 16
+	maxSchemaPayloadCollectionEntries = 256
+	maxSchemaPayloadStringRunes       = 4096
 )
 
 const (
-	codePayloadInvalid failure.Code = "events.schema.payload_invalid"
-	codePayloadLimit   failure.Code = "events.schema.payload_limit"
+	codeSchemaPayloadInvalid failure.Code = "events.schema.payload_invalid"
+	codeSchemaPayloadLimit   failure.Code = "events.schema.payload_limit"
 )
 
 type decodedPayloadValue struct {
@@ -51,7 +51,7 @@ func ValidatePayload(schema Schema, payload []byte) error {
 	if len(payload) == 0 || !utf8.Valid(payload) {
 		return payloadInvalidFailure()
 	}
-	if len(payload) > maxPayloadBytes {
+	if len(payload) > maxSchemaPayloadBytes {
 		return payloadLimitFailure()
 	}
 
@@ -90,7 +90,7 @@ func decodePayloadValue(decoder *json.Decoder, containerDepth int) (decodedPaylo
 			return decodedPayloadValue{}, payloadInvalidFailure()
 		}
 	case string:
-		if utf8.RuneCountInString(value) > maxPayloadStringRunes {
+		if utf8.RuneCountInString(value) > maxSchemaPayloadStringRunes {
 			return decodedPayloadValue{}, payloadLimitFailure()
 		}
 		return decodedPayloadValue{kind: ValueString}, nil
@@ -109,7 +109,7 @@ func decodePayloadValue(decoder *json.Decoder, containerDepth int) (decodedPaylo
 }
 
 func decodePayloadObject(decoder *json.Decoder, containerDepth int) (decodedPayloadValue, error) {
-	if containerDepth >= maxPayloadDepth {
+	if containerDepth >= maxSchemaPayloadDepth {
 		return decodedPayloadValue{}, payloadLimitFailure()
 	}
 	nextDepth := containerDepth + 1
@@ -117,7 +117,7 @@ func decodePayloadObject(decoder *json.Decoder, containerDepth int) (decodedPayl
 	entries := 0
 	for decoder.More() {
 		entries++
-		if entries > maxPayloadCollectionEntries {
+		if entries > maxSchemaPayloadCollectionEntries {
 			return decodedPayloadValue{}, payloadLimitFailure()
 		}
 		keyToken, err := decoder.Token()
@@ -128,7 +128,7 @@ func decodePayloadObject(decoder *json.Decoder, containerDepth int) (decodedPayl
 		if !ok {
 			return decodedPayloadValue{}, payloadInvalidFailure()
 		}
-		if utf8.RuneCountInString(key) > maxPayloadStringRunes {
+		if utf8.RuneCountInString(key) > maxSchemaPayloadStringRunes {
 			return decodedPayloadValue{}, payloadLimitFailure()
 		}
 		if _, exists := values[key]; exists {
@@ -148,13 +148,13 @@ func decodePayloadObject(decoder *json.Decoder, containerDepth int) (decodedPayl
 }
 
 func decodePayloadArray(decoder *json.Decoder, containerDepth int) (decodedPayloadValue, error) {
-	if containerDepth >= maxPayloadDepth {
+	if containerDepth >= maxSchemaPayloadDepth {
 		return decodedPayloadValue{}, payloadLimitFailure()
 	}
 	nextDepth := containerDepth + 1
 	values := make([]decodedPayloadValue, 0)
 	for decoder.More() {
-		if len(values) >= maxPayloadCollectionEntries {
+		if len(values) >= maxSchemaPayloadCollectionEntries {
 			return decodedPayloadValue{}, payloadLimitFailure()
 		}
 		decoded, err := decodePayloadValue(decoder, nextDepth)
@@ -216,6 +216,7 @@ func validateDecodedValue(field Field, value decodedPayloadValue) bool {
 			if !validateDecodedValue(*field.Items, value.array[index]) {
 				return false
 			}
+		}
 		return true
 	default:
 		return false
@@ -235,9 +236,9 @@ func isJSONIntegerToken(value string) bool {
 }
 
 func payloadInvalidFailure() error {
-	return schemaFailure(codePayloadInvalid, failure.CategoryValidation, "event payload does not conform to the accepted schema")
+	return schemaFailure(codeSchemaPayloadInvalid, failure.CategoryValidation, "event payload does not conform to the accepted schema")
 }
 
 func payloadLimitFailure() error {
-	return schemaFailure(codePayloadLimit, failure.CategoryValidation, "event payload exceeds validation limits")
+	return schemaFailure(codeSchemaPayloadLimit, failure.CategoryValidation, "event payload exceeds validation limits")
 }
