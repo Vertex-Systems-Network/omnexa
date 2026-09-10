@@ -128,7 +128,6 @@ func TestCanonicalSchemaRejectsInvalidStructures(t *testing.T) {
 		}}}},
 	}
 	for name, schema := range cases {
-		schema := schema
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			_, _, err := CanonicalSchema(schema)
