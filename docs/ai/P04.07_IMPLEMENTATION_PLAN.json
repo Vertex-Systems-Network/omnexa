@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "phase": "P04",
+  "work_package": "P04.07",
+  "wave": "Wave 1",
+  "status": "candidate-awaiting-governance-no-runtime",
+  "coordination_issue": 270,
+  "authority": {
+    "canonical_state": "docs/roadmap/STATE.json",
+    "worker_plan": "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+    "owner": "kernel.events",
+    "business_feature_code_authorized": false,
+    "p04_08_plus_authorized": false,
+    "migration_4_reserved": false,
+    "provider_registry_authorized": false,
+    "remote_references_authorized": false,
+    "runtime_mutation_before_plan_acceptance": false
+  },
+  "first_runtime_slice": {
+    "purpose": "Provider-neutral local schema identity, deterministic compatibility, and bounded payload validation for kernel.events only.",
+    "schema_representation": {
+      "model": "repository-native typed Go Schema/Field/ValueKind",
+      "root": "closed-json-object",
+      "value_kinds": ["string", "integer", "number", "boolean", "object", "array"],
+      "nested_objects": true,
+      "homogeneous_arrays": true,
+      "unknown_payload_properties": "reject",
+      "implicit_type_coercion": false,
+      "integer_is_subset_of_number": true,
+      "executable_hooks_or_custom_callbacks": false,
+      "field_name": {
+        "must_be_trimmed_non_empty_utf8": true,
+        "max_runes": 128,
+        "forbidden_characters": ["NUL", "CR", "LF"],
+        "duplicates": "reject"
+      }
+    },
+    "canonicalization_and_fingerprint": {
+      "precondition": "validate-schema",
+      "copy_before_normalization": true,
+      "object_field_order": "lexicographic-by-exact-utf8-field-name-recursively",
+      "encoding": "deterministic-json-from-normalized-typed-structure",
+      "semantic_content_only": true,
+      "exclude_transport_provider_caller_metadata": true,
+      "fingerprint_algorithm": "sha256",
+      "fingerprint_encoding": "lowercase-hex",
+      "fingerprint_length": 64,
+      "input_field_order_affects_fingerprint": false,
+      "invalid_or_ambiguous_schema": "fail-before-fingerprint-acceptance"
+    },
+    "identity_and_registry": {
+      "identity": ["owner", "event_type", "payload_schema_version"],
+      "payload_schema_version": "positive-integer",
+      "storage": "repository-local-in-process-memory-backed",
+      "same_identity_same_canonical_content": "idempotent-success",
+      "same_identity_different_canonical_content": "fail-closed-conflict",
+      "cross_process_durability_claim": false,
+      "postgres_or_external_registry": false
+    },
+    "compatibility": {
+      "policies": ["backward", "forward", "full", "exact"],
+      "predecessor_set": "highest-accepted-version-lower-than-candidate-only",
+      "version_1_requires_predecessor": false,
+      "exact": "candidate-and-predecessor-canonical-fingerprints-equal",
+      "backward": "candidate-accepts-every-payload-accepted-by-immediate-predecessor",
+      "forward": "immediate-predecessor-accepts-every-payload-accepted-by-candidate",
+      "full": "backward-and-forward",
+      "number_accepts_integer": true,
+      "integer_accepts_general_number": false,
+      "object_and_array_rule": "recursive-language-containment",
+      "authorization_effect": "none"
+    },
+    "schema_limits": {
+      "max_canonical_bytes": 65536,
+      "max_nesting_depth": 8,
+      "max_fields_per_object": 256,
+      "max_aggregate_nodes": 2048,
+      "max_field_name_runes": 128
+    },
+    "payload_limits": {
+      "max_bytes": 65536,
+      "max_nesting_depth": 16,
+      "max_entries_per_object_or_array": 256,
+      "max_string_runes": 4096
+    },
+    "validation_runtime": {
+      "execution": "synchronous-in-process",
+      "external_io": false,
+      "goroutine_or_timeout_race": false,
+      "dynamic_code_plugin_eval_or_shell": false,
+      "safe_error_contract": "stable-bounded-machine-code-and-title-with-bounded-structural-path-only",
+      "raw_payload_or_schema_in_public_error": false,
+      "provider_runtime_error_text_in_public_error": false
+    },
+    "references": {
+      "supported": false,
+      "local_reference_graph": false,
+      "uri_resolution": false,
+      "filesystem_access": false,
+      "dns": false,
+      "http_or_https": false,
+      "dynamic_loading": false,
+      "later_reference_support_requires_fresh_governed_plan": true
+    },
+    "persistence": {
+      "form": "memory-backed-registry-instance",
+      "migration_reserved": false,
+      "migration_number": null,
+      "provider_adapter": false,
+      "durable_persistence_requires_fresh_main_replan": true
+    }
+  },
+  "workers": [
+    {
+      "slot_id": "P04.07-S01",
+      "task_id": "P04.07-T01",
+      "module": "kernel.events/schema-registry",
+      "write_paths": ["kernel/internal/events/schema_registry.go", "kernel/internal/events/schema_registry_test.go"],
+      "merge_order": 1
+    },
+    {
+      "slot_id": "P04.07-S02",
+      "task_id": "P04.07-T02",
+      "module": "kernel.events/schema-compatibility",
+      "write_paths": ["kernel/internal/events/schema_compatibility.go", "kernel/internal/events/schema_compatibility_test.go"],
+      "merge_order": 2
+    },
+    {
+      "slot_id": "P04.07-S03",
+      "task_id": "P04.07-T03",
+      "module": "kernel.events/schema-validation",
+      "write_paths": ["kernel/internal/events/schema_validation.go", "kernel/internal/events/schema_validation_test.go"],
+      "merge_order": 3
+    }
+  ],
+  "replan_triggers": [
+    "new-or-widened-write-path",
+    "migration-4-or-any-persistence-schema-change",
+    "provider-or-hosted-registry",
+    "schema-references",
+    "remote-io",
+    "p04.08-plus-scope",
+    "business-feature-code",
+    "authorization-semantic-change",
+    "different-canonicalization-or-fingerprint-law",
+    "different-predecessor-set-or-limit"
+  ],
+  "acceptance_gate": [
+    "source-exact-head-governance-pass",
+    "honest-self-supervisor-review-without-fabricated-independent-approval",
+    "zero-unresolved-review-threads",
+    "unchanged-promotion-carrier",
+    "promotion-context-exact-head-governance-pass",
+    "protected-main-freshness-and-expected-head-check",
+    "guarded-merge",
+    "protected-main-readback"
+  ]
+}
