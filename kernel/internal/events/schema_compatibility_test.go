@@ -3,8 +3,6 @@ package events
 import (
 	"reflect"
 	"testing"
-
-	"github.com/Vertex-Systems-Network/omnexa/kernel/internal/failure"
 )
 
 func TestEvaluateSchemaCompatibilityExactUsesCanonicalContent(t *testing.T) {
@@ -116,20 +114,14 @@ func TestEvaluateSchemaCompatibilityRejectsInvalidInputs(t *testing.T) {
 	valid := Schema{Fields: []Field{{Name: "id", Kind: ValueString}}}
 
 	_, err := EvaluateSchemaCompatibility(CompatibilityPolicy("provider-default"), valid, valid)
-	if got := failure.CodeOf(err); got != codeSchemaCompatibilityInvalid {
-		t.Fatalf("invalid policy code = %q, want %q", got, codeSchemaCompatibilityInvalid)
-	}
+	assertSchemaFailureCode(t, err, codeSchemaCompatibilityInvalid)
 
 	invalid := Schema{Fields: []Field{{Name: " id", Kind: ValueString}}}
 	_, err = EvaluateSchemaCompatibility(CompatibilityBackward, invalid, valid)
-	if got := failure.CodeOf(err); got != codeSchemaInvalid {
-		t.Fatalf("invalid candidate code = %q, want %q", got, codeSchemaInvalid)
-	}
+	assertSchemaFailureCode(t, err, codeSchemaInvalid)
 
 	_, err = EvaluateSchemaCompatibility(CompatibilityBackward, valid, invalid)
-	if got := failure.CodeOf(err); got != codeSchemaInvalid {
-		t.Fatalf("invalid predecessor code = %q, want %q", got, codeSchemaInvalid)
-	}
+	assertSchemaFailureCode(t, err, codeSchemaInvalid)
 }
 
 func TestEvaluateSchemaCompatibilityDoesNotMutateCallerSchemas(t *testing.T) {
