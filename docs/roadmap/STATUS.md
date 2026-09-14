@@ -1,188 +1,124 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-10 — **P04.07 POST-ACTIVATION CONTINUITY**
+Last reconciled: 2026-09-15 — **P04.07 FIRST RUNTIME SLICE ACCEPTED / NO LIVE WAVE-1 LEASES**
 
-## Authoritative protected-main base
+## Canonical status
 
-Protected main at continuity start:
+`docs/roadmap/STATE.json` remains the machine-readable source of truth.
 
-`5af9383c3e973c4055eea66d48462b7c9a2a5858`
-
-That commit is the accepted P04.06-closure / P04.07-activation merge/read-back from source PR `#265` and unchanged promotion PR `#266` at exact source/promotion head `02b58b4245da5eef7a3ab1090698cd10a4832d90`, with source Governance `#747 / 34411353055` and promotion Governance `#748 / 34412007672` both passing before guarded merge.
-
-Canonical state is now:
-
-- Foundation Architecture v1 remains FROZEN.
-- P00 is DONE — 10 / 10.
-- P01 is DONE — 12 / 12; exit SATISFIED.
-- P02 is DONE — 10 / 10; exit SATISFIED.
-- P03 is DONE — 11 / 11; exit SATISFIED.
-- P04 remains ACTIVE — **6 / 10 done**.
-- P04.01-P04.06 are DONE with retained accepted evidence.
-- P04.07 is the **sole ACTIVE package**.
-- P04.08-P04.10 remain PLANNED / LOCKED.
-- `kernel_code_authorized=true` is bounded to P04.07 only.
-- P04.07 runtime is still blocked pending accepted Issue #267 continuity and a later separate implementation-plan/worker-plan.
-- P04.07 worker slots/tasks/runtime branches remain `0`.
+- Foundation Architecture v1: FROZEN.
+- P00: DONE — 10 / 10.
+- P01: DONE — 12 / 12; exit SATISFIED.
+- P02: DONE — 10 / 10; exit SATISFIED.
+- P03: DONE — 11 / 11; exit SATISFIED.
+- P04: ACTIVE — **6 / 10 done**.
+- Current work package: **P04.07 — Event Schema Registry, Compatibility & Validation**.
+- P04.01-P04.06: DONE with retained accepted evidence.
+- P04.07: sole ACTIVE package.
+- P04.08-P04.10: PLANNED / LOCKED.
+- `kernel_code_authorized=true` only inside explicitly governed P04.07 scope.
 - `business_feature_code_authorized=false`.
-- accepted `kernel.events` migration 3 remains immutable P04.06 history.
-- migration 4 is not reserved or authorized.
-- provider/vendor schema-registry selection remains unauthorized.
-- strategic X-program and AI/model/agent product runtime remain unauthorized.
-- canonical CI remains GitHub-hosted `ubuntu-24.04` only.
+- migration 4: not reserved or authorized.
+- provider/vendor schema registry: not selected or authorized.
+- strategic X runtime: unauthorized.
+- AI/model/agent product runtime: unauthorized.
 
-`docs/roadmap/STATE.json` remains the canonical machine-readable cursor. This status file is a subordinate human-readable mirror and cannot widen authority by itself.
+P04.07 remains ACTIVE after its accepted first runtime slice; the first slice does not count as P04.07 package completion and does not activate P04.08.
 
-## Accepted P04.06 implementation/completion
+## P04.07 accepted chain
 
-P04.06 is DONE with bounded accepted runtime/verifier evidence through the completed multi-wave chain.
+Activation:
 
-Terminal evidence:
+- source `#265`;
+- unchanged promotion `#266`;
+- protected-main merge/read-back `5af9383c3e973c4055eea66d48462b7c9a2a5858`.
 
-- source PR `#257` / unchanged promotion `#258`;
-- exact source/promotion head `b0d047c93e8c53e9da62a96e36c4a1a8a7ce634f`;
-- source Governance `#738 / 34400644888` — PASS;
-- promotion Governance `#739 / 34401644140`, job `102634706533` — PASS;
-- implementation merge/read-back `bdb96bb7f0dabf5b103acd78335599cc59e92b69`;
-- completion evidence `docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md`;
-- Wave 2D ledger closure source `#259` / unchanged promotion `#260`;
-- zero-lease ledger merge/read-back `6050bc2d970b5cf83118115557e952e3e91e0f96`.
+Post-activation continuity:
 
-Accepted P04.06 scope includes structured deterministic failure disposition, bounded retry/backoff/eligibility, durable scheduled/quarantined/resolved retry state, immutable `kernel.events` migration 3, PostgreSQL CAS/claim/due-discovery behavior, quarantine-before-checkpoint and crash-gap recovery, P04.05 already-applied composition and real-PostgreSQL restart persistence.
+- Issue `#267`;
+- source `#268`;
+- promotion `#269`;
+- merge/read-back `3df6c0ec0d1034134b7417fe34e813a31b3ab821`.
 
-P04.03 checkpoint, P04.05 inbox completion and P04.06 retry/quarantine remain separate facts. Nothing in P04.06 grants authorization, business success, global ordering or end-to-end exactly-once semantics.
+Wave-1 plan:
 
-## Accepted P04.07 preparation
+- coordination Issue `#270`;
+- source `#271`;
+- promotion `#272`;
+- merge/read-back `07ab591f37ccf16df74cbadd3cc641c195ebbc43`.
 
-P04.07 contract preparation was accepted before activation:
+Accepted first-slice implementation:
 
-- source `#262` / unchanged promotion `#263`;
-- exact preparation head `94789264824a34e3f2608283cb6b1c2f158e0b81`;
-- source Governance `#744 / 34407394506` — PASS;
-- promotion Governance `#745 / 34408137084` — PASS;
-- preparation merge/read-back `23f3dca090338b5debbf1af02b6db49b2f03f30b`;
-- contract `docs/roadmap/work-packages/P04.07.md`;
-- handoff `docs/ai/handoffs/P04.07.md`.
+- T01 schema registry: source `#273`, promotion `#274`, merge/read-back `5d61af89743625bd4e39d515a11cd711d1fe01e4`;
+- T02 compatibility: source `#275`, promotion `#278`, merge/read-back `d06fa216ace09e806ef4dc1c5005cd26d424391e`;
+- T03 payload validation: source `#276`, promotion `#279`, merge/read-back `e39a9dab525e410dad11f7059e41a1d052b42fd1`;
+- T04 Supervisor verifier/evidence: source `#280`, promotion `#281`, exact head `52b3e5c9449f6f31c47cae9234347fbd0b6b8770`, source Governance `34540920140`, promotion Governance `34541808091`, merge/read-back `5c5153ee15c70646d28926743e2d19ab941013d2`.
 
-Preparation defined provider-neutral payload-schema identity/versioning, immutable historical fingerprints, deterministic compatibility, bounded local-only validation, owner/producer/tenant isolation, no remote references/dynamic execution/schema-derived authorization, and strict separation from checkpoint/inbox/retry facts.
+The accepted first-slice verifier is `scripts/verify_p04_07.sh`. Historical evidence is `docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md`.
 
-Preparation reserved no migration and selected no provider/vendor registry.
+## Live lease state
 
-## Accepted P04.06 closure / P04.07 activation
+Issue #267 and Issue #270 are historical accepted governance carriers. Their old branch/task/lease wording must not be interpreted as live authority.
 
-Coordination issue `#264` is completed.
+Current live Wave-1 state:
 
-Accepted transition evidence:
+- worker slots: `0`;
+- worker tasks: `0`;
+- worker branches: `0`;
+- Supervisor T04 lease: `0`;
+- migration reservations: `0`.
 
-- source PR `#265`;
-- unchanged promotion PR `#266`;
-- exact unchanged source/promotion head `02b58b4245da5eef7a3ab1090698cd10a4832d90`;
-- source Governance `#747 / 34411353055` — PASS;
-- promotion Governance `#748 / 34412007672` — PASS;
-- SELF/Supervisor review provenance recorded without claiming independent approval;
-- zero unresolved review threads before protected integration;
-- protected-main freshness verified at `23f3dca090338b5debbf1af02b6db49b2f03f30b`;
-- expected-head guarded merge/read-back `5af9383c3e973c4055eea66d48462b7c9a2a5858`.
+`docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` records Wave 1 as completed historical leases. A new agent does not inherit those leases merely by reading the file or reusing a branch name.
 
-The transition changed governance/state/continuity only:
-
-- P04.06 moved from ACTIVE to DONE with retained completion evidence;
-- P04.07 moved from PLANNED to sole ACTIVE;
-- P04 done count moved from 5 to 6;
-- bounded kernel package authority moved from P04.06 to P04.07;
-- active runtime worker/task/branch count remained zero;
-- migration 3 remained immutable historical P04.06 evidence;
-- migration 4 remained unreserved;
-- provider/vendor schema-registry selection remained unauthorized;
-- P04.08-P04.10 remained locked.
-
-## P04.07 active boundary
+## P04.07 retained boundary
 
 Owner: `kernel.events`.
 
-P04.07 is canonically ACTIVE, but runtime implementation does not begin from package activation alone. The accepted provider-neutral contract in `docs/roadmap/work-packages/P04.07.md` requires:
+The accepted first slice remains bounded to provider-neutral local schema-registry, compatibility and payload-validation behavior. Retained laws include:
 
 - payload schema version separate from P04.01 envelope version;
-- stable owner/event-type/version identity and immutable historical fingerprints;
-- deterministic `backward`, `forward`, `full` and `exact` compatibility;
-- an explicitly frozen predecessor comparison set;
-- bounded deterministic local-only validation before protected mutation;
+- stable owner/event-type/version identity;
+- immutable accepted historical fingerprints;
+- deterministic bounded canonicalization and compatibility;
+- deterministic bounded payload validation before protected mutation;
 - fail-closed unknown/unregistered/unsupported schema identity/version;
-- no remote HTTP(S)/DNS/registry/filesystem schema fetching;
-- no dynamic code/plugin/shell/schema-callback execution;
-- no schema-derived authorization;
-- owner/producer/tenant isolation and no tenant-specific V1 schema forks;
-- separation from checkpoint, inbox and retry/quarantine state.
+- no remote HTTP(S), DNS, hosted registry or arbitrary filesystem schema/reference fetching;
+- no dynamic code, eval, arbitrary plugin, shell or schema-callback execution;
+- no schema-derived authorization, capability or tenant-membership authority;
+- no tenant-specific V1 schema forks;
+- no migration 4;
+- no provider/vendor schema registry selection;
+- no P04.08+ runtime;
+- no business-feature or AI/model/agent product-runtime authority;
+- no global ordering or end-to-end exactly-once claim.
 
-Validation success proves only schema conformance. It does not grant authorization or exactly-once/global-ordering semantics.
+Validation success proves schema conformance only.
 
-## Issue #267 post-activation continuity
+## Security continuity — Issue #285
 
-Issue `#267` is the current continuity-only carrier.
+Issue `#285` corrects a stale AI instruction/confused-deputy risk: repository-authoritative mirrors still presented pre-runtime Issue #267/#270 state as current after T01-T04 had already been accepted.
 
-It may reconcile exactly:
+The reconciliation updates only governance/continuity surfaces. It does not change runtime code, migrations, provider choices, package state, architecture, business authority or AI product-runtime authority.
 
-1. `AGENTS.md`
-2. `README.md`
-3. `docs/roadmap/STATUS.md`
-4. `docs/ai/AI_STATE.yaml`
-5. `docs/ai/AI_CONTEXT.md`
-6. `docs/ai/handoffs/P04.07.md`
-7. `docs/governance/P04_06_P04_07_TRANSITION_TRANSACTION.md`
+Required security outcome:
 
-It must not modify canonical `STATE.json`, the P04 package sequence, activation validators, `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`, runtime Go source, migrations, workflows or modules.
+- historical plans and branches are explicitly historical;
+- accepted T01-T04 facts are recorded;
+- no historical write lease is reusable;
+- contradictory live-looking instructions are removed;
+- fail-closed authority behavior is preserved;
+- canonical Governance must pass on the exact proposed head before merge.
 
-Throughout this continuity source and its unchanged promotion:
+## Next action
 
-- P04.07 worker slots: `0`;
-- P04.07 runtime tasks: `0`;
-- P04.07 runtime branches: `0`;
-- P04.07 migration reservations: `0`;
-- schema-registry/provider choice: `none`.
+There is no automatic next runtime implementation from Wave 1.
 
-## Separate implementation-plan gate
+If more P04.07 work is required:
 
-After Issue #267 continuity is accepted/read back, a later separately governed P04.07 implementation-plan/worker-plan must freeze the first bounded implementation slice before any runtime change.
+1. re-read current protected `main` and open Issues/PRs;
+2. confirm `STATE.json` still has P04.07 as sole ACTIVE package;
+3. create a fresh separately governed plan with new task IDs, branches and write-path leases;
+4. freeze dependencies and migration/data budget before mutation;
+5. require exact-head Governance, review freshness and protected-main freshness before merge.
 
-That plan must explicitly decide:
-
-- exact implementation paths and non-overlapping worker leases;
-- supported bounded schema representation/dialect or subset;
-- canonicalization/fingerprint algorithm and encoding;
-- predecessor-set compatibility semantics;
-- validator size/depth/time/memory/collection limits and stable safe errors;
-- local-reference policy and graph limits if supported;
-- registry persistence form;
-- only if durable persistence is required, the exact next `kernel.events` migration owner/version/path/data budget after fresh migration preflight.
-
-No worker may infer migration 4 or a vendor registry from package activation or continuity.
-
-## Still unauthorized
-
-- P04.07 runtime mutation on Issue #267 source/promotion;
-- a P04.07 runtime worker/task/branch before separate implementation-plan acceptance;
-- migration 4 reservation/schema mutation before separately governed persistence decision;
-- provider/vendor registry selection or remote schema fetching;
-- dynamic code/plugin/shell execution from schema content;
-- P04.08 background-job ownership/runtime;
-- P04.09 broad operator recovery UX;
-- P04.10 replay/release/poison aggregate runtime;
-- global ordering or end-to-end exactly-once claims;
-- production business handlers/features;
-- strategic X runtime;
-- AI/model/agent product runtime.
-
-## Exact next work
-
-1. Complete the exact seven-file Issue `#267` continuity source from protected `main@5af9383c3e973c4055eea66d48462b7c9a2a5858`.
-2. Verify exact changed-path scope and absence of runtime/state/worker-plan/migration drift.
-3. Require exact-head Omnexa Governance.
-4. Record honest SELF/Supervisor review and require zero unresolved threads.
-5. Re-verify protected-main freshness.
-6. Create an unchanged promotion at the exact reviewed source head.
-7. Require fresh promotion Governance, promotion SELF/Supervisor review and zero unresolved threads.
-8. Merge with expected-head protection and re-read protected main.
-9. Confirm P04.01-P04.06 DONE, P04.07 sole ACTIVE at **6 / 10 done**, P04.08+ locked and zero runtime leases/reservations.
-10. Only then create a separate P04.07 implementation-plan/worker-plan carrier.
-
-Do not start P04.07 runtime or auto-advance P04.08 from this continuity carrier.
+Do not reuse Issue #270 branches/task records as current authority. Do not auto-advance P04.08, reserve migration 4, select a provider registry or infer business/AI runtime authority.
