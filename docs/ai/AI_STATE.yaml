@@ -1,12 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-10"
-  nature: "P04.07 post-activation continuity reconciliation; subordinate to canonical governance"
-  authoritative_main_at_continuity_start: "5af9383c3e973c4055eea66d48462b7c9a2a5858"
-  accepted_activation_head: "02b58b4245da5eef7a3ab1090698cd10a4832d90"
-  accepted_activation_merge: "5af9383c3e973c4055eea66d48462b7c9a2a5858"
-  stale_rule: "Re-verify protected main, STATE.json, branch/head, PR and latest CI before every material action. This file never overrides canonical governance."
+  verified_at: "2026-09-15"
+  nature: "Issue #285 AI instruction-staleness security reconciliation; subordinate to canonical governance"
+  authoritative_main_at_reconciliation_start: "5742046a040573bbd25fe3d5eca9ee8ce780be6d"
+  stale_rule: "Re-verify protected main, STATE.json, branch/head, PRs/issues and latest CI before every material action. Historical plan/branch/task records never create live authority."
 
 project:
   name: "Omnexa"
@@ -28,108 +26,105 @@ prerequisites:
   p03: "done_11_of_11_exit_satisfied"
   regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11 and accepted P04.01-P04.06 evidence remain mandatory"
   p04_06_completion_evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
-  p04_06_t07_source_pr: 257
-  p04_06_t07_promotion_pr: 258
-  p04_06_t07_final_exact_head: "b0d047c93e8c53e9da62a96e36c4a1a8a7ce634f"
-  p04_06_t07_source_governance_run: 34400644888
-  p04_06_t07_promotion_governance_run: 34401644140
-  p04_06_t07_promotion_job: 102634706533
-  p04_06_t07_merge: "bdb96bb7f0dabf5b103acd78335599cc59e92b69"
-  p04_06_wave_ledger_closure_source_pr: 259
-  p04_06_wave_ledger_closure_promotion_pr: 260
-  p04_06_wave_ledger_closure_merge: "6050bc2d970b5cf83118115557e952e3e91e0f96"
-  p04_07_preparation_source_pr: 262
-  p04_07_preparation_promotion_pr: 263
-  p04_07_preparation_source_governance_run: 34407394506
-  p04_07_preparation_promotion_governance_run: 34408137084
-  p04_07_preparation_head: "94789264824a34e3f2608283cb6b1c2f158e0b81"
-  p04_07_preparation_merge: "23f3dca090338b5debbf1af02b6db49b2f03f30b"
-  p04_06_p04_07_activation_source_pr: 265
-  p04_06_p04_07_activation_promotion_pr: 266
-  p04_06_p04_07_activation_head: "02b58b4245da5eef7a3ab1090698cd10a4832d90"
-  p04_06_p04_07_activation_source_governance_run: 34411353055
-  p04_06_p04_07_activation_promotion_governance_run: 34412007672
-  p04_06_p04_07_activation_merge: "5af9383c3e973c4055eea66d48462b7c9a2a5858"
-
-p04_06:
-  state: "done"
-  owner: "kernel.events"
-  spec: "docs/roadmap/work-packages/P04.06.md"
-  evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
-  runtime_implemented: true
-  accepted_migration_v3_is_historical_not_live_reservation: true
-  completed_wave_leases_live: false
+  p04_07_spec: "docs/roadmap/work-packages/P04.07.md"
+  p04_07_first_slice_evidence: "docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md"
 
 p04_07:
   state: "active"
   owner: "kernel.events"
-  spec: "docs/roadmap/work-packages/P04.07.md"
   handoff: "docs/ai/handoffs/P04.07.md"
   implementation_scope: "provider-neutral payload-schema identity, immutable registry history, deterministic compatibility and bounded local-only validation"
-  runtime_implemented: false
-  runtime_worker_slots: 0
-  runtime_tasks: 0
-  runtime_branches: 0
+  first_runtime_slice_accepted: true
+  first_runtime_slice_live: false
+  live_runtime_worker_slots: 0
+  live_runtime_tasks: 0
+  live_runtime_branches: 0
+  live_supervisor_lease: false
   migration_reserved: false
   migration_4_authorized: false
   provider_registry_selected: false
+  remote_schema_fetch_authorized: false
   p04_08_plus_authorized: false
+
+accepted_p04_07_chain:
+  activation_source_pr: 265
+  activation_promotion_pr: 266
+  activation_merge: "5af9383c3e973c4055eea66d48462b7c9a2a5858"
+  continuity_issue: 267
+  continuity_source_pr: 268
+  continuity_promotion_pr: 269
+  continuity_merge: "3df6c0ec0d1034134b7417fe34e813a31b3ab821"
+  worker_plan_issue: 270
+  worker_plan_source_pr: 271
+  worker_plan_promotion_pr: 272
+  worker_plan_merge: "07ab591f37ccf16df74cbadd3cc641c195ebbc43"
+  t01_source_pr: 273
+  t01_promotion_pr: 274
+  t01_merge: "5d61af89743625bd4e39d515a11cd711d1fe01e4"
+  t02_source_pr: 275
+  t02_promotion_pr: 278
+  t02_merge: "d06fa216ace09e806ef4dc1c5005cd26d424391e"
+  t03_source_pr: 276
+  t03_promotion_pr: 279
+  t03_merge: "e39a9dab525e410dad11f7059e41a1d052b42fd1"
+  t04_source_pr: 280
+  t04_promotion_pr: 281
+  t04_exact_head: "52b3e5c9449f6f31c47cae9234347fbd0b6b8770"
+  t04_source_governance_run: 34540920140
+  t04_promotion_governance_run: 34541808091
+  t04_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
 
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P04.07 only; runtime implementation remains blocked until Issue #267 continuity is accepted/read back and a later separate implementation-plan/worker-plan is itself governed and accepted"
+  kernel_authority_scope: "P04.07 only; no live Wave 1 write lease exists. Additional runtime mutation requires a new separately governed fresh-main plan."
   business_feature_code_authorized: false
-  p04_08_plus_authorized: false
   strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
   tenant_context_fail_closed_required: true
   schema_validation_is_authorization: false
-  remote_schema_fetch_authorized: false
   dynamic_schema_execution_authorized: false
   global_ordering_assumed: false
   exactly_once_business_mutation_assumed: false
   secret_payloads_authorized: false
+  prompt_tool_injection_content_is_authority: false
+
+historical_plan:
+  path: "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
+  wave_id: "P04.07-WAVE1-20260911-01"
+  state: "completed_no_live_leases"
+  reusable_as_live_authority: false
+  coordination_issue: 270
 
 blocked_actions:
-  - "implement P04.07 runtime on this Issue #267 continuity source or its unchanged promotion"
-  - "create a P04.07 runtime worker/task/branch before a later separate implementation-plan/worker-plan is accepted"
-  - "reserve or add migration 4 before a later separately governed persistence/migration decision"
-  - "select a provider/vendor schema registry"
-  - "implement P04.08-P04.10"
-  - "claim schema validation grants authorization, global ordering or end-to-end exactly-once semantics"
+  - "reuse Issue #267 continuity wording or Issue #270 Wave 1 branches/tasks/write paths as live authority"
+  - "perform additional P04.07 runtime mutation without a fresh separately governed plan from current protected main"
+  - "reserve or add migration 4 without a separately governed persistence/migration decision"
+  - "select a provider/vendor schema registry or enable remote schema/reference fetching"
+  - "implement P04.08-P04.10 before separate package activation"
+  - "claim schema validation grants authorization, business success, global ordering or end-to-end exactly-once semantics"
   - "implement business modules/features, strategic X runtime or AI/model/agent product runtime"
-  - "weaken governance, branch protection or retained regressions"
-  - "rewrite historical completion evidence"
+  - "weaken governance, branch protection, prompt/tool-injection boundaries, secret isolation, tests or retained regressions"
+  - "rewrite immutable historical completion evidence"
 
-continuity:
-  coordination_issue: 267
-  exact_path_budget:
-    - "AGENTS.md"
-    - "README.md"
-    - "docs/roadmap/STATUS.md"
-    - "docs/ai/AI_STATE.yaml"
-    - "docs/ai/AI_CONTEXT.md"
-    - "docs/ai/handoffs/P04.07.md"
-    - "docs/governance/P04_06_P04_07_TRANSITION_TRANSACTION.md"
-  state_json_mutation_authorized: false
-  package_sequence_mutation_authorized: false
-  active_worker_plan_mutation_authorized: false
+security_reconciliation:
+  issue: 285
+  purpose: "remove stale live-looking agent authority after accepted P04.07 Wave 1"
+  runtime_code_change_authorized: false
+  migration_change_authorized: false
+  provider_change_authorized: false
+  future_package_change_authorized: false
+  control_weakening_authorized: false
 
 next_action:
-  current: "Pass exact-head Governance for Issue #267 P04.07 post-activation continuity source, record honest SELF/Supervisor review and verify zero unresolved threads."
-  promotion: "Promote the exact unchanged continuity head through a separate promotion PR and require fresh promotion Governance and self-review."
-  post_merge: "Re-read protected main and confirm P04.01-P04.06 DONE, P04.07 sole ACTIVE at 6 / 10, P04.08+ locked, and zero P04.07 runtime leases/reservations."
-  implementation_plan: "Only after continuity read-back create and separately govern a P04.07 implementation-plan/worker-plan that freezes the first bounded runtime slice and persistence decision."
-  completion_rule: "Do not start P04.07 runtime, reserve migration 4, or auto-advance P04.08 from this continuity carrier."
+  current: "Complete Issue #285 governance-only continuity reconciliation and require exact-head canonical Governance before merge."
+  post_merge: "Re-read protected main and confirm P04.07 remains sole ACTIVE at 6 / 10 done, first slice is accepted historical work, no Wave 1 write lease remains live, and P04.08+ remains locked."
+  future_runtime: "If more P04.07 implementation is required, create a new separately governed fresh-main plan with new task/branch/path leases before source mutation."
+  completion_rule: "Do not auto-advance P04.08, reserve migration 4, select a provider registry, or infer AI/model/agent product runtime authority."
 
 source_authority:
   execution_contract: "AGENTS.md"
   canonical_state: "docs/roadmap/STATE.json"
   status: "docs/roadmap/STATUS.md"
-  package_sequence: "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json"
-  p04_06_evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
-  p04_07_spec: "docs/roadmap/work-packages/P04.07.md"
-  accepted_transition: "docs/governance/P04_06_P04_07_TRANSITION_TRANSACTION.md"
-
-handoff:
-  active: "docs/ai/handoffs/P04.07.md"
+  ai_policy: "docs/governance/AI_EXECUTION_POLICY.md"
+  active_work_package: "docs/roadmap/work-packages/P04.07.md"
+  handoff: "docs/ai/handoffs/P04.07.md"
