@@ -172,20 +172,40 @@ func runVerify(ctx context.Context, options Options) int {
 	return runVerification(ctx, root, verificationEnvironment(options.Environment), options.Stdout, options.Stderr, options.Runner, options.Arguments[1])
 }
 
-// verificationEnvironment prevents runtime Omnexa configuration, including
-// restricted provider URLs and future credentials, from leaking into repository
-// verification subprocesses. Synthetic P01_* provider variables and ordinary
-// toolchain/process variables remain available to the governed scripts.
+// verificationEnvironment deliberately uses an allowlist instead of trying to
+// enumerate secrets. Repository-owned verification subprocesses must never
+// inherit unrelated host credentials such as AI-provider keys, GitHub tokens,
+// cloud credentials, SSH agent state or production service configuration.
+// Only ordinary toolchain/process settings and synthetic work-package test
+// fixtures cross this execution boundary.
 func verificationEnvironment(environment []string) []string {
 	filtered := make([]string, 0, len(environment))
 	for _, item := range environment {
 		key, _, ok := strings.Cut(item, "=")
-		if ok && strings.HasPrefix(key, "OMNEXA_") {
+		if !ok || !allowedVerificationEnvironmentKey(key) {
 			continue
 		}
 		filtered = append(filtered, item)
 	}
 	return filtered
+}
+
+func allowedVerificationEnvironmentKey(key string) bool {
+	switch key {
+	case "PATH", "HOME", "USERPROFILE", "TMPDIR", "TEMP", "TMP", "RUNNER_TEMP",
+		"SYSTEMROOT", "COMSPEC", "PATHEXT", "CI", "GITHUB_ACTIONS", "RUNNER_OS",
+		"RUNNER_ARCH", "RUNNER_ENVIRONMENT", "LANG", "LC_ALL", "TZ", "GOCACHE",
+		"GOMODCACHE", "GOPATH", "GOPROXY", "GOSUMDB", "GOENV", "GOTOOLCHAIN",
+		"CGO_ENABLED", "CC", "CXX", "SSL_CERT_FILE", "SSL_CERT_DIR":
+		return true
+	}
+
+	return len(key) > 12 && key[0] == 'P' && isASCIIDigit(key[1]) && isASCIIDigit(key[2]) &&
+		key[3] == '_' && isASCIIDigit(key[4]) && isASCIIDigit(key[5]) && strings.HasPrefix(key[6:], "_TEST_")
+}
+
+func isASCIIDigit(value byte) bool {
+	return value >= '0' && value <= '9'
 }
 
 func explicitEnvironment(resolved config.Config) bool {
