@@ -10,6 +10,24 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable mirror and never grants authority by itself.
 
+## Live development progress
+
+This is the human-readable mirror of the active AI-Native development flow. Canonical repository/governance evidence remains authoritative.
+
+| Item | Current state |
+|---|---|
+| Current module | **P04 / P04.07 — kernel.events** |
+| P04 progress | **60% — 6 / 10 accepted packages** |
+| Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
+| P04.07 | **ACTIVE**; T01-T04 accepted |
+| Readiness runner | **ACCEPTED** — source PR #295 / Governance #801; promotion PR #296 / Governance #802 |
+| Protected-main runner merge | `d4ef378349292e2282f750efe3de75949bce1af4` |
+| T05 readiness | **Awaiting fresh verifier run** |
+| T06 closure | **LOCKED** until T05 terminal PASS |
+| Next safe action | Accept this progress-sync policy, then trigger a fresh main-equivalent `supervisor/p04-07-readiness-*` branch and require `scripts/verify_p04_07.sh` PASS |
+
+**Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
+
 ## Current P04 package status
 
 | Package | Status | Current truth |
@@ -107,8 +125,10 @@ Every material agent task checks these instructions at task start and before PR 
 13. preserve prompt/tool-injection, secret isolation, tenant/authz/audit and evidence boundaries;
 14. do not weaken tests, CI, branch protection or security gates to obtain green;
 15. require exact-final-head tests/CI/review and current protected-main freshness before merge;
-16. if effective working instructions change materially, update this section in the same explicitly authorized governed change;
-17. if unchanged, record: `Agent instructions checked — README instruction delta: none`.
+16. on every user `continue`, `resume`, or recovery turn, check the `Live development progress` section against protected main and canonical evidence;
+17. every material repository or milestone-state transition must update README progress in the same governed carrier when the active head is safe to mutate, even when percentages are unchanged but milestone/PR/CI/next-action evidence changed;
+18. never mutate an exact source/promotion head solely for README while that head is under CI certification; defer the README sync to the next material governed carrier and flush it before claiming completion;
+19. README is a mirror only: never invent progress, authority, PASS state, or future denominators.
 
 A new P04.07 runtime slice requires a **fresh separately governed plan from current protected main** with new task IDs, branches and path leases. Wave-1 Issue #270 is not reusable authority.
 
