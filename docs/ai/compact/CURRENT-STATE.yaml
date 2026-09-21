@@ -1,26 +1,26 @@
 schema_version: 1
-snapshot_time: "2026-09-22T00:53:00+05:00"
+snapshot_time: "2026-09-22T01:50:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
+observed_main_sha: "d4ef378349292e2282f750efe3de75949bce1af4"
 default_branch: "main"
-active_issue: 292
+active_issue: 289
 parent_coordination_issue: 289
 open_issue_gates:
   - number: 4
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: 295
-active_branch: "supervisor/20260921-p04-07-readiness-runner"
+active_pr: null
+active_branch: "supervisor/20260922-p04-07-t05-readme-progress"
 current_milestone:
-  id: "SUP-20260922-P0407-T05-RUNNER-IMPL-01"
-  name: "Implement dedicated read-only P04.07 T05 verifier workflow"
-milestone_status: "VERIFYING_REPAIRED_HEAD"
+  id: "SUP-20260922-P0407-T05-README-PROGRESS-01"
+  name: "Make README progress synchronization mandatory and transition to T05 readiness governance"
+milestone_status: "IMPLEMENTING"
 last_completed_milestone:
-  name: "Accept P04.07 T05 runner execution-path change-control plan"
-  evidence: "source PR #293 Governance 35640694421 PASS; promotion PR #294 Governance 35641740530 PASS; protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
+  name: "Accept dedicated P04.07 readiness verifier runner"
+  evidence: "source PR #295 Governance 35648731635 PASS; promotion PR #296 Governance 35651627278 PASS; protected main d4ef378349292e2282f750efe3de75949bce1af4; Issue #292 completed"
 canonical_cursor:
   phase: "P04"
   phase_name: "Data, Jobs & Event Fabric"
@@ -38,23 +38,23 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
-exact_next_safe_action: "Bind repaired PR #295 exact head to RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2, perform one consolidated exact-head Governance/review refresh, and stop if nonterminal."
+readme_progress_sync:
+  every_turn_check_required: true
+  material_transition_write_required: true
+  certified_head_exception_only: true
+  deferred_sync_must_flush_before_complete: true
+exact_next_safe_action: "Open this exact-head T05 README/progress-sync source PR, bind RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2"
+  - "RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE"
 blocked_runner_ids:
   - "RB-20260921-P0407-T05-READINESS"
 current_blockers:
-  - "PR #295 initial head failed Governance because a historical accepted prerequisite was encoded as a live depends_on task; repaired head requires fresh exact-head Governance."
-  - "T05 verifier remains NOT RUN until the dedicated workflow is accepted on protected main and triggered from a fresh main-equivalent readiness branch."
+  - "T05 verifier still requires a fresh main-equivalent supervisor/p04-07-readiness-* run after this policy carrier is accepted."
 security_scope:
-  workflow_write_authority: ".github/workflows/p04-07-readiness.yml only"
-  workflow_permissions: "contents: read"
-  workflow_secrets: false
+  workflow_mutation: false
   verifier_mutation: false
   runtime_source_mutation: false
+  migration_4: false
+  provider_remote_scope: false
+  p04_08_plus: false
   stage_b_unlocked: false
-timeout_control:
-  default_consolidated_ci_status_refreshes_per_milestone: 1
-  tight_polling: false
-  rerun_on_message_timeout: false
-  second_refresh_requires_material_transition: true

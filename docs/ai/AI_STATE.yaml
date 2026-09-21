@@ -2,8 +2,8 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 T05 runner-path plan accepted; dedicated read-only verifier workflow implementation is active under Issue #292"
-  authoritative_main_at_snapshot: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
+  nature: "P04.07 readiness runner accepted; T05 readiness governance and mandatory README progress synchronization are active"
+  authoritative_main_at_snapshot: "d4ef378349292e2282f750efe3de75949bce1af4"
   stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
 
 project:
@@ -20,41 +20,39 @@ phase:
 p04_07:
   state: "active"
   owner: "kernel.events"
-  first_runtime_slice_accepted: true
-  historical_wave1_live_leases: 0
-  completion_plan: "docs/ai/P04.07_COMPLETION_PLAN.json"
   completion_issue: 289
-  t05_status: "BLOCKED_RUNNER_IMPLEMENTATION"
-  t05_runner_id: "RB-20260921-P0407-T05-READINESS"
-  t05_runner_change_control_issue: 292
-  t05_runner_plan_source_pr: 293
-  t05_runner_plan_source_governance_run: 35640694421
-  t05_runner_plan_promotion_pr: 294
-  t05_runner_plan_promotion_governance_run: 35641740530
-  t05_runner_plan_merge: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
-  t05_runner_implementation_task: "P04.07-T05-RUNNER-IMPL"
-  t05_runner_implementation_branch: "supervisor/20260921-p04-07-readiness-runner"
-  workflow_write_authority_live: true
-  exact_workflow_path: ".github/workflows/p04-07-readiness.yml"
+  runner_change_control_issue: 292
+  runner_change_control_status: "completed"
+  runner_workflow: ".github/workflows/p04-07-readiness.yml"
+  runner_workflow_main_sha: "d4ef378349292e2282f750efe3de75949bce1af4"
+  t05_status: "BLOCKED_AWAITING_FRESH_VERIFIER_RUN"
+  t05_task: "P04.07-T05"
+  t05_branch: "supervisor/20260922-p04-07-t05-readme-progress"
   runtime_code_change_authorized: false
   migration_4_authorized: false
   provider_registry_selected: false
   remote_schema_fetch_authorized: false
   p04_08_plus_authorized: false
 
+readme_progress_sync:
+  required: true
+  every_turn_check_required: true
+  material_transition_write_required: true
+  certified_head_exception: "Do not mutate an exact source/promotion head solely for README while it is under CI certification; flush the update in the next material governed carrier."
+  deferred_sync_must_flush_before_complete: true
+  canonical_progress_only: true
+  section: "Live development progress"
+
 security:
   required_governance_check_may_be_weakened: false
   verifier_may_be_changed_or_skipped: false
-  runner_permissions: "contents: read only"
-  runner_secrets_allowed: false
-  workflow_scope: ".github/workflows/p04-07-readiness.yml only"
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
   control_weakening_authorized: false
 
 next_action:
-  current: "Verify the implementation source head through ordinary exact-head Governance; do not treat the dedicated readiness workflow as T05 evidence until it is accepted on protected main."
-  after_runner_workflow_acceptance: "Create a fresh main-equivalent supervisor/p04-07-readiness-* branch to trigger the dedicated verifier and require terminal PASS before Stage B."
+  current: "Govern this README/progress-sync T05 carrier through exact-head Governance/protected acceptance."
+  after_acceptance: "Create a fresh main-equivalent supervisor/p04-07-readiness-* identity and require terminal scripts/verify_p04_07.sh PASS before Stage B."
 
 compact_resume:
   path: "docs/ai/compact"

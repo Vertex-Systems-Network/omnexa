@@ -1,26 +1,23 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78`
-- Milestone: `SUP-20260922-P0407-T05-RUNNER-IMPL-01`
-- Status: **VERIFYING_REPAIRED_HEAD**
-- Change-control Issue: #292
+- Protected main: `d4ef378349292e2282f750efe3de75949bce1af4`
+- Milestone: `SUP-20260922-P0407-T05-README-PROGRESS-01`
+- Status: **IMPLEMENTING**
 - Parent completion/readiness Issue: #289
-- Branch: `supervisor/20260921-p04-07-readiness-runner`
-- P04.07 remains ACTIVE at 6 / 10; P04.08 remains PLANNED/LOCKED.
-- Runner-path plan acceptance is complete:
-  - source PR #293, Governance `35640694421` / #797 PASS;
-  - unchanged promotion PR #294, Governance `35641740530` / #798 PASS;
-  - protected-main merge/readback `867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78`.
-- Current write authority is exactly `.github/workflows/p04-07-readiness.yml` plus AI/compact evidence needed to carry the material transition.
-- Workflow boundary: GitHub-hosted `ubuntu-24.04`; `permissions: contents: read`; pinned checkout/setup-go; `persist-credentials: false`; no secrets; trigger only `push` on `supervisor/p04-07-readiness-*`; command only `bash scripts/verify_p04_07.sh`.
-- `scripts/verify_p04_07.sh` is immutable in this task.
-- Runtime source, migration 4, provider/remote refs, P04.08+, business features and AI product runtime remain locked.
-- T05 remains BLOCKED until this workflow is accepted on protected main and a fresh main-equivalent readiness branch produces terminal verifier PASS.
-- Source PR: #295.
-- Initial implementation head `6a06d8ac2aad62ab2484accea095e247c4ecb0ff` failed Governance run `35648318441` / #800 at `Verify repository Go code quality`.
-- Diagnostic: `P04.07-T05-RUNNER-IMPL` referenced the already-accepted RUNNER-PLAN milestone in live `supervisor.depends_on`; the validator correctly requires live dependencies to name live tasks.
-- Surgical repair: live `depends_on` is empty; #293/#294/main acceptance remains immutable historical prerequisite evidence under `runner_path_change_control.accepted_prerequisite`.
-- Dedicated workflow and `scripts/verify_p04_07.sh` are unchanged by this repair.
-- Retry Runner: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2`.
-- Next safe action: bind the repaired exact head to the retry Runner and perform one consolidated exact-head Governance/review observation.
+- Runner-path change-control Issue #292: **COMPLETED**
+- Branch: `supervisor/20260922-p04-07-t05-readme-progress`
+- P04 remains 6 / 10; overall canonical P00-P04 progress remains 49 / 53 (92.45%).
+- Dedicated readiness workflow accepted:
+  - source PR #295, Governance `35648731635` / #801 PASS;
+  - unchanged promotion PR #296, Governance `35651627278` / #802 PASS;
+  - protected-main readback `d4ef378349292e2282f750efe3de75949bce1af4`.
+- Current task: `P04.07-T05` readiness governance; zero runtime mutation authority.
+- README progress sync candidate rule:
+  - every continue/resume/recovery checks README;
+  - material state transitions update README in the same governed carrier;
+  - certified exact heads are not mutated solely for README;
+  - deferred README sync must flush in the next material carrier before COMPLETE;
+  - progress remains canonical-evidence-only.
+- T05 remains **BLOCKED_AWAITING_FRESH_VERIFIER_RUN**.
+- Pending source Runner: `RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE`.

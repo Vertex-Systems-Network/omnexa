@@ -78,3 +78,13 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - REPAIR: live `depends_on` cleared; accepted #293/#294/protected-main prerequisite retained as immutable audit metadata, not a live task.
 - SECURITY: dedicated workflow, verifier, runtime, migrations, provider, P04.08, business and AI product-runtime boundaries unchanged.
 - RETRY: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2` reserved for repaired exact head.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T05-README-PROGRESS-01
+
+- RUNNER IMPLEMENTATION ACCEPTED: source PR #295 exact head `242c34783f1f2c0fe1b8a8118fc794c77a26b6c9`, Governance `35648731635` / #801 PASS; unchanged promotion PR #296 same head, Governance `35651627278` / #802 PASS; guarded merge/readback `d4ef378349292e2282f750efe3de75949bce1af4`.
+- CHANGE CONTROL: Issue #292 closed completed; parent Issue #289 remains active.
+- README POLICY: every continue/resume/recovery checks README progress; every material state transition updates README in the same governed carrier when safe.
+- CERTIFIED HEAD EXCEPTION: an exact source/promotion head under CI certification is not mutated solely for README. Deferred sync is mandatory in the next material governed carrier before COMPLETE.
+- PROGRESS INTEGRITY: README mirrors canonical accepted counts/evidence only and never grants authority.
+- T05: fresh accepted runner execution is still pending; Stage B remains locked.
