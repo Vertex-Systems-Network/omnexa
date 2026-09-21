@@ -56,3 +56,14 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - REPAIR: live deterministic order reduced to current authorized task `P04.07-T05-RUNNER-PLAN`; future tasks remain plan intent under dependency/change-control sequencing only.
 - SECURITY: no workflow, verifier, runtime, migration, provider, P04.08, business or AI product-runtime scope changed; no gate weakening.
 - RETRY: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2` reserved for the repaired exact head.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T05-RUNNER-IMPL-01
+
+- RESUME: protected main `867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78`; OPEN Issues reconciled first (#292, #289, #4); OPEN PRs = 0.
+- PLAN ACCEPTANCE ARCHIVE: source PR #293 exact head `5891a7b5d86c0e576f94dd658071d9d3b92bd6c8`, Governance `35640694421` / #797 PASS; unchanged promotion PR #294 same head, Governance `35641740530` / #798 PASS; guarded merge/readback `867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78`.
+- AUTHORITY: Issue #292 now grants a separately governed implementation boundary for exactly `.github/workflows/p04-07-readiness.yml`.
+- IMPLEMENTATION: dedicated workflow uses `ubuntu-24.04`, `contents: read`, pinned checkout/setup-go, `persist-credentials: false`, no secrets, branch-scoped push trigger, and only `bash scripts/verify_p04_07.sh`.
+- LOCKS: verifier mutation, runtime source, migrations, providers, remote references, P04.08+, business features and AI product runtime remain forbidden.
+- T05: still BLOCKED/NOT RUN until workflow acceptance and fresh main-equivalent readiness trigger.
+- SOURCE RUNNER: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE` reserved for exact-head Governance.

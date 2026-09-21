@@ -1,9 +1,9 @@
 schema_version: 1
-snapshot_time: "2026-09-21T23:40:00+05:00"
+snapshot_time: "2026-09-22T00:53:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+observed_main_sha: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
 default_branch: "main"
 active_issue: 292
 parent_coordination_issue: 289
@@ -12,15 +12,15 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: 293
-active_branch: "supervisor/20260921-p04-07-t05-runner-plan"
+active_pr: null
+active_branch: "supervisor/20260921-p04-07-readiness-runner"
 current_milestone:
-  id: "SUP-20260921-P0407-T05-RUNNER-PLAN-01"
-  name: "Govern a dedicated read-only execution path for the P04.07 T05 verifier"
-milestone_status: "VERIFYING"
+  id: "SUP-20260922-P0407-T05-RUNNER-IMPL-01"
+  name: "Implement dedicated read-only P04.07 T05 verifier workflow"
+milestone_status: "IMPLEMENTING"
 last_completed_milestone:
-  name: "Persist T05 blocked readiness evidence"
-  evidence: "T05 branch d9bd61992e5435f904a03b95e8892e6508f18a22; Runner RB-20260921-P0407-T05-READINESS BLOCKED / verifier NOT RUN; Issue #289 overlay 5765531357"
+  name: "Accept P04.07 T05 runner execution-path change-control plan"
+  evidence: "source PR #293 Governance 35640694421 PASS; promotion PR #294 Governance 35641740530 PASS; protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
 canonical_cursor:
   phase: "P04"
   phase_name: "Data, Jobs & Event Fabric"
@@ -38,19 +38,18 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
-exact_next_safe_action: "Bind repaired PR #293 exact head to RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2, perform one consolidated exact-head Governance/review refresh, and stop if nonterminal."
+exact_next_safe_action: "Open the runner implementation source PR from exact head, bind RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
 pending_runner_ids:
-  - "RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2"
+  - "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE"
 blocked_runner_ids:
   - "RB-20260921-P0407-T05-READINESS"
 current_blockers:
-  - "PR #293 first source head failed Governance due deterministic_order including future, not-live tasks; repaired head requires fresh exact-head Governance."
-  - "T05 verifier remains NOT RUN."
-  - "Future workflow path .github/workflows/p04-07-readiness.yml is not writable until Issue #292 change-control plan is accepted."
+  - "T05 verifier remains NOT RUN until the dedicated workflow is accepted on protected main and triggered from a fresh main-equivalent readiness branch."
 security_scope:
-  plan_carrier_workflow_mutation: false
-  future_workflow_path: ".github/workflows/p04-07-readiness.yml"
-  future_permissions: "contents: read"
+  workflow_write_authority: ".github/workflows/p04-07-readiness.yml only"
+  workflow_permissions: "contents: read"
+  workflow_secrets: false
+  verifier_mutation: false
   runtime_source_mutation: false
   stage_b_unlocked: false
 timeout_control:

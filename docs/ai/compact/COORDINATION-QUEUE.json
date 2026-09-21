@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+  "observed_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -25,8 +25,8 @@
       "id": "issue-289",
       "type": "issue",
       "number": 289,
-      "status": "ACTIVE_T05_BLOCKED_RUNNER_REPLAN",
-      "scope": "P04.07 T05 completion-readiness; verifier NOT RUN; depends on separately governed runner-path change control #292",
+      "status": "ACTIVE_T05_BLOCKED_RUNNER_IMPLEMENTATION",
+      "scope": "P04.07 T05 completion-readiness; verifier NOT RUN; dedicated runner workflow implementation active under #292",
       "merge_blocking": true
     },
     {
@@ -67,8 +67,8 @@
       "id": "issue-292",
       "type": "issue",
       "number": 292,
-      "status": "ACTIVE_CHANGE_CONTROL",
-      "scope": "P04.07 T05 dedicated read-only verifier runner path plan",
+      "status": "ACTIVE_RUNNER_IMPLEMENTATION",
+      "scope": "P04.07 T05 dedicated read-only verifier workflow implementation",
       "depends_on": "issue-289 T05 blocker",
       "merge_blocking": true
     },
@@ -76,19 +76,26 @@
       "id": "pr-293",
       "type": "pull_request",
       "number": 293,
-      "status": "VERIFYING_REPAIRED_HEAD",
-      "scope": "P04.07 T05 runner-path change-control plan; governance/evidence only; zero workflow mutation",
-      "prior_failed_head": "43b94754c514d8812bad325b8d4d8b44a0b31954",
-      "prior_governance_run": 35640151323,
-      "prior_failure": "deterministic_order included future non-live tasks",
-      "merge_blocking": true
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35640694421,
+      "accepted_via_pr": 294,
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-294",
+      "type": "pull_request",
+      "number": 294,
+      "status": "MERGED",
+      "promotion_governance_run": 35641740530,
+      "merge_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+      "merge_blocking": false
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260921-P0407-T05-RUNNER-PLAN-01",
-    "branch": "supervisor/20260921-p04-07-t05-runner-plan",
-    "status": "VERIFYING",
-    "pr": 293,
-    "runner_task_id": "RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2"
+    "id": "SUP-20260922-P0407-T05-RUNNER-IMPL-01",
+    "branch": "supervisor/20260921-p04-07-readiness-runner",
+    "status": "IMPLEMENTING",
+    "pr": null,
+    "runner_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE"
   }
 }
