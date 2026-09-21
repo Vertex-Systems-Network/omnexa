@@ -31,5 +31,41 @@
     "EXPIRED",
     "NOT_RUN"
   ],
-  "archived_tasks": []
+  "archived_tasks": [
+    {
+      "stable_task_id": "RB-20260921-PR287-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "pr": 287,
+        "work_package": "governance/continuity-only",
+        "canonical_cursor_unchanged": "P04.07"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-compact-resume-protocol",
+        "head_sha": "005a1612193df74ad370bcf2d5a2c99e2c2d7e63"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35625696101,
+        "workflow_run_number": 787,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "PR verification only; no deployment, provider, production, migration, destructive or runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr287|005a1612193df74ad370bcf2d5a2c99e2c2d7e63|governance",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35625696101,
+        "conclusion": "success",
+        "exact_head_sha": "005a1612193df74ad370bcf2d5a2c99e2c2d7e63",
+        "merged_pr": 287,
+        "protected_main_readback_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+      }
+    }
+  ]
 }

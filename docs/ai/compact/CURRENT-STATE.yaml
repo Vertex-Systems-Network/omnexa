@@ -1,9 +1,10 @@
 schema_version: 1
-snapshot_time: "2026-09-21T21:18:00+05:00"
+snapshot_time: "2026-09-21T21:36:03+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
+
+observed_main_sha: "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
 default_branch: "main"
 active_issue: null
 open_issue_gates:
@@ -11,15 +12,17 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: 287
-active_branch: "supervisor/20260921-compact-resume-protocol"
+active_pr: 288
+active_branch: "supervisor/20260921-postmerge-state-reconcile"
+
 current_milestone:
   id: "SUP-20260921-COMPACT-RESUME-01"
-  name: "Integrate compact AI supervisor resume protocol and mandatory progress reporting"
+  name: "Integrate compact AI supervisor resume protocol and reconcile post-merge durable state"
 milestone_status: "VERIFYING"
 last_completed_milestone:
-  name: "Issue #285 AI instruction-staleness reconciliation"
-  evidence: "PR #286 / main 01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
+  name: "PR #287 exact-head verification and protected-main merge"
+  evidence: "Governance run 35625696101 PASS; PR #287 merged as main 8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+
 canonical_cursor:
   phase: "P04"
   phase_name: "Data, Jobs & Event Fabric"
@@ -27,6 +30,7 @@ canonical_cursor:
   owner_module: "kernel.events"
   work_package_state: "ACTIVE"
   live_wave1_write_leases: 0
+
 progress:
   current_module_basis: "P04 accepted mandatory work packages"
   current_module_done: 6
@@ -38,12 +42,14 @@ progress:
   overall_percent: 92.45
   full_p00_p27_percent: null
   full_p00_p27_reason: "P05-P27 mandatory package denominators are not yet canonical; do not invent a percentage"
-exact_next_safe_action: "Bind the final PR head to Runner Benchmark overlay RB-20260921-PR287-GOVERNANCE, perform one consolidated exact-head CI/status refresh, then stop if checks are still pending."
+
+exact_next_safe_action: "Bind final PR #288 head to Runner Benchmark overlay RB-20260921-PR288-GOVERNANCE, perform one consolidated exact-head CI/review refresh, and stop if checks are pending."
 pending_runner_ids:
-  - "RB-20260921-PR287-GOVERNANCE"
+  - "RB-20260921-PR288-GOVERNANCE"
 blocked_runner_ids: []
 current_blockers:
-  - "Exact-head canonical CI/review state has not yet been observed for PR #287"
+  - "PR #288 exact-head canonical CI/review has not yet been observed"
+
 timeout_control:
   default_consolidated_ci_status_refreshes_per_milestone: 1
   tight_polling: false
