@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "accepted-stage-a-blocked-runner-change-control-candidate",
+  "status": "accepted-stage-a-runner-implementation-active",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -45,7 +45,7 @@
     "runner_task_id": "RB-20260921-P0407-T05-READINESS",
     "synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a",
-    "blocker": "Required scripts/verify_p04_07.sh remains NOT RUN. Issue #292 proposes a separately governed read-only GitHub Actions runner path; the workflow is not writable until that change-control plan is accepted."
+    "blocker": "Required scripts/verify_p04_07.sh remains NOT RUN. The dedicated runner implementation is now authorized and is being implemented under Issue #292; T05 stays blocked until that workflow is accepted on protected main and a fresh main-equivalent readiness branch produces terminal verifier PASS."
   },
   "stage_b_closure": {
     "depends_on": "stage_a_readiness PASS",
@@ -89,7 +89,7 @@
   "accepted_promotion_governance_run": 35629981509,
   "runner_path_change_control": {
     "issue": 292,
-    "status": "candidate-awaiting-governance",
+    "status": "accepted-implementation-active",
     "plan_carrier_branch": "supervisor/20260921-p04-07-t05-runner-plan",
     "plan_carrier_workflow_mutation": false,
     "future_exact_workflow_path": ".github/workflows/p04-07-readiness.yml",
@@ -103,6 +103,12 @@
     "future_secrets_allowed": false,
     "future_required_governance_replacement": false,
     "implementation_requires_plan_acceptance": true,
-    "fresh_t05_evidence_requires_workflow_merge_then_main_equivalent_trigger": true
+    "fresh_t05_evidence_requires_workflow_merge_then_main_equivalent_trigger": true,
+    "accepted_source_pr": 293,
+    "accepted_source_governance_run": 35640694421,
+    "accepted_promotion_pr": 294,
+    "accepted_promotion_governance_run": 35641740530,
+    "accepted_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+    "implementation_branch": "supervisor/20260921-p04-07-readiness-runner"
   }
 }

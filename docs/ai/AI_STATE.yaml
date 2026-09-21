@@ -1,9 +1,9 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-21"
-  nature: "P04.07 T05 remains BLOCKED; Issue #292 runner execution-path change-control is a candidate and grants no workflow write authority until accepted"
-  authoritative_main_at_snapshot: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+  verified_at: "2026-09-22"
+  nature: "P04.07 T05 runner-path plan accepted; dedicated read-only verifier workflow implementation is active under Issue #292"
+  authoritative_main_at_snapshot: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
   stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
 
 project:
@@ -24,15 +24,18 @@ p04_07:
   historical_wave1_live_leases: 0
   completion_plan: "docs/ai/P04.07_COMPLETION_PLAN.json"
   completion_issue: 289
-  accepted_completion_plan_main_sha: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
-  t05_status: "BLOCKED"
-  t05_blocked_head: "d9bd61992e5435f904a03b95e8892e6508f18a22"
+  t05_status: "BLOCKED_RUNNER_IMPLEMENTATION"
   t05_runner_id: "RB-20260921-P0407-T05-READINESS"
   t05_runner_change_control_issue: 292
-  t05_runner_change_control_branch: "supervisor/20260921-p04-07-t05-runner-plan"
-  t05_runner_change_control_status: "candidate-awaiting-governance"
-  workflow_write_authority_live: false
-  future_exact_workflow_path: ".github/workflows/p04-07-readiness.yml"
+  t05_runner_plan_source_pr: 293
+  t05_runner_plan_source_governance_run: 35640694421
+  t05_runner_plan_promotion_pr: 294
+  t05_runner_plan_promotion_governance_run: 35641740530
+  t05_runner_plan_merge: "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
+  t05_runner_implementation_task: "P04.07-T05-RUNNER-IMPL"
+  t05_runner_implementation_branch: "supervisor/20260921-p04-07-readiness-runner"
+  workflow_write_authority_live: true
+  exact_workflow_path: ".github/workflows/p04-07-readiness.yml"
   runtime_code_change_authorized: false
   migration_4_authorized: false
   provider_registry_selected: false
@@ -42,16 +45,16 @@ p04_07:
 security:
   required_governance_check_may_be_weakened: false
   verifier_may_be_changed_or_skipped: false
-  future_runner_permissions: "contents: read only"
-  future_runner_secrets_allowed: false
+  runner_permissions: "contents: read only"
+  runner_secrets_allowed: false
+  workflow_scope: ".github/workflows/p04-07-readiness.yml only"
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
   control_weakening_authorized: false
 
 next_action:
-  current: "Govern Issue #292 runner-path plan through exact-head Governance/protected promotion. Do not edit .github/workflows until accepted."
-  after_runner_plan_acceptance: "Fresh-main implementation may add exactly .github/workflows/p04-07-readiness.yml under the accepted security boundary."
-  after_runner_workflow_acceptance: "Trigger a fresh main-equivalent supervisor/p04-07-readiness-* source identity and require terminal verifier PASS before Stage B."
+  current: "Verify the implementation source head through ordinary exact-head Governance; do not treat the dedicated readiness workflow as T05 evidence until it is accepted on protected main."
+  after_runner_workflow_acceptance: "Create a fresh main-equivalent supervisor/p04-07-readiness-* branch to trigger the dedicated verifier and require terminal PASS before Stage B."
 
 compact_resume:
   path: "docs/ai/compact"

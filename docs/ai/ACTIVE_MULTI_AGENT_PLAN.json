@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "candidate-t05-runner-path-change-control-no-workflow-mutation",
+  "status": "active-t05-runner-implementation",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "P04.07 completion plan is accepted; T05 is BLOCKED because the required verifier has no authorized executable path. Issue #292 is a fresh governance-self-modification change-control plan only. This carrier grants no workflow write authority until accepted."
+    "note": "Issue #292 runner-path plan was accepted through source PR #293 Governance PASS and unchanged promotion PR #294 Governance PASS, merged/read back on protected main. Current authority is limited to the exact dedicated readiness workflow plus governance/compact evidence; zero runtime source authority."
   },
   "bootstrap": {
-    "protected_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "protected_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "required_main_sha_snapshot": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 292,
-    "latest_governed_workflow_merge_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "latest_governed_workflow_merge_snapshot": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": 289
   },
@@ -63,11 +63,12 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T05-RUNNER-PLAN",
-    "role": "p04-07-t05-runner-change-control",
-    "branch": "supervisor/20260921-p04-07-t05-runner-plan",
-    "last_synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "task_id": "P04.07-T05-RUNNER-IMPL",
+    "role": "p04-07-readiness-runner-implementation",
+    "branch": "supervisor/20260921-p04-07-readiness-runner",
+    "last_synced_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
     "write_paths": [
+      ".github/workflows/p04-07-readiness.yml",
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
       "docs/ai/P04.07_COMPLETION_PLAN.json",
       "docs/ai/AI_STATE.yaml",
@@ -76,19 +77,20 @@
       "docs/ai/compact/EXECUTION-JOURNAL.md",
       "docs/ai/compact/DETERMINISTIC-CLAIMS.json",
       "docs/ai/compact/COORDINATION-QUEUE.json",
-      "docs/ai/compact/RUNNER-BENCHMARK.json",
-      "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md"
+      "docs/ai/compact/RUNNER-BENCHMARK.json"
     ],
     "forbidden_paths": [
       "kernel/internal/events/**",
       "kernel/migrations/**",
       "modules/**",
-      ".github/workflows/**",
+      ".github/workflows/governance.yml",
+      ".github/workflows/main-protection-admin.yml",
+      "scripts/verify_p04_07.sh",
       "docs/roadmap/work-packages/P04.08.md"
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "plan-candidate"
+    "status": "implementation-candidate"
   },
   "tasks": [],
   "completion_sequence": {
@@ -138,7 +140,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T05-RUNNER-PLAN"
+      "P04.07-T05-RUNNER-IMPL"
     ]
   },
   "instruction_sync": {
@@ -163,13 +165,18 @@
     "closure_plan_source_governance_run": 35628790112,
     "closure_plan_promotion_pr": 291,
     "closure_plan_promotion_governance_run": 35629981509,
-    "closure_plan_merge": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+    "closure_plan_merge": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "t05_runner_plan_source_pr": 293,
+    "t05_runner_plan_source_governance_run": 35640694421,
+    "t05_runner_plan_promotion_pr": 294,
+    "t05_runner_plan_promotion_governance_run": 35641740530,
+    "t05_runner_plan_merge": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
   },
-  "next_action": "Re-verify repaired PR #293 exact head through Governance. On PASS, use unchanged promotion; on failure, diagnose without weakening gates.",
+  "next_action": "Re-verify repaired PR #295 exact head through ordinary Governance. On PASS, use unchanged promotion; on failure, diagnose without weakening gates.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
-    "status": "candidate-awaiting-governance",
+    "status": "accepted-implementation-active",
     "plan_carrier_workflow_mutation": false,
     "reason": "T05 requires fresh scripts/verify_p04_07.sh evidence, but no currently authorized connected execution path exists.",
     "post_acceptance_implementation": {
@@ -202,6 +209,20 @@
       "P04.07-T05-RUNNER-IMPL",
       "P04.07-T05"
     ],
-    "note": "Future tasks remain dependency-gated plan intent only and are not live merge-order entries until separately authorized."
+    "note": "Future tasks remain dependency-gated plan intent only and are not live merge-order entries until separately authorized.",
+    "accepted_source_pr": 293,
+    "accepted_source_governance_run": 35640694421,
+    "accepted_promotion_pr": 294,
+    "accepted_promotion_governance_run": 35641740530,
+    "accepted_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+    "accepted_prerequisite": {
+      "task_id": "P04.07-T05-RUNNER-PLAN",
+      "source_pr": 293,
+      "source_governance_run": 35640694421,
+      "promotion_pr": 294,
+      "promotion_governance_run": 35641740530,
+      "protected_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+      "note": "Historical accepted prerequisite evidence; not a live dependency task."
+    }
   }
 }

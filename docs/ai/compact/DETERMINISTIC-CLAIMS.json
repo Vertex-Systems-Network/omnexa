@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+  "observed_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -112,17 +112,31 @@
       "id": "p04_07.t05_runner_change_control",
       "value": {
         "issue": 292,
-        "status": "candidate-awaiting-governance",
-        "plan_branch": "supervisor/20260921-p04-07-t05-runner-plan",
-        "plan_carrier_workflow_mutation": false,
-        "future_exact_workflow_path": ".github/workflows/p04-07-readiness.yml",
-        "future_permissions": "contents: read",
-        "future_runner": "ubuntu-24.04",
-        "future_trigger": "push supervisor/p04-07-readiness-*",
-        "future_command": "bash scripts/verify_p04_07.sh"
+        "status": "ACCEPTED",
+        "source_pr": 293,
+        "source_governance_run": 35640694421,
+        "promotion_pr": 294,
+        "promotion_governance_run": 35641740530,
+        "protected_main_readback_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
       },
-      "qualification": "No workflow write authority exists until this change-control plan is accepted on protected main. Required governance remains authoritative and T05 remains BLOCKED.",
-      "source": "GitHub Issue #292 + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json + docs/ai/P04.07_COMPLETION_PLAN.json"
+      "source": "GitHub Issue #292 / PR #293 / PR #294 / protected-main readback"
+    },
+    {
+      "id": "p04_07.t05_runner_implementation",
+      "value": {
+        "status": "IMPLEMENTING",
+        "task_id": "P04.07-T05-RUNNER-IMPL",
+        "branch": "supervisor/20260921-p04-07-readiness-runner",
+        "exact_workflow_path": ".github/workflows/p04-07-readiness.yml",
+        "permissions": "contents: read",
+        "runner": "ubuntu-24.04",
+        "trigger": "push supervisor/p04-07-readiness-*",
+        "command": "bash scripts/verify_p04_07.sh",
+        "verifier_mutation_allowed": false,
+        "secrets_allowed": false
+      },
+      "qualification": "Workflow acceptance is not T05 PASS; T05 remains blocked until a fresh main-equivalent readiness branch produces terminal verifier PASS.",
+      "source": "accepted Issue #292 change-control + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
     }
   ]
 }
