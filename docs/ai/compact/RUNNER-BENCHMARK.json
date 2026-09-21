@@ -333,6 +333,46 @@
         "merged_pr": 294,
         "protected_main_readback_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 292,
+        "parent_issue": 289,
+        "pr": 295,
+        "work_package": "P04.07",
+        "task": "P04.07-T05-RUNNER-IMPL"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-p04-07-readiness-runner",
+        "head_sha": "6a06d8ac2aad62ab2484accea095e247c4ecb0ff"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35648318441,
+        "workflow_run_number": 800,
+        "job_id": 106494153708,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Exact .github/workflows/p04-07-readiness.yml implementation plus AI/compact material-transition evidence only. No verifier/runtime/migration/provider/P04.08/business/AI product-runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr295|6a06d8ac2aad62ab2484accea095e247c4ecb0ff|governance|p04.07-t05-runner-impl",
+      "status": "FAIL",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35648318441,
+        "workflow_run_number": 800,
+        "job_id": 106494153708,
+        "conclusion": "failure",
+        "failed_step": "Verify repository Go code quality",
+        "diagnostic": "P04.07-T05-RUNNER-IMPL depends on unknown task P04.07-T05-RUNNER-PLAN accepted on protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+        "gate_weakening": false
+      }
     }
   ]
 }

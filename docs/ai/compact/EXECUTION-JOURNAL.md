@@ -67,3 +67,14 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - LOCKS: verifier mutation, runtime source, migrations, providers, remote references, P04.08+, business features and AI product runtime remain forbidden.
 - T05: still BLOCKED/NOT RUN until workflow acceptance and fresh main-equivalent readiness trigger.
 - SOURCE RUNNER: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE` reserved for exact-head Governance.
+
+
+### PR #295 source diagnostic / surgical repair
+
+- INITIAL HEAD: `6a06d8ac2aad62ab2484accea095e247c4ecb0ff`; Governance `35648318441` / #800 — **FAIL**.
+- FAILED STEP: `Verify repository Go code quality`.
+- DIAGNOSTIC: `P04.07-T05-RUNNER-IMPL depends on unknown task P04.07-T05-RUNNER-PLAN accepted on protected main 867b4ac1...`.
+- ROOT CAUSE: accepted historical prerequisite evidence was incorrectly encoded in live `supervisor.depends_on`.
+- REPAIR: live `depends_on` cleared; accepted #293/#294/protected-main prerequisite retained as immutable audit metadata, not a live task.
+- SECURITY: dedicated workflow, verifier, runtime, migrations, provider, P04.08, business and AI product-runtime boundaries unchanged.
+- RETRY: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2` reserved for repaired exact head.

@@ -3,7 +3,7 @@
 - Repository: `Vertex-Systems-Network/omnexa`
 - Protected main: `867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78`
 - Milestone: `SUP-20260922-P0407-T05-RUNNER-IMPL-01`
-- Status: **IMPLEMENTING**
+- Status: **VERIFYING_REPAIRED_HEAD**
 - Change-control Issue: #292
 - Parent completion/readiness Issue: #289
 - Branch: `supervisor/20260921-p04-07-readiness-runner`
@@ -17,5 +17,10 @@
 - `scripts/verify_p04_07.sh` is immutable in this task.
 - Runtime source, migration 4, provider/remote refs, P04.08+, business features and AI product runtime remain locked.
 - T05 remains BLOCKED until this workflow is accepted on protected main and a fresh main-equivalent readiness branch produces terminal verifier PASS.
-- Pending source Runner: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE`.
-- Next safe action: open the source PR on the exact implementation head and perform one consolidated exact-head Governance/review observation.
+- Source PR: #295.
+- Initial implementation head `6a06d8ac2aad62ab2484accea095e247c4ecb0ff` failed Governance run `35648318441` / #800 at `Verify repository Go code quality`.
+- Diagnostic: `P04.07-T05-RUNNER-IMPL` referenced the already-accepted RUNNER-PLAN milestone in live `supervisor.depends_on`; the validator correctly requires live dependencies to name live tasks.
+- Surgical repair: live `depends_on` is empty; #293/#294/main acceptance remains immutable historical prerequisite evidence under `runner_path_change_control.accepted_prerequisite`.
+- Dedicated workflow and `scripts/verify_p04_07.sh` are unchanged by this repair.
+- Retry Runner: `RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2`.
+- Next safe action: bind the repaired exact head to the retry Runner and perform one consolidated exact-head Governance/review observation.

@@ -89,13 +89,24 @@
       "promotion_governance_run": 35641740530,
       "merge_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
       "merge_blocking": false
+    },
+    {
+      "id": "pr-295",
+      "type": "pull_request",
+      "number": 295,
+      "status": "VERIFYING_REPAIRED_HEAD",
+      "scope": "P04.07 dedicated read-only readiness workflow implementation plus AI/compact material-transition evidence",
+      "prior_failed_head": "6a06d8ac2aad62ab2484accea095e247c4ecb0ff",
+      "prior_governance_run": 35648318441,
+      "prior_failure": "historical accepted prerequisite encoded as live depends_on task",
+      "merge_blocking": true
     }
   ],
   "active_supervisor_milestone": {
     "id": "SUP-20260922-P0407-T05-RUNNER-IMPL-01",
     "branch": "supervisor/20260921-p04-07-readiness-runner",
-    "status": "IMPLEMENTING",
-    "pr": null,
-    "runner_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE"
+    "status": "VERIFYING_REPAIRED_HEAD",
+    "pr": 295,
+    "runner_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2"
   }
 }

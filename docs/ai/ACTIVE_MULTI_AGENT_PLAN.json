@@ -88,9 +88,7 @@
       "scripts/verify_p04_07.sh",
       "docs/roadmap/work-packages/P04.08.md"
     ],
-    "depends_on": [
-      "P04.07-T05-RUNNER-PLAN accepted on protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
-    ],
+    "depends_on": [],
     "merge_order": 1,
     "status": "implementation-candidate"
   },
@@ -174,7 +172,7 @@
     "t05_runner_plan_promotion_governance_run": 35641740530,
     "t05_runner_plan_merge": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
   },
-  "next_action": "Verify the exact P04.07-T05-RUNNER-IMPL source head through ordinary Governance. If PASS, follow the protected acceptance path; after workflow merge/readback, trigger a fresh main-equivalent supervisor/p04-07-readiness-* identity.",
+  "next_action": "Re-verify repaired PR #295 exact head through ordinary Governance. On PASS, use unchanged promotion; on failure, diagnose without weakening gates.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -216,6 +214,15 @@
     "accepted_source_governance_run": 35640694421,
     "accepted_promotion_pr": 294,
     "accepted_promotion_governance_run": 35641740530,
-    "accepted_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
+    "accepted_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+    "accepted_prerequisite": {
+      "task_id": "P04.07-T05-RUNNER-PLAN",
+      "source_pr": 293,
+      "source_governance_run": 35640694421,
+      "promotion_pr": 294,
+      "promotion_governance_run": 35641740530,
+      "protected_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+      "note": "Historical accepted prerequisite evidence; not a live dependency task."
+    }
   }
 }

@@ -12,12 +12,12 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: null
+active_pr: 295
 active_branch: "supervisor/20260921-p04-07-readiness-runner"
 current_milestone:
   id: "SUP-20260922-P0407-T05-RUNNER-IMPL-01"
   name: "Implement dedicated read-only P04.07 T05 verifier workflow"
-milestone_status: "IMPLEMENTING"
+milestone_status: "VERIFYING_REPAIRED_HEAD"
 last_completed_milestone:
   name: "Accept P04.07 T05 runner execution-path change-control plan"
   evidence: "source PR #293 Governance 35640694421 PASS; promotion PR #294 Governance 35641740530 PASS; protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78"
@@ -38,12 +38,13 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
-exact_next_safe_action: "Open the runner implementation source PR from exact head, bind RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
+exact_next_safe_action: "Bind repaired PR #295 exact head to RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2, perform one consolidated exact-head Governance/review refresh, and stop if nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE"
+  - "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2"
 blocked_runner_ids:
   - "RB-20260921-P0407-T05-READINESS"
 current_blockers:
+  - "PR #295 initial head failed Governance because a historical accepted prerequisite was encoded as a live depends_on task; repaired head requires fresh exact-head Governance."
   - "T05 verifier remains NOT RUN until the dedicated workflow is accepted on protected main and triggered from a fresh main-equivalent readiness branch."
 security_scope:
   workflow_write_authority: ".github/workflows/p04-07-readiness.yml only"
