@@ -11,12 +11,12 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: null
+active_pr: 290
 active_branch: "supervisor/20260921-p04-07-completion-plan"
 current_milestone:
   id: "SUP-20260921-P0407-CLOSURE-PLAN-01"
   name: "Establish fresh P04.07 completion-assessment and closure governance plan"
-milestone_status: "IMPLEMENTING"
+milestone_status: "VERIFYING"
 last_completed_milestone:
   name: "Compact supervisor protocol and post-merge reconciliation"
   evidence: "PR #287 + PR #288 / main 250a55bb4c61df0bb8c453f29b0ea16a3573af36"
@@ -37,11 +37,12 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
-exact_next_safe_action: "Open the fresh completion-plan PR, persist VERIFYING with exact head/Runner Benchmark binding, then perform one consolidated exact-head CI/review refresh."
-pending_runner_ids: []
+exact_next_safe_action: "Bind PR #290 final head to RB-20260921-PR290-GOVERNANCE, perform one consolidated exact-head CI/review refresh, and stop if checks are pending."
+pending_runner_ids:
+  - "RB-20260921-PR290-GOVERNANCE"
 blocked_runner_ids: []
 current_blockers:
-  - "Fresh P04.07 completion plan is not yet accepted on protected main"
+  - "PR #290 exact-head Governance/review is not yet terminal"
 timeout_control:
   default_consolidated_ci_status_refreshes_per_milestone: 1
   tight_polling: false

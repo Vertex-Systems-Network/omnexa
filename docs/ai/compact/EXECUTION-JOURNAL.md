@@ -19,3 +19,5 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - BOOTSTRAP: Supervisor branch `supervisor/20260921-p04-07-completion-plan` created from exact protected main before task work.
 - COORDINATION: Issue #289 created for fresh completion assessment/closure governance.
 - IMPLEMENTING: fresh Supervisor-only T05 plan prepared with zero worker slots and fail-closed no-runtime/no-migration/no-provider/no-P04.08 authority.
+- VERIFYING: source PR #290 opened for the fresh P04.07 completion plan.
+- VERIFYING: compact state persisted before final exact-head CI observation; Runner Benchmark `RB-20260921-PR290-GOVERNANCE` reserved for PR overlay binding.
