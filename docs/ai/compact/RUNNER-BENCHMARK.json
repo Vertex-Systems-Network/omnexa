@@ -373,6 +373,88 @@
         "diagnostic": "P04.07-T05-RUNNER-IMPL depends on unknown task P04.07-T05-RUNNER-PLAN accepted on protected main 867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
         "gate_weakening": false
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 292,
+        "parent_issue": 289,
+        "pr": 295,
+        "work_package": "P04.07",
+        "task": "P04.07-T05-RUNNER-IMPL"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-p04-07-readiness-runner",
+        "head_sha": "242c34783f1f2c0fe1b8a8118fc794c77a26b6c9"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35648731635,
+        "workflow_run_number": 801,
+        "job_id": 106495512551,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Dedicated readiness workflow implementation only; no runtime source authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr295|242c34783f1f2c0fe1b8a8118fc794c77a26b6c9|governance|p04.07-t05-runner-impl|r2",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35648731635,
+        "workflow_run_number": 801,
+        "job_id": 106495512551,
+        "conclusion": "success",
+        "exact_head_sha": "242c34783f1f2c0fe1b8a8118fc794c77a26b6c9",
+        "accepted_via_promotion_pr": 296,
+        "protected_main_readback_sha": "d4ef378349292e2282f750efe3de75949bce1af4"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260922-PR296-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 292,
+        "parent_issue": 289,
+        "source_pr": 295,
+        "promotion_pr": 296,
+        "work_package": "P04.07",
+        "task": "P04.07-T05-RUNNER-IMPL promotion"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260922-p04-07-readiness-runner",
+        "head_sha": "242c34783f1f2c0fe1b8a8118fc794c77a26b6c9",
+        "unchanged_from_source_pr": 295
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35651627278,
+        "workflow_run_number": 802,
+        "job_id": 106505165840,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Promotion verification of the accepted read-only readiness workflow implementation.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr296|242c34783f1f2c0fe1b8a8118fc794c77a26b6c9|governance|p04.07-t05-runner-impl|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35651627278,
+        "workflow_run_number": 802,
+        "job_id": 106505165840,
+        "conclusion": "success",
+        "exact_head_sha": "242c34783f1f2c0fe1b8a8118fc794c77a26b6c9",
+        "merged_pr": 296,
+        "protected_main_readback_sha": "d4ef378349292e2282f750efe3de75949bce1af4"
+      }
     }
   ]
 }

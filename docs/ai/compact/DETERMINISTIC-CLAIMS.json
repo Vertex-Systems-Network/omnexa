@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+  "observed_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -124,19 +124,27 @@
     {
       "id": "p04_07.t05_runner_implementation",
       "value": {
-        "status": "IMPLEMENTING",
-        "task_id": "P04.07-T05-RUNNER-IMPL",
-        "branch": "supervisor/20260921-p04-07-readiness-runner",
-        "exact_workflow_path": ".github/workflows/p04-07-readiness.yml",
-        "permissions": "contents: read",
-        "runner": "ubuntu-24.04",
-        "trigger": "push supervisor/p04-07-readiness-*",
-        "command": "bash scripts/verify_p04_07.sh",
-        "verifier_mutation_allowed": false,
-        "secrets_allowed": false
+        "status": "ACCEPTED",
+        "source_pr": 295,
+        "source_governance_run": 35648731635,
+        "promotion_pr": 296,
+        "promotion_governance_run": 35651627278,
+        "protected_main_readback_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+        "workflow": ".github/workflows/p04-07-readiness.yml"
       },
-      "qualification": "Workflow acceptance is not T05 PASS; T05 remains blocked until a fresh main-equivalent readiness branch produces terminal verifier PASS.",
-      "source": "accepted Issue #292 change-control + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
+      "source": "GitHub PR #295 / PR #296 / protected-main readback"
+    },
+    {
+      "id": "readme.progress_sync",
+      "value": {
+        "every_turn_check_required": true,
+        "material_transition_write_required": true,
+        "certified_head_exception_only": true,
+        "deferred_sync_must_flush_before_complete": true,
+        "canonical_progress_only": true
+      },
+      "qualification": "Candidate until this carrier is accepted on protected main.",
+      "source": "README.md + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
     }
   ]
 }

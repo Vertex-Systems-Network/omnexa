@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "867b4ac1ba0b5bd064e0c4b8fbef9dea71329c78",
+  "observed_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -25,8 +25,8 @@
       "id": "issue-289",
       "type": "issue",
       "number": 289,
-      "status": "ACTIVE_T05_BLOCKED_RUNNER_IMPLEMENTATION",
-      "scope": "P04.07 T05 completion-readiness; verifier NOT RUN; dedicated runner workflow implementation active under #292",
+      "status": "ACTIVE_T05_READINESS_PROGRESS_POLICY",
+      "scope": "P04.07 T05 readiness; dedicated runner accepted; README progress policy carrier active",
       "merge_blocking": true
     },
     {
@@ -64,15 +64,6 @@
       "merge_blocking": false
     },
     {
-      "id": "issue-292",
-      "type": "issue",
-      "number": 292,
-      "status": "ACTIVE_RUNNER_IMPLEMENTATION",
-      "scope": "P04.07 T05 dedicated read-only verifier workflow implementation",
-      "depends_on": "issue-289 T05 blocker",
-      "merge_blocking": true
-    },
-    {
       "id": "pr-293",
       "type": "pull_request",
       "number": 293,
@@ -91,22 +82,37 @@
       "merge_blocking": false
     },
     {
+      "id": "issue-292",
+      "type": "issue",
+      "number": 292,
+      "status": "CLOSED_COMPLETED",
+      "scope": "P04.07 T05 dedicated readiness runner change control",
+      "merge_blocking": false
+    },
+    {
       "id": "pr-295",
       "type": "pull_request",
       "number": 295,
-      "status": "VERIFYING_REPAIRED_HEAD",
-      "scope": "P04.07 dedicated read-only readiness workflow implementation plus AI/compact material-transition evidence",
-      "prior_failed_head": "6a06d8ac2aad62ab2484accea095e247c4ecb0ff",
-      "prior_governance_run": 35648318441,
-      "prior_failure": "historical accepted prerequisite encoded as live depends_on task",
-      "merge_blocking": true
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35648731635,
+      "accepted_via_pr": 296,
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-296",
+      "type": "pull_request",
+      "number": 296,
+      "status": "MERGED",
+      "promotion_governance_run": 35651627278,
+      "merge_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+      "merge_blocking": false
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260922-P0407-T05-RUNNER-IMPL-01",
-    "branch": "supervisor/20260921-p04-07-readiness-runner",
-    "status": "VERIFYING_REPAIRED_HEAD",
-    "pr": 295,
-    "runner_task_id": "RB-20260922-P0407-T05-RUNNER-IMPL-GOVERNANCE-R2"
+    "id": "SUP-20260922-P0407-T05-README-PROGRESS-01",
+    "branch": "supervisor/20260922-p04-07-t05-readme-progress",
+    "status": "IMPLEMENTING",
+    "pr": null,
+    "runner_task_id": "RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE"
   }
 }
