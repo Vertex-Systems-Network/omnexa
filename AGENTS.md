@@ -111,6 +111,79 @@ The accepted P04.07 first slice remains bounded by all of these invariants:
 
 Frozen primitives include UUIDv7 IDs, exact-decimal money with explicit currency, UTC/timestamptz instants with IANA civil-time semantics, BCP 47 locale/RTL support, stable safe structured errors, versioned HTTP/OpenAPI contracts, CloudEvents-compatible event envelopes, at-least-once/idempotent event handling, four data classes (`PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, `RESTRICTED`) and deny-by-default authorization/tenant isolation.
 
+
+## Compact durable resume protocol
+
+The compact continuity layer is a **resume index only**. It never overrides live protected-main, canonical roadmap state, accepted governance, current Issue/PR state, review state or CI/runtime evidence.
+
+Compact path: `docs/ai/compact/`
+
+Required compact artifacts:
+
+- `CURRENT-STATE.yaml` — <= 12 KiB; current observed main, active Issue/PR/branch, milestone, next safe action, runner IDs, blockers and timeout controls.
+- `LAST-CHECKPOINT.md` — <= 16 KiB; concise last meaningful checkpoint.
+- `EXECUTION-JOURNAL.md` — rolling <= 32 KiB; meaningful state transitions only.
+- `DETERMINISTIC-CLAIMS.json` — deterministic continuity claims with canonical source references.
+- `COORDINATION-QUEUE.json` — durable coordination queue mirror; never grants authority.
+- `RUNNER-BENCHMARK.json` — runner registry/schema and archived immutable evidence.
+
+After this repository execution contract has been loaded, every new/start/continue/resume/recovery session must use this order before new development:
+
+1. read `docs/ai/compact/CURRENT-STATE.yaml`;
+2. read `docs/ai/compact/LAST-CHECKPOINT.md`;
+3. resolve exact current protected/default `main`;
+4. reconcile all accepted/actionable OPEN Issues first;
+5. reconcile all OPEN PRs/MRs second;
+6. re-read `docs/roadmap/STATE.json`, `docs/ai/compact/DETERMINISTIC-CLAIMS.json`, `docs/ai/compact/COORDINATION-QUEUE.json` and `docs/ai/compact/RUNNER-BENCHMARK.json`;
+7. reconcile stale compact observations against repository/runtime evidence;
+8. inspect large historical checkpoints only when a specific conflict/evidence question requires them.
+
+Never repeat a merge, migration, provider call, deployment, destructive action, runtime execution or source mutation merely because a prior chat/UI response was not delivered.
+
+### One user turn = one logical milestone
+
+By default one user `continue` / `resume` turn executes one bounded logical milestone. Do not chain unrelated audit, implementation, repeated CI polling, merge, post-merge audit and next-task development into one turn. Security/incident recovery may combine tightly coupled steps only when splitting them would reduce safety.
+
+### Remote-call / timeout control
+
+- batch related read-only calls where supported;
+- read only evidence needed by the active milestone;
+- perform at most one consolidated CI/status refresh per milestone by default;
+- never tight-poll workflows, deployments, providers or status endpoints;
+- never rerun a workflow merely because a ChatGPT/UI/message response timed out;
+- before the final exact-head CI observation, persist the milestone as `VERIFYING` or `WAITING_EXTERNAL`;
+- if CI remains running, preserve the already-written state, record exact run IDs on a PR/Issue status surface when possible without changing the certified head, report pending and end the milestone.
+
+A second refresh in one milestone requires a material security/merge/incident/provider state transition and a durable exception record.
+
+### Runner Benchmark
+
+Every material remote/container/browser/runtime/full-regression/performance workload must have a stable Runner Benchmark task identity. A terminal record must contain source Issue/PR/work package, command/workflow, exact source identity, environment/matrix/input/fixture identity, authorization state, security-critical and merge-blocking classifications, expected runner time, deterministic dedup key, status and immutable evidence.
+
+Runner registration never grants execution authority. Consumed, expired, historical, destructive, provider, production, deployment, release or formal-runtime authorization is never inferred or silently reused.
+
+To avoid recursively changing a source head only to record an in-flight run, an active VERIFYING task may bind its exact PR-head SHA and run IDs in a machine-readable PR/Issue status comment. Terminal evidence may be archived into `RUNNER-BENCHMARK.json` during the next governed source transition.
+
+### Durable state before reporting
+
+Before reporting a meaningful milestone `COMPLETE`, `BLOCKED`, `VERIFYING` or `WAITING_EXTERNAL`, reconcile compact current state/checkpoint/journal and any changed queue/runner registry. If required durable state cannot be written, do not claim the milestone fully complete.
+
+### Mandatory response footer
+
+Every user-facing engineering response for this repository must end with:
+
+- repository name;
+- current module/work-package progress bar;
+- overall progress bar;
+- active/completed milestone;
+- Issue/PR/commit evidence where available;
+- CI state;
+- blockers;
+- exact next safe action.
+
+Progress must be evidence-based. Current-module progress uses canonical accepted package counts. Overall progress uses only canonically enumerated mandatory package denominators and must state its coverage. Never invent a P00-P27 percentage when future package denominators are not canonical.
+
+
 ## Mandatory start/read order
 
 Before material work read at minimum:
@@ -274,13 +347,11 @@ After Issue #285 merges, re-read protected main before any further P04.07 planni
 
 ## Exact next action
 
-1. Complete Issue #285 continuity reconciliation on a branch from current protected main.
-2. Verify only governance/continuity surfaces changed and no runtime/migration/provider/future-package drift exists.
-3. Require exact-head canonical Governance and any other repository-required checks.
-4. Verify review provenance, unresolved threads and protected-main freshness.
-5. Merge only if protection accepts the exact head.
-6. Re-read protected main and confirm P04 remains **6 / 10 done**, P04.07 remains sole ACTIVE, P04.08-P04.10 remain locked, and Wave 1 has no live write leases.
-7. If additional P04.07 runtime work is later required, create a **new separately governed plan** from fresh protected main before source mutation.
+1. Treat Issue #285 / PR #286 security reconciliation as completed historical governance on protected main `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`.
+2. No live P04.07 Wave-1 write lease exists.
+3. Governance/continuity work uses an isolated protected-main branch and preserves P04.07 runtime locks.
+4. Additional P04.07 runtime implementation requires a **new separately governed fresh-main plan** with new task/branch/path authority before source mutation.
+5. Do not auto-advance P04.08, reserve migration 4, select a provider registry, or infer business/AI runtime authority.
 
 ## Issue #4
 

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "authority": "runner registry/archive only; registration never grants execution authority",
+  "active_overlay_policy": {
+    "reason": "Do not mutate the source head solely to record an in-flight exact-head run.",
+    "location": "machine-readable PR/Issue status comment",
+    "required_terminal_archive": "Archive immutable evidence in this file during the next governed source transition."
+  },
+  "required_task_fields": [
+    "stable_task_id",
+    "source_issue_or_pr_or_work_package",
+    "command_or_workflow",
+    "exact_source_identity",
+    "environment_matrix_input_fixture_identity",
+    "authorization_state",
+    "security_critical",
+    "merge_blocking",
+    "expected_runner_time",
+    "deterministic_dedup_key",
+    "status",
+    "immutable_evidence_when_terminal"
+  ],
+  "statuses": [
+    "REGISTERED",
+    "AUTHORIZED",
+    "RUNNING",
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "CANCELLED",
+    "EXPIRED",
+    "NOT_RUN"
+  ],
+  "archived_tasks": []
+}

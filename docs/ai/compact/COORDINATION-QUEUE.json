@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "observed_main_sha": "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7",
+  "authority": "coordination mirror only; never grants execution authority",
+  "policy": {
+    "order": [
+      "security/blocker",
+      "dependency-unblocker",
+      "contract-or-migration-owner",
+      "oldest"
+    ],
+    "issues_before_prs": true
+  },
+  "items": [
+    {
+      "id": "issue-4",
+      "type": "issue",
+      "number": 4,
+      "status": "BLOCKED_OWNER_LEGAL_DECISION",
+      "scope": "external_distribution_public_launch",
+      "blocks_current_internal_governance": false,
+      "blocks_external_release": true
+    }
+  ],
+  "active_supervisor_milestone": {
+    "id": "SUP-20260921-COMPACT-RESUME-01",
+    "branch": "supervisor/20260921-compact-resume-protocol",
+    "status": "IMPLEMENTING",
+    "pr": null
+  }
+}

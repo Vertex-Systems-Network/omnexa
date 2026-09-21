@@ -226,3 +226,32 @@ Never store in `docs/ai/`:
 - secrets copied from CI or provider errors.
 
 Store concise engineering state, evidence, constraints, decisions and externally explainable rationale only.
+
+
+## 14. Compact durable supervision extension
+
+The compact resume layer lives at `docs/ai/compact/` and is subordinate to `AGENTS.md`, `docs/roadmap/STATE.json`, accepted governance and live repository/runtime evidence.
+
+On continue/resume/recovery, after the repository execution contract is loaded, read `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolve exact protected main, OPEN Issues, OPEN PRs/MRs, deterministic claims, coordination queue and Runner Benchmark before new work.
+
+One user continue/resume turn normally equals one logical milestone. A milestone status is one of `PLANNED`, `IMPLEMENTING`, `VERIFYING`, `WAITING_EXTERNAL`, `BLOCKED` or `COMPLETE`.
+
+For remote CI/status checks, default to one consolidated refresh. Do not poll. Persist `VERIFYING` / `WAITING_EXTERNAL` before the final refresh so a message-delivery timeout cannot erase the engineering checkpoint.
+
+Compact file limits: `CURRENT-STATE.yaml` <= 12 KiB; `LAST-CHECKPOINT.md` <= 16 KiB; `EXECUTION-JOURNAL.md` <= 32 KiB rolling.
+
+## 15. Runner Benchmark protocol
+
+`docs/ai/compact/RUNNER-BENCHMARK.json` defines the machine-readable registry/archive format. Every material remote/container/browser/runtime/full-regression/performance workload receives a stable ID and deterministic dedup key.
+
+Registration is not execution authority. Security-critical, exact-head merge-required, migration/auth/secrets/data-safety, integration-safety and incident/recovery checks remain immediate when authorized; safe non-blocking runner work may be consolidated.
+
+When changing the benchmark file solely to write an in-flight run would invalidate the exact head being tested, bind the task's exact PR head and run IDs in a machine-readable PR/Issue comment without changing source. Archive immutable terminal evidence in the next governed repository transition.
+
+## 16. Progress and response contract
+
+Every engineering response ends with repository, current module/work-package progress bar and overall progress bar, then milestone/evidence/CI/blockers/next safe action.
+
+Current-module progress is based on canonical accepted package counts for the active phase. Overall progress is computed only over phases whose mandatory package denominators are canonical. The response must show that coverage and must not imply a full P00-P27 completion percentage until those denominators exist.
+
+At protected main `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`: P04 is 6 / 10 accepted = 60%; canonically enumerated P00-P04 progress is 49 / 53 accepted = 92.45%; no full P00-P27 percentage is asserted.

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "observed_main_sha": "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7",
+  "authority": "continuity claim index only",
+  "canonical_sources": [
+    "AGENTS.md",
+    "docs/roadmap/STATE.json",
+    "docs/roadmap/STATUS.md",
+    "docs/governance/AI_EXECUTION_POLICY.md"
+  ],
+  "claims": [
+    {
+      "id": "cursor.phase",
+      "value": "P04",
+      "source": "docs/roadmap/STATE.json"
+    },
+    {
+      "id": "cursor.work_package",
+      "value": "P04.07",
+      "source": "docs/roadmap/STATE.json"
+    },
+    {
+      "id": "cursor.owner_module",
+      "value": "kernel.events",
+      "source": "AGENTS.md"
+    },
+    {
+      "id": "p04.progress",
+      "value": {
+        "done": 6,
+        "total": 10,
+        "percent": 60
+      },
+      "source": "docs/roadmap/STATUS.md"
+    },
+    {
+      "id": "wave1.live_write_leases",
+      "value": 0,
+      "source": "AGENTS.md"
+    },
+    {
+      "id": "issue285.status",
+      "value": "completed",
+      "source": "GitHub Issue #285 / PR #286 / observed main"
+    },
+    {
+      "id": "issue4.scope",
+      "value": "external distribution/public launch legal gate",
+      "source": "GitHub Issue #4"
+    },
+    {
+      "id": "overall.enumerated_progress",
+      "value": {
+        "done": 49,
+        "total": 53,
+        "percent": 92.45,
+        "coverage": "P00-P04 only"
+      },
+      "source": "docs/roadmap/STATUS.md + canonical package counts"
+    },
+    {
+      "id": "overall.full_p00_p27_percent",
+      "value": null,
+      "reason": "future mandatory package denominators are not canonical"
+    }
+  ]
+}

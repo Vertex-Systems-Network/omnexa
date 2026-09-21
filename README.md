@@ -112,6 +112,16 @@ Every material agent task checks these instructions at task start and before PR 
 
 A new P04.07 runtime slice requires a **fresh separately governed plan from current protected main** with new task IDs, branches and path leases. Wave-1 Issue #270 is not reusable authority.
 
+
+### Compact resume / reporting contract
+
+For every continue/resume/recovery, after repository instructions are loaded, read `docs/ai/compact/CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md`, resolve exact protected main, reconcile OPEN Issues before OPEN PRs, then reconcile deterministic claims, coordination queue and Runner Benchmark before new work.
+
+One continue/resume turn normally executes one logical milestone. Remote CI/status is refreshed once per milestone by default; no tight polling or timeout-driven reruns.
+
+Every engineering response ends with repository name, current module/work-package progress bar and overall progress bar plus milestone, evidence, CI, blockers and exact next safe action. Progress is based on accepted canonical work packages only; the overall bar must state denominator coverage.
+
+
 ## Mandatory start-here documents
 
 Before material work read:
@@ -127,7 +137,7 @@ Before material work read:
 9. `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json`
 10. accepted P04.01-P04.06 and P04.07 first-slice evidence relevant to the task
 
-## Security continuity — Issue #285
+## Security continuity — Issue #285 (completed)
 
 Issue `#285` corrects stale live-looking AI instructions that remained after T01-T04 acceptance. The fix is governance/continuity only and must not alter product runtime, migrations, provider selection, package sequencing, business authority or AI product-runtime authority.
 
@@ -135,9 +145,9 @@ After the reconciliation merges, protected main must be re-read before any furth
 
 ## Next authorized action
 
-There is no automatic next implementation from Wave 1.
+Issue #285 was completed through PR #286 and protected-main commit `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`. No P04.07 Wave-1 write lease remains live.
 
-If further P04.07 runtime work is necessary, create and govern a new fresh-main plan first. Do not auto-advance P04.08, reserve migration 4, select a provider registry or infer business/AI runtime authority.
+If further P04.07 runtime work is necessary, create and govern a new fresh-main plan first. Governance/continuity-only updates may proceed through isolated PRs without changing runtime authority. Do not auto-advance P04.08, reserve migration 4, select a provider registry or infer business/AI runtime authority.
 
 ## Licensing / external launch
 

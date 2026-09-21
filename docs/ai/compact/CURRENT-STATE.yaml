@@ -1,0 +1,50 @@
+schema_version: 1
+snapshot_time: "2026-09-21T21:18:00+05:00"
+repository: "Vertex-Systems-Network/omnexa"
+authority: "resume-index-only; repository/runtime evidence always wins"
+compact_state_path: "docs/ai/compact"
+observed_main_sha: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
+default_branch: "main"
+active_issue: null
+open_issue_gates:
+  - number: 4
+    scope: "external distribution/public launch licensing/IP/trademark decision"
+    blocks_current_internal_governance_milestone: false
+    blocks_external_release: true
+active_pr: null
+active_branch: "supervisor/20260921-compact-resume-protocol"
+current_milestone:
+  id: "SUP-20260921-COMPACT-RESUME-01"
+  name: "Integrate compact AI supervisor resume protocol and mandatory progress reporting"
+milestone_status: "IMPLEMENTING"
+last_completed_milestone:
+  name: "Issue #285 AI instruction-staleness reconciliation"
+  evidence: "PR #286 / main 01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
+canonical_cursor:
+  phase: "P04"
+  phase_name: "Data, Jobs & Event Fabric"
+  work_package: "P04.07"
+  owner_module: "kernel.events"
+  work_package_state: "ACTIVE"
+  live_wave1_write_leases: 0
+progress:
+  current_module_basis: "P04 accepted mandatory work packages"
+  current_module_done: 6
+  current_module_total: 10
+  current_module_percent: 60.0
+  overall_basis: "accepted mandatory work packages across canonically enumerated P00-P04"
+  overall_done: 49
+  overall_total: 53
+  overall_percent: 92.45
+  full_p00_p27_percent: null
+  full_p00_p27_reason: "P05-P27 mandatory package denominators are not yet canonical; do not invent a percentage"
+exact_next_safe_action: "Persist the governance patch, open one PR, then bind the exact PR head to one Runner Benchmark overlay and perform one consolidated CI/status observation."
+pending_runner_ids: []
+blocked_runner_ids: []
+current_blockers:
+  - "PR and exact-head canonical CI have not yet been created/observed for this milestone"
+timeout_control:
+  default_consolidated_ci_status_refreshes_per_milestone: 1
+  tight_polling: false
+  rerun_on_message_timeout: false
+  second_refresh_requires_material_transition: true

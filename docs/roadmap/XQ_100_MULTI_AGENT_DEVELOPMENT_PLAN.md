@@ -244,6 +244,25 @@ Planned:
 - automatic branch-sync acknowledgement tracking;
 - concurrency metrics.
 
+### XQ-MA.06 — Compact durable supervision, runner benchmark and response telemetry
+
+Deliverables:
+
+- compact `CURRENT-STATE.yaml` + `LAST-CHECKPOINT.md` resume index;
+- rolling execution journal;
+- deterministic-claims and coordination-queue mirrors;
+- machine-readable Runner Benchmark registry/archive;
+- one-turn-one-milestone and no-tight-poll remote-call discipline;
+- mandatory repository/current-module/overall-progress response footer.
+
+Success:
+
+- resume after message/tool timeout does not repeat already-persisted work;
+- OPEN Issues/PRs are reconciled before unrelated new work;
+- pending CI does not trigger status-only source churn;
+- every material runner workload has stable identity/dedup semantics and terminal immutable evidence;
+- progress reporting is deterministic and denominator-scoped rather than subjective.
+
 ## Agent instruction lifecycle
 
 At both task start and PR submission:
