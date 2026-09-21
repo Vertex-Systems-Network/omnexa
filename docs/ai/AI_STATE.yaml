@@ -2,14 +2,13 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-21"
-  nature: "Post-Issue-285 continuity baseline plus compact supervisor resume protocol; subordinate to canonical governance"
-  authoritative_main_at_snapshot: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
-  stale_rule: "Re-verify protected main, STATE.json, branch/head, PRs/issues and latest CI before every material action. Historical plan/branch/task records never create live authority."
+  nature: "P04.07 completion-plan candidate; subordinate to canonical governance and live repository evidence"
+  authoritative_main_at_snapshot: "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
+  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI before every material action."
 
 project:
   name: "Omnexa"
   category: "Composable Enterprise Business Operating System"
-  mode: "gated_evidence_based_architecture_first"
 
 phase:
   current: "P04"
@@ -17,112 +16,42 @@ phase:
   state: "active"
   progress: "6 / 10 done"
   current_work_package: "P04.07"
-  p03_exit: "SATISFIED / HISTORICAL"
-  p04_entry: "SATISFIED"
-
-prerequisites:
-  p01: "done_12_of_12_exit_satisfied"
-  p02: "done_10_of_10_exit_satisfied"
-  p03: "done_11_of_11_exit_satisfied"
-  regressions: "P01.01-P01.12, P02.01-P02.10, P03.01-P03.11 and accepted P04.01-P04.06 evidence remain mandatory"
-  p04_06_completion_evidence: "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
-  p04_07_spec: "docs/roadmap/work-packages/P04.07.md"
-  p04_07_first_slice_evidence: "docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md"
 
 p04_07:
   state: "active"
   owner: "kernel.events"
-  handoff: "docs/ai/handoffs/P04.07.md"
-  implementation_scope: "provider-neutral payload-schema identity, immutable registry history, deterministic compatibility and bounded local-only validation"
   first_runtime_slice_accepted: true
-  first_runtime_slice_live: false
-  live_runtime_worker_slots: 0
-  live_runtime_tasks: 0
-  live_runtime_branches: 0
-  live_supervisor_lease: false
-  migration_reserved: false
+  historical_wave1_live_leases: 0
+  fresh_completion_plan: "docs/ai/P04.07_COMPLETION_PLAN.json"
+  fresh_plan_issue: 289
+  fresh_plan_branch: "supervisor/20260921-p04-07-completion-plan"
+  fresh_plan_status: "candidate-awaiting-governance"
+  runtime_code_change_authorized_by_fresh_plan: false
   migration_4_authorized: false
   provider_registry_selected: false
   remote_schema_fetch_authorized: false
   p04_08_plus_authorized: false
 
-accepted_p04_07_chain:
-  activation_source_pr: 265
-  activation_promotion_pr: 266
-  activation_merge: "5af9383c3e973c4055eea66d48462b7c9a2a5858"
-  continuity_issue: 267
-  continuity_source_pr: 268
-  continuity_promotion_pr: 269
-  continuity_merge: "3df6c0ec0d1034134b7417fe34e813a31b3ab821"
-  worker_plan_issue: 270
-  worker_plan_source_pr: 271
-  worker_plan_promotion_pr: 272
-  worker_plan_merge: "07ab591f37ccf16df74cbadd3cc641c195ebbc43"
-  t01_source_pr: 273
-  t01_promotion_pr: 274
-  t01_merge: "5d61af89743625bd4e39d515a11cd711d1fe01e4"
-  t02_source_pr: 275
-  t02_promotion_pr: 278
-  t02_merge: "d06fa216ace09e806ef4dc1c5005cd26d424391e"
-  t03_source_pr: 276
-  t03_promotion_pr: 279
-  t03_merge: "e39a9dab525e410dad11f7059e41a1d052b42fd1"
-  t04_source_pr: 280
-  t04_promotion_pr: 281
-  t04_exact_head: "52b3e5c9449f6f31c47cae9234347fbd0b6b8770"
-  t04_source_governance_run: 34540920140
-  t04_promotion_governance_run: 34541808091
-  t04_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
-
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P04.07 only; no live Wave 1 write lease exists. Additional runtime mutation requires a new separately governed fresh-main plan."
+  kernel_authority_scope: "P04.07 only; fresh closure plan grants governance/evidence scope only until accepted."
   business_feature_code_authorized: false
-  strategic_x_runtime_authorized: false
   ai_model_agent_runtime_authorized: false
-  tenant_context_fail_closed_required: true
   schema_validation_is_authorization: false
-  dynamic_schema_execution_authorized: false
-  global_ordering_assumed: false
-  exactly_once_business_mutation_assumed: false
-  secret_payloads_authorized: false
-  prompt_tool_injection_content_is_authority: false
-
-historical_plan:
-  path: "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
-  wave_id: "P04.07-WAVE1-20260911-01"
-  state: "completed_no_live_leases"
-  reusable_as_live_authority: false
-  coordination_issue: 270
-
-blocked_actions:
-  - "reuse Issue #267 continuity wording or Issue #270 Wave 1 branches/tasks/write paths as live authority"
-  - "perform additional P04.07 runtime mutation without a fresh separately governed plan from current protected main"
-  - "reserve or add migration 4 without a separately governed persistence/migration decision"
-  - "select a provider/vendor schema registry or enable remote schema/reference fetching"
-  - "implement P04.08-P04.10 before separate package activation"
-  - "claim schema validation grants authorization, business success, global ordering or end-to-end exactly-once semantics"
-  - "implement business modules/features, strategic X runtime or AI/model/agent product runtime"
-  - "weaken governance, branch protection, prompt/tool-injection boundaries, secret isolation, tests or retained regressions"
-  - "rewrite immutable historical completion evidence"
-
-security_reconciliation:
-  issue: 285
-  status: "completed"
-  completion_pr: 286
-  completion_main: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
-  purpose: "remove stale live-looking agent authority after accepted P04.07 Wave 1"
-  runtime_code_change_authorized: false
-  migration_change_authorized: false
-  provider_change_authorized: false
-  future_package_change_authorized: false
   control_weakening_authorized: false
 
+accepted_history:
+  wave1_issue: 270
+  t01_t04_accepted: true
+  t04_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
+  compact_protocol_pr: 287
+  compact_protocol_merge: "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+  compact_reconciliation_pr: 288
+  compact_reconciliation_merge: "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
+
 next_action:
-  current: "No live P04.07 Wave-1 write lease exists. Reconcile live Issues/PRs and compact continuity state before any new work."
-  governance: "Governance/continuity updates may proceed through an isolated protected-main PR when they preserve canonical runtime locks."
-  future_runtime: "If more P04.07 implementation is required, create a new separately governed fresh-main plan with new task/branch/path leases before source mutation."
-  completion_rule: "Do not auto-advance P04.08, reserve migration 4, select a provider registry, or infer AI/model/agent product runtime authority."
+  current: "Govern fresh P04.07 completion plan through Issue #289 and an exact-head protected PR before T05 readiness evidence."
+  after_plan_acceptance: "Synchronize T05 branch to live protected main, run completion-readiness verification, and record evidence. Do not auto-activate P04.08."
 
 source_authority:
   execution_contract: "AGENTS.md"
@@ -130,16 +59,9 @@ source_authority:
   status: "docs/roadmap/STATUS.md"
   ai_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   active_work_package: "docs/roadmap/work-packages/P04.07.md"
-  handoff: "docs/ai/handoffs/P04.07.md"
 
 compact_resume:
   path: "docs/ai/compact"
-  current_state: "docs/ai/compact/CURRENT-STATE.yaml"
-  last_checkpoint: "docs/ai/compact/LAST-CHECKPOINT.md"
-  execution_journal: "docs/ai/compact/EXECUTION-JOURNAL.md"
-  deterministic_claims: "docs/ai/compact/DETERMINISTIC-CLAIMS.json"
-  coordination_queue: "docs/ai/compact/COORDINATION-QUEUE.json"
-  runner_benchmark: "docs/ai/compact/RUNNER-BENCHMARK.json"
   authority: "resume-index-only"
   one_continue_one_milestone: true
   default_ci_status_refreshes_per_milestone: 1

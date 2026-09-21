@@ -4,17 +4,18 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 
 ## 2026-09-21 — SUP-20260921-COMPACT-RESUME-01
 
-- INTAKE: protected main resolved to `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`.
-- INTAKE: OPEN Issues reconciled; #4 is external-release/legal only for this milestone.
-- INTAKE: OPEN PRs = 0.
-- DRIFT: `docs/ai/AI_STATE.yaml` still described completed Issue #285 as the next action; this milestone reconciled that stale continuity state.
-- IMPLEMENTING: branch `supervisor/20260921-compact-resume-protocol` created from exact protected main.
-- IMPLEMENTING: compact resume, milestone, timeout, runner-benchmark and progress-response contracts prepared without runtime/migration/provider/future-package authority changes.
-- VERIFYING: PR #287 opened from the isolated Supervisor branch.
-- VERIFYING: compact state persisted before final exact-head CI observation; runner ID `RB-20260921-PR287-GOVERNANCE` registered for PR-status overlay binding.
-- PASS: exact-head Omnexa Governance run `35625696101` completed successfully for `005a1612193df74ad370bcf2d5a2c99e2c2d7e63`.
-- MERGED: guarded expected-head squash merged PR #287.
-- READBACK: protected main resolved to `8e501d75b4695a5dd09c89c534e1ff193fa5e81a`; P04.07 remained ACTIVE and no Wave-1 lease was recreated.
-- DRIFT: newly merged compact state still represented pre-merge VERIFYING state; mandatory post-merge durable-state reconciliation started on `supervisor/20260921-postmerge-state-reconcile`.
-- VERIFYING: post-merge durable-state reconciliation opened as PR #288.
-- VERIFYING: state persisted before final exact-head CI observation; runner ID `RB-20260921-PR288-GOVERNANCE` reserved for PR-status overlay binding.
+- Compact supervisor protocol accepted via PR #287.
+- Post-merge durable-state reconciliation accepted via PR #288.
+- PR #288 exact-head Governance run `35626926471` PASS; protected-main readback `250a55bb4c61df0bb8c453f29b0ea16a3573af36`.
+- Terminal PR #288 runner evidence is archived during the next material transition rather than by a recursive state-only PR.
+
+## 2026-09-21 — SUP-20260921-P0407-CLOSURE-PLAN-01
+
+- INTAKE: compact resume index was stale at PR #288 VERIFYING; live repository evidence won.
+- INTAKE: protected main resolved to `250a55bb4c61df0bb8c453f29b0ea16a3573af36`.
+- INTAKE: OPEN Issues reconciled; #4 is external-release/legal only. OPEN PRs = 0.
+- AUTHORITY: STATE.json still has P04.07 as sole ACTIVE package; first-slice T01-T04 are accepted historical evidence with zero live Wave-1 leases.
+- SCOPE: no repository evidence mandates a second runtime slice; do not invent one.
+- BOOTSTRAP: Supervisor branch `supervisor/20260921-p04-07-completion-plan` created from exact protected main before task work.
+- COORDINATION: Issue #289 created for fresh completion assessment/closure governance.
+- IMPLEMENTING: fresh Supervisor-only T05 plan prepared with zero worker slots and fail-closed no-runtime/no-migration/no-provider/no-P04.08 authority.

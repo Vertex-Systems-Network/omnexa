@@ -4,7 +4,7 @@
   "active_overlay_policy": {
     "reason": "Do not mutate the source head solely to record an in-flight exact-head run.",
     "location": "machine-readable PR/Issue status comment",
-    "required_terminal_archive": "Archive immutable evidence in this file during the next governed source transition."
+    "required_terminal_archive": "Archive immutable evidence during the next material governed source transition."
   },
   "required_task_fields": [
     "stable_task_id",
@@ -65,6 +65,42 @@
         "exact_head_sha": "005a1612193df74ad370bcf2d5a2c99e2c2d7e63",
         "merged_pr": 287,
         "protected_main_readback_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260921-PR288-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "pr": 288,
+        "work_package": "post-merge compact durable-state reconciliation",
+        "canonical_cursor_unchanged": "P04.07"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-postmerge-state-reconcile",
+        "head_sha": "e624f91e2ac73b0acd9a65461f0b474b4712c4d4"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35626926471,
+        "workflow_run_number": 790,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "PR verification only; no deployment, provider, production, migration, destructive or runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr288|e624f91e2ac73b0acd9a65461f0b474b4712c4d4|governance",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35626926471,
+        "workflow_run_number": 790,
+        "conclusion": "success",
+        "exact_head_sha": "e624f91e2ac73b0acd9a65461f0b474b4712c4d4",
+        "merged_pr": 288,
+        "protected_main_readback_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
       }
     }
   ]
