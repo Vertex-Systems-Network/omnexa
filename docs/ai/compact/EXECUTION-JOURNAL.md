@@ -21,3 +21,27 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - IMPLEMENTING: fresh Supervisor-only T05 plan prepared with zero worker slots and fail-closed no-runtime/no-migration/no-provider/no-P04.08 authority.
 - VERIFYING: source PR #290 opened for the fresh P04.07 completion plan.
 - VERIFYING: compact state persisted before final exact-head CI observation; Runner Benchmark `RB-20260921-PR290-GOVERNANCE` reserved for PR overlay binding.
+
+
+## 2026-09-21 — SUP-20260921-P0407-T05-READINESS-01
+
+- INTAKE: stale compact PR #290 VERIFYING state reconciled against live protected main `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`; OPEN Issues #4/#289, OPEN PRs = 0.
+- PLAN ACCEPTANCE: source PR #290 Governance `35628790112` PASS; promotion PR #291 Governance `35629981509` PASS; guarded merge/readback `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- SYNC: Supervisor T05 branch non-force merge-synced to accepted main via `7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a`; sync tree is exactly protected-main tree `43123ae889be76ab4cbc7fb41a8df41ef265701b`.
+- AUTHORITY: T05 is evidence/readiness only; zero worker slots and no runtime/migration/provider/remote-reference/P04.08/business/AI authority.
+- RUNNER DISCOVERY: repository workflow inventory contains only `governance.yml` and `main-protection-admin.yml`; neither provides an authorized invocation of `scripts/verify_p04_07.sh`.
+- EXECUTION: local runner attempt could not materialize the public repository because the execution environment cannot resolve GitHub; connected GitHub tooling has no arbitrary workflow-dispatch action.
+- RESULT: `scripts/verify_p04_07.sh` is **NOT RUN**; T05 is **BLOCKED**, not PASS. Stage B remains NOT RUN.
+- RUNNER: `RB-20260921-P0407-T05-READINESS` registered as BLOCKED on exact synced source identity.
+
+
+## 2026-09-21 — SUP-20260921-P0407-T05-RUNNER-PLAN-01
+
+- RESUME: T05 BLOCKED checkpoint read from `d9bd61992e5435f904a03b95e8892e6508f18a22`; live protected main remains `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- GATES: OPEN Issues #4/#289 reconciled first; OPEN PRs = 0. New change-control Issue #292 created after confirming the scope delta.
+- SCOPE DELTA: accepted T05 plan explicitly forbids `.github/workflows/**`, therefore direct runner-workflow mutation is prohibited.
+- CHANGE CONTROL: fresh-main branch `supervisor/20260921-p04-07-t05-runner-plan` created from `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- PLAN: proposed future exact workflow `.github/workflows/p04-07-readiness.yml` only, `ubuntu-24.04`, `contents: read`, pinned checkout/setup-go, no secrets, branch-scoped push trigger, command `bash scripts/verify_p04_07.sh`.
+- SELF-MODIFICATION SAFETY: the plan carrier itself keeps `.github/workflows/**` forbidden. Workflow authority becomes live only after this plan is accepted through ordinary Governance/protected promotion.
+- T05 / Stage B: T05 remains BLOCKED/NOT RUN; Stage B remains locked.
+- VERIFYING: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE` reserved for the source plan PR exact head.

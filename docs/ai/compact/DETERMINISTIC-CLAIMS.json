@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+  "observed_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -82,6 +82,47 @@
       "id": "overall.full_p00_p27_percent",
       "value": null,
       "reason": "future mandatory package denominators are not canonical"
+    },
+    {
+      "id": "p04_07.closure_plan_acceptance",
+      "value": {
+        "source_pr": 290,
+        "source_governance_run": 35628790112,
+        "promotion_pr": 291,
+        "promotion_governance_run": 35629981509,
+        "protected_main_readback_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+      },
+      "source": "GitHub PR #290 / PR #291 / workflow runs / protected-main readback"
+    },
+    {
+      "id": "p04_07.t05_readiness",
+      "value": {
+        "status": "BLOCKED",
+        "runner_task_id": "RB-20260921-P0407-T05-READINESS",
+        "branch": "supervisor/20260921-p04-07-completion-plan",
+        "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a",
+        "synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+        "verifier": "bash scripts/verify_p04_07.sh",
+        "verifier_result": "NOT RUN"
+      },
+      "qualification": "Pending/skipped/unknown cannot be treated as PASS; Stage B remains locked.",
+      "source": "docs/ai/P04.07_COMPLETION_PLAN.json + readiness evidence + Issue #289 runner overlay"
+    },
+    {
+      "id": "p04_07.t05_runner_change_control",
+      "value": {
+        "issue": 292,
+        "status": "candidate-awaiting-governance",
+        "plan_branch": "supervisor/20260921-p04-07-t05-runner-plan",
+        "plan_carrier_workflow_mutation": false,
+        "future_exact_workflow_path": ".github/workflows/p04-07-readiness.yml",
+        "future_permissions": "contents: read",
+        "future_runner": "ubuntu-24.04",
+        "future_trigger": "push supervisor/p04-07-readiness-*",
+        "future_command": "bash scripts/verify_p04_07.sh"
+      },
+      "qualification": "No workflow write authority exists until this change-control plan is accepted on protected main. Required governance remains authoritative and T05 remains BLOCKED.",
+      "source": "GitHub Issue #292 + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json + docs/ai/P04.07_COMPLETION_PLAN.json"
     }
   ]
 }

@@ -102,6 +102,115 @@
         "merged_pr": 288,
         "protected_main_readback_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
       }
+    },
+    {
+      "stable_task_id": "RB-20260921-PR290-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 290,
+        "work_package": "P04.07 completion-assessment/closure plan",
+        "canonical_cursor_unchanged": "P04.07"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-p04-07-completion-plan",
+        "head_sha": "b69340db022eeb71fe60db70a6aecae29c909d47"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35628790112,
+        "workflow_run_number": 793,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Plan verification only; zero runtime worker slots; no migration 4, provider, remote-reference, P04.08, business-feature or AI product-runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr290|b69340db022eeb71fe60db70a6aecae29c909d47|governance",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35628790112,
+        "workflow_run_number": 793,
+        "conclusion": "success",
+        "exact_head_sha": "b69340db022eeb71fe60db70a6aecae29c909d47",
+        "accepted_via_promotion_pr": 291,
+        "protected_main_readback_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260921-PR291-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "source_pr": 290,
+        "promotion_pr": 291,
+        "work_package": "P04.07 completion-assessment/closure plan promotion",
+        "canonical_cursor_unchanged": "P04.07"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260921-p04-07-completion-plan",
+        "head_sha": "b69340db022eeb71fe60db70a6aecae29c909d47",
+        "unchanged_from_source_pr": 290
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35629981509,
+        "workflow_run_number": 794,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Promotion verification only; content-identical to source PR #290; zero runtime worker slots; no migration 4, provider, remote-reference, P04.08, business-feature or AI product-runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr291|b69340db022eeb71fe60db70a6aecae29c909d47|governance|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35629981509,
+        "workflow_run_number": 794,
+        "conclusion": "success",
+        "exact_head_sha": "b69340db022eeb71fe60db70a6aecae29c909d47",
+        "merged_pr": 291,
+        "protected_main_readback_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260921-P0407-T05-READINESS",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 completion-readiness"
+      },
+      "command_or_workflow": "bash scripts/verify_p04_07.sh",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-p04-07-completion-plan",
+        "head_sha": "d9bd61992e5435f904a03b95e8892e6508f18a22",
+        "synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+        "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "required_environment": "authorized repository runner with pinned Go toolchain and full repository checkout",
+        "actual_environment": "not available through connected execution tooling",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "T05 evidence/readiness only; no runtime source mutation, migration 4, provider, remote references, P04.08, business-feature or AI product-runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|p04.07-t05|d9bd61992e5435f904a03b95e8892e6508f18a22|verify_p04_07",
+      "status": "BLOCKED",
+      "immutable_evidence_when_terminal": {
+        "verifier_result": "NOT RUN",
+        "reason": "Repository workflows did not invoke scripts/verify_p04_07.sh; arbitrary workflow dispatch was unavailable through connected tooling; local environment could not materialize repository.",
+        "issue_overlay_comment_id": 5765531357,
+        "stage_b_unlocked": false
+      }
     }
   ]
 }
