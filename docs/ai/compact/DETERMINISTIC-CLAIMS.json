@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7",
+  "observed_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -41,12 +41,23 @@
     {
       "id": "issue285.status",
       "value": "completed",
-      "source": "GitHub Issue #285 / PR #286 / observed main"
+      "source": "GitHub Issue #285 / PR #286"
     },
     {
       "id": "issue4.scope",
       "value": "external distribution/public launch legal gate",
       "source": "GitHub Issue #4"
+    },
+    {
+      "id": "supervisor.compact_protocol",
+      "value": {
+        "pr": 287,
+        "exact_head": "005a1612193df74ad370bcf2d5a2c99e2c2d7e63",
+        "governance_run": 35625696101,
+        "governance_result": "PASS",
+        "merge_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+      },
+      "source": "GitHub PR #287 / workflow 35625696101 / protected-main readback"
     },
     {
       "id": "overall.enumerated_progress",

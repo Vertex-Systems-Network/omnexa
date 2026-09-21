@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7",
+  "observed_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -25,15 +25,16 @@
       "id": "pr-287",
       "type": "pull_request",
       "number": 287,
-      "status": "VERIFYING",
+      "status": "MERGED",
       "scope": "compact AI supervisor resume/governance protocol",
-      "merge_blocking": true
+      "merge_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
+      "merge_blocking": false
     }
   ],
   "active_supervisor_milestone": {
     "id": "SUP-20260921-COMPACT-RESUME-01",
-    "branch": "supervisor/20260921-compact-resume-protocol",
-    "status": "VERIFYING",
-    "pr": 287
+    "branch": "supervisor/20260921-postmerge-state-reconcile",
+    "status": "IMPLEMENTING_POST_MERGE_RECONCILIATION",
+    "pr": null
   }
 }
