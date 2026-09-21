@@ -21,3 +21,38 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - IMPLEMENTING: fresh Supervisor-only T05 plan prepared with zero worker slots and fail-closed no-runtime/no-migration/no-provider/no-P04.08 authority.
 - VERIFYING: source PR #290 opened for the fresh P04.07 completion plan.
 - VERIFYING: compact state persisted before final exact-head CI observation; Runner Benchmark `RB-20260921-PR290-GOVERNANCE` reserved for PR overlay binding.
+
+
+## 2026-09-21 — SUP-20260921-P0407-T05-READINESS-01
+
+- INTAKE: stale compact PR #290 VERIFYING state reconciled against live protected main `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`; OPEN Issues #4/#289, OPEN PRs = 0.
+- PLAN ACCEPTANCE: source PR #290 Governance `35628790112` PASS; promotion PR #291 Governance `35629981509` PASS; guarded merge/readback `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- SYNC: Supervisor T05 branch non-force merge-synced to accepted main via `7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a`; sync tree is exactly protected-main tree `43123ae889be76ab4cbc7fb41a8df41ef265701b`.
+- AUTHORITY: T05 is evidence/readiness only; zero worker slots and no runtime/migration/provider/remote-reference/P04.08/business/AI authority.
+- RUNNER DISCOVERY: repository workflow inventory contains only `governance.yml` and `main-protection-admin.yml`; neither provides an authorized invocation of `scripts/verify_p04_07.sh`.
+- EXECUTION: local runner attempt could not materialize the public repository because the execution environment cannot resolve GitHub; connected GitHub tooling has no arbitrary workflow-dispatch action.
+- RESULT: `scripts/verify_p04_07.sh` is **NOT RUN**; T05 is **BLOCKED**, not PASS. Stage B remains NOT RUN.
+- RUNNER: `RB-20260921-P0407-T05-READINESS` registered as BLOCKED on exact synced source identity.
+
+
+## 2026-09-21 — SUP-20260921-P0407-T05-RUNNER-PLAN-01
+
+- RESUME: T05 BLOCKED checkpoint read from `d9bd61992e5435f904a03b95e8892e6508f18a22`; live protected main remains `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- GATES: OPEN Issues #4/#289 reconciled first; OPEN PRs = 0. New change-control Issue #292 created after confirming the scope delta.
+- SCOPE DELTA: accepted T05 plan explicitly forbids `.github/workflows/**`, therefore direct runner-workflow mutation is prohibited.
+- CHANGE CONTROL: fresh-main branch `supervisor/20260921-p04-07-t05-runner-plan` created from `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`.
+- PLAN: proposed future exact workflow `.github/workflows/p04-07-readiness.yml` only, `ubuntu-24.04`, `contents: read`, pinned checkout/setup-go, no secrets, branch-scoped push trigger, command `bash scripts/verify_p04_07.sh`.
+- SELF-MODIFICATION SAFETY: the plan carrier itself keeps `.github/workflows/**` forbidden. Workflow authority becomes live only after this plan is accepted through ordinary Governance/protected promotion.
+- T05 / Stage B: T05 remains BLOCKED/NOT RUN; Stage B remains locked.
+- VERIFYING: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE` reserved for the source plan PR exact head.
+
+
+### PR #293 source diagnostic / surgical repair
+
+- AI-NATIVE ALIGNMENT: re-read `AGENTS.md`, AI execution policy, Supervisor workflow, orchestration plan, XQ-100 plan, active AI plan/state and canonical Governance workflow.
+- SOURCE CI: exact head `43b94754c514d8812bad325b8d4d8b44a0b31954`, Governance run `35640151323` / #796 — **FAIL**.
+- DIAGNOSTIC: job `106467219534`, failed step `Verify repository Go code quality`; validator reported `deterministic_order does not match task merge_order`.
+- ROOT CAUSE: future dependency-gated `P04.07-T05-RUNNER-IMPL` and `P04.07-T05` were incorrectly pre-listed as live deterministic merge-order entries.
+- REPAIR: live deterministic order reduced to current authorized task `P04.07-T05-RUNNER-PLAN`; future tasks remain plan intent under dependency/change-control sequencing only.
+- SECURITY: no workflow, verifier, runtime, migration, provider, P04.08, business or AI product-runtime scope changed; no gate weakening.
+- RETRY: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2` reserved for the repaired exact head.

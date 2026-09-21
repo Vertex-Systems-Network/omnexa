@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "candidate-awaiting-governance-no-runtime",
+  "status": "candidate-t05-runner-path-change-control-no-workflow-mutation",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,18 +9,19 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Fresh Supervisor-only P04.07 completion-assessment/closure plan from protected main. No runtime worker slot, migration, provider, remote-reference, P04.08, business-feature or AI product-runtime authority is granted until this plan itself is accepted."
+    "note": "P04.07 completion plan is accepted; T05 is BLOCKED because the required verifier has no authorized executable path. Issue #292 is a fresh governance-self-modification change-control plan only. This carrier grants no workflow write authority until accepted."
   },
   "bootstrap": {
-    "protected_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "protected_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "required_main_sha_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-    "all_active_branches_synced_to_snapshot": true
+    "coordination_issue": 292,
+    "latest_governed_workflow_merge_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
+    "all_active_branches_synced_to_snapshot": true,
+    "parent_coordination_issue": 289
   },
   "onboarding": {
     "slot_schema": "docs/ai/AGENT_SLOT_SCHEMA.json",
@@ -62,10 +63,10 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T05",
-    "role": "p04-07-completion-readiness-and-closure-governance",
-    "branch": "supervisor/20260921-p04-07-completion-plan",
-    "last_synced_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "task_id": "P04.07-T05-RUNNER-PLAN",
+    "role": "p04-07-t05-runner-change-control",
+    "branch": "supervisor/20260921-p04-07-t05-runner-plan",
+    "last_synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "write_paths": [
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
       "docs/ai/P04.07_COMPLETION_PLAN.json",
@@ -76,12 +77,7 @@
       "docs/ai/compact/DETERMINISTIC-CLAIMS.json",
       "docs/ai/compact/COORDINATION-QUEUE.json",
       "docs/ai/compact/RUNNER-BENCHMARK.json",
-      "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md",
-      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
-      "docs/roadmap/STATE.json",
-      "docs/roadmap/STATUS.md",
-      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-      "docs/ai/handoffs/P04.07.md"
+      "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md"
     ],
     "forbidden_paths": [
       "kernel/internal/events/**",
@@ -96,15 +92,25 @@
   },
   "tasks": [],
   "completion_sequence": {
-    "stage_a": {
-      "name": "readiness-assessment",
-      "rule": "After plan acceptance and fresh-main sync, run the existing P04.07 verifier/regressions and record new readiness evidence without changing runtime behavior.",
+    "stage_a0_runner_plan": {
+      "name": "t05-runner-path-change-control",
+      "rule": "This plan carrier may change governance/evidence state only; .github/workflows remains forbidden until this plan is accepted.",
+      "runtime_source_mutation": false
+    },
+    "stage_a1_runner_implementation": {
+      "depends_on": "stage_a0_runner_plan accepted on protected main",
+      "rule": "Implement exactly .github/workflows/p04-07-readiness.yml with read-only permissions, pinned actions, branch-scoped push trigger, and only bash scripts/verify_p04_07.sh.",
+      "runtime_source_mutation": false
+    },
+    "stage_a2_readiness": {
+      "depends_on": "stage_a1_runner_implementation accepted on protected main",
+      "rule": "Trigger the dedicated workflow from a fresh main-equivalent supervisor/p04-07-readiness-* source identity and require terminal PASS before T05 can become PASS.",
       "runtime_source_mutation": false
     },
     "stage_b": {
       "name": "p04-07-closure-carrier",
-      "dependency": "stage_a must be PASS on an exact current source identity",
-      "rule": "May mark P04.07 DONE and update completion/status/handoff evidence only. P04.08 remains planned/locked and is not activated in the same transaction.",
+      "dependency": "stage_a2_readiness must be PASS on exact source identity",
+      "rule": "May mark P04.07 DONE only through the separately governed closure carrier. P04.08 remains PLANNED/LOCKED.",
       "runtime_source_mutation": false
     }
   },
@@ -132,7 +138,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T05"
+      "P04.07-T05-RUNNER-PLAN"
     ]
   },
   "instruction_sync": {
@@ -152,7 +158,50 @@
     "compact_protocol_merge": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
     "compact_reconciliation_pr": 288,
     "compact_reconciliation_merge": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-    "accepted_migration": "kernel.events version 3 remains immutable; migration 4 is not reserved"
+    "accepted_migration": "kernel.events version 3 remains immutable; migration 4 is not reserved",
+    "closure_plan_source_pr": 290,
+    "closure_plan_source_governance_run": 35628790112,
+    "closure_plan_promotion_pr": 291,
+    "closure_plan_promotion_governance_run": 35629981509,
+    "closure_plan_merge": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
   },
-  "next_action": "Accept this fresh plan through exact-head Governance/protected-main path before starting T05 readiness evidence or any package-closure mutation."
+  "next_action": "Re-verify repaired PR #293 exact head through Governance. On PASS, use unchanged promotion; on failure, diagnose without weakening gates.",
+  "runner_path_change_control": {
+    "issue": 292,
+    "parent_issue": 289,
+    "status": "candidate-awaiting-governance",
+    "plan_carrier_workflow_mutation": false,
+    "reason": "T05 requires fresh scripts/verify_p04_07.sh evidence, but no currently authorized connected execution path exists.",
+    "post_acceptance_implementation": {
+      "task_id": "P04.07-T05-RUNNER-IMPL",
+      "branch": "supervisor/20260921-p04-07-readiness-runner",
+      "exact_write_path": ".github/workflows/p04-07-readiness.yml",
+      "runner": "ubuntu-24.04",
+      "trigger": {
+        "event": "push",
+        "branches": [
+          "supervisor/p04-07-readiness-*"
+        ]
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "checkout_action": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "setup_go_action": "actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e",
+      "persist_credentials": false,
+      "go_version_file": ".go-version",
+      "command": "bash scripts/verify_p04_07.sh",
+      "verifier_mutation_allowed": false,
+      "secrets_allowed": false,
+      "deployment_or_provider_authority": false,
+      "required_governance_check_remains_authoritative": true,
+      "workflow_merge_required_before_fresh_t05_evidence": true,
+      "fresh_evidence_branch_rule": "After workflow acceptance on protected main, create a fresh main-equivalent supervisor/p04-07-readiness-* branch and a tree-identical commit solely to trigger the dedicated workflow; bind exact run/head evidence."
+    },
+    "future_deterministic_sequence": [
+      "P04.07-T05-RUNNER-IMPL",
+      "P04.07-T05"
+    ],
+    "note": "Future tasks remain dependency-gated plan intent only and are not live merge-order entries until separately authorized."
+  }
 }

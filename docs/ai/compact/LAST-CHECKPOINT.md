@@ -1,17 +1,26 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected-main baseline: `250a55bb4c61df0bb8c453f29b0ea16a3573af36`
-- Milestone: `SUP-20260921-P0407-CLOSURE-PLAN-01`
+- Protected main: `4a77d468ad52604f80f40ff07fa2abf9b6d79c2e`
+- Milestone: `SUP-20260921-P0407-T05-RUNNER-PLAN-01`
 - Status: **VERIFYING**
-- Coordination Issue: #289
-- Branch: `supervisor/20260921-p04-07-completion-plan`
-- Open Issue #4 remains external-release/legal only and does not block this internal governance milestone.
-- Open PRs at intake: 0.
-- P04.07 remains sole ACTIVE package; P04 progress remains 6 / 10 = 60%.
-- Accepted T01-T04 are historical evidence; live Wave-1 leases = 0.
-- Repository evidence does not mandate a second runtime slice; fresh plan scopes readiness evidence and dependency-gated package closure only.
-- Runtime source, migration 4, provider registry, remote references, P04.08+, business features and AI product runtime remain unauthorized by this plan candidate.
-- Active PR: #290.
-- Pending Runner Benchmark: `RB-20260921-PR290-GOVERNANCE`.
-- Next safe action: perform one consolidated exact-head CI/review refresh and stop if checks remain pending.
+- Active change-control Issue: #292
+- Parent P04.07 completion Issue: #289
+- Branch: `supervisor/20260921-p04-07-t05-runner-plan`
+- P04.07 remains ACTIVE at 6 / 10; P04.08 remains PLANNED/LOCKED.
+- T05 remains **BLOCKED**; required `bash scripts/verify_p04_07.sh` is NOT RUN.
+- Blocked T05 evidence: branch `d9bd61992e5435f904a03b95e8892e6508f18a22`, Runner `RB-20260921-P0407-T05-READINESS`, Issue #289 overlay `5765531357`.
+- Change-control rationale: current accepted plan forbids `.github/workflows/**`; direct workflow mutation would violate scope and governance self-modification protection.
+- This plan carrier changes governance/evidence only. `.github/workflows/**` remains forbidden in this carrier.
+- Proposed post-acceptance implementation is exactly `.github/workflows/p04-07-readiness.yml`, GitHub-hosted `ubuntu-24.04`, `contents: read`, pinned checkout/setup-go, no secrets, and only `bash scripts/verify_p04_07.sh`.
+- Proposed trigger is branch-scoped `push` on `supervisor/p04-07-readiness-*`, which the connected GitHub path can cause without workflow-dispatch capability.
+- The new workflow must not replace/weaken the required `governance` check and must not mutate/skip the verifier.
+- Runtime, migration 4, provider, remote references, P04.08+, business features and AI product runtime remain locked.
+- Stage B remains NOT RUN.
+- Source PR: #293.
+- Initial exact head `43b94754c514d8812bad325b8d4d8b44a0b31954` failed Governance run `35640151323` / #796 at `Verify repository Go code quality`.
+- Failure was deterministic AI-plan consistency only: live merge order expected `[P04.07-T05-RUNNER-PLAN]` but future dependency-gated tasks had been pre-listed.
+- No gate/test/workflow/verifier weakening is permitted or performed.
+- Surgical repair keeps future `P04.07-T05-RUNNER-IMPL` and `P04.07-T05` in dependency sequencing while live `merge_strategy.deterministic_order` contains only the current task.
+- Retry Runner: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2`.
+- Next safe action: bind the repaired exact head to the retry Runner, make one consolidated Governance/review observation, and stop if nonterminal.
