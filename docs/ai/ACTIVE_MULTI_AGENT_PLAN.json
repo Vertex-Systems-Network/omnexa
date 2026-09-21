@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "candidate-awaiting-governance-no-runtime",
+  "status": "active-readiness-blocked-runner",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Fresh Supervisor-only P04.07 completion-assessment/closure plan from protected main. No runtime worker slot, migration, provider, remote-reference, P04.08, business-feature or AI product-runtime authority is granted until this plan itself is accepted."
+    "note": "Fresh Supervisor-only P04.07 completion-assessment/closure plan accepted via promotion PR #291 on protected main. T05 evidence/readiness authority is live; runtime source, migration, provider, remote-reference, P04.08, business-feature and AI product-runtime authority remain absent."
   },
   "bootstrap": {
-    "protected_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "protected_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "required_main_sha_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "latest_governed_workflow_merge_snapshot": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
@@ -65,7 +65,7 @@
     "task_id": "P04.07-T05",
     "role": "p04-07-completion-readiness-and-closure-governance",
     "branch": "supervisor/20260921-p04-07-completion-plan",
-    "last_synced_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "last_synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
     "write_paths": [
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
       "docs/ai/P04.07_COMPLETION_PLAN.json",
@@ -92,7 +92,7 @@
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "plan-candidate"
+    "status": "readiness-blocked-runner"
   },
   "tasks": [],
   "completion_sequence": {
@@ -152,7 +152,12 @@
     "compact_protocol_merge": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
     "compact_reconciliation_pr": 288,
     "compact_reconciliation_merge": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-    "accepted_migration": "kernel.events version 3 remains immutable; migration 4 is not reserved"
+    "accepted_migration": "kernel.events version 3 remains immutable; migration 4 is not reserved",
+    "closure_plan_source_pr": 290,
+    "closure_plan_source_governance_run": 35628790112,
+    "closure_plan_promotion_pr": 291,
+    "closure_plan_promotion_governance_run": 35629981509,
+    "closure_plan_merge": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
   },
-  "next_action": "Accept this fresh plan through exact-head Governance/protected-main path before starting T05 readiness evidence or any package-closure mutation."
+  "next_action": "Execute bash scripts/verify_p04_07.sh on the exact synced T05 branch using an authorized runner and bind immutable terminal evidence. Do not start Stage B unless T05 is PASS."
 }

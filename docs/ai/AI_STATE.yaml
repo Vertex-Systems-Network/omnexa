@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-21"
-  nature: "P04.07 completion-plan candidate; subordinate to canonical governance and live repository evidence"
-  authoritative_main_at_snapshot: "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
-  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI before every material action."
+  nature: "P04.07 T05 completion-readiness is active but BLOCKED on required verifier execution; subordinate to canonical governance and live repository evidence"
+  authoritative_main_at_snapshot: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
 
 project:
   name: "Omnexa"
@@ -25,7 +25,11 @@ p04_07:
   fresh_completion_plan: "docs/ai/P04.07_COMPLETION_PLAN.json"
   fresh_plan_issue: 289
   fresh_plan_branch: "supervisor/20260921-p04-07-completion-plan"
-  fresh_plan_status: "candidate-awaiting-governance"
+  fresh_plan_status: "accepted-stage-a-blocked-runner"
+  accepted_plan_main_sha: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
+  t05_status: "BLOCKED"
+  t05_branch_sync_commit: "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a"
+  t05_runner_id: "RB-20260921-P0407-T05-READINESS"
   runtime_code_change_authorized_by_fresh_plan: false
   migration_4_authorized: false
   provider_registry_selected: false
@@ -34,7 +38,7 @@ p04_07:
 
 security:
   kernel_code_authorized: true
-  kernel_authority_scope: "P04.07 only; fresh closure plan grants governance/evidence scope only until accepted."
+  kernel_authority_scope: "P04.07 historical runtime only; current T05 grants governance/evidence scope and no runtime source mutation."
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
   schema_validation_is_authorization: false
@@ -48,10 +52,15 @@ accepted_history:
   compact_protocol_merge: "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
   compact_reconciliation_pr: 288
   compact_reconciliation_merge: "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
+  closure_plan_source_pr: 290
+  closure_plan_source_governance_run: 35628790112
+  closure_plan_promotion_pr: 291
+  closure_plan_promotion_governance_run: 35629981509
+  closure_plan_merge: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
 
 next_action:
-  current: "Govern fresh P04.07 completion plan through Issue #289 and an exact-head protected PR before T05 readiness evidence."
-  after_plan_acceptance: "Synchronize T05 branch to live protected main, run completion-readiness verification, and record evidence. Do not auto-activate P04.08."
+  current: "Execute bash scripts/verify_p04_07.sh on exact synced T05 source identity with an authorized runner; record immutable evidence. Current connected tooling has no such execution path."
+  after_t05_pass: "Prepare the separately governed P04.07 closure carrier. Do not auto-activate P04.08."
 
 source_authority:
   execution_contract: "AGENTS.md"

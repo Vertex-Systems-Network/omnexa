@@ -1,9 +1,9 @@
 schema_version: 1
-snapshot_time: "2026-09-21T21:53:04+05:00"
+snapshot_time: "2026-09-21T23:25:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
+observed_main_sha: "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
 default_branch: "main"
 active_issue: 289
 open_issue_gates:
@@ -11,15 +11,15 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: 290
+active_pr: null
 active_branch: "supervisor/20260921-p04-07-completion-plan"
 current_milestone:
-  id: "SUP-20260921-P0407-CLOSURE-PLAN-01"
-  name: "Establish fresh P04.07 completion-assessment and closure governance plan"
-milestone_status: "VERIFYING"
+  id: "SUP-20260921-P0407-T05-READINESS-01"
+  name: "Execute P04.07 completion-readiness verification"
+milestone_status: "BLOCKED"
 last_completed_milestone:
-  name: "Compact supervisor protocol and post-merge reconciliation"
-  evidence: "PR #287 + PR #288 / main 250a55bb4c61df0bb8c453f29b0ea16a3573af36"
+  name: "Accept fresh P04.07 completion-assessment/closure plan"
+  evidence: "source PR #290 run 35628790112 PASS; promotion PR #291 run 35629981509 PASS; protected main 4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
 canonical_cursor:
   phase: "P04"
   phase_name: "Data, Jobs & Event Fabric"
@@ -37,12 +37,12 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
-exact_next_safe_action: "Bind PR #290 final head to RB-20260921-PR290-GOVERNANCE, perform one consolidated exact-head CI/review refresh, and stop if checks are pending."
-pending_runner_ids:
-  - "RB-20260921-PR290-GOVERNANCE"
-blocked_runner_ids: []
+exact_next_safe_action: "Run bash scripts/verify_p04_07.sh on the exact synced T05 branch with an authorized runner and bind immutable terminal evidence. Do not start Stage B unless T05 is PASS."
+pending_runner_ids: []
+blocked_runner_ids:
+  - "RB-20260921-P0407-T05-READINESS"
 current_blockers:
-  - "PR #290 exact-head Governance/review is not yet terminal"
+  - "Required scripts/verify_p04_07.sh is NOT RUN: repository workflows do not invoke it, arbitrary Actions workflow dispatch is unavailable through current connected tooling, and the local execution environment cannot reach GitHub to materialize the repository."
 timeout_control:
   default_consolidated_ci_status_refreshes_per_milestone: 1
   tight_polling: false
