@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "stage-a-pass-evidence-candidate",
+  "status": "stage-b-validator-gap-change-control-candidate",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -41,7 +41,7 @@
     ],
     "evidence_output": "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md",
     "pass_rule": "Every applicable required check is terminal PASS on the exact source identity; pending/skipped/unknown is not PASS.",
-    "status": "PASS_EVIDENCE_CANDIDATE",
+    "status": "PASS_ACCEPTED",
     "runner_task_id": "RB-20260921-P0407-T05-READINESS",
     "synced_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a",
@@ -55,11 +55,17 @@
     "job_id": 106519447117,
     "verifier_result": "PASS",
     "verifier_gates": "G0-G11 PASS",
-    "acceptance_pending": "Protected acceptance of this T05 PASS evidence carrier"
+    "acceptance_pending": null,
+    "accepted_source_pr": 299,
+    "accepted_source_governance_run": 35656463391,
+    "accepted_promotion_pr": 300,
+    "accepted_promotion_governance_run": 35657323992,
+    "accepted_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
   },
   "stage_b_closure": {
-    "depends_on": "stage_a_readiness PASS evidence accepted on protected main",
+    "depends_on": "T05 PASS evidence accepted on protected main and validator-gap Class C change control accepted",
     "allowed_paths": [
+      "scripts/validate_p04_activation.py",
       "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
       "docs/roadmap/STATUS.md",
@@ -67,11 +73,13 @@
       "docs/ai/handoffs/P04.07.md",
       "docs/ai/AI_STATE.yaml",
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
-      "docs/ai/compact/**"
+      "docs/ai/P04.07_COMPLETION_PLAN.json",
+      "docs/ai/compact/**",
+      "README.md"
     ],
     "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
     "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction",
-    "status": "LOCKED_PENDING_T05_EVIDENCE_ACCEPTANCE"
+    "status": "BLOCKED_VALIDATOR_GAP_CHANGE_CONTROL"
   },
   "fail_closed_replan_triggers": [
     "runtime source change becomes necessary",
@@ -138,5 +146,44 @@
     "accepted_promotion_pr": 298,
     "accepted_promotion_governance_run": 35654567210,
     "accepted_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20"
+  },
+  "validator_gap_change_control": {
+    "issue": 301,
+    "change_class": "C",
+    "adr": "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
+    "status": "PLAN_CANDIDATE",
+    "discovered_on_protected_main": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
+    "contradiction": "Accepted T06 requires P04.07 DONE with P04.08 still PLANNED/LOCKED, but validate_p04_activation.py currently rejects P04 active with current_work_package=null.",
+    "plan_carrier": {
+      "branch": "supervisor/20260922-p04-07-t06-validator-gap-plan",
+      "validator_mutation_allowed": false,
+      "runtime_source_mutation": false,
+      "state_closure_mutation": false
+    },
+    "post_acceptance_atomic_t06": {
+      "validator_path": "scripts/validate_p04_activation.py",
+      "required_mode": "fail-closed intra-P04 terminal checkpoint",
+      "immediate_completed_prefix": [
+        "P04.01",
+        "P04.02",
+        "P04.03",
+        "P04.04",
+        "P04.05",
+        "P04.06",
+        "P04.07"
+      ],
+      "immediate_future_packages": [
+        "P04.08",
+        "P04.09",
+        "P04.10"
+      ],
+      "current_work_package": null,
+      "implementation_authorized": false,
+      "p04_08_activation_authorized": false,
+      "verifier_mutation_allowed": false,
+      "workflow_mutation_allowed": false,
+      "runtime_source_mutation": false,
+      "canonical_governance_must_pass_on_actual_closure_state": true
+    }
   }
 }

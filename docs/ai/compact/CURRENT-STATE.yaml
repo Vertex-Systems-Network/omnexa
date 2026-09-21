@@ -1,72 +1,72 @@
 schema_version: 1
-snapshot_time: "2026-09-22T02:17:00+05:00"
+snapshot_time: "2026-09-22T02:45:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "f3a8bb8da06afe6a946b33107b426716691cce20"
+observed_main_sha: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
 default_branch: "main"
-active_issue: 289
+active_issue: 301
 parent_coordination_issue: 289
 open_issue_gates:
+  - number: 301
+    scope: "P04.07 T06 validator-gap Class C change control"
+    blocks_current_internal_governance_milestone: true
+    blocks_external_release: false
+  - number: 289
+    scope: "P04.07 completion assessment and closure governance"
+    blocks_current_internal_governance_milestone: true
+    blocks_external_release: false
   - number: 4
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
 active_pr: null
-active_branch: "supervisor/20260922-p04-07-t05-readiness-evidence"
+active_branch: "supervisor/20260922-p04-07-t06-validator-gap-plan"
 current_milestone:
-  id: "SUP-20260922-P0407-T05-READINESS-EVIDENCE-01"
-  name: "Accept fresh P04.07 T05 readiness PASS evidence"
-milestone_status: "IMPLEMENTING_PASS_EVIDENCE"
+  id: "SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01"
+  name: "Govern intra-P04 terminal checkpoint validator-gap decision"
+milestone_status: "IMPLEMENTING_CHANGE_CONTROL_PLAN"
 last_completed_milestone:
-  name: "Accept README progress synchronization policy"
-  evidence: "source PR #297 Governance 35653650082 PASS; promotion PR #298 Governance 35654567210 PASS; protected main f3a8bb8da06afe6a946b33107b426716691cce20"
+  name: "Accept P04.07 T05 readiness PASS evidence"
+  evidence: "source PR #299 Governance 35656463391 PASS; promotion PR #300 Governance 35657323992 PASS; protected main 3f34301f0cd37aa43392c26e906a0a719b6db2a0"
 canonical_cursor:
   phase: "P04"
-  phase_name: "Data, Jobs & Event Fabric"
   work_package: "P04.07"
   owner_module: "kernel.events"
   work_package_state: "ACTIVE"
-  live_runtime_worker_slots: 0
 progress:
-  current_module_basis: "P04 accepted mandatory work packages"
   current_module_done: 6
   current_module_total: 10
   current_module_percent: 60.0
-  overall_basis: "accepted mandatory work packages across canonically enumerated P00-P04"
   overall_done: 49
   overall_total: 53
   overall_percent: 92.45
-  full_p00_p27_percent: null
+  overall_basis: "P00-P04 only"
 t05_readiness:
-  trigger_branch: "supervisor/p04-07-readiness-t05-20260922"
-  exact_head_sha: "2129e0834dc5436a6c65759a0ca3643b01a38ada"
-  tree_identical_to_main: true
-  workflow: "P04.07 Readiness"
+  status: "PASS_ACCEPTED"
   workflow_run_id: 35655774421
-  workflow_run_number: 2
   job_id: 106519447117
-  verifier: "bash scripts/verify_p04_07.sh"
-  verifier_result: "PASS"
   gates: "G0-G11 PASS"
-  evidence_acceptance_pending: true
-readme_progress_sync:
-  accepted_on_protected_main: true
-  every_turn_check_required: true
-  material_transition_write_required: true
-  deferred_sync_must_flush_before_complete: true
-exact_next_safe_action: "Open exact-head T05 PASS evidence PR, bind RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
+  source_pr: 299
+  source_governance_run: 35656463391
+  promotion_pr: 300
+  promotion_governance_run: 35657323992
+  accepted_main_sha: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
+t06_validator_gap:
+  issue: 301
+  change_class: "C"
+  adr: "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md"
+  discovered_constraint: "validate_p04_activation.py rejects P04 active with current_work_package=null"
+  required_target: "P04.07 DONE; P04.08-P04.10 PLANNED/LOCKED; implementation authority false"
+  plan_validator_mutation_authorized: false
+  post_acceptance_atomic_validator_and_closure: true
+exact_next_safe_action: "Open exact-head change-control plan PR, bind source Governance Runner, and stop if CI is nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE"
-historical_blocked_runner_ids:
-  - "RB-20260921-P0407-T05-READINESS"
-current_blockers:
-  - "Stage B T06 remains locked until T05 PASS evidence carrier is accepted on protected main."
+  - "RB-20260922-P0407-T06-VALIDATOR-GAP-PLAN-GOVERNANCE"
 security_scope:
-  workflow_mutation: false
-  verifier_mutation: false
-  runtime_source_mutation: false
+  plan_runtime_source_mutation: false
+  plan_validator_mutation: false
+  plan_state_closure_mutation: false
   migration_4: false
   provider_remote_scope: false
-  p04_08_plus: false
-  stage_b_unlocked: false
+  p04_08_activation: false

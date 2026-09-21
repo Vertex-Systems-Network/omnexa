@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+  "observed_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -138,22 +138,34 @@
     {
       "id": "p04_07.t05_readiness",
       "value": {
-        "status": "PASS_EVIDENCE_CANDIDATE",
-        "runner_task_id": "RB-20260922-P0407-T05-READINESS-R2",
-        "branch": "supervisor/p04-07-readiness-t05-20260922",
-        "exact_head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
-        "parent_protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
-        "tree_identical_to_main": true,
+        "status": "PASS_ACCEPTED",
+        "trigger_head": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
         "workflow_run_id": 35655774421,
         "workflow_run_number": 2,
         "job_id": 106519447117,
-        "verifier": "bash scripts/verify_p04_07.sh",
-        "verifier_result": "PASS",
         "gates": "G0-G11 PASS",
-        "stage_b_unlocked": false
+        "source_pr": 299,
+        "source_governance_run": 35656463391,
+        "promotion_pr": 300,
+        "promotion_governance_run": 35657323992,
+        "protected_main_readback_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
       },
-      "qualification": "Verifier evidence is terminal PASS; Stage B remains locked until this evidence carrier is accepted on protected main.",
-      "source": "P04.07 Readiness run 35655774421 + job 106519447117 + readiness evidence file"
+      "source": "GitHub run 35655774421 / PR #299 / PR #300 / protected-main readback"
+    },
+    {
+      "id": "p04_07.t06_validator_gap",
+      "value": {
+        "status": "CHANGE_CONTROL_REQUIRED",
+        "issue": 301,
+        "change_class": "C",
+        "adr": "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
+        "validator": "scripts/validate_p04_activation.py",
+        "current_validator_supports_required_gap": false,
+        "required_gap_state": "P04 active phase, current_work_package=null, P04.01-P04.07 done, P04.08-P04.10 planned, implementation authority false",
+        "runtime_scope_change": false
+      },
+      "qualification": "Repository authority conflicts; fail closed until change-control decision is accepted.",
+      "source": "scripts/validate_p04_activation.py + accepted P04.07 completion plan + Issue #301"
     }
   ]
 }

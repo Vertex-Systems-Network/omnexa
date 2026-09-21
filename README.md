@@ -19,15 +19,15 @@ This is the human-readable mirror of the active AI-Native development flow. Cano
 | Current module | **P04 / P04.07 — kernel.events** |
 | P04 progress | **60% — 6 / 10 accepted packages** |
 | Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
-| P04.07 | **ACTIVE**; T01-T04 accepted |
-| Readiness runner | **ACCEPTED** — source PR #295 / Governance #801; promotion PR #296 / Governance #802 |
-| README progress policy | **ACCEPTED** — source PR #297 / Governance #804; promotion PR #298 / Governance #805; main `f3a8bb8da06afe6a946b33107b426716691cce20` |
-| T05 readiness verifier | **PASS EVIDENCE PRODUCED** — `P04.07 Readiness` run `35655774421` / #2; job `106519447117`; exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`; G0-G11 PASS |
-| T05 evidence carrier | **ACTIVE** — `supervisor/20260922-p04-07-t05-readiness-evidence`; protected acceptance pending |
-| T06 closure | **LOCKED** until this T05 PASS evidence carrier is accepted on protected main |
-| Next safe action | Govern this exact T05 evidence carrier through source Governance and unchanged promotion; only then start dependency-gated T06 package closure |
+| P04.07 | **ACTIVE**; T01-T04 accepted; T05 readiness accepted |
+| T05 readiness verifier | **PASS** — run `35655774421` / #2; job `106519447117`; exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`; G0-G11 PASS |
+| T05 evidence acceptance | **ACCEPTED** — source PR #299 / Governance #807; promotion PR #300 / Governance #808; main `3f34301f0cd37aa43392c26e906a0a719b6db2a0` |
+| T06 closure | **BLOCKED BY GOVERNANCE MODEL GAP** — current P04 validator cannot represent P04.07 DONE while P04.08 remains PLANNED/LOCKED |
+| Change control | **ACTIVE** — Issue #301; ADR-0013 + validator-gap plan carrier `supervisor/20260922-p04-07-t06-validator-gap-plan` |
+| P04.08 | **PLANNED / LOCKED**; no activation or runtime authority |
+| Next safe action | Accept the Class C validator-gap decision; then execute one atomic T06 carrier that adds fail-closed terminal-gap validation and closes P04.07 without activating P04.08 |
 
-**Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
+**Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the active head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
 
 ## Current P04 package status
 

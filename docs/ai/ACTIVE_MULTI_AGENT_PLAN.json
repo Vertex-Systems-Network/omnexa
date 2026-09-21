@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "active-t05-pass-evidence",
+  "status": "active-t06-validator-gap-change-control-plan",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Fresh main-equivalent T05 verifier evidence is terminal PASS on exact head 2129e0834dc5436a6c65759a0ca3643b01a38ada. This carrier persists evidence only; runtime source authority remains zero and Stage B stays locked until protected acceptance."
+    "note": "T05 readiness evidence is accepted on protected main 3f34301f0cd37aa43392c26e906a0a719b6db2a0. T06 is blocked by a governance validator representation gap; current task is Class C change-control planning only. Runtime source authority remains zero."
   },
   "bootstrap": {
-    "protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+    "protected_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "f3a8bb8da06afe6a946b33107b426716691cce20",
+    "required_main_sha_snapshot": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "f3a8bb8da06afe6a946b33107b426716691cce20",
+    "latest_governed_workflow_merge_snapshot": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": 289
   },
@@ -63,29 +63,34 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T05",
-    "role": "p04-07-completion-readiness-evidence",
-    "branch": "supervisor/20260922-p04-07-t05-readiness-evidence",
-    "last_synced_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+    "task_id": "P04.07-T06-VALIDATOR-GAP-PLAN",
+    "role": "p04-07-t06-validator-gap-change-control-plan",
+    "branch": "supervisor/20260922-p04-07-t06-validator-gap-plan",
+    "last_synced_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
     "write_paths": [
       "README.md",
+      "docs/roadmap/STATUS.md",
+      "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
       "docs/ai/P04.07_COMPLETION_PLAN.json",
       "docs/ai/AI_STATE.yaml",
-      "docs/ai/compact/**",
-      "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md"
+      "docs/ai/compact/**"
     ],
     "forbidden_paths": [
-      "kernel/internal/events/**",
-      "kernel/migrations/**",
+      "scripts/validate_p04_activation.py",
+      "scripts/verify_p04_07.sh",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/ai/handoffs/P04.07.md",
+      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "kernel/**",
       "modules/**",
       ".github/workflows/**",
-      "scripts/verify_p04_07.sh",
       "docs/roadmap/work-packages/P04.08.md"
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "pass-evidence-candidate"
+    "status": "change-control-plan-candidate"
   },
   "tasks": [],
   "completion_sequence": {
@@ -103,7 +108,7 @@
       "depends_on": "stage_a1_runner_implementation accepted on protected main",
       "rule": "Trigger the dedicated workflow from a fresh main-equivalent supervisor/p04-07-readiness-* source identity and require terminal PASS before T05 can become PASS.",
       "runtime_source_mutation": false,
-      "status": "PASS_EVIDENCE_CANDIDATE",
+      "status": "PASS_ACCEPTED",
       "exact_source_identity": {
         "branch": "supervisor/p04-07-readiness-t05-20260922",
         "head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
@@ -118,6 +123,13 @@
         "command": "bash scripts/verify_p04_07.sh",
         "result": "PASS",
         "gates": "G0-G11 PASS"
+      },
+      "acceptance": {
+        "source_pr": 299,
+        "source_governance_run": 35656463391,
+        "promotion_pr": 300,
+        "promotion_governance_run": 35657323992,
+        "protected_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
       }
     },
     "stage_b": {
@@ -125,7 +137,8 @@
       "dependency": "stage_a2_readiness must be PASS on exact source identity",
       "rule": "May mark P04.07 DONE only through the separately governed closure carrier. P04.08 remains PLANNED/LOCKED.",
       "runtime_source_mutation": false,
-      "depends_on": "stage_a2_readiness PASS evidence accepted on protected main"
+      "depends_on": "stage_a2_readiness PASS evidence accepted on protected main",
+      "status": "BLOCKED_VALIDATOR_GAP_CHANGE_CONTROL"
     }
   },
   "signals": {
@@ -152,7 +165,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T05"
+      "P04.07-T06-VALIDATOR-GAP-PLAN"
     ]
   },
   "instruction_sync": {
@@ -208,9 +221,14 @@
     "readme_progress_merge": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "t05_readiness_trigger_head": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
     "t05_readiness_run": 35655774421,
-    "t05_readiness_job": 106519447117
+    "t05_readiness_job": 106519447117,
+    "t05_evidence_source_pr": 299,
+    "t05_evidence_source_governance_run": 35656463391,
+    "t05_evidence_promotion_pr": 300,
+    "t05_evidence_promotion_governance_run": 35657323992,
+    "t05_evidence_merge": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
   },
-  "next_action": "Govern this T05 PASS evidence carrier through exact-head Governance and unchanged promotion. After protected acceptance, Stage B T06 closure may begin; P04.08 remains locked.",
+  "next_action": "Govern Issue #301 / ADR-0013 validator-gap plan through exact-head source Governance and unchanged promotion. After acceptance, execute one atomic T06 validator+closure carrier; keep P04.08 locked.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -265,5 +283,35 @@
     "accepted_implementation_source_pr": 295,
     "accepted_implementation_promotion_pr": 296,
     "accepted_implementation_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4"
+  },
+  "validator_gap_change_control": {
+    "issue": 301,
+    "change_class": "C",
+    "adr": "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
+    "current_plan_status": "CANDIDATE",
+    "current_plan_validator_mutation": false,
+    "post_acceptance_atomic_t06": {
+      "allowed_paths": [
+        "scripts/validate_p04_activation.py",
+        "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+        "docs/roadmap/STATE.json",
+        "docs/roadmap/STATUS.md",
+        "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+        "docs/ai/handoffs/P04.07.md",
+        "docs/ai/AI_STATE.yaml",
+        "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+        "docs/ai/P04.07_COMPLETION_PLAN.json",
+        "docs/ai/compact/**",
+        "README.md"
+      ],
+      "required_validator_mode": "intra-P04 terminal checkpoint",
+      "no_auto_activation": true,
+      "p04_08_activation_authorized": false,
+      "runtime_source_mutation": false,
+      "migration_4_authorized": false,
+      "provider_remote_authorized": false,
+      "business_feature_code_authorized": false,
+      "ai_model_agent_runtime_authorized": false
+    }
   }
 }
