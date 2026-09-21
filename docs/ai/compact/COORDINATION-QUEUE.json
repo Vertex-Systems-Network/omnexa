@@ -71,13 +71,24 @@
       "scope": "P04.07 T05 dedicated read-only verifier runner path plan",
       "depends_on": "issue-289 T05 blocker",
       "merge_blocking": true
+    },
+    {
+      "id": "pr-293",
+      "type": "pull_request",
+      "number": 293,
+      "status": "VERIFYING_REPAIRED_HEAD",
+      "scope": "P04.07 T05 runner-path change-control plan; governance/evidence only; zero workflow mutation",
+      "prior_failed_head": "43b94754c514d8812bad325b8d4d8b44a0b31954",
+      "prior_governance_run": 35640151323,
+      "prior_failure": "deterministic_order included future non-live tasks",
+      "merge_blocking": true
     }
   ],
   "active_supervisor_milestone": {
     "id": "SUP-20260921-P0407-T05-RUNNER-PLAN-01",
     "branch": "supervisor/20260921-p04-07-t05-runner-plan",
     "status": "VERIFYING",
-    "pr": null,
-    "runner_task_id": "RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE"
+    "pr": 293,
+    "runner_task_id": "RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2"
   }
 }

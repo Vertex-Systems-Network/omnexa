@@ -45,3 +45,14 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - SELF-MODIFICATION SAFETY: the plan carrier itself keeps `.github/workflows/**` forbidden. Workflow authority becomes live only after this plan is accepted through ordinary Governance/protected promotion.
 - T05 / Stage B: T05 remains BLOCKED/NOT RUN; Stage B remains locked.
 - VERIFYING: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE` reserved for the source plan PR exact head.
+
+
+### PR #293 source diagnostic / surgical repair
+
+- AI-NATIVE ALIGNMENT: re-read `AGENTS.md`, AI execution policy, Supervisor workflow, orchestration plan, XQ-100 plan, active AI plan/state and canonical Governance workflow.
+- SOURCE CI: exact head `43b94754c514d8812bad325b8d4d8b44a0b31954`, Governance run `35640151323` / #796 — **FAIL**.
+- DIAGNOSTIC: job `106467219534`, failed step `Verify repository Go code quality`; validator reported `deterministic_order does not match task merge_order`.
+- ROOT CAUSE: future dependency-gated `P04.07-T05-RUNNER-IMPL` and `P04.07-T05` were incorrectly pre-listed as live deterministic merge-order entries.
+- REPAIR: live deterministic order reduced to current authorized task `P04.07-T05-RUNNER-PLAN`; future tasks remain plan intent under dependency/change-control sequencing only.
+- SECURITY: no workflow, verifier, runtime, migration, provider, P04.08, business or AI product-runtime scope changed; no gate weakening.
+- RETRY: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2` reserved for the repaired exact head.

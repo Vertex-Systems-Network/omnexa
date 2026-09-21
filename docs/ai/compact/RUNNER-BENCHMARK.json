@@ -211,6 +211,46 @@
         "issue_overlay_comment_id": 5765531357,
         "stage_b_unlocked": false
       }
+    },
+    {
+      "stable_task_id": "RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 292,
+        "parent_issue": 289,
+        "pr": 293,
+        "work_package": "P04.07",
+        "task": "P04.07-T05-RUNNER-PLAN"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260921-p04-07-t05-runner-plan",
+        "head_sha": "43b94754c514d8812bad325b8d4d8b44a0b31954"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35640151323,
+        "workflow_run_number": 796,
+        "job_id": 106467219534,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Runner-path change-control plan verification only; zero workflow/runtime/migration/provider/P04.08/business/AI product-runtime authority",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr293|43b94754c514d8812bad325b8d4d8b44a0b31954|governance|p04.07-t05-runner-plan",
+      "status": "FAIL",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35640151323,
+        "workflow_run_number": 796,
+        "job_id": 106467219534,
+        "conclusion": "failure",
+        "failed_step": "Verify repository Go code quality",
+        "diagnostic": "deterministic_order does not match task merge_order: expected [P04.07-T05-RUNNER-PLAN], got [P04.07-T05-RUNNER-PLAN, P04.07-T05-RUNNER-IMPL, P04.07-T05]",
+        "gate_weakening": false
+      }
     }
   ]
 }

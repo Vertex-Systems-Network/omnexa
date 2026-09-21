@@ -138,9 +138,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T05-RUNNER-PLAN",
-      "P04.07-T05-RUNNER-IMPL",
-      "P04.07-T05"
+      "P04.07-T05-RUNNER-PLAN"
     ]
   },
   "instruction_sync": {
@@ -167,7 +165,7 @@
     "closure_plan_promotion_governance_run": 35629981509,
     "closure_plan_merge": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e"
   },
-  "next_action": "Accept Issue #292 runner-path change-control plan through source exact-head Governance and protected promotion path. Do not mutate .github/workflows until that acceptance.",
+  "next_action": "Re-verify repaired PR #293 exact head through Governance. On PASS, use unchanged promotion; on failure, diagnose without weakening gates.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -199,6 +197,11 @@
       "required_governance_check_remains_authoritative": true,
       "workflow_merge_required_before_fresh_t05_evidence": true,
       "fresh_evidence_branch_rule": "After workflow acceptance on protected main, create a fresh main-equivalent supervisor/p04-07-readiness-* branch and a tree-identical commit solely to trigger the dedicated workflow; bind exact run/head evidence."
-    }
+    },
+    "future_deterministic_sequence": [
+      "P04.07-T05-RUNNER-IMPL",
+      "P04.07-T05"
+    ],
+    "note": "Future tasks remain dependency-gated plan intent only and are not live merge-order entries until separately authorized."
   }
 }

@@ -17,5 +17,10 @@
 - The new workflow must not replace/weaken the required `governance` check and must not mutate/skip the verifier.
 - Runtime, migration 4, provider, remote references, P04.08+, business features and AI product runtime remain locked.
 - Stage B remains NOT RUN.
-- Reserved source-plan Runner: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE`.
-- Next safe action: open source plan PR, bind exact head, make one consolidated Governance/review observation, and stop if nonterminal.
+- Source PR: #293.
+- Initial exact head `43b94754c514d8812bad325b8d4d8b44a0b31954` failed Governance run `35640151323` / #796 at `Verify repository Go code quality`.
+- Failure was deterministic AI-plan consistency only: live merge order expected `[P04.07-T05-RUNNER-PLAN]` but future dependency-gated tasks had been pre-listed.
+- No gate/test/workflow/verifier weakening is permitted or performed.
+- Surgical repair keeps future `P04.07-T05-RUNNER-IMPL` and `P04.07-T05` in dependency sequencing while live `merge_strategy.deterministic_order` contains only the current task.
+- Retry Runner: `RB-20260921-P0407-T05-RUNNER-PLAN-GOVERNANCE-R2`.
+- Next safe action: bind the repaired exact head to the retry Runner, make one consolidated Governance/review observation, and stop if nonterminal.
