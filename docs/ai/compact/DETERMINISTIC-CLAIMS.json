@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
+  "observed_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -36,12 +36,23 @@
     {
       "id": "wave1.live_write_leases",
       "value": 0,
-      "source": "AGENTS.md"
+      "source": "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json + handoff"
     },
     {
-      "id": "issue285.status",
-      "value": "completed",
-      "source": "GitHub Issue #285 / PR #286"
+      "id": "p04_07.first_slice",
+      "value": "T01-T04 accepted; package completion not yet claimed",
+      "source": "docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md + handoff"
+    },
+    {
+      "id": "p04_07.second_runtime_slice_required",
+      "value": false,
+      "qualification": "No explicit second runtime slice is mandated by current canonical repository evidence; any newly discovered runtime need triggers replan.",
+      "source": "P04.07 contract + STATUS + handoff"
+    },
+    {
+      "id": "issue289.scope",
+      "value": "fresh Supervisor-only P04.07 completion assessment/closure governance",
+      "source": "GitHub Issue #289"
     },
     {
       "id": "issue4.scope",
@@ -49,15 +60,13 @@
       "source": "GitHub Issue #4"
     },
     {
-      "id": "supervisor.compact_protocol",
+      "id": "compact_protocol.pr288",
       "value": {
-        "pr": 287,
-        "exact_head": "005a1612193df74ad370bcf2d5a2c99e2c2d7e63",
-        "governance_run": 35625696101,
-        "governance_result": "PASS",
-        "merge_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a"
+        "governance_run": 35626926471,
+        "result": "PASS",
+        "merge_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
       },
-      "source": "GitHub PR #287 / workflow 35625696101 / protected-main readback"
+      "source": "GitHub PR #288 / workflow / protected-main readback"
     },
     {
       "id": "overall.enumerated_progress",

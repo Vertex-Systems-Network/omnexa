@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.07-WAVE1-20260911-01",
-  "status": "completed-no-live-leases",
+  "wave_id": "P04.07-CLOSURE-20260921-01",
+  "status": "candidate-awaiting-governance-no-runtime",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Historical accepted P04.07 Wave 1 plan. T01/T02/T03 and Supervisor T04 are accepted on protected main. This file records completed leases only and grants no current write authority. Any additional P04.07 runtime slice requires a fresh separately governed plan from current protected main. Migration 4, provider/vendor registry selection, remote references, P04.08+, business features and AI/model/agent product runtime remain unauthorized."
+    "note": "Fresh Supervisor-only P04.07 completion-assessment/closure plan from protected main. No runtime worker slot, migration, provider, remote-reference, P04.08, business-feature or AI product-runtime authority is granted until this plan itself is accepted."
   },
   "bootstrap": {
-    "protected_main_sha": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
+    "protected_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
-    "required_main_resolution": "Resolve protected main before every material mutation, assignment, review and merge. Stored SHAs are audit snapshots only.",
-    "branches_created_before_task_work": false,
+    "required_main_sha_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
+    "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 270,
-    "latest_governed_workflow_merge_snapshot": "5c5153ee15c70646d28926743e2d19ab941013d2",
+    "coordination_issue": 289,
+    "latest_governed_workflow_merge_snapshot": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
     "all_active_branches_synced_to_snapshot": true
   },
   "onboarding": {
@@ -29,12 +29,12 @@
     "assignment_requires_open_authorized_slot": true,
     "open_slot_state": "open",
     "occupied_slot_state": "occupied",
-    "current_worker_slot_capacity": 3,
+    "current_worker_slot_capacity": 0,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
     "no_free_slot_response": "Go Home Come Back Next Time",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "Wave 1 is complete and has zero live worker slots. The three records below are historical completed leases, not reusable authority. A new worker requires a fresh governed plan from current protected main."
+    "assignment_rule": "This closure wave is Supervisor-only. It exposes zero worker slots and creates no runtime write authority."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -57,183 +57,60 @@
     "registered_worker_pr_scope_violation_fails_closed": true,
     "registered_worker_stale_main_pr_fails_closed": true,
     "worker_writer_cap": 3,
-    "scale_gate": "No live Wave 1 writer remains. Do not add a fourth slot, persistence/migration writer, provider-registry writer or future-package stream without fresh governed replanning."
+    "scale_gate": "Zero worker slots in this closure wave. No runtime or future-package stream may be added without fresh governed replanning."
   },
-  "worker_slots": [
-    {
-      "schema_version": 1,
-      "slot_id": "P04.07-S01",
-      "phase": "P04",
-      "work_package": "P04.07",
-      "module": "kernel.events/schema-registry",
-      "branch": "agent/20260911-p04-07-schema-registry",
-      "status": "completed",
-      "agent_id": "Agent-01",
-      "start_status": "done",
-      "assigned_from_main_sha": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
-      "last_synced_main_sha": "5d61af89743625bd4e39d515a11cd711d1fe01e4",
-      "write_paths": [
-        "kernel/internal/events/schema_registry.go",
-        "kernel/internal/events/schema_registry_test.go"
-      ],
-      "depends_on": [],
-      "merge_order": 1,
-      "notes": "Historical completed lease. Accepted via source #273 / promotion #274; protected-main read-back 5d61af89743625bd4e39d515a11cd711d1fe01e4. Not reusable write authority."
-    },
-    {
-      "schema_version": 1,
-      "slot_id": "P04.07-S02",
-      "phase": "P04",
-      "work_package": "P04.07",
-      "module": "kernel.events/schema-compatibility",
-      "branch": "agent/20260911-p04-07-schema-compatibility",
-      "status": "completed",
-      "agent_id": "Agent-02",
-      "start_status": "done",
-      "assigned_from_main_sha": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
-      "last_synced_main_sha": "d06fa216ace09e806ef4dc1c5005cd26d424391e",
-      "write_paths": [
-        "kernel/internal/events/schema_compatibility.go",
-        "kernel/internal/events/schema_compatibility_test.go"
-      ],
-      "depends_on": [],
-      "merge_order": 2,
-      "notes": "Historical completed lease. Accepted via source #275 / promotion #278; protected-main read-back d06fa216ace09e806ef4dc1c5005cd26d424391e. Not reusable write authority."
-    },
-    {
-      "schema_version": 1,
-      "slot_id": "P04.07-S03",
-      "phase": "P04",
-      "work_package": "P04.07",
-      "module": "kernel.events/schema-validation",
-      "branch": "agent/20260911-p04-07-schema-validation",
-      "status": "completed",
-      "agent_id": "Agent-03",
-      "start_status": "done",
-      "assigned_from_main_sha": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
-      "last_synced_main_sha": "e39a9dab525e410dad11f7059e41a1d052b42fd1",
-      "write_paths": [
-        "kernel/internal/events/schema_validation.go",
-        "kernel/internal/events/schema_validation_test.go"
-      ],
-      "depends_on": [],
-      "merge_order": 3,
-      "notes": "Historical completed lease. Accepted via source #276 / promotion #279; protected-main read-back e39a9dab525e410dad11f7059e41a1d052b42fd1. Not reusable write authority."
-    }
-  ],
+  "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T04",
-    "role": "p04-07-first-slice-verifier-and-evidence",
-    "branch": "supervisor/20260911-p04-07-first-slice-verifier",
-    "last_synced_main_sha": "5c5153ee15c70646d28926743e2d19ab941013d2",
+    "task_id": "P04.07-T05",
+    "role": "p04-07-completion-readiness-and-closure-governance",
+    "branch": "supervisor/20260921-p04-07-completion-plan",
+    "last_synced_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
     "write_paths": [
-      "scripts/verify_p04_07.sh",
-      "docs/ai/handoffs/P04.07.md",
-      "docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md"
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/P04.07_COMPLETION_PLAN.json",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/compact/CURRENT-STATE.yaml",
+      "docs/ai/compact/LAST-CHECKPOINT.md",
+      "docs/ai/compact/EXECUTION-JOURNAL.md",
+      "docs/ai/compact/DETERMINISTIC-CLAIMS.json",
+      "docs/ai/compact/COORDINATION-QUEUE.json",
+      "docs/ai/compact/RUNNER-BENCHMARK.json",
+      "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md",
+      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/ai/handoffs/P04.07.md"
     ],
     "forbidden_paths": [
-      "docs/roadmap/STATE.json",
-      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "kernel/internal/events/**",
       "kernel/migrations/**",
-      "modules/**"
+      "modules/**",
+      ".github/workflows/**",
+      "docs/roadmap/work-packages/P04.08.md"
     ],
-    "depends_on": [
-      "P04.07-T01",
-      "P04.07-T02",
-      "P04.07-T03"
-    ],
-    "merge_order": 4,
-    "status": "done",
-    "sha_note": "Historical completed Supervisor lease. Source #280 / promotion #281 at exact head 52b3e5c9449f6f31c47cae9234347fbd0b6b8770; protected-main read-back 5c5153ee15c70646d28926743e2d19ab941013d2. Not reusable write authority."
+    "depends_on": [],
+    "merge_order": 1,
+    "status": "plan-candidate"
   },
-  "tasks": [
-    {
-      "task_id": "P04.07-T01",
-      "agent_id": "Agent-01",
-      "slot_id": "P04.07-S01",
-      "role": "schema-registry-writer",
-      "module": "kernel.events/schema-registry",
-      "branch": "agent/20260911-p04-07-schema-registry",
-      "last_synced_main_sha": "5d61af89743625bd4e39d515a11cd711d1fe01e4",
-      "write_paths": [
-        "kernel/internal/events/schema_registry.go",
-        "kernel/internal/events/schema_registry_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/schema_compatibility.go",
-        "kernel/internal/events/schema_compatibility_test.go",
-        "kernel/internal/events/schema_validation.go",
-        "kernel/internal/events/schema_validation_test.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-        "modules/**"
-      ],
-      "depends_on": [],
-      "merge_order": 1,
-      "status": "done"
+  "tasks": [],
+  "completion_sequence": {
+    "stage_a": {
+      "name": "readiness-assessment",
+      "rule": "After plan acceptance and fresh-main sync, run the existing P04.07 verifier/regressions and record new readiness evidence without changing runtime behavior.",
+      "runtime_source_mutation": false
     },
-    {
-      "task_id": "P04.07-T02",
-      "agent_id": "Agent-02",
-      "slot_id": "P04.07-S02",
-      "role": "schema-compatibility-writer",
-      "module": "kernel.events/schema-compatibility",
-      "branch": "agent/20260911-p04-07-schema-compatibility",
-      "last_synced_main_sha": "d06fa216ace09e806ef4dc1c5005cd26d424391e",
-      "write_paths": [
-        "kernel/internal/events/schema_compatibility.go",
-        "kernel/internal/events/schema_compatibility_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/schema_registry.go",
-        "kernel/internal/events/schema_registry_test.go",
-        "kernel/internal/events/schema_validation.go",
-        "kernel/internal/events/schema_validation_test.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-        "modules/**"
-      ],
-      "depends_on": [],
-      "merge_order": 2,
-      "status": "done"
-    },
-    {
-      "task_id": "P04.07-T03",
-      "agent_id": "Agent-03",
-      "slot_id": "P04.07-S03",
-      "role": "schema-validation-writer",
-      "module": "kernel.events/schema-validation",
-      "branch": "agent/20260911-p04-07-schema-validation",
-      "last_synced_main_sha": "e39a9dab525e410dad11f7059e41a1d052b42fd1",
-      "write_paths": [
-        "kernel/internal/events/schema_validation.go",
-        "kernel/internal/events/schema_validation_test.go"
-      ],
-      "forbidden_paths": [
-        "kernel/internal/events/schema_registry.go",
-        "kernel/internal/events/schema_registry_test.go",
-        "kernel/internal/events/schema_compatibility.go",
-        "kernel/internal/events/schema_compatibility_test.go",
-        "kernel/migrations/**",
-        ".github/workflows/**",
-        "docs/roadmap/STATE.json",
-        "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-        "modules/**"
-      ],
-      "depends_on": [],
-      "merge_order": 3,
-      "status": "done"
+    "stage_b": {
+      "name": "p04-07-closure-carrier",
+      "dependency": "stage_a must be PASS on an exact current source identity",
+      "rule": "May mark P04.07 DONE and update completion/status/handoff evidence only. P04.08 remains planned/locked and is not activated in the same transaction.",
+      "runtime_source_mutation": false
     }
-  ],
+  },
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/270",
+    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/289",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
@@ -243,7 +120,7 @@
     "supervisor_reviews_all_worker_submissions": true,
     "direct_unverified_main_merge_forbidden": true,
     "pipeline": [
-      "worker/source exact head",
+      "supervisor/source exact head",
       "source PR review",
       "exact-head Governance",
       "unchanged promotion when required",
@@ -252,52 +129,30 @@
       "protected-main freshness and expected-head check",
       "guarded merge",
       "protected-main readback",
-      "merge alert and branch resynchronization"
+      "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T01",
-      "P04.07-T02",
-      "P04.07-T03",
-      "P04.07-T04"
+      "P04.07-T05"
     ]
   },
   "instruction_sync": {
     "task_start_required": true,
     "pre_submission_required": true,
     "readme_section": "Agent Working Instructions",
-    "if_materially_changed": "update README only in an explicitly authorized governed verifier/continuity scope",
+    "if_materially_changed": "update README only when working instructions materially change",
     "if_unchanged": "Agent instructions checked — README instruction delta: none"
   },
   "historical_completion": {
-    "p04_07_activation_source_pr": 265,
-    "p04_07_activation_promotion_pr": 266,
-    "p04_07_activation_merge": "5af9383c3e973c4055eea66d48462b7c9a2a5858",
-    "p04_07_continuity_issue": 267,
-    "p04_07_continuity_source_pr": 268,
-    "p04_07_continuity_promotion_pr": 269,
-    "p04_07_continuity_merge": "3df6c0ec0d1034134b7417fe34e813a31b3ab821",
-    "p04_07_plan_source_pr": 271,
-    "p04_07_plan_promotion_pr": 272,
-    "p04_07_plan_exact_head": "f41c20e8f2386de1076e42ccdce1e0f93efe429f",
-    "p04_07_plan_source_governance_run": 34529011238,
-    "p04_07_plan_promotion_governance_run": 34529016950,
-    "p04_07_plan_merge": "07ab591f37ccf16df74cbadd3cc641c195ebbc43",
-    "t01_source_pr": 273,
-    "t01_promotion_pr": 274,
-    "t01_merge": "5d61af89743625bd4e39d515a11cd711d1fe01e4",
-    "t02_source_pr": 275,
-    "t02_promotion_pr": 278,
-    "t02_merge": "d06fa216ace09e806ef4dc1c5005cd26d424391e",
-    "t03_source_pr": 276,
-    "t03_promotion_pr": 279,
-    "t03_merge": "e39a9dab525e410dad11f7059e41a1d052b42fd1",
-    "t04_source_pr": 280,
-    "t04_promotion_pr": 281,
-    "t04_exact_head": "52b3e5c9449f6f31c47cae9234347fbd0b6b8770",
-    "t04_source_governance_run": 34540920140,
-    "t04_promotion_governance_run": 34541808091,
+    "previous_wave_id": "P04.07-WAVE1-20260911-01",
+    "previous_wave_status": "completed-no-live-leases",
+    "coordination_issue": 270,
+    "t01_t04_accepted": true,
     "t04_merge": "5c5153ee15c70646d28926743e2d19ab941013d2",
-    "accepted_migration": "kernel.events version 3 remains immutable accepted retry/quarantine persistence; P04.07 Wave 1 reserves no migration 4"
+    "compact_protocol_pr": 287,
+    "compact_protocol_merge": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
+    "compact_reconciliation_pr": 288,
+    "compact_reconciliation_merge": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+    "accepted_migration": "kernel.events version 3 remains immutable; migration 4 is not reserved"
   },
-  "next_action": "Wave 1 is complete. Do not reuse Issue #270, its branches, task records or historical write paths as live authority. If more P04.07 work is required, reconcile current protected main and create a fresh separately governed plan. Do not reserve migration 4 or start provider/P04.08/business/AI runtime without separate authorization."
+  "next_action": "Accept this fresh plan through exact-head Governance/protected-main path before starting T05 readiness evidence or any package-closure mutation."
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
+  "observed_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -22,11 +22,18 @@
       "blocks_external_release": true
     },
     {
+      "id": "issue-289",
+      "type": "issue",
+      "number": 289,
+      "status": "ACTIVE_GOVERNANCE",
+      "scope": "P04.07 completion assessment and closure plan",
+      "merge_blocking": true
+    },
+    {
       "id": "pr-287",
       "type": "pull_request",
       "number": 287,
       "status": "MERGED",
-      "scope": "compact AI supervisor resume/governance protocol",
       "merge_main_sha": "8e501d75b4695a5dd09c89c534e1ff193fa5e81a",
       "merge_blocking": false
     },
@@ -34,15 +41,23 @@
       "id": "pr-288",
       "type": "pull_request",
       "number": 288,
+      "status": "MERGED",
+      "merge_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-290",
+      "type": "pull_request",
+      "number": 290,
       "status": "VERIFYING",
-      "scope": "post-merge compact durable-state reconciliation",
+      "scope": "fresh P04.07 completion assessment/closure plan",
       "merge_blocking": true
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260921-COMPACT-RESUME-01",
-    "branch": "supervisor/20260921-postmerge-state-reconcile",
+    "id": "SUP-20260921-P0407-CLOSURE-PLAN-01",
+    "branch": "supervisor/20260921-p04-07-completion-plan",
     "status": "VERIFYING",
-    "pr": 288
+    "pr": 290
   }
 }

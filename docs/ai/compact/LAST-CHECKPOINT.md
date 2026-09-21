@@ -1,17 +1,17 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected-main readback: `8e501d75b4695a5dd09c89c534e1ff193fa5e81a`
-- Milestone: `SUP-20260921-COMPACT-RESUME-01`
-- Status: **VERIFYING — post-merge durable-state reconciliation PR #288**
-- PR #287 exact head: `005a1612193df74ad370bcf2d5a2c99e2c2d7e63`
-- Governance run: `35625696101` — **PASS**
-- PR #287: merged by guarded expected-head squash; protected-main readback `8e501d75b4695a5dd09c89c534e1ff193fa5e81a`.
-- Open PRs after merge/readback: none.
-- Open Issue gate: #4 remains owner/legal external-release only and does not block this internal governance reconciliation.
-- Canonical cursor remains P04.07; no live Wave-1 write lease exists.
-- Current module progress: P04 = 6 / 10 accepted packages = 60%.
-- Overall denominator coverage: P00-P04 = 49 / 53 accepted packages = 92.45%; no full P00-P27 percentage is asserted.
-- Runner `RB-20260921-PR287-GOVERNANCE`: terminal **PASS**, immutable evidence bound to exact head/run/main readback.
-- Pending Runner Benchmark ID: `RB-20260921-PR288-GOVERNANCE`.
-- Next safe action: bind the exact final PR #288 head, perform one consolidated CI/review refresh, and stop if checks remain pending.
+- Protected-main baseline: `250a55bb4c61df0bb8c453f29b0ea16a3573af36`
+- Milestone: `SUP-20260921-P0407-CLOSURE-PLAN-01`
+- Status: **VERIFYING**
+- Coordination Issue: #289
+- Branch: `supervisor/20260921-p04-07-completion-plan`
+- Open Issue #4 remains external-release/legal only and does not block this internal governance milestone.
+- Open PRs at intake: 0.
+- P04.07 remains sole ACTIVE package; P04 progress remains 6 / 10 = 60%.
+- Accepted T01-T04 are historical evidence; live Wave-1 leases = 0.
+- Repository evidence does not mandate a second runtime slice; fresh plan scopes readiness evidence and dependency-gated package closure only.
+- Runtime source, migration 4, provider registry, remote references, P04.08+, business features and AI product runtime remain unauthorized by this plan candidate.
+- Active PR: #290.
+- Pending Runner Benchmark: `RB-20260921-PR290-GOVERNANCE`.
+- Next safe action: perform one consolidated exact-head CI/review refresh and stop if checks remain pending.

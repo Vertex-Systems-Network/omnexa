@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "phase": "P04",
+  "work_package": "P04.07",
+  "plan_id": "P04.07-CLOSURE-20260921-01",
+  "coordination_issue": 289,
+  "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
+  "status": "candidate-awaiting-governance",
+  "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
+  "authority": {
+    "owner": "kernel.events",
+    "runtime_code_change_authorized": false,
+    "migration_4_reserved": false,
+    "durable_registry_authorized": false,
+    "provider_registry_authorized": false,
+    "remote_references_authorized": false,
+    "p04_08_activation_authorized": false,
+    "business_feature_code_authorized": false,
+    "ai_model_agent_runtime_authorized": false
+  },
+  "retained_accepted_evidence": {
+    "first_slice_evidence": "docs/roadmap/evidence/P04.07_FIRST_SLICE_2026-09-11.md",
+    "verifier": "scripts/verify_p04_07.sh",
+    "t01_t04_accepted": true
+  },
+  "stage_a_readiness": {
+    "task_id": "P04.07-T05",
+    "required_before_mutation": [
+      "fresh protected-main readback",
+      "open Issues reconciliation",
+      "open PR reconciliation",
+      "effective instruction/lease check"
+    ],
+    "verification": [
+      "existing scripts/verify_p04_07.sh",
+      "canonical governance/P04 activation validators",
+      "accepted P04.01-P04.06 regressions required by the verifier/governance",
+      "no migration 4",
+      "no provider/remote-reference dependency",
+      "zero unauthorized runtime diffs"
+    ],
+    "evidence_output": "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md",
+    "pass_rule": "Every applicable required check is terminal PASS on the exact source identity; pending/skipped/unknown is not PASS."
+  },
+  "stage_b_closure": {
+    "depends_on": "stage_a_readiness PASS",
+    "allowed_paths": [
+      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/ai/handoffs/P04.07.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/compact/**"
+    ],
+    "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
+    "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction"
+  },
+  "fail_closed_replan_triggers": [
+    "runtime source change becomes necessary",
+    "migration 4 or durable persistence becomes necessary",
+    "provider/hosted registry becomes necessary",
+    "schema reference or remote I/O becomes necessary",
+    "P04.08 or future-package scope is requested",
+    "business-feature or AI product-runtime scope is requested",
+    "accepted first-slice contract/limits need to change"
+  ],
+  "acceptance_gate": [
+    "source exact-head Governance PASS",
+    "honest review provenance",
+    "zero unresolved review threads",
+    "unchanged promotion carrier when repository governance requires it",
+    "promotion-context Governance PASS when promotion is required",
+    "protected-main freshness/expected-head check",
+    "guarded merge",
+    "protected-main readback"
+  ]
+}
