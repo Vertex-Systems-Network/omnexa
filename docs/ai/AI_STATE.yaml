@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 T05 accepted; T06 blocked by explicit validator-gap Class C change control"
-  authoritative_main_at_snapshot: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
-  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
+  nature: "P04.07 T06 closure state with ADR-0013 intra-P04 terminal checkpoint"
+  authoritative_parent_main_sha: "b4d3a832e8a4d0480fba4c49186fd32811307749"
+  canonical_effect_rule: "This state becomes canonical only when the exact tree containing it is accepted on protected main."
 
 project:
   name: "Omnexa"
@@ -14,57 +14,60 @@ phase:
   current: "P04"
   name: "Data, Jobs & Event Fabric"
   state: "active"
-  progress: "6 / 10 done"
-  current_work_package: "P04.07"
+  progress: "7 / 10 done"
+  current_work_package: null
+  checkpoint: "implementation-locked after P04.07"
 
 p04_07:
-  state: "active"
+  state: "done"
   owner: "kernel.events"
   completion_issue: 289
+  completion_evidence: "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md"
+  first_slice_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
   t05_status: "PASS_ACCEPTED"
   t05_trigger_head: "2129e0834dc5436a6c65759a0ca3643b01a38ada"
   t05_workflow_run_id: 35655774421
   t05_job_id: 106519447117
-  t05_verifier_result: "PASS"
   t05_verifier_gates: "G0-G11 PASS"
-  t05_source_pr: 299
-  t05_source_governance_run: 35656463391
-  t05_promotion_pr: 300
-  t05_promotion_governance_run: 35657323992
-  t05_accepted_main_sha: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
-  runtime_code_change_authorized: false
+  t05_evidence_main: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
+  validator_gap_issue: 301
+  validator_gap_adr: "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md"
+  validator_gap_source_pr: 302
+  validator_gap_promotion_pr: 303
+  validator_gap_main: "b4d3a832e8a4d0480fba4c49186fd32811307749"
+
+terminal_checkpoint:
+  current_work_package: null
+  p04_08_state: "planned_locked"
+  p04_09_state: "planned_locked"
+  p04_10_state: "planned_locked"
+  kernel_code_authorized: false
+  business_feature_code_authorized: false
+  package_sequence_implementation_authorized: false
+  auto_advance_allowed: false
+
+security:
   migration_4_authorized: false
   provider_registry_selected: false
   remote_schema_fetch_authorized: false
-  p04_08_plus_authorized: false
-
-t06:
-  status: "BLOCKED_VALIDATOR_GAP_CHANGE_CONTROL"
-  validator_gap_issue: 301
-  change_class: "C"
-  adr: "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md"
-  plan_branch: "supervisor/20260922-p04-07-t06-validator-gap-plan"
-  plan_validator_mutation_authorized: false
-  planned_atomic_implementation: "validator terminal-gap mode + P04.07 closure state/evidence"
-  p04_08_activation_authorized: false
-
-security:
-  required_governance_check_may_be_weakened: false
-  verifier_may_be_changed_or_skipped: false
+  p04_08_runtime_authorized: false
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
-  control_weakening_authorized: false
+  required_governance_check_may_be_weakened: false
+  p04_07_verifier_may_be_changed_or_skipped: false
 
 readme_progress_sync:
   required: true
-  accepted_on_protected_main: true
-  every_turn_check_required: true
-  material_transition_write_required: true
-  canonical_progress_only: true
+  current_module_done: 7
+  current_module_total: 10
+  overall_done: 50
+  overall_total: 53
+  overall_percent: 94.34
+  coverage: "P00-P04 only"
 
 next_action:
-  current: "Accept Issue #301 / ADR-0013 validator-gap change-control plan through exact-head Governance and protected promotion."
-  after_acceptance: "Execute one atomic T06 validator+closure carrier; P04.08 remains PLANNED/LOCKED."
+  current: "Accept this exact T06 validator+closure state through protected governance."
+  after_acceptance: "No automatic next package. P04.08 requires a fresh separately governed preparation/activation transaction."
 
 compact_resume:
   path: "docs/ai/compact"

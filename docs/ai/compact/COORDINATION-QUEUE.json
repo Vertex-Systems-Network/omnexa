@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
+  "observed_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -13,13 +13,38 @@
   },
   "items": [
     {
+      "id": "issue-289",
+      "type": "issue",
+      "number": 289,
+      "status": "ACTIVE_T06_CLOSURE",
+      "scope": "Atomic P04.07 terminal-checkpoint validator + closure state",
+      "merge_blocking": true
+    },
+    {
       "id": "issue-301",
       "type": "issue",
       "number": 301,
-      "status": "OPEN_CHANGE_CONTROL",
-      "scope": "P04.07 T06 intra-phase terminal checkpoint validator-gap",
-      "merge_blocking": true,
-      "parent_issue": 289
+      "status": "CLOSED_COMPLETED",
+      "scope": "P04.07 T06 validator-gap Class C change control",
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-302",
+      "type": "pull_request",
+      "number": 302,
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35659128824,
+      "accepted_via_pr": 303,
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-303",
+      "type": "pull_request",
+      "number": 303,
+      "status": "MERGED",
+      "promotion_governance_run": 35660012233,
+      "merge_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+      "merge_blocking": false
     },
     {
       "id": "issue-4",
@@ -29,14 +54,6 @@
       "scope": "external_distribution_public_launch",
       "blocks_current_internal_governance": false,
       "blocks_external_release": true
-    },
-    {
-      "id": "issue-289",
-      "type": "issue",
-      "number": 289,
-      "status": "ACTIVE_T06_VALIDATOR_GAP",
-      "scope": "P04.07 T05 accepted; T06 blocked pending validator-gap Class C change control",
-      "merge_blocking": true
     },
     {
       "id": "pr-287",
@@ -154,10 +171,10 @@
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01",
-    "branch": "supervisor/20260922-p04-07-t06-validator-gap-plan",
-    "status": "IMPLEMENTING_CHANGE_CONTROL_PLAN",
+    "id": "SUP-20260922-P0407-T06-CLOSURE-01",
+    "branch": "supervisor/20260922-p04-07-t06-closure",
+    "status": "CLOSURE_STATE_VERIFYING",
     "pr": null,
-    "runner_task_id": "RB-20260922-P0407-T06-VALIDATOR-GAP-PLAN-GOVERNANCE"
+    "runner_task_id": "RB-20260922-P0407-T06-CLOSURE-GOVERNANCE"
   }
 }

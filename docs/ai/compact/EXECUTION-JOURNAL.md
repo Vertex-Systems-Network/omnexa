@@ -110,3 +110,14 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - DECISION CANDIDATE: ADR-0013 defines a strict terminal-gap mode: completed prefix retained with PASS evidence, no active package, future packages planned/spec-null, implementation authority false, no auto-advance.
 - FAST PATH: after decision acceptance, one atomic T06 carrier may update validator + closure state/evidence so canonical Governance exercises the new mode against the actual target state.
 - NON-SCOPE: no runtime source, migration 4, provider/remote refs, P04.08 activation, business feature or AI product runtime.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T06-CLOSURE-01
+
+- CHANGE CONTROL ACCEPTED: Issue #301 / ADR-0013; source #302 Governance #810 PASS; promotion #303 Governance #811 PASS; protected-main readback `b4d3a832e8a4d0480fba4c49186fd32811307749`.
+- AUTHORITY: one atomic T06 validator+closure carrier is authorized; no product-runtime mutation is authorized.
+- VALIDATOR: add a fail-closed intra-P04 terminal checkpoint while preserving planning and one-active-package modes.
+- TARGET STATE: P04.01-P04.07 DONE, current_work_package=null, P04.08-P04.10 planned/spec-null, implementation authority false.
+- COMPLETION PROOF: accepted T01-T04 implementation chain + fresh T05 run 35655774421/job 106519447117/G0-G11 PASS.
+- NON-SCOPE: no migration 4, provider/remote schema scope, P04.08 activation, business features, AI runtime, workflow changes or P04.07 verifier weakening.
+- PROGRESS TARGET AFTER PROTECTED ACCEPTANCE: P04 7/10; canonical P00-P04 50/53 = 94.34%.

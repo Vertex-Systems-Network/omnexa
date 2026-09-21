@@ -6,26 +6,26 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 6 / 10 done. P04.01-P04.06 are DONE and P04.07 is the sole ACTIVE package.** P04.07 Wave 1 T01-T04 is accepted on protected main, but Wave 1 has **no live worker/Supervisor write lease**. P04.08-P04.10 remain locked. `business_feature_code_authorized=false`.
+> **Current canonical state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 7 / 10 done. P04.01-P04.07 are DONE and P04 is at an implementation-locked intra-phase terminal checkpoint with no active work package.** P04.08-P04.10 remain PLANNED / LOCKED. `kernel_code_authorized=false`; `business_feature_code_authorized=false`.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable mirror and never grants authority by itself.
 
 ## Live development progress
 
-This is the human-readable mirror of the active AI-Native development flow. Canonical repository/governance evidence remains authoritative.
+This is the human-readable mirror of the AI-Native development flow. Canonical repository/governance evidence remains authoritative.
 
 | Item | Current state |
 |---|---|
-| Current module | **P04 / P04.07 — kernel.events** |
-| P04 progress | **60% — 6 / 10 accepted packages** |
-| Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
-| P04.07 | **ACTIVE**; T01-T04 accepted; T05 readiness accepted |
-| T05 readiness verifier | **PASS** — run `35655774421` / #2; job `106519447117`; exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`; G0-G11 PASS |
-| T05 evidence acceptance | **ACCEPTED** — source PR #299 / Governance #807; promotion PR #300 / Governance #808; main `3f34301f0cd37aa43392c26e906a0a719b6db2a0` |
-| T06 closure | **BLOCKED BY GOVERNANCE MODEL GAP** — current P04 validator cannot represent P04.07 DONE while P04.08 remains PLANNED/LOCKED |
-| Change control | **ACTIVE** — Issue #301; ADR-0013 + validator-gap plan carrier `supervisor/20260922-p04-07-t06-validator-gap-plan` |
-| P04.08 | **PLANNED / LOCKED**; no activation or runtime authority |
-| Next safe action | Accept the Class C validator-gap decision; then execute one atomic T06 carrier that adds fail-closed terminal-gap validation and closes P04.07 without activating P04.08 |
+| Current module | **P04 terminal checkpoint after P04.07 — no active package** |
+| P04 progress | **70% — 7 / 10 accepted packages** |
+| Overall canonical progress | **94.34% — 50 / 53 across P00-P04 only** |
+| P04.07 | **DONE in this closure state** — accepted first slice + T05 G0-G11 readiness proof |
+| T05 readiness | **PASS / ACCEPTED** — run `35655774421` #2; source #299/#807; promotion #300/#808 |
+| ADR-0013 change control | **ACCEPTED** — source #302/#810; promotion #303/#811; main `b4d3a832e8a4d0480fba4c49186fd32811307749` |
+| T06 closure | **P04.07 DONE / terminal checkpoint** — effective only from protected-main acceptance of this exact tree |
+| P04.08-P04.10 | **PLANNED / LOCKED**; no activation or runtime authority |
+| Kernel implementation authority | **LOCKED** |
+| Next safe action | Only a fresh separately governed P04.08 preparation/activation transaction may advance the cursor; no auto-advance |
 
 **Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the active head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
 
@@ -33,9 +33,8 @@ This is the human-readable mirror of the active AI-Native development flow. Cano
 
 | Package | Status | Current truth |
 |---|---|---|
-| P04.01-P04.06 | DONE | Accepted evidence retained |
-| P04.07 | ACTIVE | First bounded runtime slice T01-T04 accepted; package is not complete; no live Wave-1 leases |
-| P04.08-P04.10 | PLANNED / LOCKED | Not authorized |
+| P04.01-P04.07 | DONE | Accepted evidence retained; P04.07 closure proof at `docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md` |
+| P04.08-P04.10 | PLANNED / LOCKED | No accepted implementation specs or authority |
 
 ## P04.07 accepted first slice
 

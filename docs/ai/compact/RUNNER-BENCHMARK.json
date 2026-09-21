@@ -656,6 +656,88 @@
         "merged_pr": 300,
         "protected_main_readback_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T06-VALIDATOR-GAP-PLAN-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "parent_issue": 289,
+        "change_control_issue": 301,
+        "pr": 302,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-VALIDATOR-GAP-PLAN"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260922-p04-07-t06-validator-gap-plan",
+        "head_sha": "e2d01fa0cbbce1e1c319c8b98b449249f20947cd"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35659128824,
+        "workflow_run_number": 810,
+        "job_id": 106529896438,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Class C change-control decision only; no product runtime mutation.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr302|e2d01fa0cbbce1e1c319c8b98b449249f20947cd|governance|p04.07-t06-validator-gap-plan",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35659128824,
+        "workflow_run_number": 810,
+        "job_id": 106529896438,
+        "conclusion": "success",
+        "exact_head_sha": "e2d01fa0cbbce1e1c319c8b98b449249f20947cd",
+        "accepted_via_promotion_pr": 303,
+        "protected_main_readback_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260922-PR303-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "parent_issue": 289,
+        "change_control_issue": 301,
+        "source_pr": 302,
+        "promotion_pr": 303,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-VALIDATOR-GAP-PLAN promotion"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260922-p04-07-t06-validator-gap-plan",
+        "head_sha": "e2d01fa0cbbce1e1c319c8b98b449249f20947cd",
+        "unchanged_from_source_pr": 302
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35660012233,
+        "workflow_run_number": 811,
+        "job_id": 106532761009,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Accepted promotion verification of ADR-0013 validator-gap decision.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr303|e2d01fa0cbbce1e1c319c8b98b449249f20947cd|governance|p04.07-t06-validator-gap-plan|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35660012233,
+        "workflow_run_number": 811,
+        "job_id": 106532761009,
+        "conclusion": "success",
+        "exact_head_sha": "e2d01fa0cbbce1e1c319c8b98b449249f20947cd",
+        "merged_pr": 303,
+        "protected_main_readback_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749"
+      }
     }
   ]
 }
