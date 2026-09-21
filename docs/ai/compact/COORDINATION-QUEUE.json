@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+  "observed_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -25,8 +25,8 @@
       "id": "issue-289",
       "type": "issue",
       "number": 289,
-      "status": "ACTIVE_T05_READINESS_PROGRESS_POLICY",
-      "scope": "P04.07 T05 readiness; dedicated runner accepted; README progress policy carrier active",
+      "status": "ACTIVE_T05_PASS_EVIDENCE",
+      "scope": "P04.07 T05 fresh readiness verifier PASS produced; protected evidence acceptance pending",
       "merge_blocking": true
     },
     {
@@ -106,13 +106,31 @@
       "promotion_governance_run": 35651627278,
       "merge_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
       "merge_blocking": false
+    },
+    {
+      "id": "pr-297",
+      "type": "pull_request",
+      "number": 297,
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35653650082,
+      "accepted_via_pr": 298,
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-298",
+      "type": "pull_request",
+      "number": 298,
+      "status": "MERGED",
+      "promotion_governance_run": 35654567210,
+      "merge_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+      "merge_blocking": false
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260922-P0407-T05-README-PROGRESS-01",
-    "branch": "supervisor/20260922-p04-07-t05-readme-progress",
-    "status": "IMPLEMENTING",
+    "id": "SUP-20260922-P0407-T05-READINESS-EVIDENCE-01",
+    "branch": "supervisor/20260922-p04-07-t05-readiness-evidence",
+    "status": "IMPLEMENTING_PASS_EVIDENCE",
     "pr": null,
-    "runner_task_id": "RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE"
+    "runner_task_id": "RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE"
   }
 }
