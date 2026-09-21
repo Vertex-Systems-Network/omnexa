@@ -11,12 +11,12 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-active_pr: null
+active_pr: 287
 active_branch: "supervisor/20260921-compact-resume-protocol"
 current_milestone:
   id: "SUP-20260921-COMPACT-RESUME-01"
   name: "Integrate compact AI supervisor resume protocol and mandatory progress reporting"
-milestone_status: "IMPLEMENTING"
+milestone_status: "VERIFYING"
 last_completed_milestone:
   name: "Issue #285 AI instruction-staleness reconciliation"
   evidence: "PR #286 / main 01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
@@ -38,11 +38,12 @@ progress:
   overall_percent: 92.45
   full_p00_p27_percent: null
   full_p00_p27_reason: "P05-P27 mandatory package denominators are not yet canonical; do not invent a percentage"
-exact_next_safe_action: "Persist the governance patch, open one PR, then bind the exact PR head to one Runner Benchmark overlay and perform one consolidated CI/status observation."
-pending_runner_ids: []
+exact_next_safe_action: "Bind the final PR head to Runner Benchmark overlay RB-20260921-PR287-GOVERNANCE, perform one consolidated exact-head CI/status refresh, then stop if checks are still pending."
+pending_runner_ids:
+  - "RB-20260921-PR287-GOVERNANCE"
 blocked_runner_ids: []
 current_blockers:
-  - "PR and exact-head canonical CI have not yet been created/observed for this milestone"
+  - "Exact-head canonical CI/review state has not yet been observed for PR #287"
 timeout_control:
   default_consolidated_ci_status_refreshes_per_milestone: 1
   tight_polling: false

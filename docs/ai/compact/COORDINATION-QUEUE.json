@@ -20,12 +20,20 @@
       "scope": "external_distribution_public_launch",
       "blocks_current_internal_governance": false,
       "blocks_external_release": true
+    },
+    {
+      "id": "pr-287",
+      "type": "pull_request",
+      "number": 287,
+      "status": "VERIFYING",
+      "scope": "compact AI supervisor resume/governance protocol",
+      "merge_blocking": true
     }
   ],
   "active_supervisor_milestone": {
     "id": "SUP-20260921-COMPACT-RESUME-01",
     "branch": "supervisor/20260921-compact-resume-protocol",
-    "status": "IMPLEMENTING",
-    "pr": null
+    "status": "VERIFYING",
+    "pr": 287
   }
 }
