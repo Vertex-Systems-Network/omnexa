@@ -294,3 +294,24 @@ Therefore:
 - when the plan is next materially edited for another reason, its audit snapshots should be reconciled to the latest accepted evidence.
 
 No snapshot may be used to justify working from a branch that is stale relative to live protected main when the new main can affect the task.
+
+
+## 19. Compact durable resume gate
+
+The Supervisor maintains `docs/ai/compact/` as a small resume index subordinate to canonical repository/runtime truth. At start/continue/resume/recovery, after repository instructions are loaded: read current state/checkpoint, resolve exact protected main, reconcile OPEN Issues, reconcile OPEN PRs/MRs, re-read deterministic claims/coordination queue/Runner Benchmark, then reconcile stale observations before mutation. A message-delivery timeout never proves the previous repository operation failed.
+
+## 20. One-turn milestone boundary
+
+One user continue/resume turn normally equals one bounded logical milestone. Do not chain unrelated audit, multiple implementations, repeated CI polling, merge, post-merge audit and next task into one turn.
+
+## 21. Remote status budget
+
+Default to one consolidated CI/status refresh per milestone. Never tight-poll. Persist `VERIFYING` or `WAITING_EXTERNAL` before the final refresh. If checks remain running, record exact run identity on a PR/Issue status surface without changing the tested head, report pending and stop.
+
+## 22. Runner Benchmark
+
+Every material remote/container/browser/runtime/full-regression/performance workload receives a stable Runner Benchmark identity and deterministic dedup key. Registration never creates authority.
+
+## 23. Response progress contract
+
+Every Supervisor response ends with repo name, current module/work-package progress bar, overall progress bar with denominator coverage, milestone, evidence, CI, blockers and exact next safe action. Never fabricate a full-roadmap percentage.

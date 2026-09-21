@@ -1,9 +1,9 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-15"
-  nature: "Issue #285 AI instruction-staleness security reconciliation; subordinate to canonical governance"
-  authoritative_main_at_reconciliation_start: "5742046a040573bbd25fe3d5eca9ee8ce780be6d"
+  verified_at: "2026-09-21"
+  nature: "Post-Issue-285 continuity baseline plus compact supervisor resume protocol; subordinate to canonical governance"
+  authoritative_main_at_snapshot: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
   stale_rule: "Re-verify protected main, STATE.json, branch/head, PRs/issues and latest CI before every material action. Historical plan/branch/task records never create live authority."
 
 project:
@@ -108,6 +108,9 @@ blocked_actions:
 
 security_reconciliation:
   issue: 285
+  status: "completed"
+  completion_pr: 286
+  completion_main: "01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7"
   purpose: "remove stale live-looking agent authority after accepted P04.07 Wave 1"
   runtime_code_change_authorized: false
   migration_change_authorized: false
@@ -116,8 +119,8 @@ security_reconciliation:
   control_weakening_authorized: false
 
 next_action:
-  current: "Complete Issue #285 governance-only continuity reconciliation and require exact-head canonical Governance before merge."
-  post_merge: "Re-read protected main and confirm P04.07 remains sole ACTIVE at 6 / 10 done, first slice is accepted historical work, no Wave 1 write lease remains live, and P04.08+ remains locked."
+  current: "No live P04.07 Wave-1 write lease exists. Reconcile live Issues/PRs and compact continuity state before any new work."
+  governance: "Governance/continuity updates may proceed through an isolated protected-main PR when they preserve canonical runtime locks."
   future_runtime: "If more P04.07 implementation is required, create a new separately governed fresh-main plan with new task/branch/path leases before source mutation."
   completion_rule: "Do not auto-advance P04.08, reserve migration 4, select a provider registry, or infer AI/model/agent product runtime authority."
 
@@ -128,3 +131,17 @@ source_authority:
   ai_policy: "docs/governance/AI_EXECUTION_POLICY.md"
   active_work_package: "docs/roadmap/work-packages/P04.07.md"
   handoff: "docs/ai/handoffs/P04.07.md"
+
+compact_resume:
+  path: "docs/ai/compact"
+  current_state: "docs/ai/compact/CURRENT-STATE.yaml"
+  last_checkpoint: "docs/ai/compact/LAST-CHECKPOINT.md"
+  execution_journal: "docs/ai/compact/EXECUTION-JOURNAL.md"
+  deterministic_claims: "docs/ai/compact/DETERMINISTIC-CLAIMS.json"
+  coordination_queue: "docs/ai/compact/COORDINATION-QUEUE.json"
+  runner_benchmark: "docs/ai/compact/RUNNER-BENCHMARK.json"
+  authority: "resume-index-only"
+  one_continue_one_milestone: true
+  default_ci_status_refreshes_per_milestone: 1
+  tight_polling_allowed: false
+  response_progress_required: true
