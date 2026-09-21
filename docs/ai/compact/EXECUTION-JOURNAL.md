@@ -16,3 +16,5 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - MERGED: guarded expected-head squash merged PR #287.
 - READBACK: protected main resolved to `8e501d75b4695a5dd09c89c534e1ff193fa5e81a`; P04.07 remained ACTIVE and no Wave-1 lease was recreated.
 - DRIFT: newly merged compact state still represented pre-merge VERIFYING state; mandatory post-merge durable-state reconciliation started on `supervisor/20260921-postmerge-state-reconcile`.
+- VERIFYING: post-merge durable-state reconciliation opened as PR #288.
+- VERIFYING: state persisted before final exact-head CI observation; runner ID `RB-20260921-PR288-GOVERNANCE` reserved for PR-status overlay binding.
