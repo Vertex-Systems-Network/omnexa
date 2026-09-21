@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "accepted-stage-a-runner-live-readiness-progress-policy-candidate",
+  "status": "stage-a-pass-evidence-candidate",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -41,14 +41,24 @@
     ],
     "evidence_output": "docs/roadmap/evidence/P04.07_COMPLETION_READINESS_2026-09-21.md",
     "pass_rule": "Every applicable required check is terminal PASS on the exact source identity; pending/skipped/unknown is not PASS.",
-    "status": "BLOCKED_AWAITING_FRESH_VERIFIER_RUN",
+    "status": "PASS_EVIDENCE_CANDIDATE",
     "runner_task_id": "RB-20260921-P0407-T05-READINESS",
-    "synced_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "synced_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a",
-    "blocker": "Dedicated readiness workflow is accepted on protected main, but no fresh main-equivalent supervisor/p04-07-readiness-* identity has yet produced terminal scripts/verify_p04_07.sh PASS."
+    "blocker": null,
+    "branch": "supervisor/p04-07-readiness-t05-20260922",
+    "exact_head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+    "tree_identical_to_main": true,
+    "workflow": "P04.07 Readiness",
+    "workflow_run_id": 35655774421,
+    "workflow_run_number": 2,
+    "job_id": 106519447117,
+    "verifier_result": "PASS",
+    "verifier_gates": "G0-G11 PASS",
+    "acceptance_pending": "Protected acceptance of this T05 PASS evidence carrier"
   },
   "stage_b_closure": {
-    "depends_on": "stage_a_readiness PASS",
+    "depends_on": "stage_a_readiness PASS evidence accepted on protected main",
     "allowed_paths": [
       "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
@@ -61,7 +71,7 @@
     ],
     "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
     "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction",
-    "status": "NOT RUN"
+    "status": "LOCKED_PENDING_T05_EVIDENCE_ACCEPTANCE"
   },
   "fail_closed_replan_triggers": [
     "runtime source change becomes necessary",
@@ -122,6 +132,11 @@
     "material_transition_write_required": true,
     "certified_head_exception": "Do not mutate an exact source/promotion head solely for README while it is under CI certification; reconcile README in the next material governed carrier.",
     "deferred_sync_must_flush_before_complete": true,
-    "canonical_progress_only": true
+    "canonical_progress_only": true,
+    "accepted_source_pr": 297,
+    "accepted_source_governance_run": 35653650082,
+    "accepted_promotion_pr": 298,
+    "accepted_promotion_governance_run": 35654567210,
+    "accepted_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20"
   }
 }

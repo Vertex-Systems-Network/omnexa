@@ -2,8 +2,8 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 readiness runner accepted; T05 readiness governance and mandatory README progress synchronization are active"
-  authoritative_main_at_snapshot: "d4ef378349292e2282f750efe3de75949bce1af4"
+  nature: "P04.07 T05 fresh accepted-path verifier PASS evidence produced; protected evidence acceptance pending"
+  authoritative_main_at_snapshot: "f3a8bb8da06afe6a946b33107b426716691cce20"
   stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
 
 project:
@@ -21,13 +21,17 @@ p04_07:
   state: "active"
   owner: "kernel.events"
   completion_issue: 289
-  runner_change_control_issue: 292
   runner_change_control_status: "completed"
   runner_workflow: ".github/workflows/p04-07-readiness.yml"
-  runner_workflow_main_sha: "d4ef378349292e2282f750efe3de75949bce1af4"
-  t05_status: "BLOCKED_AWAITING_FRESH_VERIFIER_RUN"
-  t05_task: "P04.07-T05"
-  t05_branch: "supervisor/20260922-p04-07-t05-readme-progress"
+  readme_progress_policy_main_sha: "f3a8bb8da06afe6a946b33107b426716691cce20"
+  t05_status: "PASS_EVIDENCE_CANDIDATE"
+  t05_trigger_branch: "supervisor/p04-07-readiness-t05-20260922"
+  t05_trigger_head: "2129e0834dc5436a6c65759a0ca3643b01a38ada"
+  t05_workflow_run_id: 35655774421
+  t05_workflow_run_number: 2
+  t05_job_id: 106519447117
+  t05_verifier_result: "PASS"
+  t05_verifier_gates: "G0-G11 PASS"
   runtime_code_change_authorized: false
   migration_4_authorized: false
   provider_registry_selected: false
@@ -36,12 +40,10 @@ p04_07:
 
 readme_progress_sync:
   required: true
+  accepted_on_protected_main: true
   every_turn_check_required: true
   material_transition_write_required: true
-  certified_head_exception: "Do not mutate an exact source/promotion head solely for README while it is under CI certification; flush the update in the next material governed carrier."
-  deferred_sync_must_flush_before_complete: true
   canonical_progress_only: true
-  section: "Live development progress"
 
 security:
   required_governance_check_may_be_weakened: false
@@ -50,9 +52,13 @@ security:
   ai_model_agent_runtime_authorized: false
   control_weakening_authorized: false
 
+stage_b:
+  status: "LOCKED_PENDING_T05_EVIDENCE_ACCEPTANCE"
+  p04_08_activation_authorized: false
+
 next_action:
-  current: "Govern this README/progress-sync T05 carrier through exact-head Governance/protected acceptance."
-  after_acceptance: "Create a fresh main-equivalent supervisor/p04-07-readiness-* identity and require terminal scripts/verify_p04_07.sh PASS before Stage B."
+  current: "Govern this T05 PASS evidence carrier through exact-head Governance and unchanged promotion."
+  after_acceptance: "Begin separately governed T06 P04.07 package closure; keep P04.08 PLANNED/LOCKED."
 
 compact_resume:
   path: "docs/ai/compact"
