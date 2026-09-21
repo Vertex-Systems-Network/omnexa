@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "active-t05-readiness-progress-policy",
+  "status": "active-t05-pass-evidence",
   "authority": {
     "phase": "P04",
     "work_package": "P04.07",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "Dedicated P04.07 readiness runner is accepted on protected main. Current task is T05 readiness governance plus mandatory README progress synchronization; runtime source authority remains zero."
+    "note": "Fresh main-equivalent T05 verifier evidence is terminal PASS on exact head 2129e0834dc5436a6c65759a0ca3643b01a38ada. This carrier persists evidence only; runtime source authority remains zero and Stage B stays locked until protected acceptance."
   },
   "bootstrap": {
-    "protected_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "required_main_sha_snapshot": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "latest_governed_workflow_merge_snapshot": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": 289
   },
@@ -64,9 +64,9 @@
   "supervisor": {
     "agent_id": "Supervisor",
     "task_id": "P04.07-T05",
-    "role": "p04-07-completion-readiness-and-progress-sync",
-    "branch": "supervisor/20260922-p04-07-t05-readme-progress",
-    "last_synced_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "role": "p04-07-completion-readiness-evidence",
+    "branch": "supervisor/20260922-p04-07-t05-readiness-evidence",
+    "last_synced_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
     "write_paths": [
       "README.md",
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
@@ -85,7 +85,7 @@
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "progress-policy-candidate"
+    "status": "pass-evidence-candidate"
   },
   "tasks": [],
   "completion_sequence": {
@@ -102,13 +102,30 @@
     "stage_a2_readiness": {
       "depends_on": "stage_a1_runner_implementation accepted on protected main",
       "rule": "Trigger the dedicated workflow from a fresh main-equivalent supervisor/p04-07-readiness-* source identity and require terminal PASS before T05 can become PASS.",
-      "runtime_source_mutation": false
+      "runtime_source_mutation": false,
+      "status": "PASS_EVIDENCE_CANDIDATE",
+      "exact_source_identity": {
+        "branch": "supervisor/p04-07-readiness-t05-20260922",
+        "head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+        "parent_protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+        "tree_identical": true
+      },
+      "verifier": {
+        "workflow": "P04.07 Readiness",
+        "workflow_run_id": 35655774421,
+        "workflow_run_number": 2,
+        "job_id": 106519447117,
+        "command": "bash scripts/verify_p04_07.sh",
+        "result": "PASS",
+        "gates": "G0-G11 PASS"
+      }
     },
     "stage_b": {
       "name": "p04-07-closure-carrier",
       "dependency": "stage_a2_readiness must be PASS on exact source identity",
       "rule": "May mark P04.07 DONE only through the separately governed closure carrier. P04.08 remains PLANNED/LOCKED.",
-      "runtime_source_mutation": false
+      "runtime_source_mutation": false,
+      "depends_on": "stage_a2_readiness PASS evidence accepted on protected main"
     }
   },
   "signals": {
@@ -183,9 +200,17 @@
     "t05_runner_impl_source_governance_run": 35648731635,
     "t05_runner_impl_promotion_pr": 296,
     "t05_runner_impl_promotion_governance_run": 35651627278,
-    "t05_runner_impl_merge": "d4ef378349292e2282f750efe3de75949bce1af4"
+    "t05_runner_impl_merge": "d4ef378349292e2282f750efe3de75949bce1af4",
+    "readme_progress_source_pr": 297,
+    "readme_progress_source_governance_run": 35653650082,
+    "readme_progress_promotion_pr": 298,
+    "readme_progress_promotion_governance_run": 35654567210,
+    "readme_progress_merge": "f3a8bb8da06afe6a946b33107b426716691cce20",
+    "t05_readiness_trigger_head": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+    "t05_readiness_run": 35655774421,
+    "t05_readiness_job": 106519447117
   },
-  "next_action": "Accept this README/progress-sync policy carrier, then create a fresh main-equivalent supervisor/p04-07-readiness-* identity and require terminal scripts/verify_p04_07.sh PASS.",
+  "next_action": "Govern this T05 PASS evidence carrier through exact-head Governance and unchanged promotion. After protected acceptance, Stage B T06 closure may begin; P04.08 remains locked.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,

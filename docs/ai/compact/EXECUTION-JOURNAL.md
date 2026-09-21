@@ -88,3 +88,13 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - CERTIFIED HEAD EXCEPTION: an exact source/promotion head under CI certification is not mutated solely for README. Deferred sync is mandatory in the next material governed carrier before COMPLETE.
 - PROGRESS INTEGRITY: README mirrors canonical accepted counts/evidence only and never grants authority.
 - T05: fresh accepted runner execution is still pending; Stage B remains locked.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T05-READINESS-EVIDENCE-01
+
+- README POLICY ACCEPTED: source PR #297 Governance #804 PASS; promotion PR #298 Governance #805 PASS; protected-main readback `f3a8bb8da06afe6a946b33107b426716691cce20`.
+- FRESH T05 TRIGGER: branch `supervisor/p04-07-readiness-t05-20260922`, exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`, tree-identical to protected main with zero changed files.
+- VERIFIER: `P04.07 Readiness` run `35655774421` / #2, job `106519447117`, `bash scripts/verify_p04_07.sh` terminal **PASS**.
+- INTERNAL GATES: verifier job log explicitly reports G0 through G11 PASS.
+- SECURITY: zero runtime/verifier/workflow mutation; migration 4, provider/remote refs, P04.08+, business features and AI product runtime remain locked.
+- ACCEPTANCE: T05 PASS evidence produced; Stage B remains locked until this evidence carrier passes protected governance/merge/readback.

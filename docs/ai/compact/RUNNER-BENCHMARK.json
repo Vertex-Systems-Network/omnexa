@@ -455,6 +455,127 @@
         "merged_pr": 296,
         "protected_main_readback_sha": "d4ef378349292e2282f750efe3de75949bce1af4"
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 297,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 README progress synchronization"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260922-p04-07-t05-readme-progress",
+        "head_sha": "80764b6dd08980f92ebeb51360b52a9284f8b391"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35653650082,
+        "workflow_run_number": 804,
+        "job_id": 106511820368,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "README progress mirror + AI/compact governance transition only; no runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr297|80764b6dd08980f92ebeb51360b52a9284f8b391|governance|p04.07-t05-readme-progress",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35653650082,
+        "workflow_run_number": 804,
+        "job_id": 106511820368,
+        "conclusion": "success",
+        "exact_head_sha": "80764b6dd08980f92ebeb51360b52a9284f8b391",
+        "accepted_via_promotion_pr": 298,
+        "protected_main_readback_sha": "f3a8bb8da06afe6a946b33107b426716691cce20"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260922-PR298-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "source_pr": 297,
+        "promotion_pr": 298,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 README progress synchronization promotion"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260922-p04-07-t05-readme-progress",
+        "head_sha": "80764b6dd08980f92ebeb51360b52a9284f8b391",
+        "unchanged_from_source_pr": 297
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35654567210,
+        "workflow_run_number": 805,
+        "job_id": 106514859021,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Promotion verification of README progress-sync policy only; no runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr298|80764b6dd08980f92ebeb51360b52a9284f8b391|governance|p04.07-t05-readme-progress|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35654567210,
+        "workflow_run_number": 805,
+        "job_id": 106514859021,
+        "conclusion": "success",
+        "exact_head_sha": "80764b6dd08980f92ebeb51360b52a9284f8b391",
+        "merged_pr": 298,
+        "protected_main_readback_sha": "f3a8bb8da06afe6a946b33107b426716691cce20"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T05-READINESS-R2",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 completion-readiness"
+      },
+      "command_or_workflow": "P04.07 Readiness / .github/workflows/p04-07-readiness.yml -> bash scripts/verify_p04_07.sh",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/p04-07-readiness-t05-20260922",
+        "head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+        "parent_protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+        "tree_identity": "identical to protected main; changed files 0"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "push",
+        "runner": "ubuntu-24.04",
+        "workflow_run_id": 35655774421,
+        "workflow_run_number": 2,
+        "job_id": 106519447117,
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "T05 readiness evidence only; no runtime/verifier/migration/provider/P04.08/business/AI product-runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|p04.07-t05|2129e0834dc5436a6c65759a0ca3643b01a38ada|verify_p04_07|r2",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35655774421,
+        "workflow_run_number": 2,
+        "job_id": 106519447117,
+        "conclusion": "success",
+        "exact_head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+        "verifier_result": "PASS",
+        "gates": "G0-G11 PASS",
+        "stage_b_unlocked": false
+      }
     }
   ]
 }

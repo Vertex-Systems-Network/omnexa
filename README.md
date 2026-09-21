@@ -21,10 +21,11 @@ This is the human-readable mirror of the active AI-Native development flow. Cano
 | Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
 | P04.07 | **ACTIVE**; T01-T04 accepted |
 | Readiness runner | **ACCEPTED** — source PR #295 / Governance #801; promotion PR #296 / Governance #802 |
-| Protected-main runner merge | `d4ef378349292e2282f750efe3de75949bce1af4` |
-| T05 readiness | **Awaiting fresh verifier run** |
-| T06 closure | **LOCKED** until T05 terminal PASS |
-| Next safe action | Accept this progress-sync policy, then trigger a fresh main-equivalent `supervisor/p04-07-readiness-*` branch and require `scripts/verify_p04_07.sh` PASS |
+| README progress policy | **ACCEPTED** — source PR #297 / Governance #804; promotion PR #298 / Governance #805; main `f3a8bb8da06afe6a946b33107b426716691cce20` |
+| T05 readiness verifier | **PASS EVIDENCE PRODUCED** — `P04.07 Readiness` run `35655774421` / #2; job `106519447117`; exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`; G0-G11 PASS |
+| T05 evidence carrier | **ACTIVE** — `supervisor/20260922-p04-07-t05-readiness-evidence`; protected acceptance pending |
+| T06 closure | **LOCKED** until this T05 PASS evidence carrier is accepted on protected main |
+| Next safe action | Govern this exact T05 evidence carrier through source Governance and unchanged promotion; only then start dependency-gated T06 package closure |
 
 **Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
 

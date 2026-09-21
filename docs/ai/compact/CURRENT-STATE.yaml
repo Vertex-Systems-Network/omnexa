@@ -1,9 +1,9 @@
 schema_version: 1
-snapshot_time: "2026-09-22T01:50:00+05:00"
+snapshot_time: "2026-09-22T02:17:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_main_sha: "d4ef378349292e2282f750efe3de75949bce1af4"
+observed_main_sha: "f3a8bb8da06afe6a946b33107b426716691cce20"
 default_branch: "main"
 active_issue: 289
 parent_coordination_issue: 289
@@ -13,14 +13,14 @@ open_issue_gates:
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
 active_pr: null
-active_branch: "supervisor/20260922-p04-07-t05-readme-progress"
+active_branch: "supervisor/20260922-p04-07-t05-readiness-evidence"
 current_milestone:
-  id: "SUP-20260922-P0407-T05-README-PROGRESS-01"
-  name: "Make README progress synchronization mandatory and transition to T05 readiness governance"
-milestone_status: "IMPLEMENTING"
+  id: "SUP-20260922-P0407-T05-READINESS-EVIDENCE-01"
+  name: "Accept fresh P04.07 T05 readiness PASS evidence"
+milestone_status: "IMPLEMENTING_PASS_EVIDENCE"
 last_completed_milestone:
-  name: "Accept dedicated P04.07 readiness verifier runner"
-  evidence: "source PR #295 Governance 35648731635 PASS; promotion PR #296 Governance 35651627278 PASS; protected main d4ef378349292e2282f750efe3de75949bce1af4; Issue #292 completed"
+  name: "Accept README progress synchronization policy"
+  evidence: "source PR #297 Governance 35653650082 PASS; promotion PR #298 Governance 35654567210 PASS; protected main f3a8bb8da06afe6a946b33107b426716691cce20"
 canonical_cursor:
   phase: "P04"
   phase_name: "Data, Jobs & Event Fabric"
@@ -38,18 +38,30 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   full_p00_p27_percent: null
+t05_readiness:
+  trigger_branch: "supervisor/p04-07-readiness-t05-20260922"
+  exact_head_sha: "2129e0834dc5436a6c65759a0ca3643b01a38ada"
+  tree_identical_to_main: true
+  workflow: "P04.07 Readiness"
+  workflow_run_id: 35655774421
+  workflow_run_number: 2
+  job_id: 106519447117
+  verifier: "bash scripts/verify_p04_07.sh"
+  verifier_result: "PASS"
+  gates: "G0-G11 PASS"
+  evidence_acceptance_pending: true
 readme_progress_sync:
+  accepted_on_protected_main: true
   every_turn_check_required: true
   material_transition_write_required: true
-  certified_head_exception_only: true
   deferred_sync_must_flush_before_complete: true
-exact_next_safe_action: "Open this exact-head T05 README/progress-sync source PR, bind RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
+exact_next_safe_action: "Open exact-head T05 PASS evidence PR, bind RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE, perform one consolidated Governance/review refresh, and stop if nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE"
-blocked_runner_ids:
+  - "RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE"
+historical_blocked_runner_ids:
   - "RB-20260921-P0407-T05-READINESS"
 current_blockers:
-  - "T05 verifier still requires a fresh main-equivalent supervisor/p04-07-readiness-* run after this policy carrier is accepted."
+  - "Stage B T06 remains locked until T05 PASS evidence carrier is accepted on protected main."
 security_scope:
   workflow_mutation: false
   verifier_mutation: false

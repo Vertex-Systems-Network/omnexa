@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "d4ef378349292e2282f750efe3de75949bce1af4",
+  "observed_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -95,20 +95,6 @@
       "source": "GitHub PR #290 / PR #291 / workflow runs / protected-main readback"
     },
     {
-      "id": "p04_07.t05_readiness",
-      "value": {
-        "status": "BLOCKED",
-        "runner_task_id": "RB-20260921-P0407-T05-READINESS",
-        "branch": "supervisor/20260921-p04-07-completion-plan",
-        "branch_sync_commit": "7568e041fbdb5e3a7245edea2d2ecb6c7c46e99a",
-        "synced_main_sha": "4a77d468ad52604f80f40ff07fa2abf9b6d79c2e",
-        "verifier": "bash scripts/verify_p04_07.sh",
-        "verifier_result": "NOT RUN"
-      },
-      "qualification": "Pending/skipped/unknown cannot be treated as PASS; Stage B remains locked.",
-      "source": "docs/ai/P04.07_COMPLETION_PLAN.json + readiness evidence + Issue #289 runner overlay"
-    },
-    {
       "id": "p04_07.t05_runner_change_control",
       "value": {
         "issue": 292,
@@ -137,14 +123,37 @@
     {
       "id": "readme.progress_sync",
       "value": {
+        "status": "ACCEPTED",
+        "source_pr": 297,
+        "source_governance_run": 35653650082,
+        "promotion_pr": 298,
+        "promotion_governance_run": 35654567210,
+        "protected_main_readback_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
         "every_turn_check_required": true,
         "material_transition_write_required": true,
-        "certified_head_exception_only": true,
-        "deferred_sync_must_flush_before_complete": true,
         "canonical_progress_only": true
       },
-      "qualification": "Candidate until this carrier is accepted on protected main.",
-      "source": "README.md + docs/ai/ACTIVE_MULTI_AGENT_PLAN.json"
+      "source": "GitHub PR #297 / PR #298 / protected-main readback + README.md"
+    },
+    {
+      "id": "p04_07.t05_readiness",
+      "value": {
+        "status": "PASS_EVIDENCE_CANDIDATE",
+        "runner_task_id": "RB-20260922-P0407-T05-READINESS-R2",
+        "branch": "supervisor/p04-07-readiness-t05-20260922",
+        "exact_head_sha": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+        "parent_protected_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+        "tree_identical_to_main": true,
+        "workflow_run_id": 35655774421,
+        "workflow_run_number": 2,
+        "job_id": 106519447117,
+        "verifier": "bash scripts/verify_p04_07.sh",
+        "verifier_result": "PASS",
+        "gates": "G0-G11 PASS",
+        "stage_b_unlocked": false
+      },
+      "qualification": "Verifier evidence is terminal PASS; Stage B remains locked until this evidence carrier is accepted on protected main.",
+      "source": "P04.07 Readiness run 35655774421 + job 106519447117 + readiness evidence file"
     }
   ]
 }

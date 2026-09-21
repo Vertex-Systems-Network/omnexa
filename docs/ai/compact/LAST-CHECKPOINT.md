@@ -1,23 +1,26 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `d4ef378349292e2282f750efe3de75949bce1af4`
-- Milestone: `SUP-20260922-P0407-T05-README-PROGRESS-01`
-- Status: **IMPLEMENTING**
+- Protected main: `f3a8bb8da06afe6a946b33107b426716691cce20`
+- Milestone: `SUP-20260922-P0407-T05-READINESS-EVIDENCE-01`
+- Status: **IMPLEMENTING_PASS_EVIDENCE**
 - Parent completion/readiness Issue: #289
-- Runner-path change-control Issue #292: **COMPLETED**
-- Branch: `supervisor/20260922-p04-07-t05-readme-progress`
-- P04 remains 6 / 10; overall canonical P00-P04 progress remains 49 / 53 (92.45%).
-- Dedicated readiness workflow accepted:
-  - source PR #295, Governance `35648731635` / #801 PASS;
-  - unchanged promotion PR #296, Governance `35651627278` / #802 PASS;
-  - protected-main readback `d4ef378349292e2282f750efe3de75949bce1af4`.
-- Current task: `P04.07-T05` readiness governance; zero runtime mutation authority.
-- README progress sync candidate rule:
-  - every continue/resume/recovery checks README;
-  - material state transitions update README in the same governed carrier;
-  - certified exact heads are not mutated solely for README;
-  - deferred README sync must flush in the next material carrier before COMPLETE;
-  - progress remains canonical-evidence-only.
-- T05 remains **BLOCKED_AWAITING_FRESH_VERIFIER_RUN**.
-- Pending source Runner: `RB-20260922-P0407-T05-README-PROGRESS-GOVERNANCE`.
+- Branch: `supervisor/20260922-p04-07-t05-readiness-evidence`
+- P04 remains 6 / 10; overall canonical P00-P04 remains 49 / 53 (92.45%).
+- README progress-sync policy is accepted on protected main through:
+  - source PR #297, Governance `35653650082` / #804 PASS;
+  - unchanged promotion PR #298, Governance `35654567210` / #805 PASS;
+  - protected-main readback `f3a8bb8da06afe6a946b33107b426716691cce20`.
+- Fresh T05 readiness source identity:
+  - branch `supervisor/p04-07-readiness-t05-20260922`;
+  - head `2129e0834dc5436a6c65759a0ca3643b01a38ada`;
+  - tree-identical to protected main, changed files 0.
+- Dedicated verifier:
+  - workflow `P04.07 Readiness`;
+  - run `35655774421` / #2;
+  - job `106519447117`;
+  - `bash scripts/verify_p04_07.sh` — **PASS**;
+  - job log explicitly reports **G0-G11 PASS**.
+- No runtime, verifier, workflow, migration, provider, P04.08, business-feature or AI product-runtime mutation occurred in T05 execution.
+- Stage B remains locked until this PASS evidence carrier is accepted on protected main.
+- Pending source Runner: `RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE`.
