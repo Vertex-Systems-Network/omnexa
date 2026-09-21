@@ -1,6 +1,6 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-15 — **P04.07 FIRST RUNTIME SLICE ACCEPTED / NO LIVE WAVE-1 LEASES**
+Last reconciled: 2026-09-22 — **P04.07 T05 READINESS ACCEPTED / T06 VALIDATOR-GAP CHANGE CONTROL ACTIVE**
 
 ## Canonical status
 
@@ -24,6 +24,27 @@ Last reconciled: 2026-09-15 — **P04.07 FIRST RUNTIME SLICE ACCEPTED / NO LIVE 
 - AI/model/agent product runtime: unauthorized.
 
 P04.07 remains ACTIVE after its accepted first runtime slice; the first slice does not count as P04.07 package completion and does not activate P04.08.
+
+## P04.07 T05 readiness acceptance and T06 gate
+
+Fresh completion-readiness evidence is accepted on protected main:
+
+- readiness trigger head `2129e0834dc5436a6c65759a0ca3643b01a38ada`, tree-identical to its protected-main parent;
+- `P04.07 Readiness` run `35655774421` / #2 — PASS;
+- job `106519447117` — PASS;
+- `bash scripts/verify_p04_07.sh` — PASS with G0-G11 PASS;
+- source evidence PR #299 / Governance #807 — PASS;
+- unchanged promotion PR #300 / Governance #808 — PASS;
+- protected-main readback `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
+
+T06 closure is not yet accepted. Pre-mutation reconciliation found a governance-model contradiction: `scripts/validate_p04_activation.py` cannot represent an implementation-locked intra-P04 checkpoint with P04.07 DONE, no active package, and P04.08 still PLANNED/LOCKED.
+
+Issue #301 and ADR-0013 govern the required Class C validator-gap reconciliation. Until that decision is accepted:
+
+- P04.07 remains canonical ACTIVE;
+- P04 progress remains 6 / 10;
+- P04.08-P04.10 remain PLANNED / LOCKED;
+- no runtime, migration, provider, business-feature or AI product-runtime authority expands.
 
 ## P04.07 accepted chain
 
@@ -111,14 +132,6 @@ Required security outcome:
 
 ## Next action
 
-There is no automatic next runtime implementation from Wave 1.
+Accept the Class C validator-gap change-control decision in Issue #301 / ADR-0013 through exact-head Governance and protected promotion. Only after that acceptance may one atomic T06 carrier update the validator plus P04.07 closure state/evidence.
 
-If more P04.07 work is required:
-
-1. re-read current protected `main` and open Issues/PRs;
-2. confirm `STATE.json` still has P04.07 as sole ACTIVE package;
-3. create a fresh separately governed plan with new task IDs, branches and write-path leases;
-4. freeze dependencies and migration/data budget before mutation;
-5. require exact-head Governance, review freshness and protected-main freshness before merge.
-
-Do not reuse Issue #270 branches/task records as current authority. Do not auto-advance P04.08, reserve migration 4, select a provider registry or infer business/AI runtime authority.
+The terminal-gap validator mode must keep `current_work_package=null`, implementation authority false and P04.08-P04.10 planned/locked. Do not auto-activate P04.08, reserve migration 4, select a provider registry or infer business/AI runtime authority.

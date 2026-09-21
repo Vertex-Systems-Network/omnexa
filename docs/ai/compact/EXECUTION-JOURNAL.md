@@ -98,3 +98,15 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - INTERNAL GATES: verifier job log explicitly reports G0 through G11 PASS.
 - SECURITY: zero runtime/verifier/workflow mutation; migration 4, provider/remote refs, P04.08+, business features and AI product runtime remain locked.
 - ACCEPTANCE: T05 PASS evidence produced; Stage B remains locked until this evidence carrier passes protected governance/merge/readback.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01
+
+- T05 ACCEPTED: source PR #299 Governance #807 PASS; promotion PR #300 Governance #808 PASS; protected-main readback `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
+- T06 PRE-MUTATION AUDIT: accepted closure semantics require P04.07 DONE without P04.08 activation.
+- BLOCKER DISCOVERED: `scripts/validate_p04_activation.py` only accepts pre-P04 planning or exactly one active P04 package, so it rejects the required safe `current_work_package=null` intra-phase checkpoint.
+- FAIL CLOSED: no STATE/package/validator mutation was attempted under the conflicting authority.
+- CHANGE CONTROL: Issue #301 opened; Class C per `docs/governance/CHANGE_CONTROL.md`.
+- DECISION CANDIDATE: ADR-0013 defines a strict terminal-gap mode: completed prefix retained with PASS evidence, no active package, future packages planned/spec-null, implementation authority false, no auto-advance.
+- FAST PATH: after decision acceptance, one atomic T06 carrier may update validator + closure state/evidence so canonical Governance exercises the new mode against the actual target state.
+- NON-SCOPE: no runtime source, migration 4, provider/remote refs, P04.08 activation, business feature or AI product runtime.

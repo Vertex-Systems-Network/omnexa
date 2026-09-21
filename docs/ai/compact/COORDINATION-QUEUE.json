@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
+  "observed_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -12,6 +12,15 @@
     "issues_before_prs": true
   },
   "items": [
+    {
+      "id": "issue-301",
+      "type": "issue",
+      "number": 301,
+      "status": "OPEN_CHANGE_CONTROL",
+      "scope": "P04.07 T06 intra-phase terminal checkpoint validator-gap",
+      "merge_blocking": true,
+      "parent_issue": 289
+    },
     {
       "id": "issue-4",
       "type": "issue",
@@ -25,8 +34,8 @@
       "id": "issue-289",
       "type": "issue",
       "number": 289,
-      "status": "ACTIVE_T05_PASS_EVIDENCE",
-      "scope": "P04.07 T05 fresh readiness verifier PASS produced; protected evidence acceptance pending",
+      "status": "ACTIVE_T06_VALIDATOR_GAP",
+      "scope": "P04.07 T05 accepted; T06 blocked pending validator-gap Class C change control",
       "merge_blocking": true
     },
     {
@@ -124,13 +133,31 @@
       "promotion_governance_run": 35654567210,
       "merge_main_sha": "f3a8bb8da06afe6a946b33107b426716691cce20",
       "merge_blocking": false
+    },
+    {
+      "id": "pr-299",
+      "type": "pull_request",
+      "number": 299,
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35656463391,
+      "accepted_via_pr": 300,
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-300",
+      "type": "pull_request",
+      "number": 300,
+      "status": "MERGED",
+      "promotion_governance_run": 35657323992,
+      "merge_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
+      "merge_blocking": false
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260922-P0407-T05-READINESS-EVIDENCE-01",
-    "branch": "supervisor/20260922-p04-07-t05-readiness-evidence",
-    "status": "IMPLEMENTING_PASS_EVIDENCE",
+    "id": "SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01",
+    "branch": "supervisor/20260922-p04-07-t06-validator-gap-plan",
+    "status": "IMPLEMENTING_CHANGE_CONTROL_PLAN",
     "pr": null,
-    "runner_task_id": "RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE"
+    "runner_task_id": "RB-20260922-P0407-T06-VALIDATOR-GAP-PLAN-GOVERNANCE"
   }
 }

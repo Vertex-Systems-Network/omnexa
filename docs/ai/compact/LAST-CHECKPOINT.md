@@ -1,26 +1,23 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `f3a8bb8da06afe6a946b33107b426716691cce20`
-- Milestone: `SUP-20260922-P0407-T05-READINESS-EVIDENCE-01`
-- Status: **IMPLEMENTING_PASS_EVIDENCE**
-- Parent completion/readiness Issue: #289
-- Branch: `supervisor/20260922-p04-07-t05-readiness-evidence`
-- P04 remains 6 / 10; overall canonical P00-P04 remains 49 / 53 (92.45%).
-- README progress-sync policy is accepted on protected main through:
-  - source PR #297, Governance `35653650082` / #804 PASS;
-  - unchanged promotion PR #298, Governance `35654567210` / #805 PASS;
-  - protected-main readback `f3a8bb8da06afe6a946b33107b426716691cce20`.
-- Fresh T05 readiness source identity:
-  - branch `supervisor/p04-07-readiness-t05-20260922`;
-  - head `2129e0834dc5436a6c65759a0ca3643b01a38ada`;
-  - tree-identical to protected main, changed files 0.
-- Dedicated verifier:
-  - workflow `P04.07 Readiness`;
-  - run `35655774421` / #2;
-  - job `106519447117`;
-  - `bash scripts/verify_p04_07.sh` — **PASS**;
-  - job log explicitly reports **G0-G11 PASS**.
-- No runtime, verifier, workflow, migration, provider, P04.08, business-feature or AI product-runtime mutation occurred in T05 execution.
-- Stage B remains locked until this PASS evidence carrier is accepted on protected main.
-- Pending source Runner: `RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE`.
+- Protected main: `3f34301f0cd37aa43392c26e906a0a719b6db2a0`
+- Milestone: `SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01`
+- Status: **IMPLEMENTING_CHANGE_CONTROL_PLAN**
+- Parent completion Issue: #289
+- Change-control Issue: #301
+- Branch: `supervisor/20260922-p04-07-t06-validator-gap-plan`
+- Canonical accepted progress remains P04 6 / 10 and overall P00-P04 49 / 53 (92.45%).
+- T05 readiness is accepted:
+  - verifier run `35655774421` / #2, job `106519447117`, G0-G11 PASS;
+  - source PR #299 Governance #807 PASS;
+  - unchanged promotion PR #300 Governance #808 PASS;
+  - protected-main readback `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
+- T06 pre-mutation audit found a fail-closed governance contradiction:
+  - accepted closure requires P04.07 DONE while P04.08 remains PLANNED/LOCKED;
+  - current `scripts/validate_p04_activation.py` rejects `current_phase=P04` with `current_work_package=null`.
+- Class C change control is required before validator mutation.
+- ADR-0013 defines a fail-closed intra-P04 terminal checkpoint.
+- This plan carrier does not modify the validator, canonical closure state, runtime, workflow or verifier.
+- After plan acceptance, one atomic T06 carrier may update the validator plus closure state/evidence and must pass canonical Governance on the exact closure head.
+- P04.08 remains PLANNED/LOCKED.

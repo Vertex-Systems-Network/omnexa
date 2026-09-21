@@ -576,6 +576,86 @@
         "gates": "G0-G11 PASS",
         "stage_b_unlocked": false
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T05-EVIDENCE-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 299,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 readiness PASS evidence acceptance"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260922-p04-07-t05-readiness-evidence",
+        "head_sha": "15d75682f58ec1272c1d294fe7cf2dd5aae5746a"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35656463391,
+        "workflow_run_number": 807,
+        "job_id": 106521251425,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "T05 PASS evidence/README/AI compact synchronization only; no runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr299|15d75682f58ec1272c1d294fe7cf2dd5aae5746a|governance|p04.07-t05-readiness-evidence",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35656463391,
+        "workflow_run_number": 807,
+        "job_id": 106521251425,
+        "conclusion": "success",
+        "exact_head_sha": "15d75682f58ec1272c1d294fe7cf2dd5aae5746a",
+        "accepted_via_promotion_pr": 300,
+        "protected_main_readback_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260922-PR300-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "source_pr": 299,
+        "promotion_pr": 300,
+        "work_package": "P04.07",
+        "task": "P04.07-T05 readiness PASS evidence promotion"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260922-p04-07-t05-readiness-evidence",
+        "head_sha": "15d75682f58ec1272c1d294fe7cf2dd5aae5746a",
+        "unchanged_from_source_pr": 299
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35657323992,
+        "workflow_run_number": 808,
+        "job_id": 106524082456,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Promotion verification of T05 PASS evidence only; no runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr300|15d75682f58ec1272c1d294fe7cf2dd5aae5746a|governance|p04.07-t05-readiness-evidence|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35657323992,
+        "workflow_run_number": 808,
+        "job_id": 106524082456,
+        "conclusion": "success",
+        "exact_head_sha": "15d75682f58ec1272c1d294fe7cf2dd5aae5746a",
+        "merged_pr": 300,
+        "protected_main_readback_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
+      }
     }
   ]
 }
