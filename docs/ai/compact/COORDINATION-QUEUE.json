@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+  "observed_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
   "authority": "coordination mirror only; never grants execution authority",
   "policy": {
     "order": [
@@ -16,10 +16,29 @@
       "id": "issue-309",
       "type": "issue",
       "number": 309,
-      "status": "OPEN_SCOPE_AMENDMENT",
+      "status": "CLOSED_COMPLETED",
       "scope": "Consolidated downstream terminal-checkpoint validator surfaces",
-      "merge_blocking": true,
+      "merge_blocking": false,
       "parent_issue": 289
+    },
+    {
+      "id": "pr-310",
+      "type": "pull_request",
+      "number": 310,
+      "status": "CLOSED_ACCEPTED_VIA_PROMOTION",
+      "source_governance_run": 35768196297,
+      "accepted_via_pr": 311,
+      "exact_head": "938a9735579f9f2ed2ff4a963a1bf1162e6be11f",
+      "merge_blocking": false
+    },
+    {
+      "id": "pr-311",
+      "type": "pull_request",
+      "number": 311,
+      "status": "MERGED",
+      "promotion_governance_run": 35784103063,
+      "merge_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+      "merge_blocking": false
     },
     {
       "id": "pr-308",
@@ -34,8 +53,8 @@
       "id": "issue-289",
       "type": "issue",
       "number": 289,
-      "status": "ACTIVE_T06_SCOPE_AMENDMENT",
-      "scope": "P04.07 closure blocked on Issue #309",
+      "status": "ACTIVE_T06_CLOSURE_R3",
+      "scope": "Fresh-main atomic P04.07 five-validator terminal-checkpoint closure",
       "merge_blocking": true
     },
     {
@@ -207,10 +226,10 @@
     }
   ],
   "active_supervisor_milestone": {
-    "id": "SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01",
-    "branch": "supervisor/20260922-p04-07-t06-downstream-validator-amendment",
-    "status": "IMPLEMENTING_SCOPE_AMENDMENT_PLAN",
+    "id": "SUP-20260923-P0407-T06-CLOSURE-R3-01",
+    "branch": "supervisor/20260923-p04-07-t06-closure-r3",
+    "status": "CLOSURE_R3_VERIFYING",
     "pr": null,
-    "runner_task_id": "RB-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT"
+    "runner_task_id": "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE"
   }
 }
