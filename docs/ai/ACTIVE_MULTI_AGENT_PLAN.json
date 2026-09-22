@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "active-t06-downstream-validator-amendment",
+  "status": "p04-07-t06-closure-r3-verifying",
   "authority": {
     "phase": "P04",
-    "work_package": "P04.07",
-    "owner": "kernel.events",
+    "work_package": null,
+    "owner": null,
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": true,
-    "note": "T05, ADR-0013 and Issue #305 are accepted. Rebuilt T06 #308 proved canonical state validation PASS but failed a downstream historical validator. Issue #309 is a scope-amendment plan only; product-runtime authority remains zero."
+    "kernel_code_authorized": false,
+    "note": "Fresh-main R3 T06 closure candidate after Issue #309 acceptance. P04.01-P04.07 are the proposed completed prefix; no active package or product-runtime write authority exists. P04.08-P04.10 remain planned/locked."
   },
   "bootstrap": {
-    "protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "required_main_sha_snapshot": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "latest_governed_workflow_merge_snapshot": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": 289
   },
@@ -63,30 +63,29 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT",
-    "role": "p04-07-t06-downstream-validator-scope-amendment",
-    "branch": "supervisor/20260922-p04-07-t06-downstream-validator-amendment",
-    "last_synced_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "task_id": "P04.07-T06-CLOSURE-R3",
+    "role": "p04-07-terminal-checkpoint-five-validator-closure-r3",
+    "branch": "supervisor/20260923-p04-07-t06-closure-r3",
+    "last_synced_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
     "write_paths": [
-      "README.md",
-      "docs/roadmap/STATUS.md",
-      "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
-      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
-      "docs/ai/P04.07_COMPLETION_PLAN.json",
-      "docs/ai/AI_STATE.yaml",
-      "docs/ai/compact/**"
-    ],
-    "forbidden_paths": [
       "scripts/validate_governance.py",
       "scripts/validate_p04_activation.py",
       "scripts/validate_freeze_review.py",
       "scripts/validate_p03_preparation.py",
       "scripts/validate_p03_package_specs.py",
-      "scripts/verify_p04_07.sh",
+      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
+      "docs/roadmap/STATUS.md",
       "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "docs/ai/handoffs/P04.07.md",
-      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/P04.07_COMPLETION_PLAN.json",
+      "docs/ai/compact/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      "scripts/verify_p04_07.sh",
       "kernel/**",
       "modules/**",
       ".github/workflows/**",
@@ -94,7 +93,7 @@
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "scope-amendment-plan-candidate"
+    "status": "closure-r3-verifying"
   },
   "tasks": [],
   "completion_sequence": {
@@ -139,10 +138,10 @@
     "stage_b": {
       "name": "p04-07-closure-carrier",
       "dependency": "stage_a2_readiness must be PASS on exact source identity",
-      "rule": "After #309 acceptance, rebuild T06 from fresh main with all five validator surfaces plus P04.07 closure state atomically; P04.08 stays PLANNED/LOCKED.",
+      "rule": "This fresh-main R3 carrier atomically reconciles all five accepted terminal-checkpoint validator surfaces plus P04.07 closure state/evidence. P04.08 remains PLANNED/LOCKED.",
       "runtime_source_mutation": false,
       "depends_on": "T05 PASS + ADR-0013 + #305 + #309 accepted",
-      "status": "BLOCKED_SCOPE_AMENDMENT_309"
+      "status": "CLOSURE_R3_VERIFYING"
     }
   },
   "signals": {
@@ -151,7 +150,10 @@
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
-    "review_changes": "Review Changes Required"
+    "review_changes": "Review Changes Required",
+    "deterministic_order": [
+      "P04.07-T06-CLOSURE-R3"
+    ]
   },
   "merge_strategy": {
     "supervisor_reviews_all_worker_submissions": true,
@@ -249,7 +251,7 @@
     "t06_failed_governance_run_r2": 35673877543,
     "t06_failed_head_r2": "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
   },
-  "next_action": "Govern Issue #309 consolidated downstream-validator amendment. After acceptance, rebuild T06 from fresh main with all five validator surfaces; P04.08 remains locked.",
+  "next_action": "Run exact-head Governance on the fresh R3 closure carrier. If PASS, review honestly, promote the unchanged head, require promotion Governance, guarded merge and protected-main readback. P04.08 remains locked.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -356,25 +358,22 @@
   },
   "downstream_validator_amendment": {
     "issue": 309,
+    "status": "ACCEPTED",
     "change_class": "C implementation-surface reconciliation",
-    "trigger": {
-      "failed_pr": 308,
-      "exact_head": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
-      "governance_run": 35673877543,
-      "governance_run_number": 817,
-      "job_id": 106576147839,
-      "passed_step_8": "Validate canonical governance state",
-      "failed_step_11": "Validate foundation freeze review",
-      "diagnostic": "active P04 must identify one current P04 package"
-    },
-    "status": "PLAN_CANDIDATE",
     "semantic_decision_changed": false,
-    "consolidated_future_validator_paths": [
+    "source_pr": 310,
+    "source_governance_run": 35768196297,
+    "promotion_pr": 311,
+    "promotion_governance_run": 35784103063,
+    "protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "failed_r2_pr": 308,
+    "failed_r2_governance_run": 35673877543,
+    "failed_r2_job": 106576147839,
+    "consolidated_validator_paths": [
       "scripts/validate_freeze_review.py",
       "scripts/validate_p03_preparation.py",
       "scripts/validate_p03_package_specs.py"
     ],
-    "plan_validator_mutation_allowed": false,
     "runtime_source_mutation": false,
     "p04_08_activation_authorized": false
   }
