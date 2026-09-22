@@ -1,21 +1,25 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `3a314e10bcc06fd5d90222087a35e12c99e7fdff`
-- Milestone: `SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01`
-- Status: **IMPLEMENTING_SCOPE_AMENDMENT_PLAN**
+- Parent protected main: `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`
+- Milestone: `SUP-20260923-P0407-T06-CLOSURE-R3-01`
+- Status: **CLOSURE_R3_VERIFYING**
 - Parent Issue: #289
-- Amendment Issue: #309
-- Branch: `supervisor/20260922-p04-07-t06-downstream-validator-amendment`
-- Canonical progress remains P04 6 / 10 and P00-P04 49 / 53 (92.45%).
-- #304 / Governance #813 remains immutable FAIL evidence.
-- #305 accepted the canonical state validator surface through #306/#307.
-- Rebuilt #308 / Governance #817:
-  - step 8 canonical governance state: PASS;
-  - step 11 foundation freeze review: FAIL;
-  - exact head `c45e0ac2e2df040c229c40ec733a1f26e3f69365`.
-- Proactive scan found the same stale active-P04 assumption in `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py`.
-- Issue #309 consolidates all three remaining downstream validator surfaces.
-- This plan carrier does not mutate validator code, STATE, package sequence, closure evidence, runtime, workflow or P04.07 verifier.
-- After #309 acceptance, rebuild T06 from fresh protected main with all five validators plus closure state atomically.
-- P04.08 remains PLANNED/LOCKED.
+- Downstream amendment Issue #309: **ACCEPTED**
+- Branch: `supervisor/20260923-p04-07-t06-closure-r3`
+- Issue #305 canonical-validator amendment remains accepted through #306/#307.
+- R2 #308 / Governance #817 remains immutable FAIL evidence: canonical-state step 8 PASS, foundation-freeze step 11 FAIL.
+- Issue #309 acceptance:
+  - source #310 / Governance #818 PASS;
+  - unchanged promotion #311 / Governance #819 PASS;
+  - protected-main readback `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`.
+- R3 atomic T06 target reconciles:
+  - `scripts/validate_governance.py`;
+  - `scripts/validate_p04_activation.py`;
+  - `scripts/validate_freeze_review.py`;
+  - `scripts/validate_p03_preparation.py`;
+  - `scripts/validate_p03_package_specs.py`.
+- Proposed closure state: P04.01-P04.07 DONE; `current_work_package=null`; no active P04 package; P04.08-P04.10 PLANNED/LOCKED; kernel/business implementation authority false.
+- Accepted T05 evidence remains run `35655774421` / job `106519447117` / G0-G11 PASS.
+- Target progress after protected acceptance: P04 7 / 10; overall canonical P00-P04 50 / 53 (94.34%).
+- This branch is not canonical until exact-head source Governance, honest review, unchanged promotion Governance, guarded merge and protected-main readback succeed.
