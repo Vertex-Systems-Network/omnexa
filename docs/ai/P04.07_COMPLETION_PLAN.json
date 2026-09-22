@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "stage-b-governance-validator-scope-amendment",
+  "status": "stage-b-downstream-validator-amendment",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -63,10 +63,13 @@
     "accepted_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
   },
   "stage_b_closure": {
-    "depends_on": "T05 PASS evidence accepted, ADR-0013 accepted, and Issue #305 governance-validator implementation-surface amendment accepted",
+    "depends_on": "T05 PASS accepted, ADR-0013 accepted, Issue #305 accepted, and Issue #309 downstream-validator amendment accepted",
     "allowed_paths": [
       "scripts/validate_governance.py",
       "scripts/validate_p04_activation.py",
+      "scripts/validate_freeze_review.py",
+      "scripts/validate_p03_preparation.py",
+      "scripts/validate_p03_package_specs.py",
       "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
       "docs/roadmap/STATUS.md",
@@ -80,7 +83,7 @@
     ],
     "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
     "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction",
-    "status": "BLOCKED_SCOPE_AMENDMENT_305"
+    "status": "BLOCKED_SCOPE_AMENDMENT_309"
   },
   "fail_closed_replan_triggers": [
     "runtime source change becomes necessary",
@@ -215,5 +218,29 @@
     "runtime_source_mutation": false,
     "p04_08_activation_authorized": false
   },
-  "next_action": "Accept Issue #305 implementation-surface amendment. Then rebuild T06 from fresh protected main with both canonical validators plus the P04.07 closure state in one atomic governed carrier."
+  "next_action": "Accept Issue #309 downstream-validator amendment. Then rebuild T06 from fresh protected main with all five validator surfaces plus P04.07 closure state/evidence atomically.",
+  "scope_delta_amendment_309": {
+    "issue": 309,
+    "change_class": "C implementation-surface reconciliation",
+    "trigger": {
+      "failed_pr": 308,
+      "exact_head": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
+      "governance_run": 35673877543,
+      "governance_run_number": 817,
+      "job_id": 106576147839,
+      "passed_step_8": "Validate canonical governance state",
+      "failed_step_11": "Validate foundation freeze review",
+      "diagnostic": "active P04 must identify one current P04 package"
+    },
+    "status": "PLAN_CANDIDATE",
+    "semantic_decision_changed": false,
+    "consolidated_future_validator_paths": [
+      "scripts/validate_freeze_review.py",
+      "scripts/validate_p03_preparation.py",
+      "scripts/validate_p03_package_specs.py"
+    ],
+    "plan_validator_mutation_allowed": false,
+    "runtime_source_mutation": false,
+    "p04_08_activation_authorized": false
+  }
 }

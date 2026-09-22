@@ -20,12 +20,13 @@ This is the human-readable mirror of the active AI-Native development flow. Cano
 | P04 progress | **60% — 6 / 10 accepted packages** |
 | Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
 | P04.07 | **ACTIVE**; T01-T04 + T05 readiness accepted |
-| ADR-0013 | **ACCEPTED** — source #302/#810; promotion #303/#811; main `b4d3a832e8a4d0480fba4c49186fd32811307749` |
-| First T06 closure carrier | **FAILED / CLOSED** — PR #304, head `94425685ec3010b967a8839341b20ff766972522`, Governance #813 |
-| Failure | canonical `scripts/validate_governance.py` still requires exactly one active package |
-| Scope amendment | **ACTIVE** — Issue #305; adds the missing governance-validator implementation surface only |
+| ADR-0013 / #305 | **ACCEPTED** — canonical validator surface authorized |
+| First T06 | **#304 / #813 FAIL / CLOSED** — canonical validator gap discovered |
+| Rebuilt T06 R2 | **#308 / #817 FAIL / CLOSED** — canonical state step 8 PASS; freeze-review step 11 FAIL |
+| Proactive scan | stale terminal-checkpoint assumption also found in P03 preparation/spec validators |
+| Downstream amendment | **ACTIVE** — Issue #309 consolidates all 3 remaining downstream validator surfaces |
 | P04.08 | **PLANNED / LOCKED**; no activation or runtime authority |
-| Next safe action | Accept #305, then rebuild atomic T06 from fresh main with both validators and the closure state |
+| Next safe action | Accept #309, then rebuild T06 from fresh main with all five validator surfaces and closure state |
 
 **Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the active head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
 

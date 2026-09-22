@@ -1,6 +1,6 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-22 — **P04.07 T06 SCOPE AMENDMENT ACTIVE AFTER PR #304 GOVERNANCE FAILURE**
+Last reconciled: 2026-09-22 — **P04.07 T06 DOWNSTREAM-VALIDATOR AMENDMENT ACTIVE AFTER PR #308 GOVERNANCE FAILURE**
 
 ## Canonical status
 
@@ -25,25 +25,27 @@ Last reconciled: 2026-09-22 — **P04.07 T06 SCOPE AMENDMENT ACTIVE AFTER PR #30
 
 P04.07 remains ACTIVE after its accepted first runtime slice; the first slice does not count as P04.07 package completion and does not activate P04.08.
 
-## P04.07 T05 readiness, ADR-0013 and T06 scope amendment
+## P04.07 T05 readiness, ADR-0013 and downstream validator amendment
 
-T05 completion readiness remains accepted: `P04.07 Readiness` run `35655774421` / #2 and job `106519447117` are PASS with G0-G11 PASS; evidence acceptance landed through #299/#300.
+T05 readiness remains accepted and ADR-0013 terminal-checkpoint semantics remain accepted.
 
-ADR-0013 terminal-checkpoint semantics are accepted through source #302 / Governance #810, unchanged promotion #303 / Governance #811 and protected main `b4d3a832e8a4d0480fba4c49186fd32811307749`.
+The first T06 source #304 / Governance #813 failed canonical state validation. Issue #305 added `scripts/validate_governance.py`; source #306 / #814 and promotion #307 / #815 were accepted on main `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
 
-The first atomic T06 source attempt #304 was correctly rejected by canonical Governance #813 on exact head `94425685ec3010b967a8839341b20ff766972522`:
+Rebuilt T06 #308 / Governance #817 then proved that fix:
 
-- failed step: `Validate canonical governance state`;
-- exact error: `active foundation execution requires exactly one active work package`;
-- root cause: `scripts/validate_governance.py` was an omitted implementation surface and still contradicted ADR-0013.
+- `Validate canonical governance state` (step 8): **PASS**;
+- `Validate foundation freeze review` (step 11): **FAIL**;
+- diagnostic: `active P04 must identify one current P04 package`.
 
-Issue #305 is the explicit Class C implementation-surface amendment. Until it is accepted:
+A repository-wide scan found the same stale active-P04 assumption in the later `validate_p03_preparation.py` and `validate_p03_package_specs.py` Governance surfaces.
+
+Issue #309 consolidates those three remaining validator surfaces. Until #309 is accepted:
 
 - P04.07 remains canonical ACTIVE;
 - P04 remains 6 / 10;
 - P04.08-P04.10 remain PLANNED / LOCKED;
-- no runtime, migration, provider, business-feature or AI product-runtime authority expands;
-- #304 remains historical FAIL evidence and is not reusable merge permission.
+- #304 and #308 remain historical FAIL evidence only;
+- no product runtime, migration, provider, business-feature or AI runtime authority expands.
 
 ## P04.07 accepted chain
 
@@ -131,6 +133,6 @@ Required security outcome:
 
 ## Next action
 
-Accept Issue #305 through exact-head Governance and protected promotion. The amendment only adds `scripts/validate_governance.py` to the already accepted ADR-0013 implementation surface.
+Accept Issue #309 through exact-head Governance and protected promotion.
 
-After protected acceptance, rebuild T06 from fresh main in one atomic carrier containing both validator reconciliations plus P04.07 closure state/evidence. P04.08 must remain PLANNED/LOCKED and no package may auto-advance.
+After protected acceptance, rebuild T06 from fresh main in one atomic carrier containing the five authorized validator surfaces plus P04.07 closure state/evidence. P04.08 remains PLANNED/LOCKED and no package may auto-advance.

@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 T06 scope-delta amendment after canonical Governance exposed a second validator surface"
-  authoritative_main_at_snapshot: "b4d3a832e8a4d0480fba4c49186fd32811307749"
-  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
+  nature: "P04.07 T06 consolidated downstream-validator scope amendment after #308/#817"
+  authoritative_main_at_snapshot: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI evidence before every material action."
 
 project:
   name: "Omnexa"
@@ -18,24 +18,27 @@ phase:
 
 p04_07:
   state: "active"
-  owner: "kernel.events"
   completion_issue: 289
   t05_status: "PASS_ACCEPTED"
-  t05_verifier_gates: "G0-G11 PASS"
   adr_0013_status: "ACCEPTED"
-  adr_0013_main_sha: "b4d3a832e8a4d0480fba4c49186fd32811307749"
-  failed_t06_pr: 304
-  failed_t06_head: "94425685ec3010b967a8839341b20ff766972522"
-  failed_t06_governance_run: 35661784066
-  failed_t06_job: 106538470575
-  failed_t06_reason: "scripts/validate_governance.py requires exactly one active work package for active phases"
+  scope_amendment_305_status: "ACCEPTED"
+  failed_t06_pr_1: 304
+  failed_t06_governance_1: 35661784066
+  failed_t06_pr_2: 308
+  failed_t06_head_2: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
+  failed_t06_governance_2: 35673877543
+  failed_t06_job_2: 106576147839
+  canonical_state_step_2: "PASS"
+  downstream_failure_step: "Validate foundation freeze review"
 
-scope_delta:
-  issue: 305
+downstream_scope_delta:
+  issue: 309
   change_class: "C implementation-surface reconciliation"
   semantic_decision_changed: false
-  newly_required_validator: "scripts/validate_governance.py"
-  existing_validator: "scripts/validate_p04_activation.py"
+  validator_paths:
+    - "scripts/validate_freeze_review.py"
+    - "scripts/validate_p03_preparation.py"
+    - "scripts/validate_p03_package_specs.py"
   plan_code_mutation_authorized: false
   post_acceptance_atomic_t06: true
 
@@ -51,13 +54,5 @@ security:
   ai_model_agent_runtime_authorized: false
 
 next_action:
-  current: "Accept Issue #305 scope amendment through protected governance."
-  after_acceptance: "Rebuild atomic T06 from fresh main with both canonical validators plus closure state/evidence."
-
-compact_resume:
-  path: "docs/ai/compact"
-  authority: "resume-index-only"
-  one_continue_one_milestone: true
-  default_ci_status_refreshes_per_milestone: 1
-  tight_polling_allowed: false
-  response_progress_required: true
+  current: "Accept Issue #309 through exact-head Governance and protected promotion."
+  after_acceptance: "Rebuild atomic T06 from fresh main with all five validator surfaces plus closure state/evidence."

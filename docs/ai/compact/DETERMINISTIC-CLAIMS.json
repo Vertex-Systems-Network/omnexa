@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+  "observed_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -191,6 +191,37 @@
       },
       "qualification": "No validator or closure-state mutation is authorized until this amendment is accepted.",
       "source": "Issue #305 + ADR-0013 amendment carrier"
+    },
+    {
+      "id": "p04_07.t06_failed_attempt_r2",
+      "value": {
+        "status": "FAIL",
+        "pr": 308,
+        "exact_head": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
+        "governance_run": 35673877543,
+        "governance_run_number": 817,
+        "job_id": 106576147839,
+        "canonical_state_step": "PASS",
+        "failed_step": "Validate foundation freeze review",
+        "diagnostic": "active P04 must identify one current P04 package"
+      },
+      "source": "PR #308 / Governance #817 / job logs"
+    },
+    {
+      "id": "p04_07.t06_downstream_amendment",
+      "value": {
+        "status": "PLAN_CANDIDATE",
+        "issue": 309,
+        "semantic_decision_changed": false,
+        "future_validator_paths": [
+          "scripts/validate_freeze_review.py",
+          "scripts/validate_p03_preparation.py",
+          "scripts/validate_p03_package_specs.py"
+        ],
+        "runtime_scope_change": false
+      },
+      "qualification": "No validator or closure-state mutation until this amendment is accepted.",
+      "source": "Issue #309 + ADR-0013 amendment carrier"
     }
   ]
 }
