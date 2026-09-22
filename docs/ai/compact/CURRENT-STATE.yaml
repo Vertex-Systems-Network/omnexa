@@ -1,15 +1,14 @@
 schema_version: 1
-snapshot_time: "2026-09-22T05:04:00+05:00"
+snapshot_time: "2026-09-22T23:28:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
-compact_state_path: "docs/ai/compact"
-observed_main_sha: "b4d3a832e8a4d0480fba4c49186fd32811307749"
+observed_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
 default_branch: "main"
-active_issue: 305
+active_issue: 309
 parent_coordination_issue: 289
 open_issue_gates:
-  - number: 305
-    scope: "P04.07 T06 ADR-0013 governance-validator implementation-surface amendment"
+  - number: 309
+    scope: "P04.07 T06 consolidated downstream-validator terminal-checkpoint amendment"
     blocks_current_internal_governance_milestone: true
     blocks_external_release: false
   - number: 289
@@ -21,23 +20,22 @@ open_issue_gates:
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
 active_pr: null
-active_branch: "supervisor/20260922-p04-07-t06-governance-validator-amendment"
+active_branch: "supervisor/20260922-p04-07-t06-downstream-validator-amendment"
 current_milestone:
-  id: "SUP-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT-01"
-  name: "Authorize missing canonical governance-validator implementation surface"
+  id: "SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01"
+  name: "Authorize all remaining downstream terminal-checkpoint validator surfaces"
 milestone_status: "IMPLEMENTING_SCOPE_AMENDMENT_PLAN"
-last_completed_milestone:
-  name: "Accept ADR-0013 validator-gap plan"
-  evidence: "source #302 Governance #810 PASS; promotion #303 Governance #811 PASS; main b4d3a832e8a4d0480fba4c49186fd32811307749"
-failed_t06_attempt:
-  pr: 304
-  exact_head: "94425685ec3010b967a8839341b20ff766972522"
-  governance_run: 35661784066
-  governance_run_number: 813
-  job_id: 106538470575
-  failed_step: "Validate canonical governance state"
-  diagnostic: "active foundation execution requires exactly one active work package"
-  status: "FAIL"
+failed_t06_attempts:
+  - pr: 304
+    governance_run: 35661784066
+    status: "FAIL"
+  - pr: 308
+    exact_head: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
+    governance_run: 35673877543
+    job_id: 106576147839
+    canonical_state_step: "PASS"
+    failed_step: "Validate foundation freeze review"
+    status: "FAIL"
 canonical_cursor:
   phase: "P04"
   work_package: "P04.07"
@@ -50,15 +48,17 @@ progress:
   overall_total: 53
   overall_percent: 92.45
   overall_basis: "P00-P04 only"
-scope_delta:
-  issue: 305
-  added_future_validator: "scripts/validate_governance.py"
-  existing_future_validator: "scripts/validate_p04_activation.py"
+downstream_scope_delta:
+  issue: 309
+  future_validator_paths:
+    - "scripts/validate_freeze_review.py"
+    - "scripts/validate_p03_preparation.py"
+    - "scripts/validate_p03_package_specs.py"
   semantic_decision_changed: false
   plan_code_mutation_authorized: false
-exact_next_safe_action: "Open exact-head scope-amendment plan PR, bind Runner Benchmark, observe Governance once, and stop if nonterminal."
+exact_next_safe_action: "Open exact-head #309 amendment plan PR, bind Runner Benchmark, observe Governance once, and stop if nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT"
+  - "RB-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT"
 security_scope:
   plan_validator_mutation: false
   product_runtime_source_mutation: false

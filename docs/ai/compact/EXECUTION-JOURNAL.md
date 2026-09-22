@@ -122,3 +122,15 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - FAIL CLOSED: #304 closed red; no promotion, merge, rerun, force push, check weakening or P04.08 activation.
 - SCOPE DELTA: Issue #305 opened. Semantic decision unchanged; add only `scripts/validate_governance.py` as a required future implementation surface.
 - PLAN HEAD: no validator/state/runtime mutation authorized.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01
+
+- REBUILT T06 R2: PR #308 exact head `c45e0ac2e2df040c229c40ec733a1f26e3f69365`.
+- GOVERNANCE #817 / job `106576147839`: FAIL.
+- PROOF OF PRIOR FIX: step 8 canonical governance state PASS at 7/10 / current package NONE.
+- FAILURE: step 11 foundation freeze review rejected the terminal checkpoint.
+- PROACTIVE SCAN: the same stale active-P04 assumption exists in P03 preparation and P03 package-spec validators.
+- FAIL CLOSED: #308 closed red; no promotion/merge/rerun/force push/gate weakening.
+- CONSOLIDATED SCOPE DELTA: Issue #309 governs all three downstream validator surfaces in one amendment.
+- PLAN HEAD: no validator/state/runtime mutation authorized.

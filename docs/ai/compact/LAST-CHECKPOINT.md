@@ -1,21 +1,21 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `b4d3a832e8a4d0480fba4c49186fd32811307749`
-- Milestone: `SUP-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT-01`
+- Protected main: `3a314e10bcc06fd5d90222087a35e12c99e7fdff`
+- Milestone: `SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01`
 - Status: **IMPLEMENTING_SCOPE_AMENDMENT_PLAN**
 - Parent Issue: #289
-- Scope-delta Issue: #305
-- Branch: `supervisor/20260922-p04-07-t06-governance-validator-amendment`
+- Amendment Issue: #309
+- Branch: `supervisor/20260922-p04-07-t06-downstream-validator-amendment`
 - Canonical progress remains P04 6 / 10 and P00-P04 49 / 53 (92.45%).
-- ADR-0013 is accepted through #302/#303.
-- First T06 source PR #304 is immutable FAIL evidence:
-  - head `94425685ec3010b967a8839341b20ff766972522`;
-  - Governance `35661784066` / #813;
-  - job `106538470575`;
-  - failed canonical-state step because `scripts/validate_governance.py` still requires exactly one active work package.
-- #304 is closed; no promotion/merge occurred.
-- Issue #305 adds only the missing `scripts/validate_governance.py` implementation surface to ADR-0013/T06 authority.
-- This plan carrier does not mutate either validator, STATE, package sequence, closure evidence, runtime, workflow or P04.07 verifier.
-- After amendment acceptance, T06 must be rebuilt from fresh protected main with both validators plus closure state atomically.
+- #304 / Governance #813 remains immutable FAIL evidence.
+- #305 accepted the canonical state validator surface through #306/#307.
+- Rebuilt #308 / Governance #817:
+  - step 8 canonical governance state: PASS;
+  - step 11 foundation freeze review: FAIL;
+  - exact head `c45e0ac2e2df040c229c40ec733a1f26e3f69365`.
+- Proactive scan found the same stale active-P04 assumption in `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py`.
+- Issue #309 consolidates all three remaining downstream validator surfaces.
+- This plan carrier does not mutate validator code, STATE, package sequence, closure evidence, runtime, workflow or P04.07 verifier.
+- After #309 acceptance, rebuild T06 from fresh protected main with all five validators plus closure state atomically.
 - P04.08 remains PLANNED/LOCKED.

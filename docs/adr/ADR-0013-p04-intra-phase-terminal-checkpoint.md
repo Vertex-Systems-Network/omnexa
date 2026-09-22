@@ -61,6 +61,9 @@ After this ADR/change-control carrier is accepted, one atomic T06 carrier may mo
 
 - `scripts/validate_governance.py` to recognize the ADR-0013 terminal checkpoint without changing ordinary one-active-package or fully-completed-phase semantics;
 - `scripts/validate_p04_activation.py` to add the P04-specific terminal-checkpoint invariants;
+- `scripts/validate_p03_package_specs.py` to preserve historical foundation/P03 evidence while accepting the same ADR-0013 locked P04 checkpoint;
+- `scripts/validate_p03_preparation.py` to preserve historical foundation/P03 evidence while accepting the same ADR-0013 locked P04 checkpoint;
+- `scripts/validate_freeze_review.py` to preserve historical foundation/P03 evidence while accepting the same ADR-0013 locked P04 checkpoint;
 - `docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md`;
 - `docs/roadmap/STATE.json`;
 - `docs/roadmap/STATUS.md`;
@@ -77,6 +80,14 @@ The atomic carrier must run canonical Governance against the actual proposed clo
 ### 2026-09-22 implementation-surface amendment
 
 Failed source PR #304 / Governance #813 proved that `scripts/validate_governance.py` independently enforced exactly one active work package for every active phase. Issue #305 therefore amends only the implementation surface of this already accepted decision. The semantic decision above is unchanged; the canonical state validator and P04-specific validator must agree on the same locked terminal checkpoint.
+
+### 2026-09-22 downstream-validator amendment
+
+Rebuilt source PR #308 / Governance #817 proved the canonical `scripts/validate_governance.py` fix: step 8 passed with P04 at 7/10 and `current_work_package=NONE`.
+
+The run then failed at step 11 because `scripts/validate_freeze_review.py` still assumed every active P04 phase has one current package. A repository-wide scan found the same historical active-P04 assumption in `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py`, which are later Governance steps.
+
+Issue #309 therefore consolidates these three remaining implementation surfaces. ADR-0013 semantics do not change. The downstream validators must accept either ordinary active-package P04 execution or the strict implementation-locked ADR-0013 checkpoint, while preserving all historical P00-P03 evidence checks.
 
 ## Non-decisions
 
@@ -139,4 +150,5 @@ Before protected merge, reject/revert the candidate. After protected merge, a la
 
 Parent coordination: #289  
 Change-control issue: #301  
-Implementation-surface amendment: #305
+Implementation-surface amendment: #305  
+Downstream-validator amendment: #309

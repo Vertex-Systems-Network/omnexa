@@ -779,6 +779,48 @@
         "diagnostic": "active foundation execution requires exactly one active work package",
         "promotion_allowed": false
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T06-CLOSURE-R2-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 308,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-CLOSURE-R2"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260922-p04-07-t06-closure-r2",
+        "head_sha": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
+        "parent_protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35673877543,
+        "workflow_run_number": 817,
+        "job_id": 106576147839,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Rebuilt atomic T06 closure candidate; no product-runtime authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr308|c45e0ac2e2df040c229c40ec733a1f26e3f69365|governance|p04.07-t06-closure-r2",
+      "status": "FAIL",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35673877543,
+        "workflow_run_number": 817,
+        "job_id": 106576147839,
+        "conclusion": "failure",
+        "exact_head_sha": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
+        "passed_step_8": "Validate canonical governance state",
+        "failed_step": "Validate foundation freeze review",
+        "diagnostic": "active P04 must identify one current P04 package",
+        "promotion_allowed": false
+      }
     }
   ]
 }
