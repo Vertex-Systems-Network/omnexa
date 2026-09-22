@@ -1,10 +1,10 @@
 schema_version: 1
 
 snapshot:
-  verified_at: "2026-09-22"
-  nature: "P04.07 T06 consolidated downstream-validator scope amendment after #308/#817"
-  authoritative_main_at_snapshot: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
-  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI evidence before every material action."
+  verified_at: "2026-09-23"
+  nature: "Fresh-main P04.07 T06 R3 closure candidate with all five accepted ADR-0013 validator surfaces"
+  authoritative_parent_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+  canonical_effect_rule: "This R3 state becomes canonical only after exact-head source Governance, unchanged promotion Governance, guarded merge and protected-main readback."
 
 project:
   name: "Omnexa"
@@ -13,46 +13,78 @@ project:
 phase:
   current: "P04"
   state: "active"
-  progress: "6 / 10 done"
-  current_work_package: "P04.07"
+  progress: "7 / 10 done"
+  current_work_package: null
+  checkpoint: "implementation-locked after P04.07"
 
 p04_07:
-  state: "active"
+  state: "done"
+  owner: "kernel.events"
   completion_issue: 289
+  completion_evidence: "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md"
+  first_slice_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
   t05_status: "PASS_ACCEPTED"
+  t05_workflow_run_id: 35655774421
+  t05_job_id: 106519447117
+  t05_verifier_gates: "G0-G11 PASS"
+  failed_t06_pr: 304
+  failed_t06_governance_run: 35661784066
   adr_0013_status: "ACCEPTED"
-  scope_amendment_305_status: "ACCEPTED"
-  failed_t06_pr_1: 304
-  failed_t06_governance_1: 35661784066
-  failed_t06_pr_2: 308
-  failed_t06_head_2: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
-  failed_t06_governance_2: 35673877543
-  failed_t06_job_2: 106576147839
-  canonical_state_step_2: "PASS"
-  downstream_failure_step: "Validate foundation freeze review"
+  scope_amendment_issue: 305
+  scope_amendment_source_pr: 306
+  scope_amendment_source_governance_run: 35670794058
+  scope_amendment_promotion_pr: 307
+  scope_amendment_promotion_governance_run: 35671643286
+  scope_amendment_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
 
-downstream_scope_delta:
+terminal_checkpoint:
+  current_work_package: null
+  p04_08_state: "planned_locked"
+  p04_09_state: "planned_locked"
+  p04_10_state: "planned_locked"
+  kernel_code_authorized: false
+  business_feature_code_authorized: false
+  package_sequence_implementation_authorized: false
+  auto_advance_allowed: false
+  validators:
+    - "scripts/validate_governance.py"
+    - "scripts/validate_p04_activation.py"
+
+security:
+  migration_4_authorized: false
+  provider_registry_selected: false
+  remote_schema_fetch_authorized: false
+  p04_08_runtime_authorized: false
+  business_feature_code_authorized: false
+  ai_model_agent_runtime_authorized: false
+  required_governance_check_may_be_weakened: false
+  p04_07_verifier_may_be_changed_or_skipped: false
+
+readme_progress_sync:
+  required: true
+  current_module_done: 7
+  current_module_total: 10
+  overall_done: 50
+  overall_total: 53
+  overall_percent: 94.34
+  coverage: "P00-P04 only"
+
+next_action:
+  current: "Run exact-head source Governance for R3, then unchanged promotion Governance and guarded merge/readback."
+  after_acceptance: "Close Issue #289; no automatic next package. P04.08 requires a fresh separately governed preparation/activation transaction."
+
+downstream_validator_amendment:
   issue: 309
-  change_class: "C implementation-surface reconciliation"
-  semantic_decision_changed: false
+  status: "ACCEPTED"
+  source_pr: 310
+  source_governance_run: 35768196297
+  promotion_pr: 311
+  promotion_governance_run: 35784103063
+  protected_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+  failed_r2_pr: 308
+  failed_r2_governance_run: 35673877543
   validator_paths:
     - "scripts/validate_freeze_review.py"
     - "scripts/validate_p03_preparation.py"
     - "scripts/validate_p03_package_specs.py"
-  plan_code_mutation_authorized: false
-  post_acceptance_atomic_t06: true
-
-security:
-  required_governance_check_may_be_weakened: false
-  verifier_may_be_changed_or_skipped: false
-  runtime_code_change_authorized: false
-  migration_4_authorized: false
-  provider_registry_selected: false
-  remote_schema_fetch_authorized: false
-  p04_08_activation_authorized: false
-  business_feature_code_authorized: false
-  ai_model_agent_runtime_authorized: false
-
-next_action:
-  current: "Accept Issue #309 through exact-head Governance and protected promotion."
-  after_acceptance: "Rebuild atomic T06 from fresh main with all five validator surfaces plus closure state/evidence."
+  semantic_decision_changed: false
