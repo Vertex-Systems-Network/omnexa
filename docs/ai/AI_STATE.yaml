@@ -2,9 +2,9 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 T06 scope-delta amendment after canonical Governance exposed a second validator surface"
-  authoritative_main_at_snapshot: "b4d3a832e8a4d0480fba4c49186fd32811307749"
-  stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
+  nature: "Rebuilt P04.07 T06 closure candidate with both ADR-0013 validator surfaces"
+  authoritative_parent_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+  canonical_effect_rule: "This state becomes canonical only when the exact rebuilt tree is accepted on protected main."
 
 project:
   name: "Omnexa"
@@ -13,51 +13,62 @@ project:
 phase:
   current: "P04"
   state: "active"
-  progress: "6 / 10 done"
-  current_work_package: "P04.07"
+  progress: "7 / 10 done"
+  current_work_package: null
+  checkpoint: "implementation-locked after P04.07"
 
 p04_07:
-  state: "active"
+  state: "done"
   owner: "kernel.events"
   completion_issue: 289
+  completion_evidence: "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md"
+  first_slice_merge: "5c5153ee15c70646d28926743e2d19ab941013d2"
   t05_status: "PASS_ACCEPTED"
+  t05_workflow_run_id: 35655774421
+  t05_job_id: 106519447117
   t05_verifier_gates: "G0-G11 PASS"
-  adr_0013_status: "ACCEPTED"
-  adr_0013_main_sha: "b4d3a832e8a4d0480fba4c49186fd32811307749"
   failed_t06_pr: 304
-  failed_t06_head: "94425685ec3010b967a8839341b20ff766972522"
   failed_t06_governance_run: 35661784066
-  failed_t06_job: 106538470575
-  failed_t06_reason: "scripts/validate_governance.py requires exactly one active work package for active phases"
+  adr_0013_status: "ACCEPTED"
+  scope_amendment_issue: 305
+  scope_amendment_source_pr: 306
+  scope_amendment_source_governance_run: 35670794058
+  scope_amendment_promotion_pr: 307
+  scope_amendment_promotion_governance_run: 35671643286
+  scope_amendment_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
 
-scope_delta:
-  issue: 305
-  change_class: "C implementation-surface reconciliation"
-  semantic_decision_changed: false
-  newly_required_validator: "scripts/validate_governance.py"
-  existing_validator: "scripts/validate_p04_activation.py"
-  plan_code_mutation_authorized: false
-  post_acceptance_atomic_t06: true
+terminal_checkpoint:
+  current_work_package: null
+  p04_08_state: "planned_locked"
+  p04_09_state: "planned_locked"
+  p04_10_state: "planned_locked"
+  kernel_code_authorized: false
+  business_feature_code_authorized: false
+  package_sequence_implementation_authorized: false
+  auto_advance_allowed: false
+  validators:
+    - "scripts/validate_governance.py"
+    - "scripts/validate_p04_activation.py"
 
 security:
-  required_governance_check_may_be_weakened: false
-  verifier_may_be_changed_or_skipped: false
-  runtime_code_change_authorized: false
   migration_4_authorized: false
   provider_registry_selected: false
   remote_schema_fetch_authorized: false
-  p04_08_activation_authorized: false
+  p04_08_runtime_authorized: false
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
+  required_governance_check_may_be_weakened: false
+  p04_07_verifier_may_be_changed_or_skipped: false
+
+readme_progress_sync:
+  required: true
+  current_module_done: 7
+  current_module_total: 10
+  overall_done: 50
+  overall_total: 53
+  overall_percent: 94.34
+  coverage: "P00-P04 only"
 
 next_action:
-  current: "Accept Issue #305 scope amendment through protected governance."
-  after_acceptance: "Rebuild atomic T06 from fresh main with both canonical validators plus closure state/evidence."
-
-compact_resume:
-  path: "docs/ai/compact"
-  authority: "resume-index-only"
-  one_continue_one_milestone: true
-  default_ci_status_refreshes_per_milestone: 1
-  tight_polling_allowed: false
-  response_progress_required: true
+  current: "Accept this exact rebuilt T06 through protected governance."
+  after_acceptance: "Close Issue #289; no automatic next package. P04.08 requires a fresh separately governed preparation/activation transaction."

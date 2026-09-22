@@ -4,7 +4,7 @@
   "name": "Data, Jobs & Event Fabric",
   "state": "active",
   "activation_policy": "strict_sequential_one_active_package",
-  "implementation_authorized": true,
+  "implementation_authorized": false,
   "business_feature_code_authorized": false,
   "packages": [
     {
@@ -21,7 +21,9 @@
       "id": "P04.02",
       "name": "Publish/subscribe abstraction & ownership boundaries",
       "state": "done",
-      "depends_on": ["P04.01"],
+      "depends_on": [
+        "P04.01"
+      ],
       "spec": "docs/roadmap/work-packages/P04.02.md",
       "evidence": [
         "docs/roadmap/evidence/P04.02_COMPLETION_2026-08-31.md"
@@ -31,7 +33,10 @@
       "id": "P04.03",
       "name": "Durable stream/consumer baseline & checkpoint model",
       "state": "done",
-      "depends_on": ["P04.01", "P04.02"],
+      "depends_on": [
+        "P04.01",
+        "P04.02"
+      ],
       "spec": "docs/roadmap/work-packages/P04.03.md",
       "evidence": [
         "docs/roadmap/evidence/P04.03_COMPLETION_2026-08-31.md"
@@ -41,7 +46,10 @@
       "id": "P04.04",
       "name": "Transactional outbox reliability primitive",
       "state": "done",
-      "depends_on": ["P04.01", "P04.03"],
+      "depends_on": [
+        "P04.01",
+        "P04.03"
+      ],
       "spec": "docs/roadmap/work-packages/P04.04.md",
       "evidence": [
         "docs/roadmap/evidence/P04.04_COMPLETION_2026-09-04.md"
@@ -51,7 +59,10 @@
       "id": "P04.05",
       "name": "Consumer inbox/deduplication & idempotency primitive",
       "state": "done",
-      "depends_on": ["P04.01", "P04.04"],
+      "depends_on": [
+        "P04.01",
+        "P04.04"
+      ],
       "spec": "docs/roadmap/work-packages/P04.05.md",
       "evidence": [
         "docs/roadmap/evidence/P04.05_COMPLETION_2026-09-05.md"
@@ -61,7 +72,10 @@
       "id": "P04.06",
       "name": "Retry/backoff, terminal failure & dead-letter/quarantine policy",
       "state": "done",
-      "depends_on": ["P04.03", "P04.05"],
+      "depends_on": [
+        "P04.03",
+        "P04.05"
+      ],
       "spec": "docs/roadmap/work-packages/P04.06.md",
       "evidence": [
         "docs/roadmap/evidence/P04.06_COMPLETION_2026-09-09.md"
@@ -70,31 +84,46 @@
     {
       "id": "P04.07",
       "name": "Event schema registry, compatibility & validation",
-      "state": "active",
-      "depends_on": ["P04.01", "P04.06"],
-      "spec": "docs/roadmap/work-packages/P04.07.md"
+      "state": "done",
+      "depends_on": [
+        "P04.01",
+        "P04.06"
+      ],
+      "spec": "docs/roadmap/work-packages/P04.07.md",
+      "evidence": [
+        "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md"
+      ]
     },
     {
       "id": "P04.08",
       "name": "Background-job ownership, tenant context & correlation",
       "state": "planned",
-      "depends_on": ["P04.01", "P04.07"],
+      "depends_on": [
+        "P04.01",
+        "P04.07"
+      ],
       "spec": null
     },
     {
       "id": "P04.09",
       "name": "Reliability observability, diagnostics & operator recovery",
       "state": "planned",
-      "depends_on": ["P04.03", "P04.08"],
+      "depends_on": [
+        "P04.03",
+        "P04.08"
+      ],
       "spec": null
     },
     {
       "id": "P04.10",
       "name": "Replay/duplicate/failure/restart/poison-event acceptance",
       "state": "planned",
-      "depends_on": ["P04.01", "P04.09"],
+      "depends_on": [
+        "P04.01",
+        "P04.09"
+      ],
       "spec": null
     }
   ],
-  "note": "P04.01-P04.06 are done with accepted completion evidence. This P04.06-closure/P04.07-activation candidate makes P04.07 the sole active package only after exact-head source Governance, unchanged promotion Governance, expected-head protected merge and protected-main read-back. P04.08-P04.10 remain planned/locked; the transition creates no P04.07 runtime worker/task/branch, reserves no migration 4, selects no provider/vendor registry, and grants no business-feature or AI/model/agent product-runtime authority."
+  "note": "P04.01-P04.07 are done with accepted completion evidence. ADR-0013 permits this implementation-locked intra-P04 terminal checkpoint: no package is active, P04.08-P04.10 remain planned with spec=null, implementation_authorized=false, no migration 4/provider/remote scope is granted, and no package may auto-advance."
 }

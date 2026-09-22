@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
   "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "active-t06-governance-validator-scope-amendment",
+  "status": "p04-07-t06-closure-r2-verifying",
   "authority": {
     "phase": "P04",
-    "work_package": "P04.07",
-    "owner": "kernel.events",
+    "work_package": null,
+    "owner": null,
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": true,
-    "note": "T05 readiness and ADR-0013 are accepted. T06 source PR #304 failed canonical Governance because scripts/validate_governance.py was an omitted implementation surface. Issue #305 is a scope-delta plan only; runtime authority remains zero."
+    "kernel_code_authorized": false,
+    "note": "Rebuilt T06 closure candidate after Issue #305 acceptance. P04.01-P04.07 are the proposed completed prefix; no active package or product-runtime write authority exists. P04.08-P04.10 remain planned/locked."
   },
   "bootstrap": {
-    "protected_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+    "protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+    "required_main_sha_snapshot": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+    "latest_governed_workflow_merge_snapshot": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": 289
   },
@@ -63,35 +63,34 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T06-GOVERNANCE-VALIDATOR-AMENDMENT",
-    "role": "p04-07-t06-governance-validator-scope-amendment",
-    "branch": "supervisor/20260922-p04-07-t06-governance-validator-amendment",
-    "last_synced_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+    "task_id": "P04.07-T06-CLOSURE-R2",
+    "role": "p04-07-terminal-checkpoint-validator-and-closure-r2",
+    "branch": "supervisor/20260922-p04-07-t06-closure-r2",
+    "last_synced_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
     "write_paths": [
-      "README.md",
-      "docs/roadmap/STATUS.md",
-      "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
-      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
-      "docs/ai/P04.07_COMPLETION_PLAN.json",
-      "docs/ai/AI_STATE.yaml",
-      "docs/ai/compact/**"
-    ],
-    "forbidden_paths": [
       "scripts/validate_governance.py",
       "scripts/validate_p04_activation.py",
-      "scripts/verify_p04_07.sh",
+      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
+      "docs/roadmap/STATUS.md",
       "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "docs/ai/handoffs/P04.07.md",
-      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/P04.07_COMPLETION_PLAN.json",
+      "docs/ai/compact/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
       "kernel/**",
       "modules/**",
       ".github/workflows/**",
+      "scripts/verify_p04_07.sh",
       "docs/roadmap/work-packages/P04.08.md"
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "scope-amendment-plan-candidate"
+    "status": "closure-r2-verifying"
   },
   "tasks": [],
   "completion_sequence": {
@@ -136,10 +135,10 @@
     "stage_b": {
       "name": "p04-07-closure-carrier",
       "dependency": "stage_a2_readiness must be PASS on exact source identity",
-      "rule": "After #305 acceptance, rebuild T06 from fresh main with scripts/validate_governance.py + scripts/validate_p04_activation.py + P04.07 closure state atomically; P04.08 stays PLANNED/LOCKED.",
+      "rule": "This exact rebuilt carrier reconciles scripts/validate_governance.py and scripts/validate_p04_activation.py with P04.07 closure state atomically. P04.08 remains PLANNED/LOCKED.",
       "runtime_source_mutation": false,
       "depends_on": "T05 PASS accepted + ADR-0013 accepted + Issue #305 scope amendment accepted",
-      "status": "BLOCKED_SCOPE_AMENDMENT_305"
+      "status": "CLOSURE_R2_VERIFYING"
     }
   },
   "signals": {
@@ -166,7 +165,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T06-GOVERNANCE-VALIDATOR-AMENDMENT"
+      "P04.07-T06-CLOSURE-R2"
     ]
   },
   "instruction_sync": {
@@ -233,11 +232,14 @@
     "validator_gap_promotion_pr": 303,
     "validator_gap_promotion_governance_run": 35660012233,
     "validator_gap_merge": "b4d3a832e8a4d0480fba4c49186fd32811307749",
-    "t06_failed_source_pr": 304,
-    "t06_failed_governance_run": 35661784066,
-    "t06_failed_head": "94425685ec3010b967a8839341b20ff766972522"
+    "scope_amendment_issue": 305,
+    "scope_amendment_source_pr": 306,
+    "scope_amendment_source_governance_run": 35670794058,
+    "scope_amendment_promotion_pr": 307,
+    "scope_amendment_promotion_governance_run": 35671643286,
+    "scope_amendment_merge": "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
   },
-  "next_action": "Govern Issue #305 scope amendment through exact-head source Governance and unchanged promotion. After acceptance, rebuild T06 from fresh main using both validator surfaces; keep P04.08 locked.",
+  "next_action": "Govern rebuilt T06 exact head. No package auto-advances; after protected acceptance only a fresh separately governed P04.08 preparation/activation transaction may advance the cursor.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -331,21 +333,13 @@
   },
   "scope_delta_amendment": {
     "issue": 305,
-    "change_class": "C implementation-surface reconciliation",
-    "trigger": {
-      "failed_pr": 304,
-      "exact_head": "94425685ec3010b967a8839341b20ff766972522",
-      "governance_run": 35661784066,
-      "governance_run_number": 813,
-      "job_id": 106538470575,
-      "failed_step": "Validate canonical governance state",
-      "diagnostic": "active foundation execution requires exactly one active work package"
-    },
-    "status": "PLAN_CANDIDATE",
+    "status": "ACCEPTED",
     "semantic_decision_changed": false,
-    "added_future_write_path": "scripts/validate_governance.py",
-    "plan_validator_mutation_allowed": false,
-    "runtime_source_mutation": false,
-    "p04_08_activation_authorized": false
+    "source_pr": 306,
+    "source_governance_run": 35670794058,
+    "promotion_pr": 307,
+    "promotion_governance_run": 35671643286,
+    "protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "added_write_path": "scripts/validate_governance.py"
   }
 }

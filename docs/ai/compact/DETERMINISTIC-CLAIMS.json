@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+  "observed_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -15,23 +15,9 @@
       "source": "docs/roadmap/STATE.json"
     },
     {
-      "id": "cursor.work_package",
-      "value": "P04.07",
-      "source": "docs/roadmap/STATE.json"
-    },
-    {
       "id": "cursor.owner_module",
       "value": "kernel.events",
       "source": "AGENTS.md"
-    },
-    {
-      "id": "p04.progress",
-      "value": {
-        "done": 6,
-        "total": 10,
-        "percent": 60
-      },
-      "source": "docs/roadmap/STATUS.md"
     },
     {
       "id": "wave1.live_write_leases",
@@ -67,16 +53,6 @@
         "merge_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36"
       },
       "source": "GitHub PR #288 / workflow / protected-main readback"
-    },
-    {
-      "id": "overall.enumerated_progress",
-      "value": {
-        "done": 49,
-        "total": 53,
-        "percent": 92.45,
-        "coverage": "P00-P04 only"
-      },
-      "source": "docs/roadmap/STATUS.md + canonical package counts"
     },
     {
       "id": "overall.full_p00_p27_percent",
@@ -181,16 +157,63 @@
       "source": "PR #304 / Governance #813 / job logs"
     },
     {
+      "id": "cursor.work_package",
+      "value": null,
+      "qualification": "Rebuilt T06 terminal-checkpoint target; canonical only after protected acceptance.",
+      "source": "docs/roadmap/STATE.json"
+    },
+    {
+      "id": "p04.progress",
+      "value": {
+        "done": 7,
+        "total": 10,
+        "percent": 70
+      },
+      "qualification": "Rebuilt T06 target; not protected-main progress until merge/readback.",
+      "source": "docs/roadmap/STATE.json + STATUS.md"
+    },
+    {
+      "id": "overall.enumerated_progress",
+      "value": {
+        "done": 50,
+        "total": 53,
+        "percent": 94.34,
+        "coverage": "P00-P04 only"
+      },
+      "qualification": "Rebuilt T06 target; canonical only after protected acceptance.",
+      "source": "canonical package counts"
+    },
+    {
       "id": "p04_07.t06_scope_amendment",
       "value": {
-        "status": "PLAN_CANDIDATE",
+        "status": "ACCEPTED",
         "issue": 305,
-        "semantic_decision_changed": false,
-        "added_future_write_path": "scripts/validate_governance.py",
-        "runtime_scope_change": false
+        "source_pr": 306,
+        "source_governance_run": 35670794058,
+        "promotion_pr": 307,
+        "promotion_governance_run": 35671643286,
+        "protected_main_readback_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+        "added_write_path": "scripts/validate_governance.py"
       },
-      "qualification": "No validator or closure-state mutation is authorized until this amendment is accepted.",
-      "source": "Issue #305 + ADR-0013 amendment carrier"
+      "source": "Issue #305 / PR #306 / PR #307 / protected-main readback"
+    },
+    {
+      "id": "p04_07.closure_state",
+      "value": {
+        "status": "REBUILT_VERIFYING",
+        "evidence": "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+        "current_work_package": null,
+        "p04_07": "DONE",
+        "p04_08": "PLANNED_LOCKED",
+        "kernel_code_authorized": false,
+        "source_branch": "supervisor/20260922-p04-07-t06-closure-r2",
+        "validators": [
+          "scripts/validate_governance.py",
+          "scripts/validate_p04_activation.py"
+        ]
+      },
+      "qualification": "Becomes canonical only after exact-head Governance, unchanged promotion, guarded merge and protected-main readback.",
+      "source": "rebuilt T06 closure carrier"
     }
   ]
 }

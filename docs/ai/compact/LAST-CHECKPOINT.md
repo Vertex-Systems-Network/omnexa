@@ -1,21 +1,23 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `b4d3a832e8a4d0480fba4c49186fd32811307749`
-- Milestone: `SUP-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT-01`
-- Status: **IMPLEMENTING_SCOPE_AMENDMENT_PLAN**
+- Parent protected main: `3a314e10bcc06fd5d90222087a35e12c99e7fdff`
+- Milestone: `SUP-20260922-P0407-T06-CLOSURE-R2-01`
+- Status: **CLOSURE_R2_VERIFYING**
 - Parent Issue: #289
-- Scope-delta Issue: #305
-- Branch: `supervisor/20260922-p04-07-t06-governance-validator-amendment`
-- Canonical progress remains P04 6 / 10 and P00-P04 49 / 53 (92.45%).
-- ADR-0013 is accepted through #302/#303.
-- First T06 source PR #304 is immutable FAIL evidence:
-  - head `94425685ec3010b967a8839341b20ff766972522`;
-  - Governance `35661784066` / #813;
-  - job `106538470575`;
-  - failed canonical-state step because `scripts/validate_governance.py` still requires exactly one active work package.
-- #304 is closed; no promotion/merge occurred.
-- Issue #305 adds only the missing `scripts/validate_governance.py` implementation surface to ADR-0013/T06 authority.
-- This plan carrier does not mutate either validator, STATE, package sequence, closure evidence, runtime, workflow or P04.07 verifier.
-- After amendment acceptance, T06 must be rebuilt from fresh protected main with both validators plus closure state atomically.
-- P04.08 remains PLANNED/LOCKED.
+- Branch: `supervisor/20260922-p04-07-t06-closure-r2`
+- Issue #305 scope amendment is accepted:
+  - source #306 Governance #814 PASS;
+  - unchanged promotion #307 Governance #815 PASS;
+  - protected-main readback `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
+- Historical #304 / Governance #813 remains immutable FAIL evidence and is not merge authority.
+- Rebuilt atomic T06 target:
+  - `scripts/validate_governance.py` recognizes the strict P04-only implementation-locked intra-phase terminal checkpoint;
+  - `scripts/validate_p04_activation.py` enforces the P04-specific completed-prefix/future-planned invariants;
+  - P04.07 becomes DONE;
+  - `current_work_package=null`;
+  - P04.08-P04.10 remain PLANNED/LOCKED with spec null;
+  - kernel/business implementation authority false.
+- Accepted T05 evidence remains run `35655774421` / job `106519447117` / G0-G11 PASS.
+- Target progress after protected acceptance: P04 7 / 10; overall canonical P00-P04 50 / 53 (94.34%).
+- This branch content is not canonical until exact-head Governance/promotion/merge/readback succeeds.

@@ -122,3 +122,15 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - FAIL CLOSED: #304 closed red; no promotion, merge, rerun, force push, check weakening or P04.08 activation.
 - SCOPE DELTA: Issue #305 opened. Semantic decision unchanged; add only `scripts/validate_governance.py` as a required future implementation surface.
 - PLAN HEAD: no validator/state/runtime mutation authorized.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T06-CLOSURE-R2-01
+
+- SCOPE AMENDMENT ACCEPTED: Issue #305; source #306 Governance #814 PASS; promotion #307 Governance #815 PASS; protected-main readback `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
+- HISTORICAL FAIL RETAINED: #304 / Governance #813 remains immutable diagnostic evidence; it is not reused or promoted.
+- REBUILD: fresh branch from protected main `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
+- VALIDATORS: reconcile both `scripts/validate_governance.py` and `scripts/validate_p04_activation.py` to the already accepted ADR-0013 semantics.
+- FAIL-CLOSED INVARIANTS: P04 only; non-empty strict done prefix; zero active packages; future packages planned; current_work_package null; kernel/business authority false; phases[].P04 active_work_package null.
+- STATUS CONTRACT: exact `Current work package: **NONE**` marker retained for canonical validator compatibility.
+- TARGET: P04.01-P04.07 DONE; P04.08-P04.10 planned/spec-null; no package auto-advance.
+- NON-SCOPE: no product runtime, migration 4, provider/remote schema scope, P04.08 activation, business/AI runtime, workflow or P04.07 verifier mutation.

@@ -1,6 +1,6 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-22 — **P04.07 T06 SCOPE AMENDMENT ACTIVE AFTER PR #304 GOVERNANCE FAILURE**
+Last reconciled: 2026-09-22 — **P04.07 CLOSURE STATE / ADR-0013 TERMINAL CHECKPOINT**
 
 ## Canonical status
 
@@ -11,39 +11,43 @@ Last reconciled: 2026-09-22 — **P04.07 T06 SCOPE AMENDMENT ACTIVE AFTER PR #30
 - P01: DONE — 12 / 12; exit SATISFIED.
 - P02: DONE — 10 / 10; exit SATISFIED.
 - P03: DONE — 11 / 11; exit SATISFIED.
-- P04: ACTIVE — **6 / 10 done**.
-- Current work package: **P04.07 — Event Schema Registry, Compatibility & Validation**.
-- P04.01-P04.06: DONE with retained accepted evidence.
-- P04.07: sole ACTIVE package.
+- P04: ACTIVE — **7 / 10 done**.
+- Current work package: **NONE** — implementation-locked intra-P04 terminal checkpoint after P04.07.
+- P04.01-P04.07: DONE with retained accepted evidence.
+- P04.07: DONE in this closure state; canonical only from protected-main acceptance of this exact tree.
 - P04.08-P04.10: PLANNED / LOCKED.
-- `kernel_code_authorized=true` only inside explicitly governed P04.07 scope.
+- `kernel_code_authorized=false` at the terminal checkpoint.
 - `business_feature_code_authorized=false`.
 - migration 4: not reserved or authorized.
 - provider/vendor schema registry: not selected or authorized.
 - strategic X runtime: unauthorized.
 - AI/model/agent product runtime: unauthorized.
 
-P04.07 remains ACTIVE after its accepted first runtime slice; the first slice does not count as P04.07 package completion and does not activate P04.08.
+P04.07 completion is based on its accepted first runtime slice plus fresh T05 G0-G11 readiness evidence and ADR-0013 terminal-checkpoint governance. P04.08 is not activated by this closure.
 
-## P04.07 T05 readiness, ADR-0013 and T06 scope amendment
+## P04.07 T05 readiness, ADR-0013 and T06 closure state
 
-T05 completion readiness remains accepted: `P04.07 Readiness` run `35655774421` / #2 and job `106519447117` are PASS with G0-G11 PASS; evidence acceptance landed through #299/#300.
+Fresh completion-readiness evidence is accepted:
 
-ADR-0013 terminal-checkpoint semantics are accepted through source #302 / Governance #810, unchanged promotion #303 / Governance #811 and protected main `b4d3a832e8a4d0480fba4c49186fd32811307749`.
+- readiness trigger head `2129e0834dc5436a6c65759a0ca3643b01a38ada`;
+- `P04.07 Readiness` run `35655774421` / #2 — PASS;
+- job `106519447117` — PASS;
+- `bash scripts/verify_p04_07.sh` — G0-G11 PASS;
+- source evidence PR #299 / Governance #807 — PASS;
+- promotion PR #300 / Governance #808 — PASS;
+- accepted evidence main `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
 
-The first atomic T06 source attempt #304 was correctly rejected by canonical Governance #813 on exact head `94425685ec3010b967a8839341b20ff766972522`:
+The terminal-checkpoint decision was accepted through Issue #301 / ADR-0013 / #302/#303. Failed T06 source #304 / Governance #813 then exposed the omitted canonical-validator surface. Issue #305 amended that implementation boundary through source #306 / Governance #814, unchanged promotion #307 / Governance #815, and protected-main readback `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
 
-- failed step: `Validate canonical governance state`;
-- exact error: `active foundation execution requires exactly one active work package`;
-- root cause: `scripts/validate_governance.py` was an omitted implementation surface and still contradicted ADR-0013.
+This T06 state closes P04.07 into an implementation-locked intra-P04 checkpoint:
 
-Issue #305 is the explicit Class C implementation-surface amendment. Until it is accepted:
+- P04.01-P04.07 DONE;
+- no active P04 work package;
+- P04.08-P04.10 PLANNED / LOCKED;
+- kernel/business implementation authority false;
+- no migration 4/provider/remote/P04.08/business/AI runtime expansion.
 
-- P04.07 remains canonical ACTIVE;
-- P04 remains 6 / 10;
-- P04.08-P04.10 remain PLANNED / LOCKED;
-- no runtime, migration, provider, business-feature or AI product-runtime authority expands;
-- #304 remains historical FAIL evidence and is not reusable merge permission.
+The closure is canonical only when this rebuilt exact state is present on protected main. Failed #304 remains historical FAIL evidence and grants no merge authority.
 
 ## P04.07 accepted chain
 
@@ -131,6 +135,6 @@ Required security outcome:
 
 ## Next action
 
-Accept Issue #305 through exact-head Governance and protected promotion. The amendment only adds `scripts/validate_governance.py` to the already accepted ADR-0013 implementation surface.
+No package auto-advances from this terminal checkpoint.
 
-After protected acceptance, rebuild T06 from fresh main in one atomic carrier containing both validator reconciliations plus P04.07 closure state/evidence. P04.08 must remain PLANNED/LOCKED and no package may auto-advance.
+A future P04.08 preparation/activation requires a fresh separately governed transaction from current protected main. Until then, P04.08-P04.10 remain PLANNED/LOCKED, kernel implementation authority is false, migration 4 remains unreserved, and provider/business/AI runtime scope remains unauthorized.
