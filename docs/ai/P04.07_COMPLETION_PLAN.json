@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "stage-b-downstream-validator-amendment",
+  "status": "p04-07-t06-closure-r3-verifying",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -63,7 +63,7 @@
     "accepted_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
   },
   "stage_b_closure": {
-    "depends_on": "T05 PASS accepted, ADR-0013 accepted, Issue #305 accepted, and Issue #309 downstream-validator amendment accepted",
+    "depends_on": "T05 PASS accepted, ADR-0013 accepted, Issue #305 accepted, and Issue #309 accepted",
     "allowed_paths": [
       "scripts/validate_governance.py",
       "scripts/validate_p04_activation.py",
@@ -83,7 +83,16 @@
     ],
     "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
     "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction",
-    "status": "BLOCKED_SCOPE_AMENDMENT_309"
+    "status": "CLOSURE_R3_VERIFYING",
+    "target_state": {
+      "p04_07": "DONE",
+      "current_work_package": null,
+      "p04_08": "PLANNED_LOCKED",
+      "kernel_code_authorized": false,
+      "business_feature_code_authorized": false,
+      "migration_4_authorized": false,
+      "provider_remote_authorized": false
+    }
   },
   "fail_closed_replan_triggers": [
     "runtime source change becomes necessary",
@@ -201,24 +210,21 @@
   },
   "scope_delta_amendment": {
     "issue": 305,
-    "change_class": "C implementation-surface reconciliation",
-    "trigger": {
-      "failed_pr": 304,
-      "exact_head": "94425685ec3010b967a8839341b20ff766972522",
-      "governance_run": 35661784066,
-      "governance_run_number": 813,
-      "job_id": 106538470575,
-      "failed_step": "Validate canonical governance state",
-      "diagnostic": "active foundation execution requires exactly one active work package"
-    },
-    "status": "PLAN_CANDIDATE",
+    "status": "ACCEPTED",
+    "source_pr": 306,
+    "source_governance_run": 35670794058,
+    "promotion_pr": 307,
+    "promotion_governance_run": 35671643286,
+    "protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+    "failed_pr": 304,
+    "failed_governance_run": 35661784066,
     "semantic_decision_changed": false,
-    "added_future_write_path": "scripts/validate_governance.py",
-    "plan_validator_mutation_allowed": false,
-    "runtime_source_mutation": false,
-    "p04_08_activation_authorized": false
+    "validator_paths": [
+      "scripts/validate_governance.py",
+      "scripts/validate_p04_activation.py"
+    ]
   },
-  "next_action": "Accept Issue #309 downstream-validator amendment. Then rebuild T06 from fresh protected main with all five validator surfaces plus P04.07 closure state/evidence atomically.",
+  "next_action": "Govern the fresh R3 atomic T06 through exact-head source Governance and unchanged promotion. P04.08 remains locked.",
   "scope_delta_amendment_309": {
     "issue": 309,
     "change_class": "C implementation-surface reconciliation",
@@ -242,5 +248,24 @@
     "plan_validator_mutation_allowed": false,
     "runtime_source_mutation": false,
     "p04_08_activation_authorized": false
+  },
+  "downstream_validator_amendment": {
+    "issue": 309,
+    "status": "ACCEPTED",
+    "change_class": "C implementation-surface reconciliation",
+    "semantic_decision_changed": false,
+    "source_pr": 310,
+    "source_governance_run": 35768196297,
+    "promotion_pr": 311,
+    "promotion_governance_run": 35784103063,
+    "protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "failed_pr": 308,
+    "failed_governance_run": 35673877543,
+    "failed_job": 106576147839,
+    "validator_paths": [
+      "scripts/validate_freeze_review.py",
+      "scripts/validate_p03_preparation.py",
+      "scripts/validate_p03_package_specs.py"
+    ]
   }
 }
