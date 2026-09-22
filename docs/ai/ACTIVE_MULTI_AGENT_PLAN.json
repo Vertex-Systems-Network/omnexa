@@ -171,7 +171,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT"
+      "P04.07-T06-CLOSURE-R3"
     ]
   },
   "instruction_sync": {
