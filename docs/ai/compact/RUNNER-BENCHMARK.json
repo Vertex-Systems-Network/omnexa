@@ -906,6 +906,48 @@
         "merged_pr": 311,
         "protected_main_readback_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
       }
+    },
+    {
+      "stable_task_id": "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 312,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-CLOSURE-R3"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260923-p04-07-t06-closure-r3",
+        "head_sha": "690a8ee526ec32c1a81e817d4056595c07bd8d62",
+        "parent_protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35786197930,
+        "workflow_run_number": 821,
+        "job_id": 106943491372,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Fresh-main R3 five-validator closure carrier; no product runtime/P04.08/workflow/verifier expansion.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr312|690a8ee526ec32c1a81e817d4056595c07bd8d62|governance|p04.07-t06-closure-r3",
+      "status": "FAIL",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35786197930,
+        "workflow_run_number": 821,
+        "job_id": 106943491372,
+        "conclusion": "failure",
+        "exact_head_sha": "690a8ee526ec32c1a81e817d4056595c07bd8d62",
+        "passed_through_step": 18,
+        "failed_step": "Verify repository Go code quality",
+        "diagnostic": "deterministic_order does not match task merge_order: expected ['P04.07-T06-CLOSURE-R3'], got ['P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT']",
+        "promotion_allowed": false
+      }
     }
   ]
 }
