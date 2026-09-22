@@ -1,23 +1,21 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Protected main: `3f34301f0cd37aa43392c26e906a0a719b6db2a0`
-- Milestone: `SUP-20260922-P0407-T06-VALIDATOR-GAP-PLAN-01`
-- Status: **IMPLEMENTING_CHANGE_CONTROL_PLAN**
-- Parent completion Issue: #289
-- Change-control Issue: #301
-- Branch: `supervisor/20260922-p04-07-t06-validator-gap-plan`
-- Canonical accepted progress remains P04 6 / 10 and overall P00-P04 49 / 53 (92.45%).
-- T05 readiness is accepted:
-  - verifier run `35655774421` / #2, job `106519447117`, G0-G11 PASS;
-  - source PR #299 Governance #807 PASS;
-  - unchanged promotion PR #300 Governance #808 PASS;
-  - protected-main readback `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
-- T06 pre-mutation audit found a fail-closed governance contradiction:
-  - accepted closure requires P04.07 DONE while P04.08 remains PLANNED/LOCKED;
-  - current `scripts/validate_p04_activation.py` rejects `current_phase=P04` with `current_work_package=null`.
-- Class C change control is required before validator mutation.
-- ADR-0013 defines a fail-closed intra-P04 terminal checkpoint.
-- This plan carrier does not modify the validator, canonical closure state, runtime, workflow or verifier.
-- After plan acceptance, one atomic T06 carrier may update the validator plus closure state/evidence and must pass canonical Governance on the exact closure head.
+- Protected main: `b4d3a832e8a4d0480fba4c49186fd32811307749`
+- Milestone: `SUP-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT-01`
+- Status: **IMPLEMENTING_SCOPE_AMENDMENT_PLAN**
+- Parent Issue: #289
+- Scope-delta Issue: #305
+- Branch: `supervisor/20260922-p04-07-t06-governance-validator-amendment`
+- Canonical progress remains P04 6 / 10 and P00-P04 49 / 53 (92.45%).
+- ADR-0013 is accepted through #302/#303.
+- First T06 source PR #304 is immutable FAIL evidence:
+  - head `94425685ec3010b967a8839341b20ff766972522`;
+  - Governance `35661784066` / #813;
+  - job `106538470575`;
+  - failed canonical-state step because `scripts/validate_governance.py` still requires exactly one active work package.
+- #304 is closed; no promotion/merge occurred.
+- Issue #305 adds only the missing `scripts/validate_governance.py` implementation surface to ADR-0013/T06 authority.
+- This plan carrier does not mutate either validator, STATE, package sequence, closure evidence, runtime, workflow or P04.07 verifier.
+- After amendment acceptance, T06 must be rebuilt from fresh protected main with both validators plus closure state atomically.
 - P04.08 remains PLANNED/LOCKED.

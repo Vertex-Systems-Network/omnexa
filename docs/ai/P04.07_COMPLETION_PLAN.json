@@ -5,7 +5,7 @@
   "plan_id": "P04.07-CLOSURE-20260921-01",
   "coordination_issue": 289,
   "base_main_sha": "250a55bb4c61df0bb8c453f29b0ea16a3573af36",
-  "status": "stage-b-validator-gap-change-control-candidate",
+  "status": "stage-b-governance-validator-scope-amendment",
   "conclusion_from_current_evidence": "No explicit second runtime slice is mandated by canonical repository evidence. T01-T04 already implement and verify the bounded provider-neutral first slice; the remaining known work is completion-readiness proof and a separately governed package-closure carrier.",
   "authority": {
     "owner": "kernel.events",
@@ -63,8 +63,9 @@
     "accepted_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
   },
   "stage_b_closure": {
-    "depends_on": "T05 PASS evidence accepted on protected main and validator-gap Class C change control accepted",
+    "depends_on": "T05 PASS evidence accepted, ADR-0013 accepted, and Issue #305 governance-validator implementation-surface amendment accepted",
     "allowed_paths": [
+      "scripts/validate_governance.py",
       "scripts/validate_p04_activation.py",
       "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
       "docs/roadmap/STATE.json",
@@ -79,7 +80,7 @@
     ],
     "closure_effect": "P04.07 may become DONE only with exact-head evidence and protected merge/readback.",
     "p04_08_effect": "none; P04.08 stays PLANNED/LOCKED until a later separate activation transaction",
-    "status": "BLOCKED_VALIDATOR_GAP_CHANGE_CONTROL"
+    "status": "BLOCKED_SCOPE_AMENDMENT_305"
   },
   "fail_closed_replan_triggers": [
     "runtime source change becomes necessary",
@@ -151,7 +152,7 @@
     "issue": 301,
     "change_class": "C",
     "adr": "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
-    "status": "PLAN_CANDIDATE",
+    "status": "ACCEPTED",
     "discovered_on_protected_main": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
     "contradiction": "Accepted T06 requires P04.07 DONE with P04.08 still PLANNED/LOCKED, but validate_p04_activation.py currently rejects P04 active with current_work_package=null.",
     "plan_carrier": {
@@ -183,7 +184,36 @@
       "verifier_mutation_allowed": false,
       "workflow_mutation_allowed": false,
       "runtime_source_mutation": false,
-      "canonical_governance_must_pass_on_actual_closure_state": true
-    }
-  }
+      "canonical_governance_must_pass_on_actual_closure_state": true,
+      "validator_paths": [
+        "scripts/validate_governance.py",
+        "scripts/validate_p04_activation.py"
+      ]
+    },
+    "accepted_source_pr": 302,
+    "accepted_source_governance_run": 35659128824,
+    "accepted_promotion_pr": 303,
+    "accepted_promotion_governance_run": 35660012233,
+    "accepted_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749"
+  },
+  "scope_delta_amendment": {
+    "issue": 305,
+    "change_class": "C implementation-surface reconciliation",
+    "trigger": {
+      "failed_pr": 304,
+      "exact_head": "94425685ec3010b967a8839341b20ff766972522",
+      "governance_run": 35661784066,
+      "governance_run_number": 813,
+      "job_id": 106538470575,
+      "failed_step": "Validate canonical governance state",
+      "diagnostic": "active foundation execution requires exactly one active work package"
+    },
+    "status": "PLAN_CANDIDATE",
+    "semantic_decision_changed": false,
+    "added_future_write_path": "scripts/validate_governance.py",
+    "plan_validator_mutation_allowed": false,
+    "runtime_source_mutation": false,
+    "p04_08_activation_authorized": false
+  },
+  "next_action": "Accept Issue #305 implementation-surface amendment. Then rebuild T06 from fresh protected main with both canonical validators plus the P04.07 closure state in one atomic governed carrier."
 }

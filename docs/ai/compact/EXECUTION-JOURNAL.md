@@ -110,3 +110,15 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - DECISION CANDIDATE: ADR-0013 defines a strict terminal-gap mode: completed prefix retained with PASS evidence, no active package, future packages planned/spec-null, implementation authority false, no auto-advance.
 - FAST PATH: after decision acceptance, one atomic T06 carrier may update validator + closure state/evidence so canonical Governance exercises the new mode against the actual target state.
 - NON-SCOPE: no runtime source, migration 4, provider/remote refs, P04.08 activation, business feature or AI product runtime.
+
+
+## 2026-09-22 — SUP-20260922-P0407-T06-GOVERNANCE-VALIDATOR-AMENDMENT-01
+
+- T06 ATTEMPT: PR #304 exact head `94425685ec3010b967a8839341b20ff766972522`.
+- CANONICAL GOVERNANCE: run `35661784066` / #813, job `106538470575` — **FAIL**.
+- FAILED STEP: `Validate canonical governance state`.
+- DIAGNOSTIC: `active foundation execution requires exactly one active work package`.
+- ROOT CAUSE: ADR-0013 semantics were implemented in the P04-specific validator, but upstream `scripts/validate_governance.py` remained contradictory and was not in the accepted T06 write-path list.
+- FAIL CLOSED: #304 closed red; no promotion, merge, rerun, force push, check weakening or P04.08 activation.
+- SCOPE DELTA: Issue #305 opened. Semantic decision unchanged; add only `scripts/validate_governance.py` as a required future implementation surface.
+- PLAN HEAD: no validator/state/runtime mutation authorized.

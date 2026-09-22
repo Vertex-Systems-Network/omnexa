@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
+  "observed_main_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -155,17 +155,42 @@
     {
       "id": "p04_07.t06_validator_gap",
       "value": {
-        "status": "CHANGE_CONTROL_REQUIRED",
+        "status": "ACCEPTED",
         "issue": 301,
-        "change_class": "C",
         "adr": "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md",
-        "validator": "scripts/validate_p04_activation.py",
-        "current_validator_supports_required_gap": false,
-        "required_gap_state": "P04 active phase, current_work_package=null, P04.01-P04.07 done, P04.08-P04.10 planned, implementation authority false",
+        "source_pr": 302,
+        "source_governance_run": 35659128824,
+        "promotion_pr": 303,
+        "promotion_governance_run": 35660012233,
+        "protected_main_readback_sha": "b4d3a832e8a4d0480fba4c49186fd32811307749"
+      },
+      "source": "Issue #301 / PR #302 / PR #303 / protected-main readback"
+    },
+    {
+      "id": "p04_07.t06_failed_attempt",
+      "value": {
+        "status": "FAIL",
+        "pr": 304,
+        "exact_head": "94425685ec3010b967a8839341b20ff766972522",
+        "governance_run": 35661784066,
+        "governance_run_number": 813,
+        "job_id": 106538470575,
+        "failed_step": "Validate canonical governance state",
+        "diagnostic": "active foundation execution requires exactly one active work package"
+      },
+      "source": "PR #304 / Governance #813 / job logs"
+    },
+    {
+      "id": "p04_07.t06_scope_amendment",
+      "value": {
+        "status": "PLAN_CANDIDATE",
+        "issue": 305,
+        "semantic_decision_changed": false,
+        "added_future_write_path": "scripts/validate_governance.py",
         "runtime_scope_change": false
       },
-      "qualification": "Repository authority conflicts; fail closed until change-control decision is accepted.",
-      "source": "scripts/validate_p04_activation.py + accepted P04.07 completion plan + Issue #301"
+      "qualification": "No validator or closure-state mutation is authorized until this amendment is accepted.",
+      "source": "Issue #305 + ADR-0013 amendment carrier"
     }
   ]
 }
