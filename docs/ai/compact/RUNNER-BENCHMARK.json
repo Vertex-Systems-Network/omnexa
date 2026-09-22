@@ -823,7 +823,7 @@
       }
     },
     {
-      "stable_task_id": "RB-20260923-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT",
+      "stable_task_id": "RB-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT",
       "source_issue_or_pr_or_work_package": {
         "parent_issue": 289,
         "scope_delta_issue": 309,
