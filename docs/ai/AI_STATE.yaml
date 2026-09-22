@@ -2,8 +2,8 @@ schema_version: 1
 
 snapshot:
   verified_at: "2026-09-22"
-  nature: "P04.07 T05 accepted; T06 blocked by explicit validator-gap Class C change control"
-  authoritative_main_at_snapshot: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
+  nature: "P04.07 T06 scope-delta amendment after canonical Governance exposed a second validator surface"
+  authoritative_main_at_snapshot: "b4d3a832e8a4d0480fba4c49186fd32811307749"
   stale_rule: "Re-verify protected main, STATE.json, open Issues/PRs and exact-head CI/runtime evidence before every material action."
 
 project:
@@ -12,7 +12,6 @@ project:
 
 phase:
   current: "P04"
-  name: "Data, Jobs & Event Fabric"
   state: "active"
   progress: "6 / 10 done"
   current_work_package: "P04.07"
@@ -22,49 +21,38 @@ p04_07:
   owner: "kernel.events"
   completion_issue: 289
   t05_status: "PASS_ACCEPTED"
-  t05_trigger_head: "2129e0834dc5436a6c65759a0ca3643b01a38ada"
-  t05_workflow_run_id: 35655774421
-  t05_job_id: 106519447117
-  t05_verifier_result: "PASS"
   t05_verifier_gates: "G0-G11 PASS"
-  t05_source_pr: 299
-  t05_source_governance_run: 35656463391
-  t05_promotion_pr: 300
-  t05_promotion_governance_run: 35657323992
-  t05_accepted_main_sha: "3f34301f0cd37aa43392c26e906a0a719b6db2a0"
-  runtime_code_change_authorized: false
-  migration_4_authorized: false
-  provider_registry_selected: false
-  remote_schema_fetch_authorized: false
-  p04_08_plus_authorized: false
+  adr_0013_status: "ACCEPTED"
+  adr_0013_main_sha: "b4d3a832e8a4d0480fba4c49186fd32811307749"
+  failed_t06_pr: 304
+  failed_t06_head: "94425685ec3010b967a8839341b20ff766972522"
+  failed_t06_governance_run: 35661784066
+  failed_t06_job: 106538470575
+  failed_t06_reason: "scripts/validate_governance.py requires exactly one active work package for active phases"
 
-t06:
-  status: "BLOCKED_VALIDATOR_GAP_CHANGE_CONTROL"
-  validator_gap_issue: 301
-  change_class: "C"
-  adr: "docs/adr/ADR-0013-p04-intra-phase-terminal-checkpoint.md"
-  plan_branch: "supervisor/20260922-p04-07-t06-validator-gap-plan"
-  plan_validator_mutation_authorized: false
-  planned_atomic_implementation: "validator terminal-gap mode + P04.07 closure state/evidence"
-  p04_08_activation_authorized: false
+scope_delta:
+  issue: 305
+  change_class: "C implementation-surface reconciliation"
+  semantic_decision_changed: false
+  newly_required_validator: "scripts/validate_governance.py"
+  existing_validator: "scripts/validate_p04_activation.py"
+  plan_code_mutation_authorized: false
+  post_acceptance_atomic_t06: true
 
 security:
   required_governance_check_may_be_weakened: false
   verifier_may_be_changed_or_skipped: false
+  runtime_code_change_authorized: false
+  migration_4_authorized: false
+  provider_registry_selected: false
+  remote_schema_fetch_authorized: false
+  p04_08_activation_authorized: false
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
-  control_weakening_authorized: false
-
-readme_progress_sync:
-  required: true
-  accepted_on_protected_main: true
-  every_turn_check_required: true
-  material_transition_write_required: true
-  canonical_progress_only: true
 
 next_action:
-  current: "Accept Issue #301 / ADR-0013 validator-gap change-control plan through exact-head Governance and protected promotion."
-  after_acceptance: "Execute one atomic T06 validator+closure carrier; P04.08 remains PLANNED/LOCKED."
+  current: "Accept Issue #305 scope amendment through protected governance."
+  after_acceptance: "Rebuild atomic T06 from fresh main with both canonical validators plus closure state/evidence."
 
 compact_resume:
   path: "docs/ai/compact"

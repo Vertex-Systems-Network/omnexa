@@ -19,13 +19,13 @@ This is the human-readable mirror of the active AI-Native development flow. Cano
 | Current module | **P04 / P04.07 — kernel.events** |
 | P04 progress | **60% — 6 / 10 accepted packages** |
 | Overall canonical progress | **92.45% — 49 / 53 across P00-P04 only** |
-| P04.07 | **ACTIVE**; T01-T04 accepted; T05 readiness accepted |
-| T05 readiness verifier | **PASS** — run `35655774421` / #2; job `106519447117`; exact head `2129e0834dc5436a6c65759a0ca3643b01a38ada`; G0-G11 PASS |
-| T05 evidence acceptance | **ACCEPTED** — source PR #299 / Governance #807; promotion PR #300 / Governance #808; main `3f34301f0cd37aa43392c26e906a0a719b6db2a0` |
-| T06 closure | **BLOCKED BY GOVERNANCE MODEL GAP** — current P04 validator cannot represent P04.07 DONE while P04.08 remains PLANNED/LOCKED |
-| Change control | **ACTIVE** — Issue #301; ADR-0013 + validator-gap plan carrier `supervisor/20260922-p04-07-t06-validator-gap-plan` |
+| P04.07 | **ACTIVE**; T01-T04 + T05 readiness accepted |
+| ADR-0013 | **ACCEPTED** — source #302/#810; promotion #303/#811; main `b4d3a832e8a4d0480fba4c49186fd32811307749` |
+| First T06 closure carrier | **FAILED / CLOSED** — PR #304, head `94425685ec3010b967a8839341b20ff766972522`, Governance #813 |
+| Failure | canonical `scripts/validate_governance.py` still requires exactly one active package |
+| Scope amendment | **ACTIVE** — Issue #305; adds the missing governance-validator implementation surface only |
 | P04.08 | **PLANNED / LOCKED**; no activation or runtime authority |
-| Next safe action | Accept the Class C validator-gap decision; then execute one atomic T06 carrier that adds fail-closed terminal-gap validation and closes P04.07 without activating P04.08 |
+| Next safe action | Accept #305, then rebuild atomic T06 from fresh main with both validators and the closure state |
 
 **Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the active head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
 

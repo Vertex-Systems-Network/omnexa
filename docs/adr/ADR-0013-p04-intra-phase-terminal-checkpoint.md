@@ -59,7 +59,8 @@ The immediate T06 target is P04.01-P04.07 DONE with P04.08-P04.10 PLANNED/LOCKED
 
 After this ADR/change-control carrier is accepted, one atomic T06 carrier may modify:
 
-- `scripts/validate_p04_activation.py` to add the terminal-checkpoint mode;
+- `scripts/validate_governance.py` to recognize the ADR-0013 terminal checkpoint without changing ordinary one-active-package or fully-completed-phase semantics;
+- `scripts/validate_p04_activation.py` to add the P04-specific terminal-checkpoint invariants;
 - `docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md`;
 - `docs/roadmap/STATE.json`;
 - `docs/roadmap/STATUS.md`;
@@ -71,7 +72,11 @@ After this ADR/change-control carrier is accepted, one atomic T06 carrier may mo
 - `docs/ai/compact/**`;
 - `README.md`.
 
-The atomic carrier must run canonical Governance against the actual proposed closure state. Existing planning and one-active-package modes must remain fail-closed and unchanged in meaning.
+The atomic carrier must run canonical Governance against the actual proposed closure state. Existing planning, ordinary one-active-package execution, and fully-completed-phase terminal modes must remain fail-closed and unchanged in meaning.
+
+### 2026-09-22 implementation-surface amendment
+
+Failed source PR #304 / Governance #813 proved that `scripts/validate_governance.py` independently enforced exactly one active work package for every active phase. Issue #305 therefore amends only the implementation surface of this already accepted decision. The semantic decision above is unchanged; the canonical state validator and P04-specific validator must agree on the same locked terminal checkpoint.
 
 ## Non-decisions
 
@@ -126,10 +131,12 @@ Before protected merge, reject/revert the candidate. After protected merge, a la
 
 ## Documents/work packages affected
 
+- `scripts/validate_governance.py`
 - `scripts/validate_p04_activation.py`
 - P04.07 T06 closure plan/evidence/state
 - P04 package sequence and progress mirrors
 - AI/compact continuity state
 
 Parent coordination: #289  
-Change-control issue: #301
+Change-control issue: #301  
+Implementation-surface amendment: #305
