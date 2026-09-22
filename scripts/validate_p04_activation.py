@@ -179,9 +179,42 @@ active = (
     and phase.get("id") == "P04"
     and phase.get("state") == "active"
 )
+terminal_checkpoint = (
+    current_phase == "P04"
+    and current_package is None
+    and phase.get("id") == "P04"
+    and phase.get("state") == "active"
+)
 
-if not (planning or active):
+if not (planning or active or terminal_checkpoint):
     raise SystemExit("ERROR: invalid P04 readiness/activation checkpoint")
+
+
+def validate_completed_package(package_id: str) -> None:
+    package = by_id[package_id]
+    if package.get("state") != "done":
+        raise SystemExit(f"ERROR: completed predecessor {package_id} must be done")
+    expected_spec = f"docs/roadmap/work-packages/{package_id}.md"
+    if package.get("spec") != expected_spec or not (ROOT / expected_spec).is_file():
+        raise SystemExit(f"ERROR: completed predecessor {package_id} must retain its accepted specification")
+    evidence = package.get("evidence") or []
+    if not evidence or any(not (ROOT / item).is_file() for item in evidence):
+        raise SystemExit(f"ERROR: completed predecessor {package_id} must retain completion evidence")
+
+    tracking_key = f"p04_{package_id.split('.')[1]}_completion"
+    completion = tracking.get(tracking_key) or {}
+    if completion.get("state") != "PASS":
+        raise SystemExit(f"ERROR: completed predecessor {package_id} requires retained PASS tracking evidence")
+    if completion.get("completion_evidence") not in evidence:
+        raise SystemExit(f"ERROR: completed predecessor {package_id} tracking/evidence reference drift")
+    for field in ["final_exact_head", "implementation_merge", "workflow_run", "job"]:
+        if not completion.get(field):
+            raise SystemExit(f"ERROR: completed predecessor {package_id} missing canonical {field} tracking")
+    if completion.get("evidence_environment") != "github-hosted":
+        raise SystemExit(f"ERROR: completed predecessor {package_id} evidence must remain GitHub-hosted")
+    if completion.get("runner_image") != "ubuntu-24.04":
+        raise SystemExit(f"ERROR: completed predecessor {package_id} runner-image evidence drift")
+
 
 if planning:
     if (phase_rows.get("P04") or {}).get("state") != "planned":
@@ -198,7 +231,7 @@ if planning:
         raise SystemExit("ERROR: readiness mode P04 entry gate must remain NOT YET SATISFIED")
     mode = "PLANNING / READY"
     authority = "LOCKED"
-else:
+elif active:
     active_index = expected_ids.index(current_package)
     done_ids = expected_ids[:active_index]
     future_ids = expected_ids[active_index + 1 :]
@@ -213,29 +246,7 @@ else:
         raise SystemExit("ERROR: active P04 sequence must remain implementation-authorized")
 
     for package_id in done_ids:
-        package = by_id[package_id]
-        if package.get("state") != "done":
-            raise SystemExit(f"ERROR: completed predecessor {package_id} must be done")
-        expected_spec = f"docs/roadmap/work-packages/{package_id}.md"
-        if package.get("spec") != expected_spec or not (ROOT / expected_spec).is_file():
-            raise SystemExit(f"ERROR: completed predecessor {package_id} must retain its accepted specification")
-        evidence = package.get("evidence") or []
-        if not evidence or any(not (ROOT / item).is_file() for item in evidence):
-            raise SystemExit(f"ERROR: completed predecessor {package_id} must retain completion evidence")
-
-        tracking_key = f"p04_{package_id.split('.')[1]}_completion"
-        completion = tracking.get(tracking_key) or {}
-        if completion.get("state") != "PASS":
-            raise SystemExit(f"ERROR: completed predecessor {package_id} requires retained PASS tracking evidence")
-        if completion.get("completion_evidence") not in evidence:
-            raise SystemExit(f"ERROR: completed predecessor {package_id} tracking/evidence reference drift")
-        for field in ["final_exact_head", "implementation_merge", "workflow_run", "job"]:
-            if not completion.get(field):
-                raise SystemExit(f"ERROR: completed predecessor {package_id} missing canonical {field} tracking")
-        if completion.get("evidence_environment") != "github-hosted":
-            raise SystemExit(f"ERROR: completed predecessor {package_id} evidence must remain GitHub-hosted")
-        if completion.get("runner_image") != "ubuntu-24.04":
-            raise SystemExit(f"ERROR: completed predecessor {package_id} runner-image evidence drift")
+        validate_completed_package(package_id)
 
     active_package = by_id[current_package]
     if active_package.get("state") != "active":
@@ -275,6 +286,74 @@ else:
 
     mode = f"ACTIVE / {current_package}"
     authority = f"AUTHORIZED FOR {current_package} ONLY"
+else:
+    states = [by_id[p].get("state") for p in expected_ids]
+    done_count = 0
+    while done_count < len(states) and states[done_count] == "done":
+        done_count += 1
+
+    if done_count == 0 or done_count >= len(expected_ids):
+        raise SystemExit("ERROR: terminal checkpoint requires a non-empty strict completed P04 prefix")
+    done_ids = expected_ids[:done_count]
+    future_ids = expected_ids[done_count:]
+
+    if any(by_id[p].get("state") != "planned" for p in future_ids):
+        raise SystemExit("ERROR: terminal checkpoint future packages must remain planned")
+    if any(by_id[p].get("spec") is not None for p in future_ids):
+        raise SystemExit("ERROR: terminal checkpoint future package specs must remain null")
+
+    p04_row = phase_rows.get("P04") or {}
+    if p04_row.get("state") != "active" or p04_row.get("active_work_package") is not None:
+        raise SystemExit("ERROR: terminal checkpoint requires active P04 with no active_work_package")
+    if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: terminal checkpoint must keep all implementation authority locked")
+    if sequence.get("state") != "active" or sequence.get("implementation_authorized") is not False:
+        raise SystemExit("ERROR: terminal checkpoint sequence must remain active but implementation-locked")
+
+    for package_id in done_ids:
+        validate_completed_package(package_id)
+
+    phase_packages = {pkg.get("id"): pkg for pkg in phase.get("work_packages") or []}
+    if phase.get("done_work_packages") != len(done_ids):
+        raise SystemExit("ERROR: terminal checkpoint done_work_packages must equal the strict completed prefix count")
+    for package_id in done_ids:
+        mirror = phase_packages.get(package_id) or {}
+        if mirror.get("state") != "done":
+            raise SystemExit(f"ERROR: STATE phase mirror must mark {package_id} done")
+        if mirror.get("spec") != by_id[package_id].get("spec"):
+            raise SystemExit(f"ERROR: STATE phase mirror specification drift for {package_id}")
+        if mirror.get("evidence") != by_id[package_id].get("evidence"):
+            raise SystemExit(f"ERROR: STATE phase mirror evidence drift for {package_id}")
+    if any((phase_packages.get(p) or {}).get("state") != "planned" for p in future_ids):
+        raise SystemExit("ERROR: STATE phase mirror must keep terminal-checkpoint future packages planned")
+    if any((phase_packages.get(p) or {}).get("spec") is not None for p in future_ids):
+        raise SystemExit("ERROR: STATE phase mirror future package specs must remain null")
+
+    next_package = future_ids[0]
+    preparation = state.get("p04_preparation") or {}
+    if preparation.get("phase_state") != "active":
+        raise SystemExit("ERROR: terminal checkpoint preparation must retain active P04 phase state")
+    if preparation.get("next_work_package") != next_package:
+        raise SystemExit("ERROR: terminal checkpoint preparation cursor must point only to the next planned package")
+    if preparation.get("work_package_state") != "planned":
+        raise SystemExit("ERROR: terminal checkpoint preparation must keep the next package planned")
+    if preparation.get("work_package_spec") is not None:
+        raise SystemExit("ERROR: terminal checkpoint must not create a future package implementation spec")
+    if preparation.get("prepared_spec_count") != len(done_ids):
+        raise SystemExit("ERROR: terminal checkpoint prepared_spec_count must equal the completed accepted-spec prefix")
+
+    entry_tracking = tracking.get("p04_entry_gate") or {}
+    if entry_tracking.get("current_work_package") is not None:
+        raise SystemExit("ERROR: terminal checkpoint P04 entry tracking must expose no current work package")
+    if entry_tracking.get("kernel_code_authorized") is not False:
+        raise SystemExit("ERROR: terminal checkpoint P04 entry tracking must lock kernel implementation")
+    if entry_tracking.get("business_feature_code_authorized") is not False:
+        raise SystemExit("ERROR: terminal checkpoint business-feature authority must remain locked")
+    if "Status: **SATISFIED**" not in entry:
+        raise SystemExit("ERROR: terminal checkpoint requires retained SATISFIED P04 entry gate")
+
+    mode = f"TERMINAL CHECKPOINT / {done_ids[-1]} DONE / {next_package} PLANNED"
+    authority = "LOCKED"
 
 print("Omnexa P04 sequential activation validation: PASS")
 print(f"Mode: {mode}")
