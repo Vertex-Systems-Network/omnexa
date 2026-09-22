@@ -1,6 +1,6 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-22 — **P04.07 T06 DOWNSTREAM-VALIDATOR AMENDMENT ACTIVE AFTER PR #308 GOVERNANCE FAILURE**
+Last reconciled: 2026-09-23 — **P04.07 T06 R3 CLOSURE CANDIDATE / ADR-0013 TERMINAL CHECKPOINT**
 
 ## Canonical status
 
@@ -11,41 +11,45 @@ Last reconciled: 2026-09-22 — **P04.07 T06 DOWNSTREAM-VALIDATOR AMENDMENT ACTI
 - P01: DONE — 12 / 12; exit SATISFIED.
 - P02: DONE — 10 / 10; exit SATISFIED.
 - P03: DONE — 11 / 11; exit SATISFIED.
-- P04: ACTIVE — **6 / 10 done**.
-- Current work package: **P04.07 — Event Schema Registry, Compatibility & Validation**.
-- P04.01-P04.06: DONE with retained accepted evidence.
-- P04.07: sole ACTIVE package.
+- P04: ACTIVE — **7 / 10 done**.
+- Current work package: **NONE** — implementation-locked intra-P04 terminal checkpoint after P04.07.
+- P04.01-P04.07: DONE with retained accepted evidence.
+- P04.07: DONE in this closure state; canonical only from protected-main acceptance of this exact tree.
 - P04.08-P04.10: PLANNED / LOCKED.
-- `kernel_code_authorized=true` only inside explicitly governed P04.07 scope.
+- `kernel_code_authorized=false` at the terminal checkpoint.
 - `business_feature_code_authorized=false`.
 - migration 4: not reserved or authorized.
 - provider/vendor schema registry: not selected or authorized.
 - strategic X runtime: unauthorized.
 - AI/model/agent product runtime: unauthorized.
 
-P04.07 remains ACTIVE after its accepted first runtime slice; the first slice does not count as P04.07 package completion and does not activate P04.08.
+P04.07 completion is based on its accepted first runtime slice plus fresh T05 G0-G11 readiness evidence and ADR-0013 terminal-checkpoint governance. P04.08 is not activated by this closure.
 
-## P04.07 T05 readiness, ADR-0013 and downstream validator amendment
+## P04.07 T05 readiness, ADR-0013 and T06 closure state
 
-T05 readiness remains accepted and ADR-0013 terminal-checkpoint semantics remain accepted.
+Fresh completion-readiness evidence is accepted:
 
-The first T06 source #304 / Governance #813 failed canonical state validation. Issue #305 added `scripts/validate_governance.py`; source #306 / #814 and promotion #307 / #815 were accepted on main `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
+- readiness trigger head `2129e0834dc5436a6c65759a0ca3643b01a38ada`;
+- `P04.07 Readiness` run `35655774421` / #2 — PASS;
+- job `106519447117` — PASS;
+- `bash scripts/verify_p04_07.sh` — G0-G11 PASS;
+- source evidence PR #299 / Governance #807 — PASS;
+- promotion PR #300 / Governance #808 — PASS;
+- accepted evidence main `3f34301f0cd37aa43392c26e906a0a719b6db2a0`.
 
-Rebuilt T06 #308 / Governance #817 then proved that fix:
+The terminal-checkpoint decision was accepted through Issue #301 / ADR-0013 / #302/#303. Failed T06 source #304 / Governance #813 then exposed the omitted canonical-validator surface. Issue #305 amended that implementation boundary through source #306 / Governance #814, unchanged promotion #307 / Governance #815, and protected-main readback `3a314e10bcc06fd5d90222087a35e12c99e7fdff`.
 
-- `Validate canonical governance state` (step 8): **PASS**;
-- `Validate foundation freeze review` (step 11): **FAIL**;
-- diagnostic: `active P04 must identify one current P04 package`.
+Rebuilt T06 R2 source #308 / Governance #817 proved the canonical-state reconciliation at step 8, then failed step 11 in `scripts/validate_freeze_review.py`. The same stale active-P04 assumption was found in `scripts/validate_p03_preparation.py` and `scripts/validate_p03_package_specs.py`. Issue #309 consolidated those three downstream surfaces and was accepted through source #310 / Governance #818, unchanged promotion #311 / Governance #819, and protected-main readback `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`.
 
-A repository-wide scan found the same stale active-P04 assumption in the later `validate_p03_preparation.py` and `validate_p03_package_specs.py` Governance surfaces.
+This fresh-main R3 T06 candidate closes P04.07 into an implementation-locked intra-P04 checkpoint while reconciling all five accepted validator surfaces:
 
-Issue #309 consolidates those three remaining validator surfaces. Until #309 is accepted:
+- P04.01-P04.07 DONE;
+- no active P04 work package;
+- P04.08-P04.10 PLANNED / LOCKED;
+- kernel/business implementation authority false;
+- no migration 4/provider/remote/P04.08/business/AI runtime expansion.
 
-- P04.07 remains canonical ACTIVE;
-- P04 remains 6 / 10;
-- P04.08-P04.10 remain PLANNED / LOCKED;
-- #304 and #308 remain historical FAIL evidence only;
-- no product runtime, migration, provider, business-feature or AI runtime authority expands.
+The closure is canonical only when this exact R3 state passes source Governance, unchanged-promotion Governance, guarded merge and protected-main readback. Failed #304 and #308 remain immutable historical FAIL evidence and grant no merge authority.
 
 ## P04.07 accepted chain
 
@@ -133,6 +137,6 @@ Required security outcome:
 
 ## Next action
 
-Accept Issue #309 through exact-head Governance and protected promotion.
+No package auto-advances from this terminal checkpoint.
 
-After protected acceptance, rebuild T06 from fresh main in one atomic carrier containing the five authorized validator surfaces plus P04.07 closure state/evidence. P04.08 remains PLANNED/LOCKED and no package may auto-advance.
+A future P04.08 preparation/activation requires a fresh separately governed transaction from current protected main. Until then, P04.08-P04.10 remain PLANNED/LOCKED, kernel implementation authority is false, migration 4 remains unreserved, and provider/business/AI runtime scope remains unauthorized.
