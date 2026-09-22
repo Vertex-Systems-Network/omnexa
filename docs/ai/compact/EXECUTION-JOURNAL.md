@@ -146,3 +146,14 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - TARGET: P04.01-P04.07 DONE, no current/active package, P04.08-P04.10 PLANNED/LOCKED, kernel/business authority false.
 - NON-SCOPE: no product runtime source, migration 4, provider/remote schema, workflow, P04.08 activation, business feature, AI/model/agent product runtime, or P04.07 verifier weakening.
 - NEXT: open exact-head R3 source PR, bind Runner Benchmark, observe canonical Governance once, then review/promote only if terminal PASS.
+
+
+### R3 Governance #821 repair
+
+- SOURCE PR: #312 exact head `690a8ee526ec32c1a81e817d4056595c07bd8d62`.
+- GOVERNANCE: run `35786197930` / #821, job `106943491372` — FAIL.
+- PROGRESS: steps 8-18 all PASS, including canonical state, freeze review, P03 preparation/specs and P04 terminal activation.
+- FAILED STEP: `Verify repository Go code quality`.
+- DIAGNOSTIC: `merge_strategy.deterministic_order` retained `P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT` while Supervisor task/merge order is `P04.07-T06-CLOSURE-R3`.
+- REPAIR: both deterministic-order authorities now identify only `P04.07-T06-CLOSURE-R3`.
+- SECURITY: no validator semantics, STATE, runtime, workflow, verifier, migration/provider, P04.08 or business/AI scope changed by this repair.
