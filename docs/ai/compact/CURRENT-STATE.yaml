@@ -20,7 +20,7 @@ active_branch: "supervisor/20260923-p04-07-t06-closure-r3"
 current_milestone:
   id: "SUP-20260923-P0407-T06-CLOSURE-R3-01"
   name: "Fresh-main atomic P04.07 five-validator terminal-checkpoint closure state"
-milestone_status: "CLOSURE_R3_VERIFYING"
+milestone_status: "CLOSURE_R3_REPAIR_VERIFYING"
 last_completed_milestone:
   name: "Accept Issue #309 downstream-validator scope amendment"
   evidence: "source #310 Governance #818 PASS; promotion #311 Governance #819 PASS; protected main 0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
@@ -59,7 +59,7 @@ validator_surfaces:
   - "scripts/validate_p03_package_specs.py"
 exact_next_safe_action: "Open exact-head R3 T06 PR, bind Runner Benchmark, observe Governance once, and stop if CI is nonterminal."
 pending_runner_ids:
-  - "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE"
+  - "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE-R2"
 security_scope:
   product_runtime_source_mutation: false
   validator_change: "ADR-0013 terminal checkpoint only"
@@ -84,3 +84,14 @@ failed_t06_r2:
   job: 106576147839
   canonical_state_step: "PASS"
   downstream_freeze_review_step: "FAIL"
+
+latest_failed_source_run:
+  pr: 312
+  head: "690a8ee526ec32c1a81e817d4056595c07bd8d62"
+  governance_run: 35786197930
+  run_number: 821
+  job: 106943491372
+  passed_through_step: 18
+  failed_step: "Verify repository Go code quality"
+  diagnostic: "merge_strategy.deterministic_order retained the prior amendment task"
+  repair: "align both deterministic_order authorities to P04.07-T06-CLOSURE-R3"
