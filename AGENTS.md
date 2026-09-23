@@ -356,3 +356,10 @@ After Issue #285 merges, re-read protected main before any further P04.07 planni
 ## Issue #4
 
 Issue `#4` remains the external distribution/public-launch licensing/IP/trademark gate. Repository visibility is public and the current `LICENSE` remains GPLv3 until a governed licensing decision changes it.
+
+
+## VSN organization next-action handoff
+
+Before every user-facing development handoff, read and follow `.ai/NEXT-ACTION-OPTIONS.md`.
+
+If the user sends only this repository's GitHub URL, perform the policy's read-only bootstrap and return shuffled numbered next-action options. A URL-only message never authorizes a repository mutation. A later numeric selection must revalidate live repository state before acting.
