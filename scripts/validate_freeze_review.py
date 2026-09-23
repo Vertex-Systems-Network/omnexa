@@ -155,12 +155,31 @@ if current_phase == "P04":
     if phase.get("id") != "P04" or phase.get("state") != "active" or p04.get("state") != "active":
         raise SystemExit("ERROR: P04 current phase/state mismatch")
     current = state.get("current_work_package")
-    if not isinstance(current, str) or not current.startswith("P04."):
-        raise SystemExit("ERROR: active P04 must identify one current P04 package")
-    if p04.get("active_work_package") != current:
-        raise SystemExit("ERROR: phases[] P04 active package mismatch")
-    if lock.get("kernel_code_authorized") is not True:
-        raise SystemExit("ERROR: active P04 must explicitly authorize bounded kernel implementation")
+    if isinstance(current, str) and current.startswith("P04."):
+        if p04.get("active_work_package") != current:
+            raise SystemExit("ERROR: phases[] P04 active package mismatch")
+        if lock.get("kernel_code_authorized") is not True:
+            raise SystemExit("ERROR: active P04 must explicitly authorize bounded kernel implementation")
+    elif current is None:
+        if p04.get("active_work_package") is not None:
+            raise SystemExit("ERROR: P04 terminal checkpoint must expose no active_work_package")
+        phase_packages = phase.get("work_packages") or []
+        states = [item.get("state") for item in phase_packages]
+        done_count = 0
+        while done_count < len(states) and states[done_count] == "done":
+            done_count += 1
+        if done_count == 0 or done_count >= len(states):
+            raise SystemExit("ERROR: P04 terminal checkpoint requires a non-empty strict completed prefix")
+        if any(item != "planned" for item in states[done_count:]):
+            raise SystemExit("ERROR: P04 terminal checkpoint requires all future packages to remain planned")
+        if any(item == "active" for item in states):
+            raise SystemExit("ERROR: P04 terminal checkpoint must have no active package")
+        if phase.get("done_work_packages") != done_count:
+            raise SystemExit("ERROR: P04 terminal checkpoint done count mismatch")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            raise SystemExit("ERROR: P04 terminal checkpoint must lock kernel and business implementation")
+    else:
+        raise SystemExit("ERROR: active P04 current_work_package must be a P04 package or the accepted terminal checkpoint")
 
 print("Omnexa foundation freeze / completed P01 prerequisite validation: PASS")
 print("Architecture: FROZEN")

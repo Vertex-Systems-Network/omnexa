@@ -56,7 +56,8 @@ planning = current_phase == "P02" and current is None and phase.get("id") == "P0
 active = current_phase == "P03" and phase.get("id") == "P03" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P03.")
 terminal = current_phase == "P03" and current is None and phase.get("id") == "P03" and phase.get("state") == "done"
 historical = current_phase == "P04" and phase.get("id") == "P04" and phase.get("state") == "active" and isinstance(current, str) and current.startswith("P04.")
-if not (planning or active or terminal or historical):
+historical_terminal = current_phase == "P04" and phase.get("id") == "P04" and phase.get("state") == "active" and current is None
+if not (planning or active or terminal or historical or historical_terminal):
     raise SystemExit("ERROR: invalid P03 readiness/activation/completion/historical checkpoint")
 
 entry = (ROOT / "docs/governance/P03_ENTRY_GATE.md").read_text(encoding="utf-8")
@@ -143,12 +144,26 @@ else:
             raise SystemExit("ERROR: P04 must remain planned until a separate governed activation")
         if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
             raise SystemExit("ERROR: completed P03 terminal checkpoint must lock kernel and business implementation")
-    else:
+    elif historical:
         p04_row = phase_rows.get("P04") or {}
         if p04_row.get("state") != "active" or p04_row.get("active_work_package") != current:
             raise SystemExit("ERROR: P04 historical checkpoint must identify the current P04 package")
         if lock.get("kernel_code_authorized") is not True or lock.get("business_feature_code_authorized") is not False:
             raise SystemExit("ERROR: active P04 must keep business code locked while P03 remains historical")
+    else:
+        p04_row = phase_rows.get("P04") or {}
+        if p04_row.get("state") != "active" or p04_row.get("active_work_package") is not None:
+            raise SystemExit("ERROR: P04 terminal historical checkpoint must keep P04 active with no active package")
+        states = [item.get("state") for item in phase.get("work_packages") or []]
+        done_count = 0
+        while done_count < len(states) and states[done_count] == "done":
+            done_count += 1
+        if done_count == 0 or done_count >= len(states):
+            raise SystemExit("ERROR: P04 terminal historical checkpoint requires a non-empty strict completed prefix")
+        if any(item != "planned" for item in states[done_count:]) or any(item == "active" for item in states):
+            raise SystemExit("ERROR: P04 terminal historical checkpoint requires no active package and planned future packages")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            raise SystemExit("ERROR: P04 terminal historical checkpoint must lock kernel and business implementation")
 
     prep = state.get("p03_preparation") or {}
     expected_prep = {
@@ -167,7 +182,7 @@ else:
     }
     for key, expected in expected_prep.items():
         if prep.get(key) != expected:
-            label = "historical" if historical else "terminal"
+            label = "historical" if historical else "historical terminal" if historical_terminal else "terminal"
             raise SystemExit(f"ERROR: {label} p03_preparation.{key} must be {expected}")
     if prep.get("blocking_gate") is not None:
         raise SystemExit("ERROR: completed P03 must have no unresolved P03 blocker")
@@ -195,13 +210,15 @@ mode = (
     if active
     else "COMPLETED / HISTORICAL — P04 ACTIVE"
     if historical
+    else "COMPLETED / HISTORICAL — P04 TERMINAL CHECKPOINT"
+    if historical_terminal
     else "COMPLETED / NOT ADVANCED"
 )
 kernel_mode = (
     f"AUTHORIZED FOR {current}"
     if active
     else "P03 LOCKED / HISTORICAL"
-    if historical
+    if historical or historical_terminal
     else "LOCKED"
 )
 print("Omnexa P03 preparation/readiness validation: PASS")

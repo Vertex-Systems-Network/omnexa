@@ -2,17 +2,16 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-09-10",
+  "last_reconciled": "2026-09-22",
   "program": "kernel",
   "current_phase": "P04",
-  "current_work_package": "P04.07",
+  "current_work_package": null,
   "implementation_lock": {
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": true,
+    "kernel_code_authorized": false,
     "allowed_work": [
-      "P04.07 event schema registry, compatibility and validation implementation only after this P04.06-closure/P04.07-activation transaction passes exact-head Governance, is promoted unchanged, merges, protected main is re-read, and a separate post-activation continuity/worker plan is accepted",
-      "P04.07 provider-neutral payload-schema identity, immutable registry history, deterministic compatibility and bounded local-only validation only within the accepted P04.07 contract after the post-activation continuity/worker-plan gate",
-      "governance and continuity updates required for P04.07"
+      "governance, evidence and continuity maintenance only while P04 is at an implementation-locked intra-phase terminal checkpoint",
+      "a separately governed future P04.08 preparation/activation transaction only after fresh protected-main reconciliation; this state grants no P04.08 implementation authority"
     ]
   },
   "governance_tracking": {
@@ -503,10 +502,10 @@
       "readiness_merge": "384c82b6d5b8bd89b70eb94640ea3be7109bc537",
       "planning_merge": "73561ad68e453c2741dec82d0b6fb01a7dcea1be",
       "validator_prerequisite_merge": "f97ee9a509f14247771626dc89b685e22ecd9457",
-      "current_work_package": "P04.07",
-      "kernel_code_authorized": true,
+      "current_work_package": null,
+      "kernel_code_authorized": false,
       "business_feature_code_authorized": false,
-      "note": "Historical P04 entry remains satisfied. P04.01-P04.06 have accepted completion evidence; this separate Issue #264 transaction makes P04.07 the sole active package only after exact-head Governance, unchanged promotion, protected merge and read-back. P04.07 runtime still requires a separate post-activation continuity/worker-plan acceptance."
+      "note": "Historical P04 entry remains SATISFIED. P04.01-P04.07 now form the accepted completed prefix at an implementation-locked intra-phase terminal checkpoint. P04.08 remains planned/locked and requires a separate future preparation/activation transaction."
     },
     "p04_01_completion": {
       "state": "PASS",
@@ -675,6 +674,43 @@
       "preparation_promotion_workflow_run": 34408137084,
       "preparation_merge": "23f3dca090338b5debbf1af02b6db49b2f03f30b",
       "note": "P04.06 implementation/verifier evidence is accepted through T07 and the Wave 2D ledger is fully released. P04.07 preparation is separately accepted on protected main. Issue #264 must still pass its own exact-head source Governance, unchanged promotion Governance and protected merge/read-back before P04.07 authority becomes canonical."
+    },
+    "p04_07_completion": {
+      "state": "PASS",
+      "completion_evidence": "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+      "source_carrier_pr": 280,
+      "implementation_pr": 281,
+      "final_exact_head": "52b3e5c9449f6f31c47cae9234347fbd0b6b8770",
+      "implementation_merge": "5c5153ee15c70646d28926743e2d19ab941013d2",
+      "workflow_run": 35655774421,
+      "job": 106519447117,
+      "evidence_environment": "github-hosted",
+      "runner_image": "ubuntu-24.04",
+      "go": "1.26.7",
+      "first_slice_source_governance_run": 34540920140,
+      "first_slice_promotion_governance_run": 34541808091,
+      "readiness_trigger_head": "2129e0834dc5436a6c65759a0ca3643b01a38ada",
+      "readiness_workflow_run": 35655774421,
+      "readiness_job": 106519447117,
+      "readiness_gates": "G0-G11 PASS",
+      "readiness_evidence_source_pr": 299,
+      "readiness_evidence_promotion_pr": 300,
+      "readiness_evidence_main": "3f34301f0cd37aa43392c26e906a0a719b6db2a0",
+      "validator_gap_issue": 301,
+      "validator_gap_source_pr": 302,
+      "validator_gap_promotion_pr": 303,
+      "validator_gap_main": "b4d3a832e8a4d0480fba4c49186fd32811307749",
+      "note": "P04.07 completion combines the accepted T01-T04 implementation/verifier chain, fresh T05 G0-G11 readiness PASS and accepted ADR-0013 terminal-checkpoint governance. No second runtime slice, migration 4, provider registry, remote reference, P04.08 activation, business feature or AI product-runtime authority is implied.",
+      "scope_amendment_issue": 305,
+      "scope_amendment_source_pr": 306,
+      "scope_amendment_source_governance_run": 35670794058,
+      "scope_amendment_promotion_pr": 307,
+      "scope_amendment_promotion_governance_run": 35671643286,
+      "scope_amendment_main": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+      "failed_t06_source_pr": 304,
+      "failed_t06_head": "94425685ec3010b967a8839341b20ff766972522",
+      "failed_t06_governance_run": 35661784066,
+      "failed_t06_job": 106538470575
     }
   },
   "p01_preparation": {
@@ -732,12 +768,12 @@
     "note": "P03 remains complete at 11 / 11 with P03 exit SATISFIED and no active P03 package; it is a historical prerequisite for active P04."
   },
   "p04_preparation": {
-    "state": "activated",
+    "state": "checkpoint",
     "phase_state": "active",
-    "next_work_package": "P04.07",
-    "work_package_name": "Event schema registry, compatibility & validation",
-    "work_package_state": "active",
-    "work_package_spec": "docs/roadmap/work-packages/P04.07.md",
+    "next_work_package": "P04.08",
+    "work_package_name": "Background-job ownership, tenant context & correlation",
+    "work_package_state": "planned",
+    "work_package_spec": null,
     "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
     "prepared_spec_count": 7,
     "mandatory_spec_count": 10,
@@ -746,7 +782,7 @@
     "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
     "validator": "scripts/validate_p04_activation.py",
     "blocking_gate": null,
-    "note": "Issue #264 closure/activation candidate: P04.01-P04.06 are done with accepted evidence and P04.07 becomes the sole active kernel package only after this transaction passes exact-head Governance, is promoted unchanged, merges and protected main is re-read. P04.07 runtime workers/tasks/migration reservations remain zero until a separate post-activation continuity/worker plan is accepted. P04.08-P04.10 and business-feature/AI runtime remain locked."
+    "note": "ADR-0013 terminal checkpoint after P04.07 closure. P04.08 is only the next planned package; it has no accepted implementation spec, no active cursor and no kernel implementation authority."
   },
   "state_vocabulary": [
     "planned",
@@ -762,7 +798,7 @@
     "name": "Data, Jobs & Event Fabric",
     "state": "active",
     "mandatory_work_packages": 10,
-    "done_work_packages": 6,
+    "done_work_packages": 7,
     "work_packages": [
       {
         "id": "P04.01",
@@ -841,12 +877,15 @@
       {
         "id": "P04.07",
         "name": "Event schema registry, compatibility & validation",
-        "state": "active",
+        "state": "done",
         "depends_on": [
           "P04.01",
           "P04.06"
         ],
-        "spec": "docs/roadmap/work-packages/P04.07.md"
+        "spec": "docs/roadmap/work-packages/P04.07.md",
+        "evidence": [
+          "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md"
+        ]
       },
       {
         "id": "P04.08",
@@ -916,7 +955,7 @@
       "id": "P04",
       "name": "Data, Jobs & Event Fabric",
       "state": "active",
-      "active_work_package": "P04.07",
+      "active_work_package": null,
       "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "entry_gate": "docs/governance/P04_ENTRY_GATE.md"
     },
@@ -1036,5 +1075,5 @@
       "state": "planned"
     }
   ],
-  "next_transition_rule": "P04.01-P04.06 are complete with accepted evidence and P04.07 becomes the sole authorized kernel package only after this exact Issue #264 closure/activation source passes exact-final-head Governance, is promoted unchanged through fresh Governance, merges and protected main is re-read. P04.07 runtime still requires a separate post-activation continuity/worker-plan acceptance. P04.08-P04.10 remain planned/locked and no package may auto-advance."
+  "next_transition_rule": "P04.01-P04.07 are complete with accepted evidence. P04 remains active at the implementation-locked ADR-0013 terminal checkpoint with no current work package. P04.08-P04.10 remain planned/locked; a separate fresh P04.08 preparation/activation transaction is required and no package may auto-advance."
 }

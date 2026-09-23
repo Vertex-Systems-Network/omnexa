@@ -345,6 +345,14 @@ def validate_state(state: dict) -> None:
     current_package = state.get("current_work_package")
     lock = state.get("implementation_lock") or {}
 
+    intra_phase_terminal = (
+        not terminal
+        and current_phase == "P04"
+        and current_package is None
+        and not active_packages
+        and 0 < done_count < len(work_packages)
+    )
+
     if terminal:
         if current_phase not in {"P01", "P02", "P03"} or done_count != len(work_packages):
             fail("terminal checkpoint is valid only for a fully completed governed phase")
@@ -352,6 +360,16 @@ def validate_state(state: dict) -> None:
             fail("completed phase must have no active/current work package")
         if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
             fail("completed phase must lock kernel and business-feature implementation")
+    elif intra_phase_terminal:
+        prefix_done = 0
+        while prefix_done < len(work_packages) and work_packages[prefix_done].get("state") == "done":
+            prefix_done += 1
+        if prefix_done != done_count:
+            fail("intra-phase terminal checkpoint requires a strict completed package prefix")
+        if any(pkg.get("state") != "planned" for pkg in work_packages[prefix_done:]):
+            fail("intra-phase terminal checkpoint requires all future work packages to remain planned")
+        if lock.get("kernel_code_authorized") is not False or lock.get("business_feature_code_authorized") is not False:
+            fail("intra-phase terminal checkpoint must lock kernel and business-feature implementation")
     else:
         if len(active_packages) != 1:
             fail("active foundation execution requires exactly one active work package")
@@ -378,6 +396,12 @@ def validate_state(state: dict) -> None:
             fail(f"phases[] {current_phase} row must be done with no active work package")
         if next_row and next_row.get("state") != "planned":
             fail(f"{next_phase_id} must remain planned until a separate governed activation")
+    elif intra_phase_terminal:
+        if len(active_phases) != 1 or active_phases[0].get("id") != current_phase:
+            fail("intra-phase terminal checkpoint requires exactly one active phase matching current_phase")
+        current_row = active_phases[0]
+        if current_row.get("active_work_package") is not None:
+            fail("intra-phase terminal checkpoint must expose no active_work_package")
     elif len(active_phases) != 1 or active_phases[0].get("id") != current_phase:
         fail("phases[] must contain exactly one active phase matching current_phase")
 
@@ -400,7 +424,7 @@ def validate_status(state: dict) -> None:
 
     if current_package is None:
         if "Current work package: **NONE**" not in status:
-            fail("STATUS.md must record Current work package: NONE at the completed checkpoint")
+            fail("STATUS.md must record Current work package: NONE at a no-active-package checkpoint")
     elif current_package not in status:
         fail(f"STATUS.md does not mention current work package {current_package}")
     if expected_progress not in status:

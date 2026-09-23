@@ -134,3 +134,26 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - FAIL CLOSED: #308 closed red; no promotion/merge/rerun/force push/gate weakening.
 - CONSOLIDATED SCOPE DELTA: Issue #309 governs all three downstream validator surfaces in one amendment.
 - PLAN HEAD: no validator/state/runtime mutation authorized.
+
+
+## 2026-09-23 — SUP-20260923-P0407-T06-CLOSURE-R3-01
+
+- RESUME: downstream-validator amendment accepted through source #310 / Governance #818 and unchanged promotion #311 / Governance #819; protected-main readback `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`.
+- CLOSEOUT: Issue #309 closed completed; source #310 closed as accepted-via-promotion. Parent Issue #289 remains the P04.07 closure coordination gate.
+- FRESH BASE: branch `supervisor/20260923-p04-07-t06-closure-r3` created from exact protected main `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`; failed #308 head was not reused.
+- TRANSPLANT: retained R2-proven `validate_governance.py`, `validate_p04_activation.py`, P04.07 closure state, package sequence and completion evidence.
+- DOWNSTREAM RECONCILIATION: `validate_freeze_review.py`, `validate_p03_preparation.py` and `validate_p03_package_specs.py` now accept only the same strict P04-only terminal checkpoint while preserving ordinary active-package semantics.
+- TARGET: P04.01-P04.07 DONE, no current/active package, P04.08-P04.10 PLANNED/LOCKED, kernel/business authority false.
+- NON-SCOPE: no product runtime source, migration 4, provider/remote schema, workflow, P04.08 activation, business feature, AI/model/agent product runtime, or P04.07 verifier weakening.
+- NEXT: open exact-head R3 source PR, bind Runner Benchmark, observe canonical Governance once, then review/promote only if terminal PASS.
+
+
+### R3 Governance #821 repair
+
+- SOURCE PR: #312 exact head `690a8ee526ec32c1a81e817d4056595c07bd8d62`.
+- GOVERNANCE: run `35786197930` / #821, job `106943491372` — FAIL.
+- PROGRESS: steps 8-18 all PASS, including canonical state, freeze review, P03 preparation/specs and P04 terminal activation.
+- FAILED STEP: `Verify repository Go code quality`.
+- DIAGNOSTIC: `merge_strategy.deterministic_order` retained `P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT` while Supervisor task/merge order is `P04.07-T06-CLOSURE-R3`.
+- REPAIR: both deterministic-order authorities now identify only `P04.07-T06-CLOSURE-R3`.
+- SECURITY: no validator semantics, STATE, runtime, workflow, verifier, migration/provider, P04.08 or business/AI scope changed by this repair.

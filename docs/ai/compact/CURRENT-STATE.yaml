@@ -1,18 +1,14 @@
 schema_version: 1
-snapshot_time: "2026-09-22T23:28:00+05:00"
+snapshot_time: "2026-09-22T05:40:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
-observed_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+compact_state_path: "docs/ai/compact"
+observed_parent_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
 default_branch: "main"
-active_issue: 309
-parent_coordination_issue: 289
+active_issue: 289
 open_issue_gates:
-  - number: 309
-    scope: "P04.07 T06 consolidated downstream-validator terminal-checkpoint amendment"
-    blocks_current_internal_governance_milestone: true
-    blocks_external_release: false
   - number: 289
-    scope: "P04.07 completion assessment and closure governance"
+    scope: "P04.07 fresh-main R3 five-validator closure governance"
     blocks_current_internal_governance_milestone: true
     blocks_external_release: false
   - number: 4
@@ -20,50 +16,82 @@ open_issue_gates:
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
 active_pr: null
-active_branch: "supervisor/20260922-p04-07-t06-downstream-validator-amendment"
+active_branch: "supervisor/20260923-p04-07-t06-closure-r3"
 current_milestone:
-  id: "SUP-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT-01"
-  name: "Authorize all remaining downstream terminal-checkpoint validator surfaces"
-milestone_status: "IMPLEMENTING_SCOPE_AMENDMENT_PLAN"
-failed_t06_attempts:
-  - pr: 304
-    governance_run: 35661784066
-    status: "FAIL"
-  - pr: 308
-    exact_head: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
-    governance_run: 35673877543
-    job_id: 106576147839
-    canonical_state_step: "PASS"
-    failed_step: "Validate foundation freeze review"
-    status: "FAIL"
-canonical_cursor:
+  id: "SUP-20260923-P0407-T06-CLOSURE-R3-01"
+  name: "Fresh-main atomic P04.07 five-validator terminal-checkpoint closure state"
+milestone_status: "CLOSURE_R3_REPAIR_VERIFYING"
+last_completed_milestone:
+  name: "Accept Issue #309 downstream-validator scope amendment"
+  evidence: "source #310 Governance #818 PASS; promotion #311 Governance #819 PASS; protected main 0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+failed_t06_attempt:
+  pr: 304
+  exact_head: "94425685ec3010b967a8839341b20ff766972522"
+  governance_run: 35661784066
+  job_id: 106538470575
+  status: "FAIL"
+canonical_target_cursor:
   phase: "P04"
-  work_package: "P04.07"
-  state: "ACTIVE"
-progress:
-  current_module_done: 6
+  work_package: null
+  checkpoint: "after P04.07"
+  p04_07_state: "DONE"
+  p04_08_state: "PLANNED_LOCKED"
+target_progress:
+  current_module_done: 7
   current_module_total: 10
-  current_module_percent: 60.0
-  overall_done: 49
+  current_module_percent: 70.0
+  overall_done: 50
   overall_total: 53
-  overall_percent: 92.45
+  overall_percent: 94.34
   overall_basis: "P00-P04 only"
-downstream_scope_delta:
-  issue: 309
-  future_validator_paths:
-    - "scripts/validate_freeze_review.py"
-    - "scripts/validate_p03_preparation.py"
-    - "scripts/validate_p03_package_specs.py"
-  semantic_decision_changed: false
-  plan_code_mutation_authorized: false
-exact_next_safe_action: "Open exact-head #309 amendment plan PR, bind Runner Benchmark, observe Governance once, and stop if nonterminal."
+accepted_scope_amendment:
+  issue: 305
+  source_pr: 306
+  source_governance_run: 35670794058
+  promotion_pr: 307
+  promotion_governance_run: 35671643286
+  protected_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+validator_surfaces:
+  - "scripts/validate_governance.py"
+  - "scripts/validate_p04_activation.py"
+  - "scripts/validate_freeze_review.py"
+  - "scripts/validate_p03_preparation.py"
+  - "scripts/validate_p03_package_specs.py"
+exact_next_safe_action: "Open exact-head R3 T06 PR, bind Runner Benchmark, observe Governance once, and stop if CI is nonterminal."
 pending_runner_ids:
-  - "RB-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT"
+  - "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE-R2"
 security_scope:
-  plan_validator_mutation: false
   product_runtime_source_mutation: false
-  workflow_mutation: false
+  validator_change: "ADR-0013 terminal checkpoint only"
   verifier_mutation: false
+  workflow_mutation: false
   migration_4: false
   provider_remote_scope: false
   p04_08_activation: false
+  kernel_implementation_authorized: false
+
+accepted_downstream_amendment:
+  issue: 309
+  source_pr: 310
+  source_governance_run: 35768196297
+  promotion_pr: 311
+  promotion_governance_run: 35784103063
+  protected_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+failed_t06_r2:
+  pr: 308
+  exact_head: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
+  governance_run: 35673877543
+  job: 106576147839
+  canonical_state_step: "PASS"
+  downstream_freeze_review_step: "FAIL"
+
+latest_failed_source_run:
+  pr: 312
+  head: "690a8ee526ec32c1a81e817d4056595c07bd8d62"
+  governance_run: 35786197930
+  run_number: 821
+  job: 106943491372
+  passed_through_step: 18
+  failed_step: "Verify repository Go code quality"
+  diagnostic: "merge_strategy.deterministic_order retained the prior amendment task"
+  repair: "align both deterministic_order authorities to P04.07-T06-CLOSURE-R3"

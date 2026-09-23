@@ -821,6 +821,133 @@
         "diagnostic": "active P04 must identify one current P04 package",
         "promotion_allowed": false
       }
+    },
+    {
+      "stable_task_id": "RB-20260922-P0407-T06-DOWNSTREAM-VALIDATOR-AMENDMENT",
+      "source_issue_or_pr_or_work_package": {
+        "parent_issue": 289,
+        "scope_delta_issue": 309,
+        "pr": 310,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260922-p04-07-t06-downstream-validator-amendment",
+        "head_sha": "938a9735579f9f2ed2ff4a963a1bf1162e6be11f",
+        "parent_protected_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35768196297,
+        "workflow_run_number": 818,
+        "job_id": 106882961100,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Scope-amendment plan only; no validator/runtime/state/workflow/P04.08 mutation on this exact head.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr310|938a9735579f9f2ed2ff4a963a1bf1162e6be11f|governance|p04.07-t06-downstream-validator-amendment",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35768196297,
+        "workflow_run_number": 818,
+        "job_id": 106882961100,
+        "conclusion": "success",
+        "exact_head_sha": "938a9735579f9f2ed2ff4a963a1bf1162e6be11f",
+        "accepted_via_promotion_pr": 311,
+        "protected_main_readback_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260923-PR311-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "parent_issue": 289,
+        "scope_delta_issue": 309,
+        "source_pr": 310,
+        "promotion_pr": 311,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT promotion"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20260923-p04-07-t06-downstream-validator-amendment",
+        "head_sha": "938a9735579f9f2ed2ff4a963a1bf1162e6be11f",
+        "unchanged_from_source_pr": 310
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35784103063,
+        "workflow_run_number": 819,
+        "job_id": 106936550080,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Accepted promotion of Issue #309 downstream-validator scope amendment; no implementation mutation on the promoted head.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr311|938a9735579f9f2ed2ff4a963a1bf1162e6be11f|governance|p04.07-t06-downstream-validator-amendment|promotion",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35784103063,
+        "workflow_run_number": 819,
+        "job_id": 106936550080,
+        "conclusion": "success",
+        "exact_head_sha": "938a9735579f9f2ed2ff4a963a1bf1162e6be11f",
+        "source_pr": 310,
+        "promotion_pr": 311,
+        "merged_pr": 311,
+        "protected_main_readback_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+      }
+    },
+    {
+      "stable_task_id": "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE",
+      "source_issue_or_pr_or_work_package": {
+        "issue": 289,
+        "pr": 312,
+        "work_package": "P04.07",
+        "task": "P04.07-T06-CLOSURE-R3"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "supervisor/20260923-p04-07-t06-closure-r3",
+        "head_sha": "690a8ee526ec32c1a81e817d4056595c07bd8d62",
+        "parent_protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 35786197930,
+        "workflow_run_number": 821,
+        "job_id": 106943491372,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Fresh-main R3 five-validator closure carrier; no product runtime/P04.08/workflow/verifier expansion.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "omnexa|pr312|690a8ee526ec32c1a81e817d4056595c07bd8d62|governance|p04.07-t06-closure-r3",
+      "status": "FAIL",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 35786197930,
+        "workflow_run_number": 821,
+        "job_id": 106943491372,
+        "conclusion": "failure",
+        "exact_head_sha": "690a8ee526ec32c1a81e817d4056595c07bd8d62",
+        "passed_through_step": 18,
+        "failed_step": "Verify repository Go code quality",
+        "diagnostic": "deterministic_order does not match task merge_order: expected ['P04.07-T06-CLOSURE-R3'], got ['P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT']",
+        "promotion_allowed": false
+      }
     }
   ]
 }

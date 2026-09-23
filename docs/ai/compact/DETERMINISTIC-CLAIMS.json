@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_main_sha": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
+  "observed_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
   "authority": "continuity claim index only",
   "canonical_sources": [
     "AGENTS.md",
@@ -16,8 +16,9 @@
     },
     {
       "id": "cursor.work_package",
-      "value": "P04.07",
-      "source": "docs/roadmap/STATE.json"
+      "value": null,
+      "source": "docs/roadmap/STATE.json",
+      "qualification": "R3 terminal-checkpoint target; canonical only after protected acceptance."
     },
     {
       "id": "cursor.owner_module",
@@ -27,11 +28,12 @@
     {
       "id": "p04.progress",
       "value": {
-        "done": 6,
+        "done": 7,
         "total": 10,
-        "percent": 60
+        "percent": 70
       },
-      "source": "docs/roadmap/STATUS.md"
+      "source": "docs/roadmap/STATE.json + STATUS.md",
+      "qualification": "R3 target; canonical only after protected acceptance."
     },
     {
       "id": "wave1.live_write_leases",
@@ -71,12 +73,13 @@
     {
       "id": "overall.enumerated_progress",
       "value": {
-        "done": 49,
+        "done": 50,
         "total": 53,
-        "percent": 92.45,
+        "percent": 94.34,
         "coverage": "P00-P04 only"
       },
-      "source": "docs/roadmap/STATUS.md + canonical package counts"
+      "source": "canonical package counts",
+      "qualification": "R3 target; canonical only after protected acceptance."
     },
     {
       "id": "overall.full_p00_p27_percent",
@@ -201,7 +204,7 @@
         "governance_run": 35673877543,
         "governance_run_number": 817,
         "job_id": 106576147839,
-        "canonical_state_step": "PASS",
+        "passed_step": "Validate canonical governance state",
         "failed_step": "Validate foundation freeze review",
         "diagnostic": "active P04 must identify one current P04 package"
       },
@@ -222,6 +225,46 @@
       },
       "qualification": "No validator or closure-state mutation until this amendment is accepted.",
       "source": "Issue #309 + ADR-0013 amendment carrier"
+    },
+    {
+      "id": "p04_07.t06_downstream_validator_amendment",
+      "value": {
+        "status": "ACCEPTED",
+        "issue": 309,
+        "source_pr": 310,
+        "source_governance_run": 35768196297,
+        "promotion_pr": 311,
+        "promotion_governance_run": 35784103063,
+        "protected_main_readback_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+        "validator_paths": [
+          "scripts/validate_freeze_review.py",
+          "scripts/validate_p03_preparation.py",
+          "scripts/validate_p03_package_specs.py"
+        ]
+      },
+      "source": "Issue #309 / PR #310 / PR #311 / protected-main readback"
+    },
+    {
+      "id": "p04_07.closure_state",
+      "value": {
+        "status": "R3_VERIFYING",
+        "evidence": "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
+        "current_work_package": null,
+        "p04_07": "DONE",
+        "p04_08": "PLANNED_LOCKED",
+        "kernel_code_authorized": false,
+        "source_branch": "supervisor/20260923-p04-07-t06-closure-r3",
+        "parent_protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+        "validators": [
+          "scripts/validate_governance.py",
+          "scripts/validate_p04_activation.py",
+          "scripts/validate_freeze_review.py",
+          "scripts/validate_p03_preparation.py",
+          "scripts/validate_p03_package_specs.py"
+        ]
+      },
+      "source": "fresh-main R3 T06 closure carrier",
+      "qualification": "Becomes canonical only after exact-head Governance, unchanged promotion, guarded merge and protected-main readback."
     }
   ]
 }
