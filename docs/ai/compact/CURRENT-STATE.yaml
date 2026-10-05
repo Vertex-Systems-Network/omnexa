@@ -1,26 +1,26 @@
 schema_version: 1
-snapshot_time: "2026-09-22T05:40:00+05:00"
+snapshot_time: "2026-10-05T12:00:00+05:00"
 repository: "Vertex-Systems-Network/omnexa"
 authority: "resume-index-only; repository/runtime evidence always wins"
 compact_state_path: "docs/ai/compact"
-observed_parent_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+observed_parent_main_sha: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
+observed_main_evidence: "live origin/main == local HEAD cc24a9f; STATE.json records P04 7/10, current_work_package null, implementation lock false; open Issues at read-back: #4 only; open PRs: 0; exact R3 merge receipt not re-verified in this milestone"
 default_branch: "main"
-active_issue: 289
+active_issue: null
 open_issue_gates:
-  - number: 289
-    scope: "P04.07 fresh-main R3 five-validator closure governance"
-    blocks_current_internal_governance_milestone: true
-    blocks_external_release: false
   - number: 4
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
+  - note: "Issue #289 is not open at the 2026-10-05 read-back; it grants no live lease"
 active_pr: null
-active_branch: "supervisor/20260923-p04-07-t06-closure-r3"
+active_branch: "governance/p04.08-preparation-20261005"
+active_branch_base: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
+active_branch_state: "local only; not committed, not pushed, no PR, no CI bound"
 current_milestone:
-  id: "SUP-20260923-P0407-T06-CLOSURE-R3-01"
-  name: "Fresh-main atomic P04.07 five-validator terminal-checkpoint closure state"
-milestone_status: "CLOSURE_R3_REPAIR_VERIFYING"
+  id: "PREP-20261005-P0408-CONTRACT-01"
+  name: "P04.08 preparation carrier: contract + handoff + README mirror row"
+milestone_status: "PREPARATION_AUTHORED_LOCAL_VERIFIERS_PASS"
 last_completed_milestone:
   name: "Accept Issue #309 downstream-validator scope amendment"
   evidence: "source #310 Governance #818 PASS; promotion #311 Governance #819 PASS; protected main 0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
@@ -57,9 +57,9 @@ validator_surfaces:
   - "scripts/validate_freeze_review.py"
   - "scripts/validate_p03_preparation.py"
   - "scripts/validate_p03_package_specs.py"
-exact_next_safe_action: "Open exact-head R3 T06 PR, bind Runner Benchmark, observe Governance once, and stop if CI is nonterminal."
-pending_runner_ids:
-  - "RB-20260923-P0407-T06-CLOSURE-R3-GOVERNANCE-R2"
+exact_next_safe_action: "Only on explicit user request: commit the three preparation files on the isolated branch, open an exact-head source PR and observe Governance once. Until then no delivery command runs. A separate governed activation transaction is required before any P04.08 state or authority change."
+pending_runner_ids: []
+pending_runner_note: "No runner is bound for this milestone; historical R3 runner receipts stay in RUNNER-BENCHMARK.json and are not reusable."
 security_scope:
   product_runtime_source_mutation: false
   validator_change: "ADR-0013 terminal checkpoint only"
@@ -68,7 +68,15 @@ security_scope:
   migration_4: false
   provider_remote_scope: false
   p04_08_activation: false
+  p04_08_contract_preparation: true
+  canonical_state_mutation: false
   kernel_implementation_authorized: false
+
+discrepancies_found_2026_10_05:
+  - surface: "AGENTS.md current canonical state block"
+    observed: "still reads P04 6/10, current work package P04.07, kernel_code_authorized=true"
+    canonical: "STATE.json reads P04 7/10, current_work_package=null, implementation lock false"
+    handling: "fail closed to the locked reading; propose a separate continuity-only reconciliation carrier; no runtime or activation started"
 
 accepted_downstream_amendment:
   issue: 309

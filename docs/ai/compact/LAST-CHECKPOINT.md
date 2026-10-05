@@ -1,25 +1,33 @@
 # Last Checkpoint
 
 - Repository: `Vertex-Systems-Network/omnexa`
-- Parent protected main: `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`
-- Milestone: `SUP-20260923-P0407-T06-CLOSURE-R3-01`
-- Status: **CLOSURE_R3_VERIFYING**
-- Parent Issue: #289
-- Downstream amendment Issue #309: **ACCEPTED**
-- Branch: `supervisor/20260923-p04-07-t06-closure-r3`
-- Issue #305 canonical-validator amendment remains accepted through #306/#307.
-- R2 #308 / Governance #817 remains immutable FAIL evidence: canonical-state step 8 PASS, foundation-freeze step 11 FAIL.
-- Issue #309 acceptance:
-  - source #310 / Governance #818 PASS;
-  - unchanged promotion #311 / Governance #819 PASS;
-  - protected-main readback `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562`.
-- R3 atomic T06 target reconciles:
-  - `scripts/validate_governance.py`;
-  - `scripts/validate_p04_activation.py`;
-  - `scripts/validate_freeze_review.py`;
-  - `scripts/validate_p03_preparation.py`;
-  - `scripts/validate_p03_package_specs.py`.
-- Proposed closure state: P04.01-P04.07 DONE; `current_work_package=null`; no active P04 package; P04.08-P04.10 PLANNED/LOCKED; kernel/business implementation authority false.
-- Accepted T05 evidence remains run `35655774421` / job `106519447117` / G0-G11 PASS.
-- Target progress after protected acceptance: P04 7 / 10; overall canonical P00-P04 50 / 53 (94.34%).
-- This branch is not canonical until exact-head source Governance, honest review, unchanged promotion Governance, guarded merge and protected-main readback succeed.
+- Observed protected main: `cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8` (local HEAD == `origin/main`)
+- Milestone: `PREP-20261005-P0408-CONTRACT-01`
+- Status: **PREPARATION_AUTHORED_LOCAL_VERIFIERS_PASS**
+- Branch: `governance/p04.08-preparation-20261005` (local only — not committed, not pushed, no PR, no CI)
+- Open Issues at read-back: `#4` only (licensing/IP/trademark gate). Open PRs: `0`.
+
+## Canonical state observed
+
+- P04: ACTIVE — `7 / 10 done`; `current_work_package = null` (ADR-0013 intra-phase terminal checkpoint).
+- P04.01-P04.07: DONE with retained accepted evidence.
+- P04.08-P04.10: PLANNED / LOCKED; `kernel_code_authorized = false`; `business_feature_code_authorized = false`.
+- Migration 4: unreserved / unauthorized. Provider/vendor registry, queue/broker, business and AI runtime: unauthorized.
+
+## This milestone
+
+Authored the P04.08 preparation artifacts from fresh protected main:
+
+- `docs/roadmap/work-packages/P04.08.md` — bounded contract (owner `kernel.jobs`): job ownership, fail-closed tenant context, P04.01 correlation/causation propagation, idempotency, claim/lease, P04.06 retry composition, closed migration gate.
+- `docs/ai/handoffs/P04.08.md` — preparation handoff with authority warning and next governed sequence.
+- `README.md` — one clearly-labelled **unaccepted** preparation mirror row.
+
+Local verification: all 11 governance validators PASS, including `validate_p04_activation` in `TERMINAL CHECKPOINT / P04.07 DONE / P04.08 PLANNED` mode. No Go toolchain in this workspace, so Go verifiers were not run locally; only markdown changed.
+
+## Known discrepancy
+
+Repository `AGENTS.md` canonical-state block still reads `6 / 10`, `current_work_package = P04.07`, `kernel_code_authorized = true`, conflicting with `STATE.json`. Fail-closed reading applies (implementation locked). A separate continuity-only reconciliation carrier is proposed; it must not carry runtime, activation or validator changes.
+
+## Not done / not authorized
+
+No commit, push, PR, CI run, STATE/sequence mutation, migration reservation, provider selection or P04.08 activation. Preparing a contract grants no write lease and no implementation authority.

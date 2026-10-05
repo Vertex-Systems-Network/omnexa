@@ -157,3 +157,16 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - DIAGNOSTIC: `merge_strategy.deterministic_order` retained `P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT` while Supervisor task/merge order is `P04.07-T06-CLOSURE-R3`.
 - REPAIR: both deterministic-order authorities now identify only `P04.07-T06-CLOSURE-R3`.
 - SECURITY: no validator semantics, STATE, runtime, workflow, verifier, migration/provider, P04.08 or business/AI scope changed by this repair.
+
+
+## 2026-10-05 — PREP-20261005-P0408-CONTRACT-01
+
+- READ-BACK: live `origin/main == HEAD cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8`; STATE.json = P04 7/10, `current_work_package=null`, implementation lock false; open Issues `#4` only; open PRs `0`.
+- DISCREPANCY: repository `AGENTS.md` canonical-state block still reads 6/10 / P04.07 active / `kernel_code_authorized=true` and therefore conflicts with STATE.json. Fail-closed reading adopted: implementation locked. Separate continuity-only reconciliation proposed; no runtime or activation started.
+- AUTHORITY CHECK: STATE `allowed_work` explicitly permits a separately governed future P04.08 preparation/activation transaction; this milestone is preparation only and grants no P04.08 implementation authority.
+- FRESH BASE: isolated branch `governance/p04.08-preparation-20261005` created from exact protected main `cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8`.
+- SCOPE: `docs/roadmap/work-packages/P04.08.md` (bounded contract), `docs/ai/handoffs/P04.08.md` (handoff), `README.md` (one clearly-labelled unaccepted-preparation mirror row).
+- NON-SCOPE: no STATE.json/package-sequence mutation, no validator/workflow/verifier change, no runtime Go source, no migration reservation, no queue/broker/provider selection, no P04.08 activation, no business/AI product runtime, no commit/push/PR/CI.
+- VERIFY: all 11 local governance validators PASS, including `validate_p04_activation` in `TERMINAL CHECKPOINT / P04.07 DONE / P04.08 PLANNED` mode with the new contract file present (sequence `spec` stays `null`, `p04_preparation.work_package_spec` stays `null`).
+- LIMITATION: no Go toolchain in this workspace, so `verify_go_quality.sh` and package verifiers were not run locally; only markdown changed, and canonical Go evidence remains GitHub-hosted Governance CI.
+- NEXT: on explicit user request, commit the three files, open the exact-head source PR, observe Governance once, then promote unchanged; a separate activation transaction follows only after protected read-back.
