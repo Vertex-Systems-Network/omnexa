@@ -170,3 +170,27 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - VERIFY: all 11 local governance validators PASS, including `validate_p04_activation` in `TERMINAL CHECKPOINT / P04.07 DONE / P04.08 PLANNED` mode with the new contract file present (sequence `spec` stays `null`, `p04_preparation.work_package_spec` stays `null`).
 - LIMITATION: no Go toolchain in this workspace, so `verify_go_quality.sh` and package verifiers were not run locally; only markdown changed, and canonical Go evidence remains GitHub-hosted Governance CI.
 - NEXT: on explicit user request, commit the three files, open the exact-head source PR, observe Governance once, then promote unchanged; a separate activation transaction follows only after protected read-back.
+
+
+## 2026-10-05 — CONT-20261005-AGENTS-MIRROR-01
+
+- RESUME: Carrier A was saved by the Freebuff Changes panel as local commit `282a577` on `governance/p04.08-preparation-20261005` (6 files, parent/base `cc24a9f` = `origin/main`); not pushed, no PR, no CI.
+- READ-BACK: `origin/main` unchanged at `cc24a9f`; open Issues `#4` only; open PRs `0`; working tree clean before this carrier.
+- TARGET: reconcile the stale `AGENTS.md` canonical-state block with `STATE.json` (the confirmed confused-deputy risk reported in the previous milestone), continuity-only.
+- SCOPE: `AGENTS.md`, `docs/ai/AI_CONTEXT.md`, plus this compact sync. No STATE/sequence/validator/workflow/runtime/migration/evidence change; `README.md` and `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` deliberately untouched (see FOLLOW-UP).
+- CHANGE: `AGENTS.md` block now records P04 `7 / 10`, `P04.01-P04.07 DONE`, `Current work package: NONE`, `kernel_code_authorized: false`, added `queue/broker/job-system selection: NOT SELECTED / NOT AUTHORIZED` and an explicit `P04.08 contract/handoff = AUTHORED PREPARATION ONLY / NOT ACCEPTED` line; read-order items 5-6 and `Exact next action` rewritten to the terminal-checkpoint reality. `AI_CONTEXT.md` status header, canonical-truth bullets, completion sentence and start order reconciled the same way.
+- LOCKS: every implementation lock is preserved or tightened; no authority added, no gate weakened, no control text removed.
+- VERIFY: all 11 governance validators rerun after the edit.
+- NON-SCOPE: no P04.08 activation, no migration 4, no queue/broker/provider selection, no business/AI runtime, no delivery command.
+- FOLLOW-UP (conservative stale mirrors, not authority-bearing): `README.md` still labels the R3 closure as a candidate and its `Next safe action` cell; `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json.next_action` still points at the completed R3 Governance run (plan/lease file — change only through its own governed carrier); `docs/ai/AI_EXECUTION_PROTOCOL.md` keeps its SHA-scoped historical 6/10 example; `docs/ai/handoffs/P04.08.md` still says AGENTS.md is unrepaired (true at its authoring time). None of these grants authority.
+
+
+## 2026-10-05 — PREP-20261005-P0408-CONTRACT-01-DELIVERY
+
+- AUTHORIZATION: user selected next-action option 1 (deliver Carrier A as the exact-head source PR).
+- READ-BACK: `origin/main` unchanged at `cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8`; open Issues `#4` only; open PRs `0`; overlap detector `PASS`.
+- PUSH: exact commit `282a5770e7f114691e6b8cff6d44c337a281e027` (6 preparation files, parent `cc24a9f`) pushed to `governance/p04.08-preparation-20261005`; Carrier B working-tree changes were excluded from the push.
+- PR: source PR `#316` opened against `main`, title `P04.08 preparation: bounded contract + handoff + README mirror row (governance/continuity only)`; template filled with exact base/head, 6-file write budget, forbidden paths, honest SELF review provenance and merge-blocking runner binding.
+- SCOPE GUARD: no `STATE.json`/sequence/validator/workflow/runtime/migration change; no activation; no promotion or merge attempted in this milestone.
+- STATE: milestone persisted as `VERIFYING` before the exact-head CI observation; one consolidated Governance observation only, never a timeout-driven rerun.
+- NEXT: record the exact run id in a PR status comment; PASS -> honest review -> unchanged promotion -> guarded merge -> read-back; FAIL/pending -> stop and report.

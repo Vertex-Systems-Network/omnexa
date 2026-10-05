@@ -13,17 +13,19 @@ open_issue_gates:
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
   - note: "Issue #289 is not open at the 2026-10-05 read-back; it grants no live lease"
-active_pr: null
+active_pr: 316
+active_pr_head: "282a5770e7f114691e6b8cff6d44c337a281e027"
+active_pr_base: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
 active_branch: "governance/p04.08-preparation-20261005"
 active_branch_base: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
-active_branch_state: "local only; not committed, not pushed, no PR, no CI bound"
+active_branch_state: "pushed: remote tip 282a577 = PR #316 head (6 preparation files only); Carrier B continuity changes remain uncommitted in the working tree"
 current_milestone:
-  id: "PREP-20261005-P0408-CONTRACT-01"
-  name: "P04.08 preparation carrier: contract + handoff + README mirror row"
-milestone_status: "PREPARATION_AUTHORED_LOCAL_VERIFIERS_PASS"
+  id: "PREP-20261005-P0408-CONTRACT-01-DELIVERY"
+  name: "Carrier A source PR #316 — exact-head Governance observation"
+milestone_status: "VERIFYING"
 last_completed_milestone:
-  name: "Accept Issue #309 downstream-validator scope amendment"
-  evidence: "source #310 Governance #818 PASS; promotion #311 Governance #819 PASS; protected main 0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
+  name: "CONT-20261005-AGENTS-MIRROR-01 — AGENTS.md + AI_CONTEXT.md continuity reconciliation authored (locks preserved)"
+  evidence: "working tree, uncommitted/undelivered: 5 files; all 11 governance validators PASS; no residual stale live claims"
 failed_t06_attempt:
   pr: 304
   exact_head: "94425685ec3010b967a8839341b20ff766972522"
@@ -57,9 +59,20 @@ validator_surfaces:
   - "scripts/validate_freeze_review.py"
   - "scripts/validate_p03_preparation.py"
   - "scripts/validate_p03_package_specs.py"
-exact_next_safe_action: "Only on explicit user request: commit the three preparation files on the isolated branch, open an exact-head source PR and observe Governance once. Until then no delivery command runs. A separate governed activation transaction is required before any P04.08 state or authority change."
+exact_next_safe_action: "Observe exact-head Governance on PR #316 once and record the run id in a machine-readable PR status comment. PASS -> honest review -> unchanged promotion PR -> guarded merge -> protected-main read-back. Pending/FAIL -> stop, keep state VERIFYING/FAIL, never rerun on timeout. Carrier B ships later as its own scoped PR. P04.08 activation stays a separate governed transaction."
 pending_runner_ids: []
-pending_runner_note: "No runner is bound for this milestone; historical R3 runner receipts stay in RUNNER-BENCHMARK.json and are not reusable."
+pending_runner_note: "PR #316 carries a machine-readable runner binding in its body (dedup PREP-20261005-P0408-CONTRACT-01-GOVERNANCE-SOURCE, merge-blocking, GitHub-hosted ubuntu-24.04). Historical R3 runner receipts stay in RUNNER-BENCHMARK.json and are not reusable. Archive terminal evidence on the next governed source transition."
+
+verifying_run:
+  pr: 316
+  head_sha: "282a5770e7f114691e6b8cff6d44c337a281e027"
+  workflow_run_id: 37311224788
+  job_id: 111766858376
+  check: "governance"
+  observed_state: "in_progress (pending)"
+  observed_at: "2026-10-05T12:40:58Z"
+  pr_status_comment: "issuecomment-5994670936"
+  observation_policy: "single consolidated observation for this milestone; no second refresh unless a material state transition occurs"
 security_scope:
   product_runtime_source_mutation: false
   validator_change: "ADR-0013 terminal checkpoint only"
@@ -74,9 +87,10 @@ security_scope:
 
 discrepancies_found_2026_10_05:
   - surface: "AGENTS.md current canonical state block"
-    observed: "still reads P04 6/10, current work package P04.07, kernel_code_authorized=true"
+    observed: "still read P04 6/10, current work package P04.07, kernel_code_authorized=true"
     canonical: "STATE.json reads P04 7/10, current_work_package=null, implementation lock false"
     handling: "fail closed to the locked reading; propose a separate continuity-only reconciliation carrier; no runtime or activation started"
+    status: "reconciled locally by CONT-20261005-AGENTS-MIRROR-01 in the working tree; unaccepted until its own governed carrier lands"
 
 accepted_downstream_amendment:
   issue: 309

@@ -1,26 +1,27 @@
 # Omnexa AI Project Context
 
-Status: **P04.07 ACTIVE / FIRST RUNTIME SLICE ACCEPTED / NO LIVE WAVE-1 LEASES**
+Status: **P04 TERMINAL CHECKPOINT AFTER P04.07 / P04.07 DONE / NO LIVE IMPLEMENTATION LEASES**
 
 This file is a continuity aid only. It never overrides `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs, security standards or live protected-main evidence.
 
 ## Current protected-main truth
 
-Security reconciliation started from protected main:
+Live protected main must be resolved before every material mutation; the SHA below is only the historical base of the Issue #285 reconciliation:
 
-`5742046a040573bbd25fe3d5eca9ee8ce780be6d`
+`5742046a040573bbd25fe3d5eca9ee8ce780be6d` (historical)
 
-Canonical roadmap truth remains:
+Canonical roadmap truth (from `docs/roadmap/STATE.json`):
 
 - P00-P03: complete;
-- P04: ACTIVE — **6 / 10 done**;
-- P04.01-P04.06: DONE;
-- P04.07: sole ACTIVE package;
+- P04: ACTIVE — **7 / 10 done**;
+- P04.01-P04.07: DONE with retained accepted evidence (ADR-0013 implementation-locked intra-phase terminal checkpoint);
+- current work package: **NONE** — no active package, implementation locked;
 - P04.08-P04.10: PLANNED / LOCKED;
-- `kernel_code_authorized=true` only inside governed P04.07 scope;
+- `kernel_code_authorized=false` — locked until a separate governed P04.08 activation transaction;
 - `business_feature_code_authorized=false`;
 - migration 4: not reserved/authorized;
-- provider/vendor schema registry: not selected/authorized;
+- provider/vendor schema registry, queue/broker/job system: not selected/authorized;
+- P04.08 contract/handoff: authored preparation only, **not accepted**, granting no authority;
 - AI/model/agent product runtime: not authorized.
 
 `docs/roadmap/STATE.json` remains the machine-readable canonical cursor.
@@ -39,7 +40,7 @@ Accepted chain:
 - T03 validation source `#276`, promotion `#279`, merge/read-back `e39a9dab525e410dad11f7059e41a1d052b42fd1`;
 - T04 Supervisor verifier/evidence source `#280`, promotion `#281`, exact head `52b3e5c9449f6f31c47cae9234347fbd0b6b8770`, source Governance run `34540920140`, promotion Governance run `34541808091`, merge/read-back `5c5153ee15c70646d28926743e2d19ab941013d2`.
 
-The first bounded P04.07 runtime slice is therefore accepted. It does **not** complete P04.07 or activate P04.08.
+The first bounded P04.07 runtime slice, its T05 readiness proof and the ADR-0013 closure state are all accepted. P04.07 is therefore **DONE**, P04 has no active package, and P04.08 remains PLANNED/LOCKED with no activation authority.
 
 ## Current lease truth
 
@@ -53,7 +54,7 @@ Wave 1 has no live write authority:
 
 `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` now records Wave 1 as completed historical leases. Its old branches/task IDs/write paths must never be reused as current authority.
 
-A future P04.07 slice requires a **new separately governed plan from fresh protected main** before any source mutation.
+Any further P04.07 runtime change requires a **new separately governed plan from fresh protected main** before any source mutation. P04.08 additionally requires, in order: an accepted preparation carrier, then a separate activation transaction, then a fresh implementation plan.
 
 ## P04.07 retained security boundaries
 
@@ -86,7 +87,7 @@ Before any material action:
 3. read `AGENTS.md`;
 4. read `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 5. read `docs/governance/AI_EXECUTION_POLICY.md`;
-6. read `docs/roadmap/work-packages/P04.07.md` and this handoff;
+6. read `docs/roadmap/work-packages/P04.07.md` (accepted) plus `docs/roadmap/work-packages/P04.08.md` and `docs/ai/handoffs/P04.08.md` if present, treating every P04.08 artifact as **unaccepted preparation**;
 7. inspect `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` and verify whether any **new** governed live lease actually exists;
 8. stop rather than infer authority from historical branches, SHAs, issues or task records.
 
