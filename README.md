@@ -6,40 +6,38 @@ Omnexa is a governed modular platform above the scope of a conventional ERP. ERP
 
 > **Architecture state:** Foundation Architecture v1 is **FROZEN**; P00, P01, P02 and P03 are complete.
 
-> **Current R3 candidate state:** **P04 — Data, Jobs & Event Fabric is ACTIVE at 7 / 10 done. P04.01-P04.07 are DONE and P04 is at an implementation-locked intra-phase terminal checkpoint with no active work package.** This becomes canonical only after exact-head Governance, unchanged promotion, guarded merge and protected-main readback. P04.08-P04.10 remain PLANNED / LOCKED. `kernel_code_authorized=false`; `business_feature_code_authorized=false`.
+> **P04.08 activation candidate:** Fresh protected main `ec726440213209af2018fea9ff552504f9a5496f` records P04 at 7 / 10 with no active package. This carrier proposes P04.08 as the sole active package; the proposal takes effect only after exact-head Governance, unchanged promotion, protected merge and main read-back. Until then protected main remains locked. P04.09-P04.10 stay planned/locked. Business-feature, migration 4 and provider selection remain unauthorized.
 
 `docs/roadmap/STATE.json` is the canonical machine-readable execution cursor. This README is a human-readable mirror and never grants authority by itself.
 
 ## Live development progress
 
-This is the human-readable mirror of the AI-Native development flow. Canonical repository/governance evidence remains authoritative.
+This is the human-readable mirror of the AI-Native development flow. Canonical protected-main evidence remains authoritative.
 
 | Item | Current state |
 |---|---|
-| Current module | **P04 terminal checkpoint after P04.07 — no active package** |
-| P04 progress | **70% — 7 / 10 accepted packages** |
-| Overall canonical progress | **94.34% — 50 / 53 across P00-P04 only** |
-| P04.07 | **PROPOSED DONE in this R3 closure state** — accepted first slice + T05 G0-G11 readiness proof; canonical only after protected acceptance |
-| T05 readiness | **PASS / ACCEPTED** — run `35655774421` #2; source #299/#807; promotion #300/#808 |
-| ADR-0013 | **ACCEPTED** — source #302/#810; promotion #303/#811 |
-| Failed first T06 | **#304 / Governance #813 FAIL / CLOSED** — immutable diagnostic evidence |
-| Canonical-validator amendment | **ACCEPTED** — Issue #305; source #306/#814; promotion #307/#815; main `3a314e10bcc06fd5d90222087a35e12c99e7fdff` |
-| Failed rebuilt T06 R2 | **#308 / Governance #817 FAIL / CLOSED** — canonical-state step 8 PASS; freeze-review step 11 exposed downstream gap |
-| Downstream-validator amendment | **ACCEPTED** — Issue #309; source #310/#818; promotion #311/#819; main `0ea2c5a2b34c00b32aaecf00f3ae0d217704b562` |
-| Rebuilt T06 R3 | **candidate exact closure state** — all five accepted validator surfaces reconciled atomically |
-| P04.08-P04.10 | **PLANNED / LOCKED**; no activation or runtime authority |
-| Kernel implementation authority | **LOCKED** |
-| Next safe action | Run exact-head source Governance on R3; if PASS, promote unchanged, require promotion Governance, guarded merge and protected-main readback |
+| Fresh protected main | ec726440213209af2018fea9ff552504f9a5496f |
+| Canonical main state | P04 ACTIVE, 7 / 10 accepted; no active package; implementation locked |
+| Current governed milestone | P04.08 activation candidate; Supervisor-only governance/evidence lease |
+| Worker slots / worker tasks | 0 / 0 |
+| Proposed package state | P04.08 sole active candidate; P04.09-P04.10 planned/locked |
+| Activation acceptance | Pending source and promotion Governance, review-thread resolution, protected merge and main read-back |
+| P04.08 implementation | Not started; requires separate fresh-main exact-path task lease |
+| Migration 4 / provider / queue-broker choice | Not reserved or authorized |
+| Business feature / AI product runtime | Not authorized |
+| Next safe action | Complete source review and exact-head Governance for the activation carrier; promote unchanged only after all gates pass |
 
-**Progress-sync rule:** every user `continue`, `resume`, or recovery turn must check this section. Every material repository or milestone-state transition must update it in the same governed carrier when the active head is safe to mutate. If an exact source/promotion head is already being certified by CI, do not mutate that certified head merely to update README; record live status externally and flush the README update in the next material governed carrier before claiming the milestone complete. Percentages and authority must come from canonical evidence only.
+**Progress-sync rule:** every user continue, resume, or recovery turn must check this section. Percentages and authority come from canonical evidence only.
 
 ## Current P04 package status
 
-| Package | Status | Current truth |
+| Package | Protected main now | Activation candidate |
 |---|---|---|
-| P04.01-P04.07 | DONE | Accepted evidence retained; P04.07 closure proof at `docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md` |
-| P04.08-P04.10 | PLANNED / LOCKED | No accepted implementation specs or authority |
-| P04.08 preparation | **PREPARED CANDIDATE (unaccepted)** | `docs/roadmap/work-packages/P04.08.md` + `docs/ai/handoffs/P04.08.md` authored from main `cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8`; no activation, no sequence/STATE mutation, no migration reservation, no authority until its own governed source/promotion path passes |
+| P04.01-P04.07 | DONE with accepted evidence | Unchanged |
+| P04.08 | PLANNED / LOCKED | Proposed sole active package; effective only after protected acceptance/read-back |
+| P04.09-P04.10 | PLANNED / LOCKED | Remain planned; spec=null |
+
+docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md records the activation proposal and acceptance fields. The activation carrier makes no runtime change and creates no runtime lease.
 
 ## P04.07 accepted first slice
 
