@@ -50,11 +50,12 @@ security:
   migration_4_authorized: false
   provider_registry_selected: false
   remote_schema_fetch_authorized: false
-  p04_08_runtime_authorized: "requires accepted activation and a separate exact-path implementation lease"
+  p04_08_runtime_authorized: false
   business_feature_code_authorized: false
   ai_model_agent_runtime_authorized: false
   required_governance_check_may_be_weakened: false
   p04_07_verifier_may_be_changed_or_skipped: false
+  p04_08_implementation_task_lease_open: false
 
 readme_progress_sync:
   required: true
