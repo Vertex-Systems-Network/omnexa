@@ -28,21 +28,17 @@ Accepted chain:
 - T03 validation source `#276`, promotion `#279`, merge/read-back `e39a9dab525e410dad11f7059e41a1d052b42fd1`;
 - T04 Supervisor verifier/evidence source `#280`, promotion `#281`, exact head `52b3e5c9449f6f31c47cae9234347fbd0b6b8770`, source Governance run `34540920140`, promotion Governance run `34541808091`, merge/read-back `5c5153ee15c70646d28926743e2d19ab941013d2`.
 
-The first bounded P04.07 runtime slice, its T05 readiness proof and the ADR-0013 closure state are all accepted. P04.07 is therefore **DONE**, P04 has no active package, and P04.08 remains PLANNED/LOCKED with no activation authority.
+The first bounded P04.07 runtime slice, its T05 readiness proof and ADR-0013 closure state are accepted. On protected main at task start, P04.07 is DONE, P04 has no active package and P04.08 is PLANNED/LOCKED. This branch proposes a separate P04.08 activation; it is not effective before protected-main acceptance and read-back.
 
 ## Current lease truth
 
-Wave 1 has no live write authority:
-
-- live worker slots: `0`;
-- live worker tasks: `0`;
-- live worker branches: `0`;
-- live Supervisor lease: `false`;
-- migration reservations: `0`.
-
-`docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` now records Wave 1 as completed historical leases. Its old branches/task IDs/write paths must never be reused as current authority.
-
-Any further P04.07 runtime change requires a **new separately governed plan from fresh protected main** before any source mutation. P04.08 additionally requires, in order: an accepted preparation carrier, then a separate activation transaction, then a fresh implementation plan.
+- Current Supervisor lease: P04.08-ACTIVATION-20261006-01, governance/evidence only.
+- Live worker slots: 0; worker tasks: 0; worker branches: 0.
+- Runtime write paths are not leased by this activation task.
+- Historical P04.07/Wave-1 task IDs and paths are closed and non-reusable.
+- Close/release this one Supervisor lease after activation is accepted or blocked and recorded.
+- If accepted, open a separate fresh-main P04.08 implementation lease with exact paths.
+- Migration reservations: 0.
 
 ## P04.07 retained security boundaries
 
