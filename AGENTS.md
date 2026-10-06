@@ -19,28 +19,26 @@ When authoritative sources conflict, fail closed and reconcile through change co
 
 ## Current canonical state
 
+The fresh protected-main starting point for the P04.08 activation carrier is ec726440213209af2018fea9ff552504f9a5496f. On that main commit P04 is ACTIVE at 7 / 10, the current package is NONE, P04.08-P04.10 are planned/locked, and kernel/business implementation authority is false.
+
+This branch proposes a separately governed activation transaction with the following candidate state:
+
 ```text
-Foundation Architecture v1: FROZEN
-P00: DONE — 10 / 10
-P01: DONE — 12 / 12; exit SATISFIED
-P02: DONE — 10 / 10; exit SATISFIED
-P03: DONE — 11 / 11; exit SATISFIED
-P04: ACTIVE — 7 / 10 done
-P04.01-P04.07: DONE with accepted evidence (ADR-0013 implementation-locked intra-phase terminal checkpoint)
-Current work package: NONE — no active work package; implementation locked
-P04.08-P04.10: PLANNED / LOCKED
-kernel_code_authorized: false — locked until a separate governed P04.08 activation transaction
+P04: ACTIVE — 7 / 10 accepted packages
+P04.01-P04.07: DONE with retained accepted evidence
+P04.08: sole active package candidate; owner kernel.jobs
+P04.09-P04.10: PLANNED / LOCKED; spec=null
+current_work_package: P04.08 (candidate only until protected-main acceptance/read-back)
+kernel_code_authorized: true only for bounded P04.08 after acceptance and under a separate exact task/path lease
 business_feature_code_authorized: false
 migration 4: NOT RESERVED / NOT AUTHORIZED
-provider/vendor schema registry: NOT SELECTED / NOT AUTHORIZED
-queue/broker/job-system selection: NOT SELECTED / NOT AUTHORIZED
-strategic X runtime: NOT AUTHORIZED
-AI/model/agent product runtime: NOT AUTHORIZED
-P04.08 contract/handoff: may exist as AUTHORED PREPARATION only — NOT ACCEPTED, grants no authority until its own governed source/promotion/merge/read-back lands on protected main
+queue/broker/provider selection: NOT SELECTED / NOT AUTHORIZED
+strategic X and AI/model/agent product runtime: NOT AUTHORIZED
 ```
 
-P04 has **no active work package**. This is the ADR-0013 terminal checkpoint recorded by `STATE.json`; P04.07 is DONE with retained evidence. Nothing auto-activates P04.08 — activation requires a separate governed transaction from fresh protected main. Where any other mirror still describes P04.07 as active, P04 at 6 / 10, or kernel code as authorized, `STATE.json` wins and the fail-closed (locked) reading applies.
+The branch proposal is not live protected-main authority. Effective package activation requires exact-head Governance, unchanged promotion, protected merge and a fresh main read-back. Even after activation, this governance carrier does not authorize runtime writes: a separate fresh-main P04.08 implementation plan must define the implementation task and exact paths. Migration/provider decisions require their own preflight and explicit authorization.
 
+## Accepted P04.07 first-slice state
 ## Accepted P04.07 first-slice state
 
 Historical activation/continuity chain:
@@ -60,19 +58,12 @@ The accepted first-slice verifier is `scripts/verify_p04_07.sh`. Historical firs
 
 ## Live lease truth
 
-Issue #267 and Issue #270 are historical accepted governance records. Their old task IDs, branch names, path budgets, stored SHAs and lease language are **not reusable live authority**.
-
-Current Wave-1 live state is:
-
-- live worker slots: `0`;
-- live worker tasks: `0`;
-- live worker branches: `0`;
-- live Supervisor T04 lease: `false`;
-- P04.07 migration reservations: `0`.
-
-`docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` records Wave 1 as completed historical leases. A record marked completed/done does not grant writes.
-
-Any additional P04.07 runtime slice requires a **new separately governed plan created from fresh protected main** with new task/branch/path authority before source mutation.
+- Current governed task: P04.08-ACTIVATION-20261006-01, Supervisor-only governance/evidence transaction on supervisor/20261006-p04-08-activation.
+- Current worker slots, worker tasks and worker branches: 0.
+- The one Supervisor governance lease remains active until the activation transaction is accepted or blocked and recorded; it is not a P04.08 runtime lease.
+- Historical P04.07/Wave-1 leases remain closed and cannot be reused.
+- After activation acceptance, release this governance lease before opening a separate fresh-main P04.08 implementation task with exact runtime write paths.
+- Migration reservations: 0.
 
 ## P04.07 retained security and architecture laws
 
