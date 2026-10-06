@@ -1,30 +1,18 @@
 # Omnexa AI Project Context
 
-Status: **P04 TERMINAL CHECKPOINT AFTER P04.07 / P04.07 DONE / NO LIVE IMPLEMENTATION LEASES**
+Status: **P04.08 ACTIVATION CANDIDATE / GOVERNANCE-ONLY SUPERVISOR LEASE / NO RUNTIME LEASE**
 
 This file is a continuity aid only. It never overrides `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs, security standards or live protected-main evidence.
 
 ## Current protected-main truth
 
-Live protected main must be resolved before every material mutation; the SHA below is only the historical base of the Issue #285 reconciliation:
+Fresh protected main at task start is ec726440213209af2018fea9ff552504f9a5496f. On that commit canonical P04 state is 7/10, current package NONE, P04.08-P04.10 planned/locked, and kernel/business authority false.
 
-`5742046a040573bbd25fe3d5eca9ee8ce780be6d` (historical)
+This branch carries a proposed activation of P04.08 alone (owner kernel.jobs). It becomes effective only after exact-head Governance, unchanged promotion, protected merge and fresh main read-back. The activation carrier is governance/evidence-only. Runtime implementation still needs a separate fresh-main task/branch/path lease; migration 4 and provider/queue/broker selections require explicit preflight and authorization.
 
-Canonical roadmap truth (from `docs/roadmap/STATE.json`):
+Worker slots and worker tasks remain 0. The current single Supervisor lease is only for activation governance and continuity reconciliation; it must be closed/released after this milestone is accepted or blocked.
 
-- P00-P03: complete;
-- P04: ACTIVE — **7 / 10 done**;
-- P04.01-P04.07: DONE with retained accepted evidence (ADR-0013 implementation-locked intra-phase terminal checkpoint);
-- current work package: **NONE** — no active package, implementation locked;
-- P04.08-P04.10: PLANNED / LOCKED;
-- `kernel_code_authorized=false` — locked until a separate governed P04.08 activation transaction;
-- `business_feature_code_authorized=false`;
-- migration 4: not reserved/authorized;
-- provider/vendor schema registry, queue/broker/job system: not selected/authorized;
-- P04.08 contract/handoff: authored preparation only, **not accepted**, granting no authority;
-- AI/model/agent product runtime: not authorized.
-
-`docs/roadmap/STATE.json` remains the machine-readable canonical cursor.
+The accepted preparation chain is source PR #316 / Governance 37312529538, unchanged promotion PR #317 / Governance 37315910306, and main read-back ec726440213209af2018fea9ff552504f9a5496f. Historical #316 had a CHANGES_REQUESTED review and three unresolved inline threads at promotion; the activation carrier reconciles stale continuity statements and does not claim that review was approved.
 
 ## Accepted P04.07 progression
 
@@ -40,21 +28,17 @@ Accepted chain:
 - T03 validation source `#276`, promotion `#279`, merge/read-back `e39a9dab525e410dad11f7059e41a1d052b42fd1`;
 - T04 Supervisor verifier/evidence source `#280`, promotion `#281`, exact head `52b3e5c9449f6f31c47cae9234347fbd0b6b8770`, source Governance run `34540920140`, promotion Governance run `34541808091`, merge/read-back `5c5153ee15c70646d28926743e2d19ab941013d2`.
 
-The first bounded P04.07 runtime slice, its T05 readiness proof and the ADR-0013 closure state are all accepted. P04.07 is therefore **DONE**, P04 has no active package, and P04.08 remains PLANNED/LOCKED with no activation authority.
+The first bounded P04.07 runtime slice, its T05 readiness proof and ADR-0013 closure state are accepted. On protected main at task start, P04.07 is DONE, P04 has no active package and P04.08 is PLANNED/LOCKED. This branch proposes a separate P04.08 activation; it is not effective before protected-main acceptance and read-back.
 
 ## Current lease truth
 
-Wave 1 has no live write authority:
-
-- live worker slots: `0`;
-- live worker tasks: `0`;
-- live worker branches: `0`;
-- live Supervisor lease: `false`;
-- migration reservations: `0`.
-
-`docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` now records Wave 1 as completed historical leases. Its old branches/task IDs/write paths must never be reused as current authority.
-
-Any further P04.07 runtime change requires a **new separately governed plan from fresh protected main** before any source mutation. P04.08 additionally requires, in order: an accepted preparation carrier, then a separate activation transaction, then a fresh implementation plan.
+- Current Supervisor lease: P04.08-ACTIVATION-20261006-01, governance/evidence only.
+- Live worker slots: 0; worker tasks: 0; worker branches: 0.
+- Runtime write paths are not leased by this activation task.
+- Historical P04.07/Wave-1 task IDs and paths are closed and non-reusable.
+- Close/release this one Supervisor lease after activation is accepted or blocked and recorded.
+- If accepted, open a separate fresh-main P04.08 implementation lease with exact paths.
+- Migration reservations: 0.
 
 ## P04.07 retained security boundaries
 

@@ -194,3 +194,15 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - SCOPE GUARD: no `STATE.json`/sequence/validator/workflow/runtime/migration change; no activation; no promotion or merge attempted in this milestone.
 - STATE: milestone persisted as `VERIFYING` before the exact-head CI observation; one consolidated Governance observation only, never a timeout-driven rerun.
 - NEXT: record the exact run id in a PR status comment; PASS -> honest review -> unchanged promotion -> guarded merge -> read-back; FAIL/pending -> stop and report.
+
+
+## 2026-10-06 — P04.08-ACTIVATION-20261006-01
+
+- INTAKE: fresh protected main resolved to ec726440213209af2018fea9ff552504f9a5496f after promotion PR #317.
+- RECONCILIATION: canonical STATE remains P04 7/10, current package null, P04.08-.10 planned/locked, and no implementation authority.
+- PREPARATION EVIDENCE: source #316 Governance 37312529538 PASS; unchanged promotion #317 Governance 37315910306 PASS; main read-back ec726440.
+- REVIEW DISCLOSURE: source #316 carried CHANGES_REQUESTED plus three unresolved inline threads at promotion. The activation carrier repairs stale continuity but does not describe that review as approved.
+- LEASE: Supervisor-only governance/evidence carrier on supervisor/20261006-p04-08-activation; worker capacity/slots/tasks 0; runtime paths excluded. Keep this one lease until accepted or blocked, then release it.
+- CANDIDATE: synchronize STATE, P04_PACKAGE_SEQUENCE, P04.08 contract, README, STATUS and AI continuity to propose P04.08 as sole active package while preserving business, migration, provider and future-package locks.
+- EFFECT RULE: candidate activation becomes authoritative only after exact-head Governance, clean required review threads, unchanged promotion, protected merge and fresh main read-back.
+- NEXT: open source PR only after final scope review, bind its exact head/run in the PR status comment, and continue through the repository-owned promotion flow.

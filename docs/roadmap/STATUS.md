@@ -1,29 +1,34 @@
 # Omnexa Roadmap Status
 
-Last reconciled: 2026-09-23 — **P04.07 T06 R3 CLOSURE CANDIDATE / ADR-0013 TERMINAL CHECKPOINT**
+Last reconciled: 2026-10-06 — **P04.08 activation candidate; protected main read-back still at pre-activation checkpoint**
 
-## Canonical status
+## Canonical protected-main status
 
-`docs/roadmap/STATE.json` remains the machine-readable source of truth.
+docs/roadmap/STATE.json on protected main ec726440213209af2018fea9ff552504f9a5496f remains authoritative until an activation carrier is accepted and read back:
 
 - Foundation Architecture v1: FROZEN.
 - P00: DONE — 10 / 10.
 - P01: DONE — 12 / 12; exit SATISFIED.
 - P02: DONE — 10 / 10; exit SATISFIED.
 - P03: DONE — 11 / 11; exit SATISFIED.
-- P04: ACTIVE — **7 / 10 done**.
-- Current work package: **NONE** — implementation-locked intra-P04 terminal checkpoint after P04.07.
-- P04.01-P04.07: DONE with retained accepted evidence.
-- P04.07: DONE in this closure state; canonical only from protected-main acceptance of this exact tree.
-- P04.08-P04.10: PLANNED / LOCKED.
-- `kernel_code_authorized=false` at the terminal checkpoint.
-- `business_feature_code_authorized=false`.
-- migration 4: not reserved or authorized.
-- provider/vendor schema registry: not selected or authorized.
-- strategic X runtime: unauthorized.
-- AI/model/agent product runtime: unauthorized.
+- P04: ACTIVE — 7 / 10 done (the seven accepted packages remain complete).
+- Current protected-main package at base ec726440: NONE; the candidate STATE.json proposes current_work_package P04.08.
+- Current work package: P04.08 (activation candidate; effective only after protected-main acceptance/read-back).
+- P04.08-P04.10 remain planned/locked on the starting protected main.
+- Kernel and business-feature authority on protected main: false.
+- Migration 4, provider/vendor, queue/broker, business feature and AI product runtime: not authorized.
 
-P04.07 completion is based on its accepted first runtime slice plus fresh T05 G0-G11 readiness evidence and ADR-0013 terminal-checkpoint governance. P04.08 is not activated by this closure.
+## Current activation candidate
+
+A Supervisor-only governance/evidence transaction proposes P04.08 as the sole active package, with bounded kernel.jobs authority after acceptance. The current activation lease has zero worker slots and does not lease runtime paths. The proposed state is not effective until exact-head Governance, unchanged promotion, clean required review threads, protected merge and fresh main read-back.
+
+- Fresh-main base: ec726440213209af2018fea9ff552504f9a5496f.
+- P04.08 preparation source PR #316 / Governance 37312529538 PASS; unchanged promotion PR #317 / Governance 37315910306 PASS; merged main read-back ec726440213209af2018fea9ff552504f9a5496f.
+- Historical PR #316 carried a CHANGES_REQUESTED review and unresolved threads at promotion time; those are disclosed for continuity and do not constitute approval of this activation candidate.
+- Activation evidence record: docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md.
+- Current activation PR/run/merge: pending.
+
+Migration 4 remains unreserved and unauthorized. Provider/queue/broker selection, P04.09/P04.10, business features and AI/model/agent product runtime remain out of scope.
 
 ## P04.07 T05 readiness, ADR-0013 and T06 closure state
 
@@ -137,6 +142,4 @@ Required security outcome:
 
 ## Next action
 
-No package auto-advances from this terminal checkpoint.
-
-A future P04.08 preparation/activation requires a fresh separately governed transaction from current protected main. Until then, P04.08-P04.10 remain PLANNED/LOCKED, kernel implementation authority is false, migration 4 remains unreserved, and provider/business/AI runtime scope remains unauthorized.
+Complete the current P04.08 activation candidate through the source PR, exact-head Governance, resolved review threads, unchanged promotion, promotion Governance, protected merge and fresh main read-back. Only after acceptance, close/release this Supervisor-only governance lease and create a separate fresh-main P04.08 implementation lease. Until protected-main read-back, the canonical cursor remains P04 7/10 with no active package and all implementation authority locked. Migration 4 remains unreserved; no provider, queue or broker is selected; business and AI product runtime remain unauthorized.

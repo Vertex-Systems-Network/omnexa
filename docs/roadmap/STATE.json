@@ -2,16 +2,16 @@
   "schema_version": 1,
   "product": "Omnexa",
   "product_category": "Composable Enterprise Business Operating System",
-  "last_reconciled": "2026-09-22",
+  "last_reconciled": "2026-10-06",
   "program": "kernel",
   "current_phase": "P04",
-  "current_work_package": null,
+  "current_work_package": "P04.08",
   "implementation_lock": {
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": false,
+    "kernel_code_authorized": true,
     "allowed_work": [
-      "governance, evidence and continuity maintenance only while P04 is at an implementation-locked intra-phase terminal checkpoint",
-      "a separately governed future P04.08 preparation/activation transaction only after fresh protected-main reconciliation; this state grants no P04.08 implementation authority"
+      "bounded P04.08 kernel.jobs implementation only under its accepted specification and a fresh separate implementation task/branch/path lease",
+      "governance, evidence and continuity maintenance within the active P04.08 scope"
     ]
   },
   "governance_tracking": {
@@ -502,10 +502,10 @@
       "readiness_merge": "384c82b6d5b8bd89b70eb94640ea3be7109bc537",
       "planning_merge": "73561ad68e453c2741dec82d0b6fb01a7dcea1be",
       "validator_prerequisite_merge": "f97ee9a509f14247771626dc89b685e22ecd9457",
-      "current_work_package": null,
-      "kernel_code_authorized": false,
+      "current_work_package": "P04.08",
+      "kernel_code_authorized": true,
       "business_feature_code_authorized": false,
-      "note": "Historical P04 entry remains SATISFIED. P04.01-P04.07 now form the accepted completed prefix at an implementation-locked intra-phase terminal checkpoint. P04.08 remains planned/locked and requires a separate future preparation/activation transaction."
+      "note": "Historical P04 entry SATISFIED; this activation carrier proposes only P04.08 bounded kernel.jobs authority. Effective only after accepted protected-main readback; P04.09/P04.10 remain locked."
     },
     "p04_01_completion": {
       "state": "PASS",
@@ -768,21 +768,21 @@
     "note": "P03 remains complete at 11 / 11 with P03 exit SATISFIED and no active P03 package; it is a historical prerequisite for active P04."
   },
   "p04_preparation": {
-    "state": "checkpoint",
+    "state": "active",
     "phase_state": "active",
     "next_work_package": "P04.08",
     "work_package_name": "Background-job ownership, tenant context & correlation",
-    "work_package_state": "planned",
-    "work_package_spec": null,
+    "work_package_state": "active",
+    "work_package_spec": "docs/roadmap/work-packages/P04.08.md",
     "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-    "prepared_spec_count": 7,
+    "prepared_spec_count": 8,
     "mandatory_spec_count": 10,
     "entry_gate": "docs/governance/P04_ENTRY_GATE.md",
     "readiness": "docs/governance/P03_P04_TRANSITION_READINESS.md",
     "activation_template": "docs/governance/P04_ACTIVATION_TRANSACTION_TEMPLATE.md",
     "validator": "scripts/validate_p04_activation.py",
     "blocking_gate": null,
-    "note": "ADR-0013 terminal checkpoint after P04.07 closure. P04.08 is only the next planned package; it has no accepted implementation spec, no active cursor and no kernel implementation authority."
+    "note": "P04.08 activation is proposed by the current governed activation carrier. It becomes canonical only after exact-head Governance, unchanged promotion, protected merge and main read-back. P04.08 implementation remains subject to a separate fresh-main task/branch/path lease and migration/provider preflight; P04.09-P04.10 remain planned and locked."
   },
   "state_vocabulary": [
     "planned",
@@ -890,12 +890,12 @@
       {
         "id": "P04.08",
         "name": "Background-job ownership, tenant context & correlation",
-        "state": "planned",
+        "state": "active",
         "depends_on": [
           "P04.01",
           "P04.07"
         ],
-        "spec": null
+        "spec": "docs/roadmap/work-packages/P04.08.md"
       },
       {
         "id": "P04.09",
@@ -955,7 +955,7 @@
       "id": "P04",
       "name": "Data, Jobs & Event Fabric",
       "state": "active",
-      "active_work_package": null,
+      "active_work_package": "P04.08",
       "package_sequence": "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
       "entry_gate": "docs/governance/P04_ENTRY_GATE.md"
     },

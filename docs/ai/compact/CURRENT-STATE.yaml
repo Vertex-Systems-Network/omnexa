@@ -1,10 +1,10 @@
 schema_version: 1
-snapshot_time: "2026-10-05T12:00:00+05:00"
+snapshot_time: "2026-10-06T14:10:00Z"
 repository: "Vertex-Systems-Network/omnexa"
-authority: "resume-index-only; repository/runtime evidence always wins"
+authority: "resume-index-only; protected-main STATE and live GitHub evidence always win"
 compact_state_path: "docs/ai/compact"
-observed_parent_main_sha: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
-observed_main_evidence: "live origin/main == local HEAD cc24a9f; STATE.json records P04 7/10, current_work_package null, implementation lock false; open Issues at read-back: #4 only; open PRs: 0; exact R3 merge receipt not re-verified in this milestone"
+observed_parent_main_sha: "ec726440213209af2018fea9ff552504f9a5496f"
+observed_main_evidence: "main is the merged PR #317 promotion at ec726440; canonical STATE remains P04 7/10, current_work_package null, P04.08-.10 planned/locked, implementation authorization false"
 default_branch: "main"
 active_issue: null
 open_issue_gates:
@@ -12,32 +12,25 @@ open_issue_gates:
     scope: "external distribution/public launch licensing/IP/trademark decision"
     blocks_current_internal_governance_milestone: false
     blocks_external_release: true
-  - note: "Issue #289 is not open at the 2026-10-05 read-back; it grants no live lease"
-active_pr: 316
-active_pr_head: "282a5770e7f114691e6b8cff6d44c337a281e027"
-active_pr_base: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
-active_branch: "governance/p04.08-preparation-20261005"
-active_branch_base: "cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8"
-active_branch_state: "pushed: remote tip 282a577 = PR #316 head (6 preparation files only); Carrier B continuity changes remain uncommitted in the working tree"
+active_pr: null
+active_pr_head: null
+active_pr_base: "ec726440213209af2018fea9ff552504f9a5496f"
+active_branch: "supervisor/20261006-p04-08-activation"
+active_branch_base: "ec726440213209af2018fea9ff552504f9a5496f"
+active_branch_state: "activation candidate staged on governed Supervisor-only branch; canonical STATE/sequence changes are proposed and not effective until protected-main acceptance/read-back"
 current_milestone:
-  id: "PREP-20261005-P0408-CONTRACT-01-DELIVERY"
-  name: "Carrier A source PR #316 — exact-head Governance observation"
-milestone_status: "VERIFYING"
+  id: "P04.08-ACTIVATION-20261006-01"
+  name: "P04.08 activation governance carrier"
+milestone_status: "IMPLEMENTING"
 last_completed_milestone:
-  name: "CONT-20261005-AGENTS-MIRROR-01 — AGENTS.md + AI_CONTEXT.md continuity reconciliation authored (locks preserved)"
-  evidence: "working tree, uncommitted/undelivered: 5 files; all 11 governance validators PASS; no residual stale live claims"
-failed_t06_attempt:
-  pr: 304
-  exact_head: "94425685ec3010b967a8839341b20ff766972522"
-  governance_run: 35661784066
-  job_id: 106538470575
-  status: "FAIL"
+  name: "P04.08 preparation accepted through source #316 and unchanged promotion #317"
+  evidence: "source Governance 37312529538 PASS; promotion Governance 37315910306 PASS; protected-main read-back ec726440213209af2018fea9ff552504f9a5496f"
 canonical_target_cursor:
   phase: "P04"
   work_package: null
-  checkpoint: "after P04.07"
+  checkpoint: "after P04.07; implementation locked"
   p04_07_state: "DONE"
-  p04_08_state: "PLANNED_LOCKED"
+  p04_08_state: "PLANNED_LOCKED on protected main; activation candidate on branch"
 target_progress:
   current_module_done: 7
   current_module_total: 10
@@ -45,75 +38,35 @@ target_progress:
   overall_done: 50
   overall_total: 53
   overall_percent: 94.34
-  overall_basis: "P00-P04 only"
-accepted_scope_amendment:
-  issue: 305
-  source_pr: 306
-  source_governance_run: 35670794058
-  promotion_pr: 307
-  promotion_governance_run: 35671643286
-  protected_main_sha: "3a314e10bcc06fd5d90222087a35e12c99e7fdff"
-validator_surfaces:
-  - "scripts/validate_governance.py"
-  - "scripts/validate_p04_activation.py"
-  - "scripts/validate_freeze_review.py"
-  - "scripts/validate_p03_preparation.py"
-  - "scripts/validate_p03_package_specs.py"
-exact_next_safe_action: "Observe exact-head Governance on PR #316 once and record the run id in a machine-readable PR status comment. PASS -> honest review -> unchanged promotion PR -> guarded merge -> protected-main read-back. Pending/FAIL -> stop, keep state VERIFYING/FAIL, never rerun on timeout. Carrier B ships later as its own scoped PR. P04.08 activation stays a separate governed transaction."
-pending_runner_ids: []
-pending_runner_note: "PR #316 carries a machine-readable runner binding in its body (dedup PREP-20261005-P0408-CONTRACT-01-GOVERNANCE-SOURCE, merge-blocking, GitHub-hosted ubuntu-24.04). Historical R3 runner receipts stay in RUNNER-BENCHMARK.json and are not reusable. Archive terminal evidence on the next governed source transition."
-
-verifying_run:
-  pr: 316
-  head_sha: "282a5770e7f114691e6b8cff6d44c337a281e027"
-  workflow_run_id: 37311224788
-  job_id: 111766858376
-  check: "governance"
-  observed_state: "in_progress (pending)"
-  observed_at: "2026-10-05T12:40:58Z"
-  pr_status_comment: "issuecomment-5994670936"
-  observation_policy: "single consolidated observation for this milestone; no second refresh unless a material state transition occurs"
-security_scope:
-  product_runtime_source_mutation: false
-  validator_change: "ADR-0013 terminal checkpoint only"
-  verifier_mutation: false
-  workflow_mutation: false
-  migration_4: false
-  provider_remote_scope: false
-  p04_08_activation: false
-  p04_08_contract_preparation: true
-  canonical_state_mutation: false
-  kernel_implementation_authorized: false
-
-discrepancies_found_2026_10_05:
-  - surface: "AGENTS.md current canonical state block"
-    observed: "still read P04 6/10, current work package P04.07, kernel_code_authorized=true"
-    canonical: "STATE.json reads P04 7/10, current_work_package=null, implementation lock false"
-    handling: "fail closed to the locked reading; propose a separate continuity-only reconciliation carrier; no runtime or activation started"
-    status: "reconciled locally by CONT-20261005-AGENTS-MIRROR-01 in the working tree; unaccepted until its own governed carrier lands"
-
-accepted_downstream_amendment:
-  issue: 309
-  source_pr: 310
-  source_governance_run: 35768196297
-  promotion_pr: 311
-  promotion_governance_run: 35784103063
-  protected_main_sha: "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562"
-failed_t06_r2:
-  pr: 308
-  exact_head: "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
-  governance_run: 35673877543
-  job: 106576147839
-  canonical_state_step: "PASS"
-  downstream_freeze_review_step: "FAIL"
-
-latest_failed_source_run:
-  pr: 312
-  head: "690a8ee526ec32c1a81e817d4056595c07bd8d62"
-  governance_run: 35786197930
-  run_number: 821
-  job: 106943491372
-  passed_through_step: 18
-  failed_step: "Verify repository Go code quality"
-  diagnostic: "merge_strategy.deterministic_order retained the prior amendment task"
-  repair: "align both deterministic_order authorities to P04.07-T06-CLOSURE-R3"
+  overall_coverage: "enumerated mandatory packages P00-P04 only"
+lease_state:
+  supervisor_task: "P04.08-ACTIVATION-20261006-01"
+  supervisor_scope: "governance/evidence/continuity activation carrier only"
+  worker_slots: 0
+  worker_tasks: 0
+  runtime_paths_leased: false
+  implementation_lease: "not open; create separately from fresh main after activation acceptance"
+preparation_evidence:
+  source_pr: 316
+  source_head: "9b87b690be50d86611c3b41ffb62481dadc53858"
+  source_governance_run: 37312529538
+  promotion_pr: 317
+  promotion_governance_run: 37315910306
+  main_readback: "ec726440213209af2018fea9ff552504f9a5496f"
+  review_disclosure: "source review was CHANGES_REQUESTED and three inline threads unresolved at promotion; not represented as approved"
+activation_candidate:
+  proposed_work_package: "P04.08"
+  owner: "kernel.jobs"
+  state: "pending governance and protected-main read-back"
+  proposed_kernel_authority: "P04.08 only; implementation still needs a separate exact-path lease"
+  business_feature_authority: false
+  migration_4_reserved: false
+  provider_queue_broker_selected: false
+  P04_09_P04_10: "planned/locked; no spec"
+runner:
+  active_governance_task: "register exact PR head/run in machine-readable PR comment before terminal CI observation"
+  source_run: null
+  promotion_run: null
+blockers:
+  - "activation source PR review, exact-head Governance, unchanged promotion Governance and protected-main acceptance are pending"
+next_safe_action: "Finish/read-back the activation candidate, open its source PR, bind the final head and one Governance run in a machine-readable PR comment, then follow the repo's source/promotion/protected-main flow."

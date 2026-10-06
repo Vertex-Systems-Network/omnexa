@@ -4,7 +4,7 @@
   "name": "Data, Jobs & Event Fabric",
   "state": "active",
   "activation_policy": "strict_sequential_one_active_package",
-  "implementation_authorized": false,
+  "implementation_authorized": true,
   "business_feature_code_authorized": false,
   "packages": [
     {
@@ -97,12 +97,12 @@
     {
       "id": "P04.08",
       "name": "Background-job ownership, tenant context & correlation",
-      "state": "planned",
+      "state": "active",
       "depends_on": [
         "P04.01",
         "P04.07"
       ],
-      "spec": null
+      "spec": "docs/roadmap/work-packages/P04.08.md"
     },
     {
       "id": "P04.09",
@@ -125,5 +125,5 @@
       "spec": null
     }
   ],
-  "note": "P04.01-P04.07 are done with accepted completion evidence. ADR-0013 permits this implementation-locked intra-P04 terminal checkpoint: no package is active, P04.08-P04.10 remain planned with spec=null, implementation_authorized=false, no migration 4/provider/remote scope is granted, and no package may auto-advance."
+  "note": "P04.01-P04.07 are done with accepted completion evidence. This P04.08 activation candidate retains strict single-package sequencing: P04.08 alone is active, P04.09-P04.10 remain planned with spec=null, business-feature code is locked, and no migration/provider/queue/broker choice or runtime expansion is granted. Activation is effective only after protected-main acceptance/readback; implementation needs a separate exact task/path lease."
 }
