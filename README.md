@@ -16,28 +16,28 @@ This is the human-readable mirror of the AI-Native development flow. Canonical p
 
 | Item | Current state |
 |---|---|
-| Fresh protected main | ec726440213209af2018fea9ff552504f9a5496f |
-| Canonical main state | P04 ACTIVE, 7 / 10 accepted; no active package; implementation locked |
-| Current governed milestone | P04.08 activation candidate; Supervisor-only governance/evidence lease |
+| Fresh protected main | a6b9e4fae864084415ea20726ec2584c42da8065 |
+| Canonical main state | P04 ACTIVE, 7 / 10 accepted; P04.08 active and not complete |
+| Current governed milestone | P04.08 implementation-plan intake; no live implementation lease |
 | Worker slots / worker tasks | 0 / 0 |
-| Proposed package state | P04.08 sole active candidate; P04.09-P04.10 planned/locked |
-| Activation acceptance | Pending source and promotion Governance, review-thread resolution, protected merge and main read-back |
+| Accepted package state | P04.08 sole active package; P04.09-P04.10 planned/locked |
+| Activation acceptance | Source #318 and unchanged promotion #319 Governance PASS; merge/read-back a6b9e4fae864084415ea20726ec2584c42da8065 |
 | P04.08 implementation | Not started; requires separate fresh-main exact-path task lease |
 | Migration 4 / provider / queue-broker choice | Not reserved or authorized |
 | Business feature / AI product runtime | Not authorized |
-| Next safe action | Complete source review and exact-head Governance for the activation carrier; promote unchanged only after all gates pass |
+| Next safe action | Review the accepted P04.08 spec and prepare a separate governed implementation task/lease |
 
 **Progress-sync rule:** every user continue, resume, or recovery turn must check this section. Percentages and authority come from canonical evidence only.
 
 ## Current P04 package status
 
-| Package | Protected main now | Activation candidate |
-|---|---|---|
-| P04.01-P04.07 | DONE with accepted evidence | Unchanged |
-| P04.08 | PLANNED / LOCKED | Proposed sole active package; effective only after protected acceptance/read-back |
-| P04.09-P04.10 | PLANNED / LOCKED | Remain planned; spec=null |
+| Package | Protected main now |
+|---|---|
+| P04.01-P04.07 | DONE with accepted evidence |
+| P04.08 | ACTIVE; 7/10 remain done; implementation requires a separate exact-path lease |
+| P04.09-P04.10 | PLANNED / LOCKED; specs are null |
 
-docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md records the activation proposal and acceptance fields. The activation carrier makes no runtime change and creates no runtime lease.
+docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md records the activation proposal and accepted transaction. The activation carrier made no runtime change and created no runtime implementation lease.
 
 ## P04.07 accepted first slice
 
