@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.07-CLOSURE-20260921-01",
-  "status": "p04-07-t06-closure-r3-verifying",
+  "wave_id": "P04.08-ACTIVATION-20261006-01",
+  "status": "p04-08-activation-carrier-implementing",
   "authority": {
     "phase": "P04",
     "work_package": null,
@@ -9,19 +9,19 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": false,
-    "note": "Fresh-main R3 T06 closure candidate after Issue #309 acceptance. P04.01-P04.07 are the proposed completed prefix; no active package or product-runtime write authority exists. P04.08-P04.10 remain planned/locked."
+    "note": "Fresh-main governance-only P04.08 activation transaction. Canonical work_package remains null and all implementation authority remains locked on this source branch until the exact activation carrier passes Governance, is promoted/merged, and protected main is read back. No runtime, migration, queue/broker/provider or business/AI product code is leased."
   },
   "bootstrap": {
-    "protected_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "required_main_sha_snapshot": "ec726440213209af2018fea9ff552504f9a5496f",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": 289,
-    "latest_governed_workflow_merge_snapshot": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "coordination_issue": null,
+    "latest_governed_workflow_merge_snapshot": "ec726440213209af2018fea9ff552504f9a5496f",
     "all_active_branches_synced_to_snapshot": true,
-    "parent_coordination_issue": 289
+    "parent_coordination_issue": null
   },
   "onboarding": {
     "slot_schema": "docs/ai/AGENT_SLOT_SCHEMA.json",
@@ -33,9 +33,9 @@
     "current_worker_slot_capacity": 0,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
-    "no_free_slot_response": "Go Home Come Back Next Time",
+    "no_free_slot_response": "No worker slots are opened; this is a Supervisor-only governance activation task.",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "This closure wave is Supervisor-only. It exposes zero worker slots and creates no runtime write authority."
+    "assignment_rule": "Supervisor-only P04.08 activation/continuity transaction. No worker slots, runtime, migration or provider authority before protected-main acceptance."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -63,37 +63,41 @@
   "worker_slots": [],
   "supervisor": {
     "agent_id": "Supervisor",
-    "task_id": "P04.07-T06-CLOSURE-R3",
-    "role": "p04-07-terminal-checkpoint-five-validator-closure-r3",
-    "branch": "supervisor/20260923-p04-07-t06-closure-r3",
-    "last_synced_main_sha": "0ea2c5a2b34c00b32aaecf00f3ae0d217704b562",
+    "task_id": "P04.08-ACTIVATION-20261006-01",
+    "role": "p04-08-governed-activation-and-continuity-reconciliation",
+    "branch": "supervisor/20261006-p04-08-activation",
+    "last_synced_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
     "write_paths": [
-      "scripts/validate_governance.py",
-      "scripts/validate_p04_activation.py",
-      "scripts/validate_freeze_review.py",
-      "scripts/validate_p03_preparation.py",
-      "scripts/validate_p03_package_specs.py",
-      "docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md",
-      "docs/roadmap/STATE.json",
-      "docs/roadmap/STATUS.md",
-      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-      "docs/ai/handoffs/P04.07.md",
-      "docs/ai/AI_STATE.yaml",
       "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
-      "docs/ai/P04.07_COMPLETION_PLAN.json",
-      "docs/ai/compact/**",
-      "README.md"
+      "docs/ai/AI_CONTEXT.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/compact/CURRENT-STATE.yaml",
+      "docs/ai/compact/LAST-CHECKPOINT.md",
+      "docs/ai/compact/EXECUTION-JOURNAL.md",
+      "docs/ai/handoffs/P04.08.md",
+      "docs/ai/handoffs/P04.08-ACTIVATION.md",
+      "AGENTS.md",
+      "README.md",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md"
     ],
     "forbidden_paths": [
-      "scripts/verify_p04_07.sh",
       "kernel/**",
       "modules/**",
+      "kernel/migrations/**",
+      "scripts/**",
       ".github/workflows/**",
-      "docs/roadmap/work-packages/P04.08.md"
+      "docs/roadmap/work-packages/P04.09.md",
+      "docs/roadmap/work-packages/P04.10.md",
+      "queue/broker/provider selection",
+      "business-feature code",
+      "AI/model/agent product runtime"
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "closure-r3-verifying"
+    "status": "activation-carrier-implementing"
   },
   "tasks": [],
   "completion_sequence": {
@@ -146,13 +150,13 @@
   },
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "https://github.com/Vertex-Systems-Network/omnexa/issues/289",
+    "coordination_channel": "Supervisor-only task; no live coordination issue",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
     "review_changes": "Review Changes Required",
     "deterministic_order": [
-      "P04.07-T06-CLOSURE-R3"
+      "P04.08-ACTIVATION-20261006-01"
     ]
   },
   "merge_strategy": {
@@ -171,7 +175,7 @@
       "merge alert/resynchronization"
     ],
     "deterministic_order": [
-      "P04.07-T06-CLOSURE-R3"
+      "P04.08-ACTIVATION-20261006-01"
     ]
   },
   "instruction_sync": {
@@ -249,9 +253,18 @@
     "scope_amendment_merge": "3a314e10bcc06fd5d90222087a35e12c99e7fdff",
     "t06_failed_source_pr_r2": 308,
     "t06_failed_governance_run_r2": 35673877543,
-    "t06_failed_head_r2": "c45e0ac2e2df040c229c40ec733a1f26e3f69365"
+    "t06_failed_head_r2": "c45e0ac2e2df040c229c40ec733a1f26e3f69365",
+    "p04_08_preparation": {
+      "source_pr": 316,
+      "source_head": "9b87b690be50d86611c3b41ffb62481dadc53858",
+      "source_governance_run": 37312529538,
+      "promotion_pr": 317,
+      "promotion_governance_run": 37315910306,
+      "protected_main_readback": "ec726440213209af2018fea9ff552504f9a5496f",
+      "review_state_at_readback": "source review CHANGES_REQUESTED; three inline review threads remained unresolved on closed source PR; discrepancies carried forward for this activation continuity repair."
+    }
   },
-  "next_action": "Run exact-head Governance on the fresh R3 closure carrier. If PASS, review honestly, promote the unchanged head, require promotion Governance, guarded merge and protected-main readback. P04.08 remains locked.",
+  "next_action": "Complete only the P04.08 activation/state/continuity carrier from fresh protected main ec726440; preserve migration/provider/runtime locks, require exact-head Governance and clean review threads, promote the unchanged source head, merge through protected main, then read back main before opening a separate P04.08 implementation plan.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -376,5 +389,11 @@
     ],
     "runtime_source_mutation": false,
     "p04_08_activation_authorized": false
+  },
+  "superseded_plan": {
+    "wave_id": "P04.07-CLOSURE-20260921-01",
+    "status": "p04-07-t06-closure-r3-verifying",
+    "superseded_by_protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
+    "reason": "P04.07 closure and P04.08 preparation/promotion have since merged; old Supervisor branch/task/lease and zero-slot closure plan are historical and not reusable."
   }
 }
