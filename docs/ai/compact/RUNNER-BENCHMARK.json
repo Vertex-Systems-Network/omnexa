@@ -948,6 +948,50 @@
         "diagnostic": "deterministic_order does not match task merge_order: expected ['P04.07-T06-CLOSURE-R3'], got ['P04.07-T06-DOWNSTREAM-VALIDATOR-AMENDMENT']",
         "promotion_allowed": false
       }
+    },
+    {
+      "stable_task_id": "RB-P04.08-ACTIVATION-PROMOTION-319",
+      "source_issue_or_pr_or_work_package": {
+        "source_pr": 318,
+        "promotion_pr": 319,
+        "work_package": "P04.08 activation governance/evidence carrier"
+      },
+      "command_or_workflow": "Omnexa Governance / .github/workflows/governance.yml",
+      "exact_source_identity": {
+        "repository": "Vertex-Systems-Network/omnexa",
+        "branch": "promotion/20261006-p04-08-activation",
+        "head_sha": "81cdc015cd36274b596a502d2cdc92f012056478",
+        "parent_protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
+        "unchanged_from_source_pr": 318
+      },
+      "environment_matrix_input_fixture_identity": {
+        "provider": "GitHub Actions",
+        "trigger": "pull_request",
+        "workflow_run_id": 37486273013,
+        "workflow_run_number": 844,
+        "job_id": 112347722841,
+        "matrix": "repository-defined",
+        "fixtures": "repository-defined"
+      },
+      "authorization_state": "Unchanged promotion of the P04.08 activation/evidence carrier; no runtime, migration, provider or product-feature authority.",
+      "security_critical": true,
+      "merge_blocking": true,
+      "expected_runner_time": "repository-defined; no agent ETA inferred",
+      "deterministic_dedup_key": "P04.08-ACTIVATION-20261006-01|PR319|81cdc015cd36274b596a502d2cdc92f012056478|governance",
+      "status": "PASS",
+      "immutable_evidence_when_terminal": {
+        "workflow_run_id": 37486273013,
+        "workflow_run_number": 844,
+        "job_id": 112347722841,
+        "conclusion": "success",
+        "exact_head_sha": "81cdc015cd36274b596a502d2cdc92f012056478",
+        "source_pr": 318,
+        "promotion_pr": 319,
+        "merged_pr": 319,
+        "merge_commit": "a6b9e4fae864084415ea20726ec2584c42da8065",
+        "protected_main_readback_sha": "a6b9e4fae864084415ea20726ec2584c42da8065",
+        "unresolved_review_threads": 0
+      }
     }
   ]
 }
