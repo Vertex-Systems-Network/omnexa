@@ -340,12 +340,12 @@ After Issue #285 merges, re-read protected main before any further P04.07 planni
 
 ## Exact next action
 
-1. Treat Issue #285 / PR #286 security reconciliation as completed historical governance on protected main `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`.
-2. Canonical state is the ADR-0013 terminal checkpoint: P04 `7 / 10`, `current_work_package = null`, `kernel_code_authorized = false`. Re-read `STATE.json` and live protected main before acting; stored SHAs are audit evidence only.
-3. No live write lease exists. Wave-1, T04, T05 and T06 records are historical and non-reusable.
-4. Governance/continuity work uses an isolated protected-main branch and preserves every implementation lock.
-5. P04.08 requires, in order and in separate carriers: (a) accepted preparation — contract/handoff through source PR, unchanged promotion, guarded merge, protected-main read-back; (b) a separate governed activation transaction that alone flips `current_work_package`, the sequence/STATE `spec` fields and bounded kernel authority; (c) only then a fresh implementation plan with exact task/branch/path authority and migration preflight.
-6. Do not reserve migration 4, select a queue/broker/provider registry, start P04.09/P04.10, or infer business/AI runtime authority.
+1. Continue task P04.08-ACTIVATION-20261006-01 on its declared Supervisor-only governance/evidence lease; worker slots/tasks remain zero.
+2. Reconcile the proposed STATE/sequence/spec and continuity mirrors from fresh main ec726440213209af2018fea9ff552504f9a5496f; do not treat branch candidate state as accepted authority.
+3. Finish exact changed-path and self-review checks, open the source PR, bind its exact head and Governance task/run in a machine-readable PR status comment, and require exact-head Governance plus resolved review threads.
+4. Promote only the unchanged source head through the repository-owned flow; require promotion-specific Governance, protected-main freshness and a fresh main read-back.
+5. After acceptance or a recorded blocker, close/release this governance lease. If accepted, start a new P04.08 implementation plan from fresh protected main with exact task/branch/path authority and migration/provider preflight.
+6. Keep P04.09/P04.10 planned and locked; do not reserve migration 4, select queue/broker/provider, or infer business/AI runtime authority.
 
 ## Issue #4
 
