@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave_id": "P04.08-ACTIVATION-20261006-01",
-  "status": "p04-08-activation-carrier-verifying",
+  "status": "completed-no-live-leases",
   "authority": {
     "phase": "P04",
     "work_package": "P04.08",
@@ -9,17 +9,17 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "This source branch proposes bounded P04.08 activation only; canonical authority is effective only after exact Governance, unchanged promotion, protected merge and main read-back. The current Supervisor lease is governance/evidence-only. Runtime implementation requires a separate fresh-main task/branch/path lease and approved migration/provider preflight."
+    "note": "P04.08 activation is accepted on protected main. The prior Supervisor governance/evidence lease is completed and released. Bounded kernel.jobs implementation authority requires a separate fresh-main exact-path task lease; no runtime, migration, provider, queue, business-feature or AI product runtime authority is granted here."
   },
   "bootstrap": {
-    "protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
+    "protected_main_sha": "a6b9e4fae864084415ea20726ec2584c42da8065",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "ec726440213209af2018fea9ff552504f9a5496f",
+    "required_main_sha_snapshot": "a6b9e4fae864084415ea20726ec2584c42da8065",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
     "coordination_issue": null,
-    "latest_governed_workflow_merge_snapshot": "ec726440213209af2018fea9ff552504f9a5496f",
+    "latest_governed_workflow_merge_snapshot": "a6b9e4fae864084415ea20726ec2584c42da8065",
     "all_active_branches_synced_to_snapshot": true,
     "parent_coordination_issue": null
   },
@@ -61,45 +61,6 @@
     "scale_gate": "Zero worker slots in this closure wave. No runtime or future-package stream may be added without fresh governed replanning."
   },
   "worker_slots": [],
-  "supervisor": {
-    "agent_id": "Supervisor",
-    "task_id": "P04.08-ACTIVATION-20261006-01",
-    "role": "p04-08-governed-activation-and-continuity-reconciliation",
-    "branch": "supervisor/20261006-p04-08-activation",
-    "last_synced_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
-    "write_paths": [
-      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
-      "docs/ai/AI_CONTEXT.md",
-      "docs/ai/AI_STATE.yaml",
-      "docs/ai/compact/CURRENT-STATE.yaml",
-      "docs/ai/compact/LAST-CHECKPOINT.md",
-      "docs/ai/compact/EXECUTION-JOURNAL.md",
-      "docs/ai/handoffs/P04.08.md",
-      "docs/ai/handoffs/P04.08-ACTIVATION.md",
-      "AGENTS.md",
-      "README.md",
-      "docs/roadmap/STATUS.md",
-      "docs/roadmap/STATE.json",
-      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
-      "docs/roadmap/work-packages/P04.08.md"
-    ],
-    "forbidden_paths": [
-      "kernel/**",
-      "modules/**",
-      "kernel/migrations/**",
-      "scripts/**",
-      ".github/workflows/**",
-      "docs/roadmap/work-packages/P04.09.md",
-      "docs/roadmap/work-packages/P04.10.md",
-      "queue/broker/provider selection",
-      "business-feature code",
-      "AI/model/agent product runtime"
-    ],
-    "depends_on": [],
-    "merge_order": 1,
-    "status": "activation-carrier-verifying"
-  },
   "tasks": [],
   "completion_sequence": {
     "stage_a0_runner_plan": {
@@ -175,9 +136,7 @@
       "protected-main readback",
       "merge alert/resynchronization"
     ],
-    "deterministic_order": [
-      "P04.08-ACTIVATION-20261006-01"
-    ]
+    "deterministic_order": []
   },
   "instruction_sync": {
     "task_start_required": true,
@@ -265,7 +224,7 @@
       "review_state_at_readback": "source review CHANGES_REQUESTED; three inline review threads remained unresolved on closed source PR; discrepancies carried forward for this activation continuity repair."
     }
   },
-  "next_action": "Finish the P04.08 activation candidate and continuity reconciliation on the leased governance-only branch; open source PR, record exact-head Governance evidence, promote unchanged, pass promotion Governance, resolve threads, merge through protected main and read back. Then close/release this Supervisor lease and create a separate P04.08 implementation plan from the new protected main; no migration/provider/runtime decision is inferred.",
+  "next_action": "Review the accepted P04.08 specification and fresh-main preflight requirements, then prepare a separate governed implementation task/branch/exact-path lease. Do not mutate runtime code or infer migration/provider authority before that lease and any required explicit decisions are accepted.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -396,5 +355,69 @@
     "status": "p04-07-t06-closure-r3-verifying",
     "superseded_by_protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
     "reason": "P04.07 closure and P04.08 preparation/promotion have since merged; old Supervisor branch/task/lease and zero-slot closure plan are historical and not reusable."
+  },
+  "activation_acceptance": {
+    "source_pr": 318,
+    "source_head": "81cdc015cd36274b596a502d2cdc92f012056478",
+    "source_governance_run": 37484718479,
+    "source_governance_job": 112341690386,
+    "promotion_pr": 319,
+    "promotion_governance_run": 37486273013,
+    "promotion_governance_job": 112347722841,
+    "promotion_governance_conclusion": "success",
+    "merge_commit": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "protected_main_readback": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "result": "accepted",
+    "supervisor_lease": "completed-and-released",
+    "implementation_lease": "not-open"
+  },
+  "completed_activation_lease": {
+    "agent_id": "Supervisor",
+    "task_id": "P04.08-ACTIVATION-20261006-01",
+    "role": "p04-08-governed-activation-and-continuity-reconciliation",
+    "branch": "supervisor/20261006-p04-08-activation",
+    "last_synced_main_sha": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "write_paths": [
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/AI_CONTEXT.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/compact/CURRENT-STATE.yaml",
+      "docs/ai/compact/LAST-CHECKPOINT.md",
+      "docs/ai/compact/EXECUTION-JOURNAL.md",
+      "docs/ai/handoffs/P04.08.md",
+      "docs/ai/handoffs/P04.08-ACTIVATION.md",
+      "AGENTS.md",
+      "README.md",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
+      "docs/roadmap/work-packages/P04.08.md"
+    ],
+    "forbidden_paths": [
+      "kernel/**",
+      "modules/**",
+      "kernel/migrations/**",
+      "scripts/**",
+      ".github/workflows/**",
+      "docs/roadmap/work-packages/P04.09.md",
+      "docs/roadmap/work-packages/P04.10.md",
+      "queue/broker/provider selection",
+      "business-feature code",
+      "AI/model/agent product runtime"
+    ],
+    "depends_on": [],
+    "merge_order": 1,
+    "status": "completed",
+    "lease_status": "released",
+    "accepted_main_sha": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "accepted_via_pr": 319,
+    "source_pr": 318,
+    "source_head": "81cdc015cd36274b596a502d2cdc92f012056478",
+    "source_governance_run": 37484718479,
+    "promotion_governance_run": 37486273013,
+    "promotion_governance_job": 112347722841,
+    "runtime_paths_leased": false,
+    "note": "Historical task/branch/path record retained for audit only; this object is deliberately outside active worker/supervisor lease collections."
   }
 }

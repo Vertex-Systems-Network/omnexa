@@ -206,3 +206,13 @@ Rolling compact journal. Archive older detail before this file exceeds 32 KiB.
 - CANDIDATE: synchronize STATE, P04_PACKAGE_SEQUENCE, P04.08 contract, README, STATUS and AI continuity to propose P04.08 as sole active package while preserving business, migration, provider and future-package locks.
 - EFFECT RULE: candidate activation becomes authoritative only after exact-head Governance, clean required review threads, unchanged promotion, protected merge and fresh main read-back.
 - NEXT: open source PR only after final scope review, bind its exact head/run in the PR status comment, and continue through the repository-owned promotion flow.
+
+
+## 2026-10-06 — P04.08 activation accepted / lease released
+
+- INTAKE: fresh protected main was `a6b9e4fae864084415ea20726ec2584c42da8065`; open Issue #4 is an external distribution/legal gate; no other open issues or PRs.
+- AUDIT: source #318 and unchanged promotion #319 shared exact head `81cdc015cd36274b596a502d2cdc92f012056478`; source Governance run 37484718479/job 112341690386 PASS; promotion Governance run 37486273013/job 112347722841 PASS; zero unresolved review threads.
+- ACCEPTANCE: guarded merge of #319 produced `a6b9e4fae864084415ea20726ec2584c42da8065`; protected-main read-back confirms the P04.08 activation in canonical STATE and package sequence. Source #318 is recorded by GitHub as merged at the same merge commit.
+- RUNNER: `RB-P04.08-ACTIVATION-PROMOTION-319` terminal PASS archived with exact head, run/job, merge and main-readback evidence.
+- LEASE: activation Supervisor task completed/released; worker slots/tasks 0; no runtime implementation paths are leased.
+- NEXT: inspect the accepted P04.08 spec/preflight from fresh main and create a separate governed implementation task/path lease. P04.08 is active but not complete (P04 remains 7/10).
