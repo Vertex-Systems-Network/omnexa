@@ -1,30 +1,18 @@
 # Omnexa AI Project Context
 
-Status: **P04 TERMINAL CHECKPOINT AFTER P04.07 / P04.07 DONE / NO LIVE IMPLEMENTATION LEASES**
+Status: **P04.08 ACTIVATION CANDIDATE / GOVERNANCE-ONLY SUPERVISOR LEASE / NO RUNTIME LEASE**
 
 This file is a continuity aid only. It never overrides `AGENTS.md`, `docs/roadmap/STATE.json`, `docs/governance/AI_EXECUTION_POLICY.md`, accepted ADRs, security standards or live protected-main evidence.
 
 ## Current protected-main truth
 
-Live protected main must be resolved before every material mutation; the SHA below is only the historical base of the Issue #285 reconciliation:
+Fresh protected main at task start is ec726440213209af2018fea9ff552504f9a5496f. On that commit canonical P04 state is 7/10, current package NONE, P04.08-P04.10 planned/locked, and kernel/business authority false.
 
-`5742046a040573bbd25fe3d5eca9ee8ce780be6d` (historical)
+This branch carries a proposed activation of P04.08 alone (owner kernel.jobs). It becomes effective only after exact-head Governance, unchanged promotion, protected merge and fresh main read-back. The activation carrier is governance/evidence-only. Runtime implementation still needs a separate fresh-main task/branch/path lease; migration 4 and provider/queue/broker selections require explicit preflight and authorization.
 
-Canonical roadmap truth (from `docs/roadmap/STATE.json`):
+Worker slots and worker tasks remain 0. The current single Supervisor lease is only for activation governance and continuity reconciliation; it must be closed/released after this milestone is accepted or blocked.
 
-- P00-P03: complete;
-- P04: ACTIVE — **7 / 10 done**;
-- P04.01-P04.07: DONE with retained accepted evidence (ADR-0013 implementation-locked intra-phase terminal checkpoint);
-- current work package: **NONE** — no active package, implementation locked;
-- P04.08-P04.10: PLANNED / LOCKED;
-- `kernel_code_authorized=false` — locked until a separate governed P04.08 activation transaction;
-- `business_feature_code_authorized=false`;
-- migration 4: not reserved/authorized;
-- provider/vendor schema registry, queue/broker/job system: not selected/authorized;
-- P04.08 contract/handoff: authored preparation only, **not accepted**, granting no authority;
-- AI/model/agent product runtime: not authorized.
-
-`docs/roadmap/STATE.json` remains the machine-readable canonical cursor.
+The accepted preparation chain is source PR #316 / Governance 37312529538, unchanged promotion PR #317 / Governance 37315910306, and main read-back ec726440213209af2018fea9ff552504f9a5496f. Historical #316 had a CHANGES_REQUESTED review and three unresolved inline threads at promotion; the activation carrier reconciles stale continuity statements and does not claim that review was approved.
 
 ## Accepted P04.07 progression
 
