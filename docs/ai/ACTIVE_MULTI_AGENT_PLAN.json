@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "wave_id": "P04.08-ACTIVATION-20261006-01",
-  "status": "p04-08-activation-carrier-implementing",
+  "status": "p04-08-activation-carrier-verifying",
   "authority": {
     "phase": "P04",
-    "work_package": null,
-    "owner": null,
+    "work_package": "P04.08",
+    "owner": "kernel.jobs",
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
-    "kernel_code_authorized": false,
-    "note": "Fresh-main governance-only P04.08 activation transaction. Canonical work_package remains null and all implementation authority remains locked on this source branch until the exact activation carrier passes Governance, is promoted/merged, and protected main is read back. No runtime, migration, queue/broker/provider or business/AI product code is leased."
+    "kernel_code_authorized": true,
+    "note": "This source branch proposes bounded P04.08 activation only; canonical authority is effective only after exact Governance, unchanged promotion, protected merge and main read-back. The current Supervisor lease is governance/evidence-only. Runtime implementation requires a separate fresh-main task/branch/path lease and approved migration/provider preflight."
   },
   "bootstrap": {
     "protected_main_sha": "ec726440213209af2018fea9ff552504f9a5496f",
@@ -81,7 +81,8 @@
       "docs/roadmap/STATUS.md",
       "docs/roadmap/STATE.json",
       "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
-      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md"
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
+      "docs/roadmap/work-packages/P04.08.md"
     ],
     "forbidden_paths": [
       "kernel/**",
@@ -97,7 +98,7 @@
     ],
     "depends_on": [],
     "merge_order": 1,
-    "status": "activation-carrier-implementing"
+    "status": "activation-carrier-verifying"
   },
   "tasks": [],
   "completion_sequence": {
@@ -264,7 +265,7 @@
       "review_state_at_readback": "source review CHANGES_REQUESTED; three inline review threads remained unresolved on closed source PR; discrepancies carried forward for this activation continuity repair."
     }
   },
-  "next_action": "Complete only the P04.08 activation/state/continuity carrier from fresh protected main ec726440; preserve migration/provider/runtime locks, require exact-head Governance and clean review threads, promote the unchanged source head, merge through protected main, then read back main before opening a separate P04.08 implementation plan.",
+  "next_action": "Finish the P04.08 activation candidate and continuity reconciliation on the leased governance-only branch; open source PR, record exact-head Governance evidence, promote unchanged, pass promotion Governance, resolve threads, merge through protected main and read back. Then close/release this Supervisor lease and create a separate P04.08 implementation plan from the new protected main; no migration/provider/runtime decision is inferred.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
