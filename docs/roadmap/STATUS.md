@@ -140,6 +140,4 @@ Required security outcome:
 
 ## Next action
 
-No package auto-advances from this terminal checkpoint.
-
-A future P04.08 preparation/activation requires a fresh separately governed transaction from current protected main. Until then, P04.08-P04.10 remain PLANNED/LOCKED, kernel implementation authority is false, migration 4 remains unreserved, and provider/business/AI runtime scope remains unauthorized.
+Complete the current P04.08 activation candidate through the source PR, exact-head Governance, resolved review threads, unchanged promotion, promotion Governance, protected merge and fresh main read-back. Only after acceptance, close/release this Supervisor-only governance lease and create a separate fresh-main P04.08 implementation lease. Until protected-main read-back, the canonical cursor remains P04 7/10 with no active package and all implementation authority locked. Migration 4 remains unreserved; no provider, queue or broker is selected; business and AI product runtime remain unauthorized.
