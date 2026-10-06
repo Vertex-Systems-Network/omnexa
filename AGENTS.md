@@ -25,19 +25,21 @@ P00: DONE — 10 / 10
 P01: DONE — 12 / 12; exit SATISFIED
 P02: DONE — 10 / 10; exit SATISFIED
 P03: DONE — 11 / 11; exit SATISFIED
-P04: ACTIVE — 6 / 10 done
-P04.01-P04.06: DONE with accepted evidence
-Current work package: P04.07 — Event Schema Registry, Compatibility & Validation
+P04: ACTIVE — 7 / 10 done
+P04.01-P04.07: DONE with accepted evidence (ADR-0013 implementation-locked intra-phase terminal checkpoint)
+Current work package: NONE — no active work package; implementation locked
 P04.08-P04.10: PLANNED / LOCKED
-kernel_code_authorized: true — P04.07 only through explicitly governed scope
+kernel_code_authorized: false — locked until a separate governed P04.08 activation transaction
 business_feature_code_authorized: false
 migration 4: NOT RESERVED / NOT AUTHORIZED
 provider/vendor schema registry: NOT SELECTED / NOT AUTHORIZED
+queue/broker/job-system selection: NOT SELECTED / NOT AUTHORIZED
 strategic X runtime: NOT AUTHORIZED
 AI/model/agent product runtime: NOT AUTHORIZED
+P04.08 contract/handoff: may exist as AUTHORED PREPARATION only — NOT ACCEPTED, grants no authority until its own governed source/promotion/merge/read-back lands on protected main
 ```
 
-P04.07 remains the sole ACTIVE package. Its accepted first runtime slice does **not** mark P04.07 done and does not activate P04.08.
+P04 has **no active work package**. This is the ADR-0013 terminal checkpoint recorded by `STATE.json`; P04.07 is DONE with retained evidence. Nothing auto-activates P04.08 — activation requires a separate governed transaction from fresh protected main. Where any other mirror still describes P04.07 as active, P04 at 6 / 10, or kernel code as authorized, `STATE.json` wins and the fail-closed (locked) reading applies.
 
 ## Accepted P04.07 first-slice state
 
@@ -192,8 +194,8 @@ Before material work read at minimum:
 2. `docs/roadmap/STATE.json` and `docs/roadmap/STATUS.md`;
 3. `docs/governance/AI_EXECUTION_POLICY.md`;
 4. applicable product constitution/architecture/security/quality standards and accepted ADRs;
-5. `docs/roadmap/work-packages/P04.07.md` while P04.07 remains active;
-6. `docs/ai/handoffs/P04.07.md`;
+5. `docs/roadmap/work-packages/P04.07.md` (accepted; P04.07 is DONE) plus `docs/roadmap/work-packages/P04.08.md` if present, treating every P04.08 artifact as **unaccepted preparation** until governance lands it;
+6. `docs/ai/handoffs/P04.07.md` and `docs/ai/handoffs/P04.08.md` if present, under the same unaccepted rule;
 7. `docs/ai/ACTIVE_MULTI_AGENT_PLAN.json` and determine whether a **new live governed lease** actually exists;
 8. relevant retained P04.01-P04.06 and P04.07 evidence;
 9. all open Issues and PRs/MRs plus current protected-main/CI state.
@@ -348,10 +350,11 @@ After Issue #285 merges, re-read protected main before any further P04.07 planni
 ## Exact next action
 
 1. Treat Issue #285 / PR #286 security reconciliation as completed historical governance on protected main `01cfd7c440b7c7b7bd1f811e2e31252cf76dedf7`.
-2. No live P04.07 Wave-1 write lease exists.
-3. Governance/continuity work uses an isolated protected-main branch and preserves P04.07 runtime locks.
-4. Additional P04.07 runtime implementation requires a **new separately governed fresh-main plan** with new task/branch/path authority before source mutation.
-5. Do not auto-advance P04.08, reserve migration 4, select a provider registry, or infer business/AI runtime authority.
+2. Canonical state is the ADR-0013 terminal checkpoint: P04 `7 / 10`, `current_work_package = null`, `kernel_code_authorized = false`. Re-read `STATE.json` and live protected main before acting; stored SHAs are audit evidence only.
+3. No live write lease exists. Wave-1, T04, T05 and T06 records are historical and non-reusable.
+4. Governance/continuity work uses an isolated protected-main branch and preserves every implementation lock.
+5. P04.08 requires, in order and in separate carriers: (a) accepted preparation — contract/handoff through source PR, unchanged promotion, guarded merge, protected-main read-back; (b) a separate governed activation transaction that alone flips `current_work_package`, the sequence/STATE `spec` fields and bounded kernel authority; (c) only then a fresh implementation plan with exact task/branch/path authority and migration preflight.
+6. Do not reserve migration 4, select a queue/broker/provider registry, start P04.09/P04.10, or infer business/AI runtime authority.
 
 ## Issue #4
 

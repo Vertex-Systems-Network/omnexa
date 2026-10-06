@@ -39,6 +39,7 @@ This is the human-readable mirror of the AI-Native development flow. Canonical r
 |---|---|---|
 | P04.01-P04.07 | DONE | Accepted evidence retained; P04.07 closure proof at `docs/roadmap/evidence/P04.07_COMPLETION_2026-09-21.md` |
 | P04.08-P04.10 | PLANNED / LOCKED | No accepted implementation specs or authority |
+| P04.08 preparation | **PREPARED CANDIDATE (unaccepted)** | `docs/roadmap/work-packages/P04.08.md` + `docs/ai/handoffs/P04.08.md` authored from main `cc24a9f1fabb2007e75c98f3c5ffe4131afc22a8`; no activation, no sequence/STATE mutation, no migration reservation, no authority until its own governed source/promotion path passes |
 
 ## P04.07 accepted first slice
 
