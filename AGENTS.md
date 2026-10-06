@@ -39,7 +39,6 @@ strategic X and AI/model/agent product runtime: NOT AUTHORIZED
 The branch proposal is not live protected-main authority. Effective package activation requires exact-head Governance, unchanged promotion, protected merge and a fresh main read-back. Even after activation, this governance carrier does not authorize runtime writes: a separate fresh-main P04.08 implementation plan must define the implementation task and exact paths. Migration/provider decisions require their own preflight and explicit authorization.
 
 ## Accepted P04.07 first-slice state
-## Accepted P04.07 first-slice state
 
 Historical activation/continuity chain:
 
