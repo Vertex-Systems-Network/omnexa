@@ -11,8 +11,10 @@ docs/roadmap/STATE.json on protected main ec726440213209af2018fea9ff552504f9a549
 - P01: DONE — 12 / 12; exit SATISFIED.
 - P02: DONE — 10 / 10; exit SATISFIED.
 - P03: DONE — 11 / 11; exit SATISFIED.
-- P04: ACTIVE — 7 / 10 accepted.
-- Current protected-main package: NONE; P04.08-P04.10 remain planned/locked.
+- P04: ACTIVE — 7 / 10 done (the seven accepted packages remain complete).
+- Current protected-main package at base ec726440: NONE; the candidate STATE.json proposes current_work_package P04.08.
+- Current work package: P04.08 (activation candidate; effective only after protected-main acceptance/read-back).
+- P04.08-P04.10 remain planned/locked on the starting protected main.
 - Kernel and business-feature authority on protected main: false.
 - Migration 4, provider/vendor, queue/broker, business feature and AI product runtime: not authorized.
 
