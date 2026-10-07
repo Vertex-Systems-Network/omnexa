@@ -261,18 +261,16 @@ Required sequence:
 7. only after that plan assignment may the agent switch from `main` to the assigned branch and begin its bounded task;
 8. the assigned agent must then perform the normal instruction/lease/dependency checks before its first write.
 
-If **no authorized slot is open**, the Supervisor must stop onboarding immediately and respond exactly:
+If **no authorized slot is open**, the Supervisor denies assignment to that arriving worker only:
 
-`Go Home Come Back Next Time`
+- no task is assigned to that worker;
+- no branch is assigned or created for that worker;
+- no lease is granted to that worker;
+- the worker starts no coding, migration, test mutation, documentation mutation or speculative future-module work;
+- the Supervisor must not raise the concurrency cap or activate a locked module merely to make room;
+- the Supervisor invocation itself continues with review, integration, governance, planning, preflight, its own authorized task, or another non-conflicting authorized task.
 
-When that response applies:
-
-- no task is assigned;
-- no branch is assigned or created for the arriving agent;
-- no lease is granted;
-- no coding, migration, test mutation, documentation mutation or speculative future-module work may start;
-- the Supervisor must not raise the concurrency cap or activate a locked module to make room;
-- the arriving agent may return only when a later governed plan exposes a valid `open` slot.
+A legacy plan value such as `stop-without-assignment` means **stop that worker admission without assignment**. It must not be interpreted as a requirement to end the Supervisor's whole development invocation.
 
 A `completed` or `retired` slot does not automatically become reusable. Reopening or repurposing a slot must still be valid under canonical state and must be recorded in the active plan before a new assignment.
 
@@ -300,13 +298,17 @@ No snapshot may be used to justify working from a branch that is stale relative 
 
 The Supervisor maintains `docs/ai/compact/` as a small resume index subordinate to canonical repository/runtime truth. At start/continue/resume/recovery, after repository instructions are loaded: read current state/checkpoint, resolve exact protected main, reconcile OPEN Issues, reconcile OPEN PRs/MRs, re-read deterministic claims/coordination queue/Runner Benchmark, then reconcile stale observations before mutation. A message-delivery timeout never proves the previous repository operation failed.
 
-## 20. One-turn milestone boundary
+## 20. Continuous invocation milestone checkpoints
 
-One user continue/resume turn normally equals one bounded logical milestone. Do not chain unrelated audit, multiple implementations, repeated CI polling, merge, post-merge audit and next task into one turn.
+One user continue/resume turn may execute multiple dependency-related bounded milestones. Each milestone must still be checkpointed with truthful state/evidence, but checkpoint completion is not a mandatory end-of-turn boundary.
+
+The Supervisor automatically selects the next highest-priority safe authorized task. Routine technical blockers, failed tests/CI, stale branches, merge conflicts and review findings are repaired or re-planned without owner confirmation when they remain inside standing authority. A blocked surface is checkpointed and skipped while other non-conflicting authorized work remains.
+
+The Supervisor does not broaden scope, activate future packages, infer migration/provider authority or bypass required approvals merely to remain busy.
 
 ## 21. Remote status budget
 
-Default to one consolidated CI/status refresh per milestone. Never tight-poll. Persist `VERIFYING` or `WAITING_EXTERNAL` before the final refresh. If checks remain running, record exact run identity on a PR/Issue status surface without changing the tested head, report pending and stop.
+Default to one consolidated CI/status refresh per checkpoint. Never tight-poll. Persist `VERIFYING` or `WAITING_EXTERNAL` before the refresh. If checks remain running, record exact run identity on a PR/Issue status surface without changing the tested head, then continue another non-conflicting authorized task when available. End only when the pending external result is the sole remaining safe path or another continuous-invocation exit condition applies.
 
 ## 22. Runner Benchmark
 
