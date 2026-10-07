@@ -132,9 +132,20 @@ After this repository execution contract has been loaded, every new/start/contin
 
 Never repeat a merge, migration, provider call, deployment, destructive action, runtime execution or source mutation merely because a prior chat/UI response was not delivered.
 
-### One user turn = one logical milestone
+### Continuous authorized development invocation
 
-By default one user `continue` / `resume` turn executes one bounded logical milestone. Do not chain unrelated audit, implementation, repeated CI polling, merge, post-merge audit and next-task development into one turn. Security/incident recovery may combine tightly coupled steps only when splitting them would reduce safety.
+A user `continue` / `resume` request, or an already-active authorized development request, starts or continues a dependency-aware execution loop. A logical milestone is a durable checkpoint, **not** a mandatory end-of-turn boundary.
+
+Within the currently authorized repository/work-package boundary, keep selecting and executing the highest-priority safe task while tool/runtime budget remains. Routine engineering blockers such as failed tests, CI failures, merge conflicts, stale bases, review findings and scope-preserving implementation errors must be diagnosed, repaired, retried or re-planned by the AI without asking the owner for `continue?`, `retry?`, `fix?` or `merge?` confirmation.
+
+A blocked path must be checkpointed truthfully. If another non-conflicting authorized task exists, continue with that task rather than ending the invocation. Do not infer future-package, migration, provider, destructive, production or product authority merely to keep working.
+
+End the continuous invocation only when one of these is true:
+
+1. the requested/canonical authorized scope is complete;
+2. the current tool/runtime/token budget is exhausted;
+3. a genuine `WAITING_EXTERNAL` condition is the sole remaining path and no other safe authorized work exists;
+4. safety/governance prohibits all remaining work.
 
 ### Remote-call / timeout control
 
@@ -144,7 +155,7 @@ By default one user `continue` / `resume` turn executes one bounded logical mile
 - never tight-poll workflows, deployments, providers or status endpoints;
 - never rerun a workflow merely because a ChatGPT/UI/message response timed out;
 - before the final exact-head CI observation, persist the milestone as `VERIFYING` or `WAITING_EXTERNAL`;
-- if CI remains running, preserve the already-written state, record exact run IDs on a PR/Issue status surface when possible without changing the certified head, report pending and end the milestone.
+- if CI remains running, preserve the already-written state and record exact run IDs on a PR/Issue status surface when possible without changing the certified head; do not tight-poll. Continue another non-conflicting authorized task when one exists. End the invocation only when waiting on that external result is the sole remaining safe path.
 
 A second refresh in one milestone requires a material security/merge/incident/provider state transition and a durable exception record.
 
@@ -257,7 +268,7 @@ Rules:
 9. completed/retired task records never recreate authority;
 10. no fourth writer or future-package stream may be invented without fresh governed replanning.
 
-If no new governed live slot exists, a newly arriving agent receives no write assignment.
+If no new governed live slot exists, a newly arriving agent receives no write assignment. This blocks that worker admission only; it does **not** end the Supervisor invocation. The Supervisor continues review, integration, planning, preflight or other non-conflicting authorized development work.
 
 ## Governance self-modification protection
 
