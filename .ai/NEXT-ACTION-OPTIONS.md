@@ -4,14 +4,22 @@ This repository adopts the Vertex Systems Network interactive AI-development han
 
 ## User-facing handoff
 
-After every repository-development response, expose 1 to 3 currently valid next actions derived from live repository evidence.
+During an already-authorized AI-Native development invocation, do **not** require a user choice after each milestone. The Supervisor selects the next highest-priority safe authorized task automatically and continues while authority, safety and the current tool/runtime budget remain available.
 
-- Always include the canonical/recommended next action, but do not bind it permanently to option 1.
-- When two or more valid options exist, reshuffle the visible 1/2/3 numbering on every handoff.
-- If the previously selected action identity and number are known, that same action must move to a different visible number on the next handoff. With only one valid action, number reuse is allowed.
-- Mark the canonical action as **Recommended**. Numbering is ephemeral presentation state and never changes priority, safety, scope, or authorization.
-- A reply containing only an option number is a request to start the corresponding next turn. Re-read current repository state before any mutation. If the option became stale or unsafe, fail closed and show the new valid options instead.
-- Interactive buttons may be used when the host supports them; otherwise numbered one-line options are the mandatory fallback.
+Expose 1 to 3 next-action options only when one of these applies:
+
+- the user entered through the URL-only/read-only flow below;
+- the user explicitly asks for choices/options;
+- a genuine owner/external decision is required and no other safe authorized work remains.
+
+When options are appropriate:
+
+- include the canonical/recommended next action and mark it **Recommended**;
+- when two or more valid options exist, numbering may be reshuffled;
+- a reply containing only an option number selects that option, subject to fresh repository revalidation;
+- interactive buttons may be used when the host supports them; otherwise numbered one-line options are acceptable.
+
+Do not use options as a routine `continue?`, `retry?`, `fix?` or `merge?` confirmation gate for actions already inside standing development authority.
 
 ## URL-only repository entry
 
@@ -26,4 +34,4 @@ When the user's message contains only this repository's canonical GitHub URL (op
 
 ## Safety and local authority
 
-Repository-specific governance, security, exact-head CI, approval, migration, production/provider, release, and one-turn/one-milestone rules remain authoritative and may be stricter than this interaction contract. This file never grants execution authority and never permits bypassing an accepted actionable Issue/PR or deferred work boundary.
+Repository-specific governance, security, exact-head CI, approval, migration, production/provider and release rules remain authoritative and may be stricter than this interaction contract. This file never grants execution authority and never permits bypassing an accepted actionable Issue/PR or deferred work boundary. Continuous invocation changes interaction cadence only; it does not expand scope or authority.
