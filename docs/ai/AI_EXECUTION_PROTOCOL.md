@@ -30,7 +30,7 @@ If a continuity file conflicts with `STATE.json`, `AI_EXECUTION_POLICY.md`, an a
 
 ## 3. Required lifecycle
 
-Every material AI engineering session follows:
+Every material AI engineering invocation follows:
 
 ```text
 READ
@@ -43,22 +43,29 @@ CHECK AUTHORITY
   ↓
 CHECK SCOPE
   ↓
-PLAN
+SELECT HIGHEST-PRIORITY SAFE TASK
   ↓
 IMPLEMENT ONLY AUTHORIZED WORK
   ↓
 TEST
   ↓
+REVIEW / REPAIR / RE-PLAN
+  ↓
 VERIFY GOVERNANCE
+  ↓
+INTEGRATE WHEN REQUIRED GATES PASS
+  ↓
+READ BACK
   ↓
 UPDATE CONTINUITY + HANDOFF
   ↓
-REPORT
+CHECKPOINT / REPORT
   ↓
-STOP
+SELECT NEXT SAFE AUTHORIZED TASK
+  ↺
 ```
 
-The AI must never automatically advance to the next work package.
+A milestone is a durable checkpoint inside the invocation, not an automatic session boundary. The AI must never automatically advance to a future work package merely because its name/order is known; canonical authority must actually permit that transition.
 
 ## 4. Fresh-session read order
 
@@ -166,10 +173,12 @@ After implementation evidence is green:
 1. record exact source SHA, PR, CI run/job and required gate results;
 2. perform only the authorized state-reconciliation/closure transition;
 3. update continuity snapshot/handoff after authoritative state changes;
-4. identify exactly one next authorized action;
-5. STOP.
+4. checkpoint the completed milestone and determine the next highest-priority safe authorized task;
+5. continue within the same invocation when safe authorized work remains.
 
-Never start the next package merely because its name is known.
+Stop the invocation only when the requested/canonical scope is complete, the current tool/runtime budget is exhausted, a genuine external/owner decision is the sole remaining path, or safety/governance blocks all remaining work.
+
+Never start the next package merely because its name is known. Never ask the owner for routine `continue`, `retry`, `fix` or `merge` confirmation when the action is already within standing repository authority.
 
 ## 10. Handoff update rule
 
@@ -234,9 +243,9 @@ The compact resume layer lives at `docs/ai/compact/` and is subordinate to `AGEN
 
 On continue/resume/recovery, after the repository execution contract is loaded, read `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolve exact protected main, OPEN Issues, OPEN PRs/MRs, deterministic claims, coordination queue and Runner Benchmark before new work.
 
-One user continue/resume turn normally equals one logical milestone. A milestone status is one of `PLANNED`, `IMPLEMENTING`, `VERIFYING`, `WAITING_EXTERNAL`, `BLOCKED` or `COMPLETE`.
+One user continue/resume turn may execute multiple dependency-related logical milestones while authority, safety and the current tool/runtime budget remain available. A milestone status is one of `PLANNED`, `IMPLEMENTING`, `VERIFYING`, `WAITING_EXTERNAL`, `BLOCKED` or `COMPLETE`.
 
-For remote CI/status checks, default to one consolidated refresh. Do not poll. Persist `VERIFYING` / `WAITING_EXTERNAL` before the final refresh so a message-delivery timeout cannot erase the engineering checkpoint.
+For remote CI/status checks, default to one consolidated refresh per checkpoint and never tight-poll. Persist `VERIFYING` / `WAITING_EXTERNAL` before the refresh so a message-delivery timeout cannot erase the engineering checkpoint. If the remote result remains pending, continue another non-conflicting authorized task when possible instead of ending merely because CI is still running.
 
 Compact file limits: `CURRENT-STATE.yaml` <= 12 KiB; `LAST-CHECKPOINT.md` <= 16 KiB; `EXECUTION-JOURNAL.md` <= 32 KiB rolling.
 
