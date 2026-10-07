@@ -79,7 +79,7 @@ Without an approved ADR and plan reconciliation, AI must not:
 
 ## 5. Allowed autonomy
 
-Within an active work package, AI may autonomously choose implementation details when they do not violate approved contracts or architecture. Examples include:
+Within an active work package or another explicitly authorized narrow maintenance/development task, AI may autonomously choose and execute implementation details when they do not violate approved contracts or architecture. Examples include:
 
 - local function decomposition;
 - internal naming consistent with repository conventions;
@@ -87,7 +87,15 @@ Within an active work package, AI may autonomously choose implementation details
 - non-breaking refactoring;
 - implementation of already-approved interfaces;
 - performance improvements that preserve semantics;
-- documentation corrections that do not alter architecture.
+- documentation corrections that do not alter architecture;
+- diagnosing, fixing and retrying failed tests or CI gates;
+- resolving merge conflicts and stale-base assumptions without discarding accepted behavior;
+- applying review findings inside the existing task budget;
+- re-planning the same-scope technical strategy after a failed approach;
+- creating/updating/closing/superseding task Issues and PRs when required by the governed workflow;
+- merging through the protected repository path when the exact head satisfies all required gates.
+
+These actions do not require repeated owner confirmation merely because an error or blocker was encountered.
 
 ## 6. Evidence requirement
 
@@ -192,18 +200,24 @@ Direct unrestricted database mutation by an AI agent is prohibited.
 
 Any transition to `verification` or `done` must include evidence references. If the two files disagree, the safest lower-completion state wins until reconciled.
 
-## 14. Stop conditions
+## 14. Blocked-path and invocation exit conditions
 
-An AI system must stop implementation and surface the issue when:
+An AI system must stop the **affected implementation path** and surface/checkpoint the issue when:
 
-- required governance documents are missing or contradictory;
+- required governance documents are missing or contradictory for that path;
 - a requested change requires an unapproved architectural decision;
 - a destructive migration has no approved migration/rollback strategy;
 - tenant isolation cannot be demonstrated;
 - a required dependency would violate module boundaries;
 - completion cannot be verified.
 
-Stopping means refusing to invent progress; it does not mean abandoning analysis or a safe planning fix.
+Stopping an affected path means refusing to invent progress or bypass controls. It does **not** automatically end the AI-Native development invocation. The AI must immediately select another non-conflicting authorized task when one exists.
+
+Ask the owner only when all remaining safe authorized work is exhausted and progress genuinely requires input that existing repository authority cannot supply, such as unavailable credentials/permissions/production access, a legally meaningful licensing/IP/trademark decision, an irreversible destructive approval, a provider/business decision not fixed by canonical governance, or a mandatory external/human approval.
+
+Do not ask broad `continue?`, `retry?`, `fix?` or `merge?` questions for routine engineering actions already within standing authority.
+
+The invocation exits only when requested/canonical authorized work is complete, the current tool/runtime budget is exhausted, a genuine external wait is the sole remaining path, or safety/governance blocks every remaining task.
 
 ## 15. Instruction trust boundary
 
@@ -335,7 +349,7 @@ README never overrides `AGENTS.md`, `STATE.json`, this policy or accepted ADRs. 
 
 ### 16.7 Repeated-failure circuit breaker
 
-AI must not loop indefinitely on the same failing strategy. After repeated equivalent failure signatures, stop, measure/analyze the root cause, re-plan or escalate rather than consuming unbounded time/cost or weakening controls.
+AI must not loop indefinitely on the same failing strategy. After repeated equivalent failure signatures, measure/analyze the root cause and change strategy. If that path remains blocked, checkpoint it and continue another non-conflicting authorized task when available. Escalate to the owner only for a genuine authority/external-decision boundary, never merely to ask permission to retry a routine technical fix. Never consume unbounded time/cost or weaken controls.
 
 ## 17. AI-native engineering roles
 
