@@ -274,7 +274,7 @@ A legacy plan value such as `stop-without-assignment` means **stop that worker a
 
 A `completed` or `retired` slot does not automatically become reusable. Reopening or repurposing a slot must still be valid under canonical state and must be recorded in the active plan before a new assignment.
 
-For the current P04.04 wave, all three worker slots are occupied. Therefore until a governed plan explicitly opens a slot, any additional arriving worker receives `Go Home Come Back Next Time` and starts no work.
+For the current P04.04 wave, all three worker slots are occupied. Therefore until a governed plan explicitly opens a slot, any additional arriving worker receives no task/branch/lease and starts no work; the Supervisor continues its own authorized orchestration/development invocation.
 
 ## 18. Live protected-main resolution law
 
