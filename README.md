@@ -132,6 +132,10 @@ Every material agent task checks these instructions at task start and before PR 
 17. every material repository or milestone-state transition must update README progress in the same governed carrier when the active head is safe to mutate, even when percentages are unchanged but milestone/PR/CI/next-action evidence changed;
 18. never mutate an exact source/promotion head solely for README while that head is under CI certification; defer the README sync to the next material governed carrier and flush it before claiming completion;
 19. README is a mirror only: never invent progress, authority, PASS state, or future denominators.
+20. an authorized AI-Native development invocation may execute multiple dependency-related milestones without asking for routine `continue`, `retry`, `fix` or `merge` confirmation;
+21. failed tests/CI, merge conflicts, stale bases, review findings and same-scope technical blockers are self-repaired or re-planned by the AI;
+22. when one path is blocked or CI is pending, checkpoint it and continue another non-conflicting authorized task when available;
+23. end the invocation only on canonical/requested completion, current tool/runtime budget exhaustion, a genuine external/owner decision as the sole remaining path, or a safety/governance boundary blocking all remaining work.
 
 A new P04.07 runtime slice requires a **fresh separately governed plan from current protected main** with new task IDs, branches and path leases. Wave-1 Issue #270 is not reusable authority.
 
@@ -140,7 +144,7 @@ A new P04.07 runtime slice requires a **fresh separately governed plan from curr
 
 For every continue/resume/recovery, after repository instructions are loaded, read `docs/ai/compact/CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md`, resolve exact protected main, reconcile OPEN Issues before OPEN PRs, then reconcile deterministic claims, coordination queue and Runner Benchmark before new work.
 
-One continue/resume turn normally executes one logical milestone. Remote CI/status is refreshed once per milestone by default; no tight polling or timeout-driven reruns.
+One continue/resume turn may execute multiple dependency-related logical milestones while current authority, safety and tool/runtime budget remain available. Milestones are durable checkpoints, not mandatory interaction stops. Remote CI/status is refreshed conservatively with no tight polling or timeout-driven reruns; if a result is pending, other non-conflicting authorized work continues when available.
 
 Every engineering response ends with repository name, current module/work-package progress bar and overall progress bar plus milestone, evidence, CI, blockers and exact next safe action. Progress is based on accepted canonical work packages only; the overall bar must state denominator coverage.
 
