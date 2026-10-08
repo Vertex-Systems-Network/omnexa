@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "wave_id": "P04.08-ACTIVATION-20261006-01",
-  "status": "completed-no-live-leases",
+  "wave_id": "P04.08-AUTHORITY-MIRROR-RECON-20261008-03",
+  "status": "authority-mirror-reconciliation-plan-verifying-r3",
   "authority": {
     "phase": "P04",
     "work_package": "P04.08",
@@ -9,18 +9,18 @@
     "canonical_state": "docs/roadmap/STATE.json",
     "business_feature_code_authorized": false,
     "kernel_code_authorized": true,
-    "note": "P04.08 activation is accepted on protected main. The prior Supervisor governance/evidence lease is completed and released. Bounded kernel.jobs implementation authority requires a separate fresh-main exact-path task lease; no runtime, migration, provider, queue, business-feature or AI product runtime authority is granted here."
+    "note": "P04.08 is active on protected main at 7/10. This proposed Supervisor-only task reconciles stale instruction/status/evidence mirrors after accepted activation and lease closeout. It grants no runtime implementation, migration, provider, future-package, business-feature or AI product-runtime authority."
   },
   "bootstrap": {
-    "protected_main_sha": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "protected_main_sha": "2e3c88a5352957863b0cf736d4bf381f004f40b9",
     "required_main_ref": "main",
-    "required_main_sha_snapshot": "a6b9e4fae864084415ea20726ec2584c42da8065",
+    "required_main_sha_snapshot": "2e3c88a5352957863b0cf736d4bf381f004f40b9",
     "required_main_resolution": "Resolve protected main before every material mutation, review and merge. Stored SHAs are audit snapshots only.",
     "branches_created_before_task_work": true,
     "all_branches_verified_same_base": true,
-    "coordination_issue": null,
-    "latest_governed_workflow_merge_snapshot": "a6b9e4fae864084415ea20726ec2584c42da8065",
-    "all_active_branches_synced_to_snapshot": true,
+    "coordination_issue": 322,
+    "latest_governed_workflow_merge_snapshot": "2e3c88a5352957863b0cf736d4bf381f004f40b9",
+    "all_active_branches_synced_to_snapshot": false,
     "parent_coordination_issue": null
   },
   "onboarding": {
@@ -33,9 +33,9 @@
     "current_worker_slot_capacity": 0,
     "current_open_worker_slots": 0,
     "no_free_slot_action": "stop-without-assignment",
-    "no_free_slot_response": "No worker slots are opened; this is a Supervisor-only governance activation task.",
+    "no_free_slot_response": "No worker slots are opened; this is a Supervisor-only authority-mirror reconciliation task.",
     "no_auto_branch_or_module_creation_on_arrival": true,
-    "assignment_rule": "Supervisor-only P04.08 activation/continuity transaction. No worker slots, runtime, migration or provider authority before protected-main acceptance."
+    "assignment_rule": "Supervisor-only Issue #322 authority/status/evidence mirror reconciliation; worker slots remain zero; no runtime, migration, provider or future-package authority."
   },
   "enforcement": {
     "m2_ci_enabled": true,
@@ -112,13 +112,13 @@
   },
   "signals": {
     "schema": "docs/ai/AGENT_SIGNAL_SCHEMA.json",
-    "coordination_channel": "Supervisor-only task; no live coordination issue",
+    "coordination_channel": "Supervisor-only governance task tracked by Issue #322; no worker slots",
     "completion": "Work Done and Submitted",
     "merge_alert": "New changes have been merged — please merge these changes into your branch first, then resume your own work.",
     "sync_ack": "Sync Complete — Resuming Work",
     "review_changes": "Review Changes Required",
     "deterministic_order": [
-      "P04.08-ACTIVATION-20261006-01"
+      "P04.08-AUTHORITY-MIRROR-RECON-20261008-03"
     ]
   },
   "merge_strategy": {
@@ -136,7 +136,9 @@
       "protected-main readback",
       "merge alert/resynchronization"
     ],
-    "deterministic_order": []
+    "deterministic_order": [
+      "P04.08-AUTHORITY-MIRROR-RECON-20261008-03"
+    ]
   },
   "instruction_sync": {
     "task_start_required": true,
@@ -224,7 +226,7 @@
       "review_state_at_readback": "source review CHANGES_REQUESTED; three inline review threads remained unresolved on closed source PR; discrepancies carried forward for this activation continuity repair."
     }
   },
-  "next_action": "Review the accepted P04.08 specification and fresh-main preflight requirements, then prepare a separate governed implementation task/branch/exact-path lease. Do not mutate runtime code or infer migration/provider authority before that lease and any required explicit decisions are accepted.",
+  "next_action": "After this fresh-main plan is accepted through exact-head source/promotion Governance and protected-main read-back, reconcile Issue #322 mirrors and compact state; keep Issue #329 deferred until #322 closes. Then prepare the separate fresh-main P04.08 runtime implementation lease with exact source paths and migration/provider preflight.",
   "runner_path_change_control": {
     "issue": 292,
     "parent_issue": 289,
@@ -419,5 +421,150 @@
     "promotion_governance_job": 112347722841,
     "runtime_paths_leased": false,
     "note": "Historical task/branch/path record retained for audit only; this object is deliberately outside active worker/supervisor lease collections."
+  },
+  "supervisor": {
+    "agent_id": "Supervisor",
+    "task_id": "P04.08-AUTHORITY-MIRROR-RECON-20261008-03",
+    "role": "p04-08-accepted-state-authority-mirror-reconciliation",
+    "branch": "supervisor/20261008-p04-08-authority-mirror-recon-r3",
+    "last_synced_main_sha": "2e3c88a5352957863b0cf736d4bf381f004f40b9",
+    "phase": "P04",
+    "work_package": "P04.08",
+    "owner": "repository-governance",
+    "purpose": "Fresh-main replan of Issue #322 after protected-main AI-Native invocation policy merge #332; reconcile stale P04.08 activation mirrors and compact continuity records without runtime, migration, provider, future-package, business-feature or AI product-runtime authority.",
+    "status": "plan-verifying-r3",
+    "read_paths": [
+      "AGENTS.md",
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "docs/roadmap/work-packages/P04.08.md",
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
+      "docs/governance/AI_EXECUTION_POLICY.md",
+      "docs/governance/CHANGE_CONTROL.md",
+      "docs/governance/MULTI_AGENT_ORCHESTRATION.md",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/compact/**"
+    ],
+    "write_paths": [
+      "AGENTS.md",
+      "README.md",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/work-packages/P04.08.md",
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
+      "docs/ai/AI_CONTEXT.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/handoffs/P04.08.md",
+      "docs/ai/handoffs/P04.08-ACTIVATION.md",
+      "docs/ai/compact/CURRENT-STATE.yaml",
+      "docs/ai/compact/LAST-CHECKPOINT.md",
+      "docs/ai/compact/EXECUTION-JOURNAL.md",
+      "docs/ai/compact/DETERMINISTIC-CLAIMS.json",
+      "docs/ai/compact/COORDINATION-QUEUE.json",
+      "docs/ai/compact/RUNNER-BENCHMARK.json"
+    ],
+    "forbidden_paths": [
+      "docs/roadmap/STATE.json",
+      "docs/roadmap/work-packages/P04_PACKAGE_SEQUENCE.json",
+      "kernel/**",
+      "modules/**",
+      "kernel/migrations/**",
+      "scripts/**",
+      ".github/workflows/**",
+      "docs/roadmap/work-packages/P04.09.md",
+      "docs/roadmap/work-packages/P04.10.md",
+      "queue/broker/provider selection",
+      "business-feature code",
+      "AI/model/agent product runtime",
+      "deployments/**",
+      "production data/secrets"
+    ],
+    "shared_paths": [
+      "AGENTS.md",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "README.md"
+    ],
+    "depends_on": [],
+    "merge_order": 1,
+    "risk_tier": "medium",
+    "required_gates": [
+      "Issue #322 scope audit including accepted AI-Native continuous-invocation policy #331/#332",
+      "Issue #329 remains deferred until the shared governance lease is accepted",
+      "exact-head Governance PASS",
+      "zero unresolved review threads",
+      "unchanged promotion if repository flow requires it",
+      "protected-main freshness",
+      "guarded merge",
+      "fresh protected-main read-back"
+    ],
+    "instruction_check": {
+      "checked": true,
+      "readme_delta": "updated-required; AGENTS/README/status still contain stale pre-activation authority text"
+    },
+    "runtime_source_mutation": false,
+    "migration_authority": false,
+    "provider_authority": false,
+    "worker_slots": 0
+  },
+  "authority_mirror_reconciliation": {
+    "issue": 322,
+    "status": "PROPOSED_PLAN_R3",
+    "fresh_main_sha": "2e3c88a5352957863b0cf736d4bf381f004f40b9",
+    "accepted_activation": {
+      "source_pr": 318,
+      "promotion_pr": 319,
+      "main_sha": "a6b9e4fae864084415ea20726ec2584c42da8065"
+    },
+    "accepted_lease_closeout": {
+      "source_pr": 320,
+      "promotion_pr": 321,
+      "source_head": "837116acc28d8156dc442a12d84eb9c580a966f2",
+      "main_sha": "81d9110c32dc9d049fe08f21d25b6f505bf8aba9",
+      "promotion_governance_run": 37522394447,
+      "promotion_governance_job": 112470830573
+    },
+    "exact_write_paths": [
+      "AGENTS.md",
+      "README.md",
+      "docs/roadmap/STATUS.md",
+      "docs/roadmap/work-packages/P04.08.md",
+      "docs/roadmap/evidence/P04.08_ACTIVATION_2026-10-06.md",
+      "docs/ai/AI_CONTEXT.md",
+      "docs/ai/AI_STATE.yaml",
+      "docs/ai/ACTIVE_MULTI_AGENT_PLAN.json",
+      "docs/ai/handoffs/P04.08.md",
+      "docs/ai/handoffs/P04.08-ACTIVATION.md",
+      "docs/ai/compact/CURRENT-STATE.yaml",
+      "docs/ai/compact/LAST-CHECKPOINT.md",
+      "docs/ai/compact/EXECUTION-JOURNAL.md",
+      "docs/ai/compact/DETERMINISTIC-CLAIMS.json",
+      "docs/ai/compact/COORDINATION-QUEUE.json",
+      "docs/ai/compact/RUNNER-BENCHMARK.json"
+    ],
+    "canonical_state_and_sequence_mutation": false,
+    "runtime_source_mutation": false,
+    "migration_or_provider_authority": false,
+    "p04_09_p04_10_authority": false,
+    "business_feature_or_ai_runtime_authority": false,
+    "instruction_check": "Protected main #332 accepted continuous AI-Native invocation policy. P04.08 activation/status mirrors remain stale and must be reconciled on declared write paths without weakening controls.",
+    "stale_carriers": {
+      "source_pr": 328,
+      "source_head": "16de1967f6588fb876ca0d590cdead5c9a0841ce",
+      "promotion_pr": 330,
+      "promotion_head": "16de1967f6588fb876ca0d590cdead5c9a0841ce",
+      "reason": "Both branches target pre-#332 main 2cda37bcaa56c8e54fd7f04cdbf75e8ed10a286f; prior Governance success is historical and not current merge authority."
+    }
+  },
+  "security_prerequisite": {
+    "issue": 326,
+    "source_pr": 327,
+    "exact_head": "f4436a148be5c057ea8ff7eb75584f9f76511c9a",
+    "source_governance_run": 37685763070,
+    "diagnostic_failed_promotion_pr": 324,
+    "diagnostic_failed_run": 37684608128,
+    "vulnerability": "GO-2026-6629",
+    "accepted_main_sha": "2cda37bcaa56c8e54fd7f04cdbf75e8ed10a286f",
+    "result": "accepted; govulncheck PASS and full retained Governance PASS"
   }
 }
